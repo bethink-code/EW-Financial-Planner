@@ -14,11 +14,12 @@ interface ColumnVisibility {
 interface NewGroupedTableViewProps {
   funds: RetirementFund[];
   columnVisibility: ColumnVisibility;
+  tableMode: "inputs" | "flows";
   onFieldUpdate: (id: number, field: keyof UpdateRetirementFund, value: string) => void;
   isUpdating: boolean;
 }
 
-export function NewGroupedTableView({ funds, columnVisibility, onFieldUpdate, isUpdating }: NewGroupedTableViewProps) {
+export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFieldUpdate, isUpdating }: NewGroupedTableViewProps) {
   const [collapsedGroups, setCollapsedGroups] = useState<Set<string>>(new Set());
 
   const toggleGroup = (group: string) => {
@@ -46,22 +47,43 @@ export function NewGroupedTableView({ funds, columnVisibility, onFieldUpdate, is
               Description
             </th>
             
-            {/* Overview Section */}
+            {/* Overview Section - different content based on table mode */}
             {columnVisibility.overview && (
               <>
-                <th className="px-3 py-2 text-center border-l border-neutral-300" colSpan={collapsedGroups.has("overview") ? 1 : 2}>
-                  <button
-                    onClick={() => toggleGroup("overview")}
-                    className="flex items-center justify-center w-full text-xs font-medium text-teal-700 uppercase tracking-wider hover:text-teal-600"
-                  >
-                    {collapsedGroups.has("overview") ? <ChevronRight size={12} /> : <ChevronDown size={12} />}
-                    Overview
-                  </button>
-                </th>
-                {!collapsedGroups.has("overview") && (
-                  <th className="px-3 py-2 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">
-                    Cover Amount
-                  </th>
+                {tableMode === "inputs" ? (
+                  <>
+                    <th className="px-3 py-2 text-center border-l border-neutral-300" colSpan={collapsedGroups.has("overview") ? 1 : 2}>
+                      <button
+                        onClick={() => toggleGroup("overview")}
+                        className="flex items-center justify-center w-full text-xs font-medium text-teal-700 uppercase tracking-wider hover:text-teal-600"
+                      >
+                        {collapsedGroups.has("overview") ? <ChevronRight size={12} /> : <ChevronDown size={12} />}
+                        Overview
+                      </button>
+                    </th>
+                    {!collapsedGroups.has("overview") && (
+                      <th className="px-3 py-2 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">
+                        Cover Amount
+                      </th>
+                    )}
+                  </>
+                ) : (
+                  <>
+                    <th className="px-3 py-2 text-center border-l border-neutral-300" colSpan={collapsedGroups.has("overview") ? 1 : 2}>
+                      <button
+                        onClick={() => toggleGroup("overview")}
+                        className="flex items-center justify-center w-full text-xs font-medium text-teal-700 uppercase tracking-wider hover:text-teal-600"
+                      >
+                        {collapsedGroups.has("overview") ? <ChevronRight size={12} /> : <ChevronDown size={12} />}
+                        Lump Sum Left Over Available as Provisions
+                      </button>
+                    </th>
+                    {!collapsedGroups.has("overview") && (
+                      <th className="px-3 py-2 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">
+                        Amount Available
+                      </th>
+                    )}
+                  </>
                 )}
               </>
             )}
@@ -91,75 +113,139 @@ export function NewGroupedTableView({ funds, columnVisibility, onFieldUpdate, is
               </>
             )}
 
-            {/* Monthly Death Benefit Section */}
+            {/* Monthly Death Benefit Section - different columns based on table mode */}
             {columnVisibility.monthlyDeathBenefit && (
               <>
-                <th className="px-3 py-2 text-center border-l border-neutral-300" colSpan={collapsedGroups.has("monthlyBenefit") ? 1 : 6}>
-                  <button
-                    onClick={() => toggleGroup("monthlyBenefit")}
-                    className="flex items-center justify-center w-full text-xs font-medium text-teal-800 uppercase tracking-wider hover:text-teal-700"
-                  >
-                    {collapsedGroups.has("monthlyBenefit") ? <ChevronRight size={12} /> : <ChevronDown size={12} />}
-                    Monthly Death Benefit
-                  </button>
-                </th>
-                {!collapsedGroups.has("monthlyBenefit") && (
+                {tableMode === "inputs" ? (
                   <>
-                    <th className="px-3 py-2 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">
-                      Term (Years)
+                    <th className="px-3 py-2 text-center border-l border-neutral-300" colSpan={collapsedGroups.has("monthlyBenefit") ? 1 : 6}>
+                      <button
+                        onClick={() => toggleGroup("monthlyBenefit")}
+                        className="flex items-center justify-center w-full text-xs font-medium text-teal-800 uppercase tracking-wider hover:text-teal-700"
+                      >
+                        {collapsedGroups.has("monthlyBenefit") ? <ChevronRight size={12} /> : <ChevronDown size={12} />}
+                        Monthly Death Benefit
+                      </button>
                     </th>
-                    <th className="px-3 py-2 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">
-                      Increase %
+                    {!collapsedGroups.has("monthlyBenefit") && (
+                      <>
+                        <th className="px-3 py-2 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">
+                          Monthly Income
+                        </th>
+                        <th className="px-3 py-2 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">
+                          Term (Years)
+                        </th>
+                        <th className="px-3 py-2 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">
+                          Increase %
+                        </th>
+                        <th className="px-3 py-2 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">
+                          Approved Life Cover
+                        </th>
+                        <th className="px-3 py-2 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">
+                          Fund Value
+                        </th>
+                        <th className="px-3 py-2 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">
+                          Value at Death
+                        </th>
+                      </>
+                    )}
+                  </>
+                ) : (
+                  <>
+                    <th className="px-3 py-2 text-center border-l border-neutral-300" colSpan={collapsedGroups.has("monthlyBenefit") ? 1 : 5}>
+                      <button
+                        onClick={() => toggleGroup("monthlyBenefit")}
+                        className="flex items-center justify-center w-full text-xs font-medium text-teal-800 uppercase tracking-wider hover:text-teal-700"
+                      >
+                        {collapsedGroups.has("monthlyBenefit") ? <ChevronRight size={12} /> : <ChevronDown size={12} />}
+                        Monthly Provision Offered
+                      </button>
                     </th>
-                    <th className="px-3 py-2 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">
-                      Approved Life Cover
-                    </th>
-                    <th className="px-3 py-2 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">
-                      Fund Value
-                    </th>
-                    <th className="px-3 py-2 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">
-                      Value at Death
-                    </th>
+                    {!collapsedGroups.has("monthlyBenefit") && (
+                      <>
+                        <th className="px-3 py-2 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">
+                          Income Provision Option
+                        </th>
+                        <th className="px-3 py-2 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">
+                          Monthly Amount
+                        </th>
+                        <th className="px-3 py-2 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">
+                          Current Annual Income
+                        </th>
+                        <th className="px-3 py-2 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">
+                          Annual Income at Death
+                        </th>
+                      </>
+                    )}
                   </>
                 )}
               </>
             )}
 
-            {/* Fund Value Beneficiaries Section */}
+            {/* Fund Value Beneficiaries Section - different content based on table mode */}
             {columnVisibility.fundValueBeneficiaries && (
               <>
-                <th className="px-3 py-2 text-center border-l border-neutral-300" colSpan={collapsedGroups.has("fundBeneficiaries") ? 1 : 7}>
-                  <button
-                    onClick={() => toggleGroup("fundBeneficiaries")}
-                    className="flex items-center justify-center w-full text-xs font-medium text-orange-700 uppercase tracking-wider hover:text-orange-600"
-                  >
-                    {collapsedGroups.has("fundBeneficiaries") ? <ChevronRight size={12} /> : <ChevronDown size={12} />}
-                    Fund Value Beneficiaries
-                  </button>
-                </th>
-                {!collapsedGroups.has("fundBeneficiaries") && (
+                {tableMode === "inputs" ? (
                   <>
-                    <th className="px-3 py-2 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">
-                      Name
+                    <th className="px-3 py-2 text-center border-l border-neutral-300" colSpan={collapsedGroups.has("fundBeneficiaries") ? 1 : 7}>
+                      <button
+                        onClick={() => toggleGroup("fundBeneficiaries")}
+                        className="flex items-center justify-center w-full text-xs font-medium text-orange-700 uppercase tracking-wider hover:text-orange-600"
+                      >
+                        {collapsedGroups.has("fundBeneficiaries") ? <ChevronRight size={12} /> : <ChevronDown size={12} />}
+                        Fund Value Beneficiaries
+                      </button>
                     </th>
-                    <th className="px-3 py-2 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">
-                      % Split
+                    {!collapsedGroups.has("fundBeneficiaries") && (
+                      <>
+                        <th className="px-3 py-2 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">
+                          Name
+                        </th>
+                        <th className="px-3 py-2 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">
+                          % Split
+                        </th>
+                        <th className="px-3 py-2 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">
+                          Amount
+                        </th>
+                        <th className="px-3 py-2 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">
+                          Lump Sum Taken
+                        </th>
+                        <th className="px-3 py-2 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">
+                          Nondeductible Contribution
+                        </th>
+                        <th className="px-3 py-2 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">
+                          Living Annuity
+                        </th>
+                        <th className="px-3 py-2 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">
+                          Income Term
+                        </th>
+                      </>
+                    )}
+                  </>
+                ) : (
+                  <>
+                    <th className="px-3 py-2 text-center border-l border-neutral-300" colSpan={collapsedGroups.has("fundBeneficiaries") ? 1 : 3}>
+                      <button
+                        onClick={() => toggleGroup("fundBeneficiaries")}
+                        className="flex items-center justify-center w-full text-xs font-medium text-orange-700 uppercase tracking-wider hover:text-orange-600"
+                      >
+                        {collapsedGroups.has("fundBeneficiaries") ? <ChevronRight size={12} /> : <ChevronDown size={12} />}
+                        Estate Duties and Fees
+                      </button>
                     </th>
-                    <th className="px-3 py-2 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">
-                      Amount
-                    </th>
-                    <th className="px-3 py-2 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">
-                      Lump Sum Taken
-                    </th>
-                    <th className="px-3 py-2 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">
-                      Nondeductible Contribution
-                    </th>
-                    <th className="px-3 py-2 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">
-                      Living Annuity
-                    </th>
-                    <th className="px-3 py-2 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">
-                      Income Term
-                    </th>
+                    {!collapsedGroups.has("fundBeneficiaries") && (
+                      <>
+                        <th className="px-3 py-2 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">
+                          Estate Deployment Deceased
+                        </th>
+                        <th className="px-3 py-2 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">
+                          Executor's Fee
+                        </th>
+                        <th className="px-3 py-2 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">
+                          Master's Fee
+                        </th>
+                      </>
+                    )}
                   </>
                 )}
               </>
@@ -173,37 +259,61 @@ export function NewGroupedTableView({ funds, columnVisibility, onFieldUpdate, is
                 {fund.description}
               </td>
 
-              {/* Overview Columns */}
+              {/* Overview Columns - different content based on table mode */}
               {columnVisibility.overview && (
                 <>
-                  <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900 border-l border-neutral-200">
-                    <Select
-                      value={fund.owner}
-                      onValueChange={(value) => handleInputChange(fund.id, "owner", value)}
-                      disabled={isUpdating}
-                    >
-                      <SelectTrigger className="compact-input border-0 bg-transparent focus:bg-white focus:border focus:border-primary">
-                        <SelectValue />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {owners.map((owner) => (
-                          <SelectItem key={owner} value={owner}>
-                            {owner}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                  </td>
-                  {!collapsedGroups.has("overview") && (
-                    <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900">
-                      <Input
-                        type="number"
-                        value={fund.coverAmount}
-                        onChange={(e) => handleInputChange(fund.id, "coverAmount", e.target.value)}
-                        className="compact-input w-20 text-right border-0 bg-transparent focus:bg-white focus:border focus:border-primary"
-                        disabled={isUpdating}
-                      />
-                    </td>
+                  {tableMode === "inputs" ? (
+                    <>
+                      <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900 border-l border-neutral-200">
+                        <Select
+                          value={fund.owner}
+                          onValueChange={(value) => handleInputChange(fund.id, "owner", value)}
+                          disabled={isUpdating}
+                        >
+                          <SelectTrigger className="compact-input border-0 bg-transparent focus:bg-white focus:border focus:border-primary">
+                            <SelectValue />
+                          </SelectTrigger>
+                          <SelectContent>
+                            {owners.map((owner) => (
+                              <SelectItem key={owner} value={owner}>
+                                {owner}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                      </td>
+                      {!collapsedGroups.has("overview") && (
+                        <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900">
+                          <Input
+                            value={fund.coverAmount}
+                            onChange={(e) => handleInputChange(fund.id, "coverAmount", e.target.value)}
+                            className="compact-input w-20 text-right border-0 bg-transparent focus:bg-white focus:border focus:border-primary"
+                            disabled={isUpdating}
+                          />
+                        </td>
+                      )}
+                    </>
+                  ) : (
+                    <>
+                      <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900 border-l border-neutral-200">
+                        <Input
+                          value={fund.owner}
+                          onChange={(e) => handleInputChange(fund.id, "owner", e.target.value)}
+                          className="compact-input border-0 bg-transparent focus:bg-white focus:border focus:border-primary"
+                          disabled={isUpdating}
+                        />
+                      </td>
+                      {!collapsedGroups.has("overview") && (
+                        <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900">
+                          <Input
+                            value={fund.lumpSumLeftOverProvisions}
+                            onChange={(e) => handleInputChange(fund.id, "lumpSumLeftOverProvisions", e.target.value)}
+                            className="compact-input w-20 text-right border-0 bg-transparent focus:bg-white focus:border focus:border-primary"
+                            disabled={isUpdating}
+                          />
+                        </td>
+                      )}
+                    </>
                   )}
                 </>
               )}

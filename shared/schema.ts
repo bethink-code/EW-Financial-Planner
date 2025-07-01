@@ -31,6 +31,16 @@ export const retirementFunds = pgTable("retirement_funds", {
   nondeductibleContribution: text("nondeductible_contribution").notNull().default("0"),
   livingAnnuity: text("living_annuity").notNull().default("0"),
   incomeTerm: text("income_term").notNull().default("0"),
+
+  // Flows mode specific fields
+  lumpSumLeftOverProvisions: text("lump_sum_left_over_provisions").notNull().default("0"),
+  incomeProvisionOption: text("income_provision_option").notNull().default(""),
+  monthlyProvisionOffered: text("monthly_provision_offered").notNull().default("0"),
+  currentAnnualIncome: text("current_annual_income").notNull().default("0"),
+  annualIncomeAtDeath: text("annual_income_at_death").notNull().default("0"),
+  estateDeploymentDeceased: text("estate_deployment_deceased").notNull().default("0"),
+  executorsFee: text("executors_fee").notNull().default("0"),
+  mastersFee: text("masters_fee").notNull().default("0"),
 });
 
 export const insertRetirementFundSchema = createInsertSchema(retirementFunds).omit({

@@ -45,7 +45,17 @@ export class MemStorage implements IStorage {
       lumpSumTaken: "R 25,000",
       nondeductibleContribution: "R 10,000",
       livingAnnuity: "R 120,000",
-      incomeTerm: "20"
+      incomeTerm: "20",
+
+      // Flows mode fields
+      lumpSumLeftOverProvisions: "R 300,000",
+      incomeProvisionOption: "Income guarantee",
+      monthlyProvisionOffered: "R 4,500",
+      currentAnnualIncome: "R 54,000",
+      annualIncomeAtDeath: "R 60,000",
+      estateDeploymentDeceased: "R 45,000",
+      executorsFee: "R 2,500",
+      mastersFee: "R 1,200"
     });
     
     this.createRetirementFund({
@@ -74,7 +84,17 @@ export class MemStorage implements IStorage {
       lumpSumTaken: "R 15,000",
       nondeductibleContribution: "R 8,000",
       livingAnnuity: "R 85,000",
-      incomeTerm: "25"
+      incomeTerm: "25",
+
+      // Flows mode fields
+      lumpSumLeftOverProvisions: "R 250,000",
+      incomeProvisionOption: "Fixed income",
+      monthlyProvisionOffered: "R 3,200",
+      currentAnnualIncome: "R 38,400",
+      annualIncomeAtDeath: "R 42,000",
+      estateDeploymentDeceased: "R 35,000",
+      executorsFee: "R 1,800",
+      mastersFee: "R 900"
     });
   }
 

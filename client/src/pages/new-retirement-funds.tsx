@@ -18,6 +18,7 @@ interface ColumnVisibility {
 
 export default function NewRetirementFunds() {
   const [viewMode, setViewMode] = useState<ViewMode>("grouped");
+  const [tableMode, setTableMode] = useState<"inputs" | "flows">("inputs");
   const [searchQuery, setSearchQuery] = useState("");
   const [columnVisibility, setColumnVisibility] = useState<ColumnVisibility>({
     overview: true,
@@ -79,6 +80,8 @@ export default function NewRetirementFunds() {
       <NewTableControls
         viewMode={viewMode}
         onViewModeChange={setViewMode}
+        tableMode={tableMode}
+        onTableModeChange={setTableMode}
         searchQuery={searchQuery}
         onSearchChange={setSearchQuery}
         columnVisibility={columnVisibility}
@@ -91,6 +94,7 @@ export default function NewRetirementFunds() {
           <NewGroupedTableView
             funds={filteredFunds}
             columnVisibility={columnVisibility}
+            tableMode={tableMode}
             onFieldUpdate={handleFieldUpdate}
             isUpdating={updateMutation.isPending}
           />

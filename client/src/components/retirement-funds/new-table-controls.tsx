@@ -12,6 +12,8 @@ interface ColumnVisibility {
 interface NewTableControlsProps {
   viewMode: "grouped" | "cards" | "detailed";
   onViewModeChange: (mode: "grouped" | "cards" | "detailed") => void;
+  tableMode: "inputs" | "flows";
+  onTableModeChange: (mode: "inputs" | "flows") => void;
   searchQuery: string;
   onSearchChange: (query: string) => void;
   columnVisibility: ColumnVisibility;
@@ -22,6 +24,8 @@ interface NewTableControlsProps {
 export function NewTableControls({
   viewMode,
   onViewModeChange,
+  tableMode,
+  onTableModeChange,
   searchQuery,
   onSearchChange,
   columnVisibility,
@@ -85,6 +89,28 @@ export function NewTableControls({
               Detailed
             </Button>
           </div>
+
+          {/* Table Mode Toggle - only show for grouped view */}
+          {viewMode === "grouped" && (
+            <div className="flex border border-neutral-200 rounded overflow-hidden">
+              <Button
+                variant={tableMode === "inputs" ? "default" : "ghost"}
+                size="sm"
+                onClick={() => onTableModeChange("inputs")}
+                className="rounded-none border-0 h-8 px-3 text-xs"
+              >
+                Inputs
+              </Button>
+              <Button
+                variant={tableMode === "flows" ? "default" : "ghost"}
+                size="sm"
+                onClick={() => onTableModeChange("flows")}
+                className="rounded-none border-0 border-l border-neutral-200 h-8 px-3 text-xs"
+              >
+                Flows
+              </Button>
+            </div>
+          )}
 
           {/* Column Visibility Toggles - only show for grouped view */}
           {viewMode === "grouped" && (
