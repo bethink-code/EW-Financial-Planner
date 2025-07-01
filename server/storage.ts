@@ -88,7 +88,28 @@ export class MemStorage implements IStorage {
 
   async createRetirementFund(insertFund: InsertRetirementFund): Promise<RetirementFund> {
     const id = this.currentFundId++;
-    const fund: RetirementFund = { ...insertFund, id };
+    const fund: RetirementFund = { 
+      id,
+      description: insertFund.description || "",
+      owner: insertFund.owner || "",
+      coverAmount: insertFund.coverAmount || "",
+      beneficiary: insertFund.beneficiary || "",
+      beneficiaryPercentage: insertFund.beneficiaryPercentage || "",
+      coverSplit: insertFund.coverSplit || "",
+      monthlyIncome: insertFund.monthlyIncome || "",
+      termYears: insertFund.termYears || "",
+      increasePercentage: insertFund.increasePercentage || "",
+      approvedLifeCover: insertFund.approvedLifeCover || "",
+      fundValue: insertFund.fundValue || "",
+      fundValueAtDeath: insertFund.fundValueAtDeath || "",
+      beneficiaryName: insertFund.beneficiaryName || "",
+      beneficiaryPercentageSplit: insertFund.beneficiaryPercentageSplit || "",
+      amount: insertFund.amount || "",
+      lumpSumTaken: insertFund.lumpSumTaken || "",
+      nondeductibleContribution: insertFund.nondeductibleContribution || "",
+      livingAnnuity: insertFund.livingAnnuity || "",
+      incomeTerm: insertFund.incomeTerm || ""
+    };
     this.retirementFunds.set(id, fund);
     return fund;
   }

@@ -10,6 +10,7 @@ function Router() {
   return (
     <Switch>
       <Route path="/" component={NewRetirementFunds} />
+      <Route path="/new-retirement-funds" component={NewRetirementFunds} />
       <Route component={NotFound} />
     </Switch>
   );

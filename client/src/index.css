@@ -4,53 +4,66 @@
 
 :root {
   --background: hsl(0, 0%, 100%);
-  --foreground: hsl(210, 11%, 15%);
+  --foreground: hsl(220, 13%, 18%);
   --muted: hsl(210, 40%, 98%);
   --muted-foreground: hsl(215, 16%, 47%);
   --popover: hsl(0, 0%, 100%);
-  --popover-foreground: hsl(210, 11%, 15%);
+  --popover-foreground: hsl(220, 13%, 18%);
   --card: hsl(0, 0%, 100%);
-  --card-foreground: hsl(210, 11%, 15%);
+  --card-foreground: hsl(220, 13%, 18%);
   --border: hsl(214, 32%, 91%);
   --input: hsl(214, 32%, 91%);
-  --primary: hsl(193, 100%, 25%);
+  
+  /* Primary: Teal from color scheme */
+  --primary: hsl(186, 100%, 29%);
   --primary-foreground: hsl(0, 0%, 100%);
-  --secondary: hsl(210, 40%, 95%);
-  --secondary-foreground: hsl(210, 11%, 15%);
+  
+  /* Secondary: Orange from color scheme */
+  --secondary: hsl(25, 95%, 53%);
+  --secondary-foreground: hsl(0, 0%, 100%);
+  
   --accent: hsl(210, 40%, 95%);
-  --accent-foreground: hsl(210, 11%, 15%);
+  --accent-foreground: hsl(220, 13%, 18%);
   --destructive: hsl(0, 84.2%, 60.2%);
   --destructive-foreground: hsl(60, 9.1%, 97.8%);
-  --ring: hsl(193, 100%, 25%);
+  --ring: hsl(186, 100%, 29%);
   --radius: 0.25rem;
   
-  /* Custom colors based on design system */
-  --teal-primary: hsl(193, 100%, 25%);
-  --teal-secondary: hsl(194, 100%, 30%);
-  --teal-light: hsl(194, 74%, 45%);
-  --teal-pale: hsl(193, 43%, 67%);
-  --orange-primary: hsl(27, 96%, 61%);
-  --orange-secondary: hsl(30, 100%, 68%);
+  /* Teal color palette from design */
+  --teal-900: hsl(197, 57%, 14%);
+  --teal-800: hsl(199, 63%, 20%);
+  --teal-700: hsl(200, 69%, 25%);
+  --teal-600: hsl(186, 100%, 29%);
+  --teal-500: hsl(180, 77%, 32%);
+  --teal-400: hsl(177, 70%, 41%);
+  --teal-300: hsl(181, 65%, 55%);
+  --teal-200: hsl(185, 57%, 76%);
+  --teal-100: hsl(195, 79%, 92%);
+  --teal-50: hsl(195, 85%, 97%);
   
-  /* Group colors - more subtle */
-  --blue-25: hsl(194, 100%, 97%);
-  --blue-50: hsl(194, 74%, 92%);
-  --green-25: hsl(160, 100%, 97%);
-  --green-50: hsl(160, 84%, 90%);
-  --orange-25: hsl(30, 100%, 97%);
-  --orange-50: hsl(30, 100%, 90%);
+  /* Orange color palette from design */
+  --orange-900: hsl(15, 86%, 30%);
+  --orange-800: hsl(20, 91%, 48%);
+  --orange-700: hsl(25, 95%, 53%);
+  --orange-600: hsl(31, 91%, 60%);
+  --orange-500: hsl(38, 92%, 67%);
+  --orange-400: hsl(42, 87%, 75%);
+  --orange-300: hsl(44, 80%, 83%);
+  --orange-200: hsl(47, 75%, 89%);
+  --orange-100: hsl(48, 67%, 94%);
+  --orange-50: hsl(48, 55%, 97%);
   
-  /* Neutral colors */
-  --neutral-50: hsl(210, 40%, 98%);
-  --neutral-100: hsl(210, 40%, 96%);
-  --neutral-200: hsl(214, 32%, 91%);
-  --neutral-300: hsl(213, 27%, 84%);
-  --neutral-400: hsl(215, 20%, 65%);
-  --neutral-500: hsl(215, 16%, 47%);
-  --neutral-600: hsl(215, 19%, 35%);
-  --neutral-700: hsl(215, 25%, 27%);
-  --neutral-800: hsl(217, 33%, 17%);
-  --neutral-900: hsl(210, 11%, 15%);
+  /* Neutral grays from design */
+  --neutral-900: hsl(220, 13%, 18%);
+  --neutral-800: hsl(215, 28%, 17%);
+  --neutral-700: hsl(217, 19%, 27%);
+  --neutral-600: hsl(215, 14%, 34%);
+  --neutral-500: hsl(220, 9%, 46%);
+  --neutral-400: hsl(218, 11%, 65%);
+  --neutral-300: hsl(216, 12%, 84%);
+  --neutral-200: hsl(220, 13%, 91%);
+  --neutral-100: hsl(220, 14%, 96%);
+  --neutral-50: hsl(210, 20%, 98%);
 }
 
 .dark {
@@ -88,24 +101,41 @@
 }
 
 @layer utilities {
-  .bg-blue-25 {
-    background-color: var(--blue-25);
-  }
-  .bg-blue-50 {
-    background-color: var(--blue-50);
-  }
-  .bg-green-25 {
-    background-color: var(--green-25);
-  }
-  .bg-green-50 {
-    background-color: var(--green-50);
-  }
-  .bg-orange-25 {
-    background-color: var(--orange-25);
-  }
-  .bg-orange-50 {
-    background-color: var(--orange-50);
-  }
+  /* Teal color utilities */
+  .bg-teal-50 { background-color: var(--teal-50); }
+  .bg-teal-100 { background-color: var(--teal-100); }
+  .bg-teal-200 { background-color: var(--teal-200); }
+  .bg-teal-300 { background-color: var(--teal-300); }
+  .bg-teal-600 { background-color: var(--teal-600); }
+  .bg-teal-700 { background-color: var(--teal-700); }
+  
+  .text-teal-600 { color: var(--teal-600); }
+  .text-teal-700 { color: var(--teal-700); }
+  .text-teal-800 { color: var(--teal-800); }
+  
+  /* Orange color utilities */
+  .bg-orange-50 { background-color: var(--orange-50); }
+  .bg-orange-100 { background-color: var(--orange-100); }
+  .bg-orange-200 { background-color: var(--orange-200); }
+  .bg-orange-600 { background-color: var(--orange-600); }
+  .bg-orange-700 { background-color: var(--orange-700); }
+  
+  .text-orange-600 { color: var(--orange-600); }
+  .text-orange-700 { color: var(--orange-700); }
+  .text-orange-800 { color: var(--orange-800); }
+  
+  /* Neutral color utilities */
+  .bg-neutral-50 { background-color: var(--neutral-50); }
+  .bg-neutral-100 { background-color: var(--neutral-100); }
+  .bg-neutral-200 { background-color: var(--neutral-200); }
+  
+  .text-neutral-500 { color: var(--neutral-500); }
+  .text-neutral-600 { color: var(--neutral-600); }
+  .text-neutral-700 { color: var(--neutral-700); }
+  .text-neutral-900 { color: var(--neutral-900); }
+  
+  .border-neutral-200 { border-color: var(--neutral-200); }
+  .border-neutral-300 { border-color: var(--neutral-300); }
   
   /* Compact spacing utilities */
   .compact-row {

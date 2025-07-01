@@ -95,7 +95,7 @@ export function NewTableControls({
                 onClick={() => onToggleColumnGroup("overview")}
                 className={`h-8 px-2 text-xs ${
                   columnVisibility.overview
-                    ? "text-primary bg-primary/10"
+                    ? "text-teal-700 bg-teal-50"
                     : "text-neutral-500"
                 }`}
               >
@@ -108,7 +108,7 @@ export function NewTableControls({
                 onClick={() => onToggleColumnGroup("unapprovedLifeCover")}
                 className={`h-8 px-2 text-xs ${
                   columnVisibility.unapprovedLifeCover
-                    ? "text-green-700 bg-green-50"
+                    ? "text-teal-600 bg-teal-100"
                     : "text-neutral-500"
                 }`}
               >
@@ -121,7 +121,7 @@ export function NewTableControls({
                 onClick={() => onToggleColumnGroup("monthlyDeathBenefit")}
                 className={`h-8 px-2 text-xs ${
                   columnVisibility.monthlyDeathBenefit
-                    ? "text-blue-700 bg-blue-50"
+                    ? "text-teal-800 bg-teal-200"
                     : "text-neutral-500"
                 }`}
               >
@@ -134,7 +134,7 @@ export function NewTableControls({
                 onClick={() => onToggleColumnGroup("fundValueBeneficiaries")}
                 className={`h-8 px-2 text-xs ${
                   columnVisibility.fundValueBeneficiaries
-                    ? "text-orange-700 bg-orange-50"
+                    ? "text-orange-700 bg-orange-100"
                     : "text-neutral-500"
                 }`}
               >

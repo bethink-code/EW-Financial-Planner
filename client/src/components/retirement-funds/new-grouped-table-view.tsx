@@ -52,7 +52,7 @@ export function NewGroupedTableView({ funds, columnVisibility, onFieldUpdate, is
                 <th className="px-3 py-2 text-center border-l border-neutral-300" colSpan={collapsedGroups.has("overview") ? 1 : 2}>
                   <button
                     onClick={() => toggleGroup("overview")}
-                    className="flex items-center justify-center w-full text-xs font-medium text-primary uppercase tracking-wider hover:text-primary/80"
+                    className="flex items-center justify-center w-full text-xs font-medium text-teal-700 uppercase tracking-wider hover:text-teal-600"
                   >
                     {collapsedGroups.has("overview") ? <ChevronRight size={12} /> : <ChevronDown size={12} />}
                     Overview
@@ -72,7 +72,7 @@ export function NewGroupedTableView({ funds, columnVisibility, onFieldUpdate, is
                 <th className="px-3 py-2 text-center border-l border-neutral-300" colSpan={collapsedGroups.has("lifeCover") ? 1 : 3}>
                   <button
                     onClick={() => toggleGroup("lifeCover")}
-                    className="flex items-center justify-center w-full text-xs font-medium text-green-700 uppercase tracking-wider hover:text-green-600"
+                    className="flex items-center justify-center w-full text-xs font-medium text-teal-600 uppercase tracking-wider hover:text-teal-700"
                   >
                     {collapsedGroups.has("lifeCover") ? <ChevronRight size={12} /> : <ChevronDown size={12} />}
                     Unapproved Life Cover
@@ -97,7 +97,7 @@ export function NewGroupedTableView({ funds, columnVisibility, onFieldUpdate, is
                 <th className="px-3 py-2 text-center border-l border-neutral-300" colSpan={collapsedGroups.has("monthlyBenefit") ? 1 : 6}>
                   <button
                     onClick={() => toggleGroup("monthlyBenefit")}
-                    className="flex items-center justify-center w-full text-xs font-medium text-blue-700 uppercase tracking-wider hover:text-blue-600"
+                    className="flex items-center justify-center w-full text-xs font-medium text-teal-800 uppercase tracking-wider hover:text-teal-700"
                   >
                     {collapsedGroups.has("monthlyBenefit") ? <ChevronRight size={12} /> : <ChevronDown size={12} />}
                     Monthly Death Benefit
