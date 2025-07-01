@@ -28,17 +28,6 @@ export function CardsView({ funds, onFieldUpdate, isUpdating, tableMode = "input
 
   return (
     <div className="space-y-6">
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {funds.map((fund) => (
-          <FundCard
-            key={fund.id}
-            fund={fund}
-            onFieldUpdate={onFieldUpdate}
-            isUpdating={isUpdating}
-          />
-        ))}
-      </div>
-
       {/* Summary Section for Inputs Mode */}
       {tableMode === "inputs" && (
         <div className="bg-white rounded shadow-sm border border-neutral-200 p-6">
@@ -77,6 +66,81 @@ export function CardsView({ funds, onFieldUpdate, isUpdating, tableMode = "input
           </div>
         </div>
       )}
+
+      {/* Retirement Summary Section */}
+      <div className="bg-white rounded shadow-sm border border-neutral-200 p-6">
+        <h3 className="text-lg font-medium text-neutral-900 mb-4">Retirement Summary</h3>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div style={{ backgroundColor: '#EDEDED' }} className="rounded p-4">
+            <h4 className="text-sm font-medium text-neutral-700 mb-3">Total Fund Portfolio</h4>
+            <div className="space-y-2">
+              <div className="flex justify-between text-sm">
+                <span className="text-neutral-600">Number of Funds:</span>
+                <span className="font-medium">{funds.length}</span>
+              </div>
+              <div className="flex justify-between text-sm">
+                <span className="text-neutral-600">Total Value:</span>
+                <span className="font-medium">R {totals.fundValue.toLocaleString()}</span>
+              </div>
+              <div className="flex justify-between text-sm">
+                <span className="text-neutral-600">Death Benefit:</span>
+                <span className="font-medium">R {totals.fundValueAtDeath.toLocaleString()}</span>
+              </div>
+            </div>
+          </div>
+
+          <div style={{ backgroundColor: '#CBE7F6' }} className="rounded p-4">
+            <h4 className="text-sm font-medium text-neutral-700 mb-3">Life Cover Protection</h4>
+            <div className="space-y-2">
+              <div className="flex justify-between text-sm">
+                <span className="text-neutral-600">Total Cover:</span>
+                <span className="font-medium">R {totals.coverAmount.toLocaleString()}</span>
+              </div>
+              <div className="flex justify-between text-sm">
+                <span className="text-neutral-600">Approved Cover:</span>
+                <span className="font-medium">R {totals.approvedLifeCover.toLocaleString()}</span>
+              </div>
+              <div className="flex justify-between text-sm">
+                <span className="text-neutral-600">Monthly Income:</span>
+                <span className="font-medium">R {totals.monthlyIncome.toLocaleString()}</span>
+              </div>
+            </div>
+          </div>
+
+          <div style={{ backgroundColor: '#EDEDED' }} className="rounded p-4">
+            <h4 className="text-sm font-medium text-neutral-700 mb-3">Key Ratios</h4>
+            <div className="space-y-2">
+              <div className="flex justify-between text-sm">
+                <span className="text-neutral-600">Cover vs Fund:</span>
+                <span className="font-medium">
+                  {totals.fundValue > 0 ? Math.round((totals.coverAmount / totals.fundValue) * 100) : 0}%
+                </span>
+              </div>
+              <div className="flex justify-between text-sm">
+                <span className="text-neutral-600">Death Benefit:</span>
+                <span className="font-medium">
+                  {totals.fundValue > 0 ? Math.round(((totals.fundValueAtDeath - totals.fundValue) / totals.fundValue) * 100) : 0}%
+                </span>
+              </div>
+              <div className="flex justify-between text-sm">
+                <span className="text-neutral-600">Annual Income:</span>
+                <span className="font-medium">R {(totals.monthlyIncome * 12).toLocaleString()}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        {funds.map((fund) => (
+          <FundCard
+            key={fund.id}
+            fund={fund}
+            onFieldUpdate={onFieldUpdate}
+            isUpdating={isUpdating}
+          />
+        ))}
+      </div>
     </div>
   );
 }
