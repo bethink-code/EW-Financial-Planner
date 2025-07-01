@@ -1,0 +1,120 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: hsl(0, 0%, 100%);
+  --foreground: hsl(20, 14.3%, 4.1%);
+  --muted: hsl(60, 4.8%, 95.9%);
+  --muted-foreground: hsl(25, 5.3%, 44.7%);
+  --popover: hsl(0, 0%, 100%);
+  --popover-foreground: hsl(20, 14.3%, 4.1%);
+  --card: hsl(0, 0%, 100%);
+  --card-foreground: hsl(20, 14.3%, 4.1%);
+  --border: hsl(20, 5.9%, 90%);
+  --input: hsl(20, 5.9%, 90%);
+  --primary: hsl(207, 90%, 54%);
+  --primary-foreground: hsl(211, 100%, 99%);
+  --secondary: hsl(60, 4.8%, 95.9%);
+  --secondary-foreground: hsl(24, 9.8%, 10%);
+  --accent: hsl(60, 4.8%, 95.9%);
+  --accent-foreground: hsl(24, 9.8%, 10%);
+  --destructive: hsl(0, 84.2%, 60.2%);
+  --destructive-foreground: hsl(60, 9.1%, 97.8%);
+  --ring: hsl(20, 14.3%, 4.1%);
+  --radius: 0.5rem;
+  
+  /* Custom colors for retirement funds table */
+  --blue-25: hsl(210, 100%, 98%);
+  --blue-50: hsl(210, 100%, 95%);
+  --green-25: hsl(120, 60%, 98%);
+  --green-50: hsl(120, 60%, 95%);
+  --yellow-25: hsl(60, 90%, 98%);
+  --yellow-50: hsl(60, 90%, 95%);
+  
+  /* Neutral colors */
+  --neutral-50: hsl(0, 0%, 98%);
+  --neutral-100: hsl(0, 0%, 96%);
+  --neutral-200: hsl(0, 0%, 93%);
+  --neutral-300: hsl(0, 0%, 88%);
+  --neutral-400: hsl(0, 0%, 74%);
+  --neutral-500: hsl(0, 0%, 62%);
+  --neutral-600: hsl(0, 0%, 46%);
+  --neutral-700: hsl(0, 0%, 38%);
+  --neutral-800: hsl(0, 0%, 26%);
+  --neutral-900: hsl(0, 0%, 13%);
+}
+
+.dark {
+  --background: hsl(240, 10%, 3.9%);
+  --foreground: hsl(0, 0%, 98%);
+  --muted: hsl(240, 3.7%, 15.9%);
+  --muted-foreground: hsl(240, 5%, 64.9%);
+  --popover: hsl(240, 10%, 3.9%);
+  --popover-foreground: hsl(0, 0%, 98%);
+  --card: hsl(240, 10%, 3.9%);
+  --card-foreground: hsl(0, 0%, 98%);
+  --border: hsl(240, 3.7%, 15.9%);
+  --input: hsl(240, 3.7%, 15.9%);
+  --primary: hsl(207, 90%, 54%);
+  --primary-foreground: hsl(211, 100%, 99%);
+  --secondary: hsl(240, 3.7%, 15.9%);
+  --secondary-foreground: hsl(0, 0%, 98%);
+  --accent: hsl(240, 3.7%, 15.9%);
+  --accent-foreground: hsl(0, 0%, 98%);
+  --destructive: hsl(0, 62.8%, 30.6%);
+  --destructive-foreground: hsl(0, 0%, 98%);
+  --ring: hsl(240, 4.9%, 83.9%);
+  --radius: 0.5rem;
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply font-sans antialiased bg-background text-foreground;
+    font-family: 'Inter', sans-serif;
+  }
+}
+
+@layer utilities {
+  .bg-blue-25 {
+    background-color: var(--blue-25);
+  }
+  .bg-blue-50 {
+    background-color: var(--blue-50);
+  }
+  .bg-green-25 {
+    background-color: var(--green-25);
+  }
+  .bg-green-50 {
+    background-color: var(--green-50);
+  }
+  .bg-yellow-25 {
+    background-color: var(--yellow-25);
+  }
+  .bg-yellow-50 {
+    background-color: var(--yellow-50);
+  }
+}
+
+/* Custom input styling for inline editing */
+.inline-edit-input {
+  @apply border-0 bg-transparent focus:ring-2 focus:ring-primary rounded px-2 py-1 transition-all;
+}
+
+.inline-edit-input:focus {
+  @apply bg-white shadow-sm;
+}
+
+/* Auto-save feedback */
+@keyframes save-flash {
+  0% { background-color: hsl(120, 60%, 95%); }
+  100% { background-color: transparent; }
+}
+
+.save-flash {
+  animation: save-flash 500ms ease-out;
+}
