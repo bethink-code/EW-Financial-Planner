@@ -151,6 +151,7 @@ export default function NewRetirementFunds() {
           funds={filteredFunds}
           onFieldUpdate={handleFieldUpdate}
           isUpdating={updateMutation.isPending}
+          tableMode={tableMode}
         />
       )}
 
