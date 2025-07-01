@@ -20,33 +20,61 @@ export class MemStorage implements IStorage {
     
     // Initialize with sample data
     this.createRetirementFund({
-      description: "Total",
+      // Overview
+      description: "Total Pension Fund",
       owner: "John Doe",
-      coverAgainst: "0",
-      monthlyDeathBenefit: "0",
-      lumpSumDeath: "0",
-      previousLumpSums: "0",
-      taxFreeAmount: "0",
-      fundValue: "0",
-      fundValueAtDeath: "0",
-      name: "",
-      amount: "0",
-      lumpSumTaken: "0",
+      coverAmount: "500000",
+      
+      // Unapproved life cover
+      beneficiary: "Spouse",
+      beneficiaryPercentage: "100",
+      coverSplit: "500000",
+      
+      // Monthly death benefit
+      monthlyIncome: "5000",
+      termYears: "10",
+      increasePercentage: "5",
+      approvedLifeCover: "250000",
+      fundValue: "180000",
+      fundValueAtDeath: "200000",
+      
+      // Fund value beneficiaries
+      beneficiaryName: "Sarah Doe",
+      beneficiaryPercentageSplit: "60",
+      amount: "150000",
+      lumpSumTaken: "25000",
+      nondeductibleContribution: "10000",
+      livingAnnuity: "120000",
+      incomeTerm: "20"
     });
     
     this.createRetirementFund({
-      description: "Lump sum death",
+      // Overview
+      description: "Provident Fund",
       owner: "Jane Smith",
-      coverAgainst: "0",
-      monthlyDeathBenefit: "0",
-      lumpSumDeath: "0",
-      previousLumpSums: "0",
-      taxFreeAmount: "0",
-      fundValue: "0",
-      fundValueAtDeath: "0",
-      name: "",
-      amount: "0",
-      lumpSumTaken: "0",
+      coverAmount: "350000",
+      
+      // Unapproved life cover
+      beneficiary: "Children",
+      beneficiaryPercentage: "50",
+      coverSplit: "175000",
+      
+      // Monthly death benefit
+      monthlyIncome: "3500",
+      termYears: "15",
+      increasePercentage: "4",
+      approvedLifeCover: "175000",
+      fundValue: "120000",
+      fundValueAtDeath: "140000",
+      
+      // Fund value beneficiaries
+      beneficiaryName: "Tom Smith",
+      beneficiaryPercentageSplit: "40",
+      amount: "100000",
+      lumpSumTaken: "15000",
+      nondeductibleContribution: "8000",
+      livingAnnuity: "85000",
+      incomeTerm: "25"
     });
   }
 

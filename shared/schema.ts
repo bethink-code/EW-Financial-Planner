@@ -4,18 +4,33 @@ import { z } from "zod";
 
 export const retirementFunds = pgTable("retirement_funds", {
   id: serial("id").primaryKey(),
+  
+  // Overview section
   description: text("description").notNull(),
   owner: text("owner").notNull(),
-  coverAgainst: text("cover_against").notNull().default("0"),
-  monthlyDeathBenefit: decimal("monthly_death_benefit", { precision: 12, scale: 2 }).notNull().default("0"),
-  lumpSumDeath: decimal("lump_sum_death", { precision: 12, scale: 2 }).notNull().default("0"),
-  previousLumpSums: decimal("previous_lump_sums", { precision: 12, scale: 2 }).notNull().default("0"),
-  taxFreeAmount: decimal("tax_free_amount", { precision: 12, scale: 2 }).notNull().default("0"),
-  fundValue: decimal("fund_value", { precision: 12, scale: 2 }).notNull().default("0"),
-  fundValueAtDeath: decimal("fund_value_at_death", { precision: 12, scale: 2 }).notNull().default("0"),
-  name: text("name").notNull().default(""),
-  amount: decimal("amount", { precision: 12, scale: 2 }).notNull().default("0"),
-  lumpSumTaken: decimal("lump_sum_taken", { precision: 12, scale: 2 }).notNull().default("0"),
+  coverAmount: text("cover_amount").notNull().default("0"),
+  
+  // Unapproved life cover section
+  beneficiary: text("beneficiary").notNull().default(""),
+  beneficiaryPercentage: text("beneficiary_percentage").notNull().default("0"),
+  coverSplit: text("cover_split").notNull().default("0"),
+  
+  // Monthly death benefit section
+  monthlyIncome: text("monthly_income").notNull().default("0"),
+  termYears: text("term_years").notNull().default("0"),
+  increasePercentage: text("increase_percentage").notNull().default("0"),
+  approvedLifeCover: text("approved_life_cover").notNull().default("0"),
+  fundValue: text("fund_value").notNull().default("0"),
+  fundValueAtDeath: text("fund_value_at_death").notNull().default("0"),
+  
+  // Fund value beneficiaries section
+  beneficiaryName: text("beneficiary_name").notNull().default(""),
+  beneficiaryPercentageSplit: text("beneficiary_percentage_split").notNull().default("0"),
+  amount: text("amount").notNull().default("0"),
+  lumpSumTaken: text("lump_sum_taken").notNull().default("0"),
+  nondeductibleContribution: text("nondeductible_contribution").notNull().default("0"),
+  livingAnnuity: text("living_annuity").notNull().default("0"),
+  incomeTerm: text("income_term").notNull().default("0"),
 });
 
 export const insertRetirementFundSchema = createInsertSchema(retirementFunds).omit({
