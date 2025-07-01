@@ -2,7 +2,7 @@ import { useState } from "react";
 import { RetirementFund, UpdateRetirementFund } from "@shared/schema";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { ChevronDown, ChevronRight } from "lucide-react";
+import { ChevronDown, ChevronRight, Edit3 } from "lucide-react";
 
 interface ColumnVisibility {
   overview: boolean;
@@ -40,10 +40,10 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
 
   return (
     <div className="overflow-x-auto">
-      <table className="min-w-full bg-white">
+      <table className="min-w-full bg-white table-fixed">
         <thead>
           <tr className="bg-neutral-50 border-b border-neutral-200">
-            <th className="px-3 py-2 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">
+            <th className="w-48 px-3 py-2 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">
               Description
             </th>
             
@@ -52,37 +52,33 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
               <>
                 {tableMode === "inputs" ? (
                   <>
-                    <th className="px-3 py-2 text-center border-l border-neutral-300" colSpan={collapsedGroups.has("overview") ? 1 : 2}>
+                    <th className={`w-36 px-3 py-2 text-center border-l border-neutral-300 transition-all duration-300 ease-in-out ${collapsedGroups.has("overview") ? 'opacity-100' : 'opacity-100'}`} colSpan={collapsedGroups.has("overview") ? 1 : 2}>
                       <button
                         onClick={() => toggleGroup("overview")}
-                        className="flex items-center justify-center w-full text-xs font-medium text-teal-700 uppercase tracking-wider hover:text-teal-600"
+                        className="flex items-center justify-center w-full text-xs font-medium text-teal-700 uppercase tracking-wider hover:text-teal-600 transition-colors duration-200"
                       >
                         {collapsedGroups.has("overview") ? <ChevronRight size={12} /> : <ChevronDown size={12} />}
                         Overview
                       </button>
                     </th>
-                    {!collapsedGroups.has("overview") && (
-                      <th className="px-3 py-2 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">
-                        Cover Amount
-                      </th>
-                    )}
+                    <th className={`w-36 px-3 py-2 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider transition-all duration-300 ease-in-out ${collapsedGroups.has("overview") ? 'w-0 opacity-0 hidden' : 'w-36 opacity-100'}`}>
+                      Cover Amount
+                    </th>
                   </>
                 ) : (
                   <>
-                    <th className="px-3 py-2 text-center border-l border-neutral-300" colSpan={collapsedGroups.has("overview") ? 1 : 2}>
+                    <th className={`w-48 px-3 py-2 text-center border-l border-neutral-300 transition-all duration-300 ease-in-out`} colSpan={collapsedGroups.has("overview") ? 1 : 2}>
                       <button
                         onClick={() => toggleGroup("overview")}
-                        className="flex items-center justify-center w-full text-xs font-medium text-teal-700 uppercase tracking-wider hover:text-teal-600"
+                        className="flex items-center justify-center w-full text-xs font-medium text-teal-700 uppercase tracking-wider hover:text-teal-600 transition-colors duration-200"
                       >
                         {collapsedGroups.has("overview") ? <ChevronRight size={12} /> : <ChevronDown size={12} />}
                         Lump Sum Left Over Available as Provisions
                       </button>
                     </th>
-                    {!collapsedGroups.has("overview") && (
-                      <th className="px-3 py-2 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">
-                        Amount Available
-                      </th>
-                    )}
+                    <th className={`w-36 px-3 py-2 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider transition-all duration-300 ease-in-out ${collapsedGroups.has("overview") ? 'w-0 opacity-0 hidden' : 'w-36 opacity-100'}`}>
+                      Amount Available
+                    </th>
                   </>
                 )}
               </>
@@ -91,25 +87,21 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
             {/* Unapproved Life Cover Section */}
             {columnVisibility.unapprovedLifeCover && (
               <>
-                <th className="px-3 py-2 text-center border-l border-neutral-300" colSpan={collapsedGroups.has("lifeCover") ? 1 : 3}>
+                <th className={`w-40 px-3 py-2 text-center border-l border-neutral-300 transition-all duration-300 ease-in-out`} colSpan={collapsedGroups.has("lifeCover") ? 1 : 3}>
                   <button
                     onClick={() => toggleGroup("lifeCover")}
-                    className="flex items-center justify-center w-full text-xs font-medium text-teal-600 uppercase tracking-wider hover:text-teal-700"
+                    className="flex items-center justify-center w-full text-xs font-medium text-teal-600 uppercase tracking-wider hover:text-teal-700 transition-colors duration-200"
                   >
                     {collapsedGroups.has("lifeCover") ? <ChevronRight size={12} /> : <ChevronDown size={12} />}
                     Unapproved Life Cover
                   </button>
                 </th>
-                {!collapsedGroups.has("lifeCover") && (
-                  <>
-                    <th className="px-3 py-2 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">
-                      % Split
-                    </th>
-                    <th className="px-3 py-2 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">
-                      Cover Split (ZAR)
-                    </th>
-                  </>
-                )}
+                <th className={`w-24 px-3 py-2 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider transition-all duration-300 ease-in-out ${collapsedGroups.has("lifeCover") ? 'w-0 opacity-0 hidden' : 'w-24 opacity-100'}`}>
+                  % Split
+                </th>
+                <th className={`w-36 px-3 py-2 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider transition-all duration-300 ease-in-out ${collapsedGroups.has("lifeCover") ? 'w-0 opacity-0 hidden' : 'w-36 opacity-100'}`}>
+                  Cover Split (ZAR)
+                </th>
               </>
             )}
 
@@ -270,8 +262,9 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
                           onValueChange={(value) => handleInputChange(fund.id, "owner", value)}
                           disabled={isUpdating}
                         >
-                          <SelectTrigger className="compact-input border-0 bg-transparent focus:bg-white focus:border focus:border-primary">
+                          <SelectTrigger className="compact-input border-0 bg-transparent focus:bg-white focus:border focus:border-teal-500 hover:bg-teal-50 transition-colors duration-200 group">
                             <SelectValue />
+                            <Edit3 size={12} className="ml-1 text-teal-400 opacity-0 group-hover:opacity-100 transition-opacity duration-200" />
                           </SelectTrigger>
                           <SelectContent>
                             {owners.map((owner) => (
@@ -282,16 +275,18 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
                           </SelectContent>
                         </Select>
                       </td>
-                      {!collapsedGroups.has("overview") && (
-                        <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900">
+                      <td className={`px-3 py-2 whitespace-nowrap text-sm text-neutral-900 transition-all duration-300 ease-in-out ${collapsedGroups.has("overview") ? 'w-0 opacity-0 hidden' : 'w-36 opacity-100'}`}>
+                        <div className="relative group">
                           <Input
                             value={fund.coverAmount}
                             onChange={(e) => handleInputChange(fund.id, "coverAmount", e.target.value)}
-                            className="compact-input w-20 text-right border-0 bg-transparent focus:bg-white focus:border focus:border-primary"
+                            className="compact-input w-full text-right border-0 bg-transparent focus:bg-white focus:border focus:border-teal-500 hover:bg-teal-50 transition-colors duration-200"
                             disabled={isUpdating}
+                            placeholder="R 0"
                           />
-                        </td>
-                      )}
+                          <Edit3 size={12} className="absolute right-2 top-1/2 -translate-y-1/2 text-teal-400 opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none" />
+                        </div>
+                      </td>
                     </>
                   ) : (
                     <>
