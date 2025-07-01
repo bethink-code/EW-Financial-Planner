@@ -26,45 +26,45 @@ export function DetailedRow({ fund, onFieldUpdate, isUpdating }: DetailedRowProp
   };
 
   return (
-    <div className="p-6">
-      <div className="flex items-center justify-between mb-4">
-        <div className="flex items-center space-x-3">
+    <div className="p-4">
+      <div className="flex items-center justify-between mb-3">
+        <div className="flex items-center space-x-2">
           <button
             onClick={() => setIsExpanded(!isExpanded)}
             className="text-primary hover:text-primary/80 transition-colors"
           >
-            {isExpanded ? <ChevronDown size={20} /> : <ChevronRight size={20} />}
+            {isExpanded ? <ChevronDown size={16} /> : <ChevronRight size={16} />}
           </button>
-          <h3 className="text-lg font-semibold text-neutral-900">{fund.description}</h3>
-          <Badge className={getOwnerBadgeColor(fund.owner)}>
-            Owner: {fund.owner}
+          <h3 className="text-base font-semibold text-neutral-900">{fund.description}</h3>
+          <Badge className={`${getOwnerBadgeColor(fund.owner)} text-xs px-2 py-0.5`}>
+            {fund.owner}
           </Badge>
         </div>
-        <div className="flex items-center space-x-3">
-          <span className="text-sm text-neutral-500">Last updated: 2 hours ago</span>
+        <div className="flex items-center space-x-2">
+          <span className="text-xs text-neutral-500">2h ago</span>
           <button className="text-neutral-400 hover:text-neutral-600 transition-colors">
-            <Edit size={18} />
+            <Edit size={14} />
           </button>
         </div>
       </div>
 
       {/* Summary Row */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4">
-        <div className="bg-neutral-50 rounded-lg p-3">
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-3">
+        <div className="bg-neutral-50 rounded p-2">
           <div className="text-xs font-medium text-neutral-500 uppercase tracking-wider">Fund Value</div>
-          <div className="text-lg font-semibold text-neutral-900">${fund.fundValue}</div>
+          <div className="text-sm font-semibold text-neutral-900">${fund.fundValue}</div>
         </div>
-        <div className="bg-neutral-50 rounded-lg p-3">
+        <div className="bg-neutral-50 rounded p-2">
           <div className="text-xs font-medium text-neutral-500 uppercase tracking-wider">Monthly Death</div>
-          <div className="text-lg font-semibold text-neutral-900">${fund.monthlyDeathBenefit}</div>
+          <div className="text-sm font-semibold text-neutral-900">${fund.monthlyDeathBenefit}</div>
         </div>
-        <div className="bg-neutral-50 rounded-lg p-3">
+        <div className="bg-neutral-50 rounded p-2">
           <div className="text-xs font-medium text-neutral-500 uppercase tracking-wider">Lump Sum Death</div>
-          <div className="text-lg font-semibold text-neutral-900">${fund.lumpSumDeath}</div>
+          <div className="text-sm font-semibold text-neutral-900">${fund.lumpSumDeath}</div>
         </div>
-        <div className="bg-neutral-50 rounded-lg p-3">
+        <div className="bg-neutral-50 rounded p-2">
           <div className="text-xs font-medium text-neutral-500 uppercase tracking-wider">Tax Free Amount</div>
-          <div className="text-lg font-semibold text-neutral-900">${fund.taxFreeAmount}</div>
+          <div className="text-sm font-semibold text-neutral-900">${fund.taxFreeAmount}</div>
         </div>
       </div>
 

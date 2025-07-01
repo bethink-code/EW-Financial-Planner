@@ -101,28 +101,28 @@ export default function RetirementFunds() {
       {/* Header */}
       <header className="bg-white shadow-sm border-b border-neutral-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16">
-            <div className="flex items-center space-x-4">
+          <div className="flex justify-between items-center h-12">
+            <div className="flex items-center space-x-3">
               <div className="flex items-center space-x-2">
-                <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
-                  <PiggyBank className="text-primary-foreground text-sm" size={16} />
+                <div className="w-6 h-6 bg-primary rounded flex items-center justify-center">
+                  <PiggyBank className="text-primary-foreground" size={14} />
                 </div>
-                <h1 className="text-xl font-semibold text-neutral-900">Retirement Funds</h1>
+                <h1 className="text-lg font-semibold text-neutral-900">Retirement Funds</h1>
               </div>
             </div>
-            <div className="flex items-center space-x-4">
-              <button className="text-neutral-600 hover:text-neutral-900 transition-colors">
-                <Bell size={18} />
+            <div className="flex items-center space-x-3">
+              <button className="text-neutral-600 hover:text-neutral-900 transition-colors p-1">
+                <Bell size={16} />
               </button>
-              <button className="text-neutral-600 hover:text-neutral-900 transition-colors">
-                <UserCircle size={20} />
+              <button className="text-neutral-600 hover:text-neutral-900 transition-colors p-1">
+                <UserCircle size={18} />
               </button>
             </div>
           </div>
         </div>
       </header>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
         <TableControls
           viewMode={viewMode}
           onViewModeChange={setViewMode}
@@ -170,15 +170,15 @@ export default function RetirementFunds() {
         )}
 
         {/* Mobile notification */}
-        <div className="mt-6 p-4 bg-blue-50 border border-blue-200 rounded-lg lg:hidden">
-          <div className="flex items-start space-x-3">
-            <div className="w-5 h-5 rounded-full bg-blue-500 flex items-center justify-center mt-0.5">
+        <div className="mt-3 p-3 bg-blue-25 border border-blue-200 rounded lg:hidden">
+          <div className="flex items-start space-x-2">
+            <div className="w-4 h-4 rounded-full bg-primary flex items-center justify-center mt-0.5">
               <span className="text-white text-xs">i</span>
             </div>
             <div>
-              <h4 className="text-sm font-medium text-blue-900">Mobile View Active</h4>
-              <p className="text-sm text-blue-700 mt-1">
-                For the best experience with this data table, consider using Cards view on mobile devices or switch to Detailed view for comprehensive editing.
+              <h4 className="text-xs font-medium text-primary">Mobile View Active</h4>
+              <p className="text-xs text-neutral-600 mt-0.5">
+                For best experience, use Cards or Detailed view on mobile devices.
               </p>
             </div>
           </div>

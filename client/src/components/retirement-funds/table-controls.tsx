@@ -36,82 +36,82 @@ export function TableControls({
   ] as const;
 
   return (
-    <div className="mb-6 space-y-4">
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-        <div className="flex items-center space-x-4">
-          <h2 className="text-2xl font-semibold text-neutral-900">Fund Overview</h2>
-          <Badge variant="secondary" className="bg-neutral-100 text-neutral-800">
+    <div className="mb-3 space-y-3">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+        <div className="flex items-center space-x-3">
+          <h2 className="text-lg font-semibold text-neutral-900">Fund Overview</h2>
+          <Badge variant="secondary" className="bg-neutral-100 text-neutral-700 px-2 py-0.5 text-xs">
             {fundsCount} records
           </Badge>
         </div>
-        <div className="flex items-center space-x-3">
+        <div className="flex items-center space-x-2">
           <div className="relative">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-neutral-400" size={16} />
+            <Search className="absolute left-2.5 top-1/2 transform -translate-y-1/2 text-neutral-400" size={14} />
             <Input
               placeholder="Search funds..."
               value={searchQuery}
               onChange={(e) => onSearchChange(e.target.value)}
-              className="pl-10 pr-4 py-2 w-64"
+              className="pl-8 pr-3 py-1.5 w-48 h-8 text-sm"
             />
           </div>
-          <Button variant="outline" size="sm">
-            <Filter className="mr-2" size={16} />
+          <Button variant="outline" size="sm" className="h-8 px-3 text-xs">
+            <Filter className="mr-1" size={14} />
             Filter
           </Button>
-          <Button size="sm">
-            <Plus className="mr-2" size={16} />
+          <Button size="sm" className="h-8 px-3 text-xs bg-orange-primary hover:bg-orange-secondary">
+            <Plus className="mr-1" size={14} />
             Add Fund
           </Button>
         </div>
       </div>
 
       {/* View Mode Toggle */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 p-4 bg-white rounded-lg border border-neutral-200">
-        <div className="flex items-center space-x-4">
-          <span className="text-sm font-medium text-neutral-700">View Mode:</span>
-          <div className="inline-flex bg-neutral-100 rounded-lg p-1" role="group">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 p-3 bg-white rounded border border-neutral-200">
+        <div className="flex items-center space-x-3">
+          <span className="text-xs font-medium text-neutral-700">View:</span>
+          <div className="inline-flex bg-neutral-100 rounded p-0.5" role="group">
             {viewModes.map(({ id, label, icon: Icon }) => (
               <button
                 key={id}
                 onClick={() => onViewModeChange(id)}
-                className={`px-4 py-2 text-sm font-medium rounded-md transition-colors flex items-center ${
+                className={`px-3 py-1.5 text-xs font-medium rounded transition-colors flex items-center ${
                   viewMode === id
-                    ? "bg-primary text-primary-foreground"
-                    : "text-neutral-600 hover:text-neutral-900"
+                    ? "bg-primary text-primary-foreground shadow-sm"
+                    : "text-neutral-600 hover:text-neutral-900 hover:bg-neutral-50"
                 }`}
               >
-                <Icon className="mr-2" size={16} />
+                <Icon className="mr-1.5" size={14} />
                 {label}
               </button>
             ))}
           </div>
         </div>
-        <div className="flex items-center space-x-4">
-          <span className="text-sm font-medium text-neutral-700">Show Columns:</span>
-          <div className="flex items-center space-x-3">
+        <div className="flex items-center space-x-3">
+          <span className="text-xs font-medium text-neutral-700">Show:</span>
+          <div className="flex items-center space-x-2">
             <label className="flex items-center">
               <Checkbox
                 checked={columnVisibility.basicInfo}
                 onCheckedChange={() => onToggleColumnGroup("basicInfo")}
-                className="rounded border-neutral-300 text-primary"
+                className="rounded border-neutral-300 text-primary w-3 h-3"
               />
-              <span className="ml-2 text-sm text-neutral-600">Basic Info</span>
+              <span className="ml-1.5 text-xs text-neutral-600">Basic</span>
             </label>
             <label className="flex items-center">
               <Checkbox
                 checked={columnVisibility.deathBenefits}
                 onCheckedChange={() => onToggleColumnGroup("deathBenefits")}
-                className="rounded border-neutral-300 text-primary"
+                className="rounded border-neutral-300 text-primary w-3 h-3"
               />
-              <span className="ml-2 text-sm text-neutral-600">Death Benefits</span>
+              <span className="ml-1.5 text-xs text-neutral-600">Benefits</span>
             </label>
             <label className="flex items-center">
               <Checkbox
                 checked={columnVisibility.financialDetails}
                 onCheckedChange={() => onToggleColumnGroup("financialDetails")}
-                className="rounded border-neutral-300 text-primary"
+                className="rounded border-neutral-300 text-primary w-3 h-3"
               />
-              <span className="ml-2 text-sm text-neutral-600">Financial Details</span>
+              <span className="ml-1.5 text-xs text-neutral-600">Financial</span>
             </label>
           </div>
         </div>

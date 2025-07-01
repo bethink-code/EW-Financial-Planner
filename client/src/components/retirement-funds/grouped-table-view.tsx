@@ -46,16 +46,16 @@ export function GroupedTableView({ funds, columnVisibility, onFieldUpdate, isUpd
             <tr>
               {/* Basic Information Group */}
               {columnVisibility.basicInfo && (
-                <th colSpan={3} className="px-6 py-3 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider bg-blue-50 border-r border-neutral-200">
+                <th colSpan={3} className="px-4 py-2 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider bg-blue-50 border-r border-neutral-200">
                   <div className="flex items-center space-x-2">
                     <button
                       onClick={() => toggleGroup("basic")}
                       className="text-primary hover:text-primary/80 transition-colors"
                     >
                       {collapsedGroups.has("basic") ? (
-                        <ChevronRight size={16} />
+                        <ChevronRight size={14} />
                       ) : (
-                        <ChevronDown size={16} />
+                        <ChevronDown size={14} />
                       )}
                     </button>
                     <span>Basic Information</span>
@@ -65,16 +65,16 @@ export function GroupedTableView({ funds, columnVisibility, onFieldUpdate, isUpd
               
               {/* Death Benefits Group */}
               {columnVisibility.deathBenefits && (
-                <th colSpan={4} className="px-6 py-3 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider bg-green-50 border-r border-neutral-200">
+                <th colSpan={4} className="px-4 py-2 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider bg-green-50 border-r border-neutral-200">
                   <div className="flex items-center space-x-2">
                     <button
                       onClick={() => toggleGroup("death")}
                       className="text-primary hover:text-primary/80 transition-colors"
                     >
                       {collapsedGroups.has("death") ? (
-                        <ChevronRight size={16} />
+                        <ChevronRight size={14} />
                       ) : (
-                        <ChevronDown size={16} />
+                        <ChevronDown size={14} />
                       )}
                     </button>
                     <span>Death Benefits</span>
@@ -84,16 +84,16 @@ export function GroupedTableView({ funds, columnVisibility, onFieldUpdate, isUpd
               
               {/* Financial Details Group */}
               {columnVisibility.financialDetails && (
-                <th colSpan={5} className="px-6 py-3 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider bg-yellow-50">
+                <th colSpan={5} className="px-4 py-2 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider bg-orange-50">
                   <div className="flex items-center space-x-2">
                     <button
                       onClick={() => toggleGroup("financial")}
                       className="text-primary hover:text-primary/80 transition-colors"
                     >
                       {collapsedGroups.has("financial") ? (
-                        <ChevronRight size={16} />
+                        <ChevronRight size={14} />
                       ) : (
-                        <ChevronDown size={16} />
+                        <ChevronDown size={14} />
                       )}
                     </button>
                     <span>Financial Details</span>
@@ -105,30 +105,30 @@ export function GroupedTableView({ funds, columnVisibility, onFieldUpdate, isUpd
               {/* Basic Information Sub-headers */}
               {columnVisibility.basicInfo && !collapsedGroups.has("basic") && (
                 <>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider bg-blue-25">Description</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider bg-blue-25">Owner</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider bg-blue-25 border-r border-neutral-200">Cover Against</th>
+                  <th className="px-3 py-1.5 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider bg-blue-25">Description</th>
+                  <th className="px-3 py-1.5 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider bg-blue-25">Owner</th>
+                  <th className="px-3 py-1.5 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider bg-blue-25 border-r border-neutral-200">Cover Against</th>
                 </>
               )}
               
               {/* Death Benefits Sub-headers */}
               {columnVisibility.deathBenefits && !collapsedGroups.has("death") && (
                 <>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider bg-green-25">Monthly Death</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider bg-green-25">Lump Sum Death</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider bg-green-25">Previous Lump</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider bg-green-25 border-r border-neutral-200">Tax Free Amount</th>
+                  <th className="px-3 py-1.5 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider bg-green-25">Monthly Death</th>
+                  <th className="px-3 py-1.5 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider bg-green-25">Lump Sum Death</th>
+                  <th className="px-3 py-1.5 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider bg-green-25">Previous Lump</th>
+                  <th className="px-3 py-1.5 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider bg-green-25 border-r border-neutral-200">Tax Free Amount</th>
                 </>
               )}
               
               {/* Financial Details Sub-headers */}
               {columnVisibility.financialDetails && !collapsedGroups.has("financial") && (
                 <>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider bg-yellow-25">Fund Value</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider bg-yellow-25">Value at Death</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider bg-yellow-25">Name</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider bg-yellow-25">Amount</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider bg-yellow-25">Lump Sum</th>
+                  <th className="px-3 py-1.5 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider bg-orange-25">Fund Value</th>
+                  <th className="px-3 py-1.5 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider bg-orange-25">Value at Death</th>
+                  <th className="px-3 py-1.5 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider bg-orange-25">Name</th>
+                  <th className="px-3 py-1.5 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider bg-orange-25">Amount</th>
+                  <th className="px-3 py-1.5 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider bg-orange-25">Lump Sum</th>
                 </>
               )}
             </tr>
@@ -139,21 +139,21 @@ export function GroupedTableView({ funds, columnVisibility, onFieldUpdate, isUpd
                 {/* Basic Information Cells */}
                 {columnVisibility.basicInfo && !collapsedGroups.has("basic") && (
                   <>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-neutral-900">
+                    <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900">
                       <Input
                         value={fund.description}
                         onChange={(e) => handleInputChange(fund.id, "description", e.target.value)}
-                        className="inline-edit-input w-full"
+                        className="compact-input w-full border-0 bg-transparent focus:bg-white focus:border focus:border-primary"
                         disabled={isUpdating}
                       />
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-neutral-900">
+                    <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900">
                       <Select
                         value={fund.owner}
                         onValueChange={(value) => handleInputChange(fund.id, "owner", value)}
                         disabled={isUpdating}
                       >
-                        <SelectTrigger className="w-full">
+                        <SelectTrigger className="w-full h-7 text-xs border-0 bg-transparent focus:bg-white focus:border focus:border-primary">
                           <SelectValue />
                         </SelectTrigger>
                         <SelectContent>
@@ -165,11 +165,11 @@ export function GroupedTableView({ funds, columnVisibility, onFieldUpdate, isUpd
                         </SelectContent>
                       </Select>
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-neutral-900 border-r border-neutral-200">
+                    <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900 border-r border-neutral-200">
                       <Input
                         value={fund.coverAgainst}
                         onChange={(e) => handleInputChange(fund.id, "coverAgainst", e.target.value)}
-                        className="inline-edit-input w-20 text-right"
+                        className="compact-input w-16 text-right border-0 bg-transparent focus:bg-white focus:border focus:border-primary"
                         disabled={isUpdating}
                       />
                     </td>
@@ -179,39 +179,39 @@ export function GroupedTableView({ funds, columnVisibility, onFieldUpdate, isUpd
                 {/* Death Benefits Cells */}
                 {columnVisibility.deathBenefits && !collapsedGroups.has("death") && (
                   <>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-neutral-900">
+                    <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900">
                       <Input
                         type="number"
                         value={fund.monthlyDeathBenefit}
                         onChange={(e) => handleInputChange(fund.id, "monthlyDeathBenefit", e.target.value)}
-                        className="inline-edit-input w-24 text-right"
+                        className="compact-input w-20 text-right border-0 bg-transparent focus:bg-white focus:border focus:border-primary"
                         disabled={isUpdating}
                       />
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-neutral-900">
+                    <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900">
                       <Input
                         type="number"
                         value={fund.lumpSumDeath}
                         onChange={(e) => handleInputChange(fund.id, "lumpSumDeath", e.target.value)}
-                        className="inline-edit-input w-24 text-right"
+                        className="compact-input w-20 text-right border-0 bg-transparent focus:bg-white focus:border focus:border-primary"
                         disabled={isUpdating}
                       />
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-neutral-900">
+                    <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900">
                       <Input
                         type="number"
                         value={fund.previousLumpSums}
                         onChange={(e) => handleInputChange(fund.id, "previousLumpSums", e.target.value)}
-                        className="inline-edit-input w-24 text-right"
+                        className="compact-input w-20 text-right border-0 bg-transparent focus:bg-white focus:border focus:border-primary"
                         disabled={isUpdating}
                       />
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-neutral-900 border-r border-neutral-200">
+                    <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900 border-r border-neutral-200">
                       <Input
                         type="number"
                         value={fund.taxFreeAmount}
                         onChange={(e) => handleInputChange(fund.id, "taxFreeAmount", e.target.value)}
-                        className="inline-edit-input w-24 text-right"
+                        className="compact-input w-20 text-right border-0 bg-transparent focus:bg-white focus:border focus:border-primary"
                         disabled={isUpdating}
                       />
                     </td>
@@ -221,49 +221,49 @@ export function GroupedTableView({ funds, columnVisibility, onFieldUpdate, isUpd
                 {/* Financial Details Cells */}
                 {columnVisibility.financialDetails && !collapsedGroups.has("financial") && (
                   <>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-neutral-900">
+                    <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900">
                       <Input
                         type="number"
                         value={fund.fundValue}
                         onChange={(e) => handleInputChange(fund.id, "fundValue", e.target.value)}
-                        className="inline-edit-input w-24 text-right"
+                        className="compact-input w-20 text-right border-0 bg-transparent focus:bg-white focus:border focus:border-primary"
                         disabled={isUpdating}
                       />
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-neutral-900">
+                    <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900">
                       <Input
                         type="number"
                         value={fund.fundValueAtDeath}
                         onChange={(e) => handleInputChange(fund.id, "fundValueAtDeath", e.target.value)}
-                        className="inline-edit-input w-24 text-right"
+                        className="compact-input w-20 text-right border-0 bg-transparent focus:bg-white focus:border focus:border-primary"
                         disabled={isUpdating}
                       />
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-neutral-900">
+                    <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900">
                       <Input
                         value={fund.name}
                         onChange={(e) => handleInputChange(fund.id, "name", e.target.value)}
-                        className="inline-edit-input w-32"
+                        className="compact-input w-24 border-0 bg-transparent focus:bg-white focus:border focus:border-primary"
                         placeholder="Name"
                         disabled={isUpdating}
                       />
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-neutral-900">
+                    <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900">
                       <Input
                         type="number"
                         value={fund.amount}
                         onChange={(e) => handleInputChange(fund.id, "amount", e.target.value)}
-                        className="inline-edit-input w-24 text-right"
+                        className="compact-input w-20 text-right border-0 bg-transparent focus:bg-white focus:border focus:border-primary"
                         placeholder="0"
                         disabled={isUpdating}
                       />
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-neutral-900">
+                    <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900">
                       <Input
                         type="number"
                         value={fund.lumpSumTaken}
                         onChange={(e) => handleInputChange(fund.id, "lumpSumTaken", e.target.value)}
-                        className="inline-edit-input w-24 text-right"
+                        className="compact-input w-20 text-right border-0 bg-transparent focus:bg-white focus:border focus:border-primary"
                         placeholder="0"
                         disabled={isUpdating}
                       />

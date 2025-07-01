@@ -19,19 +19,19 @@ export function FundCard({ fund, onFieldUpdate, isUpdating }: FundCardProps) {
   const owners = ["John Doe", "Jane Smith"];
 
   return (
-    <div className="bg-white rounded-lg shadow-sm border border-neutral-200 p-6">
-      <div className="flex items-center justify-between mb-4">
-        <h3 className="text-lg font-semibold text-neutral-900">{fund.description}</h3>
+    <div className="bg-white rounded shadow-sm border border-neutral-200 p-4">
+      <div className="flex items-center justify-between mb-3">
+        <h3 className="text-base font-semibold text-neutral-900">{fund.description}</h3>
         <button className="text-neutral-400 hover:text-neutral-600 transition-colors">
-          <MoreVertical size={20} />
+          <MoreVertical size={16} />
         </button>
       </div>
       
-      <div className="space-y-4">
+      <div className="space-y-3">
         {/* Basic Information Section */}
-        <div className="bg-blue-50 rounded-lg p-4">
-          <h4 className="text-sm font-medium text-blue-900 mb-3">Basic Information</h4>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+        <div className="bg-blue-50 rounded p-3">
+          <h4 className="text-xs font-medium text-primary mb-2">Basic Information</h4>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
             <div>
               <Label className="text-xs font-medium text-neutral-600 mb-1">Owner</Label>
               <Select
@@ -39,7 +39,7 @@ export function FundCard({ fund, onFieldUpdate, isUpdating }: FundCardProps) {
                 onValueChange={(value) => handleFieldChange("owner", value)}
                 disabled={isUpdating}
               >
-                <SelectTrigger className="w-full">
+                <SelectTrigger className="w-full h-8 text-xs">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
@@ -56,7 +56,7 @@ export function FundCard({ fund, onFieldUpdate, isUpdating }: FundCardProps) {
               <Input
                 value={fund.coverAgainst}
                 onChange={(e) => handleFieldChange("coverAgainst", e.target.value)}
-                className="w-full"
+                className="w-full h-8 text-xs"
                 disabled={isUpdating}
               />
             </div>
@@ -64,16 +64,16 @@ export function FundCard({ fund, onFieldUpdate, isUpdating }: FundCardProps) {
         </div>
 
         {/* Death Benefits Section */}
-        <div className="bg-green-50 rounded-lg p-4">
-          <h4 className="text-sm font-medium text-green-900 mb-3">Death Benefits</h4>
-          <div className="grid grid-cols-2 gap-3">
+        <div className="bg-green-50 rounded p-3">
+          <h4 className="text-xs font-medium text-green-800 mb-2">Death Benefits</h4>
+          <div className="grid grid-cols-2 gap-2">
             <div>
               <Label className="text-xs font-medium text-neutral-600 mb-1">Monthly Death</Label>
               <Input
                 type="number"
                 value={fund.monthlyDeathBenefit}
                 onChange={(e) => handleFieldChange("monthlyDeathBenefit", e.target.value)}
-                className="w-full"
+                className="w-full h-8 text-xs"
                 disabled={isUpdating}
               />
             </div>
@@ -83,7 +83,7 @@ export function FundCard({ fund, onFieldUpdate, isUpdating }: FundCardProps) {
                 type="number"
                 value={fund.lumpSumDeath}
                 onChange={(e) => handleFieldChange("lumpSumDeath", e.target.value)}
-                className="w-full"
+                className="w-full h-8 text-xs"
                 disabled={isUpdating}
               />
             </div>
@@ -93,7 +93,7 @@ export function FundCard({ fund, onFieldUpdate, isUpdating }: FundCardProps) {
                 type="number"
                 value={fund.previousLumpSums}
                 onChange={(e) => handleFieldChange("previousLumpSums", e.target.value)}
-                className="w-full"
+                className="w-full h-8 text-xs"
                 disabled={isUpdating}
               />
             </div>
@@ -103,7 +103,7 @@ export function FundCard({ fund, onFieldUpdate, isUpdating }: FundCardProps) {
                 type="number"
                 value={fund.taxFreeAmount}
                 onChange={(e) => handleFieldChange("taxFreeAmount", e.target.value)}
-                className="w-full"
+                className="w-full h-8 text-xs"
                 disabled={isUpdating}
               />
             </div>
@@ -111,16 +111,16 @@ export function FundCard({ fund, onFieldUpdate, isUpdating }: FundCardProps) {
         </div>
 
         {/* Financial Details Section */}
-        <div className="bg-yellow-50 rounded-lg p-4">
-          <h4 className="text-sm font-medium text-yellow-900 mb-3">Financial Details</h4>
-          <div className="grid grid-cols-2 gap-3">
+        <div className="bg-orange-50 rounded p-3">
+          <h4 className="text-xs font-medium text-orange-800 mb-2">Financial Details</h4>
+          <div className="grid grid-cols-2 gap-2">
             <div>
               <Label className="text-xs font-medium text-neutral-600 mb-1">Fund Value</Label>
               <Input
                 type="number"
                 value={fund.fundValue}
                 onChange={(e) => handleFieldChange("fundValue", e.target.value)}
-                className="w-full"
+                className="w-full h-8 text-xs"
                 disabled={isUpdating}
               />
             </div>
@@ -130,7 +130,7 @@ export function FundCard({ fund, onFieldUpdate, isUpdating }: FundCardProps) {
                 type="number"
                 value={fund.fundValueAtDeath}
                 onChange={(e) => handleFieldChange("fundValueAtDeath", e.target.value)}
-                className="w-full"
+                className="w-full h-8 text-xs"
                 disabled={isUpdating}
               />
             </div>
@@ -140,7 +140,7 @@ export function FundCard({ fund, onFieldUpdate, isUpdating }: FundCardProps) {
                 value={fund.name}
                 onChange={(e) => handleFieldChange("name", e.target.value)}
                 placeholder="Enter name"
-                className="w-full"
+                className="w-full h-8 text-xs"
                 disabled={isUpdating}
               />
             </div>
@@ -151,7 +151,7 @@ export function FundCard({ fund, onFieldUpdate, isUpdating }: FundCardProps) {
                 value={fund.amount}
                 onChange={(e) => handleFieldChange("amount", e.target.value)}
                 placeholder="0"
-                className="w-full"
+                className="w-full h-8 text-xs"
                 disabled={isUpdating}
               />
             </div>
@@ -162,7 +162,7 @@ export function FundCard({ fund, onFieldUpdate, isUpdating }: FundCardProps) {
                 value={fund.lumpSumTaken}
                 onChange={(e) => handleFieldChange("lumpSumTaken", e.target.value)}
                 placeholder="0"
-                className="w-full"
+                className="w-full h-8 text-xs"
                 disabled={isUpdating}
               />
             </div>
@@ -170,14 +170,14 @@ export function FundCard({ fund, onFieldUpdate, isUpdating }: FundCardProps) {
         </div>
       </div>
 
-      <div className="flex justify-end mt-4 pt-4 border-t border-neutral-200">
+      <div className="flex justify-end mt-3 pt-3 border-t border-neutral-200">
         <Button
           variant="ghost"
           size="sm"
-          className="text-primary hover:text-primary/80"
+          className="text-primary hover:text-primary/80 h-7 px-3 text-xs"
           disabled={isUpdating}
         >
-          <Save className="mr-1" size={16} />
+          <Save className="mr-1" size={12} />
           {isUpdating ? "Saving..." : "Save Changes"}
         </Button>
       </div>
