@@ -493,6 +493,98 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
               )}
             </tr>
           ))}
+          
+          {/* Totals row for inputs mode */}
+          {tableMode === "inputs" && (
+            <tr className="bg-neutral-50 border-t-2 border-neutral-300 font-medium">
+              <td className="px-3 py-2 text-sm font-bold text-neutral-900">
+                Total
+              </td>
+              
+              {/* Overview Total */}
+              {columnVisibility.overview && (
+                <>
+                  <td className="px-3 py-2 border-l border-neutral-200"></td>
+                  {!collapsedGroups.has("overview") && (
+                    <td className="px-3 py-2 text-sm font-bold text-right text-neutral-900">
+                      R {funds.reduce((sum, fund) => {
+                        const amount = parseFloat(fund.coverAmount.replace(/[^\d.-]/g, '')) || 0;
+                        return sum + amount;
+                      }, 0).toLocaleString()}
+                    </td>
+                  )}
+                </>
+              )}
+              
+              {/* Unapproved Life Cover Total */}
+              {columnVisibility.unapprovedLifeCover && (
+                <>
+                  <td className="px-3 py-2 border-l border-neutral-200"></td>
+                  {!collapsedGroups.has("unapprovedCover") && (
+                    <>
+                      <td className="px-3 py-2 text-sm font-bold text-right text-neutral-900">
+                        R {funds.reduce((sum, fund) => {
+                          const amount = parseFloat(fund.monthlyIncome.replace(/[^\d.-]/g, '')) || 0;
+                          return sum + amount;
+                        }, 0).toLocaleString()}
+                      </td>
+                      <td className="px-3 py-2"></td>
+                      <td className="px-3 py-2"></td>
+                      <td className="px-3 py-2 text-sm font-bold text-right text-neutral-900">
+                        R {funds.reduce((sum, fund) => {
+                          const amount = parseFloat(fund.approvedLifeCover.replace(/[^\d.-]/g, '')) || 0;
+                          return sum + amount;
+                        }, 0).toLocaleString()}
+                      </td>
+                    </>
+                  )}
+                </>
+              )}
+              
+              {/* Monthly Death Benefit Total */}
+              {columnVisibility.monthlyDeathBenefit && (
+                <>
+                  <td className="px-3 py-2 border-l border-neutral-200"></td>
+                  {!collapsedGroups.has("monthlyBenefit") && (
+                    <>
+                      <td className="px-3 py-2"></td>
+                      <td className="px-3 py-2"></td>
+                      <td className="px-3 py-2"></td>
+                      <td className="px-3 py-2 text-sm font-bold text-right text-neutral-900">
+                        R {funds.reduce((sum, fund) => {
+                          const amount = parseFloat(fund.fundValue.replace(/[^\d.-]/g, '')) || 0;
+                          return sum + amount;
+                        }, 0).toLocaleString()}
+                      </td>
+                      <td className="px-3 py-2 text-sm font-bold text-right text-neutral-900">
+                        R {funds.reduce((sum, fund) => {
+                          const amount = parseFloat(fund.fundValueAtDeath.replace(/[^\d.-]/g, '')) || 0;
+                          return sum + amount;
+                        }, 0).toLocaleString()}
+                      </td>
+                    </>
+                  )}
+                </>
+              )}
+              
+              {/* Fund Value Beneficiaries Total */}
+              {columnVisibility.fundValueBeneficiaries && (
+                <>
+                  <td className="px-3 py-2 border-l border-neutral-200"></td>
+                  {!collapsedGroups.has("fundBeneficiaries") && (
+                    <>
+                      <td className="px-3 py-2"></td>
+                      <td className="px-3 py-2"></td>
+                      <td className="px-3 py-2"></td>
+                      <td className="px-3 py-2"></td>
+                      <td className="px-3 py-2"></td>
+                      <td className="px-3 py-2"></td>
+                    </>
+                  )}
+                </>
+              )}
+            </tr>
+          )}
         </tbody>
       </table>
     </div>

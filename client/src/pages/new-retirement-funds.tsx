@@ -6,6 +6,7 @@ import { NewTableControls } from "@/components/retirement-funds/new-table-contro
 import { NewGroupedTableView } from "@/components/retirement-funds/new-grouped-table-view";
 import { CardsView } from "@/components/retirement-funds/cards-view";
 import { DetailedView } from "@/components/retirement-funds/detailed-view";
+import { Input } from "@/components/ui/input";
 
 type ViewMode = "grouped" | "cards" | "detailed";
 
@@ -90,15 +91,59 @@ export default function NewRetirementFunds() {
       />
 
       {viewMode === "grouped" && (
-        <div className="bg-white rounded shadow-sm border border-neutral-200">
-          <NewGroupedTableView
-            funds={filteredFunds}
-            columnVisibility={columnVisibility}
-            tableMode={tableMode}
-            onFieldUpdate={handleFieldUpdate}
-            isUpdating={updateMutation.isPending}
-          />
-        </div>
+        <>
+          <div className="bg-white rounded shadow-sm border border-neutral-200">
+            <NewGroupedTableView
+              funds={filteredFunds}
+              columnVisibility={columnVisibility}
+              tableMode={tableMode}
+              onFieldUpdate={handleFieldUpdate}
+              isUpdating={updateMutation.isPending}
+            />
+          </div>
+          
+          {/* Additional fields for inputs mode */}
+          {tableMode === "inputs" && (
+            <div className="mt-6 bg-white rounded shadow-sm border border-neutral-200 p-6">
+              <h3 className="text-lg font-medium text-neutral-900 mb-4">Additional Details</h3>
+              <div className="grid grid-cols-3 gap-6">
+                <div className="space-y-2">
+                  <label className="block text-sm font-medium text-neutral-700">
+                    Lump Sum Death
+                  </label>
+                  <Input
+                    value={filteredFunds[0]?.lumpSumDeath || "0"}
+                    onChange={(e) => handleFieldUpdate(filteredFunds[0]?.id || 1, "lumpSumDeath", e.target.value)}
+                    className="w-full"
+                    disabled={updateMutation.isPending}
+                  />
+                </div>
+                <div className="space-y-2">
+                  <label className="block text-sm font-medium text-neutral-700">
+                    Previous Lump Sums
+                  </label>
+                  <Input
+                    value={filteredFunds[0]?.previousLumpSums || "0"}
+                    onChange={(e) => handleFieldUpdate(filteredFunds[0]?.id || 1, "previousLumpSums", e.target.value)}
+                    className="w-full"
+                    disabled={updateMutation.isPending}
+                  />
+                </div>
+                <div className="space-y-2">
+                  <label className="block text-sm font-medium text-neutral-700">
+                    Additional Tax Free Amount
+                  </label>
+                  <Input
+                    value={filteredFunds[0]?.additionalTaxFreeAmount || "0"}
+                    onChange={(e) => handleFieldUpdate(filteredFunds[0]?.id || 1, "additionalTaxFreeAmount", e.target.value)}
+                    className="w-full"
+                    disabled={updateMutation.isPending}
+                  />
+                </div>
+              </div>
+            </div>
+          )}
+        </>
       )}
 
       {viewMode === "cards" && (

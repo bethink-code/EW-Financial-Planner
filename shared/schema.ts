@@ -41,6 +41,11 @@ export const retirementFunds = pgTable("retirement_funds", {
   estateDeploymentDeceased: text("estate_deployment_deceased").notNull().default("0"),
   executorsFee: text("executors_fee").notNull().default("0"),
   mastersFee: text("masters_fee").notNull().default("0"),
+
+  // Additional fields shown below table in inputs mode
+  lumpSumDeath: text("lump_sum_death").notNull().default("0"),
+  previousLumpSums: text("previous_lump_sums").notNull().default("0"),
+  additionalTaxFreeAmount: text("additional_tax_free_amount").notNull().default("0"),
 });
 
 export const insertRetirementFundSchema = createInsertSchema(retirementFunds).omit({

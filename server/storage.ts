@@ -94,7 +94,12 @@ export class MemStorage implements IStorage {
       annualIncomeAtDeath: "R 42,000",
       estateDeploymentDeceased: "R 35,000",
       executorsFee: "R 1,800",
-      mastersFee: "R 900"
+      mastersFee: "R 900",
+      
+      // Additional fields shown below table in inputs mode
+      lumpSumDeath: "0",
+      previousLumpSums: "0",
+      additionalTaxFreeAmount: "0"
     });
   }
 
@@ -128,7 +133,22 @@ export class MemStorage implements IStorage {
       lumpSumTaken: insertFund.lumpSumTaken || "",
       nondeductibleContribution: insertFund.nondeductibleContribution || "",
       livingAnnuity: insertFund.livingAnnuity || "",
-      incomeTerm: insertFund.incomeTerm || ""
+      incomeTerm: insertFund.incomeTerm || "",
+      
+      // Flows mode specific fields
+      lumpSumLeftOverProvisions: insertFund.lumpSumLeftOverProvisions || "0",
+      incomeProvisionOption: insertFund.incomeProvisionOption || "",
+      monthlyProvisionOffered: insertFund.monthlyProvisionOffered || "0",
+      currentAnnualIncome: insertFund.currentAnnualIncome || "0",
+      annualIncomeAtDeath: insertFund.annualIncomeAtDeath || "0",
+      estateDeploymentDeceased: insertFund.estateDeploymentDeceased || "0",
+      executorsFee: insertFund.executorsFee || "0",
+      mastersFee: insertFund.mastersFee || "0",
+      
+      // Additional fields shown below table in inputs mode
+      lumpSumDeath: insertFund.lumpSumDeath || "0",
+      previousLumpSums: insertFund.previousLumpSums || "0",
+      additionalTaxFreeAmount: insertFund.additionalTaxFreeAmount || "0"
     };
     this.retirementFunds.set(id, fund);
     return fund;
