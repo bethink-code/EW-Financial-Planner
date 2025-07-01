@@ -23,28 +23,28 @@ export class MemStorage implements IStorage {
       // Overview
       description: "Total Pension Fund",
       owner: "John Doe",
-      coverAmount: "500000",
+      coverAmount: "R 500,000",
       
       // Unapproved life cover
       beneficiary: "Spouse",
-      beneficiaryPercentage: "100",
-      coverSplit: "500000",
+      beneficiaryPercentage: "100%",
+      coverSplit: "R 500,000",
       
       // Monthly death benefit
-      monthlyIncome: "5000",
+      monthlyIncome: "R 5,000",
       termYears: "10",
-      increasePercentage: "5",
-      approvedLifeCover: "250000",
-      fundValue: "180000",
-      fundValueAtDeath: "200000",
+      increasePercentage: "5%",
+      approvedLifeCover: "R 250,000",
+      fundValue: "R 180,000",
+      fundValueAtDeath: "R 200,000",
       
       // Fund value beneficiaries
       beneficiaryName: "Sarah Doe",
-      beneficiaryPercentageSplit: "60",
-      amount: "150000",
-      lumpSumTaken: "25000",
-      nondeductibleContribution: "10000",
-      livingAnnuity: "120000",
+      beneficiaryPercentageSplit: "60%",
+      amount: "R 150,000",
+      lumpSumTaken: "R 25,000",
+      nondeductibleContribution: "R 10,000",
+      livingAnnuity: "R 120,000",
       incomeTerm: "20"
     });
     
@@ -52,28 +52,28 @@ export class MemStorage implements IStorage {
       // Overview
       description: "Provident Fund",
       owner: "Jane Smith",
-      coverAmount: "350000",
+      coverAmount: "R 350,000",
       
       // Unapproved life cover
       beneficiary: "Children",
-      beneficiaryPercentage: "50",
-      coverSplit: "175000",
+      beneficiaryPercentage: "50%",
+      coverSplit: "R 175,000",
       
       // Monthly death benefit
-      monthlyIncome: "3500",
+      monthlyIncome: "R 3,500",
       termYears: "15",
-      increasePercentage: "4",
-      approvedLifeCover: "175000",
-      fundValue: "120000",
-      fundValueAtDeath: "140000",
+      increasePercentage: "4%",
+      approvedLifeCover: "R 175,000",
+      fundValue: "R 120,000",
+      fundValueAtDeath: "R 140,000",
       
       // Fund value beneficiaries
       beneficiaryName: "Tom Smith",
-      beneficiaryPercentageSplit: "40",
-      amount: "100000",
-      lumpSumTaken: "15000",
-      nondeductibleContribution: "8000",
-      livingAnnuity: "85000",
+      beneficiaryPercentageSplit: "40%",
+      amount: "R 100,000",
+      lumpSumTaken: "R 15,000",
+      nondeductibleContribution: "R 8,000",
+      livingAnnuity: "R 85,000",
       incomeTerm: "25"
     });
   }

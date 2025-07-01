@@ -140,10 +140,13 @@ export function NewGroupedTableView({ funds, columnVisibility, onFieldUpdate, is
                 {!collapsedGroups.has("fundBeneficiaries") && (
                   <>
                     <th className="px-3 py-2 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">
+                      Name
+                    </th>
+                    <th className="px-3 py-2 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">
                       % Split
                     </th>
                     <th className="px-3 py-2 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">
-                      Amount (ZAR)
+                      Amount
                     </th>
                     <th className="px-3 py-2 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">
                       Lump Sum Taken
