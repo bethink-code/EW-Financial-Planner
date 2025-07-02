@@ -77,91 +77,97 @@ export default function NewRetirementFunds() {
   }
 
   return (
-    <div className="p-4 max-w-full">
-      <NewTableControls
-        viewMode={viewMode}
-        onViewModeChange={setViewMode}
-        tableMode={tableMode}
-        onTableModeChange={setTableMode}
-        searchQuery={searchQuery}
-        onSearchChange={setSearchQuery}
-        columnVisibility={columnVisibility}
-        onToggleColumnGroup={handleToggleColumnGroup}
-        fundsCount={filteredFunds.length}
-      />
+    <div className="min-h-screen" style={{ backgroundColor: '#EFF2F5' }}>
+      <div className="p-4 max-w-full">
+        <div className="bg-white rounded-lg shadow-sm border border-neutral-200 p-4 mb-4">
+          <NewTableControls
+            viewMode={viewMode}
+            onViewModeChange={setViewMode}
+            tableMode={tableMode}
+            onTableModeChange={setTableMode}
+            searchQuery={searchQuery}
+            onSearchChange={setSearchQuery}
+            columnVisibility={columnVisibility}
+            onToggleColumnGroup={handleToggleColumnGroup}
+            fundsCount={filteredFunds.length}
+          />
+        </div>
 
-      {viewMode === "grouped" && (
-        <>
-          <div className="bg-white rounded shadow-sm border border-neutral-200">
-            <NewGroupedTableView
+        {viewMode === "grouped" && (
+          <>
+            <div className="bg-white rounded-lg shadow-sm border border-neutral-200">
+              <NewGroupedTableView
+                funds={filteredFunds}
+                columnVisibility={columnVisibility}
+                tableMode={tableMode}
+                onFieldUpdate={handleFieldUpdate}
+                isUpdating={updateMutation.isPending}
+              />
+            </div>
+            
+            {/* Additional fields for inputs mode */}
+            {tableMode === "inputs" && (
+              <div className="mt-4 bg-white rounded-lg shadow-sm border border-neutral-200 p-6">
+                <h3 className="text-lg font-medium text-neutral-900 mb-4">Additional Details</h3>
+                <div className="grid grid-cols-3 gap-6">
+                  <div className="space-y-2">
+                    <label className="block text-sm font-medium text-neutral-700">
+                      Lump Sum Death
+                    </label>
+                    <Input
+                      value={filteredFunds[0]?.lumpSumDeath || "0"}
+                      onChange={(e) => handleFieldUpdate(filteredFunds[0]?.id || 1, "lumpSumDeath", e.target.value)}
+                      className="w-full"
+                      disabled={updateMutation.isPending}
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <label className="block text-sm font-medium text-neutral-700">
+                      Previous Lump Sums
+                    </label>
+                    <Input
+                      value={filteredFunds[0]?.previousLumpSums || "0"}
+                      onChange={(e) => handleFieldUpdate(filteredFunds[0]?.id || 1, "previousLumpSums", e.target.value)}
+                      className="w-full"
+                      disabled={updateMutation.isPending}
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <label className="block text-sm font-medium text-neutral-700">
+                      Additional Tax Free Amount
+                    </label>
+                    <Input
+                      value={filteredFunds[0]?.additionalTaxFreeAmount || "0"}
+                      onChange={(e) => handleFieldUpdate(filteredFunds[0]?.id || 1, "additionalTaxFreeAmount", e.target.value)}
+                      className="w-full"
+                      disabled={updateMutation.isPending}
+                    />
+                  </div>
+                </div>
+              </div>
+            )}
+          </>
+        )}
+
+        {viewMode === "cards" && (
+          <CardsView
+            funds={filteredFunds}
+            onFieldUpdate={handleFieldUpdate}
+            isUpdating={updateMutation.isPending}
+            tableMode={tableMode}
+          />
+        )}
+
+        {viewMode === "detailed" && (
+          <div className="bg-white rounded-lg shadow-sm border border-neutral-200">
+            <DetailedView
               funds={filteredFunds}
-              columnVisibility={columnVisibility}
-              tableMode={tableMode}
               onFieldUpdate={handleFieldUpdate}
               isUpdating={updateMutation.isPending}
             />
           </div>
-          
-          {/* Additional fields for inputs mode */}
-          {tableMode === "inputs" && (
-            <div className="mt-6 bg-white rounded shadow-sm border border-neutral-200 p-6">
-              <h3 className="text-lg font-medium text-neutral-900 mb-4">Additional Details</h3>
-              <div className="grid grid-cols-3 gap-6">
-                <div className="space-y-2">
-                  <label className="block text-sm font-medium text-neutral-700">
-                    Lump Sum Death
-                  </label>
-                  <Input
-                    value={filteredFunds[0]?.lumpSumDeath || "0"}
-                    onChange={(e) => handleFieldUpdate(filteredFunds[0]?.id || 1, "lumpSumDeath", e.target.value)}
-                    className="w-full"
-                    disabled={updateMutation.isPending}
-                  />
-                </div>
-                <div className="space-y-2">
-                  <label className="block text-sm font-medium text-neutral-700">
-                    Previous Lump Sums
-                  </label>
-                  <Input
-                    value={filteredFunds[0]?.previousLumpSums || "0"}
-                    onChange={(e) => handleFieldUpdate(filteredFunds[0]?.id || 1, "previousLumpSums", e.target.value)}
-                    className="w-full"
-                    disabled={updateMutation.isPending}
-                  />
-                </div>
-                <div className="space-y-2">
-                  <label className="block text-sm font-medium text-neutral-700">
-                    Additional Tax Free Amount
-                  </label>
-                  <Input
-                    value={filteredFunds[0]?.additionalTaxFreeAmount || "0"}
-                    onChange={(e) => handleFieldUpdate(filteredFunds[0]?.id || 1, "additionalTaxFreeAmount", e.target.value)}
-                    className="w-full"
-                    disabled={updateMutation.isPending}
-                  />
-                </div>
-              </div>
-            </div>
-          )}
-        </>
-      )}
-
-      {viewMode === "cards" && (
-        <CardsView
-          funds={filteredFunds}
-          onFieldUpdate={handleFieldUpdate}
-          isUpdating={updateMutation.isPending}
-          tableMode={tableMode}
-        />
-      )}
-
-      {viewMode === "detailed" && (
-        <DetailedView
-          funds={filteredFunds}
-          onFieldUpdate={handleFieldUpdate}
-          isUpdating={updateMutation.isPending}
-        />
-      )}
+        )}
+      </div>
     </div>
   );
 }
