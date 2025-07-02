@@ -61,9 +61,11 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
                         Overview
                       </button>
                     </th>
-                    <th className={`min-w-[150px] px-3 py-2 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider transition-all duration-300 ease-in-out ${collapsedGroups.has("overview") ? 'w-0 opacity-0 hidden' : 'min-w-[150px] opacity-100'}`}>
-                      Cover Amount
-                    </th>
+                    {!collapsedGroups.has("overview") && (
+                      <th className="px-3 py-2 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">
+                        Cover Amount
+                      </th>
+                    )}
                   </>
                 ) : (
                   <>
@@ -76,9 +78,11 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
                         Lump Sum Left Over Available as Provisions
                       </button>
                     </th>
-                    <th className={`min-w-[150px] px-3 py-2 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider transition-all duration-300 ease-in-out ${collapsedGroups.has("overview") ? 'w-0 opacity-0 hidden' : 'min-w-[150px] opacity-100'}`}>
-                      Amount Available
-                    </th>
+                    {!collapsedGroups.has("overview") && (
+                      <th className="px-3 py-2 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">
+                        Amount Available
+                      </th>
+                    )}
                   </>
                 )}
               </>
@@ -96,12 +100,16 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
                     Unapproved Life Cover
                   </button>
                 </th>
-                <th className={`min-w-[100px] px-3 py-2 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider transition-all duration-300 ease-in-out ${collapsedGroups.has("lifeCover") ? 'w-0 opacity-0 hidden' : 'min-w-[100px] opacity-100'}`}>
-                  % Split
-                </th>
-                <th className={`min-w-[150px] px-3 py-2 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider transition-all duration-300 ease-in-out ${collapsedGroups.has("lifeCover") ? 'w-0 opacity-0 hidden' : 'min-w-[150px] opacity-100'}`}>
-                  Cover Split (ZAR)
-                </th>
+                {!collapsedGroups.has("lifeCover") && (
+                  <>
+                    <th className="px-3 py-2 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">
+                      % Split
+                    </th>
+                    <th className="px-3 py-2 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">
+                      Cover Split (ZAR)
+                    </th>
+                  </>
+                )}
               </>
             )}
 
@@ -276,18 +284,20 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
                           </SelectContent>
                         </Select>
                       </td>
-                      <td className={`px-3 py-2 whitespace-nowrap text-sm text-neutral-900 transition-all duration-300 ease-in-out ${collapsedGroups.has("overview") ? 'w-0 opacity-0 hidden' : 'opacity-100'}`}>
-                        <div className="relative group">
-                          <Input
-                            value={fund.coverAmount}
-                            onChange={(e) => handleInputChange(fund.id, "coverAmount", e.target.value)}
-                            className="compact-input w-full text-right border-0 bg-transparent focus:bg-white focus:border focus:border-primary hover:bg-teal-50 transition-colors duration-200"
-                            disabled={isUpdating}
-                            placeholder="R 0"
-                          />
-                          <Edit3 size={12} className="absolute right-2 top-1/2 -translate-y-1/2 text-teal-400 opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none" />
-                        </div>
-                      </td>
+                      {!collapsedGroups.has("overview") && (
+                        <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900">
+                          <div className="relative group">
+                            <Input
+                              value={fund.coverAmount}
+                              onChange={(e) => handleInputChange(fund.id, "coverAmount", e.target.value)}
+                              className="compact-input w-full text-right border-0 bg-transparent focus:bg-white focus:border focus:border-primary hover:bg-teal-50 transition-colors duration-200"
+                              disabled={isUpdating}
+                              placeholder="R 0"
+                            />
+                            <Edit3 size={12} className="absolute right-2 top-1/2 -translate-y-1/2 text-teal-400 opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none" />
+                          </div>
+                        </td>
+                      )}
                     </>
                   ) : (
                     <>
