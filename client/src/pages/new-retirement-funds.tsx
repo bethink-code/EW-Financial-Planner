@@ -34,7 +34,7 @@ export default function NewRetirementFunds() {
 
   const updateMutation = useMutation({
     mutationFn: async ({ id, updates }: { id: number; updates: UpdateRetirementFund }) => {
-      return apiRequest(`/api/retirement-funds/${id}`, "PATCH", updates);
+      return apiRequest("PATCH", `/api/retirement-funds/${id}`, updates);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["/api/retirement-funds"] });
