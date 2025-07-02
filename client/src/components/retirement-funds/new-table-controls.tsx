@@ -86,7 +86,7 @@ export function NewTableControls({
               className="rounded-none border-0 border-l border-neutral-200 h-8 px-3"
             >
               <List size={14} className="mr-1" />
-              Detailed
+              Hybrid
             </Button>
           </div>
 
