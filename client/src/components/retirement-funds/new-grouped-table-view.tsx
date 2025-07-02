@@ -275,7 +275,7 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
                           </SelectContent>
                         </Select>
                       </td>
-                      <td className={`px-3 py-2 whitespace-nowrap text-sm text-neutral-900 transition-all duration-300 ease-in-out ${collapsedGroups.has("overview") ? 'w-0 opacity-0 hidden' : 'w-36 opacity-100'}`}>
+                      <td className={`px-3 py-2 whitespace-nowrap text-sm text-neutral-900 transition-all duration-300 ease-in-out ${collapsedGroups.has("overview") ? 'w-0 opacity-0 hidden' : 'opacity-100'}`}>
                         <div className="relative group">
                           <Input
                             value={fund.coverAmount}
