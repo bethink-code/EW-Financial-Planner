@@ -262,7 +262,7 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
                           onValueChange={(value) => handleInputChange(fund.id, "owner", value)}
                           disabled={isUpdating}
                         >
-                          <SelectTrigger className="compact-input border-0 bg-transparent focus:bg-white focus:border focus:border-teal-500 hover:bg-teal-50 transition-colors duration-200 group">
+                          <SelectTrigger className="compact-input border-0 bg-transparent focus:bg-white focus:border focus:border-primary hover:bg-teal-50 transition-colors duration-200 group">
                             <SelectValue />
                             <Edit3 size={12} className="ml-1 text-teal-400 opacity-0 group-hover:opacity-100 transition-opacity duration-200" />
                           </SelectTrigger>
@@ -280,7 +280,7 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
                           <Input
                             value={fund.coverAmount}
                             onChange={(e) => handleInputChange(fund.id, "coverAmount", e.target.value)}
-                            className="compact-input w-full text-right border-0 bg-transparent focus:bg-white focus:border focus:border-teal-500 hover:bg-teal-50 transition-colors duration-200"
+                            className="compact-input w-full text-right border-0 bg-transparent focus:bg-white focus:border focus:border-primary hover:bg-teal-50 transition-colors duration-200"
                             disabled={isUpdating}
                             placeholder="R 0"
                           />

@@ -14,8 +14,8 @@
   --border: hsl(214, 32%, 91%);
   --input: hsl(214, 32%, 91%);
   
-  /* Primary: Teal from color scheme */
-  --primary: hsl(186, 100%, 29%);
+  /* Primary: Updated blue from color scheme */
+  --primary: hsl(198, 99%, 29%);
   --primary-foreground: hsl(0, 0%, 100%);
   
   /* Secondary: Orange from color scheme */
@@ -26,20 +26,20 @@
   --accent-foreground: hsl(220, 13%, 18%);
   --destructive: hsl(0, 84.2%, 60.2%);
   --destructive-foreground: hsl(60, 9.1%, 97.8%);
-  --ring: hsl(186, 100%, 29%);
+  --ring: hsl(198, 99%, 29%);
   --radius: 0.25rem;
   
-  /* Teal color palette from design */
-  --teal-900: hsl(197, 57%, 14%);
-  --teal-800: hsl(199, 63%, 20%);
-  --teal-700: hsl(200, 69%, 25%);
-  --teal-600: hsl(186, 100%, 29%);
-  --teal-500: hsl(180, 77%, 32%);
-  --teal-400: hsl(177, 70%, 41%);
-  --teal-300: hsl(181, 65%, 55%);
-  --teal-200: hsl(185, 57%, 76%);
-  --teal-100: hsl(195, 79%, 92%);
-  --teal-50: hsl(195, 85%, 97%);
+  /* Blue color palette from design */
+  --teal-900: hsl(198, 90%, 14%);
+  --teal-800: hsl(198, 95%, 20%);
+  --teal-700: hsl(198, 99%, 25%);
+  --teal-600: hsl(198, 99%, 29%);
+  --teal-500: hsl(198, 95%, 35%);
+  --teal-400: hsl(198, 90%, 45%);
+  --teal-300: hsl(198, 80%, 55%);
+  --teal-200: hsl(198, 70%, 75%);
+  --teal-100: hsl(198, 60%, 90%);
+  --teal-50: hsl(198, 50%, 96%);
   
   /* Orange color palette from design */
   --orange-900: hsl(15, 86%, 30%);
