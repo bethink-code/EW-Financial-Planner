@@ -52,19 +52,38 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
               <>
                 {tableMode === "inputs" ? (
                   <>
-                    <th className={`min-w-[140px] px-3 py-2 text-center border-l border-neutral-300 transition-all duration-300 ease-in-out ${collapsedGroups.has("overview") ? 'opacity-100' : 'opacity-100'}`} colSpan={collapsedGroups.has("overview") ? 1 : 2}>
-                      <button
-                        onClick={() => toggleGroup("overview")}
-                        className="flex items-center justify-center w-full text-xs font-medium text-teal-700 uppercase tracking-wider hover:text-teal-600 transition-colors duration-200"
-                      >
-                        {collapsedGroups.has("overview") ? <ChevronRight size={12} /> : <ChevronDown size={12} />}
-                        Overview
-                      </button>
-                    </th>
-                    {!collapsedGroups.has("overview") && (
-                      <th className="px-3 py-2 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">
-                        Cover Amount
+                    {collapsedGroups.has("overview") ? (
+                      <th className="px-3 py-2 text-center border-l border-neutral-300" colSpan={1}>
+                        <button
+                          onClick={() => toggleGroup("overview")}
+                          className="flex items-center justify-center w-full text-xs font-medium text-teal-700 uppercase tracking-wider hover:text-teal-600 transition-colors duration-200"
+                        >
+                          <ChevronRight size={12} />
+                          Overview
+                        </button>
                       </th>
+                    ) : (
+                      <>
+                        <th className="px-3 py-2 text-center border-l border-neutral-300" colSpan={2}>
+                          <button
+                            onClick={() => toggleGroup("overview")}
+                            className="flex items-center justify-center w-full text-xs font-medium text-teal-700 uppercase tracking-wider hover:text-teal-600 transition-colors duration-200"
+                          >
+                            <ChevronDown size={12} />
+                            Overview
+                          </button>
+                        </th>
+                      </>
+                    )}
+                    {!collapsedGroups.has("overview") && (
+                      <>
+                        <th className="px-3 py-2 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">
+                          Owner
+                        </th>
+                        <th className="px-3 py-2 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">
+                          Cover Amount
+                        </th>
+                      </>
                     )}
                   </>
                 ) : (
@@ -91,17 +110,34 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
             {/* Unapproved Life Cover Section */}
             {columnVisibility.unapprovedLifeCover && (
               <>
-                <th className={`min-w-[160px] px-3 py-2 text-center border-l border-neutral-300 transition-all duration-300 ease-in-out`} colSpan={collapsedGroups.has("lifeCover") ? 1 : 3}>
-                  <button
-                    onClick={() => toggleGroup("lifeCover")}
-                    className="flex items-center justify-center w-full text-xs font-medium text-teal-600 uppercase tracking-wider hover:text-teal-700 transition-colors duration-200"
-                  >
-                    {collapsedGroups.has("lifeCover") ? <ChevronRight size={12} /> : <ChevronDown size={12} />}
-                    Unapproved Life Cover
-                  </button>
-                </th>
+                {collapsedGroups.has("lifeCover") ? (
+                  <th className="px-3 py-2 text-center border-l border-neutral-300" colSpan={1}>
+                    <button
+                      onClick={() => toggleGroup("lifeCover")}
+                      className="flex items-center justify-center w-full text-xs font-medium text-teal-600 uppercase tracking-wider hover:text-teal-700 transition-colors duration-200"
+                    >
+                      <ChevronRight size={12} />
+                      Unapproved Life Cover
+                    </button>
+                  </th>
+                ) : (
+                  <>
+                    <th className="px-3 py-2 text-center border-l border-neutral-300" colSpan={3}>
+                      <button
+                        onClick={() => toggleGroup("lifeCover")}
+                        className="flex items-center justify-center w-full text-xs font-medium text-teal-600 uppercase tracking-wider hover:text-teal-700 transition-colors duration-200"
+                      >
+                        <ChevronDown size={12} />
+                        Unapproved Life Cover
+                      </button>
+                    </th>
+                  </>
+                )}
                 {!collapsedGroups.has("lifeCover") && (
                   <>
+                    <th className="px-3 py-2 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">
+                      Beneficiary
+                    </th>
                     <th className="px-3 py-2 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">
                       % Split
                     </th>
