@@ -73,7 +73,7 @@ export function DetailedRow({ fund, onFieldUpdate, isUpdating }: DetailedRowProp
         <div className="border-t border-neutral-200 p-4 space-y-4">
           {/* Overview Section */}
           <div className="bg-teal-50 rounded-lg p-2">
-            <h4 className="text-xs font-medium text-teal-700 mb-2">Overview</h4>
+            <h4 className="text-sm font-bold text-teal-700 mb-3">Overview</h4>
             <div className="grid grid-cols-4 gap-2">
               <div>
                 <Label className="text-xs text-neutral-600">Description</Label>
@@ -127,7 +127,7 @@ export function DetailedRow({ fund, onFieldUpdate, isUpdating }: DetailedRowProp
 
           {/* Additional Fields Section */}
           <div className="bg-teal-50 rounded-lg p-2">
-            <h4 className="text-xs font-medium text-teal-600 mb-2">Additional Details</h4>
+            <h4 className="text-sm font-bold text-teal-600 mb-3">Additional Details</h4>
             <div className="grid grid-cols-4 gap-2">
               <div>
                 <Label className="text-xs text-neutral-600">% Split</Label>
@@ -173,7 +173,7 @@ export function DetailedRow({ fund, onFieldUpdate, isUpdating }: DetailedRowProp
 
           {/* Financial Values Section */}
           <div className="bg-teal-50 rounded-lg p-2">
-            <h4 className="text-xs font-medium text-teal-800 mb-2">Financial Values</h4>
+            <h4 className="text-sm font-bold text-teal-800 mb-3">Financial Values</h4>
             <div className="grid grid-cols-4 gap-2">
               <div>
                 <Label className="text-xs text-neutral-600">Monthly Income</Label>
