@@ -28,7 +28,7 @@ export function FundCard({ fund, onFieldUpdate, isUpdating }: FundCardProps) {
       
       <div className="space-y-3">
         {/* Overview Section */}
-        <div style={{ backgroundColor: '#EDEDED' }} className="rounded-lg p-3">
+        <div style={{ backgroundColor: '#EFF5F9' }} className="rounded-lg p-3">
           <h3 className="text-sm font-bold text-neutral-800 mb-3">Overview</h3>
           <div className="grid grid-cols-3 gap-2">
             <div>
@@ -73,7 +73,7 @@ export function FundCard({ fund, onFieldUpdate, isUpdating }: FundCardProps) {
         </div>
 
         {/* Unapproved Life Cover Section */}
-        <div style={{ backgroundColor: '#CBE7F6' }} className="rounded-lg p-3">
+        <div style={{ backgroundColor: '#EFF5F9' }} className="rounded-lg p-3">
           <h3 className="text-sm font-bold text-neutral-800 mb-3">Unapproved Life Cover</h3>
           <div className="grid grid-cols-3 gap-2">
             <div>
@@ -109,7 +109,7 @@ export function FundCard({ fund, onFieldUpdate, isUpdating }: FundCardProps) {
         </div>
 
         {/* Monthly Death Benefit Section */}
-        <div style={{ backgroundColor: '#EDEDED' }} className="rounded-lg p-3">
+        <div style={{ backgroundColor: '#EFF5F9' }} className="rounded-lg p-3">
           <h3 className="text-sm font-bold text-neutral-800 mb-3">Monthly Death Benefit</h3>
           <div className="grid grid-cols-3 gap-2">
             <div>
@@ -175,7 +175,7 @@ export function FundCard({ fund, onFieldUpdate, isUpdating }: FundCardProps) {
         </div>
 
         {/* Fund Value Beneficiaries Section */}
-        <div style={{ backgroundColor: '#CBE7F6' }} className="rounded-lg p-3">
+        <div style={{ backgroundColor: '#EFF5F9' }} className="rounded-lg p-3">
           <h3 className="text-sm font-bold text-neutral-800 mb-3">Fund Value Beneficiaries</h3>
           <div className="grid grid-cols-3 gap-2">
             <div>
