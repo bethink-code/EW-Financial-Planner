@@ -42,7 +42,7 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
     <div className="overflow-x-auto">
       <table className="min-w-full bg-white table-fixed">
         <thead>
-          <tr className="bg-neutral-50 border-b border-neutral-200">
+          <tr className="border-b border-neutral-200" style={{ backgroundColor: '#D6ECF5' }}>
             <th className="w-48 px-3 py-2 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">
               Description
             </th>
@@ -491,7 +491,7 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
           
           {/* Totals row for inputs mode */}
           {tableMode === "inputs" && (
-            <tr className="bg-neutral-50 border-t-2 border-neutral-300 font-medium">
+            <tr className="border-t-2 border-neutral-300 font-medium" style={{ backgroundColor: '#D6ECF5' }}>
               <td className="px-3 py-2 text-sm font-bold text-neutral-900">
                 Total
               </td>
