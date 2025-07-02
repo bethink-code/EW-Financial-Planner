@@ -31,24 +31,19 @@ export function DetailedRow({ fund, onFieldUpdate, isUpdating }: DetailedRowProp
 
   return (
     <div className="border border-neutral-200 rounded-lg bg-white">
-      <div className="p-4">
+      <div 
+        className="p-4 cursor-pointer hover:bg-neutral-50 transition-colors duration-200"
+        onClick={() => setIsExpanded(!isExpanded)}
+      >
         <div className="flex items-center justify-between mb-3">
           <div className="flex items-center space-x-2">
-            <button
-              onClick={() => setIsExpanded(!isExpanded)}
-              className="text-teal-600 hover:text-teal-700 transition-colors"
-            >
+            <div className="text-teal-600">
               {isExpanded ? <ChevronDown size={16} /> : <ChevronRight size={16} />}
-            </button>
+            </div>
             <h3 className="text-base font-semibold text-neutral-900">{fund.description}</h3>
             <Badge className={`${getOwnerBadgeColor(fund.owner)} text-xs px-2 py-0.5`}>
               {fund.owner}
             </Badge>
-          </div>
-          <div className="flex items-center space-x-2">
-            <button className="text-neutral-400 hover:text-neutral-600 transition-colors">
-              <Edit size={14} />
-            </button>
           </div>
         </div>
 
