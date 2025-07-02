@@ -182,7 +182,8 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
                     <th className="px-3 py-2 text-center border-l border-neutral-300" colSpan={collapsedGroups.has("fundBeneficiaries") ? 1 : 7}>
                       <button
                         onClick={() => toggleGroup("fundBeneficiaries")}
-                        className="flex items-center justify-center w-full text-xs font-medium text-orange-700 uppercase tracking-wider hover:text-orange-600"
+                        className="flex items-center justify-center w-full text-xs font-medium uppercase tracking-wider hover:opacity-80"
+                        style={{ color: '#EA8A2E' }}
                       >
                         {collapsedGroups.has("fundBeneficiaries") ? <ChevronRight size={12} /> : <ChevronDown size={12} />}
                         Fund Value Beneficiaries

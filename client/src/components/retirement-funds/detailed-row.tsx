@@ -21,12 +21,8 @@ export function DetailedRow({ fund, onFieldUpdate, isUpdating }: DetailedRowProp
 
   const owners = ["John Doe", "Jane Smith", "Sarah Johnson", "David Wilson"];
   const getOwnerBadgeColor = (owner: string) => {
-    switch (owner) {
-      case "John Doe": return "bg-teal-100 text-teal-800";
-      case "Jane Smith": return "bg-orange-100 text-orange-800";
-      case "Sarah Johnson": return "bg-teal-100 text-teal-700";
-      default: return "bg-neutral-100 text-neutral-800";
-    }
+    // All beneficiary badges use white background with orange text
+    return "bg-white border border-neutral-300";
   };
 
   return (
@@ -41,7 +37,7 @@ export function DetailedRow({ fund, onFieldUpdate, isUpdating }: DetailedRowProp
               {isExpanded ? <ChevronDown size={16} /> : <ChevronRight size={16} />}
             </div>
             <h3 className="text-base font-semibold text-neutral-900">{fund.description}</h3>
-            <Badge className={`${getOwnerBadgeColor(fund.owner)} text-xs px-2 py-0.5`}>
+            <Badge className={`${getOwnerBadgeColor(fund.owner)} text-xs px-2 py-0.5`} style={{ color: '#EA8A2E' }}>
               {fund.owner}
             </Badge>
           </div>

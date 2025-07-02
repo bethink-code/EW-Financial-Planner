@@ -160,9 +160,10 @@ export function NewTableControls({
                 onClick={() => onToggleColumnGroup("fundValueBeneficiaries")}
                 className={`h-8 px-2 text-xs ${
                   columnVisibility.fundValueBeneficiaries
-                    ? "text-orange-700 bg-orange-100"
+                    ? "bg-white border border-neutral-300"
                     : "text-neutral-500"
                 }`}
+                style={columnVisibility.fundValueBeneficiaries ? { color: '#EA8A2E' } : {}}
               >
                 {columnVisibility.fundValueBeneficiaries ? <Eye size={12} /> : <EyeOff size={12} />}
                 Beneficiaries
