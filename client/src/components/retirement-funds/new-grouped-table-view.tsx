@@ -321,7 +321,7 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
                     <Input
                       value={fund.beneficiary}
                       onChange={(e) => handleInputChange(fund.id, "beneficiary", e.target.value)}
-                      className="compact-input w-24 border-0 bg-transparent focus:bg-white focus:border focus:border-primary"
+                      className="compact-input w-24 text-right border-0 bg-transparent focus:bg-white focus:border focus:border-primary"
                       placeholder="Beneficiary"
                       disabled={isUpdating}
                     />
@@ -422,7 +422,7 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
                     <Input
                       value={fund.beneficiaryName}
                       onChange={(e) => handleInputChange(fund.id, "beneficiaryName", e.target.value)}
-                      className="compact-input w-24 border-0 bg-transparent focus:bg-white focus:border focus:border-primary"
+                      className="compact-input w-24 text-right border-0 bg-transparent focus:bg-white focus:border focus:border-primary"
                       placeholder="Name"
                       disabled={isUpdating}
                     />

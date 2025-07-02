@@ -36,7 +36,7 @@ export function FundCard({ fund, onFieldUpdate, isUpdating }: FundCardProps) {
               <Input
                 value={fund.description}
                 onChange={(e) => handleFieldChange("description", e.target.value)}
-                className="h-7 text-xs"
+                className="h-7 text-xs text-right"
                 disabled={isUpdating}
               />
             </div>
@@ -81,7 +81,7 @@ export function FundCard({ fund, onFieldUpdate, isUpdating }: FundCardProps) {
               <Input
                 value={fund.beneficiary}
                 onChange={(e) => handleFieldChange("beneficiary", e.target.value)}
-                className="h-7 text-xs"
+                className="h-7 text-xs text-right"
                 disabled={isUpdating}
               />
             </div>
@@ -90,7 +90,7 @@ export function FundCard({ fund, onFieldUpdate, isUpdating }: FundCardProps) {
               <Input
                 value={fund.beneficiaryPercentage}
                 onChange={(e) => handleFieldChange("beneficiaryPercentage", e.target.value)}
-                className="h-7 text-xs text-center"
+                className="h-7 text-xs text-right"
                 disabled={isUpdating}
                 placeholder="100%"
               />
@@ -127,7 +127,7 @@ export function FundCard({ fund, onFieldUpdate, isUpdating }: FundCardProps) {
               <Input
                 value={fund.termYears}
                 onChange={(e) => handleFieldChange("termYears", e.target.value)}
-                className="h-7 text-xs text-center"
+                className="h-7 text-xs text-right"
                 disabled={isUpdating}
               />
             </div>
@@ -136,7 +136,7 @@ export function FundCard({ fund, onFieldUpdate, isUpdating }: FundCardProps) {
               <Input
                 value={fund.increasePercentage}
                 onChange={(e) => handleFieldChange("increasePercentage", e.target.value)}
-                className="h-7 text-xs text-center"
+                className="h-7 text-xs text-right"
                 disabled={isUpdating}
                 placeholder="5%"
               />
@@ -183,7 +183,7 @@ export function FundCard({ fund, onFieldUpdate, isUpdating }: FundCardProps) {
               <Input
                 value={fund.beneficiaryName}
                 onChange={(e) => handleFieldChange("beneficiaryName", e.target.value)}
-                className="h-7 text-xs"
+                className="h-7 text-xs text-right"
                 disabled={isUpdating}
               />
             </div>
@@ -192,7 +192,7 @@ export function FundCard({ fund, onFieldUpdate, isUpdating }: FundCardProps) {
               <Input
                 value={fund.beneficiaryPercentageSplit}
                 onChange={(e) => handleFieldChange("beneficiaryPercentageSplit", e.target.value)}
-                className="h-7 text-xs text-center"
+                className="h-7 text-xs text-right"
                 disabled={isUpdating}
                 placeholder="100%"
               />
@@ -242,7 +242,7 @@ export function FundCard({ fund, onFieldUpdate, isUpdating }: FundCardProps) {
               <Input
                 value={fund.incomeTerm}
                 onChange={(e) => handleFieldChange("incomeTerm", e.target.value)}
-                className="h-7 text-xs text-center"
+                className="h-7 text-xs text-right"
                 disabled={isUpdating}
                 placeholder="20 years"
               />

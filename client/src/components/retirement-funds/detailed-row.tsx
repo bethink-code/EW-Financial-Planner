@@ -76,7 +76,7 @@ export function DetailedRow({ fund, onFieldUpdate, isUpdating }: DetailedRowProp
                 <Input
                   value={fund.description}
                   onChange={(e) => handleFieldChange("description", e.target.value)}
-                  className="h-7 text-xs"
+                  className="h-7 text-xs text-right"
                   disabled={isUpdating}
                 />
               </div>
@@ -114,7 +114,7 @@ export function DetailedRow({ fund, onFieldUpdate, isUpdating }: DetailedRowProp
                 <Input
                   value={fund.beneficiary}
                   onChange={(e) => handleFieldChange("beneficiary", e.target.value)}
-                  className="h-7 text-xs"
+                  className="h-7 text-xs text-right"
                   disabled={isUpdating}
                 />
               </div>
@@ -130,7 +130,7 @@ export function DetailedRow({ fund, onFieldUpdate, isUpdating }: DetailedRowProp
                 <Input
                   value={fund.beneficiaryPercentage}
                   onChange={(e) => handleFieldChange("beneficiaryPercentage", e.target.value)}
-                  className="h-7 text-xs text-center"
+                  className="h-7 text-xs text-right"
                   disabled={isUpdating}
                   placeholder="100%"
                 />
@@ -150,7 +150,7 @@ export function DetailedRow({ fund, onFieldUpdate, isUpdating }: DetailedRowProp
                 <Input
                   value={fund.termYears}
                   onChange={(e) => handleFieldChange("termYears", e.target.value)}
-                  className="h-7 text-xs text-center"
+                  className="h-7 text-xs text-right"
                   disabled={isUpdating}
                 />
               </div>
@@ -159,7 +159,7 @@ export function DetailedRow({ fund, onFieldUpdate, isUpdating }: DetailedRowProp
                 <Input
                   value={fund.increasePercentage}
                   onChange={(e) => handleFieldChange("increasePercentage", e.target.value)}
-                  className="h-7 text-xs text-center"
+                  className="h-7 text-xs text-right"
                   disabled={isUpdating}
                   placeholder="5%"
                 />
