@@ -40,10 +40,10 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
 
   return (
     <div className="overflow-x-auto">
-      <table className="min-w-full bg-white table-fixed">
+      <table className="min-w-full bg-white table-auto">
         <thead>
           <tr className="border-b border-neutral-200" style={{ backgroundColor: '#D6ECF5' }}>
-            <th className="w-48 px-3 py-2 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">
+            <th className="min-w-[200px] px-3 py-2 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">
               Description
             </th>
             
@@ -52,7 +52,7 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
               <>
                 {tableMode === "inputs" ? (
                   <>
-                    <th className={`w-36 px-3 py-2 text-center border-l border-neutral-300 transition-all duration-300 ease-in-out ${collapsedGroups.has("overview") ? 'opacity-100' : 'opacity-100'}`} colSpan={collapsedGroups.has("overview") ? 1 : 2}>
+                    <th className={`min-w-[140px] px-3 py-2 text-center border-l border-neutral-300 transition-all duration-300 ease-in-out ${collapsedGroups.has("overview") ? 'opacity-100' : 'opacity-100'}`} colSpan={collapsedGroups.has("overview") ? 1 : 2}>
                       <button
                         onClick={() => toggleGroup("overview")}
                         className="flex items-center justify-center w-full text-xs font-medium text-teal-700 uppercase tracking-wider hover:text-teal-600 transition-colors duration-200"
@@ -61,13 +61,13 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
                         Overview
                       </button>
                     </th>
-                    <th className={`w-36 px-3 py-2 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider transition-all duration-300 ease-in-out ${collapsedGroups.has("overview") ? 'w-0 opacity-0 hidden' : 'w-36 opacity-100'}`}>
+                    <th className={`min-w-[150px] px-3 py-2 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider transition-all duration-300 ease-in-out ${collapsedGroups.has("overview") ? 'w-0 opacity-0 hidden' : 'min-w-[150px] opacity-100'}`}>
                       Cover Amount
                     </th>
                   </>
                 ) : (
                   <>
-                    <th className={`w-48 px-3 py-2 text-center border-l border-neutral-300 transition-all duration-300 ease-in-out`} colSpan={collapsedGroups.has("overview") ? 1 : 2}>
+                    <th className={`min-w-[240px] px-3 py-2 text-center border-l border-neutral-300 transition-all duration-300 ease-in-out`} colSpan={collapsedGroups.has("overview") ? 1 : 2}>
                       <button
                         onClick={() => toggleGroup("overview")}
                         className="flex items-center justify-center w-full text-xs font-medium text-teal-700 uppercase tracking-wider hover:text-teal-600 transition-colors duration-200"
@@ -76,7 +76,7 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
                         Lump Sum Left Over Available as Provisions
                       </button>
                     </th>
-                    <th className={`w-36 px-3 py-2 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider transition-all duration-300 ease-in-out ${collapsedGroups.has("overview") ? 'w-0 opacity-0 hidden' : 'w-36 opacity-100'}`}>
+                    <th className={`min-w-[150px] px-3 py-2 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider transition-all duration-300 ease-in-out ${collapsedGroups.has("overview") ? 'w-0 opacity-0 hidden' : 'min-w-[150px] opacity-100'}`}>
                       Amount Available
                     </th>
                   </>
@@ -87,7 +87,7 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
             {/* Unapproved Life Cover Section */}
             {columnVisibility.unapprovedLifeCover && (
               <>
-                <th className={`w-40 px-3 py-2 text-center border-l border-neutral-300 transition-all duration-300 ease-in-out`} colSpan={collapsedGroups.has("lifeCover") ? 1 : 3}>
+                <th className={`min-w-[160px] px-3 py-2 text-center border-l border-neutral-300 transition-all duration-300 ease-in-out`} colSpan={collapsedGroups.has("lifeCover") ? 1 : 3}>
                   <button
                     onClick={() => toggleGroup("lifeCover")}
                     className="flex items-center justify-center w-full text-xs font-medium text-teal-600 uppercase tracking-wider hover:text-teal-700 transition-colors duration-200"
@@ -96,10 +96,10 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
                     Unapproved Life Cover
                   </button>
                 </th>
-                <th className={`w-24 px-3 py-2 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider transition-all duration-300 ease-in-out ${collapsedGroups.has("lifeCover") ? 'w-0 opacity-0 hidden' : 'w-24 opacity-100'}`}>
+                <th className={`min-w-[100px] px-3 py-2 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider transition-all duration-300 ease-in-out ${collapsedGroups.has("lifeCover") ? 'w-0 opacity-0 hidden' : 'min-w-[100px] opacity-100'}`}>
                   % Split
                 </th>
-                <th className={`w-36 px-3 py-2 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider transition-all duration-300 ease-in-out ${collapsedGroups.has("lifeCover") ? 'w-0 opacity-0 hidden' : 'w-36 opacity-100'}`}>
+                <th className={`min-w-[150px] px-3 py-2 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider transition-all duration-300 ease-in-out ${collapsedGroups.has("lifeCover") ? 'w-0 opacity-0 hidden' : 'min-w-[150px] opacity-100'}`}>
                   Cover Split (ZAR)
                 </th>
               </>
