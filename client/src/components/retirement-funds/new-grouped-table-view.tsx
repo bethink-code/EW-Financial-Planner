@@ -78,27 +78,27 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
           {/* First level headers */}
           <tr className="border-b border-neutral-200" style={{ backgroundColor: '#D6ECF5' }}>
             {columnVisibility.overview && (
-              <th className="px-3 py-2 text-center text-xs font-medium text-neutral-500 uppercase tracking-wider" colSpan={2}>
+              <th className="px-3 py-2 text-center text-xs font-bold text-neutral-500 uppercase tracking-wider" colSpan={2}>
                 Overview
               </th>
             )}
             {columnVisibility.unapprovedLifeCover && (
-              <th className="px-3 py-2 text-center text-xs font-medium text-neutral-500 uppercase tracking-wider border-l border-neutral-300" colSpan={4}>
+              <th className="px-3 py-2 text-center text-xs font-bold text-neutral-500 uppercase tracking-wider border-l border-neutral-300" colSpan={4}>
                 Unapproved life cover
               </th>
             )}
             {columnVisibility.monthlyDeathBenefit && (
-              <th className="px-3 py-2 text-center text-xs font-medium text-neutral-500 uppercase tracking-wider border-l border-neutral-300" colSpan={4}>
+              <th className="px-3 py-2 text-center text-xs font-bold text-neutral-500 uppercase tracking-wider border-l border-neutral-300" colSpan={4}>
                 Monthly death benefit
               </th>
             )}
             {columnVisibility.fundValue && (
-              <th className="px-3 py-2 text-center text-xs font-medium text-neutral-500 uppercase tracking-wider border-l border-neutral-300" colSpan={3}>
+              <th className="px-3 py-2 text-center text-xs font-bold text-neutral-500 uppercase tracking-wider border-l border-neutral-300" colSpan={3}>
                 Fund value
               </th>
             )}
             {columnVisibility.fundValueBeneficiaries && (
-              <th className="px-3 py-2 text-center text-xs font-medium text-neutral-500 uppercase tracking-wider border-l border-neutral-300" colSpan={8}>
+              <th className="px-3 py-2 text-center text-xs font-bold text-neutral-500 uppercase tracking-wider border-l border-neutral-300" colSpan={8}>
                 Fund value beneficiaries
               </th>
             )}
