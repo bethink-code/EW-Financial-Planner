@@ -166,7 +166,7 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
               </td>
 
               {/* Unapproved life cover - Beneficiary */}
-              <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900 border-l border-neutral-200">
+              <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900 border-l border-neutral-300">
                 <Select
                   value={fund.beneficiary || "No beneficiary"}
                   onValueChange={(value) => handleInputChange(fund.id, "beneficiary", value)}
