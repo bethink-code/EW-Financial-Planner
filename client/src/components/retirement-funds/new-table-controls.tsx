@@ -128,7 +128,7 @@ export function NewTableControls({
                 className="h-8 px-3 text-xs border-l border-neutral-200 ml-2"
               >
                 <Eye size={12} className="mr-1" />
-                Sections
+                Visibility
                 <ChevronDown size={12} className="ml-1" />
               </Button>
             </DropdownMenuTrigger>
@@ -138,50 +138,35 @@ export function NewTableControls({
                 onCheckedChange={() => onToggleColumnGroup("overview")}
                 className="text-xs"
               >
-                <div className="flex items-center gap-2">
-                  {columnVisibility.overview ? <Eye size={12} /> : <EyeOff size={12} />}
-                  Overview
-                </div>
+                Overview
               </DropdownMenuCheckboxItem>
               <DropdownMenuCheckboxItem
                 checked={columnVisibility.unapprovedLifeCover}
                 onCheckedChange={() => onToggleColumnGroup("unapprovedLifeCover")}
                 className="text-xs"
               >
-                <div className="flex items-center gap-2">
-                  {columnVisibility.unapprovedLifeCover ? <Eye size={12} /> : <EyeOff size={12} />}
-                  Life Cover
-                </div>
+                Life Cover
               </DropdownMenuCheckboxItem>
               <DropdownMenuCheckboxItem
                 checked={columnVisibility.monthlyDeathBenefit}
                 onCheckedChange={() => onToggleColumnGroup("monthlyDeathBenefit")}
                 className="text-xs"
               >
-                <div className="flex items-center gap-2">
-                  {columnVisibility.monthlyDeathBenefit ? <Eye size={12} /> : <EyeOff size={12} />}
-                  Monthly Benefit
-                </div>
+                Monthly Benefit
               </DropdownMenuCheckboxItem>
               <DropdownMenuCheckboxItem
                 checked={columnVisibility.fundValue}
                 onCheckedChange={() => onToggleColumnGroup("fundValue")}
                 className="text-xs"
               >
-                <div className="flex items-center gap-2">
-                  {columnVisibility.fundValue ? <Eye size={12} /> : <EyeOff size={12} />}
-                  Fund Value
-                </div>
+                Fund Value
               </DropdownMenuCheckboxItem>
               <DropdownMenuCheckboxItem
                 checked={columnVisibility.fundValueBeneficiaries}
                 onCheckedChange={() => onToggleColumnGroup("fundValueBeneficiaries")}
                 className="text-xs"
               >
-                <div className="flex items-center gap-2">
-                  {columnVisibility.fundValueBeneficiaries ? <Eye size={12} /> : <EyeOff size={12} />}
-                  Beneficiaries
-                </div>
+                Beneficiaries
               </DropdownMenuCheckboxItem>
             </DropdownMenuContent>
           </DropdownMenu>
