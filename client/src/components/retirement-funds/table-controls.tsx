@@ -18,6 +18,7 @@ interface TableControlsProps {
   columnVisibility: ColumnVisibility;
   onToggleColumnGroup: (group: keyof ColumnVisibility) => void;
   fundsCount: number;
+  onAddNewFund: () => void;
 }
 
 export function TableControls({
@@ -28,6 +29,7 @@ export function TableControls({
   columnVisibility,
   onToggleColumnGroup,
   fundsCount,
+  onAddNewFund,
 }: TableControlsProps) {
   const viewModes = [
     { id: "grouped", label: "Grouped", icon: Table },
@@ -58,7 +60,7 @@ export function TableControls({
             <Filter className="mr-1" size={14} />
             Filter
           </Button>
-          <Button size="sm" className="h-8 px-3 text-xs bg-orange-primary hover:bg-orange-secondary">
+          <Button onClick={onAddNewFund} size="sm" className="h-8 px-3 text-xs bg-orange-primary hover:bg-orange-secondary">
             <Plus className="mr-1" size={14} />
             Add Fund
           </Button>
