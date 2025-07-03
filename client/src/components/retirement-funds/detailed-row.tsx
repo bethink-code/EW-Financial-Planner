@@ -6,13 +6,22 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Badge } from "@/components/ui/badge";
 import type { RetirementFund, UpdateRetirementFund } from "@shared/schema";
 
+interface ColumnVisibility {
+  overview: boolean;
+  unapprovedLifeCover: boolean;
+  monthlyDeathBenefit: boolean;
+  fundValue: boolean;
+  fundValueBeneficiaries: boolean;
+}
+
 interface DetailedRowProps {
   fund: RetirementFund;
+  columnVisibility: ColumnVisibility;
   onFieldUpdate: (id: number, field: keyof UpdateRetirementFund, value: string) => void;
   isUpdating: boolean;
 }
 
-export function DetailedRow({ fund, onFieldUpdate, isUpdating }: DetailedRowProps) {
+export function DetailedRow({ fund, columnVisibility, onFieldUpdate, isUpdating }: DetailedRowProps) {
   const [isExpanded, setIsExpanded] = useState(false);
 
   const handleFieldChange = (field: keyof UpdateRetirementFund, value: string) => {

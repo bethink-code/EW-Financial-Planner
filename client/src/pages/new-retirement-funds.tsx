@@ -154,6 +154,7 @@ export default function NewRetirementFunds() {
         {viewMode === "cards" && (
           <CardsView
             funds={filteredFunds}
+            columnVisibility={columnVisibility}
             onFieldUpdate={handleFieldUpdate}
             isUpdating={updateMutation.isPending}
             tableMode={tableMode}
@@ -164,6 +165,7 @@ export default function NewRetirementFunds() {
           <div className="bg-white rounded-lg shadow-sm border border-neutral-200">
             <DetailedView
               funds={filteredFunds}
+              columnVisibility={columnVisibility}
               onFieldUpdate={handleFieldUpdate}
               isUpdating={updateMutation.isPending}
             />
