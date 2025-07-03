@@ -30,43 +30,37 @@ export function DetailedRow({ fund, columnVisibility, onFieldUpdate, isUpdating 
 
   const owners = ["John Doe", "Jane Smith", "Sarah Johnson", "David Wilson"];
   const getOwnerBadgeColor = (owner: string) => {
-    // All beneficiary badges use white background with orange text
     return "bg-white border border-neutral-300";
   };
 
   return (
     <div className="border border-neutral-200 rounded-lg bg-white">
       <div 
-        className="p-4 cursor-pointer hover:bg-neutral-50 transition-colors duration-200"
+        className="p-4 cursor-pointer hover:bg-gray-50 flex items-center justify-between"
         onClick={() => setIsExpanded(!isExpanded)}
       >
-        <div className="flex items-center justify-between mb-3">
-          <div className="flex items-center space-x-2">
-            <div className="text-teal-600">
-              {isExpanded ? <ChevronDown size={16} /> : <ChevronRight size={16} />}
-            </div>
-            <h3 className="text-base font-semibold text-neutral-900">{fund.description}</h3>
-            <Badge className={`${getOwnerBadgeColor(fund.owner)} text-xs px-2 py-0.5`} style={{ color: '#EA8A2E' }}>
+        <div className="flex items-center gap-4 flex-1">
+          <div className="flex items-center gap-2">
+            {isExpanded ? (
+              <ChevronDown size={16} className="text-neutral-500" />
+            ) : (
+              <ChevronRight size={16} className="text-neutral-500" />
+            )}
+            <h3 className="text-lg font-bold text-neutral-900">{fund.description}</h3>
+          </div>
+          
+          <div className="flex items-center gap-4">
+            <Badge variant="outline" className={getOwnerBadgeColor(fund.owner)} style={{ color: '#EA8A2E' }}>
               {fund.owner}
             </Badge>
+            <div className="text-sm text-neutral-600">
+              Fund Value: <span className="font-medium text-neutral-900">{fund.fundValue}</span>
+            </div>
           </div>
         </div>
 
-        {/* Compact Summary Row */}
-        <div className="grid grid-cols-4 gap-4 text-sm">
-          <div>
-            <span className="text-neutral-500 text-xs">Cover Amount:</span>
-            <div className="font-medium">{fund.coverAmount}</div>
-          </div>
-          <div>
-            <span className="text-neutral-500 text-xs">Monthly Income:</span>
-            <div className="font-medium">{fund.monthlyIncome}</div>
-          </div>
-          <div>
-            <span className="text-neutral-500 text-xs">Fund Value:</span>
-            <div className="font-medium">{fund.fundValue}</div>
-          </div>
-          <div>
+        <div className="flex items-center gap-4">
+          <div className="text-right">
             <span className="text-neutral-500 text-xs">Beneficiary:</span>
             <div className="font-medium">{fund.beneficiaryName}</div>
           </div>
@@ -77,247 +71,262 @@ export function DetailedRow({ fund, columnVisibility, onFieldUpdate, isUpdating 
       {isExpanded && (
         <div className="border-t border-neutral-200 p-4 space-y-4">
           {/* Overview Section */}
-          <div className="bg-teal-50 rounded-lg p-2">
-            <h4 className="text-sm font-bold text-teal-700 mb-3">Overview</h4>
-            <div className="grid grid-cols-4 gap-2">
-              <div>
-                <Label className="text-xs text-neutral-600">Description</Label>
-                <Input
-                  value={fund.description}
-                  onChange={(e) => handleFieldChange("description", e.target.value)}
-                  className="h-7 text-xs text-right"
-                  disabled={isUpdating}
-                />
-              </div>
-              <div>
-                <Label className="text-xs text-neutral-600">Owner</Label>
-                <Select
-                  value={fund.owner}
-                  onValueChange={(value) => handleFieldChange("owner", value)}
-                  disabled={isUpdating}
-                >
-                  <SelectTrigger className="h-7 text-xs">
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {owners.map((owner) => (
-                      <SelectItem key={owner} value={owner}>
-                        {owner}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
-              <div>
-                <Label className="text-xs text-neutral-600">Cover Amount</Label>
-                <Input
-                  value={fund.coverAmount}
-                  onChange={(e) => handleFieldChange("coverAmount", e.target.value)}
-                  className="h-7 text-xs text-right"
-                  disabled={isUpdating}
-                  placeholder="R 0"
-                />
-              </div>
-              <div>
-                <Label className="text-xs text-neutral-600">Beneficiary</Label>
-                <Input
-                  value={fund.beneficiary}
-                  onChange={(e) => handleFieldChange("beneficiary", e.target.value)}
-                  className="h-7 text-xs text-right"
-                  disabled={isUpdating}
-                />
+          {columnVisibility.overview && (
+            <div className="bg-teal-50 rounded-lg p-3">
+              <h4 className="text-sm font-bold text-teal-700 mb-3">Overview</h4>
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <Label className="text-xs text-neutral-600">Description</Label>
+                  <Input
+                    value={fund.description}
+                    onChange={(e) => handleFieldChange("description", e.target.value)}
+                    className="h-8 text-sm"
+                    disabled={isUpdating}
+                  />
+                </div>
+                <div>
+                  <Label className="text-xs text-neutral-600">Owner</Label>
+                  <Select
+                    value={fund.owner}
+                    onValueChange={(value) => handleFieldChange("owner", value)}
+                    disabled={isUpdating}
+                  >
+                    <SelectTrigger className="h-8 text-sm">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {owners.map((owner) => (
+                        <SelectItem key={owner} value={owner}>
+                          {owner}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
               </div>
             </div>
-          </div>
+          )}
 
-          {/* Additional Fields Section */}
-          <div className="bg-teal-50 rounded-lg p-2">
-            <h4 className="text-sm font-bold text-teal-600 mb-3">Additional Details</h4>
-            <div className="grid grid-cols-4 gap-2">
-              <div>
-                <Label className="text-xs text-neutral-600">% Split</Label>
-                <Input
-                  value={fund.beneficiaryPercentage}
-                  onChange={(e) => handleFieldChange("beneficiaryPercentage", e.target.value)}
-                  className="h-7 text-xs text-right"
-                  disabled={isUpdating}
-                  placeholder="100%"
-                />
-              </div>
-              <div>
-                <Label className="text-xs text-neutral-600">Cover Split</Label>
-                <Input
-                  value={fund.coverSplit}
-                  onChange={(e) => handleFieldChange("coverSplit", e.target.value)}
-                  className="h-7 text-xs text-right"
-                  disabled={isUpdating}
-                  placeholder="R 0"
-                />
-              </div>
-              <div>
-                <Label className="text-xs text-neutral-600">Term Years</Label>
-                <Input
-                  value={fund.termYears}
-                  onChange={(e) => handleFieldChange("termYears", e.target.value)}
-                  className="h-7 text-xs text-right"
-                  disabled={isUpdating}
-                />
-              </div>
-              <div>
-                <Label className="text-xs text-neutral-600">Increase %</Label>
-                <Input
-                  value={fund.increasePercentage}
-                  onChange={(e) => handleFieldChange("increasePercentage", e.target.value)}
-                  className="h-7 text-xs text-right"
-                  disabled={isUpdating}
-                  placeholder="5%"
-                />
+          {/* Unapproved Life Cover Section */}
+          {columnVisibility.unapprovedLifeCover && (
+            <div className="bg-orange-50 rounded-lg p-3">
+              <h4 className="text-sm font-bold text-orange-700 mb-3">Unapproved Life Cover</h4>
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <Label className="text-xs text-neutral-600">Cover Amount</Label>
+                  <Input
+                    value={fund.coverAmount}
+                    onChange={(e) => handleFieldChange("coverAmount", e.target.value)}
+                    className="h-8 text-sm text-right"
+                    disabled={isUpdating}
+                    placeholder="R 0"
+                  />
+                </div>
+                <div>
+                  <Label className="text-xs text-neutral-600">Beneficiary</Label>
+                  <Select
+                    value={fund.beneficiary || ""}
+                    onValueChange={(value) => handleFieldChange("beneficiary", value)}
+                    disabled={isUpdating}
+                  >
+                    <SelectTrigger className="h-8 text-sm">
+                      <SelectValue placeholder="Select beneficiary" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="No beneficiary">No beneficiary</SelectItem>
+                      <SelectItem value="Spouse">Spouse</SelectItem>
+                      <SelectItem value="Child">Child</SelectItem>
+                      <SelectItem value="Parent">Parent</SelectItem>
+                      <SelectItem value="Other">Other</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div>
+                  <Label className="text-xs text-neutral-600">% Split</Label>
+                  <Input
+                    value={fund.beneficiaryPercentage}
+                    onChange={(e) => handleFieldChange("beneficiaryPercentage", e.target.value)}
+                    className="h-8 text-sm text-right"
+                    disabled={isUpdating}
+                    placeholder="100%"
+                  />
+                </div>
+                <div>
+                  <Label className="text-xs text-neutral-600">Cover Split</Label>
+                  <Input
+                    value={fund.coverSplit}
+                    onChange={(e) => handleFieldChange("coverSplit", e.target.value)}
+                    className="h-8 text-sm text-right"
+                    disabled={isUpdating}
+                    placeholder="R 0"
+                  />
+                </div>
               </div>
             </div>
-          </div>
+          )}
 
-          {/* Financial Values Section */}
-          <div className="bg-teal-50 rounded-lg p-2">
-            <h4 className="text-sm font-bold text-teal-800 mb-3">Financial Values</h4>
-            <div className="grid grid-cols-4 gap-2">
-              <div>
-                <Label className="text-xs text-neutral-600">Monthly Income</Label>
-                <Input
-                  value={fund.monthlyIncome}
-                  onChange={(e) => handleFieldChange("monthlyIncome", e.target.value)}
-                  className="h-7 text-xs text-right"
-                  disabled={isUpdating}
-                  placeholder="R 0"
-                />
-              </div>
-              <div>
-                <Label className="text-xs text-neutral-600">Approved Cover</Label>
-                <Input
-                  value={fund.approvedLifeCover}
-                  onChange={(e) => handleFieldChange("approvedLifeCover", e.target.value)}
-                  className="h-7 text-xs text-right"
-                  disabled={isUpdating}
-                  placeholder="R 0"
-                />
-              </div>
-              <div>
-                <Label className="text-xs text-neutral-600">Fund Value</Label>
-                <Input
-                  value={fund.fundValue}
-                  onChange={(e) => handleFieldChange("fundValue", e.target.value)}
-                  className="h-7 text-xs text-right"
-                  disabled={isUpdating}
-                  placeholder="R 0"
-                />
-              </div>
-              <div>
-                <Label className="text-xs text-neutral-600">Value at Death</Label>
-                <Input
-                  value={fund.fundValueAtDeath}
-                  onChange={(e) => handleFieldChange("fundValueAtDeath", e.target.value)}
-                  className="h-7 text-xs text-right"
-                  disabled={isUpdating}
-                  placeholder="R 0"
-                />
-              </div>
-              <div>
-                <Label className="text-xs font-medium text-neutral-600 mb-1">Fund Value</Label>
-                <Input
-                  value={fund.fundValue}
-                  onChange={(e) => handleFieldChange("fundValue", e.target.value)}
-                  className="h-8 text-xs"
-                  disabled={isUpdating}
-                  placeholder="R 0"
-                />
-              </div>
-              <div>
-                <Label className="text-xs font-medium text-neutral-600 mb-1">Value at Death</Label>
-                <Input
-                  value={fund.fundValueAtDeath}
-                  onChange={(e) => handleFieldChange("fundValueAtDeath", e.target.value)}
-                  className="h-8 text-xs"
-                  disabled={isUpdating}
-                  placeholder="R 0"
-                />
+          {/* Monthly Death Benefit Section */}
+          {columnVisibility.monthlyDeathBenefit && (
+            <div className="bg-blue-50 rounded-lg p-3">
+              <h4 className="text-sm font-bold text-blue-700 mb-3">Monthly Death Benefit</h4>
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <Label className="text-xs text-neutral-600">Monthly Income</Label>
+                  <Input
+                    value={fund.monthlyIncome}
+                    onChange={(e) => handleFieldChange("monthlyIncome", e.target.value)}
+                    className="h-8 text-sm text-right"
+                    disabled={isUpdating}
+                    placeholder="R 0"
+                  />
+                </div>
+                <div>
+                  <Label className="text-xs text-neutral-600">Term Years</Label>
+                  <Input
+                    value={fund.termYears}
+                    onChange={(e) => handleFieldChange("termYears", e.target.value)}
+                    className="h-8 text-sm text-right"
+                    disabled={isUpdating}
+                  />
+                </div>
+                <div>
+                  <Label className="text-xs text-neutral-600">Increase %</Label>
+                  <Input
+                    value={fund.increasePercentage}
+                    onChange={(e) => handleFieldChange("increasePercentage", e.target.value)}
+                    className="h-8 text-sm text-right"
+                    disabled={isUpdating}
+                    placeholder="5%"
+                  />
+                </div>
+                <div>
+                  <Label className="text-xs text-neutral-600">Escalation Amount</Label>
+                  <Input
+                    value={fund.lumpSumDeath}
+                    onChange={(e) => handleFieldChange("lumpSumDeath", e.target.value)}
+                    className="h-8 text-sm text-right"
+                    disabled={isUpdating}
+                    placeholder="R 0"
+                  />
+                </div>
               </div>
             </div>
-          </div>
+          )}
+
+          {/* Fund Value Section */}
+          {columnVisibility.fundValue && (
+            <div className="bg-green-50 rounded-lg p-3">
+              <h4 className="text-sm font-bold text-green-700 mb-3">Fund Value</h4>
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <Label className="text-xs text-neutral-600">Approved Life Cover</Label>
+                  <Input
+                    value={fund.approvedLifeCover}
+                    onChange={(e) => handleFieldChange("approvedLifeCover", e.target.value)}
+                    className="h-8 text-sm text-right"
+                    disabled={isUpdating}
+                    placeholder="R 0"
+                  />
+                </div>
+                <div>
+                  <Label className="text-xs text-neutral-600">Fund Value</Label>
+                  <Input
+                    value={fund.fundValue}
+                    onChange={(e) => handleFieldChange("fundValue", e.target.value)}
+                    className="h-8 text-sm text-right"
+                    disabled={isUpdating}
+                    placeholder="R 0"
+                  />
+                </div>
+                <div className="col-span-2">
+                  <Label className="text-xs text-neutral-600">Fund Value at Death</Label>
+                  <div className="h-8 px-3 py-1 text-sm text-right bg-neutral-50 border border-neutral-200 rounded">
+                    {fund.fundValueAtDeath || "R 0"}
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
 
           {/* Fund Value Beneficiaries Section */}
-          <div className="bg-orange-50 rounded-lg p-3">
-            <h4 className="text-sm font-medium text-orange-700 mb-3">Fund Value Beneficiaries</h4>
-            <div className="grid grid-cols-3 gap-3">
-              <div>
-                <Label className="text-xs font-medium text-neutral-600 mb-1">Name</Label>
-                <Input
-                  value={fund.beneficiaryName}
-                  onChange={(e) => handleFieldChange("beneficiaryName", e.target.value)}
-                  className="h-8 text-xs"
-                  disabled={isUpdating}
-                />
-              </div>
-              <div>
-                <Label className="text-xs font-medium text-neutral-600 mb-1">% Split</Label>
-                <Input
-                  value={fund.beneficiaryPercentageSplit}
-                  onChange={(e) => handleFieldChange("beneficiaryPercentageSplit", e.target.value)}
-                  className="h-8 text-xs"
-                  disabled={isUpdating}
-                  placeholder="100%"
-                />
-              </div>
-              <div>
-                <Label className="text-xs font-medium text-neutral-600 mb-1">Amount</Label>
-                <Input
-                  value={fund.amount}
-                  onChange={(e) => handleFieldChange("amount", e.target.value)}
-                  className="h-8 text-xs"
-                  disabled={isUpdating}
-                  placeholder="R 0"
-                />
-              </div>
-              <div>
-                <Label className="text-xs font-medium text-neutral-600 mb-1">Lump Sum Taken</Label>
-                <Input
-                  value={fund.lumpSumTaken}
-                  onChange={(e) => handleFieldChange("lumpSumTaken", e.target.value)}
-                  className="h-8 text-xs"
-                  disabled={isUpdating}
-                  placeholder="R 0"
-                />
-              </div>
-              <div>
-                <Label className="text-xs font-medium text-neutral-600 mb-1">Nondeductible Contribution</Label>
-                <Input
-                  value={fund.nondeductibleContribution}
-                  onChange={(e) => handleFieldChange("nondeductibleContribution", e.target.value)}
-                  className="h-8 text-xs"
-                  disabled={isUpdating}
-                  placeholder="R 0"
-                />
-              </div>
-              <div>
-                <Label className="text-xs font-medium text-neutral-600 mb-1">Living Annuity</Label>
-                <Input
-                  value={fund.livingAnnuity}
-                  onChange={(e) => handleFieldChange("livingAnnuity", e.target.value)}
-                  className="h-8 text-xs"
-                  disabled={isUpdating}
-                  placeholder="R 0"
-                />
-              </div>
-              <div className="col-span-full">
-                <Label className="text-xs font-medium text-neutral-600 mb-1">Income Term</Label>
-                <Input
-                  value={fund.incomeTerm}
-                  onChange={(e) => handleFieldChange("incomeTerm", e.target.value)}
-                  className="h-8 text-xs"
-                  disabled={isUpdating}
-                  placeholder="20 years"
-                />
+          {columnVisibility.fundValueBeneficiaries && (
+            <div className="bg-purple-50 rounded-lg p-3">
+              <h4 className="text-sm font-bold text-purple-700 mb-3">Fund Value Beneficiaries</h4>
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <Label className="text-xs text-neutral-600">Beneficiary Name</Label>
+                  <Select
+                    value={fund.beneficiaryName || ""}
+                    onValueChange={(value) => handleFieldChange("beneficiaryName", value)}
+                    disabled={isUpdating}
+                  >
+                    <SelectTrigger className="h-8 text-sm">
+                      <SelectValue placeholder="Select beneficiary" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="Spouse">Spouse</SelectItem>
+                      <SelectItem value="Child">Child</SelectItem>
+                      <SelectItem value="Estate">Estate</SelectItem>
+                      <SelectItem value="Trust">Trust</SelectItem>
+                      <SelectItem value="Other">Other</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div>
+                  <Label className="text-xs text-neutral-600">Percentage</Label>
+                  <Input
+                    value={fund.beneficiaryPercentageSplit}
+                    onChange={(e) => handleFieldChange("beneficiaryPercentageSplit", e.target.value)}
+                    className="h-8 text-sm text-right"
+                    disabled={isUpdating}
+                    placeholder="0%"
+                  />
+                </div>
+                <div>
+                  <Label className="text-xs text-neutral-600">Amount (Read-only)</Label>
+                  <div className="h-8 px-3 py-1 text-sm text-right bg-neutral-50 border border-neutral-200 rounded">
+                    {fund.amount || "R 0"}
+                  </div>
+                </div>
+                <div>
+                  <Label className="text-xs text-neutral-600">Lump Sum Taken</Label>
+                  <Input
+                    value={fund.lumpSumTaken}
+                    onChange={(e) => handleFieldChange("lumpSumTaken", e.target.value)}
+                    className="h-8 text-sm text-right"
+                    disabled={isUpdating}
+                    placeholder="R 0"
+                  />
+                </div>
+                <div>
+                  <Label className="text-xs text-neutral-600">Non-deductible Contribution</Label>
+                  <Input
+                    value={fund.nondeductibleContribution}
+                    onChange={(e) => handleFieldChange("nondeductibleContribution", e.target.value)}
+                    className="h-8 text-sm text-right"
+                    disabled={isUpdating}
+                    placeholder="R 0"
+                  />
+                </div>
+                <div>
+                  <Label className="text-xs text-neutral-600">Living Annuity (Read-only)</Label>
+                  <div className="h-8 px-3 py-1 text-sm text-right bg-neutral-50 border border-neutral-200 rounded">
+                    {fund.livingAnnuity || ""}
+                  </div>
+                </div>
+                <div className="col-span-2">
+                  <Label className="text-xs text-neutral-600">Income Term</Label>
+                  <Input
+                    value={fund.incomeTerm}
+                    onChange={(e) => handleFieldChange("incomeTerm", e.target.value)}
+                    className="h-8 text-sm text-right"
+                    disabled={isUpdating}
+                    placeholder="Income term"
+                  />
+                </div>
               </div>
             </div>
-          </div>
+          )}
         </div>
       )}
     </div>
