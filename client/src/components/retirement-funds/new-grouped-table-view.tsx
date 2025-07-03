@@ -68,7 +68,7 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
             <th className="px-3 py-2 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider border-l border-neutral-300">
               Cover amount
             </th>
-            <th className="px-3 py-2 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider border-l border-neutral-300">
+            <th className="px-3 py-2 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider border-l-2 border-neutral-500">
               Beneficiary
             </th>
             <th className="px-3 py-2 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">
@@ -166,7 +166,7 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
               </td>
 
               {/* Unapproved life cover - Beneficiary */}
-              <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900 border-l border-neutral-300">
+              <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900 border-l-2 border-neutral-500">
                 <Select
                   value={fund.beneficiary || "No beneficiary"}
                   onValueChange={(value) => handleInputChange(fund.id, "beneficiary", value)}
