@@ -81,19 +81,17 @@ export default function NewRetirementFunds() {
   return (
     <div className="min-h-screen" style={{ backgroundColor: '#EFF2F5' }}>
       <div className="p-4 max-w-full">
-        <div className="bg-white rounded-lg shadow-sm border border-neutral-200 p-4 mb-4">
-          <NewTableControls
-            viewMode={viewMode}
-            onViewModeChange={setViewMode}
-            tableMode={tableMode}
-            onTableModeChange={setTableMode}
-            searchQuery={searchQuery}
-            onSearchChange={setSearchQuery}
-            columnVisibility={columnVisibility}
-            onToggleColumnGroup={handleToggleColumnGroup}
-            fundsCount={filteredFunds.length}
-          />
-        </div>
+        <NewTableControls
+          viewMode={viewMode}
+          onViewModeChange={setViewMode}
+          tableMode={tableMode}
+          onTableModeChange={setTableMode}
+          searchQuery={searchQuery}
+          onSearchChange={setSearchQuery}
+          columnVisibility={columnVisibility}
+          onToggleColumnGroup={handleToggleColumnGroup}
+          fundsCount={filteredFunds.length}
+        />
 
         {viewMode === "grouped" && (
           <>

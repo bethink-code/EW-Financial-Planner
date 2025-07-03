@@ -34,7 +34,7 @@ export function NewTableControls({
   fundsCount,
 }: NewTableControlsProps) {
   return (
-    <div className="bg-white rounded shadow-sm border border-neutral-200 p-3 mb-4">
+    <div className="bg-white rounded-lg shadow-sm border border-neutral-200 p-4 mb-4">
       <div className="flex flex-col lg:flex-row gap-3 items-start lg:items-center justify-between">
         {/* Left section: Title and count */}
         <div className="flex items-center gap-3">
