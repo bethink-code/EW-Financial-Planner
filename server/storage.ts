@@ -25,10 +25,21 @@ export class MemStorage implements IStorage {
       owner: "John Doe",
       coverAmount: "R 500,000",
       
-      // Unapproved life cover
-      beneficiary: "Spouse",
-      beneficiaryPercentage: "100%",
-      coverSplit: "R 500,000",
+      // Unapproved life cover - multiple beneficiaries as JSON
+      unapprovedBeneficiaries: JSON.stringify([
+        {
+          id: "1",
+          name: "Spouse",
+          percentage: "60%",
+          coverSplit: "R 300,000"
+        },
+        {
+          id: "2", 
+          name: "Child",
+          percentage: "40%",
+          coverSplit: "R 200,000"
+        }
+      ]),
       
       // Monthly death benefit
       monthlyIncome: "R 5,000",
@@ -38,14 +49,29 @@ export class MemStorage implements IStorage {
       fundValue: "R 180,000",
       fundValueAtDeath: "R 200,000",
       
-      // Fund value beneficiaries
-      beneficiaryName: "Sarah Doe",
-      beneficiaryPercentageSplit: "60%",
-      amount: "R 150,000",
-      lumpSumTaken: "R 25,000",
-      nondeductibleContribution: "R 10,000",
-      livingAnnuity: "R 120,000",
-      incomeTerm: "20",
+      // Fund value beneficiaries - multiple beneficiaries as JSON
+      fundValueBeneficiaries: JSON.stringify([
+        {
+          id: "1",
+          name: "Sarah Doe",
+          percentage: "60%",
+          amount: "R 150,000",
+          lumpSumTaken: "R 25,000",
+          nondeductibleContribution: "R 10,000",
+          livingAnnuity: "R 120,000",
+          incomeTerm: "20"
+        },
+        {
+          id: "2",
+          name: "Tom Doe",
+          percentage: "40%",
+          amount: "R 100,000", 
+          lumpSumTaken: "R 15,000",
+          nondeductibleContribution: "R 5,000",
+          livingAnnuity: "R 80,000",
+          incomeTerm: "15"
+        }
+      ]),
 
       // Flows mode fields
       lumpSumLeftOverProvisions: "R 300,000",

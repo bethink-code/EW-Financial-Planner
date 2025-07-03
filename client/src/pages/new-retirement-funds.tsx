@@ -72,9 +72,14 @@ export default function NewRetirementFunds() {
       description: "New Retirement Fund",
       owner: "John Doe",
       coverAmount: "R 0",
-      beneficiary: "No beneficiary",
-      beneficiaryPercentage: "100",
-      coverSplit: "0",
+      unapprovedBeneficiaries: JSON.stringify([
+        {
+          id: "1",
+          name: "No beneficiary",
+          percentage: "100%",
+          coverSplit: "0"
+        }
+      ]),
       monthlyIncome: "R 0",
       termYears: "0",
       increasePercentage: "0%",
@@ -82,13 +87,18 @@ export default function NewRetirementFunds() {
       approvedLifeCover: "R 0",
       fundValue: "R 0",
       fundValueAtDeath: "R 0",
-      beneficiaryName: "Spouse",
-      beneficiaryPercentageSplit: "100%",
-      amount: "R 0",
-      lumpSumTaken: "R 0",
-      nondeductibleContribution: "R 0",
-      livingAnnuity: "",
-      incomeTerm: "",
+      fundValueBeneficiaries: JSON.stringify([
+        {
+          id: "1",
+          name: "Spouse",
+          percentage: "100%",
+          amount: "R 0",
+          lumpSumTaken: "R 0",
+          nondeductibleContribution: "R 0",
+          livingAnnuity: "",
+          incomeTerm: ""
+        }
+      ]),
     };
     createMutation.mutate(newFund);
   };
@@ -113,11 +123,23 @@ export default function NewRetirementFunds() {
   const filteredFunds = funds.filter(fund => {
     if (!searchQuery) return true;
     const query = searchQuery.toLowerCase();
+    
+    // Parse beneficiary arrays for search
+    let unapprovedBeneficiaries: any[] = [];
+    let fundValueBeneficiaries: any[] = [];
+    
+    try {
+      unapprovedBeneficiaries = JSON.parse(fund.unapprovedBeneficiaries || "[]");
+      fundValueBeneficiaries = JSON.parse(fund.fundValueBeneficiaries || "[]");
+    } catch (e) {
+      // Handle invalid JSON gracefully
+    }
+    
     return (
       fund.description.toLowerCase().includes(query) ||
       fund.owner.toLowerCase().includes(query) ||
-      fund.beneficiary.toLowerCase().includes(query) ||
-      fund.beneficiaryName.toLowerCase().includes(query)
+      unapprovedBeneficiaries.some((b: any) => b.name.toLowerCase().includes(query)) ||
+      fundValueBeneficiaries.some((b: any) => b.name.toLowerCase().includes(query))
     );
   });
 

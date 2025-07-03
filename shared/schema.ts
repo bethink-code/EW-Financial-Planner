@@ -2,6 +2,25 @@ import { pgTable, text, serial, integer, decimal } from "drizzle-orm/pg-core";
 import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod";
 
+// Beneficiary interfaces
+export interface UnapprovedBeneficiary {
+  id: string;
+  name: string;
+  percentage: string;
+  coverSplit: string;
+}
+
+export interface FundValueBeneficiary {
+  id: string;
+  name: string;
+  percentage: string;
+  amount: string;
+  lumpSumTaken: string;
+  nondeductibleContribution: string;
+  livingAnnuity: string;
+  incomeTerm: string;
+}
+
 export const retirementFunds = pgTable("retirement_funds", {
   id: serial("id").primaryKey(),
   
@@ -10,10 +29,8 @@ export const retirementFunds = pgTable("retirement_funds", {
   owner: text("owner").notNull(),
   coverAmount: text("cover_amount").notNull().default("0"),
   
-  // Unapproved life cover section
-  beneficiary: text("beneficiary").notNull().default(""),
-  beneficiaryPercentage: text("beneficiary_percentage").notNull().default("0"),
-  coverSplit: text("cover_split").notNull().default("0"),
+  // Unapproved life cover section - multiple beneficiaries (JSON string)
+  unapprovedBeneficiaries: text("unapproved_beneficiaries").notNull().default("[]"),
   
   // Monthly death benefit section
   monthlyIncome: text("monthly_income").notNull().default("0"),
@@ -23,14 +40,8 @@ export const retirementFunds = pgTable("retirement_funds", {
   fundValue: text("fund_value").notNull().default("0"),
   fundValueAtDeath: text("fund_value_at_death").notNull().default("0"),
   
-  // Fund value beneficiaries section
-  beneficiaryName: text("beneficiary_name").notNull().default(""),
-  beneficiaryPercentageSplit: text("beneficiary_percentage_split").notNull().default("0"),
-  amount: text("amount").notNull().default("0"),
-  lumpSumTaken: text("lump_sum_taken").notNull().default("0"),
-  nondeductibleContribution: text("nondeductible_contribution").notNull().default("0"),
-  livingAnnuity: text("living_annuity").notNull().default("0"),
-  incomeTerm: text("income_term").notNull().default("0"),
+  // Fund value beneficiaries section - multiple beneficiaries (JSON string)
+  fundValueBeneficiaries: text("fund_value_beneficiaries").notNull().default("[]"),
 
   // Flows mode specific fields
   lumpSumLeftOverProvisions: text("lump_sum_left_over_provisions").notNull().default("0"),
