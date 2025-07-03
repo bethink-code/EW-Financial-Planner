@@ -403,7 +403,14 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
 
               {/* Income from */}
               <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900">
-                <span className="text-neutral-600">{fund.incomeTerm || ""}</span>
+                <AutoSizeInput
+                  type="text"
+                  value={fund.incomeTerm || ""}
+                  onChange={(e) => handleInputChange(fund.id, "incomeTerm", e.target.value)}
+                  className="border-0 focus:bg-white focus:border focus:border-primary hover:bg-teal-50 text-right"
+                  placeholder="Income term"
+                  disabled={isUpdating}
+                />
               </td>
             </tr>
           ))}
