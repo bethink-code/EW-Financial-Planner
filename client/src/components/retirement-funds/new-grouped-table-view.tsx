@@ -37,7 +37,7 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
             <th className="px-3 py-2 text-center text-xs font-medium text-neutral-500 uppercase tracking-wider border-l border-neutral-300" colSpan={4}>
               Unapproved life cover
             </th>
-            <th className="px-3 py-2 text-center text-xs font-medium text-neutral-500 uppercase tracking-wider border-l border-neutral-300" colSpan={4}>
+            <th className="px-3 py-2 text-center text-xs font-medium text-neutral-500 uppercase tracking-wider border-l border-neutral-300" colSpan={3}>
               Monthly death benefit
             </th>
             <th className="px-3 py-2 text-center text-xs font-medium text-neutral-500 uppercase tracking-wider border-l border-neutral-300" colSpan={1}>
@@ -83,7 +83,7 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
             <th className="px-3 py-2 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">
               Term (Years)
             </th>
-            <th className="px-3 py-2 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">
+            <th className="px-3 py-2 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider border-r border-neutral-300">
               Increase %
             </th>
             <th className="px-3 py-2 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">
@@ -211,7 +211,7 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
               </td>
 
               {/* Monthly death benefit - Monthly income */}
-              <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900 border-l border-neutral-200">
+              <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900 border-l border-neutral-300">
                 <Input
                   type="text"
                   value={fund.monthlyIncome || ""}
@@ -235,7 +235,7 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
               </td>
 
               {/* Monthly death benefit - Increase % */}
-              <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900">
+              <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900 border-r border-neutral-300">
                 <Input
                   type="text"
                   value={fund.increasePercentage || ""}
