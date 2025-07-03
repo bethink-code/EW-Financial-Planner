@@ -120,7 +120,14 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
             <tr key={fund.id} className="hover:bg-neutral-50">
               {/* Description */}
               <td className="px-3 py-2 whitespace-nowrap text-sm font-medium text-neutral-900">
-                {fund.description}
+                <Input
+                  type="text"
+                  value={fund.description || ""}
+                  onChange={(e) => handleInputChange(fund.id, "description", e.target.value)}
+                  className="compact-input border-0 focus:bg-white focus:border focus:border-primary hover:bg-teal-50 text-left font-medium"
+                  placeholder="Fund description"
+                  disabled={isUpdating}
+                />
               </td>
               
               {/* Owner */}
