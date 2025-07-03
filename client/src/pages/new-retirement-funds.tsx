@@ -21,6 +21,17 @@ interface ColumnVisibility {
 export default function NewRetirementFunds() {
   const [viewMode, setViewMode] = useState<ViewMode>("grouped");
   const [tableMode, setTableMode] = useState<"inputs" | "flows">("inputs");
+
+  // Enhanced view mode change with transitions
+  const handleViewModeChange = (newMode: ViewMode) => {
+    if (document.startViewTransition) {
+      document.startViewTransition(() => {
+        setViewMode(newMode);
+      });
+    } else {
+      setViewMode(newMode);
+    }
+  };
   const [searchQuery, setSearchQuery] = useState("");
   const [columnVisibility, setColumnVisibility] = useState<ColumnVisibility>({
     overview: true,
@@ -83,7 +94,7 @@ export default function NewRetirementFunds() {
       <div className="p-4 max-w-full">
         <NewTableControls
           viewMode={viewMode}
-          onViewModeChange={setViewMode}
+          onViewModeChange={handleViewModeChange}
           tableMode={tableMode}
           onTableModeChange={setTableMode}
           searchQuery={searchQuery}
@@ -95,7 +106,7 @@ export default function NewRetirementFunds() {
 
         {viewMode === "grouped" && (
           <>
-            <div className="bg-white rounded-lg shadow-sm border border-neutral-200">
+            <div className="bg-white rounded-lg shadow-sm border border-neutral-200" style={{ viewTransitionName: 'table-view' }}>
               <NewGroupedTableView
                 funds={filteredFunds}
                 columnVisibility={columnVisibility}
@@ -150,17 +161,19 @@ export default function NewRetirementFunds() {
         )}
 
         {viewMode === "cards" && (
-          <CardsView
-            funds={filteredFunds}
-            columnVisibility={columnVisibility}
-            onFieldUpdate={handleFieldUpdate}
-            isUpdating={updateMutation.isPending}
-            tableMode={tableMode}
-          />
+          <div style={{ viewTransitionName: 'cards-view' }}>
+            <CardsView
+              funds={filteredFunds}
+              columnVisibility={columnVisibility}
+              onFieldUpdate={handleFieldUpdate}
+              isUpdating={updateMutation.isPending}
+              tableMode={tableMode}
+            />
+          </div>
         )}
 
         {viewMode === "detailed" && (
-          <div className="bg-white rounded-lg shadow-sm border border-neutral-200">
+          <div className="bg-white rounded-lg shadow-sm border border-neutral-200" style={{ viewTransitionName: 'detailed-view' }}>
             <DetailedView
               funds={filteredFunds}
               columnVisibility={columnVisibility}
