@@ -1,6 +1,12 @@
-import { Search, Table, Layout, List, Eye, EyeOff } from "lucide-react";
+import { Search, Table, Layout, List, Eye, EyeOff, ChevronDown, Settings } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuCheckboxItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 interface ColumnVisibility {
   overview: boolean;
@@ -113,75 +119,72 @@ export function NewTableControls({
             </div>
           )}
 
-          {/* Column Visibility Toggles - show for all views */}
-          <div className="flex gap-1 border-l border-neutral-200 pl-2">
+          {/* Section Visibility Dropdown - compact design */}
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
               <Button
                 variant="ghost"
                 size="sm"
-                onClick={() => onToggleColumnGroup("overview")}
-                className={`h-8 px-2 text-xs ${
-                  columnVisibility.overview
-                    ? "text-teal-700 bg-teal-50"
-                    : "text-neutral-500"
-                }`}
+                className="h-8 px-3 text-xs border-l border-neutral-200 ml-2"
               >
-                {columnVisibility.overview ? <Eye size={12} /> : <EyeOff size={12} />}
-                Overview
+                <Settings size={12} className="mr-1" />
+                Sections
+                <ChevronDown size={12} className="ml-1" />
               </Button>
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={() => onToggleColumnGroup("unapprovedLifeCover")}
-                className={`h-8 px-2 text-xs ${
-                  columnVisibility.unapprovedLifeCover
-                    ? "text-teal-600 bg-teal-100"
-                    : "text-neutral-500"
-                }`}
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" className="w-48">
+              <DropdownMenuCheckboxItem
+                checked={columnVisibility.overview}
+                onCheckedChange={() => onToggleColumnGroup("overview")}
+                className="text-xs"
               >
-                {columnVisibility.unapprovedLifeCover ? <Eye size={12} /> : <EyeOff size={12} />}
-                Life Cover
-              </Button>
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={() => onToggleColumnGroup("monthlyDeathBenefit")}
-                className={`h-8 px-2 text-xs ${
-                  columnVisibility.monthlyDeathBenefit
-                    ? "text-teal-800 bg-teal-200"
-                    : "text-neutral-500"
-                }`}
+                <div className="flex items-center gap-2">
+                  {columnVisibility.overview ? <Eye size={12} /> : <EyeOff size={12} />}
+                  Overview
+                </div>
+              </DropdownMenuCheckboxItem>
+              <DropdownMenuCheckboxItem
+                checked={columnVisibility.unapprovedLifeCover}
+                onCheckedChange={() => onToggleColumnGroup("unapprovedLifeCover")}
+                className="text-xs"
               >
-                {columnVisibility.monthlyDeathBenefit ? <Eye size={12} /> : <EyeOff size={12} />}
-                Monthly Benefit
-              </Button>
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={() => onToggleColumnGroup("fundValue")}
-                className={`h-8 px-2 text-xs ${
-                  columnVisibility.fundValue
-                    ? "text-blue-700 bg-blue-50"
-                    : "text-neutral-500"
-                }`}
+                <div className="flex items-center gap-2">
+                  {columnVisibility.unapprovedLifeCover ? <Eye size={12} /> : <EyeOff size={12} />}
+                  Life Cover
+                </div>
+              </DropdownMenuCheckboxItem>
+              <DropdownMenuCheckboxItem
+                checked={columnVisibility.monthlyDeathBenefit}
+                onCheckedChange={() => onToggleColumnGroup("monthlyDeathBenefit")}
+                className="text-xs"
               >
-                {columnVisibility.fundValue ? <Eye size={12} /> : <EyeOff size={12} />}
-                Fund Value
-              </Button>
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={() => onToggleColumnGroup("fundValueBeneficiaries")}
-                className={`h-8 px-2 text-xs ${
-                  columnVisibility.fundValueBeneficiaries
-                    ? "bg-white border border-neutral-300"
-                    : "text-neutral-500"
-                }`}
-                style={columnVisibility.fundValueBeneficiaries ? { color: '#EA8A2E' } : {}}
+                <div className="flex items-center gap-2">
+                  {columnVisibility.monthlyDeathBenefit ? <Eye size={12} /> : <EyeOff size={12} />}
+                  Monthly Benefit
+                </div>
+              </DropdownMenuCheckboxItem>
+              <DropdownMenuCheckboxItem
+                checked={columnVisibility.fundValue}
+                onCheckedChange={() => onToggleColumnGroup("fundValue")}
+                className="text-xs"
               >
-                {columnVisibility.fundValueBeneficiaries ? <Eye size={12} /> : <EyeOff size={12} />}
-                Beneficiaries
-              </Button>
-          </div>
+                <div className="flex items-center gap-2">
+                  {columnVisibility.fundValue ? <Eye size={12} /> : <EyeOff size={12} />}
+                  Fund Value
+                </div>
+              </DropdownMenuCheckboxItem>
+              <DropdownMenuCheckboxItem
+                checked={columnVisibility.fundValueBeneficiaries}
+                onCheckedChange={() => onToggleColumnGroup("fundValueBeneficiaries")}
+                className="text-xs"
+              >
+                <div className="flex items-center gap-2">
+                  {columnVisibility.fundValueBeneficiaries ? <Eye size={12} /> : <EyeOff size={12} />}
+                  Beneficiaries
+                </div>
+              </DropdownMenuCheckboxItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
       </div>
     </div>
