@@ -40,6 +40,9 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
             <th className="px-3 py-2 text-center text-xs font-medium text-neutral-500 uppercase tracking-wider" colSpan={1}>
               Cover amount
             </th>
+            <th className="px-3 py-2 text-center text-xs font-medium text-neutral-500 uppercase tracking-wider border-l border-neutral-300" colSpan={3}>
+              Unapproved life cover
+            </th>
             <th className="px-3 py-2 text-center text-xs font-medium text-neutral-500 uppercase tracking-wider border-l border-neutral-300" colSpan={4}>
               Monthly death benefit
             </th>
@@ -64,6 +67,15 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
           <tr className="border-b border-neutral-200" style={{ backgroundColor: '#D6ECF5' }}>
             <th className="px-3 py-2 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">
               Unapproved
+            </th>
+            <th className="px-3 py-2 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider border-l border-neutral-300">
+              Beneficiary
+            </th>
+            <th className="px-3 py-2 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">
+              %
+            </th>
+            <th className="px-3 py-2 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">
+              Cover split
             </th>
             <th className="px-3 py-2 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider border-l border-neutral-300">
               Monthly income
@@ -123,7 +135,7 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
               {/* Owner */}
               <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900">
                 <Select
-                  value={fund.owner || ""}
+                  value={fund.owner || "John Doe"}
                   onValueChange={(value) => handleInputChange(fund.id, "owner", value)}
                   disabled={isUpdating}
                 >
@@ -149,6 +161,51 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
                   onChange={(e) => handleInputChange(fund.id, "coverAmount", e.target.value)}
                   className="compact-input border-0 bg-transparent focus:bg-white focus:border focus:border-primary hover:bg-teal-50 text-right"
                   placeholder="R 0"
+                  disabled={isUpdating}
+                />
+              </td>
+
+              {/* Unapproved life cover - Beneficiary */}
+              <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900 border-l border-neutral-200">
+                <Select
+                  value={fund.beneficiary || "No beneficiary"}
+                  onValueChange={(value) => handleInputChange(fund.id, "beneficiary", value)}
+                  disabled={isUpdating}
+                >
+                  <SelectTrigger className="compact-input border-0 bg-transparent focus:bg-white focus:border focus:border-primary hover:bg-teal-50 transition-colors duration-200 group">
+                    <SelectValue placeholder="No beneficiary" />
+                    <Edit3 size={12} className="ml-1 text-teal-400 opacity-0 group-hover:opacity-100 transition-opacity duration-200" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="No beneficiary">No beneficiary</SelectItem>
+                    <SelectItem value="Spouse">Spouse</SelectItem>
+                    <SelectItem value="Child">Child</SelectItem>
+                    <SelectItem value="Parent">Parent</SelectItem>
+                    <SelectItem value="Other">Other</SelectItem>
+                  </SelectContent>
+                </Select>
+              </td>
+
+              {/* Unapproved life cover - % */}
+              <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900">
+                <Input
+                  type="text"
+                  value={fund.beneficiaryPercentage || ""}
+                  onChange={(e) => handleInputChange(fund.id, "beneficiaryPercentage", e.target.value)}
+                  className="compact-input border-0 bg-transparent focus:bg-white focus:border focus:border-primary hover:bg-teal-50 text-right"
+                  placeholder="100"
+                  disabled={isUpdating}
+                />
+              </td>
+
+              {/* Unapproved life cover - Cover split */}
+              <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900">
+                <Input
+                  type="text"
+                  value={fund.coverSplit || ""}
+                  onChange={(e) => handleInputChange(fund.id, "coverSplit", e.target.value)}
+                  className="compact-input border-0 bg-transparent focus:bg-white focus:border focus:border-primary hover:bg-teal-50 text-right"
+                  placeholder="0"
                   disabled={isUpdating}
                 />
               </td>
