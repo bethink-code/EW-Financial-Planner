@@ -461,67 +461,82 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
           
           {/* Totals row */}
           <tr className="border-t-2 border-neutral-300 font-semibold" style={{ backgroundColor: '#D6ECF5' }}>
-            {/* Description */}
-            <td className="px-3 py-2 whitespace-nowrap text-sm font-semibold" style={{ color: '#094161' }}>
-              Total
-            </td>
+            {/* Overview Section */}
+            {columnVisibility.overview && (
+              <>
+                {/* Description */}
+                <td className="px-3 py-2 whitespace-nowrap text-sm font-semibold" style={{ color: '#094161' }}>
+                  Total
+                </td>
+                
+                {/* Owner */}
+                <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900">
+                  
+                </td>
+              </>
+            )}
             
-            {/* Owner */}
-            <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900">
-              
-            </td>
+            {/* Unapproved Life Cover Section */}
+            {columnVisibility.unapprovedLifeCover && (
+              <>
+                {/* Cover amount - TOTAL */}
+                <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900 border-l border-neutral-300">
+                  <span className="font-semibold text-right block" style={{ color: '#094161' }}>
+                    R {funds.reduce((sum, fund) => {
+                      const amount = parseInt(fund.coverAmount?.replace(/[^0-9]/g, '') || '0');
+                      return sum + amount;
+                    }, 0).toLocaleString()}
+                  </span>
+                </td>
+                
+                {/* Beneficiary */}
+                <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900">
+                  
+                </td>
+                
+                {/* % */}
+                <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900">
+                  
+                </td>
+                
+                {/* Cover split */}
+                <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900">
+                  
+                </td>
+              </>
+            )}
             
-            {/* Cover amount - TOTAL */}
-            <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900 border-l border-neutral-300">
-              <span className="font-semibold text-right block" style={{ color: '#094161' }}>
-                R {funds.reduce((sum, fund) => {
-                  const amount = parseInt(fund.coverAmount?.replace(/[^0-9]/g, '') || '0');
-                  return sum + amount;
-                }, 0).toLocaleString()}
-              </span>
-            </td>
+            {/* Monthly Death Benefit Section */}
+            {columnVisibility.monthlyDeathBenefit && (
+              <>
+                {/* Monthly income - TOTAL */}
+                <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900 border-l border-neutral-300">
+                  <span className="font-semibold text-right block" style={{ color: '#094161' }}>
+                    R {funds.reduce((sum, fund) => {
+                      const amount = parseInt(fund.monthlyIncome?.replace(/[^0-9]/g, '') || '0');
+                      return sum + amount;
+                    }, 0).toLocaleString()}
+                  </span>
+                </td>
+                
+                {/* Term (Years) */}
+                <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900">
+                  
+                </td>
+                
+                {/* Increase % */}
+                <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900">
+                  
+                </td>
+                
+                {/* Escalation amount */}
+                <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900 border-r border-neutral-300">
+                  
+                </td>
+              </>
+            )}
             
-            {/* Beneficiary */}
-            <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900">
-              
-            </td>
-            
-            {/* % */}
-            <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900">
-              
-            </td>
-            
-            {/* Cover split */}
-            <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900">
-              
-            </td>
-            
-            {/* Monthly income - TOTAL */}
-            <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900 border-l border-neutral-300">
-              <span className="font-semibold text-right block" style={{ color: '#094161' }}>
-                R {funds.reduce((sum, fund) => {
-                  const amount = parseInt(fund.monthlyIncome?.replace(/[^0-9]/g, '') || '0');
-                  return sum + amount;
-                }, 0).toLocaleString()}
-              </span>
-            </td>
-            
-            {/* Term (Years) */}
-            <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900">
-              
-            </td>
-            
-            {/* Increase % */}
-            <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900">
-              
-            </td>
-            
-            {/* Escalation amount */}
-            <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900 border-r border-neutral-300">
-              
-            </td>
-            
-            {/* Approved life cover - TOTAL */}
+            {/* Fund Value Section - Always Visible */}
             <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900 border-l border-neutral-300">
               <span className="font-semibold text-right block" style={{ color: '#094161' }}>
                 R {funds.reduce((sum, fund) => {
@@ -531,7 +546,6 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
               </span>
             </td>
             
-            {/* Fund value - TOTAL */}
             <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900">
               <span className="font-semibold text-right block" style={{ color: '#094161' }}>
                 R {funds.reduce((sum, fund) => {
@@ -541,7 +555,6 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
               </span>
             </td>
             
-            {/* Fund value at death - TOTAL */}
             <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900 border-r border-neutral-300">
               <span className="font-semibold text-right block" style={{ color: '#094161' }}>
                 R {funds.reduce((sum, fund) => {
@@ -551,45 +564,50 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
               </span>
             </td>
             
-            {/* Fund value beneficiaries - Name */}
-            <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900 border-l border-neutral-300">
-              
-            </td>
-            
-            {/* Fund value beneficiaries - % */}
-            <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900">
-              
-            </td>
-            
-            {/* Fund value beneficiaries - Amount */}
-            <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900">
-              
-            </td>
-            
-            {/* Fund value beneficiaries - Lump sum taken */}
-            <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900">
-              
-            </td>
-            
-            {/* Fund value beneficiaries - Fund value at death */}
-            <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900">
-              
-            </td>
-            
-            {/* Fund value beneficiaries - Non deductible contribution amount */}
-            <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900">
-              
-            </td>
-            
-            {/* Fund value beneficiaries - Living annuity */}
-            <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900">
-              
-            </td>
-            
-            {/* Fund value beneficiaries - Income term */}
-            <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900">
-              
-            </td>
+            {/* Fund Value Beneficiaries Section */}
+            {columnVisibility.fundValueBeneficiaries && (
+              <>
+                {/* Fund value beneficiaries - Name */}
+                <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900 border-l border-neutral-300">
+                  
+                </td>
+                
+                {/* Fund value beneficiaries - % */}
+                <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900">
+                  
+                </td>
+                
+                {/* Fund value beneficiaries - Amount */}
+                <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900">
+                  
+                </td>
+                
+                {/* Fund value beneficiaries - Lump sum taken */}
+                <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900">
+                  
+                </td>
+                
+                {/* Fund value beneficiaries - Fund value at death */}
+                <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900">
+                  
+                </td>
+                
+                {/* Fund value beneficiaries - Non deductible contribution amount */}
+                <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900">
+                  
+                </td>
+                
+                {/* Fund value beneficiaries - Living annuity */}
+                <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900">
+                  
+                </td>
+                
+                {/* Fund value beneficiaries - Income term */}
+                <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900">
+                  
+                </td>
+              </>
+            )}
           </tr>
         </tbody>
       </table>
