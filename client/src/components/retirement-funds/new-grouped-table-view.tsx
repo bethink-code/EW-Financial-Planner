@@ -344,7 +344,7 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
           {/* Totals row */}
           <tr className="border-t-2 border-neutral-300 font-semibold" style={{ backgroundColor: '#D6ECF5' }}>
             {/* Description */}
-            <td className="px-3 py-2 whitespace-nowrap text-sm font-semibold text-neutral-900">
+            <td className="px-3 py-2 whitespace-nowrap text-sm font-semibold" style={{ color: '#094161' }}>
               Total
             </td>
             
