@@ -255,11 +255,11 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
 
               {/* Monthly death benefit - Monthly income */}
               <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900 border-l border-neutral-300">
-                <Input
+                <AutoSizeInput
                   type="text"
                   value={fund.monthlyIncome || ""}
                   onChange={(e) => handleInputChange(fund.id, "monthlyIncome", e.target.value)}
-                  className="compact-input border-0 focus:bg-white focus:border focus:border-primary hover:bg-teal-50 text-right"
+                  className="border-0 focus:bg-white focus:border focus:border-primary hover:bg-teal-50 text-right"
                   placeholder="R 0"
                   disabled={isUpdating}
                 />
@@ -267,11 +267,11 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
 
               {/* Monthly death benefit - Term (Years) */}
               <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900">
-                <Input
+                <AutoSizeInput
                   type="text"
                   value={fund.termYears || ""}
                   onChange={(e) => handleInputChange(fund.id, "termYears", e.target.value)}
-                  className="compact-input border-0 focus:bg-white focus:border focus:border-primary hover:bg-teal-50 text-right"
+                  className="border-0 focus:bg-white focus:border focus:border-primary hover:bg-teal-50 text-right"
                   placeholder="0"
                   disabled={isUpdating}
                 />
@@ -279,11 +279,11 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
 
               {/* Monthly death benefit - Increase % */}
               <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900">
-                <Input
+                <AutoSizeInput
                   type="text"
                   value={fund.increasePercentage || ""}
                   onChange={(e) => handleInputChange(fund.id, "increasePercentage", e.target.value)}
-                  className="compact-input border-0 focus:bg-white focus:border focus:border-primary hover:bg-teal-50 text-right"
+                  className="border-0 focus:bg-white focus:border focus:border-primary hover:bg-teal-50 text-right"
                   placeholder="0%"
                   disabled={isUpdating}
                 />
@@ -291,11 +291,11 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
 
               {/* Monthly death benefit - Escalation amount */}
               <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900 border-r border-neutral-300">
-                <Input
+                <AutoSizeInput
                   type="text"
                   value={fund.lumpSumDeath || ""}
                   onChange={(e) => handleInputChange(fund.id, "lumpSumDeath", e.target.value)}
-                  className="compact-input border-0 focus:bg-white focus:border focus:border-primary hover:bg-teal-50 text-right"
+                  className="border-0 focus:bg-white focus:border focus:border-primary hover:bg-teal-50 text-right"
                   placeholder="R 0"
                   disabled={isUpdating}
                 />
