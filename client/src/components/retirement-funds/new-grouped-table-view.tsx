@@ -266,79 +266,67 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
 
               {/* Fund value beneficiaries - Name */}
               <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900 border-l border-neutral-200">
-                <div className="p-2 rounded" style={{ backgroundColor: '#FFFFFF', color: '#EA8A2E' }}>
-                  <Input
-                    type="text"
-                    value={fund.beneficiaryName || ""}
-                    onChange={(e) => handleInputChange(fund.id, "beneficiaryName", e.target.value)}
-                    className="compact-input border-0 bg-transparent focus:bg-white focus:border focus:border-primary hover:bg-orange-50 text-right"
-                    placeholder="Beneficiary name"
-                    disabled={isUpdating}
-                  />
-                </div>
+                <Input
+                  type="text"
+                  value={fund.beneficiaryName || ""}
+                  onChange={(e) => handleInputChange(fund.id, "beneficiaryName", e.target.value)}
+                  className="compact-input border-0 bg-transparent focus:bg-white focus:border focus:border-primary hover:bg-teal-50 text-right"
+                  placeholder="Beneficiary name"
+                  disabled={isUpdating}
+                />
               </td>
 
               {/* Fund value beneficiaries - % */}
               <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900">
-                <div className="p-2 rounded" style={{ backgroundColor: '#FFFFFF', color: '#EA8A2E' }}>
-                  <Input
-                    type="text"
-                    value={fund.beneficiaryPercentageSplit || ""}
-                    onChange={(e) => handleInputChange(fund.id, "beneficiaryPercentageSplit", e.target.value)}
-                    className="compact-input border-0 bg-transparent focus:bg-white focus:border focus:border-primary hover:bg-orange-50 text-right"
-                    placeholder="0%"
-                    disabled={isUpdating}
-                  />
-                </div>
+                <Input
+                  type="text"
+                  value={fund.beneficiaryPercentageSplit || ""}
+                  onChange={(e) => handleInputChange(fund.id, "beneficiaryPercentageSplit", e.target.value)}
+                  className="compact-input border-0 bg-transparent focus:bg-white focus:border focus:border-primary hover:bg-teal-50 text-right"
+                  placeholder="0%"
+                  disabled={isUpdating}
+                />
               </td>
 
               {/* Fund value beneficiaries - Amount */}
               <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900">
-                <div className="p-2 rounded" style={{ backgroundColor: '#FFFFFF', color: '#EA8A2E' }}>
-                  <Input
-                    type="text"
-                    value={fund.amount || ""}
-                    onChange={(e) => handleInputChange(fund.id, "amount", e.target.value)}
-                    className="compact-input border-0 bg-transparent focus:bg-white focus:border focus:border-primary hover:bg-orange-50 text-right"
-                    placeholder="R 0"
-                    disabled={isUpdating}
-                  />
-                </div>
+                <Input
+                  type="text"
+                  value={fund.amount || ""}
+                  onChange={(e) => handleInputChange(fund.id, "amount", e.target.value)}
+                  className="compact-input border-0 bg-transparent focus:bg-white focus:border focus:border-primary hover:bg-teal-50 text-right"
+                  placeholder="R 0"
+                  disabled={isUpdating}
+                />
               </td>
 
               {/* Fund value beneficiaries - Lump sum taken */}
               <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900">
-                <div className="p-2 rounded" style={{ backgroundColor: '#FFFFFF', color: '#EA8A2E' }}>
-                  <Input
-                    type="text"
-                    value={fund.lumpSumTaken || ""}
-                    onChange={(e) => handleInputChange(fund.id, "lumpSumTaken", e.target.value)}
-                    className="compact-input border-0 bg-transparent focus:bg-white focus:border focus:border-primary hover:bg-orange-50 text-right"
-                    placeholder="R 0"
-                    disabled={isUpdating}
-                  />
-                </div>
+                <Input
+                  type="text"
+                  value={fund.lumpSumTaken || ""}
+                  onChange={(e) => handleInputChange(fund.id, "lumpSumTaken", e.target.value)}
+                  className="compact-input border-0 bg-transparent focus:bg-white focus:border focus:border-primary hover:bg-teal-50 text-right"
+                  placeholder="R 0"
+                  disabled={isUpdating}
+                />
               </td>
 
               {/* Fund value beneficiaries - Fund value at death */}
               <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900">
-                <div className="p-2 rounded" style={{ backgroundColor: '#FFFFFF', color: '#EA8A2E' }}>
-                  <span className="text-neutral-600">R {fund.fundValueAtDeath || "0"}</span>
-                </div>
+                <span className="text-neutral-600">{fund.fundValueAtDeath || "R 0"}</span>
               </td>
 
               {/* Fund value beneficiaries - Unappropriated fund commencement amount */}
               <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900">
-                <div className="p-2 rounded" style={{ backgroundColor: '#FFFFFF', color: '#EA8A2E' }}>
-                  <Input
-                    type="text"
-                    value={fund.nondeductibleContribution || ""}
-                    onChange={(e) => handleInputChange(fund.id, "nondeductibleContribution", e.target.value)}
-                    className="compact-input border-0 bg-transparent focus:bg-white focus:border focus:border-primary hover:bg-orange-50 text-right"
-                    placeholder="R 0"
-                    disabled={isUpdating}
-                  />
-                </div>
+                <Input
+                  type="text"
+                  value={fund.nondeductibleContribution || ""}
+                  onChange={(e) => handleInputChange(fund.id, "nondeductibleContribution", e.target.value)}
+                  className="compact-input border-0 bg-transparent focus:bg-white focus:border focus:border-primary hover:bg-teal-50 text-right"
+                  placeholder="R 0"
+                  disabled={isUpdating}
+                />
               </td>
 
               {/* Living Annuity */}
