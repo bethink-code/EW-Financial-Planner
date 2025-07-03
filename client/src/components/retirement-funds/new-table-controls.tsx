@@ -127,7 +127,7 @@ export function NewTableControls({
                 size="sm"
                 className="h-8 px-3 text-xs border-l border-neutral-200 ml-2"
               >
-                <Settings size={12} className="mr-1" />
+                <Eye size={12} className="mr-1" />
                 Sections
                 <ChevronDown size={12} className="ml-1" />
               </Button>
