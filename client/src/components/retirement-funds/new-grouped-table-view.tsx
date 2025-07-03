@@ -75,36 +75,7 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
     <div className="overflow-x-auto">
       <table className="min-w-full bg-white table-auto">
         <thead>
-          {/* First level headers */}
-          <tr className="border-b border-neutral-200" style={{ backgroundColor: '#D6ECF5' }}>
-            {columnVisibility.overview && (
-              <th className="px-3 py-2 text-center text-xs font-medium text-neutral-500 uppercase tracking-wider" colSpan={2}>
-                Overview
-              </th>
-            )}
-            {columnVisibility.unapprovedLifeCover && (
-              <th className="px-3 py-2 text-center text-xs font-medium text-neutral-500 uppercase tracking-wider border-l border-neutral-300" colSpan={4}>
-                Unapproved life cover
-              </th>
-            )}
-            {columnVisibility.monthlyDeathBenefit && (
-              <th className="px-3 py-2 text-center text-xs font-medium text-neutral-500 uppercase tracking-wider border-l border-neutral-300" colSpan={4}>
-                Monthly death benefit
-              </th>
-            )}
-            {columnVisibility.fundValue && (
-              <th className="px-3 py-2 text-center text-xs font-medium text-neutral-500 uppercase tracking-wider border-l border-neutral-300" colSpan={3}>
-                Fund value
-              </th>
-            )}
-            {columnVisibility.fundValueBeneficiaries && (
-              <th className="px-3 py-2 text-center text-xs font-medium text-neutral-500 uppercase tracking-wider border-l border-neutral-300" colSpan={8}>
-                Fund value beneficiaries
-              </th>
-            )}
-          </tr>
-          
-          {/* Second level headers */}
+          {/* Column headers */}
           <tr className="border-b border-neutral-200" style={{ backgroundColor: '#D6ECF5' }}>
             {columnVisibility.overview && (
               <>
