@@ -76,55 +76,77 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
         <thead>
           {/* First level headers */}
           <tr className="border-b border-neutral-200" style={{ backgroundColor: '#D6ECF5' }}>
-            <th className="px-3 py-2 text-center text-xs font-medium text-neutral-500 uppercase tracking-wider" colSpan={2}>
-              Overview
-            </th>
-            <th className="px-3 py-2 text-center text-xs font-medium text-neutral-500 uppercase tracking-wider border-l border-neutral-300" colSpan={4}>
-              Unapproved life cover
-            </th>
-            <th className="px-3 py-2 text-center text-xs font-medium text-neutral-500 uppercase tracking-wider border-l border-neutral-300" colSpan={4}>
-              Monthly death benefit
-            </th>
+            {columnVisibility.overview && (
+              <th className="px-3 py-2 text-center text-xs font-medium text-neutral-500 uppercase tracking-wider" colSpan={2}>
+                Overview
+              </th>
+            )}
+            {columnVisibility.unapprovedLifeCover && (
+              <th className="px-3 py-2 text-center text-xs font-medium text-neutral-500 uppercase tracking-wider border-l border-neutral-300" colSpan={4}>
+                Unapproved life cover
+              </th>
+            )}
+            {columnVisibility.monthlyDeathBenefit && (
+              <th className="px-3 py-2 text-center text-xs font-medium text-neutral-500 uppercase tracking-wider border-l border-neutral-300" colSpan={4}>
+                Monthly death benefit
+              </th>
+            )}
+            {/* Fund value section is always visible */}
             <th className="px-3 py-2 text-center text-xs font-medium text-neutral-500 uppercase tracking-wider border-l border-neutral-300" colSpan={3}>
               Fund value
             </th>
-            <th className="px-3 py-2 text-center text-xs font-medium text-neutral-500 uppercase tracking-wider border-l border-neutral-300" colSpan={8}>
-              Fund value beneficiaries
-            </th>
+            {columnVisibility.fundValueBeneficiaries && (
+              <th className="px-3 py-2 text-center text-xs font-medium text-neutral-500 uppercase tracking-wider border-l border-neutral-300" colSpan={8}>
+                Fund value beneficiaries
+              </th>
+            )}
           </tr>
           
           {/* Second level headers */}
           <tr className="border-b border-neutral-200" style={{ backgroundColor: '#D6ECF5' }}>
-            <th className="px-3 py-2 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">
-              Description
-            </th>
-            <th className="px-3 py-2 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">
-              Owner
-            </th>
-            <th className="px-3 py-2 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider border-l border-neutral-300">
-              Cover amount
-            </th>
-            <th className="px-3 py-2 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">
-              Beneficiary
-            </th>
-            <th className="px-3 py-2 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">
-              %
-            </th>
-            <th className="px-3 py-2 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">
-              Cover split
-            </th>
-            <th className="px-3 py-2 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider border-l border-neutral-300">
-              Monthly income
-            </th>
-            <th className="px-3 py-2 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">
-              Term (Years)
-            </th>
-            <th className="px-3 py-2 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">
-              Increase %
-            </th>
-            <th className="px-3 py-2 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider border-r border-neutral-300">
-              Escalation amount
-            </th>
+            {columnVisibility.overview && (
+              <>
+                <th className="px-3 py-2 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">
+                  Description
+                </th>
+                <th className="px-3 py-2 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">
+                  Owner
+                </th>
+              </>
+            )}
+            {columnVisibility.unapprovedLifeCover && (
+              <>
+                <th className="px-3 py-2 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider border-l border-neutral-300">
+                  Cover amount
+                </th>
+                <th className="px-3 py-2 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">
+                  Beneficiary
+                </th>
+                <th className="px-3 py-2 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">
+                  %
+                </th>
+                <th className="px-3 py-2 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">
+                  Cover split
+                </th>
+              </>
+            )}
+            {columnVisibility.monthlyDeathBenefit && (
+              <>
+                <th className="px-3 py-2 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider border-l border-neutral-300">
+                  Monthly income
+                </th>
+                <th className="px-3 py-2 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">
+                  Term (Years)
+                </th>
+                <th className="px-3 py-2 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">
+                  Increase %
+                </th>
+                <th className="px-3 py-2 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider border-r border-neutral-300">
+                  Escalation amount
+                </th>
+              </>
+            )}
+            {/* Fund value section is always visible */}
             <th className="px-3 py-2 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider border-l border-neutral-300">
               Approved life cover
             </th>
@@ -134,174 +156,193 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
             <th className="px-3 py-2 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider border-r border-neutral-300">
               Fund value at death
             </th>
-            <th className="px-3 py-2 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider border-l border-neutral-300">
-              Name
-            </th>
-            <th className="px-3 py-2 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">
-              %
-            </th>
-            <th className="px-3 py-2 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">
-              Amount
-            </th>
-            <th className="px-3 py-2 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">
-              Lump sum taken
-            </th>
-            <th className="px-3 py-2 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">
-              Fund value at death
-            </th>
-            <th className="px-3 py-2 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">
-              Non deductible contribution amount
-            </th>
-            <th className="px-3 py-2 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">
-              Living annuity
-            </th>
-            <th className="px-3 py-2 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">
-              Income term
-            </th>
+            {columnVisibility.fundValueBeneficiaries && (
+              <>
+                <th className="px-3 py-2 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider border-l border-neutral-300">
+                  Name
+                </th>
+                <th className="px-3 py-2 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">
+                  %
+                </th>
+                <th className="px-3 py-2 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">
+                  Amount
+                </th>
+                <th className="px-3 py-2 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">
+                  Lump sum taken
+                </th>
+                <th className="px-3 py-2 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">
+                  Fund value at death
+                </th>
+                <th className="px-3 py-2 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">
+                  Non deductible contribution amount
+                </th>
+                <th className="px-3 py-2 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">
+                  Living annuity
+                </th>
+                <th className="px-3 py-2 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">
+                  Income term
+                </th>
+              </>
+            )}
           </tr>
         </thead>
         <tbody className="bg-white divide-y divide-neutral-200">
           {funds.map((fund) => (
             <tr key={fund.id} className="hover:bg-neutral-50">
-              {/* Description */}
-              <td className="px-3 py-2 whitespace-nowrap text-sm font-medium text-neutral-900">
-                <AutoSizeInput
-                  type="text"
-                  value={fund.description || ""}
-                  onChange={(e) => handleInputChange(fund.id, "description", e.target.value)}
-                  className="border-0 focus:bg-white focus:border focus:border-primary hover:bg-teal-50 text-left font-medium"
-                  placeholder="Fund description"
-                  disabled={isUpdating}
-                />
-              </td>
-              
-              {/* Owner */}
-              <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900">
-                <Select
-                  value={fund.owner || "John Doe"}
-                  onValueChange={(value) => handleInputChange(fund.id, "owner", value)}
-                  disabled={isUpdating}
-                >
-                  <SelectTrigger className="compact-input border-0 focus:bg-white focus:border focus:border-primary hover:bg-teal-50 transition-colors duration-200 group">
-                    <SelectValue />
-                    <Edit3 size={12} className="ml-1 text-teal-400 opacity-0 group-hover:opacity-100 transition-opacity duration-200" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {owners.map((owner) => (
-                      <SelectItem key={owner} value={owner}>
-                        {owner}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </td>
+              {/* Overview Section */}
+              {columnVisibility.overview && (
+                <>
+                  {/* Description */}
+                  <td className="px-3 py-2 whitespace-nowrap text-sm font-medium text-neutral-900">
+                    <AutoSizeInput
+                      type="text"
+                      value={fund.description || ""}
+                      onChange={(e) => handleInputChange(fund.id, "description", e.target.value)}
+                      className="border-0 focus:bg-white focus:border focus:border-primary hover:bg-teal-50 text-left font-medium"
+                      placeholder="Fund description"
+                      disabled={isUpdating}
+                    />
+                  </td>
+                  
+                  {/* Owner */}
+                  <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900">
+                    <Select
+                      value={fund.owner || "John Doe"}
+                      onValueChange={(value) => handleInputChange(fund.id, "owner", value)}
+                      disabled={isUpdating}
+                    >
+                      <SelectTrigger className="compact-input border-0 focus:bg-white focus:border focus:border-primary hover:bg-teal-50 transition-colors duration-200 group">
+                        <SelectValue />
+                        <Edit3 size={12} className="ml-1 text-teal-400 opacity-0 group-hover:opacity-100 transition-opacity duration-200" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {owners.map((owner) => (
+                          <SelectItem key={owner} value={owner}>
+                            {owner}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </td>
+                </>
+              )}
 
-              {/* Cover amount - Unapproved */}
-              <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900 border-l border-neutral-300">
-                <AutoSizeInput
-                  type="text"
-                  value={fund.coverAmount || ""}
-                  onChange={(e) => handleInputChange(fund.id, "coverAmount", e.target.value)}
-                  className="border-0 focus:bg-white focus:border focus:border-primary hover:bg-teal-50 text-right"
-                  placeholder="R 0"
-                  disabled={isUpdating}
-                />
-              </td>
+              {/* Unapproved Life Cover Section */}
+              {columnVisibility.unapprovedLifeCover && (
+                <>
+                  {/* Cover amount - Unapproved */}
+                  <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900 border-l border-neutral-300">
+                    <AutoSizeInput
+                      type="text"
+                      value={fund.coverAmount || ""}
+                      onChange={(e) => handleInputChange(fund.id, "coverAmount", e.target.value)}
+                      className="border-0 focus:bg-white focus:border focus:border-primary hover:bg-teal-50 text-right"
+                      placeholder="R 0"
+                      disabled={isUpdating}
+                    />
+                  </td>
 
-              {/* Unapproved life cover - Beneficiary */}
-              <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900">
-                <Select
-                  value={fund.beneficiary || "No beneficiary"}
-                  onValueChange={(value) => handleInputChange(fund.id, "beneficiary", value)}
-                  disabled={isUpdating}
-                >
-                  <SelectTrigger className="compact-input border-0 focus:bg-white focus:border focus:border-primary hover:bg-teal-50 transition-colors duration-200 group">
-                    <SelectValue placeholder="No beneficiary" />
-                    <Edit3 size={12} className="ml-1 text-teal-400 opacity-0 group-hover:opacity-100 transition-opacity duration-200" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="No beneficiary">No beneficiary</SelectItem>
-                    <SelectItem value="Spouse">Spouse</SelectItem>
-                    <SelectItem value="Child">Child</SelectItem>
-                    <SelectItem value="Parent">Parent</SelectItem>
-                    <SelectItem value="Other">Other</SelectItem>
-                  </SelectContent>
-                </Select>
-              </td>
+                  {/* Unapproved life cover - Beneficiary */}
+                  <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900">
+                    <Select
+                      value={fund.beneficiary || "No beneficiary"}
+                      onValueChange={(value) => handleInputChange(fund.id, "beneficiary", value)}
+                      disabled={isUpdating}
+                    >
+                      <SelectTrigger className="compact-input border-0 focus:bg-white focus:border focus:border-primary hover:bg-teal-50 transition-colors duration-200 group">
+                        <SelectValue placeholder="No beneficiary" />
+                        <Edit3 size={12} className="ml-1 text-teal-400 opacity-0 group-hover:opacity-100 transition-opacity duration-200" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="No beneficiary">No beneficiary</SelectItem>
+                        <SelectItem value="Spouse">Spouse</SelectItem>
+                        <SelectItem value="Child">Child</SelectItem>
+                        <SelectItem value="Parent">Parent</SelectItem>
+                        <SelectItem value="Other">Other</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </td>
 
-              {/* Unapproved life cover - % */}
-              <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900">
-                <AutoSizeInput
-                  type="text"
-                  value={fund.beneficiaryPercentage || ""}
-                  onChange={(e) => handleInputChange(fund.id, "beneficiaryPercentage", e.target.value)}
-                  className="border-0 focus:bg-white focus:border focus:border-primary hover:bg-teal-50 text-right"
-                  placeholder="100"
-                  disabled={isUpdating}
-                />
-              </td>
+                  {/* Unapproved life cover - % */}
+                  <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900">
+                    <AutoSizeInput
+                      type="text"
+                      value={fund.beneficiaryPercentage || ""}
+                      onChange={(e) => handleInputChange(fund.id, "beneficiaryPercentage", e.target.value)}
+                      className="border-0 focus:bg-white focus:border focus:border-primary hover:bg-teal-50 text-right"
+                      placeholder="100"
+                      disabled={isUpdating}
+                    />
+                  </td>
 
-              {/* Unapproved life cover - Cover split */}
-              <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900">
-                <AutoSizeInput
-                  type="text"
-                  value={fund.coverSplit || ""}
-                  onChange={(e) => handleInputChange(fund.id, "coverSplit", e.target.value)}
-                  className="border-0 focus:bg-white focus:border focus:border-primary hover:bg-teal-50 text-right"
-                  placeholder="0"
-                  disabled={isUpdating}
-                />
-              </td>
+                  {/* Unapproved life cover - Cover split */}
+                  <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900">
+                    <AutoSizeInput
+                      type="text"
+                      value={fund.coverSplit || ""}
+                      onChange={(e) => handleInputChange(fund.id, "coverSplit", e.target.value)}
+                      className="border-0 focus:bg-white focus:border focus:border-primary hover:bg-teal-50 text-right"
+                      placeholder="0"
+                      disabled={isUpdating}
+                    />
+                  </td>
+                </>
+              )}
 
-              {/* Monthly death benefit - Monthly income */}
-              <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900 border-l border-neutral-300">
-                <AutoSizeInput
-                  type="text"
-                  value={fund.monthlyIncome || ""}
-                  onChange={(e) => handleInputChange(fund.id, "monthlyIncome", e.target.value)}
-                  className="border-0 focus:bg-white focus:border focus:border-primary hover:bg-teal-50 text-right"
-                  placeholder="R 0"
-                  disabled={isUpdating}
-                />
-              </td>
+              {/* Monthly Death Benefit Section */}
+              {columnVisibility.monthlyDeathBenefit && (
+                <>
+                  {/* Monthly death benefit - Monthly income */}
+                  <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900 border-l border-neutral-300">
+                    <AutoSizeInput
+                      type="text"
+                      value={fund.monthlyIncome || ""}
+                      onChange={(e) => handleInputChange(fund.id, "monthlyIncome", e.target.value)}
+                      className="border-0 focus:bg-white focus:border focus:border-primary hover:bg-teal-50 text-right"
+                      placeholder="R 0"
+                      disabled={isUpdating}
+                    />
+                  </td>
 
-              {/* Monthly death benefit - Term (Years) */}
-              <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900">
-                <AutoSizeInput
-                  type="text"
-                  value={fund.termYears || ""}
-                  onChange={(e) => handleInputChange(fund.id, "termYears", e.target.value)}
-                  className="border-0 focus:bg-white focus:border focus:border-primary hover:bg-teal-50 text-right"
-                  placeholder="0"
-                  disabled={isUpdating}
-                />
-              </td>
+                  {/* Monthly death benefit - Term (Years) */}
+                  <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900">
+                    <AutoSizeInput
+                      type="text"
+                      value={fund.termYears || ""}
+                      onChange={(e) => handleInputChange(fund.id, "termYears", e.target.value)}
+                      className="border-0 focus:bg-white focus:border focus:border-primary hover:bg-teal-50 text-right"
+                      placeholder="0"
+                      disabled={isUpdating}
+                    />
+                  </td>
 
-              {/* Monthly death benefit - Increase % */}
-              <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900">
-                <AutoSizeInput
-                  type="text"
-                  value={fund.increasePercentage || ""}
-                  onChange={(e) => handleInputChange(fund.id, "increasePercentage", e.target.value)}
-                  className="border-0 focus:bg-white focus:border focus:border-primary hover:bg-teal-50 text-right"
-                  placeholder="0%"
-                  disabled={isUpdating}
-                />
-              </td>
+                  {/* Monthly death benefit - Increase % */}
+                  <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900">
+                    <AutoSizeInput
+                      type="text"
+                      value={fund.increasePercentage || ""}
+                      onChange={(e) => handleInputChange(fund.id, "increasePercentage", e.target.value)}
+                      className="border-0 focus:bg-white focus:border focus:border-primary hover:bg-teal-50 text-right"
+                      placeholder="0%"
+                      disabled={isUpdating}
+                    />
+                  </td>
 
-              {/* Monthly death benefit - Escalation amount */}
-              <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900 border-r border-neutral-300">
-                <AutoSizeInput
-                  type="text"
-                  value={fund.lumpSumDeath || ""}
-                  onChange={(e) => handleInputChange(fund.id, "lumpSumDeath", e.target.value)}
-                  className="border-0 focus:bg-white focus:border focus:border-primary hover:bg-teal-50 text-right"
-                  placeholder="R 0"
-                  disabled={isUpdating}
-                />
-              </td>
+                  {/* Monthly death benefit - Escalation amount */}
+                  <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900 border-r border-neutral-300">
+                    <AutoSizeInput
+                      type="text"
+                      value={fund.lumpSumDeath || ""}
+                      onChange={(e) => handleInputChange(fund.id, "lumpSumDeath", e.target.value)}
+                      className="border-0 focus:bg-white focus:border focus:border-primary hover:bg-teal-50 text-right"
+                      placeholder="R 0"
+                      disabled={isUpdating}
+                    />
+                  </td>
+                </>
+              )}
 
-              {/* Approved life cover */}
+              {/* Fund Value Section - Always Visible */}
               <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900 border-l border-neutral-300">
                 <AutoSizeInput
                   type="text"
@@ -313,7 +354,6 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
                 />
               </td>
 
-              {/* Fund value - Fund value */}
               <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900">
                 <AutoSizeInput
                   type="text"
@@ -325,93 +365,97 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
                 />
               </td>
 
-              {/* Fund value - Fund value at death */}
               <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900 border-r border-neutral-300">
                 <span className="text-neutral-600">{fund.fundValueAtDeath || "R 0"}</span>
               </td>
 
-              {/* Fund value beneficiaries - Name */}
-              <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900 border-l border-neutral-200">
-                <Select
-                  value={fund.beneficiaryName || ""}
-                  onValueChange={(value) => handleInputChange(fund.id, "beneficiaryName", value)}
-                  disabled={isUpdating}
-                >
-                  <SelectTrigger className="w-auto min-w-[120px] h-8 text-sm border-0 bg-[#F2F7FB] focus:bg-white focus:border focus:border-primary hover:bg-teal-50 text-right">
-                    <SelectValue placeholder="Select beneficiary" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="Spouse">Spouse</SelectItem>
-                    <SelectItem value="Child">Child</SelectItem>
-                    <SelectItem value="Estate">Estate</SelectItem>
-                    <SelectItem value="Trust">Trust</SelectItem>
-                    <SelectItem value="Other">Other</SelectItem>
-                  </SelectContent>
-                </Select>
-              </td>
+              {/* Fund Value Beneficiaries Section */}
+              {columnVisibility.fundValueBeneficiaries && (
+                <>
+                  {/* Fund value beneficiaries - Name */}
+                  <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900 border-l border-neutral-200">
+                    <Select
+                      value={fund.beneficiaryName || ""}
+                      onValueChange={(value) => handleInputChange(fund.id, "beneficiaryName", value)}
+                      disabled={isUpdating}
+                    >
+                      <SelectTrigger className="w-auto min-w-[120px] h-8 text-sm border-0 bg-[#F2F7FB] focus:bg-white focus:border focus:border-primary hover:bg-teal-50 text-right">
+                        <SelectValue placeholder="Select beneficiary" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="Spouse">Spouse</SelectItem>
+                        <SelectItem value="Child">Child</SelectItem>
+                        <SelectItem value="Estate">Estate</SelectItem>
+                        <SelectItem value="Trust">Trust</SelectItem>
+                        <SelectItem value="Other">Other</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </td>
 
-              {/* Fund value beneficiaries - % */}
-              <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900">
-                <AutoSizeInput
-                  type="text"
-                  value={fund.beneficiaryPercentageSplit || ""}
-                  onChange={(e) => handleInputChange(fund.id, "beneficiaryPercentageSplit", e.target.value)}
-                  className="border-0 focus:bg-white focus:border focus:border-primary hover:bg-teal-50 text-right"
-                  placeholder="0%"
-                  disabled={isUpdating}
-                />
-              </td>
+                  {/* Fund value beneficiaries - % */}
+                  <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900">
+                    <AutoSizeInput
+                      type="text"
+                      value={fund.beneficiaryPercentageSplit || ""}
+                      onChange={(e) => handleInputChange(fund.id, "beneficiaryPercentageSplit", e.target.value)}
+                      className="border-0 focus:bg-white focus:border focus:border-primary hover:bg-teal-50 text-right"
+                      placeholder="0%"
+                      disabled={isUpdating}
+                    />
+                  </td>
 
-              {/* Fund value beneficiaries - Amount */}
-              <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900">
-                <span className="text-neutral-600">{fund.amount || "R 0"}</span>
-              </td>
+                  {/* Fund value beneficiaries - Amount */}
+                  <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900">
+                    <span className="text-neutral-600">{fund.amount || "R 0"}</span>
+                  </td>
 
-              {/* Fund value beneficiaries - Lump sum taken */}
-              <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900">
-                <AutoSizeInput
-                  type="text"
-                  value={fund.lumpSumTaken || ""}
-                  onChange={(e) => handleInputChange(fund.id, "lumpSumTaken", e.target.value)}
-                  className="border-0 focus:bg-white focus:border focus:border-primary hover:bg-teal-50 text-right"
-                  placeholder="R 0"
-                  disabled={isUpdating}
-                />
-              </td>
+                  {/* Fund value beneficiaries - Lump sum taken */}
+                  <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900">
+                    <AutoSizeInput
+                      type="text"
+                      value={fund.lumpSumTaken || ""}
+                      onChange={(e) => handleInputChange(fund.id, "lumpSumTaken", e.target.value)}
+                      className="border-0 focus:bg-white focus:border focus:border-primary hover:bg-teal-50 text-right"
+                      placeholder="R 0"
+                      disabled={isUpdating}
+                    />
+                  </td>
 
-              {/* Fund value beneficiaries - Fund value at death */}
-              <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900">
-                <span className="text-neutral-600">{fund.fundValueAtDeath || "R 0"}</span>
-              </td>
+                  {/* Fund value beneficiaries - Fund value at death */}
+                  <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900">
+                    <span className="text-neutral-600">{fund.fundValueAtDeath || "R 0"}</span>
+                  </td>
 
-              {/* Fund value beneficiaries - Unappropriated fund commencement amount */}
-              <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900">
-                <AutoSizeInput
-                  type="text"
-                  value={fund.nondeductibleContribution || ""}
-                  onChange={(e) => handleInputChange(fund.id, "nondeductibleContribution", e.target.value)}
-                  className="border-0 focus:bg-white focus:border focus:border-primary hover:bg-teal-50 text-right"
-                  placeholder="R 0"
-                  disabled={isUpdating}
-                />
-              </td>
+                  {/* Fund value beneficiaries - Unappropriated fund commencement amount */}
+                  <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900">
+                    <AutoSizeInput
+                      type="text"
+                      value={fund.nondeductibleContribution || ""}
+                      onChange={(e) => handleInputChange(fund.id, "nondeductibleContribution", e.target.value)}
+                      className="border-0 focus:bg-white focus:border focus:border-primary hover:bg-teal-50 text-right"
+                      placeholder="R 0"
+                      disabled={isUpdating}
+                    />
+                  </td>
 
-              {/* Living Annuity */}
-              <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900">
-                <span className="text-neutral-600">{fund.livingAnnuity || ""}</span>
-              </td>
+                  {/* Living Annuity */}
+                  <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900">
+                    <span className="text-neutral-600">{fund.livingAnnuity || ""}</span>
+                  </td>
 
-              {/* Income from */}
-              <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900">
-                <AutoSizeInput
-                  type="text"
-                  value={fund.incomeTerm || ""}
-                  onChange={(e) => handleInputChange(fund.id, "incomeTerm", e.target.value)}
-                  className="border-0 focus:bg-white focus:border focus:border-primary hover:bg-teal-50 text-right"
-                  placeholder="Income term"
-                  disabled={isUpdating}
-                />
-              </td>
+                  {/* Income from */}
+                  <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900">
+                    <AutoSizeInput
+                      type="text"
+                      value={fund.incomeTerm || ""}
+                      onChange={(e) => handleInputChange(fund.id, "incomeTerm", e.target.value)}
+                      className="border-0 focus:bg-white focus:border focus:border-primary hover:bg-teal-50 text-right"
+                      placeholder="Income term"
+                      disabled={isUpdating}
+                    />
+                  </td>
+                </>
+              )}
             </tr>
           ))}
           
