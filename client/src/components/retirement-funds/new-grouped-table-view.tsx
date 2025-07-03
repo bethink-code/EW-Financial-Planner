@@ -332,14 +332,22 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
 
               {/* Fund value beneficiaries - Name */}
               <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900 border-l border-neutral-200">
-                <AutoSizeInput
-                  type="text"
+                <Select
                   value={fund.beneficiaryName || ""}
-                  onChange={(e) => handleInputChange(fund.id, "beneficiaryName", e.target.value)}
-                  className="border-0 focus:bg-white focus:border focus:border-primary hover:bg-teal-50 text-right"
-                  placeholder="Beneficiary name"
+                  onValueChange={(value) => handleInputChange(fund.id, "beneficiaryName", value)}
                   disabled={isUpdating}
-                />
+                >
+                  <SelectTrigger className="w-auto min-w-[120px] h-8 text-sm border-0 bg-[#F2F7FB] focus:bg-white focus:border focus:border-primary hover:bg-teal-50 text-right">
+                    <SelectValue placeholder="Select beneficiary" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="Spouse">Spouse</SelectItem>
+                    <SelectItem value="Child">Child</SelectItem>
+                    <SelectItem value="Estate">Estate</SelectItem>
+                    <SelectItem value="Trust">Trust</SelectItem>
+                    <SelectItem value="Other">Other</SelectItem>
+                  </SelectContent>
+                </Select>
               </td>
 
               {/* Fund value beneficiaries - % */}
@@ -356,14 +364,7 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
 
               {/* Fund value beneficiaries - Amount */}
               <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900">
-                <AutoSizeInput
-                  type="text"
-                  value={fund.amount || ""}
-                  onChange={(e) => handleInputChange(fund.id, "amount", e.target.value)}
-                  className="border-0 focus:bg-white focus:border focus:border-primary hover:bg-teal-50 text-right"
-                  placeholder="R 0"
-                  disabled={isUpdating}
-                />
+                <span className="text-neutral-600">{fund.amount || "R 0"}</span>
               </td>
 
               {/* Fund value beneficiaries - Lump sum taken */}
