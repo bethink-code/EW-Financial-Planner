@@ -217,7 +217,7 @@ export function DetailedRow({ fund, columnVisibility, onFieldUpdate, isUpdating 
           {columnVisibility.fundValue && (
             <div className="rounded-lg p-3" style={{ backgroundColor: '#EFF5F9' }}>
               <h4 className="text-sm font-bold mb-3" style={{ color: '#016991' }}>Fund Value</h4>
-              <div className="grid grid-cols-2 gap-3">
+              <div className="grid grid-cols-3 gap-3">
                 <div>
                   <Label className="text-xs text-neutral-600">Approved Life Cover</Label>
                   <Input
@@ -238,8 +238,8 @@ export function DetailedRow({ fund, columnVisibility, onFieldUpdate, isUpdating 
                     placeholder="R 0"
                   />
                 </div>
-                <div className="col-span-2">
-                  <Label className="text-xs text-neutral-600">Fund Value at Death</Label>
+                <div>
+                  <Label className="text-xs text-neutral-600">Fund Value at Death (Read-only)</Label>
                   <div className="h-8 px-3 py-1 text-sm text-right bg-neutral-50 border border-neutral-200 rounded">
                     {fund.fundValueAtDeath || "R 0"}
                   </div>
