@@ -92,10 +92,11 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
                 Monthly death benefit
               </th>
             )}
-            {/* Fund value section is always visible */}
-            <th className="px-3 py-2 text-center text-xs font-medium text-neutral-500 uppercase tracking-wider border-l border-neutral-300" colSpan={3}>
-              Fund value
-            </th>
+            {columnVisibility.fundValue && (
+              <th className="px-3 py-2 text-center text-xs font-medium text-neutral-500 uppercase tracking-wider border-l border-neutral-300" colSpan={3}>
+                Fund value
+              </th>
+            )}
             {columnVisibility.fundValueBeneficiaries && (
               <th className="px-3 py-2 text-center text-xs font-medium text-neutral-500 uppercase tracking-wider border-l border-neutral-300" colSpan={8}>
                 Fund value beneficiaries
