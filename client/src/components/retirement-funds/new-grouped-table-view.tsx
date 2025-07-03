@@ -40,6 +40,9 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
             <th className="px-3 py-2 text-center text-xs font-medium text-neutral-500 uppercase tracking-wider border-l border-neutral-300" colSpan={3}>
               Monthly death benefit
             </th>
+            <th className="px-3 py-2 text-center text-xs font-medium text-neutral-500 uppercase tracking-wider border-l border-neutral-300" colSpan={1}>
+              Escalation amount
+            </th>
             <th className="px-3 py-2 text-center text-xs font-medium text-neutral-500 uppercase tracking-wider border-l border-neutral-300" colSpan={3}>
               Fund value
             </th>
@@ -83,7 +86,7 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
             <th className="px-3 py-2 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider border-r border-neutral-300">
               Increase %
             </th>
-            <th className="px-3 py-2 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">
+            <th className="px-3 py-2 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider border-l border-neutral-300 border-r border-neutral-300">
               Escalation amount
             </th>
             <th className="px-3 py-2 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider border-l border-neutral-300">
@@ -244,11 +247,11 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
               </td>
 
               {/* Monthly death benefit - Escalation amount */}
-              <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900">
+              <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900 border-l border-neutral-300 border-r border-neutral-300">
                 <Input
                   type="text"
-                  value={fund.approvedLifeCover || ""}
-                  onChange={(e) => handleInputChange(fund.id, "approvedLifeCover", e.target.value)}
+                  value={fund.escalationAmount || ""}
+                  onChange={(e) => handleInputChange(fund.id, "escalationAmount", e.target.value)}
                   className="compact-input border-0 bg-transparent focus:bg-white focus:border focus:border-primary hover:bg-teal-50 text-right"
                   placeholder="R 0"
                   disabled={isUpdating}
