@@ -2,6 +2,7 @@ import { RetirementFund, UpdateRetirementFund } from "@shared/schema";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Edit3 } from "lucide-react";
+import { useRef, useEffect } from "react";
 
 interface ColumnVisibility {
   overview: boolean;
@@ -17,6 +18,50 @@ interface NewGroupedTableViewProps {
   onFieldUpdate: (id: number, field: keyof UpdateRetirementFund, value: string) => void;
   isUpdating: boolean;
 }
+
+// Auto-sizing input component
+const AutoSizeInput = ({ value, onChange, className, placeholder, disabled, style, ...props }: {
+  value: string;
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  className?: string;
+  placeholder?: string;
+  disabled?: boolean;
+  style?: React.CSSProperties;
+  type?: string;
+}) => {
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    if (inputRef.current) {
+      // Create a temporary span to measure text width
+      const span = document.createElement('span');
+      span.style.visibility = 'hidden';
+      span.style.position = 'absolute';
+      span.style.whiteSpace = 'pre';
+      span.style.font = window.getComputedStyle(inputRef.current).font;
+      span.textContent = value || placeholder || '';
+      document.body.appendChild(span);
+      
+      const width = Math.max(60, Math.min(250, span.offsetWidth + 30)); // Min 60px, max 250px, +30px for padding
+      inputRef.current.style.width = `${width}px`;
+      
+      document.body.removeChild(span);
+    }
+  }, [value, placeholder]);
+
+  return (
+    <Input
+      ref={inputRef}
+      value={value}
+      onChange={onChange}
+      className={`${className} auto-size-input`}
+      placeholder={placeholder}
+      disabled={disabled}
+      style={{ ...style, minWidth: '60px', maxWidth: '250px' }}
+      {...props}
+    />
+  );
+};
 
 export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFieldUpdate, isUpdating }: NewGroupedTableViewProps) {
   const handleInputChange = (fundId: number, field: keyof UpdateRetirementFund, value: string) => {
@@ -120,11 +165,11 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
             <tr key={fund.id} className="hover:bg-neutral-50">
               {/* Description */}
               <td className="px-3 py-2 whitespace-nowrap text-sm font-medium text-neutral-900">
-                <Input
+                <AutoSizeInput
                   type="text"
                   value={fund.description || ""}
                   onChange={(e) => handleInputChange(fund.id, "description", e.target.value)}
-                  className="compact-input border-0 focus:bg-white focus:border focus:border-primary hover:bg-teal-50 text-left font-medium"
+                  className="border-0 focus:bg-white focus:border focus:border-primary hover:bg-teal-50 text-left font-medium"
                   placeholder="Fund description"
                   disabled={isUpdating}
                 />
@@ -153,11 +198,11 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
 
               {/* Cover amount - Unapproved */}
               <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900 border-l border-neutral-300">
-                <Input
+                <AutoSizeInput
                   type="text"
                   value={fund.coverAmount || ""}
                   onChange={(e) => handleInputChange(fund.id, "coverAmount", e.target.value)}
-                  className="compact-input border-0 focus:bg-white focus:border focus:border-primary hover:bg-teal-50 text-right"
+                  className="border-0 focus:bg-white focus:border focus:border-primary hover:bg-teal-50 text-right"
                   placeholder="R 0"
                   disabled={isUpdating}
                 />
