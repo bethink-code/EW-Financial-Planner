@@ -568,74 +568,109 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
               {/* Fund Value Beneficiaries Section */}
               {columnVisibility.fundValueBeneficiaries && (
                 <>
-                  {tableMode === "flows" ? (
+                  {tableMode === "inputs" ? (
                     <>
-                      {/* Fund value beneficiaries - Name */}
+                      {/* Fund value beneficiaries - Name (editable dropdown) */}
                       <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900 border-l border-neutral-200" style={{ backgroundColor: '#EFF5F9' }}>
-                        <div className="text-right text-sm text-neutral-600">
-                          {fund.fundValueBeneficiaries ? 
-                            JSON.parse(fund.fundValueBeneficiaries).map((b: any) => b.name).join(', ') || 'None'
-                            : 'None'}
-                        </div>
+                        <Select
+                          value={fund.fundValueBeneficiaries ? JSON.parse(fund.fundValueBeneficiaries)[0]?.name || "" : ""}
+                          onValueChange={(value) => {
+                            const beneficiaries = fund.fundValueBeneficiaries ? JSON.parse(fund.fundValueBeneficiaries) : [{}];
+                            beneficiaries[0] = { ...beneficiaries[0], name: value };
+                            handleInputChange(fund.id, "fundValueBeneficiaries", JSON.stringify(beneficiaries));
+                          }}
+                          disabled={isUpdating}
+                        >
+                          <SelectTrigger className="w-auto min-w-[120px] h-8 text-sm border-0 bg-[#F2F7FB] focus:bg-white focus:border focus:border-primary hover:bg-teal-50 text-right">
+                            <SelectValue placeholder="Select beneficiary" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="Spouse">Spouse</SelectItem>
+                            <SelectItem value="Child">Child</SelectItem>
+                            <SelectItem value="Estate">Estate</SelectItem>
+                            <SelectItem value="Trust">Trust</SelectItem>
+                            <SelectItem value="Other">Other</SelectItem>
+                          </SelectContent>
+                        </Select>
                       </td>
 
-                      {/* Fund value beneficiaries - % */}
+                      {/* Fund value beneficiaries - % (editable) */}
                       <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900" style={{ backgroundColor: '#EFF5F9' }}>
-                        <div className="text-right text-sm text-neutral-600">
-                          {fund.fundValueBeneficiaries ? 
-                            JSON.parse(fund.fundValueBeneficiaries).reduce((sum: number, b: any) => sum + (parseFloat(b.percentage) || 0), 0).toFixed(1) + '%'
-                            : '0%'}
-                        </div>
+                        <AutoSizeInput
+                          type="text"
+                          value={fund.fundValueBeneficiaries ? JSON.parse(fund.fundValueBeneficiaries)[0]?.percentage || "" : ""}
+                          onChange={(e) => {
+                            const beneficiaries = fund.fundValueBeneficiaries ? JSON.parse(fund.fundValueBeneficiaries) : [{}];
+                            beneficiaries[0] = { ...beneficiaries[0], percentage: e.target.value };
+                            handleInputChange(fund.id, "fundValueBeneficiaries", JSON.stringify(beneficiaries));
+                          }}
+                          className="border-0 focus:bg-white focus:border focus:border-primary hover:bg-teal-50 text-right"
+                          placeholder="0%"
+                          disabled={isUpdating}
+                        />
                       </td>
 
-                      {/* Fund value beneficiaries - Amount */}
+                      {/* Fund value beneficiaries - Amount (read-only calculated) */}
                       <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900" style={{ backgroundColor: '#EFF5F9' }}>
-                        <div className="text-right text-sm text-neutral-600">
-                          R {((parseFloat(fund.fundValue) || 0) * 0.8).toLocaleString()}
-                        </div>
+                        <span className="text-neutral-600">R {((parseFloat(fund.fundValue) || 0) * 0.8).toLocaleString()}</span>
                       </td>
 
-                      {/* Fund value beneficiaries - Lump sum taken */}
+                      {/* Fund value beneficiaries - Lump sum taken (editable) */}
                       <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900" style={{ backgroundColor: '#EFF5F9' }}>
-                        <div className="text-right text-sm text-neutral-600">
-                          {fund.fundValueBeneficiaries ? 
-                            'R ' + JSON.parse(fund.fundValueBeneficiaries).reduce((sum: number, b: any) => sum + (parseFloat(b.lumpSumTaken) || 0), 0).toLocaleString()
-                            : 'R 0'}
-                        </div>
+                        <AutoSizeInput
+                          type="text"
+                          value={fund.fundValueBeneficiaries ? JSON.parse(fund.fundValueBeneficiaries)[0]?.lumpSumTaken || "" : ""}
+                          onChange={(e) => {
+                            const beneficiaries = fund.fundValueBeneficiaries ? JSON.parse(fund.fundValueBeneficiaries) : [{}];
+                            beneficiaries[0] = { ...beneficiaries[0], lumpSumTaken: e.target.value };
+                            handleInputChange(fund.id, "fundValueBeneficiaries", JSON.stringify(beneficiaries));
+                          }}
+                          className="border-0 focus:bg-white focus:border focus:border-primary hover:bg-teal-50 text-right"
+                          placeholder="R 0"
+                          disabled={isUpdating}
+                        />
                       </td>
 
-                      {/* Fund value beneficiaries - Fund value at death */}
+                      {/* Fund value beneficiaries - Fund value at death (read-only) */}
                       <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900" style={{ backgroundColor: '#EFF5F9' }}>
-                        <div className="text-right text-sm text-neutral-600">
-                          R {(parseFloat(fund.fundValueAtDeath) || 0).toLocaleString()}
-                        </div>
+                        <span className="text-neutral-600">R {(parseFloat(fund.fundValueAtDeath) || 0).toLocaleString()}</span>
                       </td>
 
-                      {/* Fund value beneficiaries - Non deductible contribution */}
+                      {/* Fund value beneficiaries - Non deductible contribution (editable) */}
                       <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900" style={{ backgroundColor: '#EFF5F9' }}>
-                        <div className="text-right text-sm text-neutral-600">
-                          {fund.fundValueBeneficiaries ? 
-                            'R ' + JSON.parse(fund.fundValueBeneficiaries).reduce((sum: number, b: any) => sum + (parseFloat(b.nondeductibleContribution) || 0), 0).toLocaleString()
-                            : 'R 0'}
-                        </div>
+                        <AutoSizeInput
+                          type="text"
+                          value={fund.fundValueBeneficiaries ? JSON.parse(fund.fundValueBeneficiaries)[0]?.nondeductibleContribution || "" : ""}
+                          onChange={(e) => {
+                            const beneficiaries = fund.fundValueBeneficiaries ? JSON.parse(fund.fundValueBeneficiaries) : [{}];
+                            beneficiaries[0] = { ...beneficiaries[0], nondeductibleContribution: e.target.value };
+                            handleInputChange(fund.id, "fundValueBeneficiaries", JSON.stringify(beneficiaries));
+                          }}
+                          className="border-0 focus:bg-white focus:border focus:border-primary hover:bg-teal-50 text-right"
+                          placeholder="R 0"
+                          disabled={isUpdating}
+                        />
                       </td>
 
-                      {/* Living Annuity */}
+                      {/* Living Annuity (read-only) */}
                       <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900" style={{ backgroundColor: '#EFF5F9' }}>
-                        <div className="text-right text-sm text-neutral-600">
-                          {fund.fundValueBeneficiaries ? 
-                            'R ' + JSON.parse(fund.fundValueBeneficiaries).reduce((sum: number, b: any) => sum + (parseFloat(b.livingAnnuity) || 0), 0).toLocaleString()
-                            : 'R 0'}
-                        </div>
+                        <span className="text-neutral-600">R {fund.fundValueBeneficiaries ? JSON.parse(fund.fundValueBeneficiaries)[0]?.livingAnnuity || "0" : "0"}</span>
                       </td>
 
-                      {/* Income Term */}
+                      {/* Income Term (editable) */}
                       <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900" style={{ backgroundColor: '#EFF5F9' }}>
-                        <div className="text-right text-sm text-neutral-600">
-                          {fund.fundValueBeneficiaries ? 
-                            JSON.parse(fund.fundValueBeneficiaries).reduce((sum: number, b: any) => sum + (parseFloat(b.incomeTerm) || 0), 0).toFixed(0) + ' years'
-                            : '0 years'}
-                        </div>
+                        <AutoSizeInput
+                          type="text"
+                          value={fund.fundValueBeneficiaries ? JSON.parse(fund.fundValueBeneficiaries)[0]?.incomeTerm || "" : ""}
+                          onChange={(e) => {
+                            const beneficiaries = fund.fundValueBeneficiaries ? JSON.parse(fund.fundValueBeneficiaries) : [{}];
+                            beneficiaries[0] = { ...beneficiaries[0], incomeTerm: e.target.value };
+                            handleInputChange(fund.id, "fundValueBeneficiaries", JSON.stringify(beneficiaries));
+                          }}
+                          className="border-0 focus:bg-white focus:border focus:border-primary hover:bg-teal-50 text-right"
+                          placeholder="Years"
+                          disabled={isUpdating}
+                        />
                       </td>
                     </>
                   ) : (
