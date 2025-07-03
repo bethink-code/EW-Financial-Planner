@@ -111,7 +111,7 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
               Fund value at death
             </th>
             <th className="px-3 py-2 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">
-              Unappropriated fund commencement amount
+              Non deductible contribution amount
             </th>
             <th className="px-3 py-2 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider border-l border-neutral-300">
               
