@@ -1,20 +1,8 @@
 import { RetirementFund, UpdateRetirementFund } from "@shared/schema";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Button } from "@/components/ui/button";
-import { Label } from "@/components/ui/label";
-import { Edit3, Plus, Minus } from "lucide-react";
+import { Edit3 } from "lucide-react";
 import { useRef, useEffect } from "react";
-import {
-  parseUnapprovedBeneficiaries,
-  parseFundValueBeneficiaries,
-  addUnapprovedBeneficiary,
-  addFundValueBeneficiary,
-  removeUnapprovedBeneficiary,
-  removeFundValueBeneficiary,
-  updateUnapprovedBeneficiary,
-  updateFundValueBeneficiary
-} from "@/lib/beneficiaries";
 
 interface ColumnVisibility {
   overview: boolean;
@@ -83,201 +71,275 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
 
   const owners = ["John Doe", "Jane Smith"];
 
-  // Inputs Table Component (always shown)
-  const InputsTable = () => (
-    <div className="overflow-x-auto mb-6">
-      <div className="mb-4">
-        <h3 className="text-lg font-semibold text-neutral-900">Retirement Funds - Inputs</h3>
-      </div>
-      <table className="min-w-full bg-white table-auto border border-neutral-300 rounded-lg">
+  return (
+    <div className="overflow-x-auto">
+      <table className="min-w-full bg-white table-auto">
         <thead>
-          <tr className="border-b border-neutral-200" style={{ backgroundColor: '#D6ECF5' }}>
-            {/* Overview Section Headers */}
-            {columnVisibility.overview && (
-              <>
-                <th colSpan={3} className="px-3 py-3 text-center text-sm font-bold uppercase tracking-wider border-r border-neutral-300" style={{ color: '#094161' }}>
+          {/* First level headers - different for inputs vs flows */}
+          {tableMode === "inputs" ? (
+            <tr className="border-b border-neutral-200" style={{ backgroundColor: '#D6ECF5' }}>
+              {columnVisibility.overview && (
+                <th className="px-3 py-2 text-center text-xs font-bold text-neutral-500 uppercase tracking-wider" colSpan={2}>
                   Overview
                 </th>
-              </>
-            )}
-
-            {/* Unapproved Life Cover Section Headers */}
-            {columnVisibility.unapprovedLifeCover && (
-              <>
-                <th colSpan={3} className="px-3 py-3 text-center text-sm font-bold uppercase tracking-wider border-r border-neutral-300" style={{ color: '#094161' }}>
-                  Unapproved Life Cover
+              )}
+              {columnVisibility.unapprovedLifeCover && (
+                <th className="px-3 py-2 text-center text-xs font-bold text-neutral-500 uppercase tracking-wider border-l border-neutral-300" colSpan={4}>
+                  Unapproved life cover
                 </th>
-              </>
-            )}
-
-            {/* Monthly Death Benefit Section Headers */}
-            {columnVisibility.monthlyDeathBenefit && (
-              <>
-                <th colSpan={4} className="px-3 py-3 text-center text-sm font-bold uppercase tracking-wider border-r border-neutral-300" style={{ color: '#094161' }}>
-                  Monthly Death Benefit
+              )}
+              {columnVisibility.monthlyDeathBenefit && (
+                <th className="px-3 py-2 text-center text-xs font-bold text-neutral-500 uppercase tracking-wider border-l border-neutral-300" colSpan={4}>
+                  Monthly death benefit
                 </th>
-              </>
-            )}
-
-            {/* Fund Value Section Headers */}
-            {columnVisibility.fundValue && (
-              <>
-                <th colSpan={3} className="px-3 py-3 text-center text-sm font-bold uppercase tracking-wider border-r border-neutral-300" style={{ color: '#094161' }}>
-                  Fund Value
+              )}
+              {columnVisibility.fundValue && (
+                <th className="px-3 py-2 text-center text-xs font-bold text-neutral-500 uppercase tracking-wider border-l border-neutral-300" colSpan={3}>
+                  Fund value
                 </th>
-              </>
-            )}
-
-            {/* Fund Value Beneficiaries Section Headers */}
-            {columnVisibility.fundValueBeneficiaries && (
-              <>
-                <th colSpan={8} className="px-3 py-3 text-center text-sm font-bold uppercase tracking-wider" style={{ color: '#094161' }}>
-                  Fund Value Beneficiaries
+              )}
+              {columnVisibility.fundValueBeneficiaries && (
+                <th className="px-3 py-2 text-center text-xs font-bold text-neutral-500 uppercase tracking-wider border-l border-neutral-300" colSpan={8}>
+                  Fund value beneficiaries
                 </th>
-              </>
-            )}
-          </tr>
-
-          {/* Second level headers */}
-          <tr className="border-b-2 border-neutral-300" style={{ backgroundColor: '#D6ECF5' }}>
-            {/* Overview Section Subheaders */}
-            {columnVisibility.overview && (
-              <>
-                <th className="px-3 py-2 text-left text-xs font-bold uppercase tracking-wider border-r border-neutral-300" style={{ color: '#094161' }}>
-                  Description
+              )}
+            </tr>
+          ) : (
+            <tr className="border-b border-neutral-200" style={{ backgroundColor: '#D6ECF5' }}>
+              {columnVisibility.overview && (
+                <th className="px-3 py-2 text-center text-xs font-bold text-neutral-500 uppercase tracking-wider" colSpan={2}>
+                  Overview
                 </th>
-                <th className="px-3 py-2 text-left text-xs font-bold uppercase tracking-wider border-r border-neutral-300" style={{ color: '#094161' }}>
-                  Owner
+              )}
+              {columnVisibility.unapprovedLifeCover && (
+                <th className="px-3 py-2 text-center text-xs font-bold text-neutral-500 uppercase tracking-wider border-l border-neutral-300" colSpan={4}>
+                  Come sum life cover available as provision for
                 </th>
-                <th className="px-3 py-2 text-left text-xs font-bold uppercase tracking-wider border-r border-neutral-300" style={{ color: '#094161' }}>
-                  Cover Amount
+              )}
+              {columnVisibility.monthlyDeathBenefit && (
+                <th className="px-3 py-2 text-center text-xs font-bold text-neutral-500 uppercase tracking-wider border-l border-neutral-300" colSpan={4}>
+                  Income provision options
                 </th>
-              </>
-            )}
-
-            {/* Unapproved Life Cover Subheaders */}
-            {columnVisibility.unapprovedLifeCover && (
-              <>
-                <th className="px-3 py-2 text-left text-xs font-bold uppercase tracking-wider" style={{ color: '#094161' }}>
-                  Unapproved Beneficiaries
+              )}
+              {columnVisibility.fundValue && (
+                <th className="px-3 py-2 text-center text-xs font-bold text-neutral-500 uppercase tracking-wider border-l border-neutral-300" colSpan={3}>
+                  Income provision others
                 </th>
-                <th className="px-3 py-2 text-left text-xs font-bold uppercase tracking-wider" style={{ color: '#094161' }}>
-                  Percentage
+              )}
+              {columnVisibility.fundValueBeneficiaries && (
+                <th className="px-3 py-2 text-center text-xs font-bold text-neutral-500 uppercase tracking-wider border-l border-neutral-300" colSpan={8}>
+                  Percentage required for
                 </th>
-                <th className="px-3 py-2 text-left text-xs font-bold uppercase tracking-wider border-r border-neutral-300" style={{ color: '#094161' }}>
-                  Cover Split
-                </th>
-              </>
-            )}
-
-            {/* Monthly Death Benefit Subheaders */}
-            {columnVisibility.monthlyDeathBenefit && (
-              <>
-                <th className="px-3 py-2 text-left text-xs font-bold uppercase tracking-wider" style={{ color: '#094161' }}>
-                  Monthly Income
-                </th>
-                <th className="px-3 py-2 text-left text-xs font-bold uppercase tracking-wider" style={{ color: '#094161' }}>
-                  Term Years
-                </th>
-                <th className="px-3 py-2 text-left text-xs font-bold uppercase tracking-wider" style={{ color: '#094161' }}>
-                  Increase Percentage
-                </th>
-                <th className="px-3 py-2 text-left text-xs font-bold uppercase tracking-wider border-r border-neutral-300" style={{ color: '#094161' }}>
-                  Total Amount
-                </th>
-              </>
-            )}
-
-            {/* Fund Value Subheaders */}
-            {columnVisibility.fundValue && (
-              <>
-                <th className="px-3 py-2 text-left text-xs font-bold uppercase tracking-wider" style={{ color: '#094161' }}>
-                  Approved Life Cover
-                </th>
-                <th className="px-3 py-2 text-left text-xs font-bold uppercase tracking-wider" style={{ color: '#094161' }}>
-                  Fund Value
-                </th>
-                <th className="px-3 py-2 text-left text-xs font-bold uppercase tracking-wider border-r border-neutral-300" style={{ color: '#094161' }}>
-                  Fund Value at Death
-                </th>
-              </>
-            )}
-
-            {/* Fund Value Beneficiaries Subheaders */}
-            {columnVisibility.fundValueBeneficiaries && (
-              <>
-                <th className="px-3 py-2 text-left text-xs font-bold uppercase tracking-wider" style={{ color: '#094161' }}>
-                  Name
-                </th>
-                <th className="px-3 py-2 text-left text-xs font-bold uppercase tracking-wider" style={{ color: '#094161' }}>
-                  %
-                </th>
-                <th className="px-3 py-2 text-left text-xs font-bold uppercase tracking-wider" style={{ color: '#094161' }}>
-                  Amount
-                </th>
-                <th className="px-3 py-2 text-left text-xs font-bold uppercase tracking-wider" style={{ color: '#094161' }}>
-                  Lump Sum Taken
-                </th>
-                <th className="px-3 py-2 text-left text-xs font-bold uppercase tracking-wider" style={{ color: '#094161' }}>
-                  Fund Value at Death
-                </th>
-                <th className="px-3 py-2 text-left text-xs font-bold uppercase tracking-wider" style={{ color: '#094161' }}>
-                  Non Deductible Contribution
-                </th>
-                <th className="px-3 py-2 text-left text-xs font-bold uppercase tracking-wider" style={{ color: '#094161' }}>
-                  Living Annuity
-                </th>
-                <th className="px-3 py-2 text-left text-xs font-bold uppercase tracking-wider" style={{ color: '#094161' }}>
-                  Income Term
-                </th>
-              </>
-            )}
-          </tr>
+              )}
+            </tr>
+          )}
+          
+          {/* Second level headers - different for inputs vs flows */}
+          {tableMode === "inputs" ? (
+            <tr className="border-b border-neutral-200" style={{ backgroundColor: '#D6ECF5' }}>
+              {columnVisibility.overview && (
+                <>
+                  <th className="px-3 py-2 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">
+                    Description
+                  </th>
+                  <th className="px-3 py-2 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">
+                    Owner
+                  </th>
+                </>
+              )}
+              {columnVisibility.unapprovedLifeCover && (
+                <>
+                  <th className="px-3 py-2 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider border-l border-neutral-300">
+                    Cover amount
+                  </th>
+                  <th className="px-3 py-2 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">
+                    Beneficiary
+                  </th>
+                  <th className="px-3 py-2 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">
+                    %
+                  </th>
+                  <th className="px-3 py-2 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">
+                    Cover split
+                  </th>
+                </>
+              )}
+              {columnVisibility.monthlyDeathBenefit && (
+                <>
+                  <th className="px-3 py-2 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider border-l border-neutral-300">
+                    Monthly income
+                  </th>
+                  <th className="px-3 py-2 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">
+                    Term (Years)
+                  </th>
+                  <th className="px-3 py-2 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">
+                    Increase %
+                  </th>
+                  <th className="px-3 py-2 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider border-r border-neutral-300">
+                    Escalation amount
+                  </th>
+                </>
+              )}
+              {columnVisibility.fundValue && (
+                <>
+                  <th className="px-3 py-2 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider border-l border-neutral-300">
+                    Approved life cover
+                  </th>
+                  <th className="px-3 py-2 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">
+                    Fund value
+                  </th>
+                  <th className="px-3 py-2 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider border-r border-neutral-300">
+                    Fund value at death
+                  </th>
+                </>
+              )}
+            </tr>
+          ) : (
+            <tr className="border-b border-neutral-200" style={{ backgroundColor: '#D6ECF5' }}>
+              {columnVisibility.overview && (
+                <>
+                  <th className="px-3 py-2 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">
+                    Description
+                  </th>
+                  <th className="px-3 py-2 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">
+                    Owner
+                  </th>
+                </>
+              )}
+              {columnVisibility.unapprovedLifeCover && (
+                <>
+                  <th className="px-3 py-2 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider border-l border-neutral-300">
+                    Estate
+                  </th>
+                  <th className="px-3 py-2 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">
+                    Spouse
+                  </th>
+                  <th className="px-3 py-2 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">
+                    Children
+                  </th>
+                  <th className="px-3 py-2 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">
+                    Other
+                  </th>
+                </>
+              )}
+              {columnVisibility.monthlyDeathBenefit && (
+                <>
+                  <th className="px-3 py-2 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider border-l border-neutral-300">
+                    Amount
+                  </th>
+                  <th className="px-3 py-2 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">
+                    Term (years)
+                  </th>
+                  <th className="px-3 py-2 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">
+                    Increase %
+                  </th>
+                  <th className="px-3 py-2 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider border-r border-neutral-300">
+                    Lump sum death
+                  </th>
+                </>
+              )}
+              {columnVisibility.fundValue && (
+                <>
+                  <th className="px-3 py-2 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider border-l border-neutral-300">
+                    Amount
+                  </th>
+                  <th className="px-3 py-2 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">
+                    Term (years)
+                  </th>
+                  <th className="px-3 py-2 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider border-r border-neutral-300">
+                    Increase %
+                  </th>
+                </>
+              )}
+              {tableMode === "inputs" && columnVisibility.fundValueBeneficiaries && (
+                <>
+                  <th className="px-3 py-2 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider border-l border-neutral-300">
+                    Name
+                  </th>
+                  <th className="px-3 py-2 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">
+                    %
+                  </th>
+                  <th className="px-3 py-2 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">
+                    Amount
+                  </th>
+                  <th className="px-3 py-2 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">
+                    Lump sum taken
+                  </th>
+                  <th className="px-3 py-2 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">
+                    Fund value at death
+                  </th>
+                  <th className="px-3 py-2 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">
+                    Non deductible contribution amount
+                  </th>
+                  <th className="px-3 py-2 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">
+                    Living annuity
+                  </th>
+                  <th className="px-3 py-2 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">
+                    Income term
+                  </th>
+                </>
+              )}
+              {tableMode === "flows" && columnVisibility.fundValueBeneficiaries && (
+                <>
+                  <th className="px-3 py-2 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider border-l border-neutral-300">
+                    Actual value
+                  </th>
+                  <th className="px-3 py-2 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">
+                    Estate duty (spouse life of deceased)
+                  </th>
+                  <th className="px-3 py-2 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">
+                    Estate duty (no spouse)
+                  </th>
+                  <th className="px-3 py-2 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">
+                    Estate duty (life others)
+                  </th>
+                  <th className="px-3 py-2 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">
+                    Executors fee
+                  </th>
+                  <th className="px-3 py-2 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">
+                    Masters fee
+                  </th>
+                </>
+              )}
+            </tr>
+          )}
         </thead>
-
         <tbody className="bg-white divide-y divide-neutral-200">
           {funds.map((fund) => (
             <tr key={fund.id} className="hover:bg-neutral-50">
               {/* Overview Section */}
               {columnVisibility.overview && (
                 <>
-                  <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900" style={{ backgroundColor: '#EFF5F9' }}>
+                  {/* Description */}
+                  <td className="px-3 py-2 whitespace-nowrap text-sm font-medium text-neutral-900" style={{ backgroundColor: '#EFF5F9' }}>
                     <AutoSizeInput
                       type="text"
                       value={fund.description || ""}
                       onChange={(e) => handleInputChange(fund.id, "description", e.target.value)}
-                      className="border-0 focus:bg-white focus:border focus:border-primary hover:bg-teal-50 text-right"
+                      className="border-0 focus:bg-white focus:border focus:border-primary hover:bg-teal-50 text-left font-medium"
                       placeholder="Fund description"
                       disabled={isUpdating}
                     />
                   </td>
-
+                  
+                  {/* Owner */}
                   <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900" style={{ backgroundColor: '#EFF5F9' }}>
                     <Select
-                      value={fund.owner || ""}
+                      value={fund.owner || "John Doe"}
                       onValueChange={(value) => handleInputChange(fund.id, "owner", value)}
                       disabled={isUpdating}
                     >
-                      <SelectTrigger className="w-auto min-w-[120px] h-8 text-sm border-0 bg-[#F2F7FB] focus:bg-white focus:border focus:border-primary hover:bg-teal-50 text-right">
-                        <SelectValue placeholder="Select owner" />
+                      <SelectTrigger className="compact-input border-0 focus:bg-white focus:border focus:border-primary hover:bg-teal-50 transition-colors duration-200 group">
+                        <SelectValue />
+                        <Edit3 size={12} className="ml-1 text-teal-400 opacity-0 group-hover:opacity-100 transition-opacity duration-200" />
                       </SelectTrigger>
                       <SelectContent>
                         {owners.map((owner) => (
-                          <SelectItem key={owner} value={owner}>{owner}</SelectItem>
+                          <SelectItem key={owner} value={owner}>
+                            {owner}
+                          </SelectItem>
                         ))}
                       </SelectContent>
                     </Select>
-                  </td>
-
-                  <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900 border-r border-neutral-300" style={{ backgroundColor: '#EFF5F9' }}>
-                    <AutoSizeInput
-                      type="text"
-                      value={fund.coverAmount || ""}
-                      onChange={(e) => handleInputChange(fund.id, "coverAmount", e.target.value)}
-                      className="border-0 focus:bg-white focus:border focus:border-primary hover:bg-teal-50 text-right"
-                      placeholder="R 0"
-                      disabled={isUpdating}
-                    />
                   </td>
                 </>
               )}
@@ -285,522 +347,503 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
               {/* Unapproved Life Cover Section */}
               {columnVisibility.unapprovedLifeCover && (
                 <>
-                  <td colSpan={3} className="px-3 py-2 border-r border-neutral-300" style={{ backgroundColor: '#EFF5F9' }}>
-                    <div className="space-y-2">
-                      <div className="flex items-center justify-between">
-                        <Label className="text-xs font-semibold text-neutral-700">Unapproved Beneficiaries</Label>
-                        <Button
-                          size="sm"
-                          variant="outline"
-                          onClick={() => handleInputChange(fund.id, "unapprovedBeneficiaries", addUnapprovedBeneficiary(fund.unapprovedBeneficiaries || ""))}
+                  {tableMode === "inputs" ? (
+                    <>
+                      {/* Cover amount - Unapproved */}
+                      <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900 border-l border-neutral-300" style={{ backgroundColor: '#EFF5F9' }}>
+                        <AutoSizeInput
+                          type="text"
+                          value={fund.coverAmount || ""}
+                          onChange={(e) => handleInputChange(fund.id, "coverAmount", e.target.value)}
+                          className="border-0 focus:bg-white focus:border focus:border-primary hover:bg-teal-50 text-right"
+                          placeholder="R 0"
                           disabled={isUpdating}
-                          className="h-6 w-6 p-0"
-                        >
-                          <Plus className="h-3 w-3" />
-                        </Button>
-                      </div>
-                      {parseUnapprovedBeneficiaries(fund.unapprovedBeneficiaries || "").map((beneficiary, index) => (
-                        <div key={beneficiary.id} className="grid grid-cols-4 gap-2 p-2 bg-white rounded border">
-                          <div>
-                            <Label className="text-xs text-neutral-600">Name</Label>
-                            <Input
-                              value={beneficiary.name}
-                              onChange={(e) => handleInputChange(fund.id, "unapprovedBeneficiaries", 
-                                updateUnapprovedBeneficiary(fund.unapprovedBeneficiaries || "", beneficiary.id, "name", e.target.value))}
-                              className="h-7 text-xs"
-                              disabled={isUpdating}
-                            />
-                          </div>
-                          <div>
-                            <Label className="text-xs text-neutral-600">%</Label>
-                            <Input
-                              value={beneficiary.percentage}
-                              onChange={(e) => handleInputChange(fund.id, "unapprovedBeneficiaries", 
-                                updateUnapprovedBeneficiary(fund.unapprovedBeneficiaries || "", beneficiary.id, "percentage", e.target.value))}
-                              className="h-7 text-xs text-right"
-                              disabled={isUpdating}
-                            />
-                          </div>
-                          <div>
-                            <Label className="text-xs text-neutral-600">Cover Split</Label>
-                            <Input
-                              value={beneficiary.coverSplit}
-                              onChange={(e) => handleInputChange(fund.id, "unapprovedBeneficiaries", 
-                                updateUnapprovedBeneficiary(fund.unapprovedBeneficiaries || "", beneficiary.id, "coverSplit", e.target.value))}
-                              className="h-7 text-xs text-right"
-                              disabled={isUpdating}
-                            />
-                          </div>
-                          <div className="flex items-end">
-                            <Button
-                              size="sm"
-                              variant="outline"
-                              onClick={() => handleInputChange(fund.id, "unapprovedBeneficiaries", 
-                                removeUnapprovedBeneficiary(fund.unapprovedBeneficiaries || "", beneficiary.id))}
-                              disabled={isUpdating}
-                              className="h-7 w-7 p-0"
-                            >
-                              <Minus className="h-3 w-3" />
-                            </Button>
-                          </div>
+                        />
+                      </td>
+
+                      {/* Unapproved life cover - Beneficiary */}
+                      <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900" style={{ backgroundColor: '#EFF5F9' }}>
+                        <div className="text-right text-sm text-neutral-600">
+                          {fund.unapprovedBeneficiaries ? 
+                            JSON.parse(fund.unapprovedBeneficiaries).reduce((sum: number, b: any) => sum + (parseFloat(b.percentage) || 0), 0).toFixed(1) + '%' 
+                            : '0%'}
                         </div>
-                      ))}
-                    </div>
-                  </td>
+                      </td>
+
+                      {/* Unapproved life cover - % */}
+                      <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900" style={{ backgroundColor: '#EFF5F9' }}>
+                        <div className="text-right text-sm text-neutral-600">
+                          {fund.unapprovedBeneficiaries ? 
+                            JSON.parse(fund.unapprovedBeneficiaries).reduce((sum: number, b: any) => sum + (parseFloat(b.coverSplit) || 0), 0).toFixed(0) 
+                            : '0'}
+                        </div>
+                      </td>
+
+                      {/* Unapproved life cover - Cover split */}
+                      <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900" style={{ backgroundColor: '#EFF5F9' }}>
+                        <div className="text-right text-sm text-neutral-600">
+                          R {((parseFloat(fund.coverAmount) || 0) * 0.8).toLocaleString()}
+                        </div>
+                      </td>
+                    </>
+                  ) : (
+                    <>
+                      {/* Flows mode - Estate */}
+                      <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900 border-l border-neutral-300">
+                        <div className="text-right text-sm text-neutral-600">
+                          R {((parseFloat(fund.fundValueAtDeath) || 0) * 0.4).toLocaleString()}
+                        </div>
+                      </td>
+
+                      {/* Flows mode - Spouse */}
+                      <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900">
+                        <div className="text-right text-sm text-neutral-600">
+                          R {((parseFloat(fund.fundValueAtDeath) || 0) * 0.3).toLocaleString()}
+                        </div>
+                      </td>
+
+                      {/* Flows mode - Children */}
+                      <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900">
+                        <div className="text-right text-sm text-neutral-600">
+                          R {((parseFloat(fund.fundValueAtDeath) || 0) * 0.2).toLocaleString()}
+                        </div>
+                      </td>
+
+                      {/* Flows mode - Other */}
+                      <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900">
+                        <div className="text-right text-sm text-neutral-600">
+                          R {((parseFloat(fund.fundValueAtDeath) || 0) * 0.1).toLocaleString()}
+                        </div>
+                      </td>
+                    </>
+                  )}
                 </>
               )}
 
               {/* Monthly Death Benefit Section */}
               {columnVisibility.monthlyDeathBenefit && (
                 <>
-                  <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900" style={{ backgroundColor: '#EFF5F9' }}>
-                    <AutoSizeInput
-                      type="text"
-                      value={fund.monthlyIncome || ""}
-                      onChange={(e) => handleInputChange(fund.id, "monthlyIncome", e.target.value)}
-                      className="border-0 focus:bg-white focus:border focus:border-primary hover:bg-teal-50 text-right"
-                      placeholder="R 0"
-                      disabled={isUpdating}
-                    />
-                  </td>
+                  {tableMode === "inputs" ? (
+                    <>
+                      {/* Monthly death benefit - Monthly income */}
+                      <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900 border-l border-neutral-300" style={{ backgroundColor: '#EFF5F9' }}>
+                        <AutoSizeInput
+                          type="text"
+                          value={fund.monthlyIncome || ""}
+                          onChange={(e) => handleInputChange(fund.id, "monthlyIncome", e.target.value)}
+                          className="border-0 focus:bg-white focus:border focus:border-primary hover:bg-teal-50 text-right"
+                          placeholder="R 0"
+                          disabled={isUpdating}
+                        />
+                      </td>
 
-                  <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900" style={{ backgroundColor: '#EFF5F9' }}>
-                    <AutoSizeInput
-                      type="text"
-                      value={fund.termYears || ""}
-                      onChange={(e) => handleInputChange(fund.id, "termYears", e.target.value)}
-                      className="border-0 focus:bg-white focus:border focus:border-primary hover:bg-teal-50 text-right"
-                      placeholder="0"
-                      disabled={isUpdating}
-                    />
-                  </td>
+                      {/* Monthly death benefit - Term (Years) */}
+                      <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900" style={{ backgroundColor: '#EFF5F9' }}>
+                        <AutoSizeInput
+                          type="text"
+                          value={fund.termYears || ""}
+                          onChange={(e) => handleInputChange(fund.id, "termYears", e.target.value)}
+                          className="border-0 focus:bg-white focus:border focus:border-primary hover:bg-teal-50 text-right"
+                          placeholder="0"
+                          disabled={isUpdating}
+                        />
+                      </td>
 
-                  <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900" style={{ backgroundColor: '#EFF5F9' }}>
-                    <AutoSizeInput
-                      type="text"
-                      value={fund.increasePercentage || ""}
-                      onChange={(e) => handleInputChange(fund.id, "increasePercentage", e.target.value)}
-                      className="border-0 focus:bg-white focus:border focus:border-primary hover:bg-teal-50 text-right"
-                      placeholder="0%"
-                      disabled={isUpdating}
-                    />
-                  </td>
+                      {/* Monthly death benefit - Increase % */}
+                      <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900" style={{ backgroundColor: '#EFF5F9' }}>
+                        <AutoSizeInput
+                          type="text"
+                          value={fund.increasePercentage || ""}
+                          onChange={(e) => handleInputChange(fund.id, "increasePercentage", e.target.value)}
+                          className="border-0 focus:bg-white focus:border focus:border-primary hover:bg-teal-50 text-right"
+                          placeholder="0%"
+                          disabled={isUpdating}
+                        />
+                      </td>
 
-                  <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900 border-r border-neutral-300" style={{ backgroundColor: '#EFF5F9' }}>
-                    <span className="text-neutral-600">
-                      R {((parseFloat(fund.monthlyIncome) || 0) * (parseFloat(fund.termYears) || 0) * 12).toLocaleString()}
-                    </span>
-                  </td>
+                      {/* Monthly death benefit - Escalation amount */}
+                      <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900 border-r border-neutral-300" style={{ backgroundColor: '#EFF5F9' }}>
+                        <AutoSizeInput
+                          type="text"
+                          value={fund.lumpSumDeath || ""}
+                          onChange={(e) => handleInputChange(fund.id, "lumpSumDeath", e.target.value)}
+                          className="border-0 focus:bg-white focus:border focus:border-primary hover:bg-teal-50 text-right"
+                          placeholder="R 0"
+                          disabled={isUpdating}
+                        />
+                      </td>
+                    </>
+                  ) : (
+                    <>
+                      {/* Flows mode - Amount */}
+                      <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900 border-l border-neutral-300">
+                        <div className="text-right text-sm text-neutral-600">
+                          R {(parseFloat(fund.monthlyIncome) || 0).toLocaleString()}
+                        </div>
+                      </td>
+
+                      {/* Flows mode - Term */}
+                      <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900">
+                        <div className="text-right text-sm text-neutral-600">
+                          {fund.termYears || '0'} years
+                        </div>
+                      </td>
+
+                      {/* Flows mode - Increase % */}
+                      <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900">
+                        <div className="text-right text-sm text-neutral-600">
+                          {fund.increasePercentage || '0'}%
+                        </div>
+                      </td>
+
+                      {/* Flows mode - Lump sum death */}
+                      <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900 border-r border-neutral-300">
+                        <div className="text-right text-sm text-neutral-600">
+                          R {((parseFloat(fund.monthlyIncome) || 0) * (parseFloat(fund.termYears) || 0) * 12).toLocaleString()}
+                        </div>
+                      </td>
+                    </>
+                  )}
                 </>
               )}
 
               {/* Fund Value Section */}
               {columnVisibility.fundValue && (
                 <>
-                  <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900" style={{ backgroundColor: '#EFF5F9' }}>
-                    <AutoSizeInput
-                      type="text"
-                      value={fund.approvedLifeCover || ""}
-                      onChange={(e) => handleInputChange(fund.id, "approvedLifeCover", e.target.value)}
-                      className="border-0 focus:bg-white focus:border focus:border-primary hover:bg-teal-50 text-right"
-                      placeholder="R 0"
-                      disabled={isUpdating}
-                    />
-                  </td>
+                  {tableMode === "flows" ? (
+                    <>
+                      {/* Flows mode - Amount */}
+                      <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900 border-l border-neutral-300">
+                        <div className="text-right text-sm text-neutral-600">
+                          R {(parseFloat(fund.fundValue) || 0).toLocaleString()}
+                        </div>
+                      </td>
 
-                  <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900" style={{ backgroundColor: '#EFF5F9' }}>
-                    <AutoSizeInput
-                      type="text"
-                      value={fund.fundValue || ""}
-                      onChange={(e) => handleInputChange(fund.id, "fundValue", e.target.value)}
-                      className="border-0 focus:bg-white focus:border focus:border-primary hover:bg-teal-50 text-right"
-                      placeholder="R 0"
-                      disabled={isUpdating}
-                    />
-                  </td>
+                      {/* Flows mode - Increase % */}
+                      <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900">
+                        <div className="text-right text-sm text-neutral-600">
+                          6%
+                        </div>
+                      </td>
 
-                  <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900 border-r border-neutral-300" style={{ backgroundColor: '#EFF5F9' }}>
-                    <span className="text-neutral-600">{fund.fundValueAtDeath || "R 0"}</span>
-                  </td>
+                      {/* Flows mode - Term */}
+                      <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900 border-r border-neutral-300">
+                        <div className="text-right text-sm text-neutral-600">
+                          20 years
+                        </div>
+                      </td>
+                    </>
+                  ) : (
+                    <>
+                      <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900 border-l border-neutral-300" style={{ backgroundColor: '#EFF5F9' }}>
+                        <AutoSizeInput
+                          type="text"
+                          value={fund.approvedLifeCover || ""}
+                          onChange={(e) => handleInputChange(fund.id, "approvedLifeCover", e.target.value)}
+                          className="border-0 focus:bg-white focus:border focus:border-primary hover:bg-teal-50 text-right"
+                          placeholder="R 0"
+                          disabled={isUpdating}
+                        />
+                      </td>
+
+                      <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900" style={{ backgroundColor: '#EFF5F9' }}>
+                        <AutoSizeInput
+                          type="text"
+                          value={fund.fundValue || ""}
+                          onChange={(e) => handleInputChange(fund.id, "fundValue", e.target.value)}
+                          className="border-0 focus:bg-white focus:border focus:border-primary hover:bg-teal-50 text-right"
+                          placeholder="R 0"
+                          disabled={isUpdating}
+                        />
+                      </td>
+
+                      <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900 border-r border-neutral-300" style={{ backgroundColor: '#EFF5F9' }}>
+                        <span className="text-neutral-600">{fund.fundValueAtDeath || "R 0"}</span>
+                      </td>
+                    </>
+                  )}
                 </>
               )}
 
               {/* Fund Value Beneficiaries Section */}
               {columnVisibility.fundValueBeneficiaries && (
                 <>
-                  <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900" style={{ backgroundColor: '#EFF5F9' }}>
-                    <div className="text-right text-sm text-neutral-600">
-                      {fund.fundValueBeneficiaries ? 
-                        JSON.parse(fund.fundValueBeneficiaries).map((b: any) => b.name).join(', ') || 'None'
-                        : 'None'}
-                    </div>
-                  </td>
+                  {tableMode === "flows" ? (
+                    <>
+                      {/* Fund value beneficiaries - Name */}
+                      <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900 border-l border-neutral-200" style={{ backgroundColor: '#EFF5F9' }}>
+                        <div className="text-right text-sm text-neutral-600">
+                          {fund.fundValueBeneficiaries ? 
+                            JSON.parse(fund.fundValueBeneficiaries).map((b: any) => b.name).join(', ') || 'None'
+                            : 'None'}
+                        </div>
+                      </td>
 
-                  <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900" style={{ backgroundColor: '#EFF5F9' }}>
-                    <div className="text-right text-sm text-neutral-600">
-                      {fund.fundValueBeneficiaries ? 
-                        JSON.parse(fund.fundValueBeneficiaries).reduce((sum: number, b: any) => sum + (parseFloat(b.percentage) || 0), 0).toFixed(1) + '%'
-                        : '0%'}
-                    </div>
-                  </td>
+                      {/* Fund value beneficiaries - % */}
+                      <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900" style={{ backgroundColor: '#EFF5F9' }}>
+                        <div className="text-right text-sm text-neutral-600">
+                          {fund.fundValueBeneficiaries ? 
+                            JSON.parse(fund.fundValueBeneficiaries).reduce((sum: number, b: any) => sum + (parseFloat(b.percentage) || 0), 0).toFixed(1) + '%'
+                            : '0%'}
+                        </div>
+                      </td>
 
-                  <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900" style={{ backgroundColor: '#EFF5F9' }}>
-                    <div className="text-right text-sm text-neutral-600">
-                      R {((parseFloat(fund.fundValue) || 0) * 0.8).toLocaleString()}
-                    </div>
-                  </td>
+                      {/* Fund value beneficiaries - Amount */}
+                      <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900" style={{ backgroundColor: '#EFF5F9' }}>
+                        <div className="text-right text-sm text-neutral-600">
+                          R {((parseFloat(fund.fundValue) || 0) * 0.8).toLocaleString()}
+                        </div>
+                      </td>
 
-                  <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900" style={{ backgroundColor: '#EFF5F9' }}>
-                    <div className="text-right text-sm text-neutral-600">
-                      {fund.fundValueBeneficiaries ? 
-                        'R ' + JSON.parse(fund.fundValueBeneficiaries).reduce((sum: number, b: any) => sum + (parseFloat(b.lumpSumTaken) || 0), 0).toLocaleString()
-                        : 'R 0'}
-                    </div>
-                  </td>
+                      {/* Fund value beneficiaries - Lump sum taken */}
+                      <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900" style={{ backgroundColor: '#EFF5F9' }}>
+                        <div className="text-right text-sm text-neutral-600">
+                          {fund.fundValueBeneficiaries ? 
+                            'R ' + JSON.parse(fund.fundValueBeneficiaries).reduce((sum: number, b: any) => sum + (parseFloat(b.lumpSumTaken) || 0), 0).toLocaleString()
+                            : 'R 0'}
+                        </div>
+                      </td>
 
-                  <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900" style={{ backgroundColor: '#EFF5F9' }}>
-                    <div className="text-right text-sm text-neutral-600">
-                      R {(parseFloat(fund.fundValueAtDeath) || 0).toLocaleString()}
-                    </div>
-                  </td>
+                      {/* Fund value beneficiaries - Fund value at death */}
+                      <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900" style={{ backgroundColor: '#EFF5F9' }}>
+                        <div className="text-right text-sm text-neutral-600">
+                          R {(parseFloat(fund.fundValueAtDeath) || 0).toLocaleString()}
+                        </div>
+                      </td>
 
-                  <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900" style={{ backgroundColor: '#EFF5F9' }}>
-                    <div className="text-right text-sm text-neutral-600">
-                      {fund.fundValueBeneficiaries ? 
-                        'R ' + JSON.parse(fund.fundValueBeneficiaries).reduce((sum: number, b: any) => sum + (parseFloat(b.nondeductibleContribution) || 0), 0).toLocaleString()
-                        : 'R 0'}
-                    </div>
-                  </td>
+                      {/* Fund value beneficiaries - Non deductible contribution */}
+                      <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900" style={{ backgroundColor: '#EFF5F9' }}>
+                        <div className="text-right text-sm text-neutral-600">
+                          {fund.fundValueBeneficiaries ? 
+                            'R ' + JSON.parse(fund.fundValueBeneficiaries).reduce((sum: number, b: any) => sum + (parseFloat(b.nondeductibleContribution) || 0), 0).toLocaleString()
+                            : 'R 0'}
+                        </div>
+                      </td>
 
-                  <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900" style={{ backgroundColor: '#EFF5F9' }}>
-                    <div className="text-right text-sm text-neutral-600">
-                      {fund.fundValueBeneficiaries ? 
-                        'R ' + JSON.parse(fund.fundValueBeneficiaries).reduce((sum: number, b: any) => sum + (parseFloat(b.livingAnnuity) || 0), 0).toLocaleString()
-                        : 'R 0'}
-                    </div>
-                  </td>
+                      {/* Living Annuity */}
+                      <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900" style={{ backgroundColor: '#EFF5F9' }}>
+                        <div className="text-right text-sm text-neutral-600">
+                          {fund.fundValueBeneficiaries ? 
+                            'R ' + JSON.parse(fund.fundValueBeneficiaries).reduce((sum: number, b: any) => sum + (parseFloat(b.livingAnnuity) || 0), 0).toLocaleString()
+                            : 'R 0'}
+                        </div>
+                      </td>
 
-                  <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900" style={{ backgroundColor: '#EFF5F9' }}>
-                    <div className="text-right text-sm text-neutral-600">
-                      {fund.fundValueBeneficiaries ? 
-                        JSON.parse(fund.fundValueBeneficiaries).reduce((sum: number, b: any) => sum + (parseFloat(b.incomeTerm) || 0), 0).toFixed(0) + ' years'
-                        : '0 years'}
-                    </div>
-                  </td>
+                      {/* Income Term */}
+                      <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900" style={{ backgroundColor: '#EFF5F9' }}>
+                        <div className="text-right text-sm text-neutral-600">
+                          {fund.fundValueBeneficiaries ? 
+                            JSON.parse(fund.fundValueBeneficiaries).reduce((sum: number, b: any) => sum + (parseFloat(b.incomeTerm) || 0), 0).toFixed(0) + ' years'
+                            : '0 years'}
+                        </div>
+                      </td>
+                    </>
+                  ) : (
+                    <>
+                      {/* Flows mode - Actual value */}
+                      <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900 border-l border-neutral-200">
+                        <div className="text-right text-sm text-neutral-600">
+                          R {(parseFloat(fund.fundValue) || 0).toLocaleString()}
+                        </div>
+                      </td>
+
+                      {/* Flows mode - Estate duty (spouse life of deceased) */}
+                      <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900">
+                        <div className="text-right text-sm text-neutral-600">
+                          R {((parseFloat(fund.fundValue) || 0) * 0.15).toLocaleString()}
+                        </div>
+                      </td>
+
+                      {/* Flows mode - Estate duty (no spouse) */}
+                      <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900">
+                        <div className="text-right text-sm text-neutral-600">
+                          R {((parseFloat(fund.fundValue) || 0) * 0.20).toLocaleString()}
+                        </div>
+                      </td>
+
+                      {/* Flows mode - Estate duty (life others) */}
+                      <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900">
+                        <div className="text-right text-sm text-neutral-600">
+                          R {((parseFloat(fund.fundValue) || 0) * 0.25).toLocaleString()}
+                        </div>
+                      </td>
+
+                      {/* Flows mode - Executors fee */}
+                      <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900">
+                        <div className="text-right text-sm text-neutral-600">
+                          R {((parseFloat(fund.fundValue) || 0) * 0.035).toLocaleString()}
+                        </div>
+                      </td>
+
+                      {/* Flows mode - Masters fee */}
+                      <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900">
+                        <div className="text-right text-sm text-neutral-600">
+                          R {((parseFloat(fund.fundValue) || 0) * 0.006).toLocaleString()}
+                        </div>
+                      </td>
+                    </>
+                  )}
                 </>
               )}
             </tr>
           ))}
-        </tbody>
-      </table>
-    </div>
-  );
-
-  // Flows Table Component (shown when tableMode is "flows")
-  const FlowsTable = () => (
-    <div className="overflow-x-auto">
-      <div className="mb-4">
-        <h3 className="text-lg font-semibold text-neutral-900">Retirement Funds - Financial Flows</h3>
-      </div>
-      <table className="min-w-full bg-white table-auto border border-neutral-300 rounded-lg">
-        <thead>
-          <tr className="border-b border-neutral-200" style={{ backgroundColor: '#D6ECF5' }}>
-            {/* Overview Section Headers */}
+          
+          {/* Totals row */}
+          <tr className="border-t-2 border-neutral-300 font-semibold" style={{ backgroundColor: '#D6ECF5' }}>
+            {/* Overview Section */}
             {columnVisibility.overview && (
               <>
-                <th colSpan={3} className="px-3 py-3 text-center text-sm font-bold uppercase tracking-wider border-r border-neutral-300" style={{ color: '#094161' }}>
-                  Current Values
-                </th>
+                {/* Description */}
+                <td className="px-3 py-2 whitespace-nowrap text-sm font-semibold" style={{ color: '#094161' }}>
+                  Total
+                </td>
+                
+                {/* Owner */}
+                <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900">
+                  
+                </td>
               </>
             )}
-
-            {/* Unapproved Life Cover Section Headers */}
+            
+            {/* Unapproved Life Cover Section */}
             {columnVisibility.unapprovedLifeCover && (
               <>
-                <th colSpan={3} className="px-3 py-3 text-center text-sm font-bold uppercase tracking-wider border-r border-neutral-300" style={{ color: '#094161' }}>
-                  Beneficiary Flows
-                </th>
+                {/* Cover amount - TOTAL */}
+                <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900 border-l border-neutral-300">
+                  <span className="font-semibold text-right block" style={{ color: '#094161' }}>
+                    R {funds.reduce((sum, fund) => {
+                      const amount = parseInt(fund.coverAmount?.replace(/[^0-9]/g, '') || '0');
+                      return sum + amount;
+                    }, 0).toLocaleString()}
+                  </span>
+                </td>
+                
+                {/* Beneficiary */}
+                <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900">
+                  
+                </td>
+                
+                {/* % */}
+                <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900">
+                  
+                </td>
+                
+                {/* Cover split */}
+                <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900">
+                  
+                </td>
               </>
             )}
-
-            {/* Monthly Death Benefit Section Headers */}
+            
+            {/* Monthly Death Benefit Section */}
             {columnVisibility.monthlyDeathBenefit && (
               <>
-                <th colSpan={4} className="px-3 py-3 text-center text-sm font-bold uppercase tracking-wider border-r border-neutral-300" style={{ color: '#094161' }}>
-                  Income Projections
-                </th>
+                {/* Monthly income - TOTAL */}
+                <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900 border-l border-neutral-300">
+                  <span className="font-semibold text-right block" style={{ color: '#094161' }}>
+                    R {funds.reduce((sum, fund) => {
+                      const amount = parseInt(fund.monthlyIncome?.replace(/[^0-9]/g, '') || '0');
+                      return sum + amount;
+                    }, 0).toLocaleString()}
+                  </span>
+                </td>
+                
+                {/* Term (Years) */}
+                <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900">
+                  
+                </td>
+                
+                {/* Increase % */}
+                <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900">
+                  
+                </td>
+                
+                {/* Escalation amount */}
+                <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900 border-r border-neutral-300">
+                  
+                </td>
               </>
             )}
-
-            {/* Fund Value Section Headers */}
+            
+            {/* Fund Value Section */}
             {columnVisibility.fundValue && (
               <>
-                <th colSpan={3} className="px-3 py-3 text-center text-sm font-bold uppercase tracking-wider border-r border-neutral-300" style={{ color: '#094161' }}>
-                  Fund Growth
-                </th>
+                <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900 border-l border-neutral-300">
+                  <span className="font-semibold text-right block" style={{ color: '#094161' }}>
+                    R {funds.reduce((sum, fund) => {
+                      const amount = parseInt(fund.approvedLifeCover?.replace(/[^0-9]/g, '') || '0');
+                      return sum + amount;
+                    }, 0).toLocaleString()}
+                  </span>
+                </td>
+                
+                <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900">
+                  <span className="font-semibold text-right block" style={{ color: '#094161' }}>
+                    R {funds.reduce((sum, fund) => {
+                      const amount = parseInt(fund.fundValue?.replace(/[^0-9]/g, '') || '0');
+                      return sum + amount;
+                    }, 0).toLocaleString()}
+                  </span>
+                </td>
+                
+                <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900 border-r border-neutral-300">
+                  <span className="font-semibold text-right block" style={{ color: '#094161' }}>
+                    R {funds.reduce((sum, fund) => {
+                      const amount = parseInt(fund.fundValueAtDeath?.replace(/[^0-9]/g, '') || '0');
+                      return sum + amount;
+                    }, 0).toLocaleString()}
+                  </span>
+                </td>
               </>
             )}
-
-            {/* Fund Value Beneficiaries Section Headers */}
+            
+            {/* Fund Value Beneficiaries Section */}
             {columnVisibility.fundValueBeneficiaries && (
               <>
-                <th colSpan={6} className="px-3 py-3 text-center text-sm font-bold uppercase tracking-wider" style={{ color: '#094161' }}>
-                  Estate Planning Costs
-                </th>
+                {/* Fund value beneficiaries - Name */}
+                <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900 border-l border-neutral-300">
+                  
+                </td>
+                
+                {/* Fund value beneficiaries - % */}
+                <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900">
+                  
+                </td>
+                
+                {/* Fund value beneficiaries - Amount */}
+                <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900">
+                  
+                </td>
+                
+                {/* Fund value beneficiaries - Lump sum taken */}
+                <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900">
+                  
+                </td>
+                
+                {/* Fund value beneficiaries - Fund value at death */}
+                <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900">
+                  
+                </td>
+                
+                {/* Fund value beneficiaries - Non deductible contribution amount */}
+                <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900">
+                  
+                </td>
+                
+                {/* Fund value beneficiaries - Living annuity */}
+                <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900">
+                  
+                </td>
+                
+                {/* Fund value beneficiaries - Income term */}
+                <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900">
+                  
+                </td>
               </>
             )}
           </tr>
-
-          {/* Second level headers for flows */}
-          <tr className="border-b-2 border-neutral-300" style={{ backgroundColor: '#D6ECF5' }}>
-            {/* Overview Section Subheaders */}
-            {columnVisibility.overview && (
-              <>
-                <th className="px-3 py-2 text-left text-xs font-bold uppercase tracking-wider border-r border-neutral-300" style={{ color: '#094161' }}>
-                  Fund Name
-                </th>
-                <th className="px-3 py-2 text-left text-xs font-bold uppercase tracking-wider border-r border-neutral-300" style={{ color: '#094161' }}>
-                  Owner Status
-                </th>
-                <th className="px-3 py-2 text-left text-xs font-bold uppercase tracking-wider border-r border-neutral-300" style={{ color: '#094161' }}>
-                  Current Value
-                </th>
-              </>
-            )}
-
-            {/* Unapproved Life Cover Subheaders */}
-            {columnVisibility.unapprovedLifeCover && (
-              <>
-                <th className="px-3 py-2 text-left text-xs font-bold uppercase tracking-wider" style={{ color: '#094161' }}>
-                  Beneficiaries Count
-                </th>
-                <th className="px-3 py-2 text-left text-xs font-bold uppercase tracking-wider" style={{ color: '#094161' }}>
-                  Total Coverage %
-                </th>
-                <th className="px-3 py-2 text-left text-xs font-bold uppercase tracking-wider border-r border-neutral-300" style={{ color: '#094161' }}>
-                  Flow Amount
-                </th>
-              </>
-            )}
-
-            {/* Monthly Death Benefit Subheaders */}
-            {columnVisibility.monthlyDeathBenefit && (
-              <>
-                <th className="px-3 py-2 text-left text-xs font-bold uppercase tracking-wider" style={{ color: '#094161' }}>
-                  Current Income
-                </th>
-                <th className="px-3 py-2 text-left text-xs font-bold uppercase tracking-wider" style={{ color: '#094161' }}>
-                  Annual Growth
-                </th>
-                <th className="px-3 py-2 text-left text-xs font-bold uppercase tracking-wider" style={{ color: '#094161' }}>
-                  Inflation Adj %
-                </th>
-                <th className="px-3 py-2 text-left text-xs font-bold uppercase tracking-wider border-r border-neutral-300" style={{ color: '#094161' }}>
-                  Projected Total
-                </th>
-              </>
-            )}
-
-            {/* Fund Value Subheaders */}
-            {columnVisibility.fundValue && (
-              <>
-                <th className="px-3 py-2 text-left text-xs font-bold uppercase tracking-wider" style={{ color: '#094161' }}>
-                  Current Fund Value
-                </th>
-                <th className="px-3 py-2 text-left text-xs font-bold uppercase tracking-wider" style={{ color: '#094161' }}>
-                  Growth Rate %
-                </th>
-                <th className="px-3 py-2 text-left text-xs font-bold uppercase tracking-wider border-r border-neutral-300" style={{ color: '#094161' }}>
-                  Projected Term
-                </th>
-              </>
-            )}
-
-            {/* Fund Value Beneficiaries Subheaders */}
-            {columnVisibility.fundValueBeneficiaries && (
-              <>
-                <th className="px-3 py-2 text-left text-xs font-bold uppercase tracking-wider" style={{ color: '#094161' }}>
-                  Estate Duty (Spouse)
-                </th>
-                <th className="px-3 py-2 text-left text-xs font-bold uppercase tracking-wider" style={{ color: '#094161' }}>
-                  Estate Duty (No Spouse)
-                </th>
-                <th className="px-3 py-2 text-left text-xs font-bold uppercase tracking-wider" style={{ color: '#094161' }}>
-                  Estate Duty (Others)
-                </th>
-                <th className="px-3 py-2 text-left text-xs font-bold uppercase tracking-wider" style={{ color: '#094161' }}>
-                  Executor Fee
-                </th>
-                <th className="px-3 py-2 text-left text-xs font-bold uppercase tracking-wider" style={{ color: '#094161' }}>
-                  Master Fee
-                </th>
-                <th className="px-3 py-2 text-left text-xs font-bold uppercase tracking-wider" style={{ color: '#094161' }}>
-                  Total Costs
-                </th>
-              </>
-            )}
-          </tr>
-        </thead>
-
-        <tbody className="bg-white divide-y divide-neutral-200">
-          {funds.map((fund) => (
-            <tr key={fund.id} className="hover:bg-neutral-50">
-              {/* Overview Section Flows */}
-              {columnVisibility.overview && (
-                <>
-                  <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900">
-                    <div className="text-right text-sm text-neutral-600">
-                      {fund.description || "Unnamed Fund"}
-                    </div>
-                  </td>
-
-                  <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900">
-                    <div className="text-right text-sm text-neutral-600">
-                      {fund.owner ? "Active" : "Pending"}
-                    </div>
-                  </td>
-
-                  <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900 border-r border-neutral-300">
-                    <div className="text-right text-sm text-neutral-600">
-                      R {(parseFloat(fund.coverAmount) || 0).toLocaleString()}
-                    </div>
-                  </td>
-                </>
-              )}
-
-              {/* Unapproved Life Cover Flows */}
-              {columnVisibility.unapprovedLifeCover && (
-                <>
-                  <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900">
-                    <div className="text-right text-sm text-neutral-600">
-                      {fund.unapprovedBeneficiaries ? 
-                        JSON.parse(fund.unapprovedBeneficiaries).length + " beneficiaries"
-                        : "0 beneficiaries"}
-                    </div>
-                  </td>
-
-                  <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900">
-                    <div className="text-right text-sm text-neutral-600">
-                      {fund.unapprovedBeneficiaries ? 
-                        JSON.parse(fund.unapprovedBeneficiaries).reduce((sum: number, b: any) => sum + (parseFloat(b.percentage) || 0), 0).toFixed(1) + '%'
-                        : '0%'}
-                    </div>
-                  </td>
-
-                  <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900 border-r border-neutral-300">
-                    <div className="text-right text-sm text-neutral-600">
-                      R {((parseFloat(fund.coverAmount) || 0) * 0.75).toLocaleString()}
-                    </div>
-                  </td>
-                </>
-              )}
-
-              {/* Monthly Death Benefit Flows */}
-              {columnVisibility.monthlyDeathBenefit && (
-                <>
-                  <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900">
-                    <div className="text-right text-sm text-neutral-600">
-                      R {(parseFloat(fund.monthlyIncome) || 0).toLocaleString()}
-                    </div>
-                  </td>
-
-                  <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900">
-                    <div className="text-right text-sm text-neutral-600">
-                      R {((parseFloat(fund.monthlyIncome) || 0) * 0.06).toLocaleString()}
-                    </div>
-                  </td>
-
-                  <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900">
-                    <div className="text-right text-sm text-neutral-600">
-                      {fund.increasePercentage || "6%"}
-                    </div>
-                  </td>
-
-                  <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900 border-r border-neutral-300">
-                    <div className="text-right text-sm text-neutral-600">
-                      R {((parseFloat(fund.monthlyIncome) || 0) * (parseFloat(fund.termYears) || 0) * 12 * 1.06).toLocaleString()}
-                    </div>
-                  </td>
-                </>
-              )}
-
-              {/* Fund Value Flows */}
-              {columnVisibility.fundValue && (
-                <>
-                  <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900">
-                    <div className="text-right text-sm text-neutral-600">
-                      R {(parseFloat(fund.fundValue) || 0).toLocaleString()}
-                    </div>
-                  </td>
-
-                  <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900">
-                    <div className="text-right text-sm text-neutral-600">
-                      7.5%
-                    </div>
-                  </td>
-
-                  <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900 border-r border-neutral-300">
-                    <div className="text-right text-sm text-neutral-600">
-                      25 years
-                    </div>
-                  </td>
-                </>
-              )}
-
-              {/* Fund Value Beneficiaries Flows */}
-              {columnVisibility.fundValueBeneficiaries && (
-                <>
-                  <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900">
-                    <div className="text-right text-sm text-neutral-600">
-                      R {((parseFloat(fund.fundValue) || 0) * 0.15).toLocaleString()}
-                    </div>
-                  </td>
-
-                  <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900">
-                    <div className="text-right text-sm text-neutral-600">
-                      R {((parseFloat(fund.fundValue) || 0) * 0.20).toLocaleString()}
-                    </div>
-                  </td>
-
-                  <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900">
-                    <div className="text-right text-sm text-neutral-600">
-                      R {((parseFloat(fund.fundValue) || 0) * 0.25).toLocaleString()}
-                    </div>
-                  </td>
-
-                  <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900">
-                    <div className="text-right text-sm text-neutral-600">
-                      R {((parseFloat(fund.fundValue) || 0) * 0.035).toLocaleString()}
-                    </div>
-                  </td>
-
-                  <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900">
-                    <div className="text-right text-sm text-neutral-600">
-                      R {((parseFloat(fund.fundValue) || 0) * 0.006).toLocaleString()}
-                    </div>
-                  </td>
-
-                  <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900">
-                    <div className="text-right text-sm text-neutral-600 font-semibold">
-                      R {((parseFloat(fund.fundValue) || 0) * 0.431).toLocaleString()}
-                    </div>
-                  </td>
-                </>
-              )}
-            </tr>
-          ))}
         </tbody>
       </table>
-    </div>
-  );
-
-  return (
-    <div className="space-y-6">
-      {/* Always show inputs table */}
-      <InputsTable />
-      
-      {/* Show flows table when flows mode is enabled */}
-      {tableMode === "flows" && <FlowsTable />}
     </div>
   );
 }
