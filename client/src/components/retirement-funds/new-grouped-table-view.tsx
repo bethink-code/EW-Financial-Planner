@@ -1,8 +1,20 @@
 import { RetirementFund, UpdateRetirementFund } from "@shared/schema";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Edit3 } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Label } from "@/components/ui/label";
+import { Edit3, Plus, Minus } from "lucide-react";
 import { useRef, useEffect } from "react";
+import {
+  parseUnapprovedBeneficiaries,
+  parseFundValueBeneficiaries,
+  addUnapprovedBeneficiary,
+  addFundValueBeneficiary,
+  removeUnapprovedBeneficiary,
+  removeFundValueBeneficiary,
+  updateUnapprovedBeneficiary,
+  updateFundValueBeneficiary
+} from "@/lib/beneficiaries";
 
 interface ColumnVisibility {
   overview: boolean;
@@ -273,27 +285,66 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
               {/* Unapproved Life Cover Section */}
               {columnVisibility.unapprovedLifeCover && (
                 <>
-                  <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900" style={{ backgroundColor: '#EFF5F9' }}>
-                    <div className="text-right text-sm text-neutral-600">
-                      {fund.unapprovedBeneficiaries ? 
-                        JSON.parse(fund.unapprovedBeneficiaries).map((b: any) => b.name).join(', ') || 'None'
-                        : 'None'}
-                    </div>
-                  </td>
-
-                  <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900" style={{ backgroundColor: '#EFF5F9' }}>
-                    <div className="text-right text-sm text-neutral-600">
-                      {fund.unapprovedBeneficiaries ? 
-                        JSON.parse(fund.unapprovedBeneficiaries).reduce((sum: number, b: any) => sum + (parseFloat(b.percentage) || 0), 0).toFixed(1) + '%'
-                        : '0%'}
-                    </div>
-                  </td>
-
-                  <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900 border-r border-neutral-300" style={{ backgroundColor: '#EFF5F9' }}>
-                    <div className="text-right text-sm text-neutral-600">
-                      {fund.unapprovedBeneficiaries ? 
-                        'R ' + JSON.parse(fund.unapprovedBeneficiaries).reduce((sum: number, b: any) => sum + (parseFloat(b.coverSplit) || 0), 0).toLocaleString()
-                        : 'R 0'}
+                  <td colSpan={3} className="px-3 py-2 border-r border-neutral-300" style={{ backgroundColor: '#EFF5F9' }}>
+                    <div className="space-y-2">
+                      <div className="flex items-center justify-between">
+                        <Label className="text-xs font-semibold text-neutral-700">Unapproved Beneficiaries</Label>
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          onClick={() => handleInputChange(fund.id, "unapprovedBeneficiaries", addUnapprovedBeneficiary(fund.unapprovedBeneficiaries || ""))}
+                          disabled={isUpdating}
+                          className="h-6 w-6 p-0"
+                        >
+                          <Plus className="h-3 w-3" />
+                        </Button>
+                      </div>
+                      {parseUnapprovedBeneficiaries(fund.unapprovedBeneficiaries || "").map((beneficiary, index) => (
+                        <div key={beneficiary.id} className="grid grid-cols-4 gap-2 p-2 bg-white rounded border">
+                          <div>
+                            <Label className="text-xs text-neutral-600">Name</Label>
+                            <Input
+                              value={beneficiary.name}
+                              onChange={(e) => handleInputChange(fund.id, "unapprovedBeneficiaries", 
+                                updateUnapprovedBeneficiary(fund.unapprovedBeneficiaries || "", beneficiary.id, "name", e.target.value))}
+                              className="h-7 text-xs"
+                              disabled={isUpdating}
+                            />
+                          </div>
+                          <div>
+                            <Label className="text-xs text-neutral-600">%</Label>
+                            <Input
+                              value={beneficiary.percentage}
+                              onChange={(e) => handleInputChange(fund.id, "unapprovedBeneficiaries", 
+                                updateUnapprovedBeneficiary(fund.unapprovedBeneficiaries || "", beneficiary.id, "percentage", e.target.value))}
+                              className="h-7 text-xs text-right"
+                              disabled={isUpdating}
+                            />
+                          </div>
+                          <div>
+                            <Label className="text-xs text-neutral-600">Cover Split</Label>
+                            <Input
+                              value={beneficiary.coverSplit}
+                              onChange={(e) => handleInputChange(fund.id, "unapprovedBeneficiaries", 
+                                updateUnapprovedBeneficiary(fund.unapprovedBeneficiaries || "", beneficiary.id, "coverSplit", e.target.value))}
+                              className="h-7 text-xs text-right"
+                              disabled={isUpdating}
+                            />
+                          </div>
+                          <div className="flex items-end">
+                            <Button
+                              size="sm"
+                              variant="outline"
+                              onClick={() => handleInputChange(fund.id, "unapprovedBeneficiaries", 
+                                removeUnapprovedBeneficiary(fund.unapprovedBeneficiaries || "", beneficiary.id))}
+                              disabled={isUpdating}
+                              className="h-7 w-7 p-0"
+                            >
+                              <Minus className="h-3 w-3" />
+                            </Button>
+                          </div>
+                        </div>
+                      ))}
                     </div>
                   </td>
                 </>
