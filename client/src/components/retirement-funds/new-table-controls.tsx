@@ -36,9 +36,8 @@ export function NewTableControls({
   return (
     <div className="bg-white rounded shadow-sm border border-neutral-200 p-3 mb-4">
       <div className="flex flex-col lg:flex-row gap-3 items-start lg:items-center justify-between">
-        {/* Left section: Title and count */}
+        {/* Left section: Fund count */}
         <div className="flex items-center gap-3">
-          <h1 className="text-xl font-semibold text-neutral-900">Retirement Funds</h1>
           <span className="px-2 py-1 bg-primary/10 text-primary text-xs font-medium rounded">
             {fundsCount} funds
           </span>
