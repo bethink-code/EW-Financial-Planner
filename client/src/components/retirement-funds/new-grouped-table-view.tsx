@@ -80,7 +80,7 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
             <th className="px-3 py-2 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">
               Term (Years)
             </th>
-            <th className="px-3 py-2 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider border-r border-neutral-300">
+            <th className="px-3 py-2 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">
               Increase %
             </th>
             <th className="px-3 py-2 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider border-r border-neutral-300">
@@ -232,7 +232,7 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
               </td>
 
               {/* Monthly death benefit - Increase % */}
-              <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900 border-r border-neutral-300">
+              <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900">
                 <Input
                   type="text"
                   value={fund.increasePercentage || ""}
