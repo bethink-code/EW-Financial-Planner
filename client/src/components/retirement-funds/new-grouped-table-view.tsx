@@ -231,11 +231,11 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
 
               {/* Unapproved life cover - % */}
               <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900">
-                <Input
+                <AutoSizeInput
                   type="text"
                   value={fund.beneficiaryPercentage || ""}
                   onChange={(e) => handleInputChange(fund.id, "beneficiaryPercentage", e.target.value)}
-                  className="compact-input border-0 focus:bg-white focus:border focus:border-primary hover:bg-teal-50 text-right"
+                  className="border-0 focus:bg-white focus:border focus:border-primary hover:bg-teal-50 text-right"
                   placeholder="100"
                   disabled={isUpdating}
                 />
@@ -243,11 +243,11 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
 
               {/* Unapproved life cover - Cover split */}
               <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900">
-                <Input
+                <AutoSizeInput
                   type="text"
                   value={fund.coverSplit || ""}
                   onChange={(e) => handleInputChange(fund.id, "coverSplit", e.target.value)}
-                  className="compact-input border-0 focus:bg-white focus:border focus:border-primary hover:bg-teal-50 text-right"
+                  className="border-0 focus:bg-white focus:border focus:border-primary hover:bg-teal-50 text-right"
                   placeholder="0"
                   disabled={isUpdating}
                 />
