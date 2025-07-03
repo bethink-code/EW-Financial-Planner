@@ -303,12 +303,26 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
 
               {/* Approved life cover */}
               <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900 border-l border-neutral-300">
-                <span className="text-neutral-600">{fund.approvedLifeCover || "R 0"}</span>
+                <AutoSizeInput
+                  type="text"
+                  value={fund.approvedLifeCover || ""}
+                  onChange={(e) => handleInputChange(fund.id, "approvedLifeCover", e.target.value)}
+                  className="border-0 focus:bg-white focus:border focus:border-primary hover:bg-teal-50 text-right"
+                  placeholder="R 0"
+                  disabled={isUpdating}
+                />
               </td>
 
               {/* Fund value - Fund value */}
               <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900">
-                <span className="text-neutral-600">{fund.fundValue || "R 0"}</span>
+                <AutoSizeInput
+                  type="text"
+                  value={fund.fundValue || ""}
+                  onChange={(e) => handleInputChange(fund.id, "fundValue", e.target.value)}
+                  className="border-0 focus:bg-white focus:border focus:border-primary hover:bg-teal-50 text-right"
+                  placeholder="R 0"
+                  disabled={isUpdating}
+                />
               </td>
 
               {/* Fund value - Fund value at death */}
