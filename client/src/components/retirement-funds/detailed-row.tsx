@@ -72,10 +72,10 @@ export function DetailedRow({ fund, columnVisibility, onFieldUpdate, isUpdating 
         <div className="border-t border-neutral-200 p-4 space-y-4">
           {/* Overview Section */}
           {columnVisibility.overview && (
-            <div className="rounded-lg p-3" style={{ backgroundColor: '#EFF5F9' }}>
-              <h4 className="text-sm font-bold mb-3" style={{ color: '#016991' }}>Overview</h4>
-              <div className="grid grid-cols-3 gap-3">
-                <div className="col-span-2">
+            <div className="bg-teal-50 rounded-lg p-3">
+              <h4 className="text-sm font-bold text-teal-700 mb-3">Overview</h4>
+              <div className="grid grid-cols-2 gap-3">
+                <div>
                   <Label className="text-xs text-neutral-600">Description</Label>
                   <Input
                     value={fund.description}
@@ -109,9 +109,9 @@ export function DetailedRow({ fund, columnVisibility, onFieldUpdate, isUpdating 
 
           {/* Unapproved Life Cover Section */}
           {columnVisibility.unapprovedLifeCover && (
-            <div className="rounded-lg p-3" style={{ backgroundColor: '#EFF5F9' }}>
-              <h4 className="text-sm font-bold mb-3" style={{ color: '#016991' }}>Unapproved Life Cover</h4>
-              <div className="grid grid-cols-4 gap-3">
+            <div className="bg-orange-50 rounded-lg p-3">
+              <h4 className="text-sm font-bold text-orange-700 mb-3">Unapproved Life Cover</h4>
+              <div className="grid grid-cols-2 gap-3">
                 <div>
                   <Label className="text-xs text-neutral-600">Cover Amount</Label>
                   <Input
@@ -146,7 +146,7 @@ export function DetailedRow({ fund, columnVisibility, onFieldUpdate, isUpdating 
                   <Input
                     value={fund.beneficiaryPercentage}
                     onChange={(e) => handleFieldChange("beneficiaryPercentage", e.target.value)}
-                    className="h-8 text-sm text-right w-20"
+                    className="h-8 text-sm text-right"
                     disabled={isUpdating}
                     placeholder="100%"
                   />
@@ -167,9 +167,9 @@ export function DetailedRow({ fund, columnVisibility, onFieldUpdate, isUpdating 
 
           {/* Monthly Death Benefit Section */}
           {columnVisibility.monthlyDeathBenefit && (
-            <div className="rounded-lg p-3" style={{ backgroundColor: '#EFF5F9' }}>
-              <h4 className="text-sm font-bold mb-3" style={{ color: '#016991' }}>Monthly Death Benefit</h4>
-              <div className="grid grid-cols-4 gap-3">
+            <div className="bg-blue-50 rounded-lg p-3">
+              <h4 className="text-sm font-bold text-blue-700 mb-3">Monthly Death Benefit</h4>
+              <div className="grid grid-cols-2 gap-3">
                 <div>
                   <Label className="text-xs text-neutral-600">Monthly Income</Label>
                   <Input
@@ -185,7 +185,7 @@ export function DetailedRow({ fund, columnVisibility, onFieldUpdate, isUpdating 
                   <Input
                     value={fund.termYears}
                     onChange={(e) => handleFieldChange("termYears", e.target.value)}
-                    className="h-8 text-sm text-right w-20"
+                    className="h-8 text-sm text-right"
                     disabled={isUpdating}
                   />
                 </div>
@@ -194,7 +194,7 @@ export function DetailedRow({ fund, columnVisibility, onFieldUpdate, isUpdating 
                   <Input
                     value={fund.increasePercentage}
                     onChange={(e) => handleFieldChange("increasePercentage", e.target.value)}
-                    className="h-8 text-sm text-right w-20"
+                    className="h-8 text-sm text-right"
                     disabled={isUpdating}
                     placeholder="5%"
                   />
@@ -215,9 +215,9 @@ export function DetailedRow({ fund, columnVisibility, onFieldUpdate, isUpdating 
 
           {/* Fund Value Section */}
           {columnVisibility.fundValue && (
-            <div className="rounded-lg p-3" style={{ backgroundColor: '#EFF5F9' }}>
-              <h4 className="text-sm font-bold mb-3" style={{ color: '#016991' }}>Fund Value</h4>
-              <div className="grid grid-cols-3 gap-3">
+            <div className="bg-green-50 rounded-lg p-3">
+              <h4 className="text-sm font-bold text-green-700 mb-3">Fund Value</h4>
+              <div className="grid grid-cols-2 gap-3">
                 <div>
                   <Label className="text-xs text-neutral-600">Approved Life Cover</Label>
                   <Input
@@ -238,8 +238,8 @@ export function DetailedRow({ fund, columnVisibility, onFieldUpdate, isUpdating 
                     placeholder="R 0"
                   />
                 </div>
-                <div>
-                  <Label className="text-xs text-neutral-600">Fund Value at Death (Read-only)</Label>
+                <div className="col-span-2">
+                  <Label className="text-xs text-neutral-600">Fund Value at Death</Label>
                   <div className="h-8 px-3 py-1 text-sm text-right bg-neutral-50 border border-neutral-200 rounded">
                     {fund.fundValueAtDeath || "R 0"}
                   </div>
@@ -250,10 +250,10 @@ export function DetailedRow({ fund, columnVisibility, onFieldUpdate, isUpdating 
 
           {/* Fund Value Beneficiaries Section */}
           {columnVisibility.fundValueBeneficiaries && (
-            <div className="rounded-lg p-3" style={{ backgroundColor: '#EFF5F9' }}>
-              <h4 className="text-sm font-bold mb-3" style={{ color: '#016991' }}>Fund Value Beneficiaries</h4>
-              <div className="grid grid-cols-6 gap-3">
-                <div className="col-span-2">
+            <div className="bg-purple-50 rounded-lg p-3">
+              <h4 className="text-sm font-bold text-purple-700 mb-3">Fund Value Beneficiaries</h4>
+              <div className="grid grid-cols-2 gap-3">
+                <div>
                   <Label className="text-xs text-neutral-600">Beneficiary Name</Label>
                   <Select
                     value={fund.beneficiaryName || ""}
@@ -273,17 +273,23 @@ export function DetailedRow({ fund, columnVisibility, onFieldUpdate, isUpdating 
                   </Select>
                 </div>
                 <div>
-                  <Label className="text-xs text-neutral-600">%</Label>
+                  <Label className="text-xs text-neutral-600">Percentage</Label>
                   <Input
                     value={fund.beneficiaryPercentageSplit}
                     onChange={(e) => handleFieldChange("beneficiaryPercentageSplit", e.target.value)}
-                    className="h-8 text-sm text-right w-16"
+                    className="h-8 text-sm text-right"
                     disabled={isUpdating}
                     placeholder="0%"
                   />
                 </div>
                 <div>
-                  <Label className="text-xs text-neutral-600">Lump Sum</Label>
+                  <Label className="text-xs text-neutral-600">Amount (Read-only)</Label>
+                  <div className="h-8 px-3 py-1 text-sm text-right bg-neutral-50 border border-neutral-200 rounded">
+                    {fund.amount || "R 0"}
+                  </div>
+                </div>
+                <div>
+                  <Label className="text-xs text-neutral-600">Lump Sum Taken</Label>
                   <Input
                     value={fund.lumpSumTaken}
                     onChange={(e) => handleFieldChange("lumpSumTaken", e.target.value)}
@@ -293,7 +299,7 @@ export function DetailedRow({ fund, columnVisibility, onFieldUpdate, isUpdating 
                   />
                 </div>
                 <div>
-                  <Label className="text-xs text-neutral-600">Non-deductible</Label>
+                  <Label className="text-xs text-neutral-600">Non-deductible Contribution</Label>
                   <Input
                     value={fund.nondeductibleContribution}
                     onChange={(e) => handleFieldChange("nondeductibleContribution", e.target.value)}
@@ -303,13 +309,19 @@ export function DetailedRow({ fund, columnVisibility, onFieldUpdate, isUpdating 
                   />
                 </div>
                 <div>
+                  <Label className="text-xs text-neutral-600">Living Annuity (Read-only)</Label>
+                  <div className="h-8 px-3 py-1 text-sm text-right bg-neutral-50 border border-neutral-200 rounded">
+                    {fund.livingAnnuity || ""}
+                  </div>
+                </div>
+                <div className="col-span-2">
                   <Label className="text-xs text-neutral-600">Income Term</Label>
                   <Input
                     value={fund.incomeTerm}
                     onChange={(e) => handleFieldChange("incomeTerm", e.target.value)}
-                    className="h-8 text-sm text-right w-20"
+                    className="h-8 text-sm text-right"
                     disabled={isUpdating}
-                    placeholder="Term"
+                    placeholder="Income term"
                   />
                 </div>
               </div>

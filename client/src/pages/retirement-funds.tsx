@@ -7,7 +7,7 @@ import { CardsView } from "@/components/retirement-funds/cards-view";
 import { DetailedView } from "@/components/retirement-funds/detailed-view";
 import { queryClient, apiRequest } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
-import type { RetirementFund, UpdateRetirementFund, InsertRetirementFund } from "@shared/schema";
+import type { RetirementFund, UpdateRetirementFund } from "@shared/schema";
 
 type ViewMode = "grouped" | "cards" | "detailed";
 
@@ -85,55 +85,8 @@ export default function RetirementFunds() {
     },
   });
 
-  // Create fund mutation
-  const createFundMutation = useMutation({
-    mutationFn: async (newFund: InsertRetirementFund) => {
-      return apiRequest("POST", "/api/retirement-funds", newFund);
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["/api/retirement-funds"] });
-      toast({
-        title: "Fund created",
-        description: "New retirement fund added successfully",
-      });
-    },
-    onError: () => {
-      toast({
-        title: "Creation failed",
-        description: "Could not create new fund. Please try again.",
-        variant: "destructive",
-      });
-    },
-  });
-
   const handleFieldUpdate = (id: number, field: keyof UpdateRetirementFund, value: string) => {
     updateFundMutation.mutate({ id, updates: { [field]: value } });
-  };
-
-  const handleAddNewFund = () => {
-    const newFund: InsertRetirementFund = {
-      description: "New Retirement Fund",
-      owner: "John Doe",
-      coverAmount: "R 0",
-      beneficiary: "No beneficiary",
-      beneficiaryPercentage: "100",
-      coverSplit: "0",
-      monthlyIncome: "R 0",
-      termYears: "0",
-      increasePercentage: "0%",
-      lumpSumDeath: "R 0",
-      approvedLifeCover: "R 0",
-      fundValue: "R 0",
-      fundValueAtDeath: "R 0",
-      beneficiaryName: "Spouse",
-      beneficiaryPercentageSplit: "100%",
-      amount: "R 0",
-      lumpSumTaken: "R 0",
-      nondeductibleContribution: "R 0",
-      livingAnnuity: "",
-      incomeTerm: "",
-    };
-    createFundMutation.mutate(newFund);
   };
 
   const handleToggleColumnGroup = (group: keyof ColumnVisibility) => {
@@ -178,7 +131,6 @@ export default function RetirementFunds() {
           columnVisibility={columnVisibility}
           onToggleColumnGroup={handleToggleColumnGroup}
           fundsCount={funds.length}
-          onAddNewFund={handleAddNewFund}
         />
 
         {/* View Content */}
