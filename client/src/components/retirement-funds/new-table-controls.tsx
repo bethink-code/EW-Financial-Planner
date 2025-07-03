@@ -113,9 +113,8 @@ export function NewTableControls({
             </div>
           )}
 
-          {/* Column Visibility Toggles - only show for grouped view */}
-          {viewMode === "grouped" && (
-            <div className="flex gap-1 border-l border-neutral-200 pl-2">
+          {/* Column Visibility Toggles - show for all views */}
+          <div className="flex gap-1 border-l border-neutral-200 pl-2">
               <Button
                 variant="ghost"
                 size="sm"
@@ -182,8 +181,7 @@ export function NewTableControls({
                 {columnVisibility.fundValueBeneficiaries ? <Eye size={12} /> : <EyeOff size={12} />}
                 Beneficiaries
               </Button>
-            </div>
-          )}
+          </div>
         </div>
       </div>
     </div>
