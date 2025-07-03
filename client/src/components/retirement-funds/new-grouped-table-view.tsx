@@ -43,14 +43,8 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
             <th className="px-3 py-2 text-center text-xs font-medium text-neutral-500 uppercase tracking-wider border-l border-neutral-300" colSpan={3}>
               Fund value
             </th>
-            <th className="px-3 py-2 text-center text-xs font-medium text-neutral-500 uppercase tracking-wider border-l border-neutral-300" colSpan={6}>
+            <th className="px-3 py-2 text-center text-xs font-medium text-neutral-500 uppercase tracking-wider border-l border-neutral-300" colSpan={8}>
               Fund value beneficiaries
-            </th>
-            <th className="px-3 py-2 text-center text-xs font-medium text-neutral-500 uppercase tracking-wider border-l border-neutral-300" colSpan={1}>
-              Living Annuity
-            </th>
-            <th className="px-3 py-2 text-center text-xs font-medium text-neutral-500 uppercase tracking-wider border-l border-neutral-300" colSpan={1}>
-              Income from
             </th>
           </tr>
           
@@ -113,11 +107,11 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
             <th className="px-3 py-2 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">
               Non deductible contribution amount
             </th>
-            <th className="px-3 py-2 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider border-l border-neutral-300">
-              
+            <th className="px-3 py-2 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">
+              Living annuity
             </th>
-            <th className="px-3 py-2 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider border-l border-neutral-300">
-              
+            <th className="px-3 py-2 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">
+              Income term
             </th>
           </tr>
         </thead>
@@ -348,12 +342,12 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
               </td>
 
               {/* Living Annuity */}
-              <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900 border-l border-neutral-200">
+              <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900">
                 <span className="text-neutral-600">{fund.livingAnnuity || ""}</span>
               </td>
 
               {/* Income from */}
-              <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900 border-l border-neutral-200">
+              <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900">
                 <span className="text-neutral-600">{fund.incomeTerm || ""}</span>
               </td>
             </tr>
