@@ -130,7 +130,7 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
                   onValueChange={(value) => handleInputChange(fund.id, "owner", value)}
                   disabled={isUpdating}
                 >
-                  <SelectTrigger className="compact-input border-0 bg-transparent focus:bg-white focus:border focus:border-primary hover:bg-teal-50 transition-colors duration-200 group">
+                  <SelectTrigger className="compact-input border-0 focus:bg-white focus:border focus:border-primary hover:bg-teal-50 transition-colors duration-200 group">
                     <SelectValue />
                     <Edit3 size={12} className="ml-1 text-teal-400 opacity-0 group-hover:opacity-100 transition-opacity duration-200" />
                   </SelectTrigger>
@@ -150,7 +150,7 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
                   type="text"
                   value={fund.coverAmount || ""}
                   onChange={(e) => handleInputChange(fund.id, "coverAmount", e.target.value)}
-                  className="compact-input border-0 bg-transparent focus:bg-white focus:border focus:border-primary hover:bg-teal-50 text-right"
+                  className="compact-input border-0 focus:bg-white focus:border focus:border-primary hover:bg-teal-50 text-right"
                   placeholder="R 0"
                   disabled={isUpdating}
                 />
@@ -163,7 +163,7 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
                   onValueChange={(value) => handleInputChange(fund.id, "beneficiary", value)}
                   disabled={isUpdating}
                 >
-                  <SelectTrigger className="compact-input border-0 bg-transparent focus:bg-white focus:border focus:border-primary hover:bg-teal-50 transition-colors duration-200 group">
+                  <SelectTrigger className="compact-input border-0 focus:bg-white focus:border focus:border-primary hover:bg-teal-50 transition-colors duration-200 group">
                     <SelectValue placeholder="No beneficiary" />
                     <Edit3 size={12} className="ml-1 text-teal-400 opacity-0 group-hover:opacity-100 transition-opacity duration-200" />
                   </SelectTrigger>
@@ -183,7 +183,7 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
                   type="text"
                   value={fund.beneficiaryPercentage || ""}
                   onChange={(e) => handleInputChange(fund.id, "beneficiaryPercentage", e.target.value)}
-                  className="compact-input border-0 bg-transparent focus:bg-white focus:border focus:border-primary hover:bg-teal-50 text-right"
+                  className="compact-input border-0 focus:bg-white focus:border focus:border-primary hover:bg-teal-50 text-right"
                   placeholder="100"
                   disabled={isUpdating}
                 />
@@ -195,7 +195,7 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
                   type="text"
                   value={fund.coverSplit || ""}
                   onChange={(e) => handleInputChange(fund.id, "coverSplit", e.target.value)}
-                  className="compact-input border-0 bg-transparent focus:bg-white focus:border focus:border-primary hover:bg-teal-50 text-right"
+                  className="compact-input border-0 focus:bg-white focus:border focus:border-primary hover:bg-teal-50 text-right"
                   placeholder="0"
                   disabled={isUpdating}
                 />
@@ -207,7 +207,7 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
                   type="text"
                   value={fund.monthlyIncome || ""}
                   onChange={(e) => handleInputChange(fund.id, "monthlyIncome", e.target.value)}
-                  className="compact-input border-0 bg-transparent focus:bg-white focus:border focus:border-primary hover:bg-teal-50 text-right"
+                  className="compact-input border-0 focus:bg-white focus:border focus:border-primary hover:bg-teal-50 text-right"
                   placeholder="R 0"
                   disabled={isUpdating}
                 />
@@ -219,7 +219,7 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
                   type="text"
                   value={fund.termYears || ""}
                   onChange={(e) => handleInputChange(fund.id, "termYears", e.target.value)}
-                  className="compact-input border-0 bg-transparent focus:bg-white focus:border focus:border-primary hover:bg-teal-50 text-right"
+                  className="compact-input border-0 focus:bg-white focus:border focus:border-primary hover:bg-teal-50 text-right"
                   placeholder="0"
                   disabled={isUpdating}
                 />
@@ -231,7 +231,7 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
                   type="text"
                   value={fund.increasePercentage || ""}
                   onChange={(e) => handleInputChange(fund.id, "increasePercentage", e.target.value)}
-                  className="compact-input border-0 bg-transparent focus:bg-white focus:border focus:border-primary hover:bg-teal-50 text-right"
+                  className="compact-input border-0 focus:bg-white focus:border focus:border-primary hover:bg-teal-50 text-right"
                   placeholder="0%"
                   disabled={isUpdating}
                 />
@@ -243,7 +243,7 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
                   type="text"
                   value={fund.lumpSumDeath || ""}
                   onChange={(e) => handleInputChange(fund.id, "lumpSumDeath", e.target.value)}
-                  className="compact-input border-0 bg-transparent focus:bg-white focus:border focus:border-primary hover:bg-teal-50 text-right"
+                  className="compact-input border-0 focus:bg-white focus:border focus:border-primary hover:bg-teal-50 text-right"
                   placeholder="R 0"
                   disabled={isUpdating}
                 />
@@ -270,7 +270,7 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
                   type="text"
                   value={fund.beneficiaryName || ""}
                   onChange={(e) => handleInputChange(fund.id, "beneficiaryName", e.target.value)}
-                  className="compact-input border-0 bg-transparent focus:bg-white focus:border focus:border-primary hover:bg-teal-50 text-right"
+                  className="compact-input border-0 focus:bg-white focus:border focus:border-primary hover:bg-teal-50 text-right"
                   placeholder="Beneficiary name"
                   disabled={isUpdating}
                 />
@@ -282,7 +282,7 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
                   type="text"
                   value={fund.beneficiaryPercentageSplit || ""}
                   onChange={(e) => handleInputChange(fund.id, "beneficiaryPercentageSplit", e.target.value)}
-                  className="compact-input border-0 bg-transparent focus:bg-white focus:border focus:border-primary hover:bg-teal-50 text-right"
+                  className="compact-input border-0 focus:bg-white focus:border focus:border-primary hover:bg-teal-50 text-right"
                   placeholder="0%"
                   disabled={isUpdating}
                 />
@@ -294,7 +294,7 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
                   type="text"
                   value={fund.amount || ""}
                   onChange={(e) => handleInputChange(fund.id, "amount", e.target.value)}
-                  className="compact-input border-0 bg-transparent focus:bg-white focus:border focus:border-primary hover:bg-teal-50 text-right"
+                  className="compact-input border-0 focus:bg-white focus:border focus:border-primary hover:bg-teal-50 text-right"
                   placeholder="R 0"
                   disabled={isUpdating}
                 />
@@ -306,7 +306,7 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
                   type="text"
                   value={fund.lumpSumTaken || ""}
                   onChange={(e) => handleInputChange(fund.id, "lumpSumTaken", e.target.value)}
-                  className="compact-input border-0 bg-transparent focus:bg-white focus:border focus:border-primary hover:bg-teal-50 text-right"
+                  className="compact-input border-0 focus:bg-white focus:border focus:border-primary hover:bg-teal-50 text-right"
                   placeholder="R 0"
                   disabled={isUpdating}
                 />
@@ -323,7 +323,7 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
                   type="text"
                   value={fund.nondeductibleContribution || ""}
                   onChange={(e) => handleInputChange(fund.id, "nondeductibleContribution", e.target.value)}
-                  className="compact-input border-0 bg-transparent focus:bg-white focus:border focus:border-primary hover:bg-teal-50 text-right"
+                  className="compact-input border-0 focus:bg-white focus:border focus:border-primary hover:bg-teal-50 text-right"
                   placeholder="R 0"
                   disabled={isUpdating}
                 />
