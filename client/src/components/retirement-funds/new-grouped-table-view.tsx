@@ -31,13 +31,10 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
         <thead>
           {/* First level headers */}
           <tr className="border-b border-neutral-200" style={{ backgroundColor: '#D6ECF5' }}>
-            <th className="min-w-[200px] px-3 py-2 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider" rowSpan={2}>
-              Description
+            <th className="px-3 py-2 text-center text-xs font-medium text-neutral-500 uppercase tracking-wider" colSpan={2}>
+              Overview
             </th>
-            <th className="px-3 py-2 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider" rowSpan={2}>
-              Owner
-            </th>
-            <th className="px-3 py-2 text-center text-xs font-medium text-neutral-500 uppercase tracking-wider" colSpan={1}>
+            <th className="px-3 py-2 text-center text-xs font-medium text-neutral-500 uppercase tracking-wider border-l border-neutral-300" colSpan={1}>
               Cover amount
             </th>
             <th className="px-3 py-2 text-center text-xs font-medium text-neutral-500 uppercase tracking-wider border-l border-neutral-300" colSpan={3}>
@@ -66,6 +63,12 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
           {/* Second level headers */}
           <tr className="border-b border-neutral-200" style={{ backgroundColor: '#D6ECF5' }}>
             <th className="px-3 py-2 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">
+              Description
+            </th>
+            <th className="px-3 py-2 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">
+              Owner
+            </th>
+            <th className="px-3 py-2 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider border-l border-neutral-300">
               Unapproved
             </th>
             <th className="px-3 py-2 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider border-l border-neutral-300">
