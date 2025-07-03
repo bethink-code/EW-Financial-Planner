@@ -8,6 +8,7 @@ interface ColumnVisibility {
   overview: boolean;
   unapprovedLifeCover: boolean;
   monthlyDeathBenefit: boolean;
+  fundValue: boolean;
   fundValueBeneficiaries: boolean;
 }
 
@@ -146,16 +147,20 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
                 </th>
               </>
             )}
-            {/* Fund value section is always visible */}
-            <th className="px-3 py-2 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider border-l border-neutral-300">
-              Approved life cover
-            </th>
-            <th className="px-3 py-2 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">
-              Fund value
-            </th>
-            <th className="px-3 py-2 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider border-r border-neutral-300">
-              Fund value at death
-            </th>
+            {/* Fund Value Section */}
+            {columnVisibility.fundValue && (
+              <>
+                <th className="px-3 py-2 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider border-l border-neutral-300">
+                  Approved life cover
+                </th>
+                <th className="px-3 py-2 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">
+                  Fund value
+                </th>
+                <th className="px-3 py-2 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider border-r border-neutral-300">
+                  Fund value at death
+                </th>
+              </>
+            )}
             {columnVisibility.fundValueBeneficiaries && (
               <>
                 <th className="px-3 py-2 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider border-l border-neutral-300">
@@ -342,32 +347,36 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
                 </>
               )}
 
-              {/* Fund Value Section - Always Visible */}
-              <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900 border-l border-neutral-300">
-                <AutoSizeInput
-                  type="text"
-                  value={fund.approvedLifeCover || ""}
-                  onChange={(e) => handleInputChange(fund.id, "approvedLifeCover", e.target.value)}
-                  className="border-0 focus:bg-white focus:border focus:border-primary hover:bg-teal-50 text-right"
-                  placeholder="R 0"
-                  disabled={isUpdating}
-                />
-              </td>
+              {/* Fund Value Section */}
+              {columnVisibility.fundValue && (
+                <>
+                  <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900 border-l border-neutral-300">
+                    <AutoSizeInput
+                      type="text"
+                      value={fund.approvedLifeCover || ""}
+                      onChange={(e) => handleInputChange(fund.id, "approvedLifeCover", e.target.value)}
+                      className="border-0 focus:bg-white focus:border focus:border-primary hover:bg-teal-50 text-right"
+                      placeholder="R 0"
+                      disabled={isUpdating}
+                    />
+                  </td>
 
-              <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900">
-                <AutoSizeInput
-                  type="text"
-                  value={fund.fundValue || ""}
-                  onChange={(e) => handleInputChange(fund.id, "fundValue", e.target.value)}
-                  className="border-0 focus:bg-white focus:border focus:border-primary hover:bg-teal-50 text-right"
-                  placeholder="R 0"
-                  disabled={isUpdating}
-                />
-              </td>
+                  <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900">
+                    <AutoSizeInput
+                      type="text"
+                      value={fund.fundValue || ""}
+                      onChange={(e) => handleInputChange(fund.id, "fundValue", e.target.value)}
+                      className="border-0 focus:bg-white focus:border focus:border-primary hover:bg-teal-50 text-right"
+                      placeholder="R 0"
+                      disabled={isUpdating}
+                    />
+                  </td>
 
-              <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900 border-r border-neutral-300">
-                <span className="text-neutral-600">{fund.fundValueAtDeath || "R 0"}</span>
-              </td>
+                  <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900 border-r border-neutral-300">
+                    <span className="text-neutral-600">{fund.fundValueAtDeath || "R 0"}</span>
+                  </td>
+                </>
+              )}
 
               {/* Fund Value Beneficiaries Section */}
               {columnVisibility.fundValueBeneficiaries && (
@@ -536,33 +545,37 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
               </>
             )}
             
-            {/* Fund Value Section - Always Visible */}
-            <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900 border-l border-neutral-300">
-              <span className="font-semibold text-right block" style={{ color: '#094161' }}>
-                R {funds.reduce((sum, fund) => {
-                  const amount = parseInt(fund.approvedLifeCover?.replace(/[^0-9]/g, '') || '0');
-                  return sum + amount;
-                }, 0).toLocaleString()}
-              </span>
-            </td>
-            
-            <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900">
-              <span className="font-semibold text-right block" style={{ color: '#094161' }}>
-                R {funds.reduce((sum, fund) => {
-                  const amount = parseInt(fund.fundValue?.replace(/[^0-9]/g, '') || '0');
-                  return sum + amount;
-                }, 0).toLocaleString()}
-              </span>
-            </td>
-            
-            <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900 border-r border-neutral-300">
-              <span className="font-semibold text-right block" style={{ color: '#094161' }}>
-                R {funds.reduce((sum, fund) => {
-                  const amount = parseInt(fund.fundValueAtDeath?.replace(/[^0-9]/g, '') || '0');
-                  return sum + amount;
-                }, 0).toLocaleString()}
-              </span>
-            </td>
+            {/* Fund Value Section */}
+            {columnVisibility.fundValue && (
+              <>
+                <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900 border-l border-neutral-300">
+                  <span className="font-semibold text-right block" style={{ color: '#094161' }}>
+                    R {funds.reduce((sum, fund) => {
+                      const amount = parseInt(fund.approvedLifeCover?.replace(/[^0-9]/g, '') || '0');
+                      return sum + amount;
+                    }, 0).toLocaleString()}
+                  </span>
+                </td>
+                
+                <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900">
+                  <span className="font-semibold text-right block" style={{ color: '#094161' }}>
+                    R {funds.reduce((sum, fund) => {
+                      const amount = parseInt(fund.fundValue?.replace(/[^0-9]/g, '') || '0');
+                      return sum + amount;
+                    }, 0).toLocaleString()}
+                  </span>
+                </td>
+                
+                <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900 border-r border-neutral-300">
+                  <span className="font-semibold text-right block" style={{ color: '#094161' }}>
+                    R {funds.reduce((sum, fund) => {
+                      const amount = parseInt(fund.fundValueAtDeath?.replace(/[^0-9]/g, '') || '0');
+                      return sum + amount;
+                    }, 0).toLocaleString()}
+                  </span>
+                </td>
+              </>
+            )}
             
             {/* Fund Value Beneficiaries Section */}
             {columnVisibility.fundValueBeneficiaries && (

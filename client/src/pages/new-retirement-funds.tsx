@@ -14,6 +14,7 @@ interface ColumnVisibility {
   overview: boolean;
   unapprovedLifeCover: boolean;
   monthlyDeathBenefit: boolean;
+  fundValue: boolean;
   fundValueBeneficiaries: boolean;
 }
 
@@ -25,6 +26,7 @@ export default function NewRetirementFunds() {
     overview: true,
     unapprovedLifeCover: true,
     monthlyDeathBenefit: true,
+    fundValue: true,
     fundValueBeneficiaries: true,
   });
 

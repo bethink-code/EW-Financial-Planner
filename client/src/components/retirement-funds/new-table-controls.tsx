@@ -6,6 +6,7 @@ interface ColumnVisibility {
   overview: boolean;
   unapprovedLifeCover: boolean;
   monthlyDeathBenefit: boolean;
+  fundValue: boolean;
   fundValueBeneficiaries: boolean;
 }
 
@@ -153,6 +154,19 @@ export function NewTableControls({
               >
                 {columnVisibility.monthlyDeathBenefit ? <Eye size={12} /> : <EyeOff size={12} />}
                 Monthly Benefit
+              </Button>
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => onToggleColumnGroup("fundValue")}
+                className={`h-8 px-2 text-xs ${
+                  columnVisibility.fundValue
+                    ? "text-blue-700 bg-blue-50"
+                    : "text-neutral-500"
+                }`}
+              >
+                {columnVisibility.fundValue ? <Eye size={12} /> : <EyeOff size={12} />}
+                Fund Value
               </Button>
               <Button
                 variant="ghost"
