@@ -59,10 +59,19 @@ export default function NewRetirementFunds() {
   };
 
   const handleToggleColumnGroup = (group: keyof ColumnVisibility) => {
-    setColumnVisibility(prev => ({
-      ...prev,
-      [group]: !prev[group]
-    }));
+    if (document.startViewTransition) {
+      document.startViewTransition(() => {
+        setColumnVisibility(prev => ({
+          ...prev,
+          [group]: !prev[group]
+        }));
+      });
+    } else {
+      setColumnVisibility(prev => ({
+        ...prev,
+        [group]: !prev[group]
+      }));
+    }
   };
 
   // Filter funds based on search query

@@ -45,6 +45,86 @@
   }
 }
 
+/* Section visibility transitions */
+.section-enter {
+  animation: sectionSlideIn 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.section-exit {
+  animation: sectionSlideOut 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@keyframes sectionSlideIn {
+  from {
+    opacity: 0;
+    transform: translateX(-10px);
+    max-width: 0;
+    overflow: hidden;
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+    max-width: 100%;
+    overflow: visible;
+  }
+}
+
+@keyframes sectionSlideOut {
+  from {
+    opacity: 1;
+    transform: translateX(0);
+    max-width: 100%;
+    overflow: visible;
+  }
+  to {
+    opacity: 0;
+    transform: translateX(-10px);
+    max-width: 0;
+    overflow: hidden;
+  }
+}
+
+/* Smooth transitions for table columns and sections */
+th, td {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Column visibility transitions */
+.column-hidden {
+  opacity: 0;
+  transform: scaleX(0);
+  max-width: 0;
+  padding-left: 0;
+  padding-right: 0;
+  border-width: 0;
+  overflow: hidden;
+}
+
+.column-visible {
+  opacity: 1;
+  transform: scaleX(1);
+  max-width: none;
+  overflow: visible;
+}
+
+/* Card section transitions */
+.card-section {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  overflow: hidden;
+}
+
+.card-section-hidden {
+  opacity: 0;
+  max-height: 0;
+  margin: 0;
+  padding: 0;
+}
+
+.card-section-visible {
+  opacity: 1;
+  max-height: 1000px;
+}
+
 :root {
   --background: hsl(0, 0%, 100%);
   --foreground: hsl(220, 13%, 18%);
