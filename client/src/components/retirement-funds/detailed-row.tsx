@@ -109,8 +109,8 @@ export function DetailedRow({ fund, columnVisibility, onFieldUpdate, isUpdating 
 
           {/* Unapproved Life Cover Section */}
           {columnVisibility.unapprovedLifeCover && (
-            <div className="bg-orange-50 rounded-lg p-3">
-              <h4 className="text-sm font-bold text-orange-700 mb-3">Unapproved Life Cover</h4>
+            <div className="bg-teal-50 rounded-lg p-3">
+              <h4 className="text-sm font-bold text-teal-700 mb-3">Unapproved Life Cover</h4>
               <div className="grid grid-cols-2 gap-3">
                 <div>
                   <Label className="text-xs text-neutral-600">Cover Amount</Label>
@@ -167,8 +167,8 @@ export function DetailedRow({ fund, columnVisibility, onFieldUpdate, isUpdating 
 
           {/* Monthly Death Benefit Section */}
           {columnVisibility.monthlyDeathBenefit && (
-            <div className="bg-blue-50 rounded-lg p-3">
-              <h4 className="text-sm font-bold text-blue-700 mb-3">Monthly Death Benefit</h4>
+            <div className="bg-teal-50 rounded-lg p-3">
+              <h4 className="text-sm font-bold text-teal-700 mb-3">Monthly Death Benefit</h4>
               <div className="grid grid-cols-2 gap-3">
                 <div>
                   <Label className="text-xs text-neutral-600">Monthly Income</Label>
@@ -215,8 +215,8 @@ export function DetailedRow({ fund, columnVisibility, onFieldUpdate, isUpdating 
 
           {/* Fund Value Section */}
           {columnVisibility.fundValue && (
-            <div className="bg-green-50 rounded-lg p-3">
-              <h4 className="text-sm font-bold text-green-700 mb-3">Fund Value</h4>
+            <div className="bg-teal-50 rounded-lg p-3">
+              <h4 className="text-sm font-bold text-teal-700 mb-3">Fund Value</h4>
               <div className="grid grid-cols-2 gap-3">
                 <div>
                   <Label className="text-xs text-neutral-600">Approved Life Cover</Label>
@@ -250,8 +250,8 @@ export function DetailedRow({ fund, columnVisibility, onFieldUpdate, isUpdating 
 
           {/* Fund Value Beneficiaries Section */}
           {columnVisibility.fundValueBeneficiaries && (
-            <div className="bg-purple-50 rounded-lg p-3">
-              <h4 className="text-sm font-bold text-purple-700 mb-3">Fund Value Beneficiaries</h4>
+            <div className="bg-teal-50 rounded-lg p-3">
+              <h4 className="text-sm font-bold text-teal-700 mb-3">Fund Value Beneficiaries</h4>
               <div className="grid grid-cols-2 gap-3">
                 <div>
                   <Label className="text-xs text-neutral-600">Beneficiary Name</Label>
