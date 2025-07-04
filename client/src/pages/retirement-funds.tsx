@@ -3,18 +3,20 @@ import { useQuery, useMutation } from "@tanstack/react-query";
 import { PiggyBank, Bell, UserCircle } from "lucide-react";
 import { TableControls } from "@/components/retirement-funds/table-controls";
 import { GroupedTableView } from "@/components/retirement-funds/grouped-table-view";
-import { CardsView } from "@/components/retirement-funds/cards-view";
+
 import { DetailedView } from "@/components/retirement-funds/detailed-view";
 import { queryClient, apiRequest } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
 import type { RetirementFund, UpdateRetirementFund } from "@shared/schema";
 
-type ViewMode = "grouped" | "cards" | "detailed";
+type ViewMode = "grouped" | "detailed";
 
 interface ColumnVisibility {
-  basicInfo: boolean;
-  deathBenefits: boolean;
-  financialDetails: boolean;
+  overview: boolean;
+  unapprovedLifeCover: boolean;
+  monthlyDeathBenefit: boolean;
+  fundValue: boolean;
+  fundValueBeneficiaries: boolean;
 }
 
 export default function RetirementFunds() {
@@ -22,9 +24,11 @@ export default function RetirementFunds() {
   const [searchQuery, setSearchQuery] = useState("");
   const [debouncedSearch, setDebouncedSearch] = useState("");
   const [columnVisibility, setColumnVisibility] = useState<ColumnVisibility>({
-    basicInfo: true,
-    deathBenefits: true,
-    financialDetails: true,
+    overview: true,
+    unapprovedLifeCover: true,
+    monthlyDeathBenefit: true,
+    fundValue: true,
+    fundValueBeneficiaries: true,
   });
   
   const { toast } = useToast();
@@ -37,18 +41,7 @@ export default function RetirementFunds() {
     return () => clearTimeout(timer);
   }, [searchQuery]);
 
-  // Auto-switch to cards view on mobile
-  useEffect(() => {
-    const handleResize = () => {
-      if (window.innerWidth < 768 && viewMode === "grouped") {
-        setViewMode("cards");
-      }
-    };
 
-    handleResize(); // Check on mount
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, [viewMode]);
 
   // Fetch retirement funds
   const { data: funds = [], isLoading } = useQuery({
@@ -152,16 +145,11 @@ export default function RetirementFunds() {
                 isUpdating={updateFundMutation.isPending}
               />
             )}
-            {viewMode === "cards" && (
-              <CardsView
-                funds={funds}
-                onFieldUpdate={handleFieldUpdate}
-                isUpdating={updateFundMutation.isPending}
-              />
-            )}
+
             {viewMode === "detailed" && (
               <DetailedView
                 funds={funds}
+                columnVisibility={columnVisibility}
                 onFieldUpdate={handleFieldUpdate}
                 isUpdating={updateFundMutation.isPending}
               />
@@ -178,7 +166,7 @@ export default function RetirementFunds() {
             <div>
               <h4 className="text-xs font-medium text-primary">Mobile View Active</h4>
               <p className="text-xs text-neutral-600 mt-0.5">
-                For best experience, use Cards or Detailed view on mobile devices.
+                For best experience, use Detailed view on mobile devices.
               </p>
             </div>
           </div>

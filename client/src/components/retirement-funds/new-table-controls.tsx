@@ -17,8 +17,8 @@ interface ColumnVisibility {
 }
 
 interface NewTableControlsProps {
-  viewMode: "grouped" | "cards" | "detailed";
-  onViewModeChange: (mode: "grouped" | "cards" | "detailed") => void;
+  viewMode: "grouped" | "detailed";
+  onViewModeChange: (mode: "grouped" | "detailed") => void;
   tableMode: "inputs" | "flows";
   onTableModeChange: (mode: "inputs" | "flows") => void;
   searchQuery: string;
@@ -77,15 +77,7 @@ export function NewTableControls({
               <Table size={14} className="mr-1" />
               Table
             </Button>
-            <Button
-              variant={viewMode === "cards" ? "default" : "ghost"}
-              size="sm"
-              onClick={() => onViewModeChange("cards")}
-              className="rounded-none border-0 border-l border-neutral-200 h-8 px-3"
-            >
-              <Layout size={14} className="mr-1" />
-              Cards
-            </Button>
+
             <Button
               variant={viewMode === "detailed" ? "default" : "ghost"}
               size="sm"

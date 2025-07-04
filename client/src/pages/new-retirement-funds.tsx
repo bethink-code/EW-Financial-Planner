@@ -4,11 +4,11 @@ import { RetirementFund, UpdateRetirementFund } from "@shared/schema";
 import { queryClient, apiRequest } from "@/lib/queryClient";
 import { NewTableControls } from "@/components/retirement-funds/new-table-controls";
 import { NewGroupedTableView } from "@/components/retirement-funds/new-grouped-table-view";
-import { CardsView } from "@/components/retirement-funds/cards-view";
+
 import { DetailedView } from "@/components/retirement-funds/detailed-view";
 import { Input } from "@/components/ui/input";
 
-type ViewMode = "grouped" | "cards" | "detailed";
+type ViewMode = "grouped" | "detailed";
 
 interface ColumnVisibility {
   overview: boolean;
@@ -228,17 +228,7 @@ export default function NewRetirementFunds() {
           </>
         )}
 
-        {viewMode === "cards" && (
-          <div style={{ viewTransitionName: 'cards-view' }}>
-            <CardsView
-              funds={filteredFunds}
-              columnVisibility={columnVisibility}
-              onFieldUpdate={handleFieldUpdate}
-              isUpdating={updateMutation.isPending}
-              tableMode={tableMode}
-            />
-          </div>
-        )}
+
 
         {viewMode === "detailed" && (
           <>

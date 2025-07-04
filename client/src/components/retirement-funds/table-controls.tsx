@@ -1,18 +1,20 @@
-import { Search, Filter, Plus, Table, Grid3x3, List } from "lucide-react";
+import { Search, Filter, Plus, Table, List } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Badge } from "@/components/ui/badge";
 
 interface ColumnVisibility {
-  basicInfo: boolean;
-  deathBenefits: boolean;
-  financialDetails: boolean;
+  overview: boolean;
+  unapprovedLifeCover: boolean;
+  monthlyDeathBenefit: boolean;
+  fundValue: boolean;
+  fundValueBeneficiaries: boolean;
 }
 
 interface TableControlsProps {
-  viewMode: "grouped" | "cards" | "detailed";
-  onViewModeChange: (mode: "grouped" | "cards" | "detailed") => void;
+  viewMode: "grouped" | "detailed";
+  onViewModeChange: (mode: "grouped" | "detailed") => void;
   searchQuery: string;
   onSearchChange: (query: string) => void;
   columnVisibility: ColumnVisibility;
@@ -31,7 +33,6 @@ export function TableControls({
 }: TableControlsProps) {
   const viewModes = [
     { id: "grouped", label: "Grouped", icon: Table },
-    { id: "cards", label: "Cards", icon: Grid3x3 },
     { id: "detailed", label: "Detailed", icon: List },
   ] as const;
 

@@ -5,9 +5,11 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import type { RetirementFund, UpdateRetirementFund } from "@shared/schema";
 
 interface ColumnVisibility {
-  basicInfo: boolean;
-  deathBenefits: boolean;
-  financialDetails: boolean;
+  overview: boolean;
+  unapprovedLifeCover: boolean;
+  monthlyDeathBenefit: boolean;
+  fundValue: boolean;
+  fundValueBeneficiaries: boolean;
 }
 
 interface GroupedTableViewProps {
