@@ -241,15 +241,76 @@ export default function NewRetirementFunds() {
         )}
 
         {viewMode === "detailed" && (
-          <div className="bg-white rounded-lg shadow-sm border border-neutral-200" style={{ viewTransitionName: 'detailed-view' }}>
-            <DetailedView
-              funds={filteredFunds}
-              columnVisibility={columnVisibility}
-              onFieldUpdate={handleFieldUpdate}
-              isUpdating={updateMutation.isPending}
-              tableMode={tableMode}
-            />
-          </div>
+          <>
+            {/* Summary Section for Hybrid View */}
+            {tableMode === "inputs" && (
+              <div className="bg-white rounded-lg shadow-sm border border-neutral-200 p-6 mb-4">
+                <h2 className="text-xl font-bold text-neutral-900 mb-4">Summary</h2>
+                <div className="grid grid-cols-2 lg:grid-cols-5 gap-4">
+                  <div style={{ backgroundColor: '#F9F0E5' }} className="rounded-lg p-4 text-center">
+                    <div className="text-xs font-medium text-neutral-600 mb-1">Cover Amount</div>
+                    <div className="text-lg font-bold text-neutral-900">
+                      R {filteredFunds.reduce((sum, fund) => {
+                        const value = fund.coverAmount as string;
+                        const amount = parseFloat(value.replace(/[^\d.-]/g, '')) || 0;
+                        return sum + amount;
+                      }, 0).toLocaleString()}
+                    </div>
+                  </div>
+                  <div style={{ backgroundColor: '#F9F0E5' }} className="rounded-lg p-4 text-center">
+                    <div className="text-xs font-medium text-neutral-600 mb-1">Monthly Income</div>
+                    <div className="text-lg font-bold text-neutral-900">
+                      R {filteredFunds.reduce((sum, fund) => {
+                        const value = fund.monthlyIncome as string;
+                        const amount = parseFloat(value.replace(/[^\d.-]/g, '')) || 0;
+                        return sum + amount;
+                      }, 0).toLocaleString()}
+                    </div>
+                  </div>
+                  <div style={{ backgroundColor: '#F9F0E5' }} className="rounded-lg p-4 text-center">
+                    <div className="text-xs font-medium text-neutral-600 mb-1">Approved Life Cover</div>
+                    <div className="text-lg font-bold text-neutral-900">
+                      R {filteredFunds.reduce((sum, fund) => {
+                        const value = fund.approvedLifeCover as string;
+                        const amount = parseFloat(value.replace(/[^\d.-]/g, '')) || 0;
+                        return sum + amount;
+                      }, 0).toLocaleString()}
+                    </div>
+                  </div>
+                  <div style={{ backgroundColor: '#F9F0E5' }} className="rounded-lg p-4 text-center">
+                    <div className="text-xs font-medium text-neutral-600 mb-1">Fund Value</div>
+                    <div className="text-lg font-bold text-neutral-900">
+                      R {filteredFunds.reduce((sum, fund) => {
+                        const value = fund.fundValue as string;
+                        const amount = parseFloat(value.replace(/[^\d.-]/g, '')) || 0;
+                        return sum + amount;
+                      }, 0).toLocaleString()}
+                    </div>
+                  </div>
+                  <div style={{ backgroundColor: '#F9F0E5' }} className="rounded-lg p-4 text-center">
+                    <div className="text-xs font-medium text-neutral-600 mb-1">Fund Value at Death</div>
+                    <div className="text-lg font-bold text-neutral-900">
+                      R {filteredFunds.reduce((sum, fund) => {
+                        const value = fund.fundValueAtDeath as string;
+                        const amount = parseFloat(value.replace(/[^\d.-]/g, '')) || 0;
+                        return sum + amount;
+                      }, 0).toLocaleString()}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            <div className="bg-white rounded-lg shadow-sm border border-neutral-200" style={{ viewTransitionName: 'detailed-view' }}>
+              <DetailedView
+                funds={filteredFunds}
+                columnVisibility={columnVisibility}
+                onFieldUpdate={handleFieldUpdate}
+                isUpdating={updateMutation.isPending}
+                tableMode={tableMode}
+              />
+            </div>
+          </>
         )}
       </div>
     </div>
