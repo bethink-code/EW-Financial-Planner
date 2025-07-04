@@ -1,7 +1,6 @@
 import { RetirementFund, UpdateRetirementFund } from "@shared/schema";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { SummarySection } from "./summary-section";
 import { Edit3 } from "lucide-react";
 import { useRef, useEffect } from "react";
 
@@ -73,13 +72,8 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
   const owners = ["John Doe", "Jane Smith"];
 
   return (
-    <div className="space-y-6">
-      {/* Summary Section */}
-      <SummarySection funds={funds} tableMode={tableMode} />
-      
-      {/* Table Section */}
-      <div className="overflow-x-auto">
-        <table className="min-w-full bg-white table-auto">
+    <div className="overflow-x-auto">
+      <table className="min-w-full bg-white table-auto">
         <thead>
           {/* First level headers */}
           <tr className="border-b border-neutral-200" style={{ backgroundColor: '#D6ECF5' }}>
@@ -631,7 +625,6 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
           </tr>
         </tbody>
       </table>
-      </div>
     </div>
   );
 }
