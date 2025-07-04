@@ -188,6 +188,7 @@ export default function NewRetirementFunds() {
               columnVisibility={columnVisibility}
               onFieldUpdate={handleFieldUpdate}
               isUpdating={updateMutation.isPending}
+              tableMode={tableMode}
             />
           </div>
         )}

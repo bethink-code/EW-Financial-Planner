@@ -1,4 +1,5 @@
 import { DetailedRow } from "./detailed-row";
+import { SummarySection } from "./summary-section";
 import type { RetirementFund, UpdateRetirementFund } from "@shared/schema";
 
 interface ColumnVisibility {
@@ -14,12 +15,18 @@ interface DetailedViewProps {
   columnVisibility: ColumnVisibility;
   onFieldUpdate: (id: number, field: keyof UpdateRetirementFund, value: string) => void;
   isUpdating: boolean;
+  tableMode?: "inputs" | "flows";
 }
 
-export function DetailedView({ funds, columnVisibility, onFieldUpdate, isUpdating }: DetailedViewProps) {
+export function DetailedView({ funds, columnVisibility, onFieldUpdate, isUpdating, tableMode = "inputs" }: DetailedViewProps) {
   return (
-    <div className="bg-white rounded-lg shadow-sm border border-neutral-200 overflow-hidden">
-      <div className="divide-y divide-neutral-200">
+    <div className="space-y-6">
+      {/* Summary Section */}
+      <SummarySection funds={funds} tableMode={tableMode} />
+      
+      {/* Detailed Items */}
+      <div className="bg-white rounded-lg shadow-sm border border-neutral-200 overflow-hidden">
+        <div className="divide-y divide-neutral-200">
         {funds.map((fund) => (
           <DetailedRow
             key={fund.id}
@@ -29,6 +36,7 @@ export function DetailedView({ funds, columnVisibility, onFieldUpdate, isUpdatin
             isUpdating={isUpdating}
           />
         ))}
+        </div>
       </div>
     </div>
   );
