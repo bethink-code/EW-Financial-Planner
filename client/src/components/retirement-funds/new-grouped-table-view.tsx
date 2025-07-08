@@ -269,13 +269,10 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
     );
   };
 
-  // If we're in flows mode, render the flows table instead
-  if (tableMode === "flows") {
-    return renderFlowsTable();
-  }
-
   return (
-    <div className="overflow-x-auto">
+    <div className="space-y-6">
+      {/* Always show the inputs table */}
+      <div className="overflow-x-auto">
       <table className="min-w-full bg-white table-auto">
         <thead>
           {/* First level headers */}
@@ -828,6 +825,10 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
           </tr>
         </tbody>
       </table>
+      </div>
+      
+      {/* Show flows table when in flows mode */}
+      {tableMode === "flows" && renderFlowsTable()}
     </div>
   );
 }
