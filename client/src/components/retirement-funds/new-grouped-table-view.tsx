@@ -559,25 +559,6 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
                 </td>
               </>
               )}
-              {columnVisibility.fundValueBeneficiaries && (
-                <>
-                  <td className="p-2 text-right ">
-                    
-                  </td>
-                  <td className="p-2 text-right ">
-                    
-                  </td>
-                  <td className="p-2 text-right ">
-                    
-                  </td>
-                  <td className="p-2 text-right ">
-                    
-                  </td>
-                  <td className="p-2 text-right ">
-                    
-                  </td>
-                </>
-              )}
               {columnVisibility.monthlyDeathBenefit && (
                 <>
                   <td className="p-2 text-right ">
@@ -597,21 +578,31 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
                   </td>
                 </>
               )}
-              {columnVisibility.fundValue && (
+              {columnVisibility.fundValueBeneficiaries && (
                 <>
                   <td className="p-2 text-right ">
                     <span className="font-bold text-right table-text-14 compact-total-span" style={{ color: '#094161' }}>
-                      0
+                      0%
                     </span>
                   </td>
                   <td className="p-2 text-right ">
                     <span className="font-bold text-right table-text-14 compact-total-span" style={{ color: '#094161' }}>
-                      0
+                      0%
                     </span>
                   </td>
-                  <td className="p-2 text-right  border-r border-neutral-300">
+                  <td className="p-2 text-right ">
                     <span className="font-bold text-right table-text-14 compact-total-span" style={{ color: '#094161' }}>
                       0%
+                    </span>
+                  </td>
+                  <td className="p-2 text-right">
+                    <span className="font-bold text-right table-text-14 compact-total-span" style={{ color: '#094161' }}>
+                      3.5%
+                    </span>
+                  </td>
+                  <td className="p-2 text-right">
+                    <span className="font-bold text-right table-text-14 compact-total-span" style={{ color: '#094161' }}>
+                      1.75%
                     </span>
                   </td>
                 </>
