@@ -51,14 +51,23 @@ const AutoSizeInput = ({ value, onChange, className, placeholder, disabled, styl
   }, [value, placeholder]);
 
   return (
-    <Input
+    <input
       ref={inputRef}
+      type="text"
       value={value}
       onChange={onChange}
-      className={`${className} auto-size-input text-right`}
+      className={`${className} p-1 text-xs bg-transparent border-none`}
       placeholder={placeholder}
       disabled={disabled}
-      style={{ ...style, minWidth: '60px', maxWidth: '250px', textAlign: 'right', width: '100%' }}
+      style={{ 
+        ...style, 
+        minWidth: '60px', 
+        maxWidth: '250px', 
+        textAlign: 'right', 
+        width: '100%',
+        outline: 'none',
+        background: 'transparent'
+      }}
       {...props}
     />
   );
