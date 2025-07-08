@@ -71,6 +71,209 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
 
   const owners = ["John Doe", "Jane Smith"];
 
+  const renderEditableCell = (value: string, onChange: (value: string) => void, className = "") => {
+    return (
+      <AutoSizeInput
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
+        className={`p-1 text-xs text-right bg-transparent border-none ${className}`}
+        style={{ textAlign: 'right', minWidth: '60px' }}
+        disabled={isUpdating}
+      />
+    );
+  };
+
+  // Flows table structure - following exact same patterns as inputs table
+  const renderFlowsTable = () => {
+    return (
+      <div className="space-y-4">
+        {/* Lump sum life cover available as provision to */}
+        {columnVisibility.overview && (
+          <div style={{ backgroundColor: '#F0F9FF' }} className="border border-teal-200 rounded-lg p-4">
+            <h3 className="text-sm font-semibold text-teal-800 mb-3">Lump sum life cover available as provision to</h3>
+            <div className="overflow-x-auto">
+              <table className="w-full text-xs border-collapse">
+                <thead>
+                  <tr className="border-b border-teal-200">
+                    <th className="text-left p-2 w-32">Client name</th>
+                    <th className="text-right p-2 w-20">Estate</th>
+                    <th className="text-right p-2 w-20">Spouse</th>
+                    <th className="text-right p-2 w-20">Child</th>
+                    <th className="text-right p-2 w-20">Amount</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {funds.map((fund, index) => (
+                    <tr key={fund.id} className={index % 2 === 0 ? "bg-white" : "bg-teal-50/30"}>
+                      <td className="p-2 border-r border-teal-100">{fund.description}</td>
+                      <td className="p-2 text-right border-r border-teal-100">
+                        {renderEditableCell(fund.lumpSumLeftOverProvisions || "0", (value) => onFieldUpdate(fund.id, "lumpSumLeftOverProvisions", value))}
+                      </td>
+                      <td className="p-2 text-right border-r border-teal-100">
+                        {renderEditableCell(fund.lumpSumLeftOverProvisions || "0", (value) => onFieldUpdate(fund.id, "lumpSumLeftOverProvisions", value))}
+                      </td>
+                      <td className="p-2 text-right border-r border-teal-100">
+                        {renderEditableCell(fund.lumpSumLeftOverProvisions || "0", (value) => onFieldUpdate(fund.id, "lumpSumLeftOverProvisions", value))}
+                      </td>
+                      <td className="p-2 text-right">
+                        {renderEditableCell(fund.lumpSumLeftOverProvisions || "0", (value) => onFieldUpdate(fund.id, "lumpSumLeftOverProvisions", value))}
+                      </td>
+                    </tr>
+                  ))}
+                  <tr className="bg-gray-100 font-semibold border-t-2 border-teal-300">
+                    <td className="p-2 border-r border-teal-100">Total</td>
+                    <td className="p-2 text-right border-r border-teal-100">0</td>
+                    <td className="p-2 text-right border-r border-teal-100">0</td>
+                    <td className="p-2 text-right border-r border-teal-100">0</td>
+                    <td className="p-2 text-right">0</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        )}
+
+        {/* Income provision options */}
+        {columnVisibility.monthlyDeathBenefit && (
+          <div style={{ backgroundColor: '#F0F9FF' }} className="border border-teal-200 rounded-lg p-4">
+            <h3 className="text-sm font-semibold text-teal-800 mb-3">Income provision options</h3>
+            <div className="overflow-x-auto">
+              <table className="w-full text-xs border-collapse">
+                <thead>
+                  <tr className="border-b border-teal-200">
+                    <th className="text-left p-2 w-32">Client name</th>
+                    <th className="text-right p-2 w-24">Term (years)</th>
+                    <th className="text-right p-2 w-24">Payments</th>
+                    <th className="text-right p-2 w-20">Amount</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {funds.map((fund, index) => (
+                    <tr key={fund.id} className={index % 2 === 0 ? "bg-white" : "bg-teal-50/30"}>
+                      <td className="p-2 border-r border-teal-100">{fund.description}</td>
+                      <td className="p-2 text-right border-r border-teal-100">
+                        {renderEditableCell(fund.incomeTerm || "0", (value) => onFieldUpdate(fund.id, "incomeTerm", value))}
+                      </td>
+                      <td className="p-2 text-right border-r border-teal-100">
+                        {renderEditableCell(fund.monthlyProvisionOffered || "0", (value) => onFieldUpdate(fund.id, "monthlyProvisionOffered", value))}
+                      </td>
+                      <td className="p-2 text-right">
+                        {renderEditableCell(fund.currentAnnualIncome || "0", (value) => onFieldUpdate(fund.id, "currentAnnualIncome", value))}
+                      </td>
+                    </tr>
+                  ))}
+                  <tr className="bg-gray-100 font-semibold border-t-2 border-teal-300">
+                    <td className="p-2 border-r border-teal-100">Total</td>
+                    <td className="p-2 text-right border-r border-teal-100">0</td>
+                    <td className="p-2 text-right border-r border-teal-100">0</td>
+                    <td className="p-2 text-right">0</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        )}
+
+        {/* Annual costs */}
+        {columnVisibility.fundValue && (
+          <div style={{ backgroundColor: '#F0F9FF' }} className="border border-teal-200 rounded-lg p-4">
+            <h3 className="text-sm font-semibold text-teal-800 mb-3">Annual costs</h3>
+            <div className="overflow-x-auto">
+              <table className="w-full text-xs border-collapse">
+                <thead>
+                  <tr className="border-b border-teal-200">
+                    <th className="text-left p-2 w-32">Client name</th>
+                    <th className="text-right p-2 w-24">Estate duty (incl tax on proceeds)</th>
+                    <th className="text-right p-2 w-24">Estate duty (ex capital)</th>
+                    <th className="text-right p-2 w-20">Executors fee</th>
+                    <th className="text-right p-2 w-20">Master's fee</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {funds.map((fund, index) => (
+                    <tr key={fund.id} className={index % 2 === 0 ? "bg-white" : "bg-teal-50/30"}>
+                      <td className="p-2 border-r border-teal-100">{fund.description}</td>
+                      <td className="p-2 text-right border-r border-teal-100">
+                        {renderEditableCell(fund.estateDeploymentDeceased || "0", (value) => onFieldUpdate(fund.id, "estateDeploymentDeceased", value))}
+                      </td>
+                      <td className="p-2 text-right border-r border-teal-100">
+                        {renderEditableCell(fund.annualIncomeAtDeath || "0", (value) => onFieldUpdate(fund.id, "annualIncomeAtDeath", value))}
+                      </td>
+                      <td className="p-2 text-right border-r border-teal-100">
+                        {renderEditableCell(fund.executorsFee || "0", (value) => onFieldUpdate(fund.id, "executorsFee", value))}
+                      </td>
+                      <td className="p-2 text-right">
+                        {renderEditableCell(fund.mastersFee || "0", (value) => onFieldUpdate(fund.id, "mastersFee", value))}
+                      </td>
+                    </tr>
+                  ))}
+                  <tr className="bg-gray-100 font-semibold border-t-2 border-teal-300">
+                    <td className="p-2 border-r border-teal-100">Total</td>
+                    <td className="p-2 text-right border-r border-teal-100">0</td>
+                    <td className="p-2 text-right border-r border-teal-100">0</td>
+                    <td className="p-2 text-right border-r border-teal-100">0</td>
+                    <td className="p-2 text-right">0</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        )}
+
+        {/* Percentage included for */}
+        {columnVisibility.fundValueBeneficiaries && (
+          <div style={{ backgroundColor: '#F0F9FF' }} className="border border-teal-200 rounded-lg p-4">
+            <h3 className="text-sm font-semibold text-teal-800 mb-3">Percentage included for</h3>
+            <div className="overflow-x-auto">
+              <table className="w-full text-xs border-collapse">
+                <thead>
+                  <tr className="border-b border-teal-200">
+                    <th className="text-left p-2 w-32">Client name</th>
+                    <th className="text-right p-2 w-20">Estate</th>
+                    <th className="text-right p-2 w-20">Spouse</th>
+                    <th className="text-right p-2 w-20">Children</th>
+                    <th className="text-right p-2 w-20">Total</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {funds.map((fund, index) => (
+                    <tr key={fund.id} className={index % 2 === 0 ? "bg-white" : "bg-teal-50/30"}>
+                      <td className="p-2 border-r border-teal-100">{fund.description}</td>
+                      <td className="p-2 text-right border-r border-teal-100">
+                        {renderEditableCell("0", (value) => onFieldUpdate(fund.id, "beneficiaryPercentageSplit", value))}
+                      </td>
+                      <td className="p-2 text-right border-r border-teal-100">
+                        {renderEditableCell("0", (value) => onFieldUpdate(fund.id, "beneficiaryPercentageSplit", value))}
+                      </td>
+                      <td className="p-2 text-right border-r border-teal-100">
+                        {renderEditableCell("0", (value) => onFieldUpdate(fund.id, "beneficiaryPercentageSplit", value))}
+                      </td>
+                      <td className="p-2 text-right">
+                        {renderEditableCell("0", (value) => onFieldUpdate(fund.id, "beneficiaryPercentageSplit", value))}
+                      </td>
+                    </tr>
+                  ))}
+                  <tr className="bg-gray-100 font-semibold border-t-2 border-teal-300">
+                    <td className="p-2 border-r border-teal-100">Total</td>
+                    <td className="p-2 text-right border-r border-teal-100">0</td>
+                    <td className="p-2 text-right border-r border-teal-100">0</td>
+                    <td className="p-2 text-right border-r border-teal-100">0</td>
+                    <td className="p-2 text-right">0</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        )}
+      </div>
+    );
+  };
+
+  // If we're in flows mode, render the flows table instead
+  if (tableMode === "flows") {
+    return renderFlowsTable();
+  }
+
   return (
     <div className="overflow-x-auto">
       <table className="min-w-full bg-white table-auto">

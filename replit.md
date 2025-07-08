@@ -91,6 +91,7 @@ The application has been successfully streamlined with the Cards view completely
 - **Dual View System**: Table and Hybrid views with seamless switching
 - **Column Visibility Controls**: Toggle different data sections on/off
 - **Table/Flows Mode Toggle**: Switch between input mode and flow calculations
+- **Flows Table**: Complete flows table in table view only (separate from inputs table)
 - **Search Functionality**: Real-time fund search across multiple fields
 - **Consistent Styling**: Unified teal-themed section styling across all views
 - **Responsive Design**: Mobile-optimized interface with adaptive column grids
@@ -139,3 +140,4 @@ Changelog:
 - July 02, 2025: Updated all input field content to right-align text across all view modes for consistent data presentation  
 - July 04, 2025: **CHECKPOINT** - Removed Cards view entirely, applied consistent teal styling to all hybrid view sections, cleaned up codebase for production readiness
 - July 07, 2025: **CHECKPOINT** - Optimized hybrid view layout with responsive grid (1/2/4/6 columns), enhanced performance with React.memo and useCallback, improved code structure and maintainability
+- July 08, 2025: **FLOWS TABLE** - Added complete flows table for table view only, follows exact patterns and styles of inputs table with dedicated summary section
