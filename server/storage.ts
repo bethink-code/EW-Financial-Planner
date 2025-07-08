@@ -175,7 +175,8 @@ export class MemStorage implements IStorage {
     return allFunds.filter(fund => 
       fund.description.toLowerCase().includes(lowerQuery) ||
       fund.owner.toLowerCase().includes(lowerQuery) ||
-      fund.name.toLowerCase().includes(lowerQuery)
+      fund.beneficiary.toLowerCase().includes(lowerQuery) ||
+      fund.beneficiaryName.toLowerCase().includes(lowerQuery)
     );
   }
 }

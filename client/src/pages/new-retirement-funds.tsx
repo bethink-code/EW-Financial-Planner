@@ -1,10 +1,9 @@
-import { useState } from "react";
+import { useState, useMemo, useCallback } from "react";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { RetirementFund, UpdateRetirementFund } from "@shared/schema";
 import { queryClient, apiRequest } from "@/lib/queryClient";
 import { NewTableControls } from "@/components/retirement-funds/new-table-controls";
 import { NewGroupedTableView } from "@/components/retirement-funds/new-grouped-table-view";
-
 import { DetailedView } from "@/components/retirement-funds/detailed-view";
 import { Input } from "@/components/ui/input";
 
@@ -23,7 +22,7 @@ export default function NewRetirementFunds() {
   const [tableMode, setTableMode] = useState<"inputs" | "flows">("inputs");
 
   // Enhanced view mode change with transitions
-  const handleViewModeChange = (newMode: ViewMode) => {
+  const handleViewModeChange = useCallback((newMode: ViewMode) => {
     if (document.startViewTransition) {
       document.startViewTransition(() => {
         setViewMode(newMode);
@@ -31,7 +30,7 @@ export default function NewRetirementFunds() {
     } else {
       setViewMode(newMode);
     }
-  };
+  }, []);
   const [searchQuery, setSearchQuery] = useState("");
   const [columnVisibility, setColumnVisibility] = useState<ColumnVisibility>({
     overview: true,
@@ -54,11 +53,11 @@ export default function NewRetirementFunds() {
     },
   });
 
-  const handleFieldUpdate = (id: number, field: keyof UpdateRetirementFund, value: string) => {
+  const handleFieldUpdate = useCallback((id: number, field: keyof UpdateRetirementFund, value: string) => {
     updateMutation.mutate({ id, updates: { [field]: value } });
-  };
+  }, [updateMutation]);
 
-  const handleToggleColumnGroup = (group: keyof ColumnVisibility) => {
+  const handleToggleColumnGroup = useCallback((group: keyof ColumnVisibility) => {
     if (document.startViewTransition) {
       document.startViewTransition(() => {
         setColumnVisibility(prev => ({
@@ -72,19 +71,19 @@ export default function NewRetirementFunds() {
         [group]: !prev[group]
       }));
     }
-  };
+  }, []);
 
-  // Filter funds based on search query
-  const filteredFunds = funds.filter(fund => {
-    if (!searchQuery) return true;
+  // Memoized filter for performance
+  const filteredFunds = useMemo(() => {
+    if (!searchQuery) return funds;
     const query = searchQuery.toLowerCase();
-    return (
+    return funds.filter(fund => (
       fund.description.toLowerCase().includes(query) ||
       fund.owner.toLowerCase().includes(query) ||
       fund.beneficiary.toLowerCase().includes(query) ||
       fund.beneficiaryName.toLowerCase().includes(query)
-    );
-  });
+    ));
+  }, [funds, searchQuery]);
 
   if (isLoading) {
     return (

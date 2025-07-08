@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useCallback, memo } from "react";
 import { ChevronRight, ChevronDown, Edit } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -21,12 +21,12 @@ interface DetailedRowProps {
   isUpdating: boolean;
 }
 
-export function DetailedRow({ fund, columnVisibility, onFieldUpdate, isUpdating }: DetailedRowProps) {
+export const DetailedRow = memo(function DetailedRow({ fund, columnVisibility, onFieldUpdate, isUpdating }: DetailedRowProps) {
   const [isExpanded, setIsExpanded] = useState(false);
 
-  const handleFieldChange = (field: keyof UpdateRetirementFund, value: string) => {
+  const handleFieldChange = useCallback((field: keyof UpdateRetirementFund, value: string) => {
     onFieldUpdate(fund.id, field, value);
-  };
+  }, [fund.id, onFieldUpdate]);
 
   const owners = ["John Doe", "Jane Smith", "Sarah Johnson", "David Wilson"];
   const getOwnerBadgeColor = (owner: string) => {
@@ -331,4 +331,4 @@ export function DetailedRow({ fund, columnVisibility, onFieldUpdate, isUpdating 
       )}
     </div>
   );
-}
+});
