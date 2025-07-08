@@ -299,15 +299,27 @@ th, td {
   .compact-total-span {
     padding: 0.375rem 0;
     display: block;
-    font-weight: bold !important;
+    font-weight: 700 !important;
   }
   
   .total-row-bold {
-    font-weight: bold !important;
+    font-weight: 700 !important;
+    font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif !important;
   }
   
   .total-row-bold * {
-    font-weight: bold !important;
+    font-weight: 700 !important;
+    font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif !important;
+  }
+  
+  .total-row-bold td {
+    font-weight: 700 !important;
+    font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif !important;
+  }
+  
+  .total-row-bold span {
+    font-weight: 700 !important;
+    font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif !important;
   }
   
   .compact-input {
