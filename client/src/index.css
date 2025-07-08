@@ -7,6 +7,20 @@
   text-align: right !important;
 }
 
+/* More specific selector for table inputs */
+table .auto-size-input,
+tbody .auto-size-input,
+td .auto-size-input {
+  text-align: right !important;
+  direction: ltr !important;
+}
+
+/* Target shadcn input specifically */
+input.auto-size-input {
+  text-align: right !important;
+  background-color: rgba(255, 0, 0, 0.1) !important; /* Temporary debug indicator */
+}
+
 /* View Transitions API */
 @view-transition {
   navigation: auto;
