@@ -377,51 +377,47 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
           <tbody>
             {/* Flows data rows */}
             {funds.map((fund, index) => (
-              <tr key={`flows-${fund.id}`} className={index % 2 === 0 ? "bg-neutral-50" : "bg-white"}>
+              <tr key={`flows-${fund.id}`} className={index % 2 === 0 ? "bg-white" : "bg-teal-50/30"}>
                 {columnVisibility.overview && (
-                  <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900">
+                  <td className="p-2 border-r border-teal-100 text-sm text-neutral-900">
                     {fund.description}
                   </td>
                 )}
                 {columnVisibility.overview && (
                   <>
-                    <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900 border-l border-neutral-200">
+                    <td className="p-2 text-right border-r border-teal-100">
                       <AutoSizeInput
-                        type="text"
                         value={fund.lumpSumLeftOverProvisions || "0"}
                         onChange={(e) => handleInputChange(fund.id, "lumpSumLeftOverProvisions", e.target.value)}
-                        className="border-0 focus:bg-white focus:border focus:border-primary hover:bg-neutral-50 text-right"
-                        placeholder="0"
+                        className="p-1 text-xs text-right bg-transparent border-none"
+                        style={{ textAlign: 'right', minWidth: '60px' }}
                         disabled={isUpdating}
                       />
                     </td>
-                    <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900">
+                    <td className="p-2 text-right border-r border-teal-100">
                       <AutoSizeInput
-                        type="text"
                         value={fund.lumpSumLeftOverProvisions || "0"}
                         onChange={(e) => handleInputChange(fund.id, "lumpSumLeftOverProvisions", e.target.value)}
-                        className="border-0 focus:bg-white focus:border focus:border-primary hover:bg-neutral-50 text-right"
-                        placeholder="0"
+                        className="p-1 text-xs text-right bg-transparent border-none"
+                        style={{ textAlign: 'right', minWidth: '60px' }}
                         disabled={isUpdating}
                       />
                     </td>
-                    <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900">
+                    <td className="p-2 text-right border-r border-teal-100">
                       <AutoSizeInput
-                        type="text"
                         value={fund.lumpSumLeftOverProvisions || "0"}
                         onChange={(e) => handleInputChange(fund.id, "lumpSumLeftOverProvisions", e.target.value)}
-                        className="border-0 focus:bg-white focus:border focus:border-primary hover:bg-neutral-50 text-right"
-                        placeholder="0"
+                        className="p-1 text-xs text-right bg-transparent border-none"
+                        style={{ textAlign: 'right', minWidth: '60px' }}
                         disabled={isUpdating}
                       />
                     </td>
-                    <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900">
+                    <td className="p-2 text-right border-r border-teal-100">
                       <AutoSizeInput
-                        type="text"
                         value={fund.lumpSumLeftOverProvisions || "0"}
                         onChange={(e) => handleInputChange(fund.id, "lumpSumLeftOverProvisions", e.target.value)}
-                        className="border-0 focus:bg-white focus:border focus:border-primary hover:bg-neutral-50 text-right"
-                        placeholder="0"
+                        className="p-1 text-xs text-right bg-transparent border-none"
+                        style={{ textAlign: 'right', minWidth: '60px' }}
                         disabled={isUpdating}
                       />
                     </td>
@@ -429,33 +425,33 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
                 )}
                 {columnVisibility.monthlyDeathBenefit && (
                   <>
-                    <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900 border-l border-neutral-200">
+                    <td className="p-2 text-right border-r border-teal-100 border-l border-neutral-200">
                       <AutoSizeInput
-                        type="text"
+                        
                         value={fund.incomeTerm || "0"}
                         onChange={(e) => handleInputChange(fund.id, "incomeTerm", e.target.value)}
-                        className="border-0 focus:bg-white focus:border focus:border-primary hover:bg-neutral-50 text-right"
-                        placeholder="0"
+                        className="p-1 text-xs text-right bg-transparent border-none" style={{ textAlign: "right", minWidth: "60px" }}
+                        
                         disabled={isUpdating}
                       />
                     </td>
-                    <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900">
+                    <td className="p-2 text-right border-r border-teal-100">
                       <AutoSizeInput
-                        type="text"
+                        
                         value={fund.monthlyProvisionOffered || "0"}
                         onChange={(e) => handleInputChange(fund.id, "monthlyProvisionOffered", e.target.value)}
-                        className="border-0 focus:bg-white focus:border focus:border-primary hover:bg-neutral-50 text-right"
-                        placeholder="0"
+                        className="p-1 text-xs text-right bg-transparent border-none" style={{ textAlign: "right", minWidth: "60px" }}
+                        
                         disabled={isUpdating}
                       />
                     </td>
-                    <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900">
+                    <td className="p-2 text-right border-r border-teal-100">
                       <AutoSizeInput
-                        type="text"
+                        
                         value={fund.currentAnnualIncome || "0"}
                         onChange={(e) => handleInputChange(fund.id, "currentAnnualIncome", e.target.value)}
-                        className="border-0 focus:bg-white focus:border focus:border-primary hover:bg-neutral-50 text-right"
-                        placeholder="0"
+                        className="p-1 text-xs text-right bg-transparent border-none" style={{ textAlign: "right", minWidth: "60px" }}
+                        
                         disabled={isUpdating}
                       />
                     </td>
@@ -463,43 +459,43 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
                 )}
                 {columnVisibility.fundValue && (
                   <>
-                    <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900 border-l border-neutral-200">
+                    <td className="p-2 text-right border-r border-teal-100 border-l border-neutral-200">
                       <AutoSizeInput
-                        type="text"
+                        
                         value={fund.estateDeploymentDeceased || "0"}
                         onChange={(e) => handleInputChange(fund.id, "estateDeploymentDeceased", e.target.value)}
-                        className="border-0 focus:bg-white focus:border focus:border-primary hover:bg-neutral-50 text-right"
-                        placeholder="0"
+                        className="p-1 text-xs text-right bg-transparent border-none" style={{ textAlign: "right", minWidth: "60px" }}
+                        
                         disabled={isUpdating}
                       />
                     </td>
-                    <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900">
+                    <td className="p-2 text-right border-r border-teal-100">
                       <AutoSizeInput
-                        type="text"
+                        
                         value={fund.annualIncomeAtDeath || "0"}
                         onChange={(e) => handleInputChange(fund.id, "annualIncomeAtDeath", e.target.value)}
-                        className="border-0 focus:bg-white focus:border focus:border-primary hover:bg-neutral-50 text-right"
-                        placeholder="0"
+                        className="p-1 text-xs text-right bg-transparent border-none" style={{ textAlign: "right", minWidth: "60px" }}
+                        
                         disabled={isUpdating}
                       />
                     </td>
-                    <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900">
+                    <td className="p-2 text-right border-r border-teal-100">
                       <AutoSizeInput
-                        type="text"
+                        
                         value={fund.executorsFee || "0"}
                         onChange={(e) => handleInputChange(fund.id, "executorsFee", e.target.value)}
-                        className="border-0 focus:bg-white focus:border focus:border-primary hover:bg-neutral-50 text-right"
-                        placeholder="0"
+                        className="p-1 text-xs text-right bg-transparent border-none" style={{ textAlign: "right", minWidth: "60px" }}
+                        
                         disabled={isUpdating}
                       />
                     </td>
-                    <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900">
+                    <td className="p-2 text-right border-r border-teal-100">
                       <AutoSizeInput
-                        type="text"
+                        
                         value={fund.mastersFee || "0"}
                         onChange={(e) => handleInputChange(fund.id, "mastersFee", e.target.value)}
-                        className="border-0 focus:bg-white focus:border focus:border-primary hover:bg-neutral-50 text-right"
-                        placeholder="0"
+                        className="p-1 text-xs text-right bg-transparent border-none" style={{ textAlign: "right", minWidth: "60px" }}
+                        
                         disabled={isUpdating}
                       />
                     </td>
@@ -507,42 +503,42 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
                 )}
                 {columnVisibility.fundValueBeneficiaries && (
                   <>
-                    <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900 border-l border-neutral-200">
+                    <td className="p-2 text-right border-r border-teal-100 border-l border-neutral-200">
                       <AutoSizeInput
-                        type="text"
+                        
                         value="0"
                         onChange={(e) => handleInputChange(fund.id, "beneficiaryPercentageSplit", e.target.value)}
-                        className="border-0 focus:bg-white focus:border focus:border-primary hover:bg-neutral-50 text-right"
+                        className="p-1 text-xs text-right bg-transparent border-none" style={{ textAlign: "right", minWidth: "60px" }}
                         placeholder="0%"
                         disabled={isUpdating}
                       />
                     </td>
-                    <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900">
+                    <td className="p-2 text-right border-r border-teal-100">
                       <AutoSizeInput
-                        type="text"
+                        
                         value="0"
                         onChange={(e) => handleInputChange(fund.id, "beneficiaryPercentageSplit", e.target.value)}
-                        className="border-0 focus:bg-white focus:border focus:border-primary hover:bg-neutral-50 text-right"
+                        className="p-1 text-xs text-right bg-transparent border-none" style={{ textAlign: "right", minWidth: "60px" }}
                         placeholder="0%"
                         disabled={isUpdating}
                       />
                     </td>
-                    <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900">
+                    <td className="p-2 text-right border-r border-teal-100">
                       <AutoSizeInput
-                        type="text"
+                        
                         value="0"
                         onChange={(e) => handleInputChange(fund.id, "beneficiaryPercentageSplit", e.target.value)}
-                        className="border-0 focus:bg-white focus:border focus:border-primary hover:bg-neutral-50 text-right"
+                        className="p-1 text-xs text-right bg-transparent border-none" style={{ textAlign: "right", minWidth: "60px" }}
                         placeholder="0%"
                         disabled={isUpdating}
                       />
                     </td>
-                    <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900">
+                    <td className="p-2 text-right border-r border-teal-100">
                       <AutoSizeInput
-                        type="text"
+                        
                         value="0"
                         onChange={(e) => handleInputChange(fund.id, "beneficiaryPercentageSplit", e.target.value)}
-                        className="border-0 focus:bg-white focus:border focus:border-primary hover:bg-neutral-50 text-right"
+                        className="p-1 text-xs text-right bg-transparent border-none" style={{ textAlign: "right", minWidth: "60px" }}
                         placeholder="0%"
                         disabled={isUpdating}
                       />
@@ -553,16 +549,16 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
             ))}
             
             {/* Flows total row */}
-            <tr className="bg-gray-100 font-semibold border-t-2 border-neutral-300">
+            <tr className="bg-gray-100 font-semibold border-t-2 border-teal-300">
               {columnVisibility.overview && (
-                <td className="px-3 py-2 text-sm font-semibold text-neutral-900">Total</td>
+                <td className="p-2 border-r border-teal-100">Total</td>
               )}
               {columnVisibility.overview && (
                 <>
-                  <td className="px-3 py-2 text-center text-sm font-semibold text-neutral-900 border-l border-neutral-200">0</td>
-                  <td className="px-3 py-2 text-center text-sm font-semibold text-neutral-900">0</td>
-                  <td className="px-3 py-2 text-center text-sm font-semibold text-neutral-900">0</td>
-                  <td className="px-3 py-2 text-center text-sm font-semibold text-neutral-900">0</td>
+                  <td className="p-2 text-right border-r border-teal-100">0</td>
+                  <td className="p-2 text-right border-r border-teal-100">0</td>
+                  <td className="p-2 text-right border-r border-teal-100">0</td>
+                  <td className="p-2 text-right">0</td>
                 </>
               )}
               {columnVisibility.monthlyDeathBenefit && (
@@ -726,7 +722,7 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
                   {/* Description */}
                   <td className="px-3 py-2 whitespace-nowrap text-sm font-medium text-neutral-900">
                     <AutoSizeInput
-                      type="text"
+                      
                       value={fund.description || ""}
                       onChange={(e) => handleInputChange(fund.id, "description", e.target.value)}
                       className="border-0 focus:bg-white focus:border focus:border-primary hover:bg-neutral-50 text-left font-medium"
@@ -736,7 +732,7 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
                   </td>
                   
                   {/* Owner */}
-                  <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900">
+                  <td className="p-2 text-right border-r border-teal-100">
                     <Select
                       value={fund.owner || "John Doe"}
                       onValueChange={(value) => handleInputChange(fund.id, "owner", value)}
@@ -762,19 +758,19 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
               {columnVisibility.unapprovedLifeCover && (
                 <>
                   {/* Cover amount - Unapproved */}
-                  <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900 border-l border-neutral-300">
+                  <td className="p-2 text-right border-r border-teal-100 border-l border-neutral-300">
                     <AutoSizeInput
-                      type="text"
+                      
                       value={fund.coverAmount || ""}
                       onChange={(e) => handleInputChange(fund.id, "coverAmount", e.target.value)}
-                      className="border-0 focus:bg-white focus:border focus:border-primary hover:bg-neutral-50 text-right"
+                      className="p-1 text-xs text-right bg-transparent border-none" style={{ textAlign: "right", minWidth: "60px" }}
                       placeholder="R 0"
                       disabled={isUpdating}
                     />
                   </td>
 
                   {/* Unapproved life cover - Beneficiary */}
-                  <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900">
+                  <td className="p-2 text-right border-r border-teal-100">
                     <Select
                       value={fund.beneficiary || "No beneficiary"}
                       onValueChange={(value) => handleInputChange(fund.id, "beneficiary", value)}
@@ -795,25 +791,25 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
                   </td>
 
                   {/* Unapproved life cover - % */}
-                  <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900">
+                  <td className="p-2 text-right border-r border-teal-100">
                     <AutoSizeInput
-                      type="text"
+                      
                       value={fund.beneficiaryPercentage || ""}
                       onChange={(e) => handleInputChange(fund.id, "beneficiaryPercentage", e.target.value)}
-                      className="border-0 focus:bg-white focus:border focus:border-primary hover:bg-neutral-50 text-right"
+                      className="p-1 text-xs text-right bg-transparent border-none" style={{ textAlign: "right", minWidth: "60px" }}
                       placeholder="100"
                       disabled={isUpdating}
                     />
                   </td>
 
                   {/* Unapproved life cover - Cover split */}
-                  <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900">
+                  <td className="p-2 text-right border-r border-teal-100">
                     <AutoSizeInput
-                      type="text"
+                      
                       value={fund.coverSplit || ""}
                       onChange={(e) => handleInputChange(fund.id, "coverSplit", e.target.value)}
-                      className="border-0 focus:bg-white focus:border focus:border-primary hover:bg-neutral-50 text-right"
-                      placeholder="0"
+                      className="p-1 text-xs text-right bg-transparent border-none" style={{ textAlign: "right", minWidth: "60px" }}
+                      
                       disabled={isUpdating}
                     />
                   </td>
@@ -824,48 +820,48 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
               {columnVisibility.monthlyDeathBenefit && (
                 <>
                   {/* Monthly death benefit - Monthly income */}
-                  <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900 border-l border-neutral-300">
+                  <td className="p-2 text-right border-r border-teal-100 border-l border-neutral-300">
                     <AutoSizeInput
-                      type="text"
+                      
                       value={fund.monthlyIncome || ""}
                       onChange={(e) => handleInputChange(fund.id, "monthlyIncome", e.target.value)}
-                      className="border-0 focus:bg-white focus:border focus:border-primary hover:bg-neutral-50 text-right"
+                      className="p-1 text-xs text-right bg-transparent border-none" style={{ textAlign: "right", minWidth: "60px" }}
                       placeholder="R 0"
                       disabled={isUpdating}
                     />
                   </td>
 
                   {/* Monthly death benefit - Term (Years) */}
-                  <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900">
+                  <td className="p-2 text-right border-r border-teal-100">
                     <AutoSizeInput
-                      type="text"
+                      
                       value={fund.termYears || ""}
                       onChange={(e) => handleInputChange(fund.id, "termYears", e.target.value)}
-                      className="border-0 focus:bg-white focus:border focus:border-primary hover:bg-neutral-50 text-right"
-                      placeholder="0"
+                      className="p-1 text-xs text-right bg-transparent border-none" style={{ textAlign: "right", minWidth: "60px" }}
+                      
                       disabled={isUpdating}
                     />
                   </td>
 
                   {/* Monthly death benefit - Increase % */}
-                  <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900">
+                  <td className="p-2 text-right border-r border-teal-100">
                     <AutoSizeInput
-                      type="text"
+                      
                       value={fund.increasePercentage || ""}
                       onChange={(e) => handleInputChange(fund.id, "increasePercentage", e.target.value)}
-                      className="border-0 focus:bg-white focus:border focus:border-primary hover:bg-neutral-50 text-right"
+                      className="p-1 text-xs text-right bg-transparent border-none" style={{ textAlign: "right", minWidth: "60px" }}
                       placeholder="0%"
                       disabled={isUpdating}
                     />
                   </td>
 
                   {/* Monthly death benefit - Escalation amount */}
-                  <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900 border-r border-neutral-300">
+                  <td className="p-2 text-right border-r border-teal-100 border-r border-neutral-300">
                     <AutoSizeInput
-                      type="text"
+                      
                       value={fund.lumpSumDeath || ""}
                       onChange={(e) => handleInputChange(fund.id, "lumpSumDeath", e.target.value)}
-                      className="border-0 focus:bg-white focus:border focus:border-primary hover:bg-neutral-50 text-right"
+                      className="p-1 text-xs text-right bg-transparent border-none" style={{ textAlign: "right", minWidth: "60px" }}
                       placeholder="R 0"
                       disabled={isUpdating}
                     />
@@ -876,29 +872,29 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
               {/* Fund Value Section */}
               {columnVisibility.fundValue && (
                 <>
-                  <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900 border-l border-neutral-300">
+                  <td className="p-2 text-right border-r border-teal-100 border-l border-neutral-300">
                     <AutoSizeInput
-                      type="text"
+                      
                       value={fund.approvedLifeCover || ""}
                       onChange={(e) => handleInputChange(fund.id, "approvedLifeCover", e.target.value)}
-                      className="border-0 focus:bg-white focus:border focus:border-primary hover:bg-neutral-50 text-right"
+                      className="p-1 text-xs text-right bg-transparent border-none" style={{ textAlign: "right", minWidth: "60px" }}
                       placeholder="R 0"
                       disabled={isUpdating}
                     />
                   </td>
 
-                  <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900">
+                  <td className="p-2 text-right border-r border-teal-100">
                     <AutoSizeInput
-                      type="text"
+                      
                       value={fund.fundValue || ""}
                       onChange={(e) => handleInputChange(fund.id, "fundValue", e.target.value)}
-                      className="border-0 focus:bg-white focus:border focus:border-primary hover:bg-neutral-50 text-right"
+                      className="p-1 text-xs text-right bg-transparent border-none" style={{ textAlign: "right", minWidth: "60px" }}
                       placeholder="R 0"
                       disabled={isUpdating}
                     />
                   </td>
 
-                  <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900 border-r border-neutral-300">
+                  <td className="p-2 text-right border-r border-teal-100 border-r border-neutral-300">
                     <span className="text-neutral-600">{fund.fundValueAtDeath || "R 0"}</span>
                   </td>
                 </>
@@ -908,7 +904,7 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
               {columnVisibility.fundValueBeneficiaries && (
                 <>
                   {/* Fund value beneficiaries - Name */}
-                  <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900 border-l border-neutral-200">
+                  <td className="p-2 text-right border-r border-teal-100 border-l border-neutral-200">
                     <Select
                       value={fund.beneficiaryName || ""}
                       onValueChange={(value) => handleInputChange(fund.id, "beneficiaryName", value)}
@@ -928,63 +924,63 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
                   </td>
 
                   {/* Fund value beneficiaries - % */}
-                  <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900">
+                  <td className="p-2 text-right border-r border-teal-100">
                     <AutoSizeInput
-                      type="text"
+                      
                       value={fund.beneficiaryPercentageSplit || ""}
                       onChange={(e) => handleInputChange(fund.id, "beneficiaryPercentageSplit", e.target.value)}
-                      className="border-0 focus:bg-white focus:border focus:border-primary hover:bg-neutral-50 text-right"
+                      className="p-1 text-xs text-right bg-transparent border-none" style={{ textAlign: "right", minWidth: "60px" }}
                       placeholder="0%"
                       disabled={isUpdating}
                     />
                   </td>
 
                   {/* Fund value beneficiaries - Amount */}
-                  <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900">
+                  <td className="p-2 text-right border-r border-teal-100">
                     <span className="text-neutral-600">{fund.amount || "R 0"}</span>
                   </td>
 
                   {/* Fund value beneficiaries - Lump sum taken */}
-                  <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900">
+                  <td className="p-2 text-right border-r border-teal-100">
                     <AutoSizeInput
-                      type="text"
+                      
                       value={fund.lumpSumTaken || ""}
                       onChange={(e) => handleInputChange(fund.id, "lumpSumTaken", e.target.value)}
-                      className="border-0 focus:bg-white focus:border focus:border-primary hover:bg-neutral-50 text-right"
+                      className="p-1 text-xs text-right bg-transparent border-none" style={{ textAlign: "right", minWidth: "60px" }}
                       placeholder="R 0"
                       disabled={isUpdating}
                     />
                   </td>
 
                   {/* Fund value beneficiaries - Fund value at death */}
-                  <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900">
+                  <td className="p-2 text-right border-r border-teal-100">
                     <span className="text-neutral-600">{fund.fundValueAtDeath || "R 0"}</span>
                   </td>
 
                   {/* Fund value beneficiaries - Unappropriated fund commencement amount */}
-                  <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900">
+                  <td className="p-2 text-right border-r border-teal-100">
                     <AutoSizeInput
-                      type="text"
+                      
                       value={fund.nondeductibleContribution || ""}
                       onChange={(e) => handleInputChange(fund.id, "nondeductibleContribution", e.target.value)}
-                      className="border-0 focus:bg-white focus:border focus:border-primary hover:bg-neutral-50 text-right"
+                      className="p-1 text-xs text-right bg-transparent border-none" style={{ textAlign: "right", minWidth: "60px" }}
                       placeholder="R 0"
                       disabled={isUpdating}
                     />
                   </td>
 
                   {/* Living Annuity */}
-                  <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900">
+                  <td className="p-2 text-right border-r border-teal-100">
                     <span className="text-neutral-600">{fund.livingAnnuity || ""}</span>
                   </td>
 
                   {/* Income from */}
-                  <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900">
+                  <td className="p-2 text-right border-r border-teal-100">
                     <AutoSizeInput
-                      type="text"
+                      
                       value={fund.incomeTerm || ""}
                       onChange={(e) => handleInputChange(fund.id, "incomeTerm", e.target.value)}
-                      className="border-0 focus:bg-white focus:border focus:border-primary hover:bg-neutral-50 text-right"
+                      className="p-1 text-xs text-right bg-transparent border-none" style={{ textAlign: "right", minWidth: "60px" }}
                       placeholder="Income term"
                       disabled={isUpdating}
                     />
@@ -1005,7 +1001,7 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
                 </td>
                 
                 {/* Owner */}
-                <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900">
+                <td className="p-2 text-right border-r border-teal-100">
                   
                 </td>
               </>
@@ -1015,7 +1011,7 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
             {columnVisibility.unapprovedLifeCover && (
               <>
                 {/* Cover amount - TOTAL */}
-                <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900 border-l border-neutral-300">
+                <td className="p-2 text-right border-r border-teal-100 border-l border-neutral-300">
                   <span className="font-semibold text-right block" style={{ color: '#094161' }}>
                     R {funds.reduce((sum, fund) => {
                       const amount = parseInt(fund.coverAmount?.replace(/[^0-9]/g, '') || '0');
@@ -1025,17 +1021,17 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
                 </td>
                 
                 {/* Beneficiary */}
-                <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900">
+                <td className="p-2 text-right border-r border-teal-100">
                   
                 </td>
                 
                 {/* % */}
-                <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900">
+                <td className="p-2 text-right border-r border-teal-100">
                   
                 </td>
                 
                 {/* Cover split */}
-                <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900">
+                <td className="p-2 text-right border-r border-teal-100">
                   
                 </td>
               </>
@@ -1045,7 +1041,7 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
             {columnVisibility.monthlyDeathBenefit && (
               <>
                 {/* Monthly income - TOTAL */}
-                <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900 border-l border-neutral-300">
+                <td className="p-2 text-right border-r border-teal-100 border-l border-neutral-300">
                   <span className="font-semibold text-right block" style={{ color: '#094161' }}>
                     R {funds.reduce((sum, fund) => {
                       const amount = parseInt(fund.monthlyIncome?.replace(/[^0-9]/g, '') || '0');
@@ -1055,17 +1051,17 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
                 </td>
                 
                 {/* Term (Years) */}
-                <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900">
+                <td className="p-2 text-right border-r border-teal-100">
                   
                 </td>
                 
                 {/* Increase % */}
-                <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900">
+                <td className="p-2 text-right border-r border-teal-100">
                   
                 </td>
                 
                 {/* Escalation amount */}
-                <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900 border-r border-neutral-300">
+                <td className="p-2 text-right border-r border-teal-100 border-r border-neutral-300">
                   
                 </td>
               </>
@@ -1074,7 +1070,7 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
             {/* Fund Value Section */}
             {columnVisibility.fundValue && (
               <>
-                <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900 border-l border-neutral-300">
+                <td className="p-2 text-right border-r border-teal-100 border-l border-neutral-300">
                   <span className="font-semibold text-right block" style={{ color: '#094161' }}>
                     R {funds.reduce((sum, fund) => {
                       const amount = parseInt(fund.approvedLifeCover?.replace(/[^0-9]/g, '') || '0');
@@ -1083,7 +1079,7 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
                   </span>
                 </td>
                 
-                <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900">
+                <td className="p-2 text-right border-r border-teal-100">
                   <span className="font-semibold text-right block" style={{ color: '#094161' }}>
                     R {funds.reduce((sum, fund) => {
                       const amount = parseInt(fund.fundValue?.replace(/[^0-9]/g, '') || '0');
@@ -1092,7 +1088,7 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
                   </span>
                 </td>
                 
-                <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900 border-r border-neutral-300">
+                <td className="p-2 text-right border-r border-teal-100 border-r border-neutral-300">
                   <span className="font-semibold text-right block" style={{ color: '#094161' }}>
                     R {funds.reduce((sum, fund) => {
                       const amount = parseInt(fund.fundValueAtDeath?.replace(/[^0-9]/g, '') || '0');
@@ -1107,42 +1103,42 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
             {columnVisibility.fundValueBeneficiaries && (
               <>
                 {/* Fund value beneficiaries - Name */}
-                <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900 border-l border-neutral-300">
+                <td className="p-2 text-right border-r border-teal-100 border-l border-neutral-300">
                   
                 </td>
                 
                 {/* Fund value beneficiaries - % */}
-                <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900">
+                <td className="p-2 text-right border-r border-teal-100">
                   
                 </td>
                 
                 {/* Fund value beneficiaries - Amount */}
-                <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900">
+                <td className="p-2 text-right border-r border-teal-100">
                   
                 </td>
                 
                 {/* Fund value beneficiaries - Lump sum taken */}
-                <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900">
+                <td className="p-2 text-right border-r border-teal-100">
                   
                 </td>
                 
                 {/* Fund value beneficiaries - Fund value at death */}
-                <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900">
+                <td className="p-2 text-right border-r border-teal-100">
                   
                 </td>
                 
                 {/* Fund value beneficiaries - Non deductible contribution amount */}
-                <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900">
+                <td className="p-2 text-right border-r border-teal-100">
                   
                 </td>
                 
                 {/* Fund value beneficiaries - Living annuity */}
-                <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900">
+                <td className="p-2 text-right border-r border-teal-100">
                   
                 </td>
                 
                 {/* Fund value beneficiaries - Income term */}
-                <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900">
+                <td className="p-2 text-right border-r border-teal-100">
                   
                 </td>
               </>
