@@ -275,7 +275,31 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
       <div className="overflow-x-auto">
         <table className="min-w-full bg-white table-auto">
           <thead>
-            {/* Flows table headers */}
+            {/* First level headers - Flows */}
+            <tr className="border-b border-neutral-200" style={{ backgroundColor: '#B3E5FC' }}>
+              {columnVisibility.overview && (
+                <th className="px-3 py-2 text-center text-xs font-medium text-teal-700 uppercase tracking-wider" colSpan={5}>
+                  Lump sum life cover available as provision to
+                </th>
+              )}
+              {columnVisibility.monthlyDeathBenefit && (
+                <th className="px-3 py-2 text-center text-xs font-medium text-teal-700 uppercase tracking-wider border-l border-teal-300" colSpan={3}>
+                  Income provision source
+                </th>
+              )}
+              {columnVisibility.fundValue && (
+                <th className="px-3 py-2 text-center text-xs font-medium text-teal-700 uppercase tracking-wider border-l border-teal-300" colSpan={4}>
+                  Income provision offered
+                </th>
+              )}
+              {columnVisibility.fundValueBeneficiaries && (
+                <th className="px-3 py-2 text-center text-xs font-medium text-teal-700 uppercase tracking-wider border-l border-teal-300" colSpan={4}>
+                  Percentage included for
+                </th>
+              )}
+            </tr>
+            
+            {/* Second level headers - Flows */}
             <tr className="border-b border-neutral-200" style={{ backgroundColor: '#E0F2FE' }}>
               {columnVisibility.overview && (
                 <th className="px-3 py-2 text-left text-xs font-medium text-teal-700 uppercase tracking-wider">
