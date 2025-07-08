@@ -332,13 +332,7 @@ th, td {
     padding: 0.375rem 0.75rem;
   }
   
-  /* Remove all old CSS classes to prevent conflicts */
-  .compact-cell,
-  .compact-input,
-  .compact-total-span,
-  .total-row-bold {
-    display: none !important;
-  }
+  /* Clean up - remove old CSS classes */
 
   /* Auto-sizing for input fields */
   .auto-size-input {
