@@ -931,7 +931,7 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
 
                   {/* Fund value beneficiaries - Amount */}
                   <td className="p-2 text-right border-r border-teal-100">
-                    <span className="text-neutral-600">{fund.amount || "R 0"}</span>
+                    <span className="text-neutral-600 table-text-14">{fund.amount || "R 0"}</span>
                   </td>
 
                   {/* Fund value beneficiaries - Lump sum taken */}
