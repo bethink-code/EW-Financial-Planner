@@ -826,24 +826,23 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
         {/* Show flows table rows when in flows mode */}
         {tableMode === "flows" && (
           <>
-            {/* Spacer row */}
+            {/* Flows section - within the same tbody */}
             <tbody>
+              {/* Spacer row */}
               <tr>
                 <td colSpan={100} className="py-4">
                   <div className="border-t border-neutral-300"></div>
                 </td>
               </tr>
-            </tbody>
-
-            {/* Flows section header */}
-            <thead>
+              
+              {/* Flows section header row */}
               <tr className="border-b border-neutral-200" style={{ backgroundColor: '#E0F2FE' }}>
                 <th colSpan={100} className="px-3 py-3 text-center text-sm font-semibold text-teal-800">
                   FLOWS TABLE
                 </th>
               </tr>
               
-              {/* Flows table headers */}
+              {/* Flows table headers row */}
               <tr className="border-b border-neutral-200" style={{ backgroundColor: '#E0F2FE' }}>
                 {columnVisibility.overview && (
                   <>
@@ -914,10 +913,6 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
                   </>
                 )}
               </tr>
-            </thead>
-
-            {/* Flows data rows */}
-            <tbody>
               {funds.map((fund, index) => (
                 <tr key={`flows-${fund.id}`} className={index % 2 === 0 ? "bg-teal-50/30" : "bg-white"}>
                   {columnVisibility.overview && (
