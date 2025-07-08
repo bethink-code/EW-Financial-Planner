@@ -65,8 +65,7 @@ const AutoSizeInput = ({ value, onChange, className, placeholder, disabled, styl
         maxWidth: '250px', 
         textAlign: 'right', 
         width: '100%',
-        outline: 'none',
-        background: 'transparent'
+        outline: 'none'
       }}
       {...props}
     />
