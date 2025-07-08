@@ -294,8 +294,6 @@ export default function NewRetirementFunds() {
           </>
         )}
 
-
-
         {viewMode === "detailed" && (
           <>
             {/* Summary Section for Hybrid View */}
