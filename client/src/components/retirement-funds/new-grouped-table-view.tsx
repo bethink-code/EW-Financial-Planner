@@ -298,7 +298,7 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
                 </th>
               )}
               {columnVisibility.fundValueBeneficiaries && (
-                <th className="px-3 py-2 text-center text-xs font-medium text-neutral-500 uppercase tracking-wider border-l border-neutral-300" colSpan={4}>
+                <th className="px-3 py-2 text-center text-xs font-medium text-neutral-500 uppercase tracking-wider border-l border-neutral-300" colSpan={5}>
                   Percentage included for
                 </th>
               )}
@@ -353,16 +353,19 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
               {columnVisibility.fundValueBeneficiaries && (
                 <>
                   <th className="px-3 py-2 text-center text-xs font-medium text-neutral-600 uppercase tracking-wider border-l border-neutral-300">
-                    Estate %
+                    Estate Duty (Policies on life of deceased)
                   </th>
                   <th className="px-3 py-2 text-center text-xs font-medium text-neutral-600 uppercase tracking-wider">
-                    Spouse %
+                    Estate Duty (To spouse)
                   </th>
                   <th className="px-3 py-2 text-center text-xs font-medium text-neutral-600 uppercase tracking-wider">
-                    Children %
+                    Estate Duty (To others)
                   </th>
                   <th className="px-3 py-2 text-center text-xs font-medium text-neutral-600 uppercase tracking-wider">
-                    Total %
+                    Executor's fee
+                  </th>
+                  <th className="px-3 py-2 text-center text-xs font-medium text-neutral-600 uppercase tracking-wider">
+                    Master's fee
                   </th>
                 </>
               )}
@@ -511,10 +514,18 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
                     <td className="p-2 text-right border-r border-teal-100">
                       <AutoSizeInput
                         
-                        value="0"
-                        onChange={(e) => handleInputChange(fund.id, "beneficiaryPercentageSplit", e.target.value)}
+                        value={fund.executorsFee || "0"}
+                        onChange={(e) => handleInputChange(fund.id, "executorsFee", e.target.value)}
                         className="p-1 text-xs text-right bg-transparent border-none" style={{ textAlign: "right", minWidth: "60px" }}
-                        placeholder="0%"
+                        disabled={isUpdating}
+                      />
+                    </td>
+                    <td className="p-2 text-right border-r border-teal-100">
+                      <AutoSizeInput
+                        
+                        value={fund.mastersFee || "0"}
+                        onChange={(e) => handleInputChange(fund.id, "mastersFee", e.target.value)}
+                        className="p-1 text-xs text-right bg-transparent border-none" style={{ textAlign: "right", minWidth: "60px" }}
                         disabled={isUpdating}
                       />
                     </td>
@@ -551,8 +562,9 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
               )}
               {columnVisibility.fundValueBeneficiaries && (
                 <>
-                  <td className="px-3 py-2 text-right border-r border-teal-100 border-l border-neutral-200">0</td>
-                  <td className="px-3 py-2 text-right border-r border-teal-100">0</td>
+                  <td className="px-3 py-2 text-right border-r border-teal-100 border-l border-neutral-200">0%</td>
+                  <td className="px-3 py-2 text-right border-r border-teal-100">0%</td>
+                  <td className="px-3 py-2 text-right border-r border-teal-100">0%</td>
                   <td className="px-3 py-2 text-right border-r border-teal-100">0</td>
                   <td className="px-3 py-2 text-right border-r border-teal-100">0</td>
                 </>
