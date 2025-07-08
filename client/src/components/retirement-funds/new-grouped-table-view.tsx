@@ -296,17 +296,17 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
                 </>
               )}
               {columnVisibility.monthlyDeathBenefit && (
-                <th className="p-2 text-center font-medium text-neutral-600 uppercase tracking-wider text-xs " colSpan={3}>
+                <th className="p-2 text-center font-medium text-neutral-600 uppercase tracking-wider text-xs border-l border-neutral-300" colSpan={3}>
                   Income provision source
                 </th>
               )}
               {columnVisibility.fundValue && (
-                <th className="p-2 text-center font-medium text-neutral-600 uppercase tracking-wider text-xs " colSpan={3}>
+                <th className="p-2 text-center font-medium text-neutral-600 uppercase tracking-wider text-xs border-l border-neutral-300" colSpan={3}>
                   Income provision offered
                 </th>
               )}
               {columnVisibility.fundValueBeneficiaries && (
-                <th className="p-2 text-center font-medium text-neutral-600 uppercase tracking-wider text-xs " colSpan={5}>
+                <th className="p-2 text-center font-medium text-neutral-600 uppercase tracking-wider text-xs border-l border-neutral-300" colSpan={5}>
                   Percentage included for
                 </th>
               )}
@@ -665,22 +665,22 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
               </th>
             )}
             {columnVisibility.unapprovedLifeCover && (
-              <th className="p-2 text-center font-medium text-neutral-600 uppercase tracking-wider text-xs " colSpan={4}>
+              <th className="p-2 text-center font-medium text-neutral-600 uppercase tracking-wider text-xs border-l border-neutral-300" colSpan={4}>
                 Unapproved life cover
               </th>
             )}
             {columnVisibility.monthlyDeathBenefit && (
-              <th className="p-2 text-center font-medium text-neutral-600 uppercase tracking-wider text-xs " colSpan={4}>
+              <th className="p-2 text-center font-medium text-neutral-600 uppercase tracking-wider text-xs border-l border-neutral-300" colSpan={4}>
                 Monthly death benefit
               </th>
             )}
             {columnVisibility.fundValue && (
-              <th className="p-2 text-center font-medium text-neutral-600 uppercase tracking-wider text-xs " colSpan={3}>
+              <th className="p-2 text-center font-medium text-neutral-600 uppercase tracking-wider text-xs border-l border-neutral-300" colSpan={3}>
                 Fund value
               </th>
             )}
             {columnVisibility.fundValueBeneficiaries && (
-              <th className="p-2 text-center font-medium text-neutral-600 uppercase tracking-wider text-xs " colSpan={8}>
+              <th className="p-2 text-center font-medium text-neutral-600 uppercase tracking-wider text-xs border-l border-neutral-300" colSpan={8}>
                 Fund value beneficiaries
               </th>
             )}
