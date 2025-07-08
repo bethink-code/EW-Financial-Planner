@@ -563,25 +563,25 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
               )}
               {columnVisibility.monthlyDeathBenefit && (
                 <>
-                  <td className="px-3 py-2 text-right border-r border-teal-100 border-l border-neutral-200"></td>
-                  <td className="px-3 py-2 text-right border-r border-teal-100"></td>
-                  <td className="px-3 py-2 text-right border-r border-teal-100"></td>
+                  <td className="px-3 py-2 text-right border-r border-teal-100 border-l border-neutral-200">0</td>
+                  <td className="px-3 py-2 text-right border-r border-teal-100">0</td>
+                  <td className="px-3 py-2 text-right border-r border-teal-100">0</td>
                 </>
               )}
               {columnVisibility.fundValue && (
                 <>
-                  <td className="px-3 py-2 text-right border-r border-teal-100 border-l border-neutral-200"></td>
-                  <td className="px-3 py-2 text-right border-r border-teal-100"></td>
-                  <td className="px-3 py-2 text-right border-r border-teal-100"></td>
-                  <td className="px-3 py-2 text-right border-r border-teal-100"></td>
+                  <td className="px-3 py-2 text-right border-r border-teal-100 border-l border-neutral-200">0</td>
+                  <td className="px-3 py-2 text-right border-r border-teal-100">0</td>
+                  <td className="px-3 py-2 text-right border-r border-teal-100">0</td>
+                  <td className="px-3 py-2 text-right border-r border-teal-100">0</td>
                 </>
               )}
               {columnVisibility.fundValueBeneficiaries && (
                 <>
-                  <td className="px-3 py-2 text-right border-r border-teal-100 border-l border-neutral-200"></td>
-                  <td className="px-3 py-2 text-right border-r border-teal-100"></td>
-                  <td className="px-3 py-2 text-right border-r border-teal-100"></td>
-                  <td className="px-3 py-2 text-right border-r border-teal-100"></td>
+                  <td className="px-3 py-2 text-right border-r border-teal-100 border-l border-neutral-200">0</td>
+                  <td className="px-3 py-2 text-right border-r border-teal-100">0</td>
+                  <td className="px-3 py-2 text-right border-r border-teal-100">0</td>
+                  <td className="px-3 py-2 text-right border-r border-teal-100">0</td>
                 </>
               )}
             </tr>
