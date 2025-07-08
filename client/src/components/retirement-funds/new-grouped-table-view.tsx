@@ -276,7 +276,7 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
         <table className="min-w-full bg-white table-auto">
           <thead>
             {/* First level headers - Flows */}
-            <tr className="border-b border-neutral-200" style={{ backgroundColor: '#D6ECF5' }}>
+            <tr className="border-b border-neutral-200" style={{ backgroundColor: '#D0E5F0' }}>
               {columnVisibility.overview && (
                 <th className="px-3 py-2 text-center text-xs font-medium text-neutral-500 uppercase tracking-wider" colSpan={5}>
                   Lump sum life cover available as provision to
@@ -300,7 +300,7 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
             </tr>
             
             {/* Second level headers - Flows */}
-            <tr className="border-b border-neutral-200" style={{ backgroundColor: '#B3D9F2' }}>
+            <tr className="border-b border-neutral-200" style={{ backgroundColor: '#D0E5F0' }}>
               {columnVisibility.overview && (
                 <th className="px-3 py-2 text-left text-xs font-medium text-neutral-600 uppercase tracking-wider">
                   Description
