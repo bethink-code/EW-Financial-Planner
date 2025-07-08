@@ -298,6 +298,12 @@ th, td {
     height: 2rem;
     vertical-align: middle;
   }
+
+  /* Force consistent row heights across all tables */
+  tbody tr {
+    height: 2rem !important;
+    min-height: 2rem !important;
+  }
   
   .compact-total-span {
     padding: 0.375rem 0;

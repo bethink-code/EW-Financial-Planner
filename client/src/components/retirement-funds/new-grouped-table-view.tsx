@@ -382,7 +382,7 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
           <tbody>
             {/* Flows data rows */}
             {funds.map((fund, index) => (
-              <tr key={`flows-${fund.id}`} className={index % 2 === 0 ? "bg-white" : "bg-teal-50/30"}>
+              <tr key={`flows-${fund.id}`} className={index % 2 === 0 ? "bg-white" : "bg-teal-50/30"} style={{ height: '2rem', minHeight: '2rem' }}>
                 {columnVisibility.overview && (
                   <td className="compact-cell border-r border-teal-100 table-text-14 text-neutral-900">
                     {fund.description}
@@ -712,7 +712,7 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
         </thead>
         <tbody className="bg-white divide-y divide-neutral-200">
           {funds.map((fund) => (
-            <tr key={fund.id} className="hover:bg-neutral-50">
+            <tr key={fund.id} className="hover:bg-neutral-50" style={{ height: '2rem', minHeight: '2rem' }}>
               {/* Overview Section */}
               {columnVisibility.overview && (
                 <>
