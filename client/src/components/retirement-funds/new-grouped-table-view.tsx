@@ -546,36 +546,36 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
             {/* Flows total row */}
             <tr style={{ backgroundColor: '#D6ECF5' }} className="border-t-2 border-neutral-300">
               {columnVisibility.overview && (
-                <td className="p-2 border-r border-teal-100 table-total-row">Total</td>
+                <td className="p-2 border-r border-teal-100 table-text-14">Total</td>
               )}
               {columnVisibility.overview && (
                 <>
-                  <td className="p-2 text-right border-r border-teal-100 table-total-row">0</td>
-                  <td className="p-2 text-right border-r border-teal-100 table-total-row">0</td>
-                  <td className="p-2 text-right border-r border-teal-100 table-total-row">0</td>
+                  <td className="p-2 text-right border-r border-teal-100 table-text-14">0</td>
+                  <td className="p-2 text-right border-r border-teal-100 table-text-14">0</td>
+                  <td className="p-2 text-right border-r border-teal-100 table-text-14">0</td>
                 </>
               )}
               {columnVisibility.monthlyDeathBenefit && (
                 <>
                   <td className="px-3 py-2 text-right border-r border-teal-100 table-text-14 border-l border-neutral-200">0</td>
-                  <td className="px-3 py-2 text-right border-r border-teal-100 table-total-row">0</td>
-                  <td className="px-3 py-2 text-right border-r border-teal-100 table-total-row">0%</td>
+                  <td className="px-3 py-2 text-right border-r border-teal-100 table-text-14">0</td>
+                  <td className="px-3 py-2 text-right border-r border-teal-100 table-text-14">0%</td>
                 </>
               )}
               {columnVisibility.fundValue && (
                 <>
                   <td className="px-3 py-2 text-right border-r border-teal-100 table-text-14 border-l border-neutral-200">0</td>
-                  <td className="px-3 py-2 text-right border-r border-teal-100 table-total-row">0</td>
-                  <td className="px-3 py-2 text-right border-r border-teal-100 table-total-row">0%</td>
+                  <td className="px-3 py-2 text-right border-r border-teal-100 table-text-14">0</td>
+                  <td className="px-3 py-2 text-right border-r border-teal-100 table-text-14">0%</td>
                 </>
               )}
               {columnVisibility.fundValueBeneficiaries && (
                 <>
                   <td className="px-3 py-2 text-right border-r border-teal-100 table-text-14 border-l border-neutral-200">0%</td>
-                  <td className="px-3 py-2 text-right border-r border-teal-100 table-total-row">0%</td>
-                  <td className="px-3 py-2 text-right border-r border-teal-100 table-total-row">0%</td>
-                  <td className="px-3 py-2 text-right border-r border-teal-100 table-total-row">0</td>
-                  <td className="px-3 py-2 text-right border-r border-teal-100 table-total-row">0</td>
+                  <td className="px-3 py-2 text-right border-r border-teal-100 table-text-14">0%</td>
+                  <td className="px-3 py-2 text-right border-r border-teal-100 table-text-14">0%</td>
+                  <td className="px-3 py-2 text-right border-r border-teal-100 table-text-14">0</td>
+                  <td className="px-3 py-2 text-right border-r border-teal-100 table-text-14">0</td>
                 </>
               )}
             </tr>

@@ -21,11 +21,7 @@ html {
   line-height: 1.2 !important;
 }
 
-/* Ensure total row uses normal font weight */
-.table-total-row {
-  font-size: 14px !important;
-  font-weight: normal !important;
-}
+/* Remove unused table-total-row class - using table-text-14 for all content */
 
 /* Force right alignment for flow table inputs */
 .auto-size-input {
