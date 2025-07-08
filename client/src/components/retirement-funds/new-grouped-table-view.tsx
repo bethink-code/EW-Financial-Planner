@@ -549,7 +549,7 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
             ))}
             
             {/* Flows total row */}
-            <tr className="bg-gray-100 font-semibold border-t-2 border-teal-300">
+            <tr className="bg-gray-100 border-t-2 border-teal-300">
               {columnVisibility.overview && (
                 <td className="p-2 border-r border-teal-100 text-xs">Total</td>
               )}
