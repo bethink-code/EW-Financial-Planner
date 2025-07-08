@@ -545,7 +545,7 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
             ))}
             
             {/* Flows total row */}
-            <tr className="table-total-row" style={{ backgroundColor: '#D6ECF5' }}>
+            <tr className="table-total-row">
               {columnVisibility.overview && (
                 <td className="table-cell border-r border-teal-100 table-text-14 font-bold">Total</td>
               )}
@@ -1011,7 +1011,7 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
           ))}
           
           {/* Totals row */}
-          <tr className="table-total-row" style={{ backgroundColor: '#D6ECF5' }}>
+          <tr className="table-total-row">
             {/* Overview Section */}
             {columnVisibility.overview && (
               <>
