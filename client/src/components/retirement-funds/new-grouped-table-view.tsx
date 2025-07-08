@@ -889,7 +889,13 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
                   </td>
 
                   <td className="p-2 text-right border-r border-teal-100 border-r border-neutral-300">
-                    <span className="text-neutral-600 table-text-14">{fund.fundValueAtDeath || "R 0"}</span>
+                    <AutoSizeInput
+                      value={fund.fundValueAtDeath || ""}
+                      onChange={(e) => handleInputChange(fund.id, "fundValueAtDeath", e.target.value)}
+                      className="p-1 table-text-14 text-right bg-transparent border-none" style={{ textAlign: "right", minWidth: "60px", width: "100%" }}
+                      placeholder="R 0"
+                      disabled={isUpdating}
+                    />
                   </td>
                 </>
               )}
@@ -931,7 +937,13 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
 
                   {/* Fund value beneficiaries - Amount */}
                   <td className="p-2 text-right border-r border-teal-100">
-                    <span className="text-neutral-600 table-text-14">{fund.amount || "R 0"}</span>
+                    <AutoSizeInput
+                      value={fund.amount || ""}
+                      onChange={(e) => handleInputChange(fund.id, "amount", e.target.value)}
+                      className="p-1 table-text-14 text-right bg-transparent border-none" style={{ textAlign: "right", minWidth: "60px", width: "100%" }}
+                      placeholder="R 0"
+                      disabled={isUpdating}
+                    />
                   </td>
 
                   {/* Fund value beneficiaries - Lump sum taken */}
@@ -948,7 +960,13 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
 
                   {/* Fund value beneficiaries - Fund value at death */}
                   <td className="p-2 text-right border-r border-teal-100">
-                    <span className="text-neutral-600 table-text-14">{fund.fundValueAtDeath || "R 0"}</span>
+                    <AutoSizeInput
+                      value={fund.fundValueAtDeath || ""}
+                      onChange={(e) => handleInputChange(fund.id, "fundValueAtDeath", e.target.value)}
+                      className="p-1 table-text-14 text-right bg-transparent border-none" style={{ textAlign: "right", minWidth: "60px", width: "100%" }}
+                      placeholder="R 0"
+                      disabled={isUpdating}
+                    />
                   </td>
 
                   {/* Fund value beneficiaries - Unappropriated fund commencement amount */}
@@ -965,7 +983,13 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
 
                   {/* Living Annuity */}
                   <td className="p-2 text-right border-r border-teal-100">
-                    <span className="text-neutral-600">{fund.livingAnnuity || ""}</span>
+                    <AutoSizeInput
+                      value={fund.livingAnnuity || ""}
+                      onChange={(e) => handleInputChange(fund.id, "livingAnnuity", e.target.value)}
+                      className="p-1 table-text-14 text-right bg-transparent border-none" style={{ textAlign: "right", minWidth: "60px", width: "100%" }}
+                      placeholder=""
+                      disabled={isUpdating}
+                    />
                   </td>
 
                   {/* Income from */}
