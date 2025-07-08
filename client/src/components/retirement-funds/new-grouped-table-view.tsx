@@ -522,18 +522,20 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
                     <td className="compact-cell text-right border-r border-teal-100">
                       <AutoSizeInput
                         
-                        value={fund.executorsFee || "0"}
+                        value={fund.executorsFee || "0%"}
                         onChange={(e) => handleInputChange(fund.id, "executorsFee", e.target.value)}
                         className="compact-input table-text-14" style={{ textAlign: "right" }}
+                        placeholder="0%"
                         disabled={isUpdating}
                       />
                     </td>
                     <td className="compact-cell text-right border-r border-teal-100">
                       <AutoSizeInput
                         
-                        value={fund.mastersFee || "0"}
+                        value={fund.mastersFee || "0%"}
                         onChange={(e) => handleInputChange(fund.id, "mastersFee", e.target.value)}
                         className="compact-input table-text-14" style={{ textAlign: "right" }}
+                        placeholder="0%"
                         disabled={isUpdating}
                       />
                     </td>
@@ -552,8 +554,8 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
                   <td className="compact-cell text-right border-r border-teal-100 table-text-14 font-bold border-l border-neutral-200">0%</td>
                   <td className="compact-cell text-right border-r border-teal-100 table-text-14 font-bold">0%</td>
                   <td className="compact-cell text-right border-r border-teal-100 table-text-14 font-bold">0%</td>
-                  <td className="compact-cell text-right border-r border-teal-100 table-text-14 font-bold">0</td>
-                  <td className="compact-cell text-right border-r border-teal-100 table-text-14 font-bold">0</td>
+                  <td className="compact-cell text-right border-r border-teal-100 table-text-14 font-bold">0%</td>
+                  <td className="compact-cell text-right border-r border-teal-100 table-text-14 font-bold">0%</td>
                 </>
               )}
               {columnVisibility.monthlyDeathBenefit && (

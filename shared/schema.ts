@@ -39,8 +39,8 @@ export const retirementFunds = pgTable("retirement_funds", {
   currentAnnualIncome: text("current_annual_income").notNull().default("0"),
   annualIncomeAtDeath: text("annual_income_at_death").notNull().default("0"),
   estateDeploymentDeceased: text("estate_deployment_deceased").notNull().default("0"),
-  executorsFee: text("executors_fee").notNull().default("0"),
-  mastersFee: text("masters_fee").notNull().default("0"),
+  executorsFee: text("executors_fee").notNull().default("0%"),
+  mastersFee: text("masters_fee").notNull().default("0%"),
   
   // Estate Duty percentage fields for flows table
   estateDutyPoliciesOnLife: text("estate_duty_policies_on_life").notNull().default("0%"),
