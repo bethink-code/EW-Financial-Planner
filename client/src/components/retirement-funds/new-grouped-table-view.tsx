@@ -519,7 +519,7 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
                         disabled={isUpdating}
                       />
                     </td>
-                    <td className="p-2 text-right ">
+                    <td className="p-2 text-right">
                       <AutoSizeInput
                         
                         value={fund.executorsFee || "0%"}
@@ -529,7 +529,7 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
                         disabled={isUpdating}
                       />
                     </td>
-                    <td className="p-2 text-right ">
+                    <td className="p-2 text-right">
                       <AutoSizeInput
                         
                         value={fund.mastersFee || "0%"}
@@ -574,11 +574,11 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
               )}
               {columnVisibility.fundValueBeneficiaries && (
                 <>
-                  <td className="p-2 text-right ">0%</td>
                   <td className="p-2 text-right">0%</td>
                   <td className="p-2 text-right">0%</td>
-                  <td className="p-2 text-right">0</td>
-                  <td className="p-2 text-right">0</td>
+                  <td className="p-2 text-right">0%</td>
+                  <td className="p-2 text-right">0%</td>
+                  <td className="p-2 text-right">0%</td>
                 </>
               )}
             </tr>
