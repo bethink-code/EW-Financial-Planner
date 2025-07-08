@@ -1028,7 +1028,7 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
               <>
                 {/* Cover amount - TOTAL */}
                 <td className="compact-cell text-right border-r border-teal-100 border-l border-neutral-300">
-                  <span className="font-semibold text-right block table-text-14" style={{ color: '#094161' }}>
+                  <span className="font-semibold text-right table-text-14 compact-total-span" style={{ color: '#094161' }}>
                     R {funds.reduce((sum, fund) => {
                       const amount = parseInt(fund.coverAmount?.replace(/[^0-9]/g, '') || '0');
                       return sum + amount;
@@ -1058,7 +1058,7 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
               <>
                 {/* Monthly income - TOTAL */}
                 <td className="compact-cell text-right border-r border-teal-100 border-l border-neutral-300">
-                  <span className="font-semibold text-right block table-text-14" style={{ color: '#094161' }}>
+                  <span className="font-semibold text-right table-text-14 compact-total-span" style={{ color: '#094161' }}>
                     R {funds.reduce((sum, fund) => {
                       const amount = parseInt(fund.monthlyIncome?.replace(/[^0-9]/g, '') || '0');
                       return sum + amount;
@@ -1087,7 +1087,7 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
             {columnVisibility.fundValue && (
               <>
                 <td className="compact-cell text-right border-r border-teal-100 border-l border-neutral-300">
-                  <span className="font-semibold text-right block table-text-14" style={{ color: '#094161' }}>
+                  <span className="font-semibold text-right table-text-14 compact-total-span" style={{ color: '#094161' }}>
                     R {funds.reduce((sum, fund) => {
                       const amount = parseInt(fund.approvedLifeCover?.replace(/[^0-9]/g, '') || '0');
                       return sum + amount;
@@ -1096,7 +1096,7 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
                 </td>
                 
                 <td className="compact-cell text-right border-r border-teal-100">
-                  <span className="font-semibold text-right block table-text-14" style={{ color: '#094161' }}>
+                  <span className="font-semibold text-right table-text-14 compact-total-span" style={{ color: '#094161' }}>
                     R {funds.reduce((sum, fund) => {
                       const amount = parseInt(fund.fundValue?.replace(/[^0-9]/g, '') || '0');
                       return sum + amount;
@@ -1105,7 +1105,7 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
                 </td>
                 
                 <td className="compact-cell text-right border-r border-teal-100 border-r border-neutral-300">
-                  <span className="font-semibold text-right block table-text-14" style={{ color: '#094161' }}>
+                  <span className="font-semibold text-right table-text-14 compact-total-span" style={{ color: '#094161' }}>
                     R {funds.reduce((sum, fund) => {
                       const amount = parseInt(fund.fundValueAtDeath?.replace(/[^0-9]/g, '') || '0');
                       return sum + amount;
