@@ -7,9 +7,9 @@ html {
   font-size: 16px; /* Keep default for overall app */
 }
 
-/* Define 14px font size for table content */
+/* Define 12px font size for table content to match headers */
 .table-text-14 {
-  font-size: 14px !important;
+  font-size: 12px !important;
   font-weight: normal !important;
   line-height: 1.2 !important;
 }
@@ -23,7 +23,7 @@ html {
 
 /* Ensure total row uses normal font weight */
 .table-total-row {
-  font-size: 14px !important;
+  font-size: 12px !important;
   font-weight: normal !important;
 }
 
