@@ -299,6 +299,15 @@ th, td {
   .compact-total-span {
     padding: 0.375rem 0;
     display: block;
+    font-weight: bold !important;
+  }
+  
+  .total-row-bold {
+    font-weight: bold !important;
+  }
+  
+  .total-row-bold * {
+    font-weight: bold !important;
   }
   
   .compact-input {
