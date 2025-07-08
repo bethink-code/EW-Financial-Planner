@@ -547,7 +547,9 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
             {/* Flows total row */}
             <tr className="bg-gray-100 font-semibold border-t-2 border-neutral-300">
               {columnVisibility.overview && (
-                <td className="p-2 text-right">Total</td>
+                <td className="table-cell whitespace-nowrap table-text-14 font-bold" style={{ color: '#094161' }}>
+                  Total
+                </td>
               )}
               {columnVisibility.fundValueBeneficiaries && (
                 <>
@@ -574,9 +576,21 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
               )}
               {columnVisibility.fundValueBeneficiaries && (
                 <>
-                  <td className="p-2 text-right">0%</td>
-                  <td className="p-2 text-right">0%</td>
-                  <td className="p-2 text-right">0%</td>
+                  <td className="p-2 text-right">
+                    <span className="font-bold text-right table-text-14 compact-total-span" style={{ color: '#094161' }}>
+                      0%
+                    </span>
+                  </td>
+                  <td className="p-2 text-right">
+                    <span className="font-bold text-right table-text-14 compact-total-span" style={{ color: '#094161' }}>
+                      0%
+                    </span>
+                  </td>
+                  <td className="p-2 text-right">
+                    <span className="font-bold text-right table-text-14 compact-total-span" style={{ color: '#094161' }}>
+                      0%
+                    </span>
+                  </td>
                 </>
               )}
             </tr>
