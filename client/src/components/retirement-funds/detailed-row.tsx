@@ -238,7 +238,7 @@ export function DetailedRow({ fund, columnVisibility, onFieldUpdate, isUpdating 
                     placeholder="R 0"
                   />
                 </div>
-                <div className="col-span-1 sm:col-span-2 lg:col-span-4 xl:col-span-6">
+                <div>
                   <Label className="text-xs text-neutral-600">Fund Value at Death</Label>
                   <div className="h-8 px-3 py-1 text-sm text-right bg-neutral-50 border border-neutral-200 rounded">
                     {fund.fundValueAtDeath || "R 0"}
@@ -314,7 +314,7 @@ export function DetailedRow({ fund, columnVisibility, onFieldUpdate, isUpdating 
                     {fund.livingAnnuity || ""}
                   </div>
                 </div>
-                <div className="col-span-1 sm:col-span-2 lg:col-span-4 xl:col-span-6">
+                <div>
                   <Label className="text-xs text-neutral-600">Income Term</Label>
                   <Input
                     value={fund.incomeTerm}
