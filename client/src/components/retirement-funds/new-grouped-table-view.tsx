@@ -281,7 +281,7 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
     // Render flows table only
     return (
       <div className="overflow-x-auto">
-        <table className="min-w-full bg-white table-auto">
+        <table className="w-full bg-white table-auto">
           <thead>
             {/* First level headers - Flows */}
             <tr className="border-b border-neutral-200" style={{ backgroundColor: '#D6ECF5' }}>
