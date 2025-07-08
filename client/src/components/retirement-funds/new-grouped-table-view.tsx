@@ -753,14 +753,7 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
                 <>
                   {/* Cover amount - Unapproved */}
                   <td className="p-2 text-right border-r border-teal-100 border-l border-neutral-300">
-                    <AutoSizeInput
-                      
-                      value={fund.coverAmount || ""}
-                      onChange={(e) => handleInputChange(fund.id, "coverAmount", e.target.value)}
-                      className="p-1 table-text-14 text-right bg-transparent border-none" style={{ textAlign: "right", minWidth: "60px", width: "100%" }}
-                      placeholder="R 0"
-                      disabled={isUpdating}
-                    />
+                    <span className="text-neutral-600 table-text-14">{fund.coverAmount || "R 0"}</span>
                   </td>
 
                   {/* Unapproved life cover - Beneficiary */}
@@ -983,13 +976,7 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
 
                   {/* Living Annuity */}
                   <td className="p-2 text-right border-r border-teal-100">
-                    <AutoSizeInput
-                      value={fund.livingAnnuity || ""}
-                      onChange={(e) => handleInputChange(fund.id, "livingAnnuity", e.target.value)}
-                      className="p-1 table-text-14 text-right bg-transparent border-none" style={{ textAlign: "right", minWidth: "60px", width: "100%" }}
-                      placeholder=""
-                      disabled={isUpdating}
-                    />
+                    <span className="text-neutral-600 table-text-14">{fund.livingAnnuity || ""}</span>
                   </td>
 
                   {/* Income from */}
