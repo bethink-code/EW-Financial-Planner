@@ -545,36 +545,36 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
             {/* Flows total row */}
             <tr style={{ backgroundColor: '#D6ECF5' }} className="border-t-2 border-neutral-300">
               {columnVisibility.overview && (
-                <td className="compact-cell border-r border-teal-100 table-text-14">Total</td>
+                <td className="compact-cell border-r border-teal-100 table-text-14 font-bold">Total</td>
               )}
               {columnVisibility.overview && (
                 <>
-                  <td className="compact-cell text-right border-r border-teal-100 table-text-14">0</td>
-                  <td className="compact-cell text-right border-r border-teal-100 table-text-14">0</td>
-                  <td className="compact-cell text-right border-r border-teal-100 table-text-14">0</td>
+                  <td className="compact-cell text-right border-r border-teal-100 table-text-14 font-bold">0</td>
+                  <td className="compact-cell text-right border-r border-teal-100 table-text-14 font-bold">0</td>
+                  <td className="compact-cell text-right border-r border-teal-100 table-text-14 font-bold">0</td>
                 </>
               )}
               {columnVisibility.monthlyDeathBenefit && (
                 <>
-                  <td className="compact-cell text-right border-r border-teal-100 table-text-14 border-l border-neutral-200">0</td>
-                  <td className="compact-cell text-right border-r border-teal-100 table-text-14">0</td>
-                  <td className="compact-cell text-right border-r border-teal-100 table-text-14">0%</td>
+                  <td className="compact-cell text-right border-r border-teal-100 table-text-14 font-bold border-l border-neutral-200">0</td>
+                  <td className="compact-cell text-right border-r border-teal-100 table-text-14 font-bold">0</td>
+                  <td className="compact-cell text-right border-r border-teal-100 table-text-14 font-bold">0%</td>
                 </>
               )}
               {columnVisibility.fundValue && (
                 <>
-                  <td className="compact-cell text-right border-r border-teal-100 table-text-14 border-l border-neutral-200">0</td>
-                  <td className="compact-cell text-right border-r border-teal-100 table-text-14">0</td>
-                  <td className="compact-cell text-right border-r border-teal-100 table-text-14">0%</td>
+                  <td className="compact-cell text-right border-r border-teal-100 table-text-14 font-bold border-l border-neutral-200">0</td>
+                  <td className="compact-cell text-right border-r border-teal-100 table-text-14 font-bold">0</td>
+                  <td className="compact-cell text-right border-r border-teal-100 table-text-14 font-bold">0%</td>
                 </>
               )}
               {columnVisibility.fundValueBeneficiaries && (
                 <>
-                  <td className="compact-cell text-right border-r border-teal-100 table-text-14 border-l border-neutral-200">0%</td>
-                  <td className="compact-cell text-right border-r border-teal-100 table-text-14">0%</td>
-                  <td className="compact-cell text-right border-r border-teal-100 table-text-14">0%</td>
-                  <td className="compact-cell text-right border-r border-teal-100 table-text-14">0</td>
-                  <td className="compact-cell text-right border-r border-teal-100 table-text-14">0</td>
+                  <td className="compact-cell text-right border-r border-teal-100 table-text-14 font-bold border-l border-neutral-200">0%</td>
+                  <td className="compact-cell text-right border-r border-teal-100 table-text-14 font-bold">0%</td>
+                  <td className="compact-cell text-right border-r border-teal-100 table-text-14 font-bold">0%</td>
+                  <td className="compact-cell text-right border-r border-teal-100 table-text-14 font-bold">0</td>
+                  <td className="compact-cell text-right border-r border-teal-100 table-text-14 font-bold">0</td>
                 </>
               )}
             </tr>
@@ -1012,7 +1012,7 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
             {columnVisibility.overview && (
               <>
                 {/* Description */}
-                <td className="compact-cell whitespace-nowrap table-text-14 font-semibold" style={{ color: '#094161' }}>
+                <td className="compact-cell whitespace-nowrap table-text-14 font-bold" style={{ color: '#094161' }}>
                   Total
                 </td>
                 
@@ -1028,7 +1028,7 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
               <>
                 {/* Cover amount - TOTAL */}
                 <td className="compact-cell text-right border-r border-teal-100 border-l border-neutral-300">
-                  <span className="font-semibold text-right table-text-14 compact-total-span" style={{ color: '#094161' }}>
+                  <span className="font-bold text-right table-text-14 compact-total-span" style={{ color: '#094161' }}>
                     R {funds.reduce((sum, fund) => {
                       const amount = parseInt(fund.coverAmount?.replace(/[^0-9]/g, '') || '0');
                       return sum + amount;
@@ -1058,7 +1058,7 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
               <>
                 {/* Monthly income - TOTAL */}
                 <td className="compact-cell text-right border-r border-teal-100 border-l border-neutral-300">
-                  <span className="font-semibold text-right table-text-14 compact-total-span" style={{ color: '#094161' }}>
+                  <span className="font-bold text-right table-text-14 compact-total-span" style={{ color: '#094161' }}>
                     R {funds.reduce((sum, fund) => {
                       const amount = parseInt(fund.monthlyIncome?.replace(/[^0-9]/g, '') || '0');
                       return sum + amount;
@@ -1087,7 +1087,7 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
             {columnVisibility.fundValue && (
               <>
                 <td className="compact-cell text-right border-r border-teal-100 border-l border-neutral-300">
-                  <span className="font-semibold text-right table-text-14 compact-total-span" style={{ color: '#094161' }}>
+                  <span className="font-bold text-right table-text-14 compact-total-span" style={{ color: '#094161' }}>
                     R {funds.reduce((sum, fund) => {
                       const amount = parseInt(fund.approvedLifeCover?.replace(/[^0-9]/g, '') || '0');
                       return sum + amount;
@@ -1096,7 +1096,7 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
                 </td>
                 
                 <td className="compact-cell text-right border-r border-teal-100">
-                  <span className="font-semibold text-right table-text-14 compact-total-span" style={{ color: '#094161' }}>
+                  <span className="font-bold text-right table-text-14 compact-total-span" style={{ color: '#094161' }}>
                     R {funds.reduce((sum, fund) => {
                       const amount = parseInt(fund.fundValue?.replace(/[^0-9]/g, '') || '0');
                       return sum + amount;
@@ -1105,7 +1105,7 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
                 </td>
                 
                 <td className="compact-cell text-right border-r border-teal-100 border-r border-neutral-300">
-                  <span className="font-semibold text-right table-text-14 compact-total-span" style={{ color: '#094161' }}>
+                  <span className="font-bold text-right table-text-14 compact-total-span" style={{ color: '#094161' }}>
                     R {funds.reduce((sum, fund) => {
                       const amount = parseInt(fund.fundValueAtDeath?.replace(/[^0-9]/g, '') || '0');
                       return sum + amount;
