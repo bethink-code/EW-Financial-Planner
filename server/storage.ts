@@ -54,8 +54,13 @@ export class MemStorage implements IStorage {
       currentAnnualIncome: "R 54,000",
       annualIncomeAtDeath: "R 60,000",
       estateDeploymentDeceased: "R 45,000",
-      executorsFee: "R 2,500",
-      mastersFee: "R 1,200"
+      executorsFee: "3.5%",
+      mastersFee: "1.75%",
+      
+      // Estate duty percentages
+      estateDutyPoliciesOnLife: "20%",
+      estateDutyToSpouse: "0%", 
+      estateDutyToOthers: "20%"
     });
     
     this.createRetirementFund({
@@ -93,8 +98,13 @@ export class MemStorage implements IStorage {
       currentAnnualIncome: "R 38,400",
       annualIncomeAtDeath: "R 42,000",
       estateDeploymentDeceased: "R 35,000",
-      executorsFee: "R 1,800",
-      mastersFee: "R 900",
+      executorsFee: "3.5%",
+      mastersFee: "1.75%",
+      
+      // Estate duty percentages
+      estateDutyPoliciesOnLife: "10%",
+      estateDutyToSpouse: "0%", 
+      estateDutyToOthers: "15%",
       
       // Additional fields shown below table in inputs mode
       lumpSumDeath: "0",
@@ -142,8 +152,13 @@ export class MemStorage implements IStorage {
       currentAnnualIncome: insertFund.currentAnnualIncome || "0",
       annualIncomeAtDeath: insertFund.annualIncomeAtDeath || "0",
       estateDeploymentDeceased: insertFund.estateDeploymentDeceased || "0",
-      executorsFee: insertFund.executorsFee || "0",
-      mastersFee: insertFund.mastersFee || "0",
+      executorsFee: insertFund.executorsFee || "0%",
+      mastersFee: insertFund.mastersFee || "0%",
+      
+      // Estate duty percentages
+      estateDutyPoliciesOnLife: insertFund.estateDutyPoliciesOnLife || "0%",
+      estateDutyToSpouse: insertFund.estateDutyToSpouse || "0%",
+      estateDutyToOthers: insertFund.estateDutyToOthers || "0%",
       
       // Additional fields shown below table in inputs mode
       lumpSumDeath: insertFund.lumpSumDeath || "0",
