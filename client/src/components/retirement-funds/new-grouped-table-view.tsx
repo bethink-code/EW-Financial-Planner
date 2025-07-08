@@ -712,7 +712,7 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
         </thead>
         <tbody className="bg-white divide-y divide-neutral-200">
           {funds.map((fund) => (
-            <tr key={fund.id} className="hover:bg-neutral-50" style={{ height: '2rem', minHeight: '2rem' }}>
+            <tr key={fund.id} className="hover:bg-neutral-50">
               {/* Overview Section */}
               {columnVisibility.overview && (
                 <>
