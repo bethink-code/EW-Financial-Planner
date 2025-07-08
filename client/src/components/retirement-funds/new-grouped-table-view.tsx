@@ -282,13 +282,13 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
                   <th className="px-3 py-2 text-center text-xs font-medium text-neutral-500 uppercase tracking-wider">
                     {/* Description column - standalone */}
                   </th>
-                  <th className="px-3 py-2 text-center text-xs font-medium text-neutral-500 uppercase tracking-wider border-l border-neutral-300" colSpan={4}>
+                  <th className="px-3 py-2 text-center text-xs font-medium text-neutral-500 uppercase tracking-wider border-l border-neutral-300" colSpan={3}>
                     Lump sum life cover available as provision to
                   </th>
                 </>
               )}
               {columnVisibility.monthlyDeathBenefit && (
-                <th className="px-3 py-2 text-center text-xs font-medium text-neutral-500 uppercase tracking-wider border-l border-neutral-300" colSpan={3}>
+                <th className="px-3 py-2 text-center text-xs font-medium text-neutral-500 uppercase tracking-wider border-l border-neutral-300" colSpan={4}>
                   Income provision source
                 </th>
               )}
@@ -320,10 +320,7 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
                     Spouse
                   </th>
                   <th className="px-3 py-2 text-center text-xs font-medium text-neutral-600 uppercase tracking-wider">
-                    Child
-                  </th>
-                  <th className="px-3 py-2 text-center text-xs font-medium text-neutral-600 uppercase tracking-wider">
-                    Amount
+                    Other
                   </th>
                 </>
               )}
@@ -334,6 +331,9 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
                   </th>
                   <th className="px-3 py-2 text-center text-xs font-medium text-neutral-600 uppercase tracking-wider">
                     Payments
+                  </th>
+                  <th className="px-3 py-2 text-center text-xs font-medium text-neutral-600 uppercase tracking-wider">
+                    Amount
                   </th>
                   <th className="px-3 py-2 text-center text-xs font-medium text-neutral-600 uppercase tracking-wider">
                     Amount
@@ -412,15 +412,6 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
                         disabled={isUpdating}
                       />
                     </td>
-                    <td className="p-2 text-right border-r border-teal-100">
-                      <AutoSizeInput
-                        value={fund.lumpSumLeftOverProvisions || "0"}
-                        onChange={(e) => handleInputChange(fund.id, "lumpSumLeftOverProvisions", e.target.value)}
-                        className="p-1 text-xs text-right bg-transparent border-none"
-                        style={{ textAlign: 'right', minWidth: '60px' }}
-                        disabled={isUpdating}
-                      />
-                    </td>
                   </>
                 )}
                 {columnVisibility.monthlyDeathBenefit && (
@@ -452,6 +443,15 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
                         onChange={(e) => handleInputChange(fund.id, "currentAnnualIncome", e.target.value)}
                         className="p-1 text-xs text-right bg-transparent border-none" style={{ textAlign: "right", minWidth: "60px" }}
                         
+                        disabled={isUpdating}
+                      />
+                    </td>
+                    <td className="p-2 text-right border-r border-teal-100">
+                      <AutoSizeInput
+                        value={fund.lumpSumLeftOverProvisions || "0"}
+                        onChange={(e) => handleInputChange(fund.id, "lumpSumLeftOverProvisions", e.target.value)}
+                        className="p-1 text-xs text-right bg-transparent border-none"
+                        style={{ textAlign: 'right', minWidth: '60px' }}
                         disabled={isUpdating}
                       />
                     </td>
@@ -558,12 +558,12 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
                   <td className="p-2 text-right border-r border-teal-100">0</td>
                   <td className="p-2 text-right border-r border-teal-100">0</td>
                   <td className="p-2 text-right border-r border-teal-100">0</td>
-                  <td className="p-2 text-right">0</td>
                 </>
               )}
               {columnVisibility.monthlyDeathBenefit && (
                 <>
                   <td className="px-3 py-2 text-right border-r border-teal-100 border-l border-neutral-200">0</td>
+                  <td className="px-3 py-2 text-right border-r border-teal-100">0</td>
                   <td className="px-3 py-2 text-right border-r border-teal-100">0</td>
                   <td className="px-3 py-2 text-right border-r border-teal-100">0</td>
                 </>
