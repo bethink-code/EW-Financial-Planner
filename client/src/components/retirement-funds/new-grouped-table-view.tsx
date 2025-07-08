@@ -576,20 +576,29 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
               )}
               {columnVisibility.fundValueBeneficiaries && (
                 <>
-                  <td className="p-2 text-right">
-                    <span className="font-bold text-right table-text-14 compact-total-span" style={{ color: '#094161' }}>
-                      0%
-                    </span>
+                  {/* Estate Duty (Policies on life of deceased) */}
+                  <td className="p-2 text-right ">
+                    
                   </td>
-                  <td className="p-2 text-right">
-                    <span className="font-bold text-right table-text-14 compact-total-span" style={{ color: '#094161' }}>
-                      0%
-                    </span>
+                  
+                  {/* Estate Duty (To spouse) */}
+                  <td className="p-2 text-right ">
+                    
                   </td>
-                  <td className="p-2 text-right">
-                    <span className="font-bold text-right table-text-14 compact-total-span" style={{ color: '#094161' }}>
-                      0%
-                    </span>
+                  
+                  {/* Estate Duty (To others) */}
+                  <td className="p-2 text-right ">
+                    
+                  </td>
+                  
+                  {/* Executor's fee */}
+                  <td className="p-2 text-right ">
+                    
+                  </td>
+                  
+                  {/* Master's fee */}
+                  <td className="p-2 text-right ">
+                    
                   </td>
                 </>
               )}
