@@ -74,7 +74,7 @@ export function DetailedRow({ fund, columnVisibility, onFieldUpdate, isUpdating 
           {columnVisibility.overview && (
             <div className="bg-teal-50 rounded-lg p-2 lg:p-3">
               <h4 className="text-sm font-bold text-teal-700 mb-2 lg:mb-3">Overview</h4>
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-2 lg:gap-3">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-6 gap-2 lg:gap-3">
                 <div>
                   <Label className="text-xs text-neutral-600">Description</Label>
                   <Input
@@ -111,7 +111,7 @@ export function DetailedRow({ fund, columnVisibility, onFieldUpdate, isUpdating 
           {columnVisibility.unapprovedLifeCover && (
             <div className="bg-teal-50 rounded-lg p-2 lg:p-3">
               <h4 className="text-sm font-bold text-teal-700 mb-2 lg:mb-3">Unapproved Life Cover</h4>
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-2 lg:gap-3">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-6 gap-2 lg:gap-3">
                 <div>
                   <Label className="text-xs text-neutral-600">Cover Amount</Label>
                   <Input
@@ -169,7 +169,7 @@ export function DetailedRow({ fund, columnVisibility, onFieldUpdate, isUpdating 
           {columnVisibility.monthlyDeathBenefit && (
             <div className="bg-teal-50 rounded-lg p-2 lg:p-3">
               <h4 className="text-sm font-bold text-teal-700 mb-2 lg:mb-3">Monthly Death Benefit</h4>
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-2 lg:gap-3">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-6 gap-2 lg:gap-3">
                 <div>
                   <Label className="text-xs text-neutral-600">Monthly Income</Label>
                   <Input
@@ -217,7 +217,7 @@ export function DetailedRow({ fund, columnVisibility, onFieldUpdate, isUpdating 
           {columnVisibility.fundValue && (
             <div className="bg-teal-50 rounded-lg p-2 lg:p-3">
               <h4 className="text-sm font-bold text-teal-700 mb-2 lg:mb-3">Fund Value</h4>
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-2 lg:gap-3">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-6 gap-2 lg:gap-3">
                 <div>
                   <Label className="text-xs text-neutral-600">Approved Life Cover</Label>
                   <Input
@@ -238,7 +238,7 @@ export function DetailedRow({ fund, columnVisibility, onFieldUpdate, isUpdating 
                     placeholder="R 0"
                   />
                 </div>
-                <div className="sm:col-span-2 lg:col-span-3 xl:col-span-4">
+                <div className="sm:col-span-2 lg:col-span-4 xl:col-span-6">
                   <Label className="text-xs text-neutral-600">Fund Value at Death</Label>
                   <div className="h-8 px-3 py-1 text-sm text-right bg-neutral-50 border border-neutral-200 rounded">
                     {fund.fundValueAtDeath || "R 0"}
@@ -252,7 +252,7 @@ export function DetailedRow({ fund, columnVisibility, onFieldUpdate, isUpdating 
           {columnVisibility.fundValueBeneficiaries && (
             <div className="bg-teal-50 rounded-lg p-2 lg:p-3">
               <h4 className="text-sm font-bold text-teal-700 mb-2 lg:mb-3">Fund Value Beneficiaries</h4>
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-2 lg:gap-3">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-6 gap-2 lg:gap-3">
                 <div>
                   <Label className="text-xs text-neutral-600">Beneficiary Name</Label>
                   <Select
@@ -314,7 +314,7 @@ export function DetailedRow({ fund, columnVisibility, onFieldUpdate, isUpdating 
                     {fund.livingAnnuity || ""}
                   </div>
                 </div>
-                <div className="sm:col-span-2 lg:col-span-3 xl:col-span-4">
+                <div className="sm:col-span-2 lg:col-span-4 xl:col-span-6">
                   <Label className="text-xs text-neutral-600">Income Term</Label>
                   <Input
                     value={fund.incomeTerm}
