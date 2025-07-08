@@ -547,31 +547,61 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
             {/* Flows total row */}
             <tr className="bg-gray-100 font-semibold border-t-2 border-neutral-300">
               {columnVisibility.overview && (
+                <>
+                {/* Description */}
                 <td className="table-cell whitespace-nowrap table-text-14 font-bold" style={{ color: '#094161' }}>
                   Total
                 </td>
+                
+                {/* Owner */}
+                <td className="p-2 text-right ">
+                  
+                </td>
+              </>
               )}
               {columnVisibility.fundValueBeneficiaries && (
                 <>
-                  <td className="p-2 text-right ">0%</td>
-                  <td className="p-2 text-right">0%</td>
-                  <td className="p-2 text-right">0%</td>
-                  <td className="p-2 text-right">0%</td>
-                  <td className="p-2 text-right">0%</td>
+                  <td className="p-2 text-right ">
+                    
+                  </td>
+                  <td className="p-2 text-right ">
+                    
+                  </td>
+                  <td className="p-2 text-right ">
+                    
+                  </td>
+                  <td className="p-2 text-right ">
+                    
+                  </td>
+                  <td className="p-2 text-right ">
+                    
+                  </td>
                 </>
               )}
               {columnVisibility.monthlyDeathBenefit && (
                 <>
-                  <td className="p-2 text-right ">0</td>
-                  <td className="p-2 text-right">0</td>
-                  <td className="p-2 text-right">0%</td>
+                  <td className="p-2 text-right ">
+                    
+                  </td>
+                  <td className="p-2 text-right ">
+                    
+                  </td>
+                  <td className="p-2 text-right ">
+                    
+                  </td>
                 </>
               )}
               {columnVisibility.fundValue && (
                 <>
-                  <td className="p-2 text-right ">0</td>
-                  <td className="p-2 text-right">0</td>
-                  <td className="p-2 text-right">0%</td>
+                  <td className="p-2 text-right ">
+                    
+                  </td>
+                  <td className="p-2 text-right ">
+                    
+                  </td>
+                  <td className="p-2 text-right  border-r border-neutral-300">
+                    
+                  </td>
                 </>
               )}
               {columnVisibility.fundValueBeneficiaries && (
