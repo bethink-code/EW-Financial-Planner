@@ -286,72 +286,58 @@ th, td {
   .border-neutral-200 { border-color: var(--neutral-200); }
   .border-neutral-300 { border-color: var(--neutral-300); }
   
-  /* Compact spacing utilities */
-  .compact-row {
-    padding-top: 0.5rem;
-    padding-bottom: 0.5rem;
-  }
+  /* UNIFIED TABLE SYSTEM - Clean and Consistent */
   
-  .compact-cell {
+  /* Standard table cell - works for both inputs and flows tables */
+  .table-cell {
     padding: 0.375rem 0.75rem;
-    min-height: 2rem;
     height: 2rem;
     vertical-align: middle;
-  }
-
-  /* Force consistent row heights across all tables */
-  tbody tr {
-    height: 2rem !important;
-    min-height: 2rem !important;
+    box-sizing: border-box;
   }
   
-  .compact-total-span {
-    padding: 0.375rem 0;
-    display: block;
-    font-weight: 700 !important;
-    min-height: 2rem;
-    display: flex;
-    align-items: center;
-  }
-  
-  .total-row-bold {
-    font-weight: 700 !important;
-    font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif !important;
-  }
-  
-  .total-row-bold * {
-    font-weight: 700 !important;
-    font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif !important;
-  }
-  
-  .total-row-bold td {
-    font-weight: 700 !important;
-    font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif !important;
-    min-height: 2rem;
+  /* Standard table row - enforces consistent height */
+  .table-row {
     height: 2rem;
-    vertical-align: middle;
+    line-height: 2rem;
   }
   
-  .total-row-bold span {
-    font-weight: 700 !important;
-    font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif !important;
-  }
-  
-  .compact-input {
-    padding: 0.375rem 0.75rem;
-    min-height: 2rem !important;
-    height: 2rem !important;
+  /* Input fields for editable content */
+  .table-input {
     width: auto;
     min-width: 80px;
     max-width: 300px;
+    height: 1.25rem;
+    padding: 0.375rem 0.75rem;
     background-color: #F2F7FB;
-    resize: none;
-    box-sizing: border-box;
-    display: flex;
-    align-items: center;
     border: none;
     outline: none;
     font-size: 0.875rem;
+    text-align: right;
+    box-sizing: border-box;
+    resize: none;
+  }
+  
+  /* Total rows - bold styling */
+  .table-total-row {
+    height: 2rem;
+    font-weight: 700;
+    background-color: #e0f7fa;
+  }
+  
+  .table-total-row td {
+    height: 2rem;
+    font-weight: 700;
+    vertical-align: middle;
+    padding: 0.375rem 0.75rem;
+  }
+  
+  /* Remove all old CSS classes to prevent conflicts */
+  .compact-cell,
+  .compact-input,
+  .compact-total-span,
+  .total-row-bold {
+    display: none !important;
   }
 
   /* Auto-sizing for input fields */
