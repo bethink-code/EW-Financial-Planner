@@ -2,6 +2,16 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Set base font size to 14px and define table text size */
+html {
+  font-size: 16px; /* Keep default for overall app */
+}
+
+/* Define 14px font size for table content */
+.table-text-14 {
+  font-size: 14px !important;
+}
+
 /* Force right alignment for flow table inputs */
 .auto-size-input {
   text-align: right !important;
