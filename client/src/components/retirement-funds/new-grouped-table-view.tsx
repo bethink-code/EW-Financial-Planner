@@ -270,9 +270,7 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
   };
 
   return (
-    <div className="space-y-6">
-      {/* Always show the inputs table */}
-      <div className="overflow-x-auto">
+    <div className="overflow-x-auto">
       <table className="min-w-full bg-white table-auto">
         <thead>
           {/* First level headers */}
@@ -824,11 +822,319 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
             )}
           </tr>
         </tbody>
+
+        {/* Show flows table rows when in flows mode */}
+        {tableMode === "flows" && (
+          <>
+            {/* Spacer row */}
+            <tbody>
+              <tr>
+                <td colSpan={100} className="py-4">
+                  <div className="border-t border-neutral-300"></div>
+                </td>
+              </tr>
+            </tbody>
+
+            {/* Flows section header */}
+            <thead>
+              <tr className="border-b border-neutral-200" style={{ backgroundColor: '#E0F2FE' }}>
+                <th colSpan={100} className="px-3 py-3 text-center text-sm font-semibold text-teal-800">
+                  FLOWS TABLE
+                </th>
+              </tr>
+              
+              {/* Flows table headers */}
+              <tr className="border-b border-neutral-200" style={{ backgroundColor: '#E0F2FE' }}>
+                {columnVisibility.overview && (
+                  <>
+                    <th className="px-3 py-2 text-left text-xs font-medium text-teal-700 uppercase tracking-wider">
+                      Description
+                    </th>
+                  </>
+                )}
+                {columnVisibility.overview && (
+                  <>
+                    <th className="px-3 py-2 text-center text-xs font-medium text-teal-700 uppercase tracking-wider border-l border-teal-300">
+                      Estate
+                    </th>
+                    <th className="px-3 py-2 text-center text-xs font-medium text-teal-700 uppercase tracking-wider">
+                      Spouse
+                    </th>
+                    <th className="px-3 py-2 text-center text-xs font-medium text-teal-700 uppercase tracking-wider">
+                      Child
+                    </th>
+                    <th className="px-3 py-2 text-center text-xs font-medium text-teal-700 uppercase tracking-wider">
+                      Amount
+                    </th>
+                  </>
+                )}
+                {columnVisibility.monthlyDeathBenefit && (
+                  <>
+                    <th className="px-3 py-2 text-center text-xs font-medium text-teal-700 uppercase tracking-wider border-l border-teal-300">
+                      Term (years)
+                    </th>
+                    <th className="px-3 py-2 text-center text-xs font-medium text-teal-700 uppercase tracking-wider">
+                      Payments
+                    </th>
+                    <th className="px-3 py-2 text-center text-xs font-medium text-teal-700 uppercase tracking-wider">
+                      Amount
+                    </th>
+                  </>
+                )}
+                {columnVisibility.fundValue && (
+                  <>
+                    <th className="px-3 py-2 text-center text-xs font-medium text-teal-700 uppercase tracking-wider border-l border-teal-300">
+                      Estate duty (incl tax)
+                    </th>
+                    <th className="px-3 py-2 text-center text-xs font-medium text-teal-700 uppercase tracking-wider">
+                      Estate duty (ex capital)
+                    </th>
+                    <th className="px-3 py-2 text-center text-xs font-medium text-teal-700 uppercase tracking-wider">
+                      Executors fee
+                    </th>
+                    <th className="px-3 py-2 text-center text-xs font-medium text-teal-700 uppercase tracking-wider">
+                      Master's fee
+                    </th>
+                  </>
+                )}
+                {columnVisibility.fundValueBeneficiaries && (
+                  <>
+                    <th className="px-3 py-2 text-center text-xs font-medium text-teal-700 uppercase tracking-wider border-l border-teal-300">
+                      Estate %
+                    </th>
+                    <th className="px-3 py-2 text-center text-xs font-medium text-teal-700 uppercase tracking-wider">
+                      Spouse %
+                    </th>
+                    <th className="px-3 py-2 text-center text-xs font-medium text-teal-700 uppercase tracking-wider">
+                      Children %
+                    </th>
+                    <th className="px-3 py-2 text-center text-xs font-medium text-teal-700 uppercase tracking-wider">
+                      Total %
+                    </th>
+                  </>
+                )}
+              </tr>
+            </thead>
+
+            {/* Flows data rows */}
+            <tbody>
+              {funds.map((fund, index) => (
+                <tr key={`flows-${fund.id}`} className={index % 2 === 0 ? "bg-teal-50/30" : "bg-white"}>
+                  {columnVisibility.overview && (
+                    <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900">
+                      {fund.description}
+                    </td>
+                  )}
+                  {columnVisibility.overview && (
+                    <>
+                      <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900 border-l border-teal-200">
+                        <AutoSizeInput
+                          type="text"
+                          value={fund.lumpSumLeftOverProvisions || "0"}
+                          onChange={(e) => handleInputChange(fund.id, "lumpSumLeftOverProvisions", e.target.value)}
+                          className="border-0 focus:bg-white focus:border focus:border-primary hover:bg-teal-50 text-right"
+                          placeholder="0"
+                          disabled={isUpdating}
+                        />
+                      </td>
+                      <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900">
+                        <AutoSizeInput
+                          type="text"
+                          value={fund.lumpSumLeftOverProvisions || "0"}
+                          onChange={(e) => handleInputChange(fund.id, "lumpSumLeftOverProvisions", e.target.value)}
+                          className="border-0 focus:bg-white focus:border focus:border-primary hover:bg-teal-50 text-right"
+                          placeholder="0"
+                          disabled={isUpdating}
+                        />
+                      </td>
+                      <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900">
+                        <AutoSizeInput
+                          type="text"
+                          value={fund.lumpSumLeftOverProvisions || "0"}
+                          onChange={(e) => handleInputChange(fund.id, "lumpSumLeftOverProvisions", e.target.value)}
+                          className="border-0 focus:bg-white focus:border focus:border-primary hover:bg-teal-50 text-right"
+                          placeholder="0"
+                          disabled={isUpdating}
+                        />
+                      </td>
+                      <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900">
+                        <AutoSizeInput
+                          type="text"
+                          value={fund.lumpSumLeftOverProvisions || "0"}
+                          onChange={(e) => handleInputChange(fund.id, "lumpSumLeftOverProvisions", e.target.value)}
+                          className="border-0 focus:bg-white focus:border focus:border-primary hover:bg-teal-50 text-right"
+                          placeholder="0"
+                          disabled={isUpdating}
+                        />
+                      </td>
+                    </>
+                  )}
+                  {columnVisibility.monthlyDeathBenefit && (
+                    <>
+                      <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900 border-l border-teal-200">
+                        <AutoSizeInput
+                          type="text"
+                          value={fund.incomeTerm || "0"}
+                          onChange={(e) => handleInputChange(fund.id, "incomeTerm", e.target.value)}
+                          className="border-0 focus:bg-white focus:border focus:border-primary hover:bg-teal-50 text-right"
+                          placeholder="0"
+                          disabled={isUpdating}
+                        />
+                      </td>
+                      <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900">
+                        <AutoSizeInput
+                          type="text"
+                          value={fund.monthlyProvisionOffered || "0"}
+                          onChange={(e) => handleInputChange(fund.id, "monthlyProvisionOffered", e.target.value)}
+                          className="border-0 focus:bg-white focus:border focus:border-primary hover:bg-teal-50 text-right"
+                          placeholder="0"
+                          disabled={isUpdating}
+                        />
+                      </td>
+                      <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900">
+                        <AutoSizeInput
+                          type="text"
+                          value={fund.currentAnnualIncome || "0"}
+                          onChange={(e) => handleInputChange(fund.id, "currentAnnualIncome", e.target.value)}
+                          className="border-0 focus:bg-white focus:border focus:border-primary hover:bg-teal-50 text-right"
+                          placeholder="0"
+                          disabled={isUpdating}
+                        />
+                      </td>
+                    </>
+                  )}
+                  {columnVisibility.fundValue && (
+                    <>
+                      <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900 border-l border-teal-200">
+                        <AutoSizeInput
+                          type="text"
+                          value={fund.estateDeploymentDeceased || "0"}
+                          onChange={(e) => handleInputChange(fund.id, "estateDeploymentDeceased", e.target.value)}
+                          className="border-0 focus:bg-white focus:border focus:border-primary hover:bg-teal-50 text-right"
+                          placeholder="0"
+                          disabled={isUpdating}
+                        />
+                      </td>
+                      <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900">
+                        <AutoSizeInput
+                          type="text"
+                          value={fund.annualIncomeAtDeath || "0"}
+                          onChange={(e) => handleInputChange(fund.id, "annualIncomeAtDeath", e.target.value)}
+                          className="border-0 focus:bg-white focus:border focus:border-primary hover:bg-teal-50 text-right"
+                          placeholder="0"
+                          disabled={isUpdating}
+                        />
+                      </td>
+                      <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900">
+                        <AutoSizeInput
+                          type="text"
+                          value={fund.executorsFee || "0"}
+                          onChange={(e) => handleInputChange(fund.id, "executorsFee", e.target.value)}
+                          className="border-0 focus:bg-white focus:border focus:border-primary hover:bg-teal-50 text-right"
+                          placeholder="0"
+                          disabled={isUpdating}
+                        />
+                      </td>
+                      <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900">
+                        <AutoSizeInput
+                          type="text"
+                          value={fund.mastersFee || "0"}
+                          onChange={(e) => handleInputChange(fund.id, "mastersFee", e.target.value)}
+                          className="border-0 focus:bg-white focus:border focus:border-primary hover:bg-teal-50 text-right"
+                          placeholder="0"
+                          disabled={isUpdating}
+                        />
+                      </td>
+                    </>
+                  )}
+                  {columnVisibility.fundValueBeneficiaries && (
+                    <>
+                      <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900 border-l border-teal-200">
+                        <AutoSizeInput
+                          type="text"
+                          value="0"
+                          onChange={(e) => handleInputChange(fund.id, "beneficiaryPercentageSplit", e.target.value)}
+                          className="border-0 focus:bg-white focus:border focus:border-primary hover:bg-teal-50 text-right"
+                          placeholder="0%"
+                          disabled={isUpdating}
+                        />
+                      </td>
+                      <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900">
+                        <AutoSizeInput
+                          type="text"
+                          value="0"
+                          onChange={(e) => handleInputChange(fund.id, "beneficiaryPercentageSplit", e.target.value)}
+                          className="border-0 focus:bg-white focus:border focus:border-primary hover:bg-teal-50 text-right"
+                          placeholder="0%"
+                          disabled={isUpdating}
+                        />
+                      </td>
+                      <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900">
+                        <AutoSizeInput
+                          type="text"
+                          value="0"
+                          onChange={(e) => handleInputChange(fund.id, "beneficiaryPercentageSplit", e.target.value)}
+                          className="border-0 focus:bg-white focus:border focus:border-primary hover:bg-teal-50 text-right"
+                          placeholder="0%"
+                          disabled={isUpdating}
+                        />
+                      </td>
+                      <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900">
+                        <AutoSizeInput
+                          type="text"
+                          value="0"
+                          onChange={(e) => handleInputChange(fund.id, "beneficiaryPercentageSplit", e.target.value)}
+                          className="border-0 focus:bg-white focus:border focus:border-primary hover:bg-teal-50 text-right"
+                          placeholder="0%"
+                          disabled={isUpdating}
+                        />
+                      </td>
+                    </>
+                  )}
+                </tr>
+              ))}
+              
+              {/* Flows total row */}
+              <tr className="bg-gray-100 font-semibold border-t-2 border-teal-300">
+                {columnVisibility.overview && (
+                  <td className="px-3 py-2 text-sm font-semibold text-neutral-900">Total</td>
+                )}
+                {columnVisibility.overview && (
+                  <>
+                    <td className="px-3 py-2 text-center text-sm font-semibold text-neutral-900 border-l border-teal-200">0</td>
+                    <td className="px-3 py-2 text-center text-sm font-semibold text-neutral-900">0</td>
+                    <td className="px-3 py-2 text-center text-sm font-semibold text-neutral-900">0</td>
+                    <td className="px-3 py-2 text-center text-sm font-semibold text-neutral-900">0</td>
+                  </>
+                )}
+                {columnVisibility.monthlyDeathBenefit && (
+                  <>
+                    <td className="px-3 py-2 text-center text-sm font-semibold text-neutral-900 border-l border-teal-200">0</td>
+                    <td className="px-3 py-2 text-center text-sm font-semibold text-neutral-900">0</td>
+                    <td className="px-3 py-2 text-center text-sm font-semibold text-neutral-900">0</td>
+                  </>
+                )}
+                {columnVisibility.fundValue && (
+                  <>
+                    <td className="px-3 py-2 text-center text-sm font-semibold text-neutral-900 border-l border-teal-200">0</td>
+                    <td className="px-3 py-2 text-center text-sm font-semibold text-neutral-900">0</td>
+                    <td className="px-3 py-2 text-center text-sm font-semibold text-neutral-900">0</td>
+                    <td className="px-3 py-2 text-center text-sm font-semibold text-neutral-900">0</td>
+                  </>
+                )}
+                {columnVisibility.fundValueBeneficiaries && (
+                  <>
+                    <td className="px-3 py-2 text-center text-sm font-semibold text-neutral-900 border-l border-teal-200">0</td>
+                    <td className="px-3 py-2 text-center text-sm font-semibold text-neutral-900">0</td>
+                    <td className="px-3 py-2 text-center text-sm font-semibold text-neutral-900">0</td>
+                    <td className="px-3 py-2 text-center text-sm font-semibold text-neutral-900">0</td>
+                  </>
+                )}
+              </tr>
+            </tbody>
+          </>
+        )}
       </table>
-      </div>
-      
-      {/* Show flows table when in flows mode */}
-      {tableMode === "flows" && renderFlowsTable()}
     </div>
   );
 }
