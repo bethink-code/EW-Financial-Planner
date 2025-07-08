@@ -577,8 +577,6 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
                   <td className="p-2 text-right">0%</td>
                   <td className="p-2 text-right">0%</td>
                   <td className="p-2 text-right">0%</td>
-                  <td className="p-2 text-right">0%</td>
-                  <td className="p-2 text-right">0%</td>
                 </>
               )}
             </tr>
