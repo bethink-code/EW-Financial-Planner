@@ -120,7 +120,7 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
                       </td>
                     </tr>
                   ))}
-                  <tr className="bg-gray-100 font-semibold border-t-2 border-teal-300">
+                  <tr className="bg-gray-100 font-semibold border-t-2 border-neutral-300">
                     <td className="p-2 border-r border-teal-100">Total</td>
                     <td className="p-2 text-right border-r border-teal-100">0</td>
                     <td className="p-2 text-right border-r border-teal-100">0</td>
@@ -162,7 +162,7 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
                       </td>
                     </tr>
                   ))}
-                  <tr className="bg-gray-100 font-semibold border-t-2 border-teal-300">
+                  <tr className="bg-gray-100 font-semibold border-t-2 border-neutral-300">
                     <td className="p-2 border-r border-teal-100">Total</td>
                     <td className="p-2 text-right border-r border-teal-100">0</td>
                     <td className="p-2 text-right border-r border-teal-100">0</td>
@@ -207,7 +207,7 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
                       </td>
                     </tr>
                   ))}
-                  <tr className="bg-gray-100 font-semibold border-t-2 border-teal-300">
+                  <tr className="bg-gray-100 font-semibold border-t-2 border-neutral-300">
                     <td className="p-2 border-r border-teal-100">Total</td>
                     <td className="p-2 text-right border-r border-teal-100">0</td>
                     <td className="p-2 text-right border-r border-teal-100">0</td>
@@ -253,7 +253,7 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
                       </td>
                     </tr>
                   ))}
-                  <tr className="bg-gray-100 font-semibold border-t-2 border-teal-300">
+                  <tr className="bg-gray-100 font-semibold border-t-2 border-neutral-300">
                     <td className="p-2 border-r border-teal-100">Total</td>
                     <td className="p-2 text-right border-r border-teal-100">0</td>
                     <td className="p-2 text-right border-r border-teal-100">0</td>
@@ -276,93 +276,93 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
         <table className="min-w-full bg-white table-auto">
           <thead>
             {/* First level headers - Flows */}
-            <tr className="border-b border-neutral-200" style={{ backgroundColor: '#B3E5FC' }}>
+            <tr className="border-b border-neutral-200" style={{ backgroundColor: '#D6ECF5' }}>
               {columnVisibility.overview && (
-                <th className="px-3 py-2 text-center text-xs font-medium text-teal-700 uppercase tracking-wider" colSpan={5}>
+                <th className="px-3 py-2 text-center text-xs font-medium text-neutral-500 uppercase tracking-wider" colSpan={5}>
                   Lump sum life cover available as provision to
                 </th>
               )}
               {columnVisibility.monthlyDeathBenefit && (
-                <th className="px-3 py-2 text-center text-xs font-medium text-teal-700 uppercase tracking-wider border-l border-teal-300" colSpan={3}>
+                <th className="px-3 py-2 text-center text-xs font-medium text-neutral-500 uppercase tracking-wider border-l border-neutral-300" colSpan={3}>
                   Income provision source
                 </th>
               )}
               {columnVisibility.fundValue && (
-                <th className="px-3 py-2 text-center text-xs font-medium text-teal-700 uppercase tracking-wider border-l border-teal-300" colSpan={4}>
+                <th className="px-3 py-2 text-center text-xs font-medium text-neutral-500 uppercase tracking-wider border-l border-neutral-300" colSpan={4}>
                   Income provision offered
                 </th>
               )}
               {columnVisibility.fundValueBeneficiaries && (
-                <th className="px-3 py-2 text-center text-xs font-medium text-teal-700 uppercase tracking-wider border-l border-teal-300" colSpan={4}>
+                <th className="px-3 py-2 text-center text-xs font-medium text-neutral-500 uppercase tracking-wider border-l border-neutral-300" colSpan={4}>
                   Percentage included for
                 </th>
               )}
             </tr>
             
             {/* Second level headers - Flows */}
-            <tr className="border-b border-neutral-200" style={{ backgroundColor: '#E0F2FE' }}>
+            <tr className="border-b border-neutral-200" style={{ backgroundColor: '#EDF8FC' }}>
               {columnVisibility.overview && (
-                <th className="px-3 py-2 text-left text-xs font-medium text-teal-700 uppercase tracking-wider">
+                <th className="px-3 py-2 text-left text-xs font-medium text-neutral-600 uppercase tracking-wider">
                   Description
                 </th>
               )}
               {columnVisibility.overview && (
                 <>
-                  <th className="px-3 py-2 text-center text-xs font-medium text-teal-700 uppercase tracking-wider border-l border-teal-300">
+                  <th className="px-3 py-2 text-center text-xs font-medium text-neutral-600 uppercase tracking-wider border-l border-neutral-300">
                     Estate
                   </th>
-                  <th className="px-3 py-2 text-center text-xs font-medium text-teal-700 uppercase tracking-wider">
+                  <th className="px-3 py-2 text-center text-xs font-medium text-neutral-600 uppercase tracking-wider">
                     Spouse
                   </th>
-                  <th className="px-3 py-2 text-center text-xs font-medium text-teal-700 uppercase tracking-wider">
+                  <th className="px-3 py-2 text-center text-xs font-medium text-neutral-600 uppercase tracking-wider">
                     Child
                   </th>
-                  <th className="px-3 py-2 text-center text-xs font-medium text-teal-700 uppercase tracking-wider">
+                  <th className="px-3 py-2 text-center text-xs font-medium text-neutral-600 uppercase tracking-wider">
                     Amount
                   </th>
                 </>
               )}
               {columnVisibility.monthlyDeathBenefit && (
                 <>
-                  <th className="px-3 py-2 text-center text-xs font-medium text-teal-700 uppercase tracking-wider border-l border-teal-300">
+                  <th className="px-3 py-2 text-center text-xs font-medium text-neutral-600 uppercase tracking-wider border-l border-neutral-300">
                     Term (years)
                   </th>
-                  <th className="px-3 py-2 text-center text-xs font-medium text-teal-700 uppercase tracking-wider">
+                  <th className="px-3 py-2 text-center text-xs font-medium text-neutral-600 uppercase tracking-wider">
                     Payments
                   </th>
-                  <th className="px-3 py-2 text-center text-xs font-medium text-teal-700 uppercase tracking-wider">
+                  <th className="px-3 py-2 text-center text-xs font-medium text-neutral-600 uppercase tracking-wider">
                     Amount
                   </th>
                 </>
               )}
               {columnVisibility.fundValue && (
                 <>
-                  <th className="px-3 py-2 text-center text-xs font-medium text-teal-700 uppercase tracking-wider border-l border-teal-300">
+                  <th className="px-3 py-2 text-center text-xs font-medium text-neutral-600 uppercase tracking-wider border-l border-neutral-300">
                     Estate duty (incl tax)
                   </th>
-                  <th className="px-3 py-2 text-center text-xs font-medium text-teal-700 uppercase tracking-wider">
+                  <th className="px-3 py-2 text-center text-xs font-medium text-neutral-600 uppercase tracking-wider">
                     Estate duty (ex capital)
                   </th>
-                  <th className="px-3 py-2 text-center text-xs font-medium text-teal-700 uppercase tracking-wider">
+                  <th className="px-3 py-2 text-center text-xs font-medium text-neutral-600 uppercase tracking-wider">
                     Executors fee
                   </th>
-                  <th className="px-3 py-2 text-center text-xs font-medium text-teal-700 uppercase tracking-wider">
+                  <th className="px-3 py-2 text-center text-xs font-medium text-neutral-600 uppercase tracking-wider">
                     Master's fee
                   </th>
                 </>
               )}
               {columnVisibility.fundValueBeneficiaries && (
                 <>
-                  <th className="px-3 py-2 text-center text-xs font-medium text-teal-700 uppercase tracking-wider border-l border-teal-300">
+                  <th className="px-3 py-2 text-center text-xs font-medium text-neutral-600 uppercase tracking-wider border-l border-neutral-300">
                     Estate %
                   </th>
-                  <th className="px-3 py-2 text-center text-xs font-medium text-teal-700 uppercase tracking-wider">
+                  <th className="px-3 py-2 text-center text-xs font-medium text-neutral-600 uppercase tracking-wider">
                     Spouse %
                   </th>
-                  <th className="px-3 py-2 text-center text-xs font-medium text-teal-700 uppercase tracking-wider">
+                  <th className="px-3 py-2 text-center text-xs font-medium text-neutral-600 uppercase tracking-wider">
                     Children %
                   </th>
-                  <th className="px-3 py-2 text-center text-xs font-medium text-teal-700 uppercase tracking-wider">
+                  <th className="px-3 py-2 text-center text-xs font-medium text-neutral-600 uppercase tracking-wider">
                     Total %
                   </th>
                 </>
@@ -372,7 +372,7 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
           <tbody>
             {/* Flows data rows */}
             {funds.map((fund, index) => (
-              <tr key={`flows-${fund.id}`} className={index % 2 === 0 ? "bg-teal-50/30" : "bg-white"}>
+              <tr key={`flows-${fund.id}`} className={index % 2 === 0 ? "bg-neutral-50" : "bg-white"}>
                 {columnVisibility.overview && (
                   <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900">
                     {fund.description}
@@ -380,12 +380,12 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
                 )}
                 {columnVisibility.overview && (
                   <>
-                    <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900 border-l border-teal-200">
+                    <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900 border-l border-neutral-200">
                       <AutoSizeInput
                         type="text"
                         value={fund.lumpSumLeftOverProvisions || "0"}
                         onChange={(e) => handleInputChange(fund.id, "lumpSumLeftOverProvisions", e.target.value)}
-                        className="border-0 focus:bg-white focus:border focus:border-primary hover:bg-teal-50 text-right"
+                        className="border-0 focus:bg-white focus:border focus:border-primary hover:bg-neutral-50 text-right"
                         placeholder="0"
                         disabled={isUpdating}
                       />
@@ -395,7 +395,7 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
                         type="text"
                         value={fund.lumpSumLeftOverProvisions || "0"}
                         onChange={(e) => handleInputChange(fund.id, "lumpSumLeftOverProvisions", e.target.value)}
-                        className="border-0 focus:bg-white focus:border focus:border-primary hover:bg-teal-50 text-right"
+                        className="border-0 focus:bg-white focus:border focus:border-primary hover:bg-neutral-50 text-right"
                         placeholder="0"
                         disabled={isUpdating}
                       />
@@ -405,7 +405,7 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
                         type="text"
                         value={fund.lumpSumLeftOverProvisions || "0"}
                         onChange={(e) => handleInputChange(fund.id, "lumpSumLeftOverProvisions", e.target.value)}
-                        className="border-0 focus:bg-white focus:border focus:border-primary hover:bg-teal-50 text-right"
+                        className="border-0 focus:bg-white focus:border focus:border-primary hover:bg-neutral-50 text-right"
                         placeholder="0"
                         disabled={isUpdating}
                       />
@@ -415,7 +415,7 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
                         type="text"
                         value={fund.lumpSumLeftOverProvisions || "0"}
                         onChange={(e) => handleInputChange(fund.id, "lumpSumLeftOverProvisions", e.target.value)}
-                        className="border-0 focus:bg-white focus:border focus:border-primary hover:bg-teal-50 text-right"
+                        className="border-0 focus:bg-white focus:border focus:border-primary hover:bg-neutral-50 text-right"
                         placeholder="0"
                         disabled={isUpdating}
                       />
@@ -424,12 +424,12 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
                 )}
                 {columnVisibility.monthlyDeathBenefit && (
                   <>
-                    <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900 border-l border-teal-200">
+                    <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900 border-l border-neutral-200">
                       <AutoSizeInput
                         type="text"
                         value={fund.incomeTerm || "0"}
                         onChange={(e) => handleInputChange(fund.id, "incomeTerm", e.target.value)}
-                        className="border-0 focus:bg-white focus:border focus:border-primary hover:bg-teal-50 text-right"
+                        className="border-0 focus:bg-white focus:border focus:border-primary hover:bg-neutral-50 text-right"
                         placeholder="0"
                         disabled={isUpdating}
                       />
@@ -439,7 +439,7 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
                         type="text"
                         value={fund.monthlyProvisionOffered || "0"}
                         onChange={(e) => handleInputChange(fund.id, "monthlyProvisionOffered", e.target.value)}
-                        className="border-0 focus:bg-white focus:border focus:border-primary hover:bg-teal-50 text-right"
+                        className="border-0 focus:bg-white focus:border focus:border-primary hover:bg-neutral-50 text-right"
                         placeholder="0"
                         disabled={isUpdating}
                       />
@@ -449,7 +449,7 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
                         type="text"
                         value={fund.currentAnnualIncome || "0"}
                         onChange={(e) => handleInputChange(fund.id, "currentAnnualIncome", e.target.value)}
-                        className="border-0 focus:bg-white focus:border focus:border-primary hover:bg-teal-50 text-right"
+                        className="border-0 focus:bg-white focus:border focus:border-primary hover:bg-neutral-50 text-right"
                         placeholder="0"
                         disabled={isUpdating}
                       />
@@ -458,12 +458,12 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
                 )}
                 {columnVisibility.fundValue && (
                   <>
-                    <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900 border-l border-teal-200">
+                    <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900 border-l border-neutral-200">
                       <AutoSizeInput
                         type="text"
                         value={fund.estateDeploymentDeceased || "0"}
                         onChange={(e) => handleInputChange(fund.id, "estateDeploymentDeceased", e.target.value)}
-                        className="border-0 focus:bg-white focus:border focus:border-primary hover:bg-teal-50 text-right"
+                        className="border-0 focus:bg-white focus:border focus:border-primary hover:bg-neutral-50 text-right"
                         placeholder="0"
                         disabled={isUpdating}
                       />
@@ -473,7 +473,7 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
                         type="text"
                         value={fund.annualIncomeAtDeath || "0"}
                         onChange={(e) => handleInputChange(fund.id, "annualIncomeAtDeath", e.target.value)}
-                        className="border-0 focus:bg-white focus:border focus:border-primary hover:bg-teal-50 text-right"
+                        className="border-0 focus:bg-white focus:border focus:border-primary hover:bg-neutral-50 text-right"
                         placeholder="0"
                         disabled={isUpdating}
                       />
@@ -483,7 +483,7 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
                         type="text"
                         value={fund.executorsFee || "0"}
                         onChange={(e) => handleInputChange(fund.id, "executorsFee", e.target.value)}
-                        className="border-0 focus:bg-white focus:border focus:border-primary hover:bg-teal-50 text-right"
+                        className="border-0 focus:bg-white focus:border focus:border-primary hover:bg-neutral-50 text-right"
                         placeholder="0"
                         disabled={isUpdating}
                       />
@@ -493,7 +493,7 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
                         type="text"
                         value={fund.mastersFee || "0"}
                         onChange={(e) => handleInputChange(fund.id, "mastersFee", e.target.value)}
-                        className="border-0 focus:bg-white focus:border focus:border-primary hover:bg-teal-50 text-right"
+                        className="border-0 focus:bg-white focus:border focus:border-primary hover:bg-neutral-50 text-right"
                         placeholder="0"
                         disabled={isUpdating}
                       />
@@ -502,12 +502,12 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
                 )}
                 {columnVisibility.fundValueBeneficiaries && (
                   <>
-                    <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900 border-l border-teal-200">
+                    <td className="px-3 py-2 whitespace-nowrap text-sm text-neutral-900 border-l border-neutral-200">
                       <AutoSizeInput
                         type="text"
                         value="0"
                         onChange={(e) => handleInputChange(fund.id, "beneficiaryPercentageSplit", e.target.value)}
-                        className="border-0 focus:bg-white focus:border focus:border-primary hover:bg-teal-50 text-right"
+                        className="border-0 focus:bg-white focus:border focus:border-primary hover:bg-neutral-50 text-right"
                         placeholder="0%"
                         disabled={isUpdating}
                       />
@@ -517,7 +517,7 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
                         type="text"
                         value="0"
                         onChange={(e) => handleInputChange(fund.id, "beneficiaryPercentageSplit", e.target.value)}
-                        className="border-0 focus:bg-white focus:border focus:border-primary hover:bg-teal-50 text-right"
+                        className="border-0 focus:bg-white focus:border focus:border-primary hover:bg-neutral-50 text-right"
                         placeholder="0%"
                         disabled={isUpdating}
                       />
@@ -527,7 +527,7 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
                         type="text"
                         value="0"
                         onChange={(e) => handleInputChange(fund.id, "beneficiaryPercentageSplit", e.target.value)}
-                        className="border-0 focus:bg-white focus:border focus:border-primary hover:bg-teal-50 text-right"
+                        className="border-0 focus:bg-white focus:border focus:border-primary hover:bg-neutral-50 text-right"
                         placeholder="0%"
                         disabled={isUpdating}
                       />
@@ -537,7 +537,7 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
                         type="text"
                         value="0"
                         onChange={(e) => handleInputChange(fund.id, "beneficiaryPercentageSplit", e.target.value)}
-                        className="border-0 focus:bg-white focus:border focus:border-primary hover:bg-teal-50 text-right"
+                        className="border-0 focus:bg-white focus:border focus:border-primary hover:bg-neutral-50 text-right"
                         placeholder="0%"
                         disabled={isUpdating}
                       />
@@ -548,13 +548,13 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
             ))}
             
             {/* Flows total row */}
-            <tr className="bg-gray-100 font-semibold border-t-2 border-teal-300">
+            <tr className="bg-gray-100 font-semibold border-t-2 border-neutral-300">
               {columnVisibility.overview && (
                 <td className="px-3 py-2 text-sm font-semibold text-neutral-900">Total</td>
               )}
               {columnVisibility.overview && (
                 <>
-                  <td className="px-3 py-2 text-center text-sm font-semibold text-neutral-900 border-l border-teal-200">0</td>
+                  <td className="px-3 py-2 text-center text-sm font-semibold text-neutral-900 border-l border-neutral-200">0</td>
                   <td className="px-3 py-2 text-center text-sm font-semibold text-neutral-900">0</td>
                   <td className="px-3 py-2 text-center text-sm font-semibold text-neutral-900">0</td>
                   <td className="px-3 py-2 text-center text-sm font-semibold text-neutral-900">0</td>
@@ -562,14 +562,14 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
               )}
               {columnVisibility.monthlyDeathBenefit && (
                 <>
-                  <td className="px-3 py-2 text-center text-sm font-semibold text-neutral-900 border-l border-teal-200">0</td>
+                  <td className="px-3 py-2 text-center text-sm font-semibold text-neutral-900 border-l border-neutral-200">0</td>
                   <td className="px-3 py-2 text-center text-sm font-semibold text-neutral-900">0</td>
                   <td className="px-3 py-2 text-center text-sm font-semibold text-neutral-900">0</td>
                 </>
               )}
               {columnVisibility.fundValue && (
                 <>
-                  <td className="px-3 py-2 text-center text-sm font-semibold text-neutral-900 border-l border-teal-200">0</td>
+                  <td className="px-3 py-2 text-center text-sm font-semibold text-neutral-900 border-l border-neutral-200">0</td>
                   <td className="px-3 py-2 text-center text-sm font-semibold text-neutral-900">0</td>
                   <td className="px-3 py-2 text-center text-sm font-semibold text-neutral-900">0</td>
                   <td className="px-3 py-2 text-center text-sm font-semibold text-neutral-900">0</td>
@@ -577,7 +577,7 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
               )}
               {columnVisibility.fundValueBeneficiaries && (
                 <>
-                  <td className="px-3 py-2 text-center text-sm font-semibold text-neutral-900 border-l border-teal-200">0</td>
+                  <td className="px-3 py-2 text-center text-sm font-semibold text-neutral-900 border-l border-neutral-200">0</td>
                   <td className="px-3 py-2 text-center text-sm font-semibold text-neutral-900">0</td>
                   <td className="px-3 py-2 text-center text-sm font-semibold text-neutral-900">0</td>
                   <td className="px-3 py-2 text-center text-sm font-semibold text-neutral-900">0</td>
@@ -724,7 +724,7 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
                       type="text"
                       value={fund.description || ""}
                       onChange={(e) => handleInputChange(fund.id, "description", e.target.value)}
-                      className="border-0 focus:bg-white focus:border focus:border-primary hover:bg-teal-50 text-left font-medium"
+                      className="border-0 focus:bg-white focus:border focus:border-primary hover:bg-neutral-50 text-left font-medium"
                       placeholder="Fund description"
                       disabled={isUpdating}
                     />
@@ -737,7 +737,7 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
                       onValueChange={(value) => handleInputChange(fund.id, "owner", value)}
                       disabled={isUpdating}
                     >
-                      <SelectTrigger className="compact-input border-0 focus:bg-white focus:border focus:border-primary hover:bg-teal-50 transition-colors duration-200 group">
+                      <SelectTrigger className="compact-input border-0 focus:bg-white focus:border focus:border-primary hover:bg-neutral-50 transition-colors duration-200 group">
                         <SelectValue />
                         <Edit3 size={12} className="ml-1 text-teal-400 opacity-0 group-hover:opacity-100 transition-opacity duration-200" />
                       </SelectTrigger>
@@ -762,7 +762,7 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
                       type="text"
                       value={fund.coverAmount || ""}
                       onChange={(e) => handleInputChange(fund.id, "coverAmount", e.target.value)}
-                      className="border-0 focus:bg-white focus:border focus:border-primary hover:bg-teal-50 text-right"
+                      className="border-0 focus:bg-white focus:border focus:border-primary hover:bg-neutral-50 text-right"
                       placeholder="R 0"
                       disabled={isUpdating}
                     />
@@ -775,7 +775,7 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
                       onValueChange={(value) => handleInputChange(fund.id, "beneficiary", value)}
                       disabled={isUpdating}
                     >
-                      <SelectTrigger className="compact-input border-0 focus:bg-white focus:border focus:border-primary hover:bg-teal-50 transition-colors duration-200 group">
+                      <SelectTrigger className="compact-input border-0 focus:bg-white focus:border focus:border-primary hover:bg-neutral-50 transition-colors duration-200 group">
                         <SelectValue placeholder="No beneficiary" />
                         <Edit3 size={12} className="ml-1 text-teal-400 opacity-0 group-hover:opacity-100 transition-opacity duration-200" />
                       </SelectTrigger>
@@ -795,7 +795,7 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
                       type="text"
                       value={fund.beneficiaryPercentage || ""}
                       onChange={(e) => handleInputChange(fund.id, "beneficiaryPercentage", e.target.value)}
-                      className="border-0 focus:bg-white focus:border focus:border-primary hover:bg-teal-50 text-right"
+                      className="border-0 focus:bg-white focus:border focus:border-primary hover:bg-neutral-50 text-right"
                       placeholder="100"
                       disabled={isUpdating}
                     />
@@ -807,7 +807,7 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
                       type="text"
                       value={fund.coverSplit || ""}
                       onChange={(e) => handleInputChange(fund.id, "coverSplit", e.target.value)}
-                      className="border-0 focus:bg-white focus:border focus:border-primary hover:bg-teal-50 text-right"
+                      className="border-0 focus:bg-white focus:border focus:border-primary hover:bg-neutral-50 text-right"
                       placeholder="0"
                       disabled={isUpdating}
                     />
@@ -824,7 +824,7 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
                       type="text"
                       value={fund.monthlyIncome || ""}
                       onChange={(e) => handleInputChange(fund.id, "monthlyIncome", e.target.value)}
-                      className="border-0 focus:bg-white focus:border focus:border-primary hover:bg-teal-50 text-right"
+                      className="border-0 focus:bg-white focus:border focus:border-primary hover:bg-neutral-50 text-right"
                       placeholder="R 0"
                       disabled={isUpdating}
                     />
@@ -836,7 +836,7 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
                       type="text"
                       value={fund.termYears || ""}
                       onChange={(e) => handleInputChange(fund.id, "termYears", e.target.value)}
-                      className="border-0 focus:bg-white focus:border focus:border-primary hover:bg-teal-50 text-right"
+                      className="border-0 focus:bg-white focus:border focus:border-primary hover:bg-neutral-50 text-right"
                       placeholder="0"
                       disabled={isUpdating}
                     />
@@ -848,7 +848,7 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
                       type="text"
                       value={fund.increasePercentage || ""}
                       onChange={(e) => handleInputChange(fund.id, "increasePercentage", e.target.value)}
-                      className="border-0 focus:bg-white focus:border focus:border-primary hover:bg-teal-50 text-right"
+                      className="border-0 focus:bg-white focus:border focus:border-primary hover:bg-neutral-50 text-right"
                       placeholder="0%"
                       disabled={isUpdating}
                     />
@@ -860,7 +860,7 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
                       type="text"
                       value={fund.lumpSumDeath || ""}
                       onChange={(e) => handleInputChange(fund.id, "lumpSumDeath", e.target.value)}
-                      className="border-0 focus:bg-white focus:border focus:border-primary hover:bg-teal-50 text-right"
+                      className="border-0 focus:bg-white focus:border focus:border-primary hover:bg-neutral-50 text-right"
                       placeholder="R 0"
                       disabled={isUpdating}
                     />
@@ -876,7 +876,7 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
                       type="text"
                       value={fund.approvedLifeCover || ""}
                       onChange={(e) => handleInputChange(fund.id, "approvedLifeCover", e.target.value)}
-                      className="border-0 focus:bg-white focus:border focus:border-primary hover:bg-teal-50 text-right"
+                      className="border-0 focus:bg-white focus:border focus:border-primary hover:bg-neutral-50 text-right"
                       placeholder="R 0"
                       disabled={isUpdating}
                     />
@@ -887,7 +887,7 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
                       type="text"
                       value={fund.fundValue || ""}
                       onChange={(e) => handleInputChange(fund.id, "fundValue", e.target.value)}
-                      className="border-0 focus:bg-white focus:border focus:border-primary hover:bg-teal-50 text-right"
+                      className="border-0 focus:bg-white focus:border focus:border-primary hover:bg-neutral-50 text-right"
                       placeholder="R 0"
                       disabled={isUpdating}
                     />
@@ -909,7 +909,7 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
                       onValueChange={(value) => handleInputChange(fund.id, "beneficiaryName", value)}
                       disabled={isUpdating}
                     >
-                      <SelectTrigger className="w-auto min-w-[120px] h-8 text-sm border-0 bg-[#F2F7FB] focus:bg-white focus:border focus:border-primary hover:bg-teal-50 text-right">
+                      <SelectTrigger className="w-auto min-w-[120px] h-8 text-sm border-0 bg-[#F2F7FB] focus:bg-white focus:border focus:border-primary hover:bg-neutral-50 text-right">
                         <SelectValue placeholder="Select beneficiary" />
                       </SelectTrigger>
                       <SelectContent>
@@ -928,7 +928,7 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
                       type="text"
                       value={fund.beneficiaryPercentageSplit || ""}
                       onChange={(e) => handleInputChange(fund.id, "beneficiaryPercentageSplit", e.target.value)}
-                      className="border-0 focus:bg-white focus:border focus:border-primary hover:bg-teal-50 text-right"
+                      className="border-0 focus:bg-white focus:border focus:border-primary hover:bg-neutral-50 text-right"
                       placeholder="0%"
                       disabled={isUpdating}
                     />
@@ -945,7 +945,7 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
                       type="text"
                       value={fund.lumpSumTaken || ""}
                       onChange={(e) => handleInputChange(fund.id, "lumpSumTaken", e.target.value)}
-                      className="border-0 focus:bg-white focus:border focus:border-primary hover:bg-teal-50 text-right"
+                      className="border-0 focus:bg-white focus:border focus:border-primary hover:bg-neutral-50 text-right"
                       placeholder="R 0"
                       disabled={isUpdating}
                     />
@@ -962,7 +962,7 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
                       type="text"
                       value={fund.nondeductibleContribution || ""}
                       onChange={(e) => handleInputChange(fund.id, "nondeductibleContribution", e.target.value)}
-                      className="border-0 focus:bg-white focus:border focus:border-primary hover:bg-teal-50 text-right"
+                      className="border-0 focus:bg-white focus:border focus:border-primary hover:bg-neutral-50 text-right"
                       placeholder="R 0"
                       disabled={isUpdating}
                     />
@@ -979,7 +979,7 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
                       type="text"
                       value={fund.incomeTerm || ""}
                       onChange={(e) => handleInputChange(fund.id, "incomeTerm", e.target.value)}
-                      className="border-0 focus:bg-white focus:border focus:border-primary hover:bg-teal-50 text-right"
+                      className="border-0 focus:bg-white focus:border focus:border-primary hover:bg-neutral-50 text-right"
                       placeholder="Income term"
                       disabled={isUpdating}
                     />
