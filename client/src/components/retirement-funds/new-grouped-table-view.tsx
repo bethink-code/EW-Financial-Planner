@@ -56,7 +56,7 @@ const AutoSizeInput = ({ value, onChange, className, placeholder, disabled, styl
       type="text"
       value={value}
       onChange={onChange}
-      className={`${className} p-1 table-text-14 bg-transparent border-none`}
+      className={`${className} p-1 table-text-14 bg-[#F2F7FB] border-none focus:bg-white focus:border focus:border-primary hover:bg-neutral-50`}
       placeholder={placeholder}
       disabled={disabled}
       style={{ 
@@ -85,7 +85,7 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
       <AutoSizeInput
         value={value}
         onChange={(e) => onChange(e.target.value)}
-        className={`p-1 table-text-14 text-right bg-transparent border-none ${className}`}
+        className={`p-1 table-text-14 text-right bg-[#F2F7FB] border-none focus:bg-white focus:border focus:border-primary hover:bg-neutral-50 ${className}`}
         style={{ textAlign: 'right', minWidth: '60px' }}
         disabled={isUpdating}
       />
@@ -395,7 +395,7 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
                       <AutoSizeInput
                         value={fund.lumpSumLeftOverProvisions || "0"}
                         onChange={(e) => handleInputChange(fund.id, "lumpSumLeftOverProvisions", e.target.value)}
-                        className="p-1 table-text-14 text-right bg-transparent border-none"
+                        className="p-1 table-text-14 text-right bg-[#F2F7FB] border-none focus:bg-white focus:border focus:border-primary hover:bg-neutral-50"
                         style={{ textAlign: 'right', minWidth: '60px' }}
                         disabled={isUpdating}
                       />
@@ -404,7 +404,7 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
                       <AutoSizeInput
                         value={fund.lumpSumLeftOverProvisions || "0"}
                         onChange={(e) => handleInputChange(fund.id, "lumpSumLeftOverProvisions", e.target.value)}
-                        className="p-1 table-text-14 text-right bg-transparent border-none"
+                        className="p-1 table-text-14 text-right bg-[#F2F7FB] border-none focus:bg-white focus:border focus:border-primary hover:bg-neutral-50"
                         style={{ textAlign: 'right', minWidth: '60px' }}
                         disabled={isUpdating}
                       />
@@ -413,7 +413,7 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
                       <AutoSizeInput
                         value={fund.lumpSumLeftOverProvisions || "0"}
                         onChange={(e) => handleInputChange(fund.id, "lumpSumLeftOverProvisions", e.target.value)}
-                        className="p-1 table-text-14 text-right bg-transparent border-none"
+                        className="p-1 table-text-14 text-right bg-[#F2F7FB] border-none focus:bg-white focus:border focus:border-primary hover:bg-neutral-50"
                         style={{ textAlign: 'right', minWidth: '60px' }}
                         disabled={isUpdating}
                       />
@@ -427,7 +427,7 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
                         
                         value={fund.lumpSumLeftOverProvisions || "0"}
                         onChange={(e) => handleInputChange(fund.id, "lumpSumLeftOverProvisions", e.target.value)}
-                        className="p-1 table-text-14 text-right bg-transparent border-none" style={{ textAlign: "right", minWidth: "60px", width: "100%" }}
+                        className="p-1 table-text-14 text-right bg-[#F2F7FB] border-none focus:bg-white focus:border focus:border-primary hover:bg-neutral-50" style={{ textAlign: "right", minWidth: "60px", width: "100%" }}
                         
                         disabled={isUpdating}
                       />
@@ -437,7 +437,7 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
                         
                         value={fund.incomeTerm || "0"}
                         onChange={(e) => handleInputChange(fund.id, "incomeTerm", e.target.value)}
-                        className="p-1 table-text-14 text-right bg-transparent border-none" style={{ textAlign: "right", minWidth: "60px", width: "100%" }}
+                        className="p-1 table-text-14 text-right bg-[#F2F7FB] border-none focus:bg-white focus:border focus:border-primary hover:bg-neutral-50" style={{ textAlign: "right", minWidth: "60px", width: "100%" }}
                         
                         disabled={isUpdating}
                       />
@@ -447,7 +447,7 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
                         
                         value={fund.incomeEscalation || "0%"}
                         onChange={(e) => handleInputChange(fund.id, "incomeEscalation", e.target.value)}
-                        className="p-1 table-text-14 text-right bg-transparent border-none" style={{ textAlign: "right", minWidth: "60px", width: "100%" }}
+                        className="p-1 table-text-14 text-right bg-[#F2F7FB] border-none focus:bg-white focus:border focus:border-primary hover:bg-neutral-50" style={{ textAlign: "right", minWidth: "60px", width: "100%" }}
                         
                         disabled={isUpdating}
                       />
@@ -461,7 +461,7 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
                         
                         value={fund.estateDeploymentDeceased || "0"}
                         onChange={(e) => handleInputChange(fund.id, "estateDeploymentDeceased", e.target.value)}
-                        className="p-1 table-text-14 text-right bg-transparent border-none" style={{ textAlign: "right", minWidth: "60px", width: "100%" }}
+                        className="p-1 table-text-14 text-right bg-[#F2F7FB] border-none focus:bg-white focus:border focus:border-primary hover:bg-neutral-50" style={{ textAlign: "right", minWidth: "60px", width: "100%" }}
                         
                         disabled={isUpdating}
                       />
@@ -471,7 +471,7 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
                         
                         value={fund.incomeTerm || "0"}
                         onChange={(e) => handleInputChange(fund.id, "incomeTerm", e.target.value)}
-                        className="p-1 table-text-14 text-right bg-transparent border-none" style={{ textAlign: "right", minWidth: "60px", width: "100%" }}
+                        className="p-1 table-text-14 text-right bg-[#F2F7FB] border-none focus:bg-white focus:border focus:border-primary hover:bg-neutral-50" style={{ textAlign: "right", minWidth: "60px", width: "100%" }}
                         
                         disabled={isUpdating}
                       />
@@ -481,7 +481,7 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
                         
                         value={fund.incomeEscalation || "0%"}
                         onChange={(e) => handleInputChange(fund.id, "incomeEscalation", e.target.value)}
-                        className="p-1 table-text-14 text-right bg-transparent border-none" style={{ textAlign: "right", minWidth: "60px", width: "100%" }}
+                        className="p-1 table-text-14 text-right bg-[#F2F7FB] border-none focus:bg-white focus:border focus:border-primary hover:bg-neutral-50" style={{ textAlign: "right", minWidth: "60px", width: "100%" }}
                         
                         disabled={isUpdating}
                       />
@@ -495,7 +495,7 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
                         
                         value="0"
                         onChange={(e) => handleInputChange(fund.id, "beneficiaryPercentageSplit", e.target.value)}
-                        className="p-1 table-text-14 text-right bg-transparent border-none" style={{ textAlign: "right", minWidth: "60px", width: "100%" }}
+                        className="p-1 table-text-14 text-right bg-[#F2F7FB] border-none focus:bg-white focus:border focus:border-primary hover:bg-neutral-50" style={{ textAlign: "right", minWidth: "60px", width: "100%" }}
                         placeholder="0%"
                         disabled={isUpdating}
                       />
@@ -505,7 +505,7 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
                         
                         value="0"
                         onChange={(e) => handleInputChange(fund.id, "beneficiaryPercentageSplit", e.target.value)}
-                        className="p-1 table-text-14 text-right bg-transparent border-none" style={{ textAlign: "right", minWidth: "60px", width: "100%" }}
+                        className="p-1 table-text-14 text-right bg-[#F2F7FB] border-none focus:bg-white focus:border focus:border-primary hover:bg-neutral-50" style={{ textAlign: "right", minWidth: "60px", width: "100%" }}
                         placeholder="0%"
                         disabled={isUpdating}
                       />
@@ -515,7 +515,7 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
                         
                         value="0"
                         onChange={(e) => handleInputChange(fund.id, "beneficiaryPercentageSplit", e.target.value)}
-                        className="p-1 table-text-14 text-right bg-transparent border-none" style={{ textAlign: "right", minWidth: "60px", width: "100%" }}
+                        className="p-1 table-text-14 text-right bg-[#F2F7FB] border-none focus:bg-white focus:border focus:border-primary hover:bg-neutral-50" style={{ textAlign: "right", minWidth: "60px", width: "100%" }}
                         placeholder="0%"
                         disabled={isUpdating}
                       />
@@ -525,7 +525,7 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
                         
                         value={fund.executorsFee || "0"}
                         onChange={(e) => handleInputChange(fund.id, "executorsFee", e.target.value)}
-                        className="p-1 table-text-14 text-right bg-transparent border-none" style={{ textAlign: "right", minWidth: "60px", width: "100%" }}
+                        className="p-1 table-text-14 text-right bg-[#F2F7FB] border-none focus:bg-white focus:border focus:border-primary hover:bg-neutral-50" style={{ textAlign: "right", minWidth: "60px", width: "100%" }}
                         disabled={isUpdating}
                       />
                     </td>
@@ -534,7 +534,7 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
                         
                         value={fund.mastersFee || "0"}
                         onChange={(e) => handleInputChange(fund.id, "mastersFee", e.target.value)}
-                        className="p-1 table-text-14 text-right bg-transparent border-none" style={{ textAlign: "right", minWidth: "60px", width: "100%" }}
+                        className="p-1 table-text-14 text-right bg-[#F2F7FB] border-none focus:bg-white focus:border focus:border-primary hover:bg-neutral-50" style={{ textAlign: "right", minWidth: "60px", width: "100%" }}
                         disabled={isUpdating}
                       />
                     </td>
@@ -756,7 +756,7 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
                     <AutoSizeInput
                       value={fund.coverAmount || ""}
                       onChange={(e) => handleInputChange(fund.id, "coverAmount", e.target.value)}
-                      className="p-1 table-text-14 text-right bg-transparent border-none" style={{ textAlign: "right", minWidth: "60px", width: "100%" }}
+                      className="p-1 table-text-14 text-right bg-[#F2F7FB] border-none focus:bg-white focus:border focus:border-primary hover:bg-neutral-50" style={{ textAlign: "right", minWidth: "60px", width: "100%" }}
                       placeholder="R 0"
                       disabled={isUpdating}
                     />
@@ -789,7 +789,7 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
                       
                       value={fund.beneficiaryPercentage || ""}
                       onChange={(e) => handleInputChange(fund.id, "beneficiaryPercentage", e.target.value)}
-                      className="p-1 table-text-14 text-right bg-transparent border-none" style={{ textAlign: "right", minWidth: "60px", width: "100%" }}
+                      className="p-1 table-text-14 text-right bg-[#F2F7FB] border-none focus:bg-white focus:border focus:border-primary hover:bg-neutral-50" style={{ textAlign: "right", minWidth: "60px", width: "100%" }}
                       placeholder="100"
                       disabled={isUpdating}
                     />
@@ -801,7 +801,7 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
                       
                       value={fund.coverSplit || ""}
                       onChange={(e) => handleInputChange(fund.id, "coverSplit", e.target.value)}
-                      className="p-1 table-text-14 text-right bg-transparent border-none" style={{ textAlign: "right", minWidth: "60px", width: "100%" }}
+                      className="p-1 table-text-14 text-right bg-[#F2F7FB] border-none focus:bg-white focus:border focus:border-primary hover:bg-neutral-50" style={{ textAlign: "right", minWidth: "60px", width: "100%" }}
                       
                       disabled={isUpdating}
                     />
@@ -818,7 +818,7 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
                       
                       value={fund.monthlyIncome || ""}
                       onChange={(e) => handleInputChange(fund.id, "monthlyIncome", e.target.value)}
-                      className="p-1 table-text-14 text-right bg-transparent border-none" style={{ textAlign: "right", minWidth: "60px", width: "100%" }}
+                      className="p-1 table-text-14 text-right bg-[#F2F7FB] border-none focus:bg-white focus:border focus:border-primary hover:bg-neutral-50" style={{ textAlign: "right", minWidth: "60px", width: "100%" }}
                       placeholder="R 0"
                       disabled={isUpdating}
                     />
@@ -830,7 +830,7 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
                       
                       value={fund.termYears || ""}
                       onChange={(e) => handleInputChange(fund.id, "termYears", e.target.value)}
-                      className="p-1 table-text-14 text-right bg-transparent border-none" style={{ textAlign: "right", minWidth: "60px", width: "100%" }}
+                      className="p-1 table-text-14 text-right bg-[#F2F7FB] border-none focus:bg-white focus:border focus:border-primary hover:bg-neutral-50" style={{ textAlign: "right", minWidth: "60px", width: "100%" }}
                       
                       disabled={isUpdating}
                     />
@@ -842,7 +842,7 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
                       
                       value={fund.increasePercentage || ""}
                       onChange={(e) => handleInputChange(fund.id, "increasePercentage", e.target.value)}
-                      className="p-1 table-text-14 text-right bg-transparent border-none" style={{ textAlign: "right", minWidth: "60px", width: "100%" }}
+                      className="p-1 table-text-14 text-right bg-[#F2F7FB] border-none focus:bg-white focus:border focus:border-primary hover:bg-neutral-50" style={{ textAlign: "right", minWidth: "60px", width: "100%" }}
                       placeholder="0%"
                       disabled={isUpdating}
                     />
@@ -854,7 +854,7 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
                       
                       value={fund.lumpSumDeath || ""}
                       onChange={(e) => handleInputChange(fund.id, "lumpSumDeath", e.target.value)}
-                      className="p-1 table-text-14 text-right bg-transparent border-none" style={{ textAlign: "right", minWidth: "60px", width: "100%" }}
+                      className="p-1 table-text-14 text-right bg-[#F2F7FB] border-none focus:bg-white focus:border focus:border-primary hover:bg-neutral-50" style={{ textAlign: "right", minWidth: "60px", width: "100%" }}
                       placeholder="R 0"
                       disabled={isUpdating}
                     />
@@ -870,7 +870,7 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
                       
                       value={fund.approvedLifeCover || ""}
                       onChange={(e) => handleInputChange(fund.id, "approvedLifeCover", e.target.value)}
-                      className="p-1 table-text-14 text-right bg-transparent border-none" style={{ textAlign: "right", minWidth: "60px", width: "100%" }}
+                      className="p-1 table-text-14 text-right bg-[#F2F7FB] border-none focus:bg-white focus:border focus:border-primary hover:bg-neutral-50" style={{ textAlign: "right", minWidth: "60px", width: "100%" }}
                       placeholder="R 0"
                       disabled={isUpdating}
                     />
@@ -881,7 +881,7 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
                       
                       value={fund.fundValue || ""}
                       onChange={(e) => handleInputChange(fund.id, "fundValue", e.target.value)}
-                      className="p-1 table-text-14 text-right bg-transparent border-none" style={{ textAlign: "right", minWidth: "60px", width: "100%" }}
+                      className="p-1 table-text-14 text-right bg-[#F2F7FB] border-none focus:bg-white focus:border focus:border-primary hover:bg-neutral-50" style={{ textAlign: "right", minWidth: "60px", width: "100%" }}
                       placeholder="R 0"
                       disabled={isUpdating}
                     />
@@ -891,7 +891,7 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
                     <AutoSizeInput
                       value={fund.fundValueAtDeath || ""}
                       onChange={(e) => handleInputChange(fund.id, "fundValueAtDeath", e.target.value)}
-                      className="p-1 table-text-14 text-right bg-transparent border-none" style={{ textAlign: "right", minWidth: "60px", width: "100%" }}
+                      className="p-1 table-text-14 text-right bg-[#F2F7FB] border-none focus:bg-white focus:border focus:border-primary hover:bg-neutral-50" style={{ textAlign: "right", minWidth: "60px", width: "100%" }}
                       placeholder="R 0"
                       disabled={isUpdating}
                     />
@@ -928,7 +928,7 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
                       
                       value={fund.beneficiaryPercentageSplit || ""}
                       onChange={(e) => handleInputChange(fund.id, "beneficiaryPercentageSplit", e.target.value)}
-                      className="p-1 table-text-14 text-right bg-transparent border-none" style={{ textAlign: "right", minWidth: "60px", width: "100%" }}
+                      className="p-1 table-text-14 text-right bg-[#F2F7FB] border-none focus:bg-white focus:border focus:border-primary hover:bg-neutral-50" style={{ textAlign: "right", minWidth: "60px", width: "100%" }}
                       placeholder="0%"
                       disabled={isUpdating}
                     />
@@ -939,7 +939,7 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
                     <AutoSizeInput
                       value={fund.amount || ""}
                       onChange={(e) => handleInputChange(fund.id, "amount", e.target.value)}
-                      className="p-1 table-text-14 text-right bg-transparent border-none" style={{ textAlign: "right", minWidth: "60px", width: "100%" }}
+                      className="p-1 table-text-14 text-right bg-[#F2F7FB] border-none focus:bg-white focus:border focus:border-primary hover:bg-neutral-50" style={{ textAlign: "right", minWidth: "60px", width: "100%" }}
                       placeholder="R 0"
                       disabled={isUpdating}
                     />
@@ -951,7 +951,7 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
                       
                       value={fund.lumpSumTaken || ""}
                       onChange={(e) => handleInputChange(fund.id, "lumpSumTaken", e.target.value)}
-                      className="p-1 table-text-14 text-right bg-transparent border-none" style={{ textAlign: "right", minWidth: "60px", width: "100%" }}
+                      className="p-1 table-text-14 text-right bg-[#F2F7FB] border-none focus:bg-white focus:border focus:border-primary hover:bg-neutral-50" style={{ textAlign: "right", minWidth: "60px", width: "100%" }}
                       placeholder="R 0"
                       disabled={isUpdating}
                     />
@@ -962,7 +962,7 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
                     <AutoSizeInput
                       value={fund.fundValueAtDeath || ""}
                       onChange={(e) => handleInputChange(fund.id, "fundValueAtDeath", e.target.value)}
-                      className="p-1 table-text-14 text-right bg-transparent border-none" style={{ textAlign: "right", minWidth: "60px", width: "100%" }}
+                      className="p-1 table-text-14 text-right bg-[#F2F7FB] border-none focus:bg-white focus:border focus:border-primary hover:bg-neutral-50" style={{ textAlign: "right", minWidth: "60px", width: "100%" }}
                       placeholder="R 0"
                       disabled={isUpdating}
                     />
@@ -974,7 +974,7 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
                       
                       value={fund.nondeductibleContribution || ""}
                       onChange={(e) => handleInputChange(fund.id, "nondeductibleContribution", e.target.value)}
-                      className="p-1 table-text-14 text-right bg-transparent border-none" style={{ textAlign: "right", minWidth: "60px", width: "100%" }}
+                      className="p-1 table-text-14 text-right bg-[#F2F7FB] border-none focus:bg-white focus:border focus:border-primary hover:bg-neutral-50" style={{ textAlign: "right", minWidth: "60px", width: "100%" }}
                       placeholder="R 0"
                       disabled={isUpdating}
                     />
@@ -985,7 +985,7 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
                     <AutoSizeInput
                       value={fund.livingAnnuity || ""}
                       onChange={(e) => handleInputChange(fund.id, "livingAnnuity", e.target.value)}
-                      className="p-1 table-text-14 text-right bg-transparent border-none" style={{ textAlign: "right", minWidth: "60px", width: "100%" }}
+                      className="p-1 table-text-14 text-right bg-[#F2F7FB] border-none focus:bg-white focus:border focus:border-primary hover:bg-neutral-50" style={{ textAlign: "right", minWidth: "60px", width: "100%" }}
                       placeholder=""
                       disabled={isUpdating}
                     />
@@ -997,7 +997,7 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
                       
                       value={fund.incomeTerm || ""}
                       onChange={(e) => handleInputChange(fund.id, "incomeTerm", e.target.value)}
-                      className="p-1 table-text-14 text-right bg-transparent border-none" style={{ textAlign: "right", minWidth: "60px", width: "100%" }}
+                      className="p-1 table-text-14 text-right bg-[#F2F7FB] border-none focus:bg-white focus:border focus:border-primary hover:bg-neutral-50" style={{ textAlign: "right", minWidth: "60px", width: "100%" }}
                       placeholder="Income term"
                       disabled={isUpdating}
                     />
