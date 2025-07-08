@@ -183,47 +183,7 @@ export default function NewRetirementFunds() {
               />
             </div>
             
-            {/* Additional fields for inputs mode */}
-            {tableMode === "inputs" && (
-              <div className="mt-4 bg-white rounded-lg shadow-sm border border-neutral-200 p-6">
-                <h3 className="text-lg font-medium text-neutral-900 mb-4">Additional Details</h3>
-                <div className="grid grid-cols-3 gap-6">
-                  <div className="space-y-2">
-                    <label className="block text-sm font-medium text-neutral-700">
-                      Lump Sum Death
-                    </label>
-                    <Input
-                      value={filteredFunds[0]?.lumpSumDeath || "0"}
-                      onChange={(e) => handleFieldUpdate(filteredFunds[0]?.id || 1, "lumpSumDeath", e.target.value)}
-                      className="w-full"
-                      disabled={updateMutation.isPending}
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <label className="block text-sm font-medium text-neutral-700">
-                      Previous Lump Sums
-                    </label>
-                    <Input
-                      value={filteredFunds[0]?.previousLumpSums || "0"}
-                      onChange={(e) => handleFieldUpdate(filteredFunds[0]?.id || 1, "previousLumpSums", e.target.value)}
-                      className="w-full"
-                      disabled={updateMutation.isPending}
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <label className="block text-sm font-medium text-neutral-700">
-                      Additional Tax Free Amount
-                    </label>
-                    <Input
-                      value={filteredFunds[0]?.additionalTaxFreeAmount || "0"}
-                      onChange={(e) => handleFieldUpdate(filteredFunds[0]?.id || 1, "additionalTaxFreeAmount", e.target.value)}
-                      className="w-full"
-                      disabled={updateMutation.isPending}
-                    />
-                  </div>
-                </div>
-              </div>
-            )}
+
 
             {/* Summary Section for Table View - Flows */}
             {tableMode === "flows" && (
