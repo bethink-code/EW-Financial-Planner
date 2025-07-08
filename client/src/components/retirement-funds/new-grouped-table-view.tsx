@@ -379,10 +379,10 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
               )}
             </tr>
           </thead>
-          <tbody>
+          <tbody className="bg-white divide-y divide-neutral-200">
             {/* Flows data rows */}
             {funds.map((fund, index) => (
-              <tr key={`flows-${fund.id}`} className={`table-row ${index % 2 === 0 ? "bg-white" : "bg-teal-50/30"}`}>
+              <tr key={`flows-${fund.id}`} className={index % 2 === 0 ? "bg-white" : "bg-teal-50/30"}>
                 {columnVisibility.overview && (
                   <td className="p-2  table-text-14 text-neutral-900">
                     {fund.description}
