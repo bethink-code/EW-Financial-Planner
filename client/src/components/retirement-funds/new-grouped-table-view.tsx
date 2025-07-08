@@ -492,8 +492,8 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
                     <td className="compact-cell text-right border-r border-teal-100 border-l border-neutral-200">
                       <AutoSizeInput
                         
-                        value="0"
-                        onChange={(e) => handleInputChange(fund.id, "beneficiaryPercentageSplit", e.target.value)}
+                        value={fund.estateDutyPoliciesOnLife || "0%"}
+                        onChange={(e) => handleInputChange(fund.id, "estateDutyPoliciesOnLife", e.target.value)}
                         className="compact-input table-text-14" style={{ textAlign: "right" }}
                         placeholder="0%"
                         disabled={isUpdating}
@@ -502,8 +502,8 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
                     <td className="compact-cell text-right border-r border-teal-100">
                       <AutoSizeInput
                         
-                        value="0"
-                        onChange={(e) => handleInputChange(fund.id, "beneficiaryPercentageSplit", e.target.value)}
+                        value={fund.estateDutyToSpouse || "0%"}
+                        onChange={(e) => handleInputChange(fund.id, "estateDutyToSpouse", e.target.value)}
                         className="compact-input table-text-14" style={{ textAlign: "right" }}
                         placeholder="0%"
                         disabled={isUpdating}
@@ -512,8 +512,8 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
                     <td className="compact-cell text-right border-r border-teal-100">
                       <AutoSizeInput
                         
-                        value="0"
-                        onChange={(e) => handleInputChange(fund.id, "beneficiaryPercentageSplit", e.target.value)}
+                        value={fund.estateDutyToOthers || "0%"}
+                        onChange={(e) => handleInputChange(fund.id, "estateDutyToOthers", e.target.value)}
                         className="compact-input table-text-14" style={{ textAlign: "right" }}
                         placeholder="0%"
                         disabled={isUpdating}
@@ -547,9 +547,11 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
               {columnVisibility.overview && (
                 <td className="compact-cell border-r border-teal-100 table-text-14 font-bold">Total</td>
               )}
-              {columnVisibility.overview && (
+              {columnVisibility.fundValueBeneficiaries && (
                 <>
-                  <td className="compact-cell text-right border-r border-teal-100 table-text-14 font-bold">0</td>
+                  <td className="compact-cell text-right border-r border-teal-100 table-text-14 font-bold border-l border-neutral-200">0%</td>
+                  <td className="compact-cell text-right border-r border-teal-100 table-text-14 font-bold">0%</td>
+                  <td className="compact-cell text-right border-r border-teal-100 table-text-14 font-bold">0%</td>
                   <td className="compact-cell text-right border-r border-teal-100 table-text-14 font-bold">0</td>
                   <td className="compact-cell text-right border-r border-teal-100 table-text-14 font-bold">0</td>
                 </>

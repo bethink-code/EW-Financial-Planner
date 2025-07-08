@@ -41,6 +41,11 @@ export const retirementFunds = pgTable("retirement_funds", {
   estateDeploymentDeceased: text("estate_deployment_deceased").notNull().default("0"),
   executorsFee: text("executors_fee").notNull().default("0"),
   mastersFee: text("masters_fee").notNull().default("0"),
+  
+  // Estate Duty percentage fields for flows table
+  estateDutyPoliciesOnLife: text("estate_duty_policies_on_life").notNull().default("0%"),
+  estateDutyToSpouse: text("estate_duty_to_spouse").notNull().default("0%"),
+  estateDutyToOthers: text("estate_duty_to_others").notNull().default("0%"),
 
   // Additional fields shown below table in inputs mode
   lumpSumDeath: text("lump_sum_death").notNull().default("0"),
