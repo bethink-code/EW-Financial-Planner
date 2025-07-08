@@ -334,7 +334,7 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
               )}
               {columnVisibility.monthlyDeathBenefit && (
                 <>
-                  <th className="p-2 text-center font-medium text-neutral-600 uppercase tracking-wider text-xs ">
+                  <th className="p-2 text-center font-medium text-neutral-600 uppercase tracking-wider text-xs border-l border-neutral-300">
                     Amount
                   </th>
                   <th className="p-2 text-center font-medium text-neutral-600 uppercase tracking-wider text-xs">
@@ -347,7 +347,7 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
               )}
               {columnVisibility.fundValue && (
                 <>
-                  <th className="p-2 text-center font-medium text-neutral-600 uppercase tracking-wider text-xs ">
+                  <th className="p-2 text-center font-medium text-neutral-600 uppercase tracking-wider text-xs border-l border-neutral-300">
                     Amount
                   </th>
                   <th className="p-2 text-center font-medium text-neutral-600 uppercase tracking-wider text-xs">
@@ -360,7 +360,7 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
               )}
               {columnVisibility.fundValueBeneficiaries && (
                 <>
-                  <th className="p-2 text-center font-medium text-neutral-600 uppercase tracking-wider text-xs ">
+                  <th className="p-2 text-center font-medium text-neutral-600 uppercase tracking-wider text-xs border-l border-neutral-300">
                     Estate Duty (Policies on life of deceased)
                   </th>
                   <th className="p-2 text-center font-medium text-neutral-600 uppercase tracking-wider text-xs">
@@ -700,7 +700,7 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
             )}
             {columnVisibility.unapprovedLifeCover && (
               <>
-                <th className="table-cell text-left table-header-12 text-neutral-600 uppercase tracking-wider ">
+                <th className="table-cell text-left table-header-12 text-neutral-600 uppercase tracking-wider border-l border-neutral-300">
                   Cover amount
                 </th>
                 <th className="table-cell text-left table-header-12 text-neutral-600 uppercase tracking-wider">
@@ -716,7 +716,7 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
             )}
             {columnVisibility.monthlyDeathBenefit && (
               <>
-                <th className="table-cell text-left table-header-12 text-neutral-600 uppercase tracking-wider ">
+                <th className="table-cell text-left table-header-12 text-neutral-600 uppercase tracking-wider border-l border-neutral-300">
                   Monthly income
                 </th>
                 <th className="table-cell text-left table-header-12 text-neutral-600 uppercase tracking-wider">
@@ -725,7 +725,7 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
                 <th className="table-cell text-left table-header-12 text-neutral-600 uppercase tracking-wider">
                   Increase %
                 </th>
-                <th className="table-cell text-left table-header-12 text-neutral-600 uppercase tracking-wider ">
+                <th className="table-cell text-left table-header-12 text-neutral-600 uppercase tracking-wider">
                   Escalation amount
                 </th>
               </>
@@ -733,20 +733,20 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
             {/* Fund Value Section */}
             {columnVisibility.fundValue && (
               <>
-                <th className="table-cell text-left table-header-12 text-neutral-600 uppercase tracking-wider ">
+                <th className="table-cell text-left table-header-12 text-neutral-600 uppercase tracking-wider border-l border-neutral-300">
                   Approved life cover
                 </th>
                 <th className="table-cell text-left table-header-12 text-neutral-600 uppercase tracking-wider">
                   Fund value
                 </th>
-                <th className="table-cell text-left table-header-12 text-neutral-600 uppercase tracking-wider ">
+                <th className="table-cell text-left table-header-12 text-neutral-600 uppercase tracking-wider">
                   Fund value at death
                 </th>
               </>
             )}
             {columnVisibility.fundValueBeneficiaries && (
               <>
-                <th className="table-cell text-left table-header-12 text-neutral-600 uppercase tracking-wider ">
+                <th className="table-cell text-left table-header-12 text-neutral-600 uppercase tracking-wider border-l border-neutral-300">
                   Name
                 </th>
                 <th className="table-cell text-left table-header-12 text-neutral-600 uppercase tracking-wider">
