@@ -725,7 +725,7 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
                 <th className="table-cell text-left table-header-12 text-neutral-600 uppercase tracking-wider">
                   Increase %
                 </th>
-                <th className="table-cell text-left table-header-12 text-neutral-600 uppercase tracking-wider border-r border-neutral-300">
+                <th className="table-cell text-left table-header-12 text-neutral-600 uppercase tracking-wider ">
                   Escalation amount
                 </th>
               </>
@@ -739,7 +739,7 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
                 <th className="table-cell text-left table-header-12 text-neutral-600 uppercase tracking-wider">
                   Fund value
                 </th>
-                <th className="table-cell text-left table-header-12 text-neutral-600 uppercase tracking-wider border-r border-neutral-300">
+                <th className="table-cell text-left table-header-12 text-neutral-600 uppercase tracking-wider ">
                   Fund value at death
                 </th>
               </>
@@ -916,7 +916,7 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
                   </td>
 
                   {/* Monthly death benefit - Escalation amount */}
-                  <td className="p-2 text-right  border-r border-neutral-300">
+                  <td className="p-2 text-right  ">
                     <AutoSizeInput
                       
                       value={fund.lumpSumDeath || ""}
@@ -954,7 +954,7 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
                     />
                   </td>
 
-                  <td className="p-2 text-right  border-r border-neutral-300">
+                  <td className="p-2 text-right  ">
                     <AutoSizeInput
                       value={fund.fundValueAtDeath || ""}
                       onChange={(e) => handleInputChange(fund.id, "fundValueAtDeath", e.target.value)}
@@ -1145,7 +1145,7 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
                 </td>
                 
                 {/* Escalation amount */}
-                <td className="p-2 text-right  border-r border-neutral-300">
+                <td className="p-2 text-right  ">
                   
                 </td>
               </>
@@ -1172,7 +1172,7 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
                   </span>
                 </td>
                 
-                <td className="p-2 text-right  border-r border-neutral-300">
+                <td className="p-2 text-right  ">
                   <span className="font-bold text-right table-text-14 compact-total-span" style={{ color: '#094161' }}>
                     R {funds.reduce((sum, fund) => {
                       const amount = parseInt(fund.fundValueAtDeath?.replace(/[^0-9]/g, '') || '0');
