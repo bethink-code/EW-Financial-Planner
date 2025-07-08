@@ -12,6 +12,12 @@ html {
   font-size: 14px !important;
 }
 
+/* Ensure total row uses normal font weight */
+.table-total-row {
+  font-size: 14px !important;
+  font-weight: normal !important;
+}
+
 /* Force right alignment for flow table inputs */
 .auto-size-input {
   text-align: right !important;

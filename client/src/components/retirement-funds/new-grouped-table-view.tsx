@@ -288,26 +288,26 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
             <tr className="border-b border-neutral-200" style={{ backgroundColor: '#D6ECF5' }}>
               {columnVisibility.overview && (
                 <>
-                  <th className="px-3 py-2 text-center text-xs font-medium text-neutral-500 uppercase tracking-wider">
+                  <th className="px-3 py-2 text-center table-text-14 font-medium text-neutral-500 uppercase tracking-wider">
                     {/* Description column - standalone */}
                   </th>
-                  <th className="px-3 py-2 text-center text-xs font-medium text-neutral-500 uppercase tracking-wider border-l border-neutral-300" colSpan={3}>
+                  <th className="px-3 py-2 text-center table-text-14 font-medium text-neutral-500 uppercase tracking-wider border-l border-neutral-300" colSpan={3}>
                     Lump sum life cover available as provision to
                   </th>
                 </>
               )}
               {columnVisibility.monthlyDeathBenefit && (
-                <th className="px-3 py-2 text-center text-xs font-medium text-neutral-500 uppercase tracking-wider border-l border-neutral-300" colSpan={3}>
+                <th className="px-3 py-2 text-center table-text-14 font-medium text-neutral-500 uppercase tracking-wider border-l border-neutral-300" colSpan={3}>
                   Income provision source
                 </th>
               )}
               {columnVisibility.fundValue && (
-                <th className="px-3 py-2 text-center text-xs font-medium text-neutral-500 uppercase tracking-wider border-l border-neutral-300" colSpan={3}>
+                <th className="px-3 py-2 text-center table-text-14 font-medium text-neutral-500 uppercase tracking-wider border-l border-neutral-300" colSpan={3}>
                   Income provision offered
                 </th>
               )}
               {columnVisibility.fundValueBeneficiaries && (
-                <th className="px-3 py-2 text-center text-xs font-medium text-neutral-500 uppercase tracking-wider border-l border-neutral-300" colSpan={5}>
+                <th className="px-3 py-2 text-center table-text-14 font-medium text-neutral-500 uppercase tracking-wider border-l border-neutral-300" colSpan={5}>
                   Percentage included for
                 </th>
               )}
@@ -316,64 +316,64 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
             {/* Second level headers - Flows */}
             <tr className="border-b border-neutral-200" style={{ backgroundColor: '#D6ECF5' }}>
               {columnVisibility.overview && (
-                <th className="px-3 py-2 text-left text-xs font-medium text-neutral-600 uppercase tracking-wider">
+                <th className="px-3 py-2 text-left table-text-14 font-medium text-neutral-600 uppercase tracking-wider">
                   Description
                 </th>
               )}
               {columnVisibility.overview && (
                 <>
-                  <th className="px-3 py-2 text-center text-xs font-medium text-neutral-600 uppercase tracking-wider border-l border-neutral-300">
+                  <th className="px-3 py-2 text-center table-text-14 font-medium text-neutral-600 uppercase tracking-wider border-l border-neutral-300">
                     Estate
                   </th>
-                  <th className="px-3 py-2 text-center text-xs font-medium text-neutral-600 uppercase tracking-wider">
+                  <th className="px-3 py-2 text-center table-text-14 font-medium text-neutral-600 uppercase tracking-wider">
                     Spouse
                   </th>
-                  <th className="px-3 py-2 text-center text-xs font-medium text-neutral-600 uppercase tracking-wider">
+                  <th className="px-3 py-2 text-center table-text-14 font-medium text-neutral-600 uppercase tracking-wider">
                     Other
                   </th>
                 </>
               )}
               {columnVisibility.monthlyDeathBenefit && (
                 <>
-                  <th className="px-3 py-2 text-center text-xs font-medium text-neutral-600 uppercase tracking-wider border-l border-neutral-300">
+                  <th className="px-3 py-2 text-center table-text-14 font-medium text-neutral-600 uppercase tracking-wider border-l border-neutral-300">
                     Amount
                   </th>
-                  <th className="px-3 py-2 text-center text-xs font-medium text-neutral-600 uppercase tracking-wider">
+                  <th className="px-3 py-2 text-center table-text-14 font-medium text-neutral-600 uppercase tracking-wider">
                     Term (years)
                   </th>
-                  <th className="px-3 py-2 text-center text-xs font-medium text-neutral-600 uppercase tracking-wider">
+                  <th className="px-3 py-2 text-center table-text-14 font-medium text-neutral-600 uppercase tracking-wider">
                     Increase %
                   </th>
                 </>
               )}
               {columnVisibility.fundValue && (
                 <>
-                  <th className="px-3 py-2 text-center text-xs font-medium text-neutral-600 uppercase tracking-wider border-l border-neutral-300">
+                  <th className="px-3 py-2 text-center table-text-14 font-medium text-neutral-600 uppercase tracking-wider border-l border-neutral-300">
                     Amount
                   </th>
-                  <th className="px-3 py-2 text-center text-xs font-medium text-neutral-600 uppercase tracking-wider">
+                  <th className="px-3 py-2 text-center table-text-14 font-medium text-neutral-600 uppercase tracking-wider">
                     Term (years)
                   </th>
-                  <th className="px-3 py-2 text-center text-xs font-medium text-neutral-600 uppercase tracking-wider">
+                  <th className="px-3 py-2 text-center table-text-14 font-medium text-neutral-600 uppercase tracking-wider">
                     Increase %
                   </th>
                 </>
               )}
               {columnVisibility.fundValueBeneficiaries && (
                 <>
-                  <th className="px-3 py-2 text-center text-xs font-medium text-neutral-600 uppercase tracking-wider border-l border-neutral-300">
+                  <th className="px-3 py-2 text-center table-text-14 font-medium text-neutral-600 uppercase tracking-wider border-l border-neutral-300">
                     Estate Duty (Policies on life of deceased)
                   </th>
-                  <th className="px-3 py-2 text-center text-xs font-medium text-neutral-600 uppercase tracking-wider">
+                  <th className="px-3 py-2 text-center table-text-14 font-medium text-neutral-600 uppercase tracking-wider">
                     Estate Duty (To spouse)
                   </th>
-                  <th className="px-3 py-2 text-center text-xs font-medium text-neutral-600 uppercase tracking-wider">
+                  <th className="px-3 py-2 text-center table-text-14 font-medium text-neutral-600 uppercase tracking-wider">
                     Estate Duty (To others)
                   </th>
-                  <th className="px-3 py-2 text-center text-xs font-medium text-neutral-600 uppercase tracking-wider">
+                  <th className="px-3 py-2 text-center table-text-14 font-medium text-neutral-600 uppercase tracking-wider">
                     Executor's fee
                   </th>
-                  <th className="px-3 py-2 text-center text-xs font-medium text-neutral-600 uppercase tracking-wider">
+                  <th className="px-3 py-2 text-center table-text-14 font-medium text-neutral-600 uppercase tracking-wider">
                     Master's fee
                   </th>
                 </>
@@ -544,38 +544,38 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
             ))}
             
             {/* Flows total row */}
-            <tr style={{ backgroundColor: '#D6ECF5' }} className="font-semibold border-t-2 border-neutral-300">
+            <tr style={{ backgroundColor: '#D6ECF5' }} className="border-t-2 border-neutral-300">
               {columnVisibility.overview && (
-                <td className="p-2 border-r border-teal-100 table-text-14">Total</td>
+                <td className="p-2 border-r border-teal-100 table-total-row">Total</td>
               )}
               {columnVisibility.overview && (
                 <>
-                  <td className="p-2 text-right border-r border-teal-100 table-text-14">0</td>
-                  <td className="p-2 text-right border-r border-teal-100 table-text-14">0</td>
-                  <td className="p-2 text-right border-r border-teal-100 table-text-14">0</td>
+                  <td className="p-2 text-right border-r border-teal-100 table-total-row">0</td>
+                  <td className="p-2 text-right border-r border-teal-100 table-total-row">0</td>
+                  <td className="p-2 text-right border-r border-teal-100 table-total-row">0</td>
                 </>
               )}
               {columnVisibility.monthlyDeathBenefit && (
                 <>
                   <td className="px-3 py-2 text-right border-r border-teal-100 table-text-14 border-l border-neutral-200">0</td>
-                  <td className="px-3 py-2 text-right border-r border-teal-100 table-text-14">0</td>
-                  <td className="px-3 py-2 text-right border-r border-teal-100 table-text-14">0%</td>
+                  <td className="px-3 py-2 text-right border-r border-teal-100 table-total-row">0</td>
+                  <td className="px-3 py-2 text-right border-r border-teal-100 table-total-row">0%</td>
                 </>
               )}
               {columnVisibility.fundValue && (
                 <>
                   <td className="px-3 py-2 text-right border-r border-teal-100 table-text-14 border-l border-neutral-200">0</td>
-                  <td className="px-3 py-2 text-right border-r border-teal-100 table-text-14">0</td>
-                  <td className="px-3 py-2 text-right border-r border-teal-100 table-text-14">0%</td>
+                  <td className="px-3 py-2 text-right border-r border-teal-100 table-total-row">0</td>
+                  <td className="px-3 py-2 text-right border-r border-teal-100 table-total-row">0%</td>
                 </>
               )}
               {columnVisibility.fundValueBeneficiaries && (
                 <>
                   <td className="px-3 py-2 text-right border-r border-teal-100 table-text-14 border-l border-neutral-200">0%</td>
-                  <td className="px-3 py-2 text-right border-r border-teal-100 table-text-14">0%</td>
-                  <td className="px-3 py-2 text-right border-r border-teal-100 table-text-14">0%</td>
-                  <td className="px-3 py-2 text-right border-r border-teal-100 table-text-14">0</td>
-                  <td className="px-3 py-2 text-right border-r border-teal-100 table-text-14">0</td>
+                  <td className="px-3 py-2 text-right border-r border-teal-100 table-total-row">0%</td>
+                  <td className="px-3 py-2 text-right border-r border-teal-100 table-total-row">0%</td>
+                  <td className="px-3 py-2 text-right border-r border-teal-100 table-total-row">0</td>
+                  <td className="px-3 py-2 text-right border-r border-teal-100 table-total-row">0</td>
                 </>
               )}
             </tr>
@@ -593,27 +593,27 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
           {/* First level headers */}
           <tr className="border-b border-neutral-200" style={{ backgroundColor: '#D6ECF5' }}>
             {columnVisibility.overview && (
-              <th className="px-3 py-2 text-center text-xs font-medium text-neutral-500 uppercase tracking-wider" colSpan={2}>
+              <th className="px-3 py-2 text-center table-text-14 font-medium text-neutral-500 uppercase tracking-wider" colSpan={2}>
                 Overview
               </th>
             )}
             {columnVisibility.unapprovedLifeCover && (
-              <th className="px-3 py-2 text-center text-xs font-medium text-neutral-500 uppercase tracking-wider border-l border-neutral-300" colSpan={4}>
+              <th className="px-3 py-2 text-center table-text-14 font-medium text-neutral-500 uppercase tracking-wider border-l border-neutral-300" colSpan={4}>
                 Unapproved life cover
               </th>
             )}
             {columnVisibility.monthlyDeathBenefit && (
-              <th className="px-3 py-2 text-center text-xs font-medium text-neutral-500 uppercase tracking-wider border-l border-neutral-300" colSpan={4}>
+              <th className="px-3 py-2 text-center table-text-14 font-medium text-neutral-500 uppercase tracking-wider border-l border-neutral-300" colSpan={4}>
                 Monthly death benefit
               </th>
             )}
             {columnVisibility.fundValue && (
-              <th className="px-3 py-2 text-center text-xs font-medium text-neutral-500 uppercase tracking-wider border-l border-neutral-300" colSpan={3}>
+              <th className="px-3 py-2 text-center table-text-14 font-medium text-neutral-500 uppercase tracking-wider border-l border-neutral-300" colSpan={3}>
                 Fund value
               </th>
             )}
             {columnVisibility.fundValueBeneficiaries && (
-              <th className="px-3 py-2 text-center text-xs font-medium text-neutral-500 uppercase tracking-wider border-l border-neutral-300" colSpan={8}>
+              <th className="px-3 py-2 text-center table-text-14 font-medium text-neutral-500 uppercase tracking-wider border-l border-neutral-300" colSpan={8}>
                 Fund value beneficiaries
               </th>
             )}
@@ -623,42 +623,42 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
           <tr className="border-b border-neutral-200" style={{ backgroundColor: '#D6ECF5' }}>
             {columnVisibility.overview && (
               <>
-                <th className="px-3 py-2 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">
+                <th className="px-3 py-2 text-left table-text-14 font-medium text-neutral-500 uppercase tracking-wider">
                   Description
                 </th>
-                <th className="px-3 py-2 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">
+                <th className="px-3 py-2 text-left table-text-14 font-medium text-neutral-500 uppercase tracking-wider">
                   Owner
                 </th>
               </>
             )}
             {columnVisibility.unapprovedLifeCover && (
               <>
-                <th className="px-3 py-2 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider border-l border-neutral-300">
+                <th className="px-3 py-2 text-left table-text-14 font-medium text-neutral-500 uppercase tracking-wider border-l border-neutral-300">
                   Cover amount
                 </th>
-                <th className="px-3 py-2 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">
+                <th className="px-3 py-2 text-left table-text-14 font-medium text-neutral-500 uppercase tracking-wider">
                   Beneficiary
                 </th>
-                <th className="px-3 py-2 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">
+                <th className="px-3 py-2 text-left table-text-14 font-medium text-neutral-500 uppercase tracking-wider">
                   %
                 </th>
-                <th className="px-3 py-2 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">
+                <th className="px-3 py-2 text-left table-text-14 font-medium text-neutral-500 uppercase tracking-wider">
                   Cover split
                 </th>
               </>
             )}
             {columnVisibility.monthlyDeathBenefit && (
               <>
-                <th className="px-3 py-2 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider border-l border-neutral-300">
+                <th className="px-3 py-2 text-left table-text-14 font-medium text-neutral-500 uppercase tracking-wider border-l border-neutral-300">
                   Monthly income
                 </th>
-                <th className="px-3 py-2 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">
+                <th className="px-3 py-2 text-left table-text-14 font-medium text-neutral-500 uppercase tracking-wider">
                   Term (Years)
                 </th>
-                <th className="px-3 py-2 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">
+                <th className="px-3 py-2 text-left table-text-14 font-medium text-neutral-500 uppercase tracking-wider">
                   Increase %
                 </th>
-                <th className="px-3 py-2 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider border-r border-neutral-300">
+                <th className="px-3 py-2 text-left table-text-14 font-medium text-neutral-500 uppercase tracking-wider border-r border-neutral-300">
                   Escalation amount
                 </th>
               </>
@@ -666,41 +666,41 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
             {/* Fund Value Section */}
             {columnVisibility.fundValue && (
               <>
-                <th className="px-3 py-2 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider border-l border-neutral-300">
+                <th className="px-3 py-2 text-left table-text-14 font-medium text-neutral-500 uppercase tracking-wider border-l border-neutral-300">
                   Approved life cover
                 </th>
-                <th className="px-3 py-2 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">
+                <th className="px-3 py-2 text-left table-text-14 font-medium text-neutral-500 uppercase tracking-wider">
                   Fund value
                 </th>
-                <th className="px-3 py-2 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider border-r border-neutral-300">
+                <th className="px-3 py-2 text-left table-text-14 font-medium text-neutral-500 uppercase tracking-wider border-r border-neutral-300">
                   Fund value at death
                 </th>
               </>
             )}
             {columnVisibility.fundValueBeneficiaries && (
               <>
-                <th className="px-3 py-2 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider border-l border-neutral-300">
+                <th className="px-3 py-2 text-left table-text-14 font-medium text-neutral-500 uppercase tracking-wider border-l border-neutral-300">
                   Name
                 </th>
-                <th className="px-3 py-2 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">
+                <th className="px-3 py-2 text-left table-text-14 font-medium text-neutral-500 uppercase tracking-wider">
                   %
                 </th>
-                <th className="px-3 py-2 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">
+                <th className="px-3 py-2 text-left table-text-14 font-medium text-neutral-500 uppercase tracking-wider">
                   Amount
                 </th>
-                <th className="px-3 py-2 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">
+                <th className="px-3 py-2 text-left table-text-14 font-medium text-neutral-500 uppercase tracking-wider">
                   Lump sum taken
                 </th>
-                <th className="px-3 py-2 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">
+                <th className="px-3 py-2 text-left table-text-14 font-medium text-neutral-500 uppercase tracking-wider">
                   Fund value at death
                 </th>
-                <th className="px-3 py-2 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">
+                <th className="px-3 py-2 text-left table-text-14 font-medium text-neutral-500 uppercase tracking-wider">
                   Non deductible contribution amount
                 </th>
-                <th className="px-3 py-2 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">
+                <th className="px-3 py-2 text-left table-text-14 font-medium text-neutral-500 uppercase tracking-wider">
                   Living annuity
                 </th>
-                <th className="px-3 py-2 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">
+                <th className="px-3 py-2 text-left table-text-14 font-medium text-neutral-500 uppercase tracking-wider">
                   Income term
                 </th>
               </>
