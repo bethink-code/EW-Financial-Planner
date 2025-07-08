@@ -244,13 +244,6 @@ export default function NewRetirementFunds() {
               </div>
             )}
 
-            <NewGroupedTableView
-              funds={filteredFunds}
-              columnVisibility={columnVisibility}
-              tableMode={tableMode}
-              onFieldUpdate={handleFieldUpdate}
-              isUpdating={updateMutation.isPending}
-            />
           </>
         )}
 
