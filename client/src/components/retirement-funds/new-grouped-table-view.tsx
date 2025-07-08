@@ -561,7 +561,7 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
               )}
               {columnVisibility.monthlyDeathBenefit && (
                 <>
-                  <td className="p-2 text-right ">
+                  <td className="p-2 text-right border-l border-neutral-300">
                     <span className="font-bold text-right table-text-14 compact-total-span" style={{ color: '#094161' }}>
                       0
                     </span>
@@ -610,7 +610,7 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
               {columnVisibility.fundValueBeneficiaries && (
                 <>
                   {/* Estate Duty (Policies on life of deceased) */}
-                  <td className="p-2 text-right ">
+                  <td className="p-2 text-right border-l border-neutral-300">
                     <span className="font-bold text-right table-text-14 compact-total-span" style={{ color: '#094161' }}>
                       0%
                     </span>
