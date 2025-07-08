@@ -278,9 +278,14 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
             {/* First level headers - Flows */}
             <tr className="border-b border-neutral-200" style={{ backgroundColor: '#D0E5F0' }}>
               {columnVisibility.overview && (
-                <th className="px-3 py-2 text-center text-xs font-medium text-neutral-500 uppercase tracking-wider" colSpan={5}>
-                  Lump sum life cover available as provision to
-                </th>
+                <>
+                  <th className="px-3 py-2 text-center text-xs font-medium text-neutral-500 uppercase tracking-wider">
+                    {/* Description column - standalone */}
+                  </th>
+                  <th className="px-3 py-2 text-center text-xs font-medium text-neutral-500 uppercase tracking-wider border-l border-neutral-300" colSpan={4}>
+                    Lump sum life cover available as provision to
+                  </th>
+                </>
               )}
               {columnVisibility.monthlyDeathBenefit && (
                 <th className="px-3 py-2 text-center text-xs font-medium text-neutral-500 uppercase tracking-wider border-l border-neutral-300" colSpan={3}>
