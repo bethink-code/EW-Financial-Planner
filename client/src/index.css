@@ -11,6 +11,14 @@ html {
 .table-text-14 {
   font-size: 14px !important;
   font-weight: normal !important;
+  line-height: 1.2 !important;
+}
+
+/* Force 12px for headers to make them smaller */
+.table-header-12 {
+  font-size: 12px !important;
+  font-weight: normal !important;
+  line-height: 1.2 !important;
 }
 
 /* Ensure total row uses normal font weight */
