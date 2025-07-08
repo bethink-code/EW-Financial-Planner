@@ -551,37 +551,37 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
             {/* Flows total row */}
             <tr className="bg-gray-100 font-semibold border-t-2 border-teal-300">
               {columnVisibility.overview && (
-                <td className="p-2 border-r border-teal-100">Total</td>
+                <td className="p-2 border-r border-teal-100 text-xs">Total</td>
               )}
               {columnVisibility.overview && (
                 <>
-                  <td className="p-2 text-right border-r border-teal-100">0</td>
-                  <td className="p-2 text-right border-r border-teal-100">0</td>
-                  <td className="p-2 text-right border-r border-teal-100">0</td>
-                  <td className="p-2 text-right">0</td>
+                  <td className="p-2 text-right border-r border-teal-100 text-xs">0</td>
+                  <td className="p-2 text-right border-r border-teal-100 text-xs">0</td>
+                  <td className="p-2 text-right border-r border-teal-100 text-xs">0</td>
+                  <td className="p-2 text-right text-xs">0</td>
                 </>
               )}
               {columnVisibility.monthlyDeathBenefit && (
                 <>
-                  <td className="px-3 py-2 text-center text-sm font-semibold text-neutral-900 border-l border-neutral-200">0</td>
-                  <td className="px-3 py-2 text-center text-sm font-semibold text-neutral-900">0</td>
-                  <td className="px-3 py-2 text-center text-sm font-semibold text-neutral-900">0</td>
+                  <td className="px-3 py-2 text-right border-r border-teal-100 text-xs border-l border-neutral-200">0</td>
+                  <td className="px-3 py-2 text-right border-r border-teal-100 text-xs">0</td>
+                  <td className="px-3 py-2 text-right border-r border-teal-100 text-xs">0</td>
                 </>
               )}
               {columnVisibility.fundValue && (
                 <>
-                  <td className="px-3 py-2 text-center text-sm font-semibold text-neutral-900 border-l border-neutral-200">0</td>
-                  <td className="px-3 py-2 text-center text-sm font-semibold text-neutral-900">0</td>
-                  <td className="px-3 py-2 text-center text-sm font-semibold text-neutral-900">0</td>
-                  <td className="px-3 py-2 text-center text-sm font-semibold text-neutral-900">0</td>
+                  <td className="px-3 py-2 text-right border-r border-teal-100 text-xs border-l border-neutral-200">0</td>
+                  <td className="px-3 py-2 text-right border-r border-teal-100 text-xs">0</td>
+                  <td className="px-3 py-2 text-right border-r border-teal-100 text-xs">0</td>
+                  <td className="px-3 py-2 text-right border-r border-teal-100 text-xs">0</td>
                 </>
               )}
               {columnVisibility.fundValueBeneficiaries && (
                 <>
-                  <td className="px-3 py-2 text-center text-sm font-semibold text-neutral-900 border-l border-neutral-200">0</td>
-                  <td className="px-3 py-2 text-center text-sm font-semibold text-neutral-900">0</td>
-                  <td className="px-3 py-2 text-center text-sm font-semibold text-neutral-900">0</td>
-                  <td className="px-3 py-2 text-center text-sm font-semibold text-neutral-900">0</td>
+                  <td className="px-3 py-2 text-right border-r border-teal-100 text-xs border-l border-neutral-200">0</td>
+                  <td className="px-3 py-2 text-right border-r border-teal-100 text-xs">0</td>
+                  <td className="px-3 py-2 text-right border-r border-teal-100 text-xs">0</td>
+                  <td className="px-3 py-2 text-right border-r border-teal-100 text-xs">0</td>
                 </>
               )}
             </tr>
