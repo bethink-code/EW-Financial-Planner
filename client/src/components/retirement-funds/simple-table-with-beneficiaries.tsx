@@ -342,7 +342,8 @@ export function SimpleTableWithBeneficiaries({ funds, columnVisibility, tableMod
                             onChange={(e) => handleBeneficiaryUpdate(fund.id, 0, 'name', e.target.value)}
                             placeholder="Beneficiary name"
                             disabled={isUpdating}
-                            className="compact-input border-0 focus:bg-white focus:border focus:border-primary hover:bg-neutral-50 transition-colors duration-200"
+                            className="table-input"
+                            style={{ textAlign: "left" }}
                           />
                         </td>
                         <td className="p-2 percentage-column">
@@ -579,7 +580,8 @@ export function SimpleTableWithBeneficiaries({ funds, columnVisibility, tableMod
                           onChange={(e) => handleBeneficiaryUpdate(fund.id, actualIndex, 'name', e.target.value)}
                           placeholder="Beneficiary name"
                           disabled={isUpdating}
-                          className="compact-input border-0 focus:bg-white focus:border focus:border-primary hover:bg-neutral-50 transition-colors duration-200"
+                          className="table-input"
+                          style={{ textAlign: "left" }}
                         />
                       </td>
                       <td className="p-2 percentage-column">

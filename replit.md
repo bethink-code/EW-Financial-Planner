@@ -146,3 +146,4 @@ Changelog:
 - July 09, 2025: **INPUT FIELD SIZING OPTIMIZATION** - Fixed AutoSizeInput component with Canvas API text measurement for accurate content-based sizing, eliminated text truncation issues, maintained 80px percentage column width
 - July 09, 2025: **ACTIONS COLUMN OPTIMIZATION** - Restricted Actions column to only appear in Unapproved Life Cover section, removed from Monthly Death Benefit, Fund Value, and Fund Value Beneficiaries sections for cleaner table layout
 - July 09, 2025: **OVERVIEW STYLING FIX** - Fixed AutoSizeInput component to properly apply background styling, enhanced table-input CSS with hover/focus states, fixed Owner field width to prevent truncation with min-width 120px
+- July 09, 2025: **BENEFICIARY FONT SIZE FIX** - Standardized all beneficiary name fields to use table-input class ensuring consistent font size (0.875rem) across main and additional beneficiary rows
