@@ -148,3 +148,4 @@ Changelog:
 - July 09, 2025: **OVERVIEW STYLING FIX** - Fixed AutoSizeInput component to properly apply background styling, enhanced table-input CSS with hover/focus states, fixed Owner field width to prevent truncation with min-width 120px
 - July 09, 2025: **BENEFICIARY FONT SIZE FIX** - Standardized all beneficiary name fields to use table-input class ensuring consistent font size (0.875rem) across main and additional beneficiary rows
 - July 09, 2025: **ACTION ICON COLORS** - Updated action icon colors to #1B5C82 for add (+) buttons and #4F4F4F for delete (trash) buttons with matching hover states
+- July 09, 2025: **FLOWS TABLE RESTORATION** - Fixed JSX structure errors in flows table, restored proper table mode switching between SimpleTableWithBeneficiaries (inputs) and NewGroupedTableView (flows), confirmed working table mode toggle functionality
