@@ -4,7 +4,9 @@ import { RetirementFund, UpdateRetirementFund } from "@shared/schema";
 import { queryClient, apiRequest } from "@/lib/queryClient";
 import { NewTableControls } from "@/components/retirement-funds/new-table-controls";
 import { NewGroupedTableView } from "@/components/retirement-funds/new-grouped-table-view";
+import { SimpleTableWithBeneficiaries } from "@/components/retirement-funds/simple-table-with-beneficiaries";
 import { DetailedView } from "@/components/retirement-funds/detailed-view";
+import { SummarySection } from "@/components/retirement-funds/summary-section";
 import { Input } from "@/components/ui/input";
 
 type ViewMode = "grouped" | "detailed";
@@ -240,7 +242,7 @@ export default function NewRetirementFunds() {
             )}
 
             <div className="bg-white rounded-lg shadow-sm border border-neutral-200" style={{ viewTransitionName: 'table-view' }}>
-              <NewGroupedTableView
+              <SimpleTableWithBeneficiaries
                 funds={filteredFunds}
                 columnVisibility={columnVisibility}
                 tableMode={tableMode}

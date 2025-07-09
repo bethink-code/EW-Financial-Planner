@@ -1,8 +1,11 @@
-import { RetirementFund, UpdateRetirementFund } from "@shared/schema";
+import React, { useRef, useEffect, useMemo, useCallback } from "react";
+import { RetirementFund, UpdateRetirementFund, Beneficiary } from "@shared/schema";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Edit3 } from "lucide-react";
-import { useRef, useEffect, useMemo, useCallback } from "react";
-import { BeneficiaryTableView } from "./beneficiary-table-view";
+import { Edit3, Plus, Trash2 } from "lucide-react";
+import { parseBeneficiaries } from "@/lib/beneficiaries";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { nanoid } from "nanoid";
 
 interface ColumnVisibility {
   overview: boolean;
@@ -102,6 +105,77 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
   const handleInputChange = useCallback((fundId: number, field: keyof UpdateRetirementFund, value: string) => {
     onFieldUpdate(fundId, field, value);
   }, [onFieldUpdate]);
+
+  const handleBeneficiaryUpdate = useCallback((fundId: number, beneficiaryIndex: number, field: keyof Beneficiary, value: string | number) => {
+    const fund = funds.find(f => f.id === fundId);
+    if (!fund) return;
+
+    const currentBeneficiaries = parseBeneficiaries(fund.beneficiaries);
+    const updatedBeneficiaries = [...currentBeneficiaries];
+    
+    if (updatedBeneficiaries[beneficiaryIndex]) {
+      if (field === 'percentage') {
+        updatedBeneficiaries[beneficiaryIndex] = {
+          ...updatedBeneficiaries[beneficiaryIndex],
+          [field]: Math.max(0, Math.min(100, Number(value) || 0))
+        };
+      } else {
+        updatedBeneficiaries[beneficiaryIndex] = {
+          ...updatedBeneficiaries[beneficiaryIndex],
+          [field]: value
+        };
+      }
+
+      // Update cover splits when percentages change
+      if (field === 'percentage') {
+        const coverAmount = parseFloat(fund.coverAmount.replace(/[^\d.-]/g, '')) || 0;
+        updatedBeneficiaries[beneficiaryIndex].coverSplit = 
+          `R ${Math.round((coverAmount * updatedBeneficiaries[beneficiaryIndex].percentage / 100)).toLocaleString()}`;
+      }
+
+      onFieldUpdate(fundId, 'beneficiaries', JSON.stringify(updatedBeneficiaries));
+    }
+  }, [funds, onFieldUpdate]);
+
+  const handleAddBeneficiary = useCallback((fundId: number) => {
+    const fund = funds.find(f => f.id === fundId);
+    if (!fund) return;
+
+    const currentBeneficiaries = parseBeneficiaries(fund.beneficiaries);
+    const newBeneficiary: Beneficiary = {
+      id: nanoid(),
+      name: "",
+      percentage: 0,
+      coverSplit: "R 0"
+    };
+
+    const updatedBeneficiaries = [...currentBeneficiaries, newBeneficiary];
+    onFieldUpdate(fundId, 'beneficiaries', JSON.stringify(updatedBeneficiaries));
+  }, [funds, onFieldUpdate]);
+
+  const handleRemoveBeneficiary = useCallback((fundId: number, beneficiaryIndex: number) => {
+    const fund = funds.find(f => f.id === fundId);
+    if (!fund) return;
+
+    const currentBeneficiaries = parseBeneficiaries(fund.beneficiaries);
+    if (currentBeneficiaries.length <= 1) return;
+
+    const updatedBeneficiaries = currentBeneficiaries.filter((_, index) => index !== beneficiaryIndex);
+    
+    // Auto-adjust percentages
+    const totalPercentage = updatedBeneficiaries.reduce((sum, b) => sum + b.percentage, 0);
+    if (totalPercentage > 0 && totalPercentage !== 100) {
+      const adjustmentFactor = 100 / totalPercentage;
+      const coverAmount = parseFloat(fund.coverAmount.replace(/[^\d.-]/g, '')) || 0;
+      
+      updatedBeneficiaries.forEach(b => {
+        b.percentage = Math.round(b.percentage * adjustmentFactor * 100) / 100;
+        b.coverSplit = `R ${Math.round((coverAmount * b.percentage / 100)).toLocaleString()}`;
+      });
+    }
+
+    onFieldUpdate(fundId, 'beneficiaries', JSON.stringify(updatedBeneficiaries));
+  }, [funds, onFieldUpdate]);
 
   const owners = useMemo(() => ["John Doe", "Jane Smith"], []);
 
@@ -676,8 +750,8 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
               </th>
             )}
             {columnVisibility.unapprovedLifeCover && (
-              <th className="p-2 text-center font-medium text-neutral-600 uppercase tracking-wider text-xs border-l border-neutral-300" colSpan={1}>
-                Cover Amount
+              <th className="p-2 text-center font-medium text-neutral-600 uppercase tracking-wider text-xs border-l border-neutral-300" colSpan={4}>
+                Unapproved life cover
               </th>
             )}
             {columnVisibility.monthlyDeathBenefit && (
@@ -710,9 +784,20 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
               </>
             )}
             {columnVisibility.unapprovedLifeCover && (
-              <th className="table-cell text-left table-header-12 text-neutral-600 uppercase tracking-wider border-l border-neutral-300">
-                Cover amount
-              </th>
+              <>
+                <th className="table-cell text-left table-header-12 text-neutral-600 uppercase tracking-wider border-l border-neutral-300">
+                  Cover amount
+                </th>
+                <th className="table-cell text-left table-header-12 text-neutral-600 uppercase tracking-wider">
+                  Beneficiary
+                </th>
+                <th className="table-cell text-left table-header-12 text-neutral-600 uppercase tracking-wider">
+                  %
+                </th>
+                <th className="table-cell text-left table-header-12 text-neutral-600 uppercase tracking-wider">
+                  Cover split
+                </th>
+              </>
             )}
             {columnVisibility.monthlyDeathBenefit && (
               <>
@@ -775,61 +860,179 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
           </tr>
         </thead>
         <tbody className="bg-white divide-y divide-neutral-200">
-          {funds.map((fund) => (
-            <tr key={fund.id} className="hover:bg-neutral-50">
-              {/* Overview Section */}
-              {columnVisibility.overview && (
-                <>
-                  {/* Description */}
-                  <td className="table-cell whitespace-nowrap table-text-14 text-neutral-900">
-                    <AutoSizeInput
+          {funds.map((fund) => {
+            const beneficiaries = parseBeneficiaries(fund.beneficiaries);
+            
+            return (
+              <React.Fragment key={fund.id}>
+                {/* Main fund row */}
+                <tr className="hover:bg-neutral-50">
+                  {/* Overview Section */}
+                  {columnVisibility.overview && (
+                    <>
+                      {/* Description */}
+                      <td className="table-cell whitespace-nowrap table-text-14 text-neutral-900" rowSpan={beneficiaries.length + 1}>
+                        <AutoSizeInput
+                          value={fund.description || ""}
+                          onChange={(e) => handleInputChange(fund.id, "description", e.target.value)}
+                          className="border-0 focus:bg-white focus:border focus:border-primary hover:bg-neutral-50 text-left font-medium"
+                          placeholder="Fund description"
+                          disabled={isUpdating}
+                        />
+                      </td>
                       
-                      value={fund.description || ""}
-                      onChange={(e) => handleInputChange(fund.id, "description", e.target.value)}
-                      className="border-0 focus:bg-white focus:border focus:border-primary hover:bg-neutral-50 text-left font-medium"
-                      placeholder="Fund description"
-                      disabled={isUpdating}
-                    />
-                  </td>
-                  
-                  {/* Owner */}
-                  <td className="p-2 text-right ">
-                    <Select
-                      value={fund.owner || "John Doe"}
-                      onValueChange={(value) => handleInputChange(fund.id, "owner", value)}
-                      disabled={isUpdating}
-                    >
-                      <SelectTrigger className="compact-input border-0 focus:bg-white focus:border focus:border-primary hover:bg-neutral-50 transition-colors duration-200 group">
-                        <SelectValue />
-                        <Edit3 size={12} className="ml-1 text-teal-400 opacity-0 group-hover:opacity-100 transition-opacity duration-200" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {owners.map((owner) => (
-                          <SelectItem key={owner} value={owner}>
-                            {owner}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                  </td>
-                </>
-              )}
+                      {/* Owner */}
+                      <td className="p-2 text-right" rowSpan={beneficiaries.length + 1}>
+                        <Select
+                          value={fund.owner || "John Doe"}
+                          onValueChange={(value) => handleInputChange(fund.id, "owner", value)}
+                          disabled={isUpdating}
+                        >
+                          <SelectTrigger className="compact-input border-0 focus:bg-white focus:border focus:border-primary hover:bg-neutral-50 transition-colors duration-200 group">
+                            <SelectValue />
+                            <Edit3 size={12} className="ml-1 text-teal-400 opacity-0 group-hover:opacity-100 transition-opacity duration-200" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            {owners.map((owner) => (
+                              <SelectItem key={owner} value={owner}>
+                                {owner}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                      </td>
+                    </>
+                  )}
 
-              {/* Unapproved Life Cover Section */}
-              {columnVisibility.unapprovedLifeCover && (
-                <td className="p-2 text-right border-l border-neutral-300">
-                  <AutoSizeInput
-                    value={fund.coverAmount || ""}
-                    onChange={(e) => handleInputChange(fund.id, "coverAmount", e.target.value)}
-                    className="table-input" style={{ textAlign: "right" }}
-                    placeholder="R 0"
-                    disabled={isUpdating}
-                  />
-                </td>
-              )}
+                  {/* Unapproved Life Cover Section - Header Row */}
+                  {columnVisibility.unapprovedLifeCover && (
+                    <>
+                      <td className="p-2 text-right border-l border-neutral-300 bg-teal-50" rowSpan={beneficiaries.length + 1}>
+                        <AutoSizeInput
+                          value={fund.coverAmount || ""}
+                          onChange={(e) => handleInputChange(fund.id, "coverAmount", e.target.value)}
+                          className="table-input" style={{ textAlign: "right" }}
+                          placeholder="R 0"
+                          disabled={isUpdating}
+                        />
+                      </td>
+                      <td className="p-2 text-center bg-blue-50 text-sm font-semibold text-blue-700" colSpan={3}>
+                        Beneficiaries
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => handleAddBeneficiary(fund.id)}
+                          disabled={isUpdating || beneficiaries.length >= 10}
+                          className="ml-2 h-6 w-6 p-0 text-blue-600 hover:text-blue-800 hover:bg-blue-100"
+                        >
+                          <Plus className="h-3 w-3" />
+                        </Button>
+                      </td>
+                    </>
+                  )}
 
-              {/* Monthly Death Benefit Section */}
-              {columnVisibility.monthlyDeathBenefit && (
+                  {/* Monthly Death Benefit Section - Placeholder for Main Row */}
+                  {columnVisibility.monthlyDeathBenefit && (
+                    <>
+                      <td className="p-2 border-l border-neutral-300" colSpan={4}></td>
+                    </>
+                  )}
+
+                  {/* Fund Value Section - Placeholder for Main Row */}
+                  {columnVisibility.fundValue && (
+                    <>
+                      <td className="p-2 border-l border-neutral-300" colSpan={3}></td>
+                    </>
+                  )}
+
+                  {/* Fund Value Beneficiaries Section - Placeholder for Main Row */}
+                  {columnVisibility.fundValueBeneficiaries && (
+                    <>
+                      <td className="p-2 border-l border-neutral-300" colSpan={8}></td>
+                    </>
+                  )}
+                </tr>
+
+                {/* Beneficiary Rows */}
+                {beneficiaries.map((beneficiary, index) => (
+                  <tr key={beneficiary.id} className="hover:bg-neutral-50 border-l-4 border-l-teal-200">
+                    {/* Beneficiary details only in unapproved life cover section */}
+                    {columnVisibility.unapprovedLifeCover && (
+                      <>
+                        {/* Beneficiary Name */}
+                        <td className="p-2 text-left border-l border-neutral-300">
+                          <Input
+                            value={beneficiary.name}
+                            onChange={(e) => handleBeneficiaryUpdate(fund.id, index, 'name', e.target.value)}
+                            placeholder="Beneficiary name"
+                            disabled={isUpdating}
+                            className="h-6 text-xs text-left bg-[#F2F7FB] border-none focus:bg-white focus:border focus:border-primary"
+                          />
+                        </td>
+                        
+                        {/* Percentage */}
+                        <td className="p-2 text-center">
+                          <Input
+                            type="number"
+                            value={beneficiary.percentage}
+                            onChange={(e) => handleBeneficiaryUpdate(fund.id, index, 'percentage', e.target.value)}
+                            min="0"
+                            max="100"
+                            step="0.1"
+                            disabled={isUpdating}
+                            className="h-6 text-xs text-center bg-[#F2F7FB] border-none focus:bg-white focus:border focus:border-primary"
+                          />
+                        </td>
+                        
+                        {/* Cover Split */}
+                        <td className="p-2 text-right">
+                          <div className="h-6 text-xs text-right px-2 py-1 bg-gray-50 border rounded text-neutral-600">
+                            {beneficiary.coverSplit}
+                          </div>
+                        </td>
+                        
+                        {/* Remove Button - Only in the last column */}
+                        <td className="p-2 text-center">
+                          {beneficiaries.length > 1 && (
+                            <Button
+                              variant="ghost"
+                              size="sm"
+                              onClick={() => handleRemoveBeneficiary(fund.id, index)}
+                              disabled={isUpdating}
+                              className="h-6 w-6 p-0 text-red-500 hover:text-red-700 hover:bg-red-50"
+                            >
+                              <Trash2 className="h-3 w-3" />
+                            </Button>
+                          )}
+                        </td>
+                      </>
+                    )}
+
+                    {/* Empty cells for other sections when not visible */}
+                    {columnVisibility.monthlyDeathBenefit && (
+                      <>
+                        <td className="p-2 border-l border-neutral-300" colSpan={4}></td>
+                      </>
+                    )}
+
+                    {columnVisibility.fundValue && (
+                      <>
+                        <td className="p-2 border-l border-neutral-300" colSpan={3}></td>
+                      </>
+                    )}
+
+                    {columnVisibility.fundValueBeneficiaries && (
+                      <>
+                        <td className="p-2 border-l border-neutral-300" colSpan={8}></td>
+                      </>
+                    )}
+                  </tr>
+                ))}
+              </React.Fragment>
+            );
+          })}
+
+
                 <>
                   {/* Monthly death benefit - Monthly income */}
                   <td className="p-2 text-right border-l border-neutral-300">
@@ -1165,16 +1368,7 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
         </tbody>
       </table>
       
-      {/* Beneficiaries Table - Show below main table when unapproved life cover is visible */}
-      {columnVisibility.unapprovedLifeCover && (
-        <div className="mt-6">
-          <BeneficiaryTableView
-            funds={funds}
-            onFieldUpdate={onFieldUpdate}
-            isUpdating={isUpdating}
-          />
-        </div>
-      )}
+
     </div>
   );
 }
