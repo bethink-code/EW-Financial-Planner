@@ -31,15 +31,16 @@ html {
   text-align: right !important;
 }
 
-/* Force percentage column width */
+/* Auto-size percentage column to fit content */
 .percentage-column {
-  width: 160px !important;
-  min-width: 160px !important;
-  max-width: 160px !important;
+  width: auto !important;
+  min-width: 80px !important;
+  max-width: 120px !important;
 }
 
 .percentage-input {
-  min-width: 150px !important;
+  min-width: 70px !important;
+  width: auto !important;
 }
 
 /* Optimized view transitions */
