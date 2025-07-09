@@ -187,19 +187,19 @@ export function SimpleTableWithBeneficiaries({ funds, columnVisibility, tableMod
             )}
             {columnVisibility.unapprovedLifeCover && (
               <>
-                <th className="table-cell text-left table-header-12 text-neutral-600 uppercase tracking-wider border-l border-neutral-300">
+                <th className="table-cell text-left table-header-12 text-neutral-600 uppercase tracking-wider border-l border-neutral-300" style={{ width: '140px' }}>
                   Cover amount
                 </th>
-                <th className="table-cell text-left table-header-12 text-neutral-600 uppercase tracking-wider">
+                <th className="table-cell text-left table-header-12 text-neutral-600 uppercase tracking-wider" style={{ width: '200px' }}>
                   Beneficiary
                 </th>
-                <th className="table-cell text-left table-header-12 text-neutral-600 uppercase tracking-wider">
+                <th className="table-cell text-left table-header-12 text-neutral-600 uppercase tracking-wider" style={{ width: '160px' }}>
                   %
                 </th>
-                <th className="table-cell text-left table-header-12 text-neutral-600 uppercase tracking-wider">
+                <th className="table-cell text-left table-header-12 text-neutral-600 uppercase tracking-wider" style={{ width: '140px' }}>
                   Cover split
                 </th>
-                <th className="table-cell text-center table-header-12 text-neutral-600 uppercase tracking-wider">
+                <th className="table-cell text-center table-header-12 text-neutral-600 uppercase tracking-wider" style={{ width: '80px' }}>
                   Actions
                 </th>
               </>
