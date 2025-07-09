@@ -68,7 +68,7 @@ function AutoSizeInput({
       type="text"
       value={value}
       onChange={onChange}
-      className={`compact-input bg-[#F2F7FB] border-none focus:bg-white focus:border focus:border-primary hover:bg-neutral-50 transition-colors duration-200 ${className}`}
+      className={`${className}`}
       style={{ minWidth: '60px', ...style }}
       {...props}
     />
@@ -294,7 +294,7 @@ export function SimpleTableWithBeneficiaries({ funds, columnVisibility, tableMod
                       <AutoSizeInput
                         value={fund.description || ""}
                         onChange={(e) => handleInputChange(fund.id, "description", e.target.value)}
-                        className="compact-input border-0 focus:bg-white focus:border focus:border-primary hover:bg-neutral-50 transition-colors duration-200"
+                        className="table-input"
                         style={{ textAlign: "left", fontWeight: "500" }}
                         placeholder="Fund description"
                         disabled={isUpdating}

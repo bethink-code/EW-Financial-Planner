@@ -304,6 +304,16 @@ th, td {
     box-sizing: border-box;
     resize: none;
     border-radius: 5px;
+    transition: all 0.2s ease;
+  }
+  
+  .table-input:hover {
+    background-color: #f5f5f5;
+  }
+  
+  .table-input:focus {
+    background-color: white;
+    border: 1px solid #00aef0;
   }
   
   /* Total rows - bold styling */
