@@ -612,7 +612,7 @@ export function SimpleTableWithBeneficiaries({ funds, columnVisibility, tableMod
                             onClick={() => handleRemoveBeneficiary(fund.id, actualIndex)}
                             disabled={isUpdating}
                             className="h-7 w-7 p-0 hover:bg-gray-100"
-                            style={{ color: '#4D4D4F' }}
+                            style={{ color: '#4F4F4F' }}
                           >
                             <Trash2 className="h-4 w-4" />
                           </Button>
