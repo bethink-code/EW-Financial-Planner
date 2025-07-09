@@ -391,13 +391,31 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
                 {columnVisibility.overview && (
                   <>
                     <td className="p-2 text-right ">
-                      {/* Empty cell - totals only */}
+                      <AutoSizeInput
+                        value={fund.lumpSumLeftOverProvisions || "0"}
+                        onChange={(e) => handleInputChange(fund.id, "lumpSumLeftOverProvisions", e.target.value)}
+                        className="table-input"
+                        style={{ textAlign: 'right', minWidth: '60px' }}
+                        disabled={isUpdating}
+                      />
                     </td>
                     <td className="p-2 text-right ">
-                      {/* Empty cell - totals only */}
+                      <AutoSizeInput
+                        value={fund.lumpSumLeftOverProvisions || "0"}
+                        onChange={(e) => handleInputChange(fund.id, "lumpSumLeftOverProvisions", e.target.value)}
+                        className="table-input"
+                        style={{ textAlign: 'right', minWidth: '60px' }}
+                        disabled={isUpdating}
+                      />
                     </td>
                     <td className="p-2 text-right ">
-                      {/* Empty cell - totals only */}
+                      <AutoSizeInput
+                        value={fund.lumpSumLeftOverProvisions || "0"}
+                        onChange={(e) => handleInputChange(fund.id, "lumpSumLeftOverProvisions", e.target.value)}
+                        className="table-input"
+                        style={{ textAlign: 'right', minWidth: '60px' }}
+                        disabled={isUpdating}
+                      />
                     </td>
                   </>
                 )}
