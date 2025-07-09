@@ -570,7 +570,7 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
                 {/* Other */}
                 <td className="p-2 text-right ">
                   <span className="font-bold text-right table-text-14 compact-total-span" style={{ color: '#094161' }}>
-                    0%
+                    0
                   </span>
                 </td>
               </>
