@@ -83,8 +83,13 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
     };
     
     funds.forEach(fund => {
-      // Sum up the lumpSumLeftOverProvisions values (treating as currency)
-      const value = parseFloat(fund.lumpSumLeftOverProvisions || "0");
+      // Clean the value by removing currency symbols, commas, and spaces, then parse
+      const cleanValue = (fund.lumpSumLeftOverProvisions || "0")
+        .replace(/[R\s,]/g, '') // Remove R, spaces, and commas
+        .replace(/[^\d.-]/g, ''); // Keep only digits, dots, and minus signs
+      
+      const value = parseFloat(cleanValue) || 0; // Default to 0 if still NaN
+      
       totals.estate += value;
       totals.spouse += value; 
       totals.other += value;
