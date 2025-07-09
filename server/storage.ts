@@ -25,10 +25,10 @@ export class MemStorage implements IStorage {
       owner: "John Doe",
       coverAmount: "R 500,000",
       
-      // Unapproved life cover
-      beneficiary: "Spouse",
-      beneficiaryPercentage: "100%",
-      coverSplit: "R 500,000",
+      // Unapproved life cover - dynamic beneficiaries
+      beneficiaries: JSON.stringify([
+        { id: "1", name: "Spouse", percentage: 100, coverSplit: "R 500,000" }
+      ]),
       
       // Monthly death benefit
       monthlyIncome: "R 5,000",
@@ -69,10 +69,11 @@ export class MemStorage implements IStorage {
       owner: "Jane Smith",
       coverAmount: "R 350,000",
       
-      // Unapproved life cover
-      beneficiary: "Children",
-      beneficiaryPercentage: "50%",
-      coverSplit: "R 175,000",
+      // Unapproved life cover - dynamic beneficiaries
+      beneficiaries: JSON.stringify([
+        { id: "1", name: "Tom Smith", percentage: 50, coverSplit: "R 175,000" },
+        { id: "2", name: "Anna Smith", percentage: 50, coverSplit: "R 175,000" }
+      ]),
       
       // Monthly death benefit
       monthlyIncome: "R 3,500",
@@ -128,9 +129,7 @@ export class MemStorage implements IStorage {
       description: insertFund.description || "",
       owner: insertFund.owner || "",
       coverAmount: insertFund.coverAmount || "",
-      beneficiary: insertFund.beneficiary || "",
-      beneficiaryPercentage: insertFund.beneficiaryPercentage || "",
-      coverSplit: insertFund.coverSplit || "",
+      beneficiaries: insertFund.beneficiaries || "[]",
       monthlyIncome: insertFund.monthlyIncome || "",
       termYears: insertFund.termYears || "",
       increasePercentage: insertFund.increasePercentage || "",
@@ -187,12 +186,21 @@ export class MemStorage implements IStorage {
     if (!query.trim()) return allFunds;
     
     const lowerQuery = query.toLowerCase();
-    return allFunds.filter(fund => 
-      fund.description.toLowerCase().includes(lowerQuery) ||
-      fund.owner.toLowerCase().includes(lowerQuery) ||
-      fund.beneficiary.toLowerCase().includes(lowerQuery) ||
-      fund.beneficiaryName.toLowerCase().includes(lowerQuery)
-    );
+    return allFunds.filter(fund => {
+      const beneficiariesMatch = (() => {
+        try {
+          const beneficiaries = JSON.parse(fund.beneficiaries || "[]");
+          return beneficiaries.some((b: any) => b.name?.toLowerCase().includes(lowerQuery));
+        } catch {
+          return false;
+        }
+      })();
+      
+      return fund.description.toLowerCase().includes(lowerQuery) ||
+        fund.owner.toLowerCase().includes(lowerQuery) ||
+        fund.beneficiaryName.toLowerCase().includes(lowerQuery) ||
+        beneficiariesMatch;
+    });
   }
 }
 

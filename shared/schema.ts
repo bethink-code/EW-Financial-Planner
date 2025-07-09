@@ -10,10 +10,8 @@ export const retirementFunds = pgTable("retirement_funds", {
   owner: text("owner").notNull(),
   coverAmount: text("cover_amount").notNull().default("0"),
   
-  // Unapproved life cover section
-  beneficiary: text("beneficiary").notNull().default(""),
-  beneficiaryPercentage: text("beneficiary_percentage").notNull().default("0"),
-  coverSplit: text("cover_split").notNull().default("0"),
+  // Unapproved life cover section - dynamic beneficiaries
+  beneficiaries: text("beneficiaries").notNull().default('[]'), // JSON array of beneficiaries
   
   // Monthly death benefit section
   monthlyIncome: text("monthly_income").notNull().default("0"),
@@ -60,6 +58,16 @@ export const insertRetirementFundSchema = createInsertSchema(retirementFunds).om
 export const updateRetirementFundSchema = createInsertSchema(retirementFunds).omit({
   id: true,
 }).partial();
+
+// Beneficiary type for the JSON array
+export const beneficiarySchema = z.object({
+  id: z.string(), // unique identifier for each beneficiary
+  name: z.string(),
+  percentage: z.number().min(0).max(100),
+  coverSplit: z.string().default("0") // calculated field
+});
+
+export type Beneficiary = z.infer<typeof beneficiarySchema>;
 
 export type InsertRetirementFund = z.infer<typeof insertRetirementFundSchema>;
 export type UpdateRetirementFund = z.infer<typeof updateRetirementFundSchema>;

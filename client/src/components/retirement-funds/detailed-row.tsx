@@ -4,6 +4,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
+import { BeneficiarySection } from "./beneficiary-section";
 import type { RetirementFund, UpdateRetirementFund } from "@shared/schema";
 
 interface ColumnVisibility {
@@ -105,61 +106,31 @@ export const DetailedRow = memo(function DetailedRow({ fund, columnVisibility, o
             </div>
           )}
 
-          {/* Unapproved Life Cover Section */}
+          {/* Unapproved Life Cover Section - Dynamic Beneficiaries */}
           {columnVisibility.unapprovedLifeCover && (
             <div className="bg-teal-50 rounded-lg p-2 lg:p-3">
-              <h4 className="text-sm font-bold text-teal-700 mb-2 lg:mb-3">Unapproved Life Cover</h4>
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-6 gap-2 lg:gap-3">
-                <div>
-                  <Label className="text-xs text-neutral-600">Cover Amount</Label>
-                  <Input
-                    value={fund.coverAmount}
-                    onChange={(e) => handleFieldChange("coverAmount", e.target.value)}
-                    className="h-8 text-sm text-right"
-                    disabled={isUpdating}
-                    placeholder="R 0"
-                  />
-                </div>
-                <div>
-                  <Label className="text-xs text-neutral-600">Beneficiary</Label>
-                  <Select
-                    value={fund.beneficiary || ""}
-                    onValueChange={(value) => handleFieldChange("beneficiary", value)}
-                    disabled={isUpdating}
-                  >
-                    <SelectTrigger className="h-8 text-sm">
-                      <SelectValue placeholder="Select beneficiary" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="No beneficiary">No beneficiary</SelectItem>
-                      <SelectItem value="Spouse">Spouse</SelectItem>
-                      <SelectItem value="Child">Child</SelectItem>
-                      <SelectItem value="Parent">Parent</SelectItem>
-                      <SelectItem value="Other">Other</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-                <div>
-                  <Label className="text-xs text-neutral-600">% Split</Label>
-                  <Input
-                    value={fund.beneficiaryPercentage}
-                    onChange={(e) => handleFieldChange("beneficiaryPercentage", e.target.value)}
-                    className="h-8 text-sm text-right"
-                    disabled={isUpdating}
-                    placeholder="100%"
-                  />
-                </div>
-                <div>
-                  <Label className="text-xs text-neutral-600">Cover Split</Label>
-                  <Input
-                    value={fund.coverSplit}
-                    onChange={(e) => handleFieldChange("coverSplit", e.target.value)}
-                    className="h-8 text-sm text-right"
-                    disabled={isUpdating}
-                    placeholder="R 0"
-                  />
+              <div className="flex items-center justify-between mb-3">
+                <h4 className="text-sm font-bold text-teal-700">Unapproved Life Cover</h4>
+                <div className="text-xs text-neutral-600">
+                  Cover Amount: {fund.coverAmount}
                 </div>
               </div>
+              <div className="mb-3">
+                <Label className="text-xs text-neutral-600">Cover Amount</Label>
+                <Input
+                  value={fund.coverAmount}
+                  onChange={(e) => handleFieldChange("coverAmount", e.target.value)}
+                  className="h-8 text-sm text-right"
+                  disabled={isUpdating}
+                  placeholder="R 0"
+                />
+              </div>
+              <BeneficiarySection
+                fund={fund}
+                onFieldUpdate={onFieldUpdate}
+                isUpdating={isUpdating}
+                tableMode="inputs"
+              />
             </div>
           )}
 
