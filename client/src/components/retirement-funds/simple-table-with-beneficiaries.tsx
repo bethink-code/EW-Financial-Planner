@@ -151,22 +151,22 @@ export function SimpleTableWithBeneficiaries({ funds, columnVisibility, tableMod
               </th>
             )}
             {columnVisibility.unapprovedLifeCover && (
-              <th className="p-2 text-center font-medium text-neutral-600 uppercase tracking-wider text-xs border-l border-neutral-300" colSpan={4}>
+              <th className="p-2 text-center font-medium text-neutral-600 uppercase tracking-wider text-xs border-l border-neutral-300" colSpan={5}>
                 Unapproved life cover
               </th>
             )}
             {columnVisibility.monthlyDeathBenefit && (
-              <th className="p-2 text-center font-medium text-neutral-600 uppercase tracking-wider text-xs border-l border-neutral-300" colSpan={4}>
+              <th className="p-2 text-center font-medium text-neutral-600 uppercase tracking-wider text-xs border-l border-neutral-300" colSpan={5}>
                 Monthly death benefit
               </th>
             )}
             {columnVisibility.fundValue && (
-              <th className="p-2 text-center font-medium text-neutral-600 uppercase tracking-wider text-xs border-l border-neutral-300" colSpan={3}>
+              <th className="p-2 text-center font-medium text-neutral-600 uppercase tracking-wider text-xs border-l border-neutral-300" colSpan={4}>
                 Fund value
               </th>
             )}
             {columnVisibility.fundValueBeneficiaries && (
-              <th className="p-2 text-center font-medium text-neutral-600 uppercase tracking-wider text-xs border-l border-neutral-300" colSpan={8}>
+              <th className="p-2 text-center font-medium text-neutral-600 uppercase tracking-wider text-xs border-l border-neutral-300" colSpan={9}>
                 Fund value beneficiaries
               </th>
             )}
@@ -198,6 +198,9 @@ export function SimpleTableWithBeneficiaries({ funds, columnVisibility, tableMod
                 <th className="table-cell text-left table-header-12 text-neutral-600 uppercase tracking-wider">
                   Cover split
                 </th>
+                <th className="table-cell text-center table-header-12 text-neutral-600 uppercase tracking-wider">
+                  Actions
+                </th>
               </>
             )}
             {columnVisibility.monthlyDeathBenefit && (
@@ -214,6 +217,9 @@ export function SimpleTableWithBeneficiaries({ funds, columnVisibility, tableMod
                 <th className="table-cell text-left table-header-12 text-neutral-600 uppercase tracking-wider">
                   Escalation amount
                 </th>
+                <th className="table-cell text-center table-header-12 text-neutral-600 uppercase tracking-wider">
+                  Actions
+                </th>
               </>
             )}
             {columnVisibility.fundValue && (
@@ -226,6 +232,9 @@ export function SimpleTableWithBeneficiaries({ funds, columnVisibility, tableMod
                 </th>
                 <th className="table-cell text-left table-header-12 text-neutral-600 uppercase tracking-wider">
                   Fund value at death
+                </th>
+                <th className="table-cell text-center table-header-12 text-neutral-600 uppercase tracking-wider">
+                  Actions
                 </th>
               </>
             )}
@@ -254,6 +263,9 @@ export function SimpleTableWithBeneficiaries({ funds, columnVisibility, tableMod
                 </th>
                 <th className="table-cell text-left table-header-12 text-neutral-600 uppercase tracking-wider">
                   Income term
+                </th>
+                <th className="table-cell text-center table-header-12 text-neutral-600 uppercase tracking-wider">
+                  Actions
                 </th>
               </>
             )}
@@ -337,49 +349,57 @@ export function SimpleTableWithBeneficiaries({ funds, columnVisibility, tableMod
                           />
                         </td>
                         <td className="p-2" style={{ width: '140px' }}>
-                          <div className="w-full h-7 text-sm text-right px-2 py-1 bg-gray-100 border rounded text-gray-600 flex items-center justify-between">
+                          <div className="w-full h-7 text-sm text-right px-2 py-1 bg-gray-100 border rounded text-gray-600 flex items-center">
                             <span className="truncate flex-1">{beneficiaries[0].coverSplit}</span>
-                            <div className="flex gap-1 ml-2 flex-shrink-0">
+                          </div>
+                        </td>
+                        <td className="p-2" style={{ width: '80px' }}>
+                          <div className="flex gap-1 justify-center">
+                            <Button
+                              variant="ghost"
+                              size="sm"
+                              onClick={() => handleAddBeneficiary(fund.id)}
+                              disabled={isUpdating || beneficiaries.length >= 10}
+                              className="h-7 w-7 p-0 text-blue-600 hover:text-blue-800 hover:bg-blue-100"
+                            >
+                              <Plus className="h-4 w-4" />
+                            </Button>
+                            {beneficiaries.length > 1 && (
                               <Button
                                 variant="ghost"
                                 size="sm"
-                                onClick={() => handleAddBeneficiary(fund.id)}
-                                disabled={isUpdating || beneficiaries.length >= 10}
-                                className="h-5 w-5 p-0 text-blue-600 hover:text-blue-800 hover:bg-blue-100"
+                                onClick={() => handleRemoveBeneficiary(fund.id, 0)}
+                                disabled={isUpdating}
+                                className="h-7 w-7 p-0 text-red-500 hover:text-red-700 hover:bg-red-50"
                               >
-                                <Plus className="h-3 w-3" />
+                                <Trash2 className="h-4 w-4" />
                               </Button>
-                              {beneficiaries.length > 1 && (
-                                <Button
-                                  variant="ghost"
-                                  size="sm"
-                                  onClick={() => handleRemoveBeneficiary(fund.id, 0)}
-                                  disabled={isUpdating}
-                                  className="h-5 w-5 p-0 text-red-500 hover:text-red-700 hover:bg-red-50"
-                                >
-                                  <Trash2 className="h-3 w-3" />
-                                </Button>
-                              )}
-                            </div>
+                            )}
                           </div>
                         </td>
                       </>
                     ) : (
                       <>
                         <td className="p-2" style={{ width: '200px' }}>
-                          <Button
-                            variant="ghost"
-                            size="sm"
-                            onClick={() => handleAddBeneficiary(fund.id)}
-                            disabled={isUpdating}
-                            className="w-full h-7 text-sm text-blue-600 hover:text-blue-800 hover:bg-blue-100 border border-dashed border-blue-300"
-                          >
-                            <Plus className="h-3 w-3 mr-1" />
-                            Add Beneficiary
-                          </Button>
+                          <div className="w-full h-7 text-sm text-gray-400 px-2 py-1 bg-gray-50 border border-dashed rounded flex items-center justify-center">
+                            No beneficiaries
+                          </div>
                         </td>
                         <td className="p-2" style={{ width: '100px' }}></td>
                         <td className="p-2" style={{ width: '140px' }}></td>
+                        <td className="p-2" style={{ width: '80px' }}>
+                          <div className="flex justify-center">
+                            <Button
+                              variant="ghost"
+                              size="sm"
+                              onClick={() => handleAddBeneficiary(fund.id)}
+                              disabled={isUpdating}
+                              className="h-7 w-7 p-0 text-blue-600 hover:text-blue-800 hover:bg-blue-100"
+                            >
+                              <Plus className="h-4 w-4" />
+                            </Button>
+                          </div>
+                        </td>
                       </>
                     )}
                   </>
@@ -423,6 +443,7 @@ export function SimpleTableWithBeneficiaries({ funds, columnVisibility, tableMod
                         disabled={isUpdating}
                       />
                     </td>
+                    <td className="p-2"></td>
                   </>
                 )}
 
@@ -455,6 +476,7 @@ export function SimpleTableWithBeneficiaries({ funds, columnVisibility, tableMod
                         disabled={isUpdating}
                       />
                     </td>
+                    <td className="p-2"></td>
                   </>
                 )}
 
@@ -532,6 +554,7 @@ export function SimpleTableWithBeneficiaries({ funds, columnVisibility, tableMod
                         disabled={isUpdating}
                       />
                     </td>
+                    <td className="p-2"></td>
                   </>
                 )}
               </tr>
@@ -576,16 +599,20 @@ export function SimpleTableWithBeneficiaries({ funds, columnVisibility, tableMod
                         />
                       </td>
                       <td className="p-2" style={{ width: '140px' }}>
-                        <div className="w-full h-7 text-sm text-right px-2 py-1 bg-gray-100 border rounded text-gray-600 flex items-center justify-between">
+                        <div className="w-full h-7 text-sm text-right px-2 py-1 bg-gray-100 border rounded text-gray-600 flex items-center">
                           <span className="truncate flex-1">{beneficiary.coverSplit}</span>
+                        </div>
+                      </td>
+                      <td className="p-2" style={{ width: '80px' }}>
+                        <div className="flex justify-center">
                           <Button
                             variant="ghost"
                             size="sm"
                             onClick={() => handleRemoveBeneficiary(fund.id, actualIndex)}
                             disabled={isUpdating}
-                            className="h-5 w-5 p-0 text-red-500 hover:text-red-700 hover:bg-red-50 ml-2 flex-shrink-0"
+                            className="h-7 w-7 p-0 text-red-500 hover:text-red-700 hover:bg-red-50"
                           >
-                            <Trash2 className="h-3 w-3" />
+                            <Trash2 className="h-4 w-4" />
                           </Button>
                         </div>
                       </td>
@@ -599,6 +626,7 @@ export function SimpleTableWithBeneficiaries({ funds, columnVisibility, tableMod
                       <td className="p-2"></td>
                       <td className="p-2"></td>
                       <td className="p-2"></td>
+                      <td className="p-2"></td>
                     </>
                   )}
 
@@ -607,12 +635,14 @@ export function SimpleTableWithBeneficiaries({ funds, columnVisibility, tableMod
                       <td className="p-2 border-l border-neutral-300"></td>
                       <td className="p-2"></td>
                       <td className="p-2"></td>
+                      <td className="p-2"></td>
                     </>
                   )}
 
                   {columnVisibility.fundValueBeneficiaries && (
                     <>
                       <td className="p-2 border-l border-neutral-300"></td>
+                      <td className="p-2"></td>
                       <td className="p-2"></td>
                       <td className="p-2"></td>
                       <td className="p-2"></td>
