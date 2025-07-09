@@ -308,86 +308,81 @@ export function DetailedView({ funds, columnVisibility, onFieldUpdate, isUpdatin
           {columnVisibility.fundValueBeneficiaries && (
             <div className="bg-teal-50 rounded-lg p-4">
               <h4 className="text-sm font-bold text-teal-700 mb-4">Fund Value Beneficiaries</h4>
-              <div className="space-y-4">
-                <div className="grid grid-cols-1 md:grid-cols-4 xl:grid-cols-8 gap-4">
-                  <div>
-                    <Label className="text-xs text-neutral-600 mb-1 block">Beneficiary Name</Label>
-                    <Select
-                      value={selectedFund.beneficiaryName || ""}
-                      onValueChange={(value) => handleFieldChange("beneficiaryName", value)}
-                      disabled={isUpdating}
-                    >
-                      <SelectTrigger className="h-9 text-sm">
-                        <SelectValue placeholder="Select beneficiary" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="Spouse">Spouse</SelectItem>
-                        <SelectItem value="Child">Child</SelectItem>
-                        <SelectItem value="Estate">Estate</SelectItem>
-                        <SelectItem value="Trust">Trust</SelectItem>
-                        <SelectItem value="Other">Other</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
-                  <div>
-                    <Label className="text-xs text-neutral-600 mb-1 block">Percentage</Label>
-                    <AutoSizeInput
-                      value={selectedFund.beneficiaryPercentageSplit}
-                      onChange={(e) => handleFieldChange("beneficiaryPercentageSplit", e.target.value)}
-                      className="h-9 text-sm text-right"
-                      disabled={isUpdating}
-                      placeholder="0%"
-                      style={{ textAlign: 'right' }}
-                    />
-                  </div>
-                  <div>
-                    <Label className="text-xs text-neutral-600 mb-1 block">Amount (Read-only)</Label>
-                    <div className="h-9 px-3 py-2 text-sm text-right bg-neutral-50 border border-neutral-200 rounded">
-                      {selectedFund.amount || "R 0"}
-                    </div>
+              <div className="grid grid-cols-1 md:grid-cols-4 xl:grid-cols-8 gap-4">
+                <div>
+                  <Label className="text-xs text-neutral-600 mb-1 block">Beneficiary Name</Label>
+                  <Select
+                    value={selectedFund.beneficiaryName || ""}
+                    onValueChange={(value) => handleFieldChange("beneficiaryName", value)}
+                    disabled={isUpdating}
+                  >
+                    <SelectTrigger className="h-9 text-sm">
+                      <SelectValue placeholder="Select beneficiary" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="Spouse">Spouse</SelectItem>
+                      <SelectItem value="Child">Child</SelectItem>
+                      <SelectItem value="Estate">Estate</SelectItem>
+                      <SelectItem value="Trust">Trust</SelectItem>
+                      <SelectItem value="Other">Other</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div>
+                  <Label className="text-xs text-neutral-600 mb-1 block">Percentage</Label>
+                  <AutoSizeInput
+                    value={selectedFund.beneficiaryPercentageSplit}
+                    onChange={(e) => handleFieldChange("beneficiaryPercentageSplit", e.target.value)}
+                    className="h-9 text-sm text-right"
+                    disabled={isUpdating}
+                    placeholder="0%"
+                    style={{ textAlign: 'right' }}
+                  />
+                </div>
+                <div>
+                  <Label className="text-xs text-neutral-600 mb-1 block">Amount (Read-only)</Label>
+                  <div className="h-9 px-3 py-2 text-sm text-right bg-neutral-50 border border-neutral-200 rounded">
+                    {selectedFund.amount || "R 0"}
                   </div>
                 </div>
-
-                <div className="grid grid-cols-1 md:grid-cols-4 xl:grid-cols-8 gap-4">
-                  <div>
-                    <Label className="text-xs text-neutral-600 mb-1 block">Lump Sum Taken</Label>
-                    <AutoSizeInput
-                      value={selectedFund.lumpSumTaken}
-                      onChange={(e) => handleFieldChange("lumpSumTaken", e.target.value)}
-                      className="h-9 text-sm text-right"
-                      disabled={isUpdating}
-                      placeholder="R 0"
-                      style={{ textAlign: 'right' }}
-                    />
+                <div>
+                  <Label className="text-xs text-neutral-600 mb-1 block">Lump Sum Taken</Label>
+                  <AutoSizeInput
+                    value={selectedFund.lumpSumTaken}
+                    onChange={(e) => handleFieldChange("lumpSumTaken", e.target.value)}
+                    className="h-9 text-sm text-right"
+                    disabled={isUpdating}
+                    placeholder="R 0"
+                    style={{ textAlign: 'right' }}
+                  />
+                </div>
+                <div>
+                  <Label className="text-xs text-neutral-600 mb-1 block">Non-deductible Contribution</Label>
+                  <AutoSizeInput
+                    value={selectedFund.nondeductibleContribution}
+                    onChange={(e) => handleFieldChange("nondeductibleContribution", e.target.value)}
+                    className="h-9 text-sm text-right"
+                    disabled={isUpdating}
+                    placeholder="R 0"
+                    style={{ textAlign: 'right' }}
+                  />
+                </div>
+                <div>
+                  <Label className="text-xs text-neutral-600 mb-1 block">Living Annuity (Read-only)</Label>
+                  <div className="h-9 px-3 py-2 text-sm text-right bg-neutral-50 border border-neutral-200 rounded">
+                    {selectedFund.livingAnnuity || ""}
                   </div>
-                  <div>
-                    <Label className="text-xs text-neutral-600 mb-1 block">Non-deductible Contribution</Label>
-                    <AutoSizeInput
-                      value={selectedFund.nondeductibleContribution}
-                      onChange={(e) => handleFieldChange("nondeductibleContribution", e.target.value)}
-                      className="h-9 text-sm text-right"
-                      disabled={isUpdating}
-                      placeholder="R 0"
-                      style={{ textAlign: 'right' }}
-                    />
-                  </div>
-                  <div>
-                    <Label className="text-xs text-neutral-600 mb-1 block">Living Annuity (Read-only)</Label>
-                    <div className="h-9 px-3 py-2 text-sm text-right bg-neutral-50 border border-neutral-200 rounded">
-                      {selectedFund.livingAnnuity || ""}
-                    </div>
-                  </div>
-                  <div>
-                    <Label className="text-xs text-neutral-600 mb-1 block">Income Term</Label>
-                    <AutoSizeInput
-                      value={selectedFund.incomeTerm}
-                      onChange={(e) => handleFieldChange("incomeTerm", e.target.value)}
-                      className="h-9 text-sm text-right"
-                      disabled={isUpdating}
-                      placeholder="Income term"
-                      style={{ textAlign: 'right' }}
-                    />
-                  </div>
+                </div>
+                <div>
+                  <Label className="text-xs text-neutral-600 mb-1 block">Income Term</Label>
+                  <AutoSizeInput
+                    value={selectedFund.incomeTerm}
+                    onChange={(e) => handleFieldChange("incomeTerm", e.target.value)}
+                    className="h-9 text-sm text-right"
+                    disabled={isUpdating}
+                    placeholder="Income term"
+                    style={{ textAlign: 'right' }}
+                  />
                 </div>
               </div>
             </div>
