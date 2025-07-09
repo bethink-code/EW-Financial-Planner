@@ -141,7 +141,7 @@ export function SimpleTableWithBeneficiaries({ funds, columnVisibility, tableMod
 
   return (
     <div className="overflow-x-auto">
-      <table className="min-w-full bg-white table-auto">
+      <table className="min-w-full bg-white table-fixed" style={{ tableLayout: 'fixed' }}>
         <thead>
           {/* First level headers */}
           <tr className="border-b border-neutral-200" style={{ backgroundColor: '#D6ECF5' }}>
@@ -304,28 +304,34 @@ export function SimpleTableWithBeneficiaries({ funds, columnVisibility, tableMod
                 {/* Unapproved Life Cover Section */}
                 {columnVisibility.unapprovedLifeCover && (
                   <>
-                    <td className="p-2 text-right border-l border-neutral-300">
+                    <td className="p-2 text-right border-l border-neutral-300" style={{ width: '140px' }}>
                       <AutoSizeInput
                         value={fund.coverAmount || ""}
                         onChange={(e) => handleInputChange(fund.id, "coverAmount", e.target.value)}
-                        className="table-input" style={{ textAlign: "right" }}
+                        className="table-input w-full" style={{ textAlign: "right" }}
                         placeholder="R 0"
                         disabled={isUpdating}
                       />
                     </td>
-                    <td className="p-2 text-center bg-blue-50 text-sm font-semibold text-blue-700" colSpan={2}>
-                      Beneficiaries ({beneficiaries.length})
+                    <td className="p-2 text-center bg-blue-50 text-sm font-semibold text-blue-700" style={{ width: '200px' }}>
+                      <div className="flex items-center justify-center gap-2">
+                        <span>Beneficiaries ({beneficiaries.length})</span>
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => handleAddBeneficiary(fund.id)}
+                          disabled={isUpdating || beneficiaries.length >= 10}
+                          className="h-6 w-6 p-0 text-blue-600 hover:text-blue-800 hover:bg-blue-100"
+                        >
+                          <Plus className="h-3 w-3" />
+                        </Button>
+                      </div>
                     </td>
-                    <td className="p-2 text-center">
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        onClick={() => handleAddBeneficiary(fund.id)}
-                        disabled={isUpdating || beneficiaries.length >= 10}
-                        className="h-6 w-6 p-0 text-blue-600 hover:text-blue-800 hover:bg-blue-100"
-                      >
-                        <Plus className="h-3 w-3" />
-                      </Button>
+                    <td className="p-2 text-center bg-blue-50 text-sm font-semibold text-blue-700" style={{ width: '100px' }}>
+                      %
+                    </td>
+                    <td className="p-2 text-center bg-blue-50 text-sm font-semibold text-blue-700" style={{ width: '140px' }}>
+                      Cover Split
                     </td>
                   </>
                 )}
@@ -497,17 +503,17 @@ export function SimpleTableWithBeneficiaries({ funds, columnVisibility, tableMod
                   {/* Beneficiary details in unapproved life cover section */}
                   {columnVisibility.unapprovedLifeCover && (
                     <>
-                      <td className="p-2 border-l border-neutral-300"></td>
-                      <td className="p-2">
+                      <td className="p-2 border-l border-neutral-300" style={{ width: '140px' }}></td>
+                      <td className="p-2" style={{ width: '200px' }}>
                         <Input
                           value={beneficiary.name}
                           onChange={(e) => handleBeneficiaryUpdate(fund.id, index, 'name', e.target.value)}
                           placeholder="Beneficiary name"
                           disabled={isUpdating}
-                          className="h-6 text-xs text-left bg-white border-gray-200 focus:border-primary"
+                          className="w-full h-7 text-sm text-left bg-white border-gray-200 focus:border-primary"
                         />
                       </td>
-                      <td className="p-2">
+                      <td className="p-2" style={{ width: '100px' }}>
                         <Input
                           type="number"
                           value={beneficiary.percentage}
@@ -516,19 +522,19 @@ export function SimpleTableWithBeneficiaries({ funds, columnVisibility, tableMod
                           max="100"
                           step="0.1"
                           disabled={isUpdating}
-                          className="h-6 text-xs text-center bg-white border-gray-200 focus:border-primary"
+                          className="w-full h-7 text-sm text-center bg-white border-gray-200 focus:border-primary"
                         />
                       </td>
-                      <td className="p-2">
-                        <div className="h-6 text-xs text-right px-2 py-1 bg-gray-100 border rounded text-gray-600 flex items-center justify-between">
-                          <span>{beneficiary.coverSplit}</span>
+                      <td className="p-2" style={{ width: '140px' }}>
+                        <div className="w-full h-7 text-sm text-right px-2 py-1 bg-gray-100 border rounded text-gray-600 flex items-center justify-between">
+                          <span className="truncate flex-1">{beneficiary.coverSplit}</span>
                           {beneficiaries.length > 1 && (
                             <Button
                               variant="ghost"
                               size="sm"
                               onClick={() => handleRemoveBeneficiary(fund.id, index)}
                               disabled={isUpdating}
-                              className="h-4 w-4 p-0 text-red-500 hover:text-red-700 hover:bg-red-50 ml-2"
+                              className="h-5 w-5 p-0 text-red-500 hover:text-red-700 hover:bg-red-50 ml-2 flex-shrink-0"
                             >
                               <Trash2 className="h-3 w-3" />
                             </Button>
