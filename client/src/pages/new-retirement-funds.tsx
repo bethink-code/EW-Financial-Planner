@@ -77,12 +77,23 @@ export default function NewRetirementFunds() {
   const filteredFunds = useMemo(() => {
     if (!searchQuery) return funds;
     const query = searchQuery.toLowerCase();
-    return funds.filter(fund => (
-      fund.description.toLowerCase().includes(query) ||
-      fund.owner.toLowerCase().includes(query) ||
-      fund.beneficiary.toLowerCase().includes(query) ||
-      fund.beneficiaryName.toLowerCase().includes(query)
-    ));
+    return funds.filter(fund => {
+      const basicMatch = fund.description.toLowerCase().includes(query) ||
+        fund.owner.toLowerCase().includes(query) ||
+        fund.beneficiaryName.toLowerCase().includes(query);
+      
+      // Search in beneficiaries JSON array
+      const beneficiariesMatch = (() => {
+        try {
+          const beneficiaries = JSON.parse(fund.beneficiaries || "[]");
+          return beneficiaries.some((b: any) => b.name?.toLowerCase().includes(query));
+        } catch {
+          return false;
+        }
+      })();
+      
+      return basicMatch || beneficiariesMatch;
+    });
   }, [funds, searchQuery]);
 
   if (isLoading) {

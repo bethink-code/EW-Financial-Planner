@@ -2,6 +2,7 @@ import { RetirementFund, UpdateRetirementFund } from "@shared/schema";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Edit3 } from "lucide-react";
 import { useRef, useEffect, useMemo, useCallback } from "react";
+import { BeneficiaryTableView } from "./beneficiary-table-view";
 
 interface ColumnVisibility {
   overview: boolean;
@@ -675,8 +676,8 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
               </th>
             )}
             {columnVisibility.unapprovedLifeCover && (
-              <th className="p-2 text-center font-medium text-neutral-600 uppercase tracking-wider text-xs border-l border-neutral-300" colSpan={4}>
-                Unapproved life cover
+              <th className="p-2 text-center font-medium text-neutral-600 uppercase tracking-wider text-xs border-l border-neutral-300" colSpan={1}>
+                Cover Amount
               </th>
             )}
             {columnVisibility.monthlyDeathBenefit && (
@@ -709,20 +710,9 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
               </>
             )}
             {columnVisibility.unapprovedLifeCover && (
-              <>
-                <th className="table-cell text-left table-header-12 text-neutral-600 uppercase tracking-wider border-l border-neutral-300">
-                  Cover amount
-                </th>
-                <th className="table-cell text-left table-header-12 text-neutral-600 uppercase tracking-wider">
-                  Beneficiary
-                </th>
-                <th className="table-cell text-left table-header-12 text-neutral-600 uppercase tracking-wider">
-                  %
-                </th>
-                <th className="table-cell text-left table-header-12 text-neutral-600 uppercase tracking-wider">
-                  Cover split
-                </th>
-              </>
+              <th className="table-cell text-left table-header-12 text-neutral-600 uppercase tracking-wider border-l border-neutral-300">
+                Cover amount
+              </th>
             )}
             {columnVisibility.monthlyDeathBenefit && (
               <>
@@ -827,63 +817,15 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
 
               {/* Unapproved Life Cover Section */}
               {columnVisibility.unapprovedLifeCover && (
-                <>
-                  {/* Cover amount - Unapproved */}
-                  <td className="p-2 text-right border-l border-neutral-300">
-                    <AutoSizeInput
-                      value={fund.coverAmount || ""}
-                      onChange={(e) => handleInputChange(fund.id, "coverAmount", e.target.value)}
-                      className="table-input" style={{ textAlign: "right" }}
-                      placeholder="R 0"
-                      disabled={isUpdating}
-                    />
-                  </td>
-
-                  {/* Unapproved life cover - Beneficiary */}
-                  <td className="p-2 text-right ">
-                    <Select
-                      value={fund.beneficiary || "No beneficiary"}
-                      onValueChange={(value) => handleInputChange(fund.id, "beneficiary", value)}
-                      disabled={isUpdating}
-                    >
-                      <SelectTrigger className="compact-input border-0 focus:bg-white focus:border focus:border-primary hover:bg-neutral-50 transition-colors duration-200 group">
-                        <SelectValue placeholder="No beneficiary" />
-                        <Edit3 size={12} className="ml-1 text-teal-400 opacity-0 group-hover:opacity-100 transition-opacity duration-200" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="No beneficiary">No beneficiary</SelectItem>
-                        <SelectItem value="Spouse">Spouse</SelectItem>
-                        <SelectItem value="Child">Child</SelectItem>
-                        <SelectItem value="Parent">Parent</SelectItem>
-                        <SelectItem value="Other">Other</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </td>
-
-                  {/* Unapproved life cover - % */}
-                  <td className="p-2 text-right ">
-                    <AutoSizeInput
-                      
-                      value={fund.beneficiaryPercentage || ""}
-                      onChange={(e) => handleInputChange(fund.id, "beneficiaryPercentage", e.target.value)}
-                      className="table-input" style={{ textAlign: "right" }}
-                      placeholder="100"
-                      disabled={isUpdating}
-                    />
-                  </td>
-
-                  {/* Unapproved life cover - Cover split */}
-                  <td className="p-2 text-right ">
-                    <AutoSizeInput
-                      
-                      value={fund.coverSplit || ""}
-                      onChange={(e) => handleInputChange(fund.id, "coverSplit", e.target.value)}
-                      className="table-input" style={{ textAlign: "right" }}
-                      
-                      disabled={isUpdating}
-                    />
-                  </td>
-                </>
+                <td className="p-2 text-right border-l border-neutral-300">
+                  <AutoSizeInput
+                    value={fund.coverAmount || ""}
+                    onChange={(e) => handleInputChange(fund.id, "coverAmount", e.target.value)}
+                    className="table-input" style={{ textAlign: "right" }}
+                    placeholder="R 0"
+                    disabled={isUpdating}
+                  />
+                </td>
               )}
 
               {/* Monthly Death Benefit Section */}
@@ -1103,32 +1045,14 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
             
             {/* Unapproved Life Cover Section */}
             {columnVisibility.unapprovedLifeCover && (
-              <>
-                {/* Cover amount - TOTAL */}
-                <td className="p-2 text-right border-l border-neutral-300">
-                  <span className="font-bold text-right table-text-14" style={{ color: '#094161', fontWeight: '700' }}>
-                    R {funds.reduce((sum, fund) => {
-                      const amount = parseInt(fund.coverAmount?.replace(/[^0-9]/g, '') || '0');
-                      return sum + amount;
-                    }, 0).toLocaleString()}
-                  </span>
-                </td>
-                
-                {/* Beneficiary */}
-                <td className="p-2 text-right ">
-                  
-                </td>
-                
-                {/* % */}
-                <td className="p-2 text-right ">
-                  
-                </td>
-                
-                {/* Cover split */}
-                <td className="p-2 text-right ">
-                  
-                </td>
-              </>
+              <td className="p-2 text-right border-l border-neutral-300">
+                <span className="font-bold text-right table-text-14" style={{ color: '#094161', fontWeight: '700' }}>
+                  R {funds.reduce((sum, fund) => {
+                    const amount = parseInt(fund.coverAmount?.replace(/[^0-9]/g, '') || '0');
+                    return sum + amount;
+                  }, 0).toLocaleString()}
+                </span>
+              </td>
             )}
             
             {/* Monthly Death Benefit Section */}
@@ -1240,6 +1164,17 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
           </tr>
         </tbody>
       </table>
+      
+      {/* Beneficiaries Table - Show below main table when unapproved life cover is visible */}
+      {columnVisibility.unapprovedLifeCover && (
+        <div className="mt-6">
+          <BeneficiaryTableView
+            funds={funds}
+            onFieldUpdate={onFieldUpdate}
+            isUpdating={isUpdating}
+          />
+        </div>
+      )}
     </div>
   );
 }
