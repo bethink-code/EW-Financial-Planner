@@ -73,6 +73,27 @@ const AutoSizeInput = ({ value, onChange, className, placeholder, disabled, styl
 };
 
 export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFieldUpdate, isUpdating }: NewGroupedTableViewProps) {
+  
+  // Calculate totals for flows table
+  const calculateFlowsTotals = () => {
+    const totals = {
+      estate: 0,
+      spouse: 0,
+      other: 0
+    };
+    
+    funds.forEach(fund => {
+      // Sum up the lumpSumLeftOverProvisions values (treating as currency)
+      const value = parseFloat(fund.lumpSumLeftOverProvisions || "0");
+      totals.estate += value;
+      totals.spouse += value; 
+      totals.other += value;
+    });
+    
+    return totals;
+  };
+  
+  const flowsTotals = calculateFlowsTotals();
   const handleInputChange = (fundId: number, field: keyof UpdateRetirementFund, value: string) => {
     onFieldUpdate(fundId, field, value);
   };
@@ -556,21 +577,21 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
                 {/* Estate */}
                 <td className="p-2 text-right ">
                   <span className="font-bold text-right table-text-14 compact-total-span" style={{ color: '#094161' }}>
-                    0
+                    R {flowsTotals.estate.toLocaleString()}
                   </span>
                 </td>
                 
                 {/* Spouse */}
                 <td className="p-2 text-right ">
                   <span className="font-bold text-right table-text-14 compact-total-span" style={{ color: '#094161' }}>
-                    0
+                    R {flowsTotals.spouse.toLocaleString()}
                   </span>
                 </td>
                 
                 {/* Other */}
                 <td className="p-2 text-right ">
                   <span className="font-bold text-right table-text-14 compact-total-span" style={{ color: '#094161' }}>
-                    0
+                    R {flowsTotals.other.toLocaleString()}
                   </span>
                 </td>
               </>
