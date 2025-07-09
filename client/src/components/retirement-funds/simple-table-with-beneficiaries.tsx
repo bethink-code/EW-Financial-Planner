@@ -41,10 +41,23 @@ function AutoSizeInput({
 
   useEffect(() => {
     if (inputRef.current) {
-      inputRef.current.style.width = 'auto';
-      inputRef.current.style.width = Math.max(inputRef.current.scrollWidth, 60) + 'px';
+      // Create a temporary span to measure text width more accurately
+      const span = document.createElement('span');
+      span.style.visibility = 'hidden';
+      span.style.position = 'absolute';
+      span.style.whiteSpace = 'pre';
+      span.style.font = window.getComputedStyle(inputRef.current).font;
+      span.textContent = value || props.placeholder || '';
+      document.body.appendChild(span);
+      
+      // Set width based on content with more conservative sizing
+      const contentWidth = span.offsetWidth;
+      const width = Math.max(60, Math.min(180, contentWidth + 20)); // Min 60px, max 180px, +20px for padding
+      inputRef.current.style.width = `${width}px`;
+      
+      document.body.removeChild(span);
     }
-  }, [value]);
+  }, [value, props.placeholder]);
 
   return (
     <input
@@ -53,7 +66,7 @@ function AutoSizeInput({
       value={value}
       onChange={onChange}
       className={`compact-input bg-[#F2F7FB] border-none focus:bg-white focus:border focus:border-primary hover:bg-neutral-50 transition-colors duration-200 ${className}`}
-      style={{ minWidth: '60px', ...style }}
+      style={{ minWidth: '60px', maxWidth: '180px', ...style }}
       {...props}
     />
   );
