@@ -1,4 +1,4 @@
-import { useState, useCallback, memo, useMemo } from "react";
+import { useState, useCallback, memo, useMemo, useRef, useEffect } from "react";
 import { ChevronRight, ChevronDown, Edit } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -6,6 +6,64 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Badge } from "@/components/ui/badge";
 import { BeneficiarySection } from "./beneficiary-section";
 import type { RetirementFund, UpdateRetirementFund } from "@shared/schema";
+
+// Auto-sizing input component for hybrid view
+const AutoSizeInput = ({ 
+  value, 
+  onChange, 
+  className = "", 
+  placeholder = "",
+  disabled = false,
+  style = {},
+  ...props 
+}: {
+  value: string;
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  className?: string;
+  placeholder?: string;
+  disabled?: boolean;
+  style?: React.CSSProperties;
+  type?: string;
+}) => {
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    if (inputRef.current) {
+      // Create canvas to measure text width accurately
+      const canvas = document.createElement('canvas');
+      const context = canvas.getContext('2d');
+      if (context) {
+        const computedStyle = window.getComputedStyle(inputRef.current);
+        context.font = computedStyle.font;
+        
+        const textToMeasure = value || placeholder || '';
+        const textWidth = context.measureText(textToMeasure).width;
+        
+        // Add padding and set min/max constraints
+        const width = Math.max(120, Math.min(300, textWidth + 40));
+        inputRef.current.style.width = `${width}px`;
+      }
+    }
+  }, [value, placeholder]);
+
+  return (
+    <Input
+      ref={inputRef}
+      value={value}
+      onChange={onChange}
+      className={className}
+      placeholder={placeholder}
+      disabled={disabled}
+      style={{ 
+        ...style, 
+        minWidth: '120px', 
+        maxWidth: '300px',
+        width: 'auto'
+      }}
+      {...props}
+    />
+  );
+};
 
 interface ColumnVisibility {
   overview: boolean;
@@ -76,7 +134,7 @@ export const DetailedRow = memo(function DetailedRow({ fund, columnVisibility, o
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-4xl">
                 <div>
                   <Label className="text-xs text-neutral-600 mb-1 block">Description</Label>
-                  <Input
+                  <AutoSizeInput
                     value={fund.description}
                     onChange={(e) => handleFieldChange("description", e.target.value)}
                     className="h-9 text-sm"
@@ -115,14 +173,15 @@ export const DetailedRow = memo(function DetailedRow({ fund, columnVisibility, o
                   Cover Amount: {fund.coverAmount}
                 </div>
               </div>
-              <div className="mb-4 max-w-xs">
+              <div className="mb-4">
                 <Label className="text-xs text-neutral-600 mb-1 block">Cover Amount</Label>
-                <Input
+                <AutoSizeInput
                   value={fund.coverAmount}
                   onChange={(e) => handleFieldChange("coverAmount", e.target.value)}
                   className="h-9 text-sm text-right"
                   disabled={isUpdating}
                   placeholder="R 0"
+                  style={{ textAlign: 'right' }}
                 />
               </div>
               <BeneficiarySection
@@ -141,41 +200,45 @@ export const DetailedRow = memo(function DetailedRow({ fund, columnVisibility, o
               <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4 max-w-6xl">
                 <div>
                   <Label className="text-xs text-neutral-600 mb-1 block">Monthly Income</Label>
-                  <Input
+                  <AutoSizeInput
                     value={fund.monthlyIncome}
                     onChange={(e) => handleFieldChange("monthlyIncome", e.target.value)}
                     className="h-9 text-sm text-right"
                     disabled={isUpdating}
                     placeholder="R 0"
+                    style={{ textAlign: 'right' }}
                   />
                 </div>
                 <div>
                   <Label className="text-xs text-neutral-600 mb-1 block">Term Years</Label>
-                  <Input
+                  <AutoSizeInput
                     value={fund.termYears}
                     onChange={(e) => handleFieldChange("termYears", e.target.value)}
                     className="h-9 text-sm text-right"
                     disabled={isUpdating}
+                    style={{ textAlign: 'right' }}
                   />
                 </div>
                 <div>
                   <Label className="text-xs text-neutral-600 mb-1 block">Increase %</Label>
-                  <Input
+                  <AutoSizeInput
                     value={fund.increasePercentage}
                     onChange={(e) => handleFieldChange("increasePercentage", e.target.value)}
                     className="h-9 text-sm text-right"
                     disabled={isUpdating}
                     placeholder="5%"
+                    style={{ textAlign: 'right' }}
                   />
                 </div>
                 <div>
                   <Label className="text-xs text-neutral-600 mb-1 block">Escalation Amount</Label>
-                  <Input
+                  <AutoSizeInput
                     value={fund.lumpSumDeath}
                     onChange={(e) => handleFieldChange("lumpSumDeath", e.target.value)}
                     className="h-9 text-sm text-right"
                     disabled={isUpdating}
                     placeholder="R 0"
+                    style={{ textAlign: 'right' }}
                   />
                 </div>
               </div>
@@ -189,22 +252,24 @@ export const DetailedRow = memo(function DetailedRow({ fund, columnVisibility, o
               <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 max-w-5xl">
                 <div>
                   <Label className="text-xs text-neutral-600 mb-1 block">Approved Life Cover</Label>
-                  <Input
+                  <AutoSizeInput
                     value={fund.approvedLifeCover}
                     onChange={(e) => handleFieldChange("approvedLifeCover", e.target.value)}
                     className="h-9 text-sm text-right"
                     disabled={isUpdating}
                     placeholder="R 0"
+                    style={{ textAlign: 'right' }}
                   />
                 </div>
                 <div>
                   <Label className="text-xs text-neutral-600 mb-1 block">Fund Value</Label>
-                  <Input
+                  <AutoSizeInput
                     value={fund.fundValue}
                     onChange={(e) => handleFieldChange("fundValue", e.target.value)}
                     className="h-9 text-sm text-right"
                     disabled={isUpdating}
                     placeholder="R 0"
+                    style={{ textAlign: 'right' }}
                   />
                 </div>
                 <div>
@@ -245,12 +310,13 @@ export const DetailedRow = memo(function DetailedRow({ fund, columnVisibility, o
                   </div>
                   <div>
                     <Label className="text-xs text-neutral-600 mb-1 block">Percentage</Label>
-                    <Input
+                    <AutoSizeInput
                       value={fund.beneficiaryPercentageSplit}
                       onChange={(e) => handleFieldChange("beneficiaryPercentageSplit", e.target.value)}
                       className="h-9 text-sm text-right"
                       disabled={isUpdating}
                       placeholder="0%"
+                      style={{ textAlign: 'right' }}
                     />
                   </div>
                   <div>
@@ -265,22 +331,24 @@ export const DetailedRow = memo(function DetailedRow({ fund, columnVisibility, o
                 <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4">
                   <div>
                     <Label className="text-xs text-neutral-600 mb-1 block">Lump Sum Taken</Label>
-                    <Input
+                    <AutoSizeInput
                       value={fund.lumpSumTaken}
                       onChange={(e) => handleFieldChange("lumpSumTaken", e.target.value)}
                       className="h-9 text-sm text-right"
                       disabled={isUpdating}
                       placeholder="R 0"
+                      style={{ textAlign: 'right' }}
                     />
                   </div>
                   <div>
                     <Label className="text-xs text-neutral-600 mb-1 block">Non-deductible Contribution</Label>
-                    <Input
+                    <AutoSizeInput
                       value={fund.nondeductibleContribution}
                       onChange={(e) => handleFieldChange("nondeductibleContribution", e.target.value)}
                       className="h-9 text-sm text-right"
                       disabled={isUpdating}
                       placeholder="R 0"
+                      style={{ textAlign: 'right' }}
                     />
                   </div>
                   <div>
@@ -291,12 +359,13 @@ export const DetailedRow = memo(function DetailedRow({ fund, columnVisibility, o
                   </div>
                   <div>
                     <Label className="text-xs text-neutral-600 mb-1 block">Income Term</Label>
-                    <Input
+                    <AutoSizeInput
                       value={fund.incomeTerm}
                       onChange={(e) => handleFieldChange("incomeTerm", e.target.value)}
                       className="h-9 text-sm text-right"
                       disabled={isUpdating}
                       placeholder="Income term"
+                      style={{ textAlign: 'right' }}
                     />
                   </div>
                 </div>
