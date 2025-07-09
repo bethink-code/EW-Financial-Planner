@@ -31,6 +31,17 @@ html {
   text-align: right !important;
 }
 
+/* Force percentage column width */
+.percentage-column {
+  width: 160px !important;
+  min-width: 160px !important;
+  max-width: 160px !important;
+}
+
+.percentage-input {
+  min-width: 150px !important;
+}
+
 /* Optimized view transitions */
 @view-transition {
   navigation: auto;

@@ -193,7 +193,7 @@ export function SimpleTableWithBeneficiaries({ funds, columnVisibility, tableMod
                 <th className="table-cell text-left table-header-12 text-neutral-600 uppercase tracking-wider" style={{ width: '200px' }}>
                   Beneficiary
                 </th>
-                <th className="table-cell text-left table-header-12 text-neutral-600 uppercase tracking-wider" style={{ width: '160px' }}>
+                <th className="table-cell text-left table-header-12 text-neutral-600 uppercase tracking-wider percentage-column">
                   %
                 </th>
                 <th className="table-cell text-left table-header-12 text-neutral-600 uppercase tracking-wider" style={{ width: '140px' }}>
@@ -337,7 +337,7 @@ export function SimpleTableWithBeneficiaries({ funds, columnVisibility, tableMod
                             className="w-full h-7 text-sm text-left bg-white border-gray-200 focus:border-primary"
                           />
                         </td>
-                        <td className="p-2" style={{ width: '160px' }}>
+                        <td className="p-2 percentage-column">
                           <Input
                             type="number"
                             value={beneficiaries[0].percentage || 0}
@@ -346,7 +346,7 @@ export function SimpleTableWithBeneficiaries({ funds, columnVisibility, tableMod
                             max="100"
                             step="0.1"
                             disabled={isUpdating}
-                            className="w-full h-7 text-sm text-center bg-white border-gray-200 focus:border-primary"
+                            className="w-full h-7 text-sm text-center bg-white border-gray-200 focus:border-primary percentage-input"
                             placeholder="0"
                           />
                         </td>
@@ -376,7 +376,7 @@ export function SimpleTableWithBeneficiaries({ funds, columnVisibility, tableMod
                             No beneficiaries
                           </div>
                         </td>
-                        <td className="p-2" style={{ width: '160px' }}></td>
+                        <td className="p-2 percentage-column"></td>
                         <td className="p-2" style={{ width: '140px' }}></td>
                         <td className="p-2" style={{ width: '80px' }}>
                           <div className="flex justify-start">
@@ -577,7 +577,7 @@ export function SimpleTableWithBeneficiaries({ funds, columnVisibility, tableMod
                           className="w-full h-7 text-sm text-left bg-white border-gray-200 focus:border-primary"
                         />
                       </td>
-                      <td className="p-2" style={{ width: '160px' }}>
+                      <td className="p-2 percentage-column">
                         <Input
                           type="number"
                           value={beneficiary.percentage || 0}
@@ -586,7 +586,7 @@ export function SimpleTableWithBeneficiaries({ funds, columnVisibility, tableMod
                           max="100"
                           step="0.1"
                           disabled={isUpdating}
-                          className="w-full h-7 text-sm text-center bg-white border-gray-200 focus:border-primary"
+                          className="w-full h-7 text-sm text-center bg-white border-gray-200 focus:border-primary percentage-input"
                           placeholder="0"
                         />
                       </td>
