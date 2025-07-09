@@ -242,13 +242,23 @@ export default function NewRetirementFunds() {
             )}
 
             <div className="bg-white rounded-lg shadow-sm border border-neutral-200" style={{ viewTransitionName: 'table-view' }}>
-              <SimpleTableWithBeneficiaries
-                funds={filteredFunds}
-                columnVisibility={columnVisibility}
-                tableMode={tableMode}
-                onFieldUpdate={handleFieldUpdate}
-                isUpdating={updateMutation.isPending}
-              />
+              {tableMode === "inputs" ? (
+                <SimpleTableWithBeneficiaries
+                  funds={filteredFunds}
+                  columnVisibility={columnVisibility}
+                  tableMode={tableMode}
+                  onFieldUpdate={handleFieldUpdate}
+                  isUpdating={updateMutation.isPending}
+                />
+              ) : (
+                <NewGroupedTableView
+                  funds={filteredFunds}
+                  columnVisibility={columnVisibility}
+                  tableMode={tableMode}
+                  onFieldUpdate={handleFieldUpdate}
+                  isUpdating={updateMutation.isPending}
+                />
+              )}
             </div>
             
 
