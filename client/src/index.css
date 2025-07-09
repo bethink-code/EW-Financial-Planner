@@ -290,6 +290,7 @@ th, td {
     text-align: right;
     box-sizing: border-box;
     resize: none;
+    border-radius: 5px;
   }
   
   /* Total rows - bold styling */
