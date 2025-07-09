@@ -33,15 +33,15 @@ html {
 
 /* Force percentage column width */
 .percentage-column {
-  width: 100px !important;
-  min-width: 100px !important;
-  max-width: 100px !important;
+  width: 80px !important;
+  min-width: 80px !important;
+  max-width: 80px !important;
   white-space: nowrap !important;
 }
 
 .percentage-input {
-  width: 90px !important;
-  min-width: 90px !important;
+  width: 70px !important;
+  min-width: 70px !important;
 }
 
 /* Optimized view transitions */
