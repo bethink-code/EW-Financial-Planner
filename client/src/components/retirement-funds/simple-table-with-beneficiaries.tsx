@@ -102,11 +102,12 @@ export function SimpleTableWithBeneficiaries({ funds, columnVisibility, tableMod
     if (!fund) return;
 
     const currentBeneficiaries = parseBeneficiaries(fund.beneficiaries);
+    const coverAmount = parseFloat(fund.coverAmount?.replace(/[^\d.-]/g, '') || '0') || 0;
     const newBeneficiary: Beneficiary = {
       id: nanoid(),
       name: "",
-      percentage: 0,
-      coverSplit: "R 0"
+      percentage: 100,
+      coverSplit: `R ${Math.round(coverAmount).toLocaleString()}`
     };
 
     const updatedBeneficiaries = [...currentBeneficiaries, newBeneficiary];
@@ -336,7 +337,7 @@ export function SimpleTableWithBeneficiaries({ funds, columnVisibility, tableMod
                             className="w-full h-7 text-sm text-left bg-white border-gray-200 focus:border-primary"
                           />
                         </td>
-                        <td className="p-2" style={{ width: '100px' }}>
+                        <td className="p-2" style={{ width: '120px' }}>
                           <Input
                             type="number"
                             value={beneficiaries[0].percentage}
@@ -374,7 +375,7 @@ export function SimpleTableWithBeneficiaries({ funds, columnVisibility, tableMod
                             No beneficiaries
                           </div>
                         </td>
-                        <td className="p-2" style={{ width: '100px' }}></td>
+                        <td className="p-2" style={{ width: '120px' }}></td>
                         <td className="p-2" style={{ width: '140px' }}></td>
                         <td className="p-2" style={{ width: '80px' }}>
                           <div className="flex justify-start">
@@ -575,7 +576,7 @@ export function SimpleTableWithBeneficiaries({ funds, columnVisibility, tableMod
                           className="w-full h-7 text-sm text-left bg-white border-gray-200 focus:border-primary"
                         />
                       </td>
-                      <td className="p-2" style={{ width: '100px' }}>
+                      <td className="p-2" style={{ width: '120px' }}>
                         <Input
                           type="number"
                           value={beneficiary.percentage}
