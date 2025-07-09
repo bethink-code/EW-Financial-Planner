@@ -14,6 +14,11 @@ html {
   line-height: 1.2 !important;
 }
 
+/* Override for bold total rows */
+.table-text-14.font-bold {
+  font-weight: 700 !important;
+}
+
 /* Force 12px for headers to make them smaller */
 .table-header-12 {
   font-size: 12px !important;
@@ -339,6 +344,12 @@ th, td {
     font-weight: 700 !important;
     color: #094161 !important;
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif !important;
+  }
+
+  /* Force bold for total rows - overrides table-text-14 */
+  .bg-gray-100 .table-text-14,
+  .bg-gray-100 td {
+    font-weight: 700 !important;
   }
 
   /* Auto-sizing for input fields */
