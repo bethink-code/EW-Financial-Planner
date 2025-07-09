@@ -275,7 +275,6 @@ export function SimpleTableWithBeneficiaries({ funds, columnVisibility, tableMod
         <tbody className="bg-white divide-y divide-neutral-200">
           {funds.flatMap((fund) => {
             const beneficiaries = parseBeneficiaries(fund.beneficiaries);
-            console.log('Fund beneficiaries debug:', { fundId: fund.id, beneficiaries, raw: fund.beneficiaries });
             const rows = [];
             
             // Create main fund row
@@ -338,7 +337,7 @@ export function SimpleTableWithBeneficiaries({ funds, columnVisibility, tableMod
                             className="w-full h-7 text-sm text-left bg-white border-gray-200 focus:border-primary"
                           />
                         </td>
-                        <td className="p-2" style={{ width: '120px' }}>
+                        <td className="p-2" style={{ width: '160px' }}>
                           <Input
                             type="number"
                             value={beneficiaries[0].percentage || 0}
@@ -377,7 +376,7 @@ export function SimpleTableWithBeneficiaries({ funds, columnVisibility, tableMod
                             No beneficiaries
                           </div>
                         </td>
-                        <td className="p-2" style={{ width: '120px' }}></td>
+                        <td className="p-2" style={{ width: '160px' }}></td>
                         <td className="p-2" style={{ width: '140px' }}></td>
                         <td className="p-2" style={{ width: '80px' }}>
                           <div className="flex justify-start">
@@ -578,7 +577,7 @@ export function SimpleTableWithBeneficiaries({ funds, columnVisibility, tableMod
                           className="w-full h-7 text-sm text-left bg-white border-gray-200 focus:border-primary"
                         />
                       </td>
-                      <td className="p-2" style={{ width: '120px' }}>
+                      <td className="p-2" style={{ width: '160px' }}>
                         <Input
                           type="number"
                           value={beneficiary.percentage || 0}
