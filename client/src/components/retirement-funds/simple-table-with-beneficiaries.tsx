@@ -41,21 +41,24 @@ function AutoSizeInput({
 
   useEffect(() => {
     if (inputRef.current) {
-      // Create a temporary span to measure text width more accurately
-      const span = document.createElement('span');
-      span.style.visibility = 'hidden';
-      span.style.position = 'absolute';
-      span.style.whiteSpace = 'pre';
-      span.style.font = window.getComputedStyle(inputRef.current).font;
-      span.textContent = value || props.placeholder || '';
-      document.body.appendChild(span);
+      const textToMeasure = value || props.placeholder || '';
       
-      // Set width based on content 
-      const contentWidth = span.offsetWidth;
-      const width = Math.max(60, contentWidth + 20); // Min 60px, +20px for padding
-      inputRef.current.style.width = `${width}px`;
-      
-      document.body.removeChild(span);
+      if (textToMeasure) {
+        // Use canvas for more accurate text measurement
+        const canvas = document.createElement('canvas');
+        const context = canvas.getContext('2d');
+        const computedStyle = window.getComputedStyle(inputRef.current);
+        context.font = computedStyle.font;
+        
+        const metrics = context.measureText(textToMeasure);
+        const textWidth = Math.ceil(metrics.width);
+        const width = Math.max(60, textWidth + 30); // More generous padding
+        
+        inputRef.current.style.width = `${width}px`;
+      } else {
+        // Fallback for empty content
+        inputRef.current.style.width = '60px';
+      }
     }
   }, [value, props.placeholder]);
 
