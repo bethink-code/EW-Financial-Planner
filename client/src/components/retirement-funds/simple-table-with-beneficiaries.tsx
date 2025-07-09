@@ -50,9 +50,9 @@ function AutoSizeInput({
       span.textContent = value || props.placeholder || '';
       document.body.appendChild(span);
       
-      // Set width based on content with more conservative sizing
+      // Set width based on content 
       const contentWidth = span.offsetWidth;
-      const width = Math.max(60, Math.min(180, contentWidth + 20)); // Min 60px, max 180px, +20px for padding
+      const width = Math.max(60, contentWidth + 20); // Min 60px, +20px for padding
       inputRef.current.style.width = `${width}px`;
       
       document.body.removeChild(span);
@@ -66,7 +66,7 @@ function AutoSizeInput({
       value={value}
       onChange={onChange}
       className={`compact-input bg-[#F2F7FB] border-none focus:bg-white focus:border focus:border-primary hover:bg-neutral-50 transition-colors duration-200 ${className}`}
-      style={{ minWidth: '60px', maxWidth: '180px', ...style }}
+      style={{ minWidth: '60px', ...style }}
       {...props}
     />
   );
