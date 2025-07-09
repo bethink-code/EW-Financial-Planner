@@ -455,7 +455,7 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
                 )}
                 {columnVisibility.fundValue && (
                   <>
-                    <td className="p-2 text-right  ">
+                    <td className="p-2 text-right border-l border-neutral-300">
                       <AutoSizeInput
                         
                         value={fund.estateDeploymentDeceased || "0"}
@@ -578,14 +578,9 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
                   </td>
                 </>
               )}
-              {columnVisibility.fundValueBeneficiaries && (
+              {columnVisibility.fundValue && (
                 <>
-                  <td className="p-2 text-right ">
-                    <span className="font-bold text-right table-text-14 compact-total-span" style={{ color: '#094161' }}>
-                      0%
-                    </span>
-                  </td>
-                  <td className="p-2 text-right ">
+                  <td className="p-2 text-right border-l border-neutral-300">
                     <span className="font-bold text-right table-text-14 compact-total-span" style={{ color: '#094161' }}>
                       0%
                     </span>
@@ -598,11 +593,6 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
                   <td className="p-2 text-right">
                     <span className="font-bold text-right table-text-14 compact-total-span" style={{ color: '#094161' }}>
                       3.5%
-                    </span>
-                  </td>
-                  <td className="p-2 text-right">
-                    <span className="font-bold text-right table-text-14 compact-total-span" style={{ color: '#094161' }}>
-                      1.75%
                     </span>
                   </td>
                 </>
