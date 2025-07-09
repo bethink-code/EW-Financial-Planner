@@ -152,7 +152,7 @@ export function DetailedView({ funds, columnVisibility, onFieldUpdate, isUpdatin
           {columnVisibility.overview && (
             <div className="bg-teal-50 rounded-lg p-4">
               <h4 className="text-sm font-bold text-teal-700 mb-4">Overview</h4>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-4xl">
+              <div className="grid grid-cols-1 md:grid-cols-4 xl:grid-cols-8 gap-4">
                 <div>
                   <Label className="text-xs text-neutral-600 mb-1 block">Description</Label>
                   <AutoSizeInput
@@ -219,7 +219,7 @@ export function DetailedView({ funds, columnVisibility, onFieldUpdate, isUpdatin
           {columnVisibility.monthlyDeathBenefit && (
             <div className="bg-teal-50 rounded-lg p-4">
               <h4 className="text-sm font-bold text-teal-700 mb-4">Monthly Death Benefit</h4>
-              <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4 max-w-6xl">
+              <div className="grid grid-cols-1 md:grid-cols-4 xl:grid-cols-8 gap-4">
                 <div>
                   <Label className="text-xs text-neutral-600 mb-1 block">Monthly Income</Label>
                   <AutoSizeInput
@@ -271,7 +271,7 @@ export function DetailedView({ funds, columnVisibility, onFieldUpdate, isUpdatin
           {columnVisibility.fundValue && (
             <div className="bg-teal-50 rounded-lg p-4">
               <h4 className="text-sm font-bold text-teal-700 mb-4">Fund Value</h4>
-              <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 max-w-5xl">
+              <div className="grid grid-cols-1 md:grid-cols-4 xl:grid-cols-8 gap-4">
                 <div>
                   <Label className="text-xs text-neutral-600 mb-1 block">Approved Life Cover</Label>
                   <AutoSizeInput
@@ -309,7 +309,7 @@ export function DetailedView({ funds, columnVisibility, onFieldUpdate, isUpdatin
             <div className="bg-teal-50 rounded-lg p-4">
               <h4 className="text-sm font-bold text-teal-700 mb-4">Fund Value Beneficiaries</h4>
               <div className="space-y-4">
-                <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
+                <div className="grid grid-cols-1 md:grid-cols-4 xl:grid-cols-8 gap-4">
                   <div>
                     <Label className="text-xs text-neutral-600 mb-1 block">Beneficiary Name</Label>
                     <Select
@@ -348,7 +348,7 @@ export function DetailedView({ funds, columnVisibility, onFieldUpdate, isUpdatin
                   </div>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4">
+                <div className="grid grid-cols-1 md:grid-cols-4 xl:grid-cols-8 gap-4">
                   <div>
                     <Label className="text-xs text-neutral-600 mb-1 block">Lump Sum Taken</Label>
                     <AutoSizeInput
