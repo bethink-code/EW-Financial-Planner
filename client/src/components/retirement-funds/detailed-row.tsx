@@ -189,6 +189,7 @@ export const DetailedRow = memo(function DetailedRow({ fund, columnVisibility, o
                 onFieldUpdate={onFieldUpdate}
                 isUpdating={isUpdating}
                 tableMode="inputs"
+                layout="compact"
               />
             </div>
           )}

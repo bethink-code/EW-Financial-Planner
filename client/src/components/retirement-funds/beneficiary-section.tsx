@@ -8,13 +8,15 @@ interface BeneficiarySectionProps {
   onFieldUpdate: (id: number, field: 'beneficiaries', value: string) => void;
   isUpdating: boolean;
   tableMode?: "inputs" | "flows";
+  layout?: "table" | "compact";
 }
 
 export function BeneficiarySection({ 
   fund, 
   onFieldUpdate, 
   isUpdating,
-  tableMode = "inputs" 
+  tableMode = "inputs",
+  layout = "table"
 }: BeneficiarySectionProps) {
   
   const beneficiaries = useMemo(() => {
@@ -28,20 +30,23 @@ export function BeneficiarySection({
 
   return (
     <div className="space-y-4">
-      <div className="flex items-center justify-between">
-        <h3 className="text-lg font-semibold text-neutral-900">
-          {tableMode === "inputs" ? "Unapproved Life Cover" : "Life Cover Beneficiaries"}
-        </h3>
-        <div className="text-sm text-neutral-600">
-          Cover Amount: {fund.coverAmount}
+      {layout === "table" && (
+        <div className="flex items-center justify-between">
+          <h3 className="text-lg font-semibold text-neutral-900">
+            {tableMode === "inputs" ? "Unapproved Life Cover" : "Life Cover Beneficiaries"}
+          </h3>
+          <div className="text-sm text-neutral-600">
+            Cover Amount: {fund.coverAmount}
+          </div>
         </div>
-      </div>
+      )}
       
       <BeneficiaryRowManager
         coverAmount={fund.coverAmount}
         beneficiaries={beneficiaries}
         onBeneficiariesChange={handleBeneficiariesChange}
         isUpdating={isUpdating}
+        layout={layout}
       />
     </div>
   );
