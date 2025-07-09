@@ -364,17 +364,6 @@ export function SimpleTableWithBeneficiaries({ funds, columnVisibility, tableMod
                             >
                               <Plus className="h-4 w-4" />
                             </Button>
-                            {beneficiaries.length > 1 && (
-                              <Button
-                                variant="ghost"
-                                size="sm"
-                                onClick={() => handleRemoveBeneficiary(fund.id, 0)}
-                                disabled={isUpdating}
-                                className="h-7 w-7 p-0 text-red-500 hover:text-red-700 hover:bg-red-50"
-                              >
-                                <Trash2 className="h-4 w-4" />
-                              </Button>
-                            )}
                           </div>
                         </td>
                       </>
