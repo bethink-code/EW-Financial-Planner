@@ -152,9 +152,9 @@ export function DetailedView({ funds, columnVisibility, onFieldUpdate, isUpdatin
           {columnVisibility.overview && (
             <div className="bg-teal-50 rounded-lg p-4">
               <h4 className="text-sm font-bold text-teal-700 mb-4">Overview</h4>
-              <div className="grid grid-cols-1 md:grid-cols-4 xl:grid-cols-8 gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-4 xl:grid-cols-8 gap-4 items-end">
                 <div>
-                  <Label className="text-xs text-neutral-600 mb-1 block">Description</Label>
+                  <Label className="text-xs text-neutral-600 mb-1 block h-8 flex items-end">Description</Label>
                   <AutoSizeInput
                     value={selectedFund.description}
                     onChange={(e) => handleFieldChange("description", e.target.value)}
@@ -163,7 +163,7 @@ export function DetailedView({ funds, columnVisibility, onFieldUpdate, isUpdatin
                   />
                 </div>
                 <div>
-                  <Label className="text-xs text-neutral-600 mb-1 block">Owner</Label>
+                  <Label className="text-xs text-neutral-600 mb-1 block h-8 flex items-end">Owner</Label>
                   <Select
                     value={selectedFund.owner}
                     onValueChange={(value) => handleFieldChange("owner", value)}
@@ -219,9 +219,9 @@ export function DetailedView({ funds, columnVisibility, onFieldUpdate, isUpdatin
           {columnVisibility.monthlyDeathBenefit && (
             <div className="bg-teal-50 rounded-lg p-4">
               <h4 className="text-sm font-bold text-teal-700 mb-4">Monthly Death Benefit</h4>
-              <div className="grid grid-cols-1 md:grid-cols-4 xl:grid-cols-8 gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-4 xl:grid-cols-8 gap-4 items-end">
                 <div>
-                  <Label className="text-xs text-neutral-600 mb-1 block">Monthly Income</Label>
+                  <Label className="text-xs text-neutral-600 mb-1 block h-8 flex items-end">Monthly Income</Label>
                   <AutoSizeInput
                     value={selectedFund.monthlyIncome}
                     onChange={(e) => handleFieldChange("monthlyIncome", e.target.value)}
@@ -232,7 +232,7 @@ export function DetailedView({ funds, columnVisibility, onFieldUpdate, isUpdatin
                   />
                 </div>
                 <div>
-                  <Label className="text-xs text-neutral-600 mb-1 block">Term Years</Label>
+                  <Label className="text-xs text-neutral-600 mb-1 block h-8 flex items-end">Term Years</Label>
                   <AutoSizeInput
                     value={selectedFund.termYears}
                     onChange={(e) => handleFieldChange("termYears", e.target.value)}
@@ -242,7 +242,7 @@ export function DetailedView({ funds, columnVisibility, onFieldUpdate, isUpdatin
                   />
                 </div>
                 <div>
-                  <Label className="text-xs text-neutral-600 mb-1 block">Increase %</Label>
+                  <Label className="text-xs text-neutral-600 mb-1 block h-8 flex items-end">Increase %</Label>
                   <AutoSizeInput
                     value={selectedFund.increasePercentage}
                     onChange={(e) => handleFieldChange("increasePercentage", e.target.value)}
@@ -253,7 +253,7 @@ export function DetailedView({ funds, columnVisibility, onFieldUpdate, isUpdatin
                   />
                 </div>
                 <div>
-                  <Label className="text-xs text-neutral-600 mb-1 block">Escalation Amount</Label>
+                  <Label className="text-xs text-neutral-600 mb-1 block h-8 flex items-end">Escalation Amount</Label>
                   <AutoSizeInput
                     value={selectedFund.lumpSumDeath}
                     onChange={(e) => handleFieldChange("lumpSumDeath", e.target.value)}
@@ -271,9 +271,9 @@ export function DetailedView({ funds, columnVisibility, onFieldUpdate, isUpdatin
           {columnVisibility.fundValue && (
             <div className="bg-teal-50 rounded-lg p-4">
               <h4 className="text-sm font-bold text-teal-700 mb-4">Fund Value</h4>
-              <div className="grid grid-cols-1 md:grid-cols-4 xl:grid-cols-8 gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-4 xl:grid-cols-8 gap-4 items-end">
                 <div>
-                  <Label className="text-xs text-neutral-600 mb-1 block">Approved Life Cover</Label>
+                  <Label className="text-xs text-neutral-600 mb-1 block h-8 flex items-end">Approved Life Cover</Label>
                   <AutoSizeInput
                     value={selectedFund.approvedLifeCover}
                     onChange={(e) => handleFieldChange("approvedLifeCover", e.target.value)}
@@ -284,7 +284,7 @@ export function DetailedView({ funds, columnVisibility, onFieldUpdate, isUpdatin
                   />
                 </div>
                 <div>
-                  <Label className="text-xs text-neutral-600 mb-1 block">Fund Value</Label>
+                  <Label className="text-xs text-neutral-600 mb-1 block h-8 flex items-end">Fund Value</Label>
                   <AutoSizeInput
                     value={selectedFund.fundValue}
                     onChange={(e) => handleFieldChange("fundValue", e.target.value)}
@@ -295,7 +295,7 @@ export function DetailedView({ funds, columnVisibility, onFieldUpdate, isUpdatin
                   />
                 </div>
                 <div>
-                  <Label className="text-xs text-neutral-600 mb-1 block">Fund Value at Death</Label>
+                  <Label className="text-xs text-neutral-600 mb-1 block h-8 flex items-end">Fund Value at Death</Label>
                   <div className="h-9 px-3 py-2 text-sm text-right bg-neutral-50 border border-neutral-200 rounded">
                     {selectedFund.fundValueAtDeath || "R 0"}
                   </div>
@@ -308,9 +308,9 @@ export function DetailedView({ funds, columnVisibility, onFieldUpdate, isUpdatin
           {columnVisibility.fundValueBeneficiaries && (
             <div className="bg-teal-50 rounded-lg p-4">
               <h4 className="text-sm font-bold text-teal-700 mb-4">Fund Value Beneficiaries</h4>
-              <div className="grid grid-cols-1 md:grid-cols-4 xl:grid-cols-8 gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-4 xl:grid-cols-8 gap-4 items-end">
                 <div>
-                  <Label className="text-xs text-neutral-600 mb-1 block">Beneficiary Name</Label>
+                  <Label className="text-xs text-neutral-600 mb-1 block h-8 flex items-end">Beneficiary Name</Label>
                   <Select
                     value={selectedFund.beneficiaryName || ""}
                     onValueChange={(value) => handleFieldChange("beneficiaryName", value)}
@@ -329,7 +329,7 @@ export function DetailedView({ funds, columnVisibility, onFieldUpdate, isUpdatin
                   </Select>
                 </div>
                 <div>
-                  <Label className="text-xs text-neutral-600 mb-1 block">Percentage</Label>
+                  <Label className="text-xs text-neutral-600 mb-1 block h-8 flex items-end">Percentage</Label>
                   <AutoSizeInput
                     value={selectedFund.beneficiaryPercentageSplit}
                     onChange={(e) => handleFieldChange("beneficiaryPercentageSplit", e.target.value)}
@@ -340,13 +340,13 @@ export function DetailedView({ funds, columnVisibility, onFieldUpdate, isUpdatin
                   />
                 </div>
                 <div>
-                  <Label className="text-xs text-neutral-600 mb-1 block">Amount (Read-only)</Label>
+                  <Label className="text-xs text-neutral-600 mb-1 block h-8 flex items-end">Amount (Read-only)</Label>
                   <div className="h-9 px-3 py-2 text-sm text-right bg-neutral-50 border border-neutral-200 rounded">
                     {selectedFund.amount || "R 0"}
                   </div>
                 </div>
                 <div>
-                  <Label className="text-xs text-neutral-600 mb-1 block">Lump Sum Taken</Label>
+                  <Label className="text-xs text-neutral-600 mb-1 block h-8 flex items-end">Lump Sum Taken</Label>
                   <AutoSizeInput
                     value={selectedFund.lumpSumTaken}
                     onChange={(e) => handleFieldChange("lumpSumTaken", e.target.value)}
@@ -357,7 +357,7 @@ export function DetailedView({ funds, columnVisibility, onFieldUpdate, isUpdatin
                   />
                 </div>
                 <div>
-                  <Label className="text-xs text-neutral-600 mb-1 block">Non-deductible Contribution</Label>
+                  <Label className="text-xs text-neutral-600 mb-1 block h-8 flex items-end">Non-deductible Contribution</Label>
                   <AutoSizeInput
                     value={selectedFund.nondeductibleContribution}
                     onChange={(e) => handleFieldChange("nondeductibleContribution", e.target.value)}
@@ -368,13 +368,13 @@ export function DetailedView({ funds, columnVisibility, onFieldUpdate, isUpdatin
                   />
                 </div>
                 <div>
-                  <Label className="text-xs text-neutral-600 mb-1 block">Living Annuity (Read-only)</Label>
+                  <Label className="text-xs text-neutral-600 mb-1 block h-8 flex items-end">Living Annuity (Read-only)</Label>
                   <div className="h-9 px-3 py-2 text-sm text-right bg-neutral-50 border border-neutral-200 rounded">
                     {selectedFund.livingAnnuity || ""}
                   </div>
                 </div>
                 <div>
-                  <Label className="text-xs text-neutral-600 mb-1 block">Income Term</Label>
+                  <Label className="text-xs text-neutral-600 mb-1 block h-8 flex items-end">Income Term</Label>
                   <AutoSizeInput
                     value={selectedFund.incomeTerm}
                     onChange={(e) => handleFieldChange("incomeTerm", e.target.value)}

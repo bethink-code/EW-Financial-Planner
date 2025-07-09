@@ -156,3 +156,4 @@ Changelog:
 - July 09, 2025: **HYBRID VIEW SCROLL FIX** - Removed scrollable containers in hybrid view, implemented sticky headers for fund list and detail panel, allows natural page scrolling for better user experience
 - July 09, 2025: **UNIFIED COLUMN LAYOUT** - Standardized all hybrid view sections to consistent responsive grid: 1 column mobile, 4 columns tablet, 8 columns desktop, filling from left, removed max-width constraints for full utilization
 - July 09, 2025: **FUND VALUE BENEFICIARIES SINGLE ROW** - Combined Fund Value Beneficiaries section into single row with 7 fields (Beneficiary Name, Percentage, Amount, Lump Sum Taken, Non-deductible Contribution, Living Annuity, Income Term) using full 8-column grid
+- July 09, 2025: **FIELD ALIGNMENT FIX** - Fixed input field alignment across all hybrid view sections by adding fixed label height (32px) and items-end grid alignment, ensures all input fields align horizontally regardless of label text wrapping
