@@ -553,9 +553,25 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
                   Total
                 </td>
                 
-                {/* Owner */}
+                {/* Estate */}
                 <td className="p-2 text-right ">
-                  
+                  <span className="font-bold text-right table-text-14 compact-total-span" style={{ color: '#094161' }}>
+                    0
+                  </span>
+                </td>
+                
+                {/* Spouse */}
+                <td className="p-2 text-right ">
+                  <span className="font-bold text-right table-text-14 compact-total-span" style={{ color: '#094161' }}>
+                    0
+                  </span>
+                </td>
+                
+                {/* Other */}
+                <td className="p-2 text-right ">
+                  <span className="font-bold text-right table-text-14 compact-total-span" style={{ color: '#094161' }}>
+                    0%
+                  </span>
                 </td>
               </>
               )}
@@ -563,12 +579,12 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
                 <>
                   <td className="p-2 text-right border-l border-neutral-300">
                     <span className="font-bold text-right table-text-14 compact-total-span" style={{ color: '#094161' }}>
-                      0
+                      0%
                     </span>
                   </td>
                   <td className="p-2 text-right ">
                     <span className="font-bold text-right table-text-14 compact-total-span" style={{ color: '#094161' }}>
-                      0
+                      0%
                     </span>
                   </td>
                   <td className="p-2 text-right ">
@@ -582,7 +598,7 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
                 <>
                   <td className="p-2 text-right border-l border-neutral-300">
                     <span className="font-bold text-right table-text-14 compact-total-span" style={{ color: '#094161' }}>
-                      0%
+                      3.5%
                     </span>
                   </td>
                   <td className="p-2 text-right ">
@@ -592,7 +608,7 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
                   </td>
                   <td className="p-2 text-right">
                     <span className="font-bold text-right table-text-14 compact-total-span" style={{ color: '#094161' }}>
-                      3.5%
+                      0%
                     </span>
                   </td>
                 </>
