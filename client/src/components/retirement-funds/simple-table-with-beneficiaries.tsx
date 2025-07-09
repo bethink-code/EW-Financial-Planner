@@ -275,6 +275,7 @@ export function SimpleTableWithBeneficiaries({ funds, columnVisibility, tableMod
         <tbody className="bg-white divide-y divide-neutral-200">
           {funds.flatMap((fund) => {
             const beneficiaries = parseBeneficiaries(fund.beneficiaries);
+            console.log('Fund beneficiaries debug:', { fundId: fund.id, beneficiaries, raw: fund.beneficiaries });
             const rows = [];
             
             // Create main fund row
@@ -340,13 +341,14 @@ export function SimpleTableWithBeneficiaries({ funds, columnVisibility, tableMod
                         <td className="p-2" style={{ width: '120px' }}>
                           <Input
                             type="number"
-                            value={beneficiaries[0].percentage}
+                            value={beneficiaries[0].percentage || 0}
                             onChange={(e) => handleBeneficiaryUpdate(fund.id, 0, 'percentage', e.target.value)}
                             min="0"
                             max="100"
                             step="0.1"
                             disabled={isUpdating}
                             className="w-full h-7 text-sm text-center bg-white border-gray-200 focus:border-primary"
+                            placeholder="0"
                           />
                         </td>
                         <td className="p-2" style={{ width: '140px' }}>
@@ -579,13 +581,14 @@ export function SimpleTableWithBeneficiaries({ funds, columnVisibility, tableMod
                       <td className="p-2" style={{ width: '120px' }}>
                         <Input
                           type="number"
-                          value={beneficiary.percentage}
+                          value={beneficiary.percentage || 0}
                           onChange={(e) => handleBeneficiaryUpdate(fund.id, actualIndex, 'percentage', e.target.value)}
                           min="0"
                           max="100"
                           step="0.1"
                           disabled={isUpdating}
                           className="w-full h-7 text-sm text-center bg-white border-gray-200 focus:border-primary"
+                          placeholder="0"
                         />
                       </td>
                       <td className="p-2" style={{ width: '140px' }}>
