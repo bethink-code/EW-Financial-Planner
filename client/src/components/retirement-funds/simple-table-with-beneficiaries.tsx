@@ -142,7 +142,7 @@ export function SimpleTableWithBeneficiaries({ funds, columnVisibility, tableMod
 
   return (
     <div className="overflow-x-auto">
-      <table className="min-w-full bg-white">
+      <table className="min-w-full bg-white table-auto">
         <thead>
           {/* First level headers */}
           <tr className="border-b border-neutral-200" style={{ backgroundColor: '#D6ECF5' }}>
@@ -187,19 +187,19 @@ export function SimpleTableWithBeneficiaries({ funds, columnVisibility, tableMod
             )}
             {columnVisibility.unapprovedLifeCover && (
               <>
-                <th className="table-cell text-left table-header-12 text-neutral-600 uppercase tracking-wider border-l border-neutral-300" style={{ width: '140px' }}>
+                <th className="table-cell text-left table-header-12 text-neutral-600 uppercase tracking-wider border-l border-neutral-300">
                   Cover amount
                 </th>
-                <th className="table-cell text-left table-header-12 text-neutral-600 uppercase tracking-wider" style={{ width: '200px' }}>
+                <th className="table-cell text-left table-header-12 text-neutral-600 uppercase tracking-wider">
                   Beneficiary
                 </th>
                 <th className="table-cell text-left table-header-12 text-neutral-600 uppercase tracking-wider percentage-column">
                   %
                 </th>
-                <th className="table-cell text-left table-header-12 text-neutral-600 uppercase tracking-wider" style={{ width: '140px' }}>
+                <th className="table-cell text-left table-header-12 text-neutral-600 uppercase tracking-wider">
                   Cover split
                 </th>
-                <th className="table-cell text-center table-header-12 text-neutral-600 uppercase tracking-wider" style={{ width: '80px' }}>
+                <th className="table-cell text-center table-header-12 text-neutral-600 uppercase tracking-wider">
                   Actions
                 </th>
               </>
@@ -317,24 +317,24 @@ export function SimpleTableWithBeneficiaries({ funds, columnVisibility, tableMod
                 {/* Unapproved Life Cover Section */}
                 {columnVisibility.unapprovedLifeCover && (
                   <>
-                    <td className="p-2 text-right border-l border-neutral-300" style={{ width: '140px' }}>
+                    <td className="p-2 text-right border-l border-neutral-300">
                       <AutoSizeInput
                         value={fund.coverAmount || ""}
                         onChange={(e) => handleInputChange(fund.id, "coverAmount", e.target.value)}
-                        className="table-input w-full" style={{ textAlign: "right" }}
+                        className="table-input" style={{ textAlign: "right" }}
                         placeholder="R 0"
                         disabled={isUpdating}
                       />
                     </td>
                     {beneficiaries.length > 0 ? (
                       <>
-                        <td className="p-2" style={{ width: '200px' }}>
-                          <Input
+                        <td className="p-2">
+                          <AutoSizeInput
                             value={beneficiaries[0].name}
                             onChange={(e) => handleBeneficiaryUpdate(fund.id, 0, 'name', e.target.value)}
                             placeholder="Beneficiary name"
                             disabled={isUpdating}
-                            className="w-full h-7 text-sm text-left bg-white border-gray-200 focus:border-primary"
+                            className="compact-input border-0 focus:bg-white focus:border focus:border-primary hover:bg-neutral-50 transition-colors duration-200"
                           />
                         </td>
                         <td className="p-2 percentage-column">
@@ -350,12 +350,12 @@ export function SimpleTableWithBeneficiaries({ funds, columnVisibility, tableMod
                             placeholder="0"
                           />
                         </td>
-                        <td className="p-2" style={{ width: '140px' }}>
-                          <div className="w-full h-7 text-sm text-right px-2 py-1 bg-gray-100 border rounded text-gray-600 flex items-center">
+                        <td className="p-2">
+                          <div className="h-7 text-sm text-right px-2 py-1 bg-gray-100 border rounded text-gray-600 flex items-center">
                             <span className="truncate flex-1">{beneficiaries[0].coverSplit}</span>
                           </div>
                         </td>
-                        <td className="p-2" style={{ width: '80px' }}>
+                        <td className="p-2">
                           <div className="flex gap-1 justify-start">
                             <Button
                               variant="ghost"
@@ -371,14 +371,14 @@ export function SimpleTableWithBeneficiaries({ funds, columnVisibility, tableMod
                       </>
                     ) : (
                       <>
-                        <td className="p-2" style={{ width: '200px' }}>
-                          <div className="w-full h-7 text-sm text-gray-400 px-2 py-1 bg-gray-50 border border-dashed rounded flex items-center justify-center">
+                        <td className="p-2">
+                          <div className="h-7 text-sm text-gray-400 px-2 py-1 bg-gray-50 border border-dashed rounded flex items-center justify-center">
                             No beneficiaries
                           </div>
                         </td>
                         <td className="p-2 percentage-column"></td>
-                        <td className="p-2" style={{ width: '140px' }}></td>
-                        <td className="p-2" style={{ width: '80px' }}>
+                        <td className="p-2"></td>
+                        <td className="p-2">
                           <div className="flex justify-start">
                             <Button
                               variant="ghost"
@@ -567,14 +567,14 @@ export function SimpleTableWithBeneficiaries({ funds, columnVisibility, tableMod
                   {/* Beneficiary details in unapproved life cover section */}
                   {columnVisibility.unapprovedLifeCover && (
                     <>
-                      <td className="p-2 border-l border-neutral-300" style={{ width: '140px' }}></td>
-                      <td className="p-2" style={{ width: '200px' }}>
-                        <Input
+                      <td className="p-2 border-l border-neutral-300"></td>
+                      <td className="p-2">
+                        <AutoSizeInput
                           value={beneficiary.name}
                           onChange={(e) => handleBeneficiaryUpdate(fund.id, actualIndex, 'name', e.target.value)}
                           placeholder="Beneficiary name"
                           disabled={isUpdating}
-                          className="w-full h-7 text-sm text-left bg-white border-gray-200 focus:border-primary"
+                          className="compact-input border-0 focus:bg-white focus:border focus:border-primary hover:bg-neutral-50 transition-colors duration-200"
                         />
                       </td>
                       <td className="p-2 percentage-column">
@@ -590,12 +590,12 @@ export function SimpleTableWithBeneficiaries({ funds, columnVisibility, tableMod
                           placeholder="0"
                         />
                       </td>
-                      <td className="p-2" style={{ width: '140px' }}>
-                        <div className="w-full h-7 text-sm text-right px-2 py-1 bg-gray-100 border rounded text-gray-600 flex items-center">
+                      <td className="p-2">
+                        <div className="h-7 text-sm text-right px-2 py-1 bg-gray-100 border rounded text-gray-600 flex items-center">
                           <span className="truncate flex-1">{beneficiary.coverSplit}</span>
                         </div>
                       </td>
-                      <td className="p-2" style={{ width: '80px' }}>
+                      <td className="p-2">
                         <div className="flex justify-start">
                           <Button
                             variant="ghost"
