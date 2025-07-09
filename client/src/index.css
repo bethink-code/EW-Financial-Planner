@@ -334,6 +334,13 @@ th, td {
   
   /* Clean up - remove old CSS classes */
 
+  /* Compact total span styling - for flows table totals */
+  .compact-total-span {
+    font-weight: 700 !important;
+    color: #094161 !important;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif !important;
+  }
+
   /* Auto-sizing for input fields */
   .auto-size-input {
     width: auto;
