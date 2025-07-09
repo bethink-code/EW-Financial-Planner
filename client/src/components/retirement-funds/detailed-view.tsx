@@ -100,13 +100,13 @@ export function DetailedView({ funds, columnVisibility, onFieldUpdate, isUpdatin
   }
 
   return (
-    <div className="flex h-[calc(100vh-200px)] bg-white rounded-lg border border-neutral-200">
+    <div className="flex min-h-screen bg-white rounded-lg border border-neutral-200">
       {/* Left Sidebar - Fund List */}
       <div className="w-80 border-r border-neutral-200 flex flex-col">
-        <div className="p-4 border-b border-neutral-200">
+        <div className="p-4 border-b border-neutral-200 sticky top-0 bg-white z-10">
           <h3 className="font-semibold text-neutral-900">Funds ({funds.length})</h3>
         </div>
-        <div className="flex-1 overflow-y-auto">
+        <div className="flex-1">
           {funds.map((fund) => (
             <div
               key={fund.id}
@@ -137,7 +137,7 @@ export function DetailedView({ funds, columnVisibility, onFieldUpdate, isUpdatin
       {/* Right Panel - Selected Fund Details */}
       <div className="flex-1 flex flex-col">
         {/* Header */}
-        <div className="p-4 border-b border-neutral-200 bg-gray-50">
+        <div className="p-4 border-b border-neutral-200 bg-gray-50 sticky top-0 z-10">
           <div className="flex items-center gap-4">
             <h2 className="text-xl font-bold text-neutral-900">{selectedFund.description}</h2>
             <Badge variant="outline" className={getOwnerBadgeColor()} style={{ color: '#EA8A2E' }}>
@@ -147,7 +147,7 @@ export function DetailedView({ funds, columnVisibility, onFieldUpdate, isUpdatin
         </div>
 
         {/* Content */}
-        <div className="flex-1 overflow-y-auto p-4 space-y-4">
+        <div className="flex-1 p-4 space-y-4 pb-8">
           {/* Overview Section */}
           {columnVisibility.overview && (
             <div className="bg-teal-50 rounded-lg p-4">
