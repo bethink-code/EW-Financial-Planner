@@ -1,8 +1,7 @@
 import { RetirementFund, UpdateRetirementFund } from "@shared/schema";
-import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Edit3 } from "lucide-react";
-import { useRef, useEffect } from "react";
+import { useRef, useEffect, useMemo, useCallback } from "react";
 
 interface ColumnVisibility {
   overview: boolean;
@@ -74,8 +73,8 @@ const AutoSizeInput = ({ value, onChange, className, placeholder, disabled, styl
 
 export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFieldUpdate, isUpdating }: NewGroupedTableViewProps) {
   
-  // Calculate totals for flows table
-  const calculateFlowsTotals = () => {
+  // Memoized calculations for better performance
+  const flowsTotals = useMemo(() => {
     const totals = {
       estate: 0,
       spouse: 0,
@@ -96,16 +95,17 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
     });
     
     return totals;
-  };
-  
-  const flowsTotals = calculateFlowsTotals();
-  const handleInputChange = (fundId: number, field: keyof UpdateRetirementFund, value: string) => {
+  }, [funds]);
+
+  // Memoized handlers
+  const handleInputChange = useCallback((fundId: number, field: keyof UpdateRetirementFund, value: string) => {
     onFieldUpdate(fundId, field, value);
-  };
+  }, [onFieldUpdate]);
 
-  const owners = ["John Doe", "Jane Smith"];
+  const owners = useMemo(() => ["John Doe", "Jane Smith"], []);
 
-  const renderEditableCell = (value: string, onChange: (value: string) => void, className = "") => {
+  // Memoized editable cell renderer
+  const renderEditableCell = useCallback((value: string, onChange: (value: string) => void, className = "") => {
     return (
       <AutoSizeInput
         value={value}
@@ -115,7 +115,7 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
         disabled={isUpdating}
       />
     );
-  };
+  }, [isUpdating]);
 
   // Flows table structure - following exact same patterns as inputs table
   const renderFlowsTable = () => {

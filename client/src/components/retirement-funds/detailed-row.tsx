@@ -1,4 +1,4 @@
-import { useState, useCallback, memo } from "react";
+import { useState, useCallback, memo, useMemo } from "react";
 import { ChevronRight, ChevronDown, Edit } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -28,10 +28,8 @@ export const DetailedRow = memo(function DetailedRow({ fund, columnVisibility, o
     onFieldUpdate(fund.id, field, value);
   }, [fund.id, onFieldUpdate]);
 
-  const owners = ["John Doe", "Jane Smith", "Sarah Johnson", "David Wilson"];
-  const getOwnerBadgeColor = (owner: string) => {
-    return "bg-white border border-neutral-300";
-  };
+  const owners = useMemo(() => ["John Doe", "Jane Smith", "Sarah Johnson", "David Wilson"], []);
+  const getOwnerBadgeColor = useCallback(() => "bg-white border border-neutral-300", []);
 
   return (
     <div className="border border-neutral-200 rounded-lg bg-white">
@@ -50,7 +48,7 @@ export const DetailedRow = memo(function DetailedRow({ fund, columnVisibility, o
           </div>
           
           <div className="flex items-center gap-4">
-            <Badge variant="outline" className={getOwnerBadgeColor(fund.owner)} style={{ color: '#EA8A2E' }}>
+            <Badge variant="outline" className={getOwnerBadgeColor()} style={{ color: '#EA8A2E' }}>
               {fund.owner}
             </Badge>
             <div className="text-sm text-neutral-600">
