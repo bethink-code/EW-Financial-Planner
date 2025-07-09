@@ -354,7 +354,7 @@ export function SimpleTableWithBeneficiaries({ funds, columnVisibility, tableMod
                           </div>
                         </td>
                         <td className="p-2" style={{ width: '80px' }}>
-                          <div className="flex gap-1 justify-center">
+                          <div className="flex gap-1 justify-start">
                             <Button
                               variant="ghost"
                               size="sm"
@@ -388,7 +388,7 @@ export function SimpleTableWithBeneficiaries({ funds, columnVisibility, tableMod
                         <td className="p-2" style={{ width: '100px' }}></td>
                         <td className="p-2" style={{ width: '140px' }}></td>
                         <td className="p-2" style={{ width: '80px' }}>
-                          <div className="flex justify-center">
+                          <div className="flex justify-start">
                             <Button
                               variant="ghost"
                               size="sm"
@@ -604,7 +604,7 @@ export function SimpleTableWithBeneficiaries({ funds, columnVisibility, tableMod
                         </div>
                       </td>
                       <td className="p-2" style={{ width: '80px' }}>
-                        <div className="flex justify-center">
+                        <div className="flex justify-start">
                           <Button
                             variant="ghost"
                             size="sm"
