@@ -683,6 +683,7 @@ export function SimpleTableWithBeneficiaries({ funds, columnVisibility, tableMod
                 <td className="p-2 text-right"></td>
                 <td className="p-2 text-right"></td>
                 <td className="p-2 text-right"></td>
+                <td className="p-2 text-right"></td>
               </>
             )}
             
@@ -696,6 +697,7 @@ export function SimpleTableWithBeneficiaries({ funds, columnVisibility, tableMod
                     }, 0).toLocaleString()}
                   </span>
                 </td>
+                <td className="p-2 text-right"></td>
                 <td className="p-2 text-right"></td>
                 <td className="p-2 text-right"></td>
                 <td className="p-2 text-right"></td>
@@ -728,12 +730,14 @@ export function SimpleTableWithBeneficiaries({ funds, columnVisibility, tableMod
                     }, 0).toLocaleString()}
                   </span>
                 </td>
+                <td className="p-2 text-right"></td>
               </>
             )}
             
             {columnVisibility.fundValueBeneficiaries && (
               <>
                 <td className="p-2 text-right border-l border-neutral-300"></td>
+                <td className="p-2 text-right"></td>
                 <td className="p-2 text-right"></td>
                 <td className="p-2 text-right"></td>
                 <td className="p-2 text-right"></td>
