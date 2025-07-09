@@ -142,7 +142,7 @@ export function SimpleTableWithBeneficiaries({ funds, columnVisibility, tableMod
 
   return (
     <div className="overflow-x-auto">
-      <table className="min-w-full bg-white table-fixed" style={{ tableLayout: 'fixed' }}>
+      <table className="min-w-full bg-white" style={{ tableLayout: 'auto' }}>
         <thead>
           {/* First level headers */}
           <tr className="border-b border-neutral-200" style={{ backgroundColor: '#D6ECF5' }}>

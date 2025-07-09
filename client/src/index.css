@@ -34,12 +34,12 @@ html {
 /* Auto-size percentage column to fit content */
 .percentage-column {
   width: auto !important;
-  min-width: 80px !important;
-  max-width: 120px !important;
+  min-width: 90px !important;
+  white-space: nowrap !important;
 }
 
 .percentage-input {
-  min-width: 70px !important;
+  min-width: 80px !important;
   width: auto !important;
 }
 
