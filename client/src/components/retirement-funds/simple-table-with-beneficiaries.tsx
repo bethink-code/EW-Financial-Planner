@@ -173,17 +173,17 @@ export function SimpleTableWithBeneficiaries({ funds, columnVisibility, tableMod
               </th>
             )}
             {columnVisibility.monthlyDeathBenefit && (
-              <th className="p-2 text-center font-medium text-neutral-600 uppercase tracking-wider text-xs border-l border-neutral-300" colSpan={5}>
+              <th className="p-2 text-center font-medium text-neutral-600 uppercase tracking-wider text-xs border-l border-neutral-300" colSpan={4}>
                 Monthly death benefit
               </th>
             )}
             {columnVisibility.fundValue && (
-              <th className="p-2 text-center font-medium text-neutral-600 uppercase tracking-wider text-xs border-l border-neutral-300" colSpan={4}>
+              <th className="p-2 text-center font-medium text-neutral-600 uppercase tracking-wider text-xs border-l border-neutral-300" colSpan={3}>
                 Fund value
               </th>
             )}
             {columnVisibility.fundValueBeneficiaries && (
-              <th className="p-2 text-center font-medium text-neutral-600 uppercase tracking-wider text-xs border-l border-neutral-300" colSpan={9}>
+              <th className="p-2 text-center font-medium text-neutral-600 uppercase tracking-wider text-xs border-l border-neutral-300" colSpan={8}>
                 Fund value beneficiaries
               </th>
             )}
@@ -234,9 +234,6 @@ export function SimpleTableWithBeneficiaries({ funds, columnVisibility, tableMod
                 <th className="table-cell text-left table-header-12 text-neutral-600 uppercase tracking-wider">
                   Escalation amount
                 </th>
-                <th className="table-cell text-center table-header-12 text-neutral-600 uppercase tracking-wider">
-                  Actions
-                </th>
               </>
             )}
             {columnVisibility.fundValue && (
@@ -249,9 +246,6 @@ export function SimpleTableWithBeneficiaries({ funds, columnVisibility, tableMod
                 </th>
                 <th className="table-cell text-left table-header-12 text-neutral-600 uppercase tracking-wider">
                   Fund value at death
-                </th>
-                <th className="table-cell text-center table-header-12 text-neutral-600 uppercase tracking-wider">
-                  Actions
                 </th>
               </>
             )}
@@ -280,9 +274,6 @@ export function SimpleTableWithBeneficiaries({ funds, columnVisibility, tableMod
                 </th>
                 <th className="table-cell text-left table-header-12 text-neutral-600 uppercase tracking-wider">
                   Income term
-                </th>
-                <th className="table-cell text-center table-header-12 text-neutral-600 uppercase tracking-wider">
-                  Actions
                 </th>
               </>
             )}
@@ -450,7 +441,6 @@ export function SimpleTableWithBeneficiaries({ funds, columnVisibility, tableMod
                         disabled={isUpdating}
                       />
                     </td>
-                    <td className="p-2"></td>
                   </>
                 )}
 
@@ -483,7 +473,6 @@ export function SimpleTableWithBeneficiaries({ funds, columnVisibility, tableMod
                         disabled={isUpdating}
                       />
                     </td>
-                    <td className="p-2"></td>
                   </>
                 )}
 
@@ -561,7 +550,6 @@ export function SimpleTableWithBeneficiaries({ funds, columnVisibility, tableMod
                         disabled={isUpdating}
                       />
                     </td>
-                    <td className="p-2"></td>
                   </>
                 )}
               </tr>
@@ -634,7 +622,6 @@ export function SimpleTableWithBeneficiaries({ funds, columnVisibility, tableMod
                       <td className="p-2"></td>
                       <td className="p-2"></td>
                       <td className="p-2"></td>
-                      <td className="p-2"></td>
                     </>
                   )}
 
@@ -643,14 +630,12 @@ export function SimpleTableWithBeneficiaries({ funds, columnVisibility, tableMod
                       <td className="p-2 border-l border-neutral-300"></td>
                       <td className="p-2"></td>
                       <td className="p-2"></td>
-                      <td className="p-2"></td>
                     </>
                   )}
 
                   {columnVisibility.fundValueBeneficiaries && (
                     <>
                       <td className="p-2 border-l border-neutral-300"></td>
-                      <td className="p-2"></td>
                       <td className="p-2"></td>
                       <td className="p-2"></td>
                       <td className="p-2"></td>
@@ -708,7 +693,6 @@ export function SimpleTableWithBeneficiaries({ funds, columnVisibility, tableMod
                 <td className="p-2 text-right"></td>
                 <td className="p-2 text-right"></td>
                 <td className="p-2 text-right"></td>
-                <td className="p-2 text-right"></td>
               </>
             )}
             
@@ -738,14 +722,12 @@ export function SimpleTableWithBeneficiaries({ funds, columnVisibility, tableMod
                     }, 0).toLocaleString()}
                   </span>
                 </td>
-                <td className="p-2 text-right"></td>
               </>
             )}
             
             {columnVisibility.fundValueBeneficiaries && (
               <>
                 <td className="p-2 text-right border-l border-neutral-300"></td>
-                <td className="p-2 text-right"></td>
                 <td className="p-2 text-right"></td>
                 <td className="p-2 text-right"></td>
                 <td className="p-2 text-right"></td>

@@ -144,3 +144,4 @@ Changelog:
 - July 08, 2025: **COMPACT STYLING & BOLD TOTALS** - Implemented compact cell spacing matching dropdown heights, applied proper bold styling (font-weight: 700) to total rows with explicit font family overrides
 - July 09, 2025: **MAJOR CLEANUP & OPTIMIZATION** - Comprehensive code cleanup with performance optimizations including React.memo, useCallback, useMemo for enhanced rendering efficiency, removed unused CSS classes, streamlined component structure
 - July 09, 2025: **INPUT FIELD SIZING OPTIMIZATION** - Fixed AutoSizeInput component with Canvas API text measurement for accurate content-based sizing, eliminated text truncation issues, maintained 80px percentage column width
+- July 09, 2025: **ACTIONS COLUMN OPTIMIZATION** - Restricted Actions column to only appear in Unapproved Life Cover section, removed from Monthly Death Benefit, Fund Value, and Fund Value Beneficiaries sections for cleaner table layout
