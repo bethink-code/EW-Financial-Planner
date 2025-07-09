@@ -306,7 +306,7 @@ export function SimpleTableWithBeneficiaries({ funds, columnVisibility, tableMod
                         onValueChange={(value) => handleInputChange(fund.id, "owner", value)}
                         disabled={isUpdating}
                       >
-                        <SelectTrigger className="compact-input border-0 focus:bg-white focus:border focus:border-primary hover:bg-neutral-50 transition-colors duration-200 group">
+                        <SelectTrigger className="table-input h-7 min-w-[120px] w-auto max-w-[200px] text-right border-0 focus:bg-white focus:border focus:border-primary hover:bg-neutral-50 transition-colors duration-200 group">
                           <SelectValue />
                           <Edit3 size={12} className="ml-1 text-teal-400 opacity-0 group-hover:opacity-100 transition-opacity duration-200" />
                         </SelectTrigger>
