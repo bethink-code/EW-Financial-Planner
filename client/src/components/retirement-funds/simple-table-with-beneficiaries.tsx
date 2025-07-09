@@ -371,7 +371,8 @@ export function SimpleTableWithBeneficiaries({ funds, columnVisibility, tableMod
                               size="sm"
                               onClick={() => handleAddBeneficiary(fund.id)}
                               disabled={isUpdating || beneficiaries.length >= 10}
-                              className="h-7 w-7 p-0 text-blue-600 hover:text-blue-800 hover:bg-blue-100"
+                              className="h-7 w-7 p-0 hover:bg-orange-100"
+                              style={{ color: '#EA8A2E' }}
                             >
                               <Plus className="h-4 w-4" />
                             </Button>
@@ -394,7 +395,8 @@ export function SimpleTableWithBeneficiaries({ funds, columnVisibility, tableMod
                               size="sm"
                               onClick={() => handleAddBeneficiary(fund.id)}
                               disabled={isUpdating}
-                              className="h-7 w-7 p-0 text-blue-600 hover:text-blue-800 hover:bg-blue-100"
+                              className="h-7 w-7 p-0 hover:bg-orange-100"
+                              style={{ color: '#EA8A2E' }}
                             >
                               <Plus className="h-4 w-4" />
                             </Button>
@@ -609,7 +611,8 @@ export function SimpleTableWithBeneficiaries({ funds, columnVisibility, tableMod
                             size="sm"
                             onClick={() => handleRemoveBeneficiary(fund.id, actualIndex)}
                             disabled={isUpdating}
-                            className="h-7 w-7 p-0 text-red-500 hover:text-red-700 hover:bg-red-50"
+                            className="h-7 w-7 p-0 hover:bg-gray-100"
+                            style={{ color: '#4D4D4F' }}
                           >
                             <Trash2 className="h-4 w-4" />
                           </Button>
