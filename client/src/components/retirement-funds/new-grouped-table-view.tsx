@@ -154,12 +154,12 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
                       </td>
                     </tr>
                   ))}
-                  <tr className="bg-gray-100 font-semibold border-t-2 border-neutral-300">
-                    <td className="p-2 ">Total</td>
-                    <td className="p-2 text-right ">0</td>
-                    <td className="p-2 text-right ">0</td>
-                    <td className="p-2 text-right ">0</td>
-                    <td className="p-2 text-right">0</td>
+                  <tr className="bg-gray-100 font-bold border-t-2 border-neutral-300">
+                    <td className="p-2 font-bold">Total</td>
+                    <td className="p-2 text-right font-bold">0</td>
+                    <td className="p-2 text-right font-bold">0</td>
+                    <td className="p-2 text-right font-bold">0</td>
+                    <td className="p-2 text-right font-bold">0</td>
                   </tr>
                 </tbody>
               </table>
@@ -196,11 +196,11 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
                       </td>
                     </tr>
                   ))}
-                  <tr className="bg-gray-100 font-semibold border-t-2 border-neutral-300">
-                    <td className="p-2 ">Total</td>
-                    <td className="p-2 text-right ">0</td>
-                    <td className="p-2 text-right ">0</td>
-                    <td className="p-2 text-right">0</td>
+                  <tr className="bg-gray-100 font-bold border-t-2 border-neutral-300">
+                    <td className="p-2 font-bold">Total</td>
+                    <td className="p-2 text-right font-bold">0</td>
+                    <td className="p-2 text-right font-bold">0</td>
+                    <td className="p-2 text-right font-bold">0</td>
                   </tr>
                 </tbody>
               </table>
@@ -241,12 +241,12 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
                       </td>
                     </tr>
                   ))}
-                  <tr className="bg-gray-100 font-semibold border-t-2 border-neutral-300">
-                    <td className="p-2 ">Total</td>
-                    <td className="p-2 text-right ">0</td>
-                    <td className="p-2 text-right ">0</td>
-                    <td className="p-2 text-right ">0</td>
-                    <td className="p-2 text-right">0</td>
+                  <tr className="bg-gray-100 font-bold border-t-2 border-neutral-300">
+                    <td className="p-2 font-bold">Total</td>
+                    <td className="p-2 text-right font-bold">0</td>
+                    <td className="p-2 text-right font-bold">0</td>
+                    <td className="p-2 text-right font-bold">0</td>
+                    <td className="p-2 text-right font-bold">0</td>
                   </tr>
                 </tbody>
               </table>
@@ -287,12 +287,12 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
                       </td>
                     </tr>
                   ))}
-                  <tr className="bg-gray-100 font-semibold border-t-2 border-neutral-300">
-                    <td className="p-2 ">Total</td>
-                    <td className="p-2 text-right ">0</td>
-                    <td className="p-2 text-right ">0</td>
-                    <td className="p-2 text-right ">0</td>
-                    <td className="p-2 text-right">0</td>
+                  <tr className="bg-gray-100 font-bold border-t-2 border-neutral-300">
+                    <td className="p-2 font-bold">Total</td>
+                    <td className="p-2 text-right font-bold">0</td>
+                    <td className="p-2 text-right font-bold">0</td>
+                    <td className="p-2 text-right font-bold">0</td>
+                    <td className="p-2 text-right font-bold">0</td>
                   </tr>
                 </tbody>
               </table>
@@ -571,7 +571,7 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
             ))}
             
             {/* Flows total row */}
-            <tr className="bg-gray-100 font-semibold">
+            <tr className="bg-gray-100 font-bold">
               {columnVisibility.overview && (
                 <>
                 {/* Description */}
@@ -1085,7 +1085,7 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
           ))}
           
           {/* Totals row */}
-          <tr className="bg-gray-100 font-semibold border-t-2 border-neutral-300">
+          <tr className="bg-gray-100 font-bold border-t-2 border-neutral-300">
             {/* Overview Section */}
             {columnVisibility.overview && (
               <>
