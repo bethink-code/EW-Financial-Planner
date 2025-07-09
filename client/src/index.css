@@ -316,6 +316,13 @@ th, td {
     border: 1px solid #00aef0;
   }
   
+  /* Ensure Select components display full text */
+  .table-input [data-radix-select-value] {
+    text-overflow: clip !important;
+    overflow: visible !important;
+    white-space: nowrap !important;
+  }
+  
   /* Total rows - bold styling */
   .table-total-row {
     height: 2rem;

@@ -196,7 +196,7 @@ export function SimpleTableWithBeneficiaries({ funds, columnVisibility, tableMod
                 <th className="table-cell text-left table-header-12 text-neutral-600 uppercase tracking-wider">
                   Description
                 </th>
-                <th className="table-cell text-left table-header-12 text-neutral-600 uppercase tracking-wider">
+                <th className="table-cell text-left table-header-12 text-neutral-600 uppercase tracking-wider min-w-[140px]">
                   Owner
                 </th>
               </>
@@ -306,8 +306,8 @@ export function SimpleTableWithBeneficiaries({ funds, columnVisibility, tableMod
                         onValueChange={(value) => handleInputChange(fund.id, "owner", value)}
                         disabled={isUpdating}
                       >
-                        <SelectTrigger className="table-input h-7 min-w-[120px] w-auto max-w-[200px] text-right border-0 focus:bg-white focus:border focus:border-primary hover:bg-neutral-50 transition-colors duration-200 group">
-                          <SelectValue />
+                        <SelectTrigger className="table-input h-7 min-w-[140px] w-full max-w-[180px] text-right border-0 focus:bg-white focus:border focus:border-primary hover:bg-neutral-50 transition-colors duration-200 group">
+                          <SelectValue className="text-right pr-6" />
                           <Edit3 size={12} className="ml-1 text-teal-400 opacity-0 group-hover:opacity-100 transition-opacity duration-200" />
                         </SelectTrigger>
                         <SelectContent>
