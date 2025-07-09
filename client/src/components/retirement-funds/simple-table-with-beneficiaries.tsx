@@ -313,26 +313,75 @@ export function SimpleTableWithBeneficiaries({ funds, columnVisibility, tableMod
                         disabled={isUpdating}
                       />
                     </td>
-                    <td className="p-2 text-center bg-blue-50 text-sm font-semibold text-blue-700" style={{ width: '200px' }}>
-                      <div className="flex items-center justify-center gap-2">
-                        <span>Beneficiaries ({beneficiaries.length})</span>
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          onClick={() => handleAddBeneficiary(fund.id)}
-                          disabled={isUpdating || beneficiaries.length >= 10}
-                          className="h-6 w-6 p-0 text-blue-600 hover:text-blue-800 hover:bg-blue-100"
-                        >
-                          <Plus className="h-3 w-3" />
-                        </Button>
-                      </div>
-                    </td>
-                    <td className="p-2 text-center bg-blue-50 text-sm font-semibold text-blue-700" style={{ width: '100px' }}>
-                      %
-                    </td>
-                    <td className="p-2 text-center bg-blue-50 text-sm font-semibold text-blue-700" style={{ width: '140px' }}>
-                      Cover Split
-                    </td>
+                    {beneficiaries.length > 0 ? (
+                      <>
+                        <td className="p-2" style={{ width: '200px' }}>
+                          <Input
+                            value={beneficiaries[0].name}
+                            onChange={(e) => handleBeneficiaryUpdate(fund.id, 0, 'name', e.target.value)}
+                            placeholder="Beneficiary name"
+                            disabled={isUpdating}
+                            className="w-full h-7 text-sm text-left bg-white border-gray-200 focus:border-primary"
+                          />
+                        </td>
+                        <td className="p-2" style={{ width: '100px' }}>
+                          <Input
+                            type="number"
+                            value={beneficiaries[0].percentage}
+                            onChange={(e) => handleBeneficiaryUpdate(fund.id, 0, 'percentage', e.target.value)}
+                            min="0"
+                            max="100"
+                            step="0.1"
+                            disabled={isUpdating}
+                            className="w-full h-7 text-sm text-center bg-white border-gray-200 focus:border-primary"
+                          />
+                        </td>
+                        <td className="p-2" style={{ width: '140px' }}>
+                          <div className="w-full h-7 text-sm text-right px-2 py-1 bg-gray-100 border rounded text-gray-600 flex items-center justify-between">
+                            <span className="truncate flex-1">{beneficiaries[0].coverSplit}</span>
+                            <div className="flex gap-1 ml-2 flex-shrink-0">
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                onClick={() => handleAddBeneficiary(fund.id)}
+                                disabled={isUpdating || beneficiaries.length >= 10}
+                                className="h-5 w-5 p-0 text-blue-600 hover:text-blue-800 hover:bg-blue-100"
+                              >
+                                <Plus className="h-3 w-3" />
+                              </Button>
+                              {beneficiaries.length > 1 && (
+                                <Button
+                                  variant="ghost"
+                                  size="sm"
+                                  onClick={() => handleRemoveBeneficiary(fund.id, 0)}
+                                  disabled={isUpdating}
+                                  className="h-5 w-5 p-0 text-red-500 hover:text-red-700 hover:bg-red-50"
+                                >
+                                  <Trash2 className="h-3 w-3" />
+                                </Button>
+                              )}
+                            </div>
+                          </div>
+                        </td>
+                      </>
+                    ) : (
+                      <>
+                        <td className="p-2" style={{ width: '200px' }}>
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={() => handleAddBeneficiary(fund.id)}
+                            disabled={isUpdating}
+                            className="w-full h-7 text-sm text-blue-600 hover:text-blue-800 hover:bg-blue-100 border border-dashed border-blue-300"
+                          >
+                            <Plus className="h-3 w-3 mr-1" />
+                            Add Beneficiary
+                          </Button>
+                        </td>
+                        <td className="p-2" style={{ width: '100px' }}></td>
+                        <td className="p-2" style={{ width: '140px' }}></td>
+                      </>
+                    )}
                   </>
                 )}
 
@@ -488,14 +537,15 @@ export function SimpleTableWithBeneficiaries({ funds, columnVisibility, tableMod
               </tr>
             );
 
-            // Add beneficiary rows
-            beneficiaries.forEach((beneficiary, index) => {
+            // Add additional beneficiary rows (starting from index 1)
+            beneficiaries.slice(1).forEach((beneficiary, index) => {
+              const actualIndex = index + 1; // Since we're starting from slice(1)
               rows.push(
                 <tr key={`${fund.id}-beneficiary-${beneficiary.id}`} className="bg-teal-50/30 hover:bg-teal-50">
                   {/* Empty cells for overview columns */}
                   {columnVisibility.overview && (
                     <>
-                      <td className="p-2 text-xs text-gray-500 pl-6">↳ Beneficiary {index + 1}</td>
+                      <td className="p-2 text-xs text-gray-500 pl-6">↳ Beneficiary {actualIndex + 1}</td>
                       <td className="p-2"></td>
                     </>
                   )}
@@ -507,7 +557,7 @@ export function SimpleTableWithBeneficiaries({ funds, columnVisibility, tableMod
                       <td className="p-2" style={{ width: '200px' }}>
                         <Input
                           value={beneficiary.name}
-                          onChange={(e) => handleBeneficiaryUpdate(fund.id, index, 'name', e.target.value)}
+                          onChange={(e) => handleBeneficiaryUpdate(fund.id, actualIndex, 'name', e.target.value)}
                           placeholder="Beneficiary name"
                           disabled={isUpdating}
                           className="w-full h-7 text-sm text-left bg-white border-gray-200 focus:border-primary"
@@ -517,7 +567,7 @@ export function SimpleTableWithBeneficiaries({ funds, columnVisibility, tableMod
                         <Input
                           type="number"
                           value={beneficiary.percentage}
-                          onChange={(e) => handleBeneficiaryUpdate(fund.id, index, 'percentage', e.target.value)}
+                          onChange={(e) => handleBeneficiaryUpdate(fund.id, actualIndex, 'percentage', e.target.value)}
                           min="0"
                           max="100"
                           step="0.1"
@@ -528,17 +578,15 @@ export function SimpleTableWithBeneficiaries({ funds, columnVisibility, tableMod
                       <td className="p-2" style={{ width: '140px' }}>
                         <div className="w-full h-7 text-sm text-right px-2 py-1 bg-gray-100 border rounded text-gray-600 flex items-center justify-between">
                           <span className="truncate flex-1">{beneficiary.coverSplit}</span>
-                          {beneficiaries.length > 1 && (
-                            <Button
-                              variant="ghost"
-                              size="sm"
-                              onClick={() => handleRemoveBeneficiary(fund.id, index)}
-                              disabled={isUpdating}
-                              className="h-5 w-5 p-0 text-red-500 hover:text-red-700 hover:bg-red-50 ml-2 flex-shrink-0"
-                            >
-                              <Trash2 className="h-3 w-3" />
-                            </Button>
-                          )}
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={() => handleRemoveBeneficiary(fund.id, actualIndex)}
+                            disabled={isUpdating}
+                            className="h-5 w-5 p-0 text-red-500 hover:text-red-700 hover:bg-red-50 ml-2 flex-shrink-0"
+                          >
+                            <Trash2 className="h-3 w-3" />
+                          </Button>
                         </div>
                       </td>
                     </>
