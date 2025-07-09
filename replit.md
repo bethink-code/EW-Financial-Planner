@@ -143,3 +143,4 @@ Changelog:
 - July 08, 2025: **FLOWS TABLE** - Added complete flows table for table view only, follows exact patterns and styles of inputs table with dedicated summary section
 - July 08, 2025: **COMPACT STYLING & BOLD TOTALS** - Implemented compact cell spacing matching dropdown heights, applied proper bold styling (font-weight: 700) to total rows with explicit font family overrides
 - July 09, 2025: **MAJOR CLEANUP & OPTIMIZATION** - Comprehensive code cleanup with performance optimizations including React.memo, useCallback, useMemo for enhanced rendering efficiency, removed unused CSS classes, streamlined component structure
+- July 09, 2025: **INPUT FIELD SIZING OPTIMIZATION** - Fixed AutoSizeInput component with Canvas API text measurement for accurate content-based sizing, eliminated text truncation issues, maintained 80px percentage column width
