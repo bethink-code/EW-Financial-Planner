@@ -39,12 +39,15 @@ export function DetailedView({ funds, columnVisibility, onFieldUpdate, isUpdatin
     // Fields that should have currency formatting
     const currencyFields = [
       'coverAmount', 'monthlyIncome', 'approvedLifeCover', 'fundValue', 'fundValueAtDeath', 
-      'amount', 'lumpSumTaken', 'nondeductibleContribution', 'livingAnnuity', 'escalationAmount'
+      'amount', 'lumpSumTaken', 'nondeductibleContribution', 'livingAnnuity', 'escalationAmount',
+      'currentAnnualIncome', 'annualIncomeAtDeath', 'estateDeploymentDeceased', 'monthlyProvisionOffered',
+      'lumpSumProvisionEstate', 'lumpSumProvisionSpouse', 'lumpSumProvisionOther'
     ];
     
     // Fields that should have percentage formatting (% suffix)
     const percentageFields = [
-      'increasePercentage', 'beneficiaryPercentageSplit', 'percentage'
+      'increasePercentage', 'beneficiaryPercentageSplit', 'percentage', 'incomeEscalation',
+      'executorsFee', 'mastersFee', 'estateDutyPoliciesOnLife', 'estateDutyToSpouse', 'estateDutyToOthers'
     ];
     
     // Fields that should have years formatting (years suffix)
