@@ -19,6 +19,7 @@ const AutoSizeInput = ({
   style = {},
   fundId,
   field,
+  formatCurrencyValue,
   ...props 
 }: {
   value: string;
@@ -29,12 +30,19 @@ const AutoSizeInput = ({
   style?: React.CSSProperties;
   fundId?: number;
   field?: string;
+  formatCurrencyValue?: (value: string, field: string) => string;
   type?: string;
 }) => {
   return (
     <input
       defaultValue={value}
-      onBlur={onChange}
+      onBlur={(e) => {
+        const formattedValue = formatCurrencyValue ? formatCurrencyValue(e.target.value, field || '') : e.target.value;
+        if (formattedValue !== e.target.value) {
+          e.target.value = formattedValue;
+        }
+        onChange(e);
+      }}
       className={`table-input ${className}`}
       placeholder={placeholder}
       disabled={disabled}
@@ -91,6 +99,13 @@ export function DetailedView({ funds, columnVisibility, onFieldUpdate, isUpdatin
   }, []);
 
   const handleFieldChange = useCallback((field: keyof UpdateRetirementFund, value: string) => {
+    if (selectedFund) {
+      const formattedValue = formatCurrencyValue(value, field);
+      onFieldUpdate(selectedFund.id, field, formattedValue);
+    }
+  }, [selectedFund, onFieldUpdate, formatCurrencyValue]);
+
+  const handleFieldBlur = useCallback((field: keyof UpdateRetirementFund, value: string) => {
     if (selectedFund) {
       const formattedValue = formatCurrencyValue(value, field);
       onFieldUpdate(selectedFund.id, field, formattedValue);
@@ -190,6 +205,8 @@ export function DetailedView({ funds, columnVisibility, onFieldUpdate, isUpdatin
                     onChange={(e) => handleFieldChange("description", e.target.value)}
                     className="h-9 text-sm"
                     disabled={isUpdating}
+                    field="description"
+                    formatCurrencyValue={formatCurrencyValue}
                   />
                 </div>
                 <div>
@@ -233,6 +250,8 @@ export function DetailedView({ funds, columnVisibility, onFieldUpdate, isUpdatin
                   disabled={isUpdating}
                   placeholder="R 0"
                   style={{ textAlign: 'right' }}
+                  field="coverAmount"
+                  formatCurrencyValue={formatCurrencyValue}
                 />
               </div>
               <BeneficiarySection
@@ -259,6 +278,8 @@ export function DetailedView({ funds, columnVisibility, onFieldUpdate, isUpdatin
                     disabled={isUpdating}
                     placeholder="R 0"
                     style={{ textAlign: 'right' }}
+                    field="monthlyIncome"
+                    formatCurrencyValue={formatCurrencyValue}
                   />
                 </div>
                 <div>
@@ -269,6 +290,8 @@ export function DetailedView({ funds, columnVisibility, onFieldUpdate, isUpdatin
                     className="h-9 text-sm text-right"
                     disabled={isUpdating}
                     style={{ textAlign: 'right' }}
+                    field="termYears"
+                    formatCurrencyValue={formatCurrencyValue}
                   />
                 </div>
                 <div>
@@ -280,6 +303,8 @@ export function DetailedView({ funds, columnVisibility, onFieldUpdate, isUpdatin
                     disabled={isUpdating}
                     placeholder="5%"
                     style={{ textAlign: 'right' }}
+                    field="increasePercentage"
+                    formatCurrencyValue={formatCurrencyValue}
                   />
                 </div>
                 <div>
@@ -291,6 +316,8 @@ export function DetailedView({ funds, columnVisibility, onFieldUpdate, isUpdatin
                     disabled={isUpdating}
                     placeholder="R 0"
                     style={{ textAlign: 'right' }}
+                    field="lumpSumDeath"
+                    formatCurrencyValue={formatCurrencyValue}
                   />
                 </div>
               </div>
@@ -311,6 +338,8 @@ export function DetailedView({ funds, columnVisibility, onFieldUpdate, isUpdatin
                     disabled={isUpdating}
                     placeholder="R 0"
                     style={{ textAlign: 'right' }}
+                    field="approvedLifeCover"
+                    formatCurrencyValue={formatCurrencyValue}
                   />
                 </div>
                 <div>
@@ -322,6 +351,8 @@ export function DetailedView({ funds, columnVisibility, onFieldUpdate, isUpdatin
                     disabled={isUpdating}
                     placeholder="R 0"
                     style={{ textAlign: 'right' }}
+                    field="fundValue"
+                    formatCurrencyValue={formatCurrencyValue}
                   />
                 </div>
                 <div>
@@ -367,6 +398,8 @@ export function DetailedView({ funds, columnVisibility, onFieldUpdate, isUpdatin
                     disabled={isUpdating}
                     placeholder="0%"
                     style={{ textAlign: 'right' }}
+                    field="beneficiaryPercentageSplit"
+                    formatCurrencyValue={formatCurrencyValue}
                   />
                 </div>
                 <div>
@@ -384,6 +417,8 @@ export function DetailedView({ funds, columnVisibility, onFieldUpdate, isUpdatin
                     disabled={isUpdating}
                     placeholder="R 0"
                     style={{ textAlign: 'right' }}
+                    field="lumpSumTaken"
+                    formatCurrencyValue={formatCurrencyValue}
                   />
                 </div>
                 <div>
@@ -395,6 +430,8 @@ export function DetailedView({ funds, columnVisibility, onFieldUpdate, isUpdatin
                     disabled={isUpdating}
                     placeholder="R 0"
                     style={{ textAlign: 'right' }}
+                    field="nondeductibleContribution"
+                    formatCurrencyValue={formatCurrencyValue}
                   />
                 </div>
                 <div>
@@ -412,6 +449,8 @@ export function DetailedView({ funds, columnVisibility, onFieldUpdate, isUpdatin
                     disabled={isUpdating}
                     placeholder="Income term"
                     style={{ textAlign: 'right' }}
+                    field="incomeTerm"
+                    formatCurrencyValue={formatCurrencyValue}
                   />
                 </div>
               </div>

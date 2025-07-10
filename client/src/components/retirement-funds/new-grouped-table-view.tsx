@@ -106,7 +106,7 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
     }
   }, []);
   // Memoized handlers
-  const handleInputChange = useCallback((fundId: number, field: keyof UpdateRetirementFund, value: string) => {
+  const handleInputBlur = useCallback((fundId: number, field: keyof UpdateRetirementFund, value: string) => {
     const formattedValue = formatCurrencyValue(value, field);
     onFieldUpdate(fundId, field, formattedValue);
   }, [onFieldUpdate, formatCurrencyValue]);
@@ -172,17 +172,23 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
   }, [funds, onFieldUpdate]);
   const owners = useMemo(() => ["John Doe", "Jane Smith"], []);
   // Memoized editable cell renderer
-  const renderEditableCell = useCallback((value: string, onChange: (value: string) => void, className = "") => {
+  const renderEditableCell = useCallback((value: string, onChange: (value: string) => void, className = "", field = "") => {
     return (
-      <AutoSizeInput
-        value={value}
-        onChange={(e) => onChange(e.target.value)}
-        className={`p-1 table-text-14 text-right bg-[#F2F7FB] border-none focus:bg-white focus:border focus:border-primary hover:bg-neutral-50 ${className}`}
+      <input
+        defaultValue={value}
+        onBlur={(e) => {
+          const formattedValue = formatCurrencyValue(e.target.value, field);
+          if (formattedValue !== e.target.value) {
+            e.target.value = formattedValue;
+          }
+          onChange(e.target.value);
+        }}
+        className={`p-1 table-text-14 text-right bg-[#F2F7FB] border-none focus:bg-white focus:border focus:border-primary hover:bg-neutral-50 table-input ${className}`}
         style={{ textAlign: 'right', minWidth: '60px' }}
         disabled={isUpdating}
       />
     );
-  }, [isUpdating]);
+  }, [isUpdating, formatCurrencyValue]);
   // Flows table structure - removed temporarily to fix JSX syntax error
   if (tableMode === "flows") {
     // Render flows table only
@@ -298,27 +304,45 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
                 {columnVisibility.overview && (
                   <>
                     <td className="p-2 text-right ">
-                      <AutoSizeInput
-                        value={fund.lumpSumLeftOverProvisions || "0"}
-                        onChange={(e) => handleInputChange(fund.id, "lumpSumLeftOverProvisions", e.target.value)}
+                      <input
+                        defaultValue={fund.lumpSumLeftOverProvisions || "0"}
+                        onBlur={(e) => {
+                          const formattedValue = formatCurrencyValue(e.target.value, "lumpSumLeftOverProvisions");
+                          if (formattedValue !== e.target.value) {
+                            e.target.value = formattedValue;
+                          }
+                          handleInputBlur(fund.id, "lumpSumLeftOverProvisions", e.target.value);
+                        }}
                         className="table-input"
                         style={{ textAlign: 'right', minWidth: '60px' }}
                         disabled={isUpdating}
                       />
                     </td>
                     <td className="p-2 text-right ">
-                      <AutoSizeInput
-                        value={fund.lumpSumLeftOverProvisions || "0"}
-                        onChange={(e) => handleInputChange(fund.id, "lumpSumLeftOverProvisions", e.target.value)}
+                      <input
+                        defaultValue={fund.lumpSumLeftOverProvisions || "0"}
+                        onBlur={(e) => {
+                          const formattedValue = formatCurrencyValue(e.target.value, "lumpSumLeftOverProvisions");
+                          if (formattedValue !== e.target.value) {
+                            e.target.value = formattedValue;
+                          }
+                          handleInputBlur(fund.id, "lumpSumLeftOverProvisions", e.target.value);
+                        }}
                         className="table-input"
                         style={{ textAlign: 'right', minWidth: '60px' }}
                         disabled={isUpdating}
                       />
                     </td>
                     <td className="p-2 text-right ">
-                      <AutoSizeInput
-                        value={fund.lumpSumLeftOverProvisions || "0"}
-                        onChange={(e) => handleInputChange(fund.id, "lumpSumLeftOverProvisions", e.target.value)}
+                      <input
+                        defaultValue={fund.lumpSumLeftOverProvisions || "0"}
+                        onBlur={(e) => {
+                          const formattedValue = formatCurrencyValue(e.target.value, "lumpSumLeftOverProvisions");
+                          if (formattedValue !== e.target.value) {
+                            e.target.value = formattedValue;
+                          }
+                          handleInputBlur(fund.id, "lumpSumLeftOverProvisions", e.target.value);
+                        }}
                         className="table-input"
                         style={{ textAlign: 'right', minWidth: '60px' }}
                         disabled={isUpdating}
@@ -329,32 +353,32 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
                 {columnVisibility.monthlyDeathBenefit && (
                   <>
                     <td className="p-2 text-right border-l border-neutral-300">
-                      <AutoSizeInput
-                        
-                        value={fund.lumpSumLeftOverProvisions || "0"}
-                        onChange={(e) => handleInputChange(fund.id, "lumpSumLeftOverProvisions", e.target.value)}
+                      <input
+                        defaultValue={fund.lumpSumLeftOverProvisions || "0"}
+                        onBlur={(e) => {
+                          const formattedValue = formatCurrencyValue(e.target.value, "lumpSumLeftOverProvisions");
+                          if (formattedValue !== e.target.value) {
+                            e.target.value = formattedValue;
+                          }
+                          handleInputBlur(fund.id, "lumpSumLeftOverProvisions", e.target.value);
+                        }}
                         className="table-input" style={{ textAlign: "right" }}
-                        
                         disabled={isUpdating}
                       />
                     </td>
                     <td className="p-2 text-right ">
-                      <AutoSizeInput
-                        
-                        value={fund.incomeTerm || "0"}
-                        onChange={(e) => handleInputChange(fund.id, "incomeTerm", e.target.value)}
+                      <input
+                        defaultValue={fund.incomeTerm || "0"}
+                        onBlur={(e) => handleInputBlur(fund.id, "incomeTerm", e.target.value)}
                         className="table-input" style={{ textAlign: "right" }}
-                        
                         disabled={isUpdating}
                       />
                     </td>
                     <td className="p-2 text-right ">
-                      <AutoSizeInput
-                        
-                        value={fund.incomeEscalation || "0%"}
-                        onChange={(e) => handleInputChange(fund.id, "incomeEscalation", e.target.value)}
+                      <input
+                        defaultValue={fund.incomeEscalation || "0%"}
+                        onBlur={(e) => handleInputBlur(fund.id, "incomeEscalation", e.target.value)}
                         className="table-input" style={{ textAlign: "right" }}
-                        
                         disabled={isUpdating}
                       />
                     </td>
@@ -363,32 +387,32 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
                 {columnVisibility.fundValue && (
                   <>
                     <td className="p-2 text-right border-l border-neutral-300">
-                      <AutoSizeInput
-                        
-                        value={fund.estateDeploymentDeceased || "0"}
-                        onChange={(e) => handleInputChange(fund.id, "estateDeploymentDeceased", e.target.value)}
+                      <input
+                        defaultValue={fund.estateDeploymentDeceased || "0"}
+                        onBlur={(e) => {
+                          const formattedValue = formatCurrencyValue(e.target.value, "estateDeploymentDeceased");
+                          if (formattedValue !== e.target.value) {
+                            e.target.value = formattedValue;
+                          }
+                          handleInputBlur(fund.id, "estateDeploymentDeceased", e.target.value);
+                        }}
                         className="table-input" style={{ textAlign: "right" }}
-                        
                         disabled={isUpdating}
                       />
                     </td>
                     <td className="p-2 text-right ">
-                      <AutoSizeInput
-                        
-                        value={fund.incomeTerm || "0"}
-                        onChange={(e) => handleInputChange(fund.id, "incomeTerm", e.target.value)}
+                      <input
+                        defaultValue={fund.incomeTerm || "0"}
+                        onBlur={(e) => handleInputBlur(fund.id, "incomeTerm", e.target.value)}
                         className="table-input" style={{ textAlign: "right" }}
-                        
                         disabled={isUpdating}
                       />
                     </td>
                     <td className="p-2 text-right ">
-                      <AutoSizeInput
-                        
-                        value={fund.incomeEscalation || "0%"}
-                        onChange={(e) => handleInputChange(fund.id, "incomeEscalation", e.target.value)}
+                      <input
+                        defaultValue={fund.incomeEscalation || "0%"}
+                        onBlur={(e) => handleInputBlur(fund.id, "incomeEscalation", e.target.value)}
                         className="table-input" style={{ textAlign: "right" }}
-                        
                         disabled={isUpdating}
                       />
                     </td>
@@ -397,50 +421,45 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
                 {columnVisibility.fundValueBeneficiaries && (
                   <>
                     <td className="p-2 text-right border-l border-neutral-300">
-                      <AutoSizeInput
-                        
-                        value={fund.estateDutyPoliciesOnLife || "0%"}
-                        onChange={(e) => handleInputChange(fund.id, "estateDutyPoliciesOnLife", e.target.value)}
+                      <input
+                        defaultValue={fund.estateDutyPoliciesOnLife || "0%"}
+                        onBlur={(e) => handleInputBlur(fund.id, "estateDutyPoliciesOnLife", e.target.value)}
                         className="table-input" 
                         placeholder="0%"
                         disabled={isUpdating}
                       />
                     </td>
                     <td className="p-2 text-right ">
-                      <AutoSizeInput
-                        
-                        value={fund.estateDutyToSpouse || "0%"}
-                        onChange={(e) => handleInputChange(fund.id, "estateDutyToSpouse", e.target.value)}
+                      <input
+                        defaultValue={fund.estateDutyToSpouse || "0%"}
+                        onBlur={(e) => handleInputBlur(fund.id, "estateDutyToSpouse", e.target.value)}
                         className="table-input" style={{ textAlign: "right" }}
                         placeholder="0%"
                         disabled={isUpdating}
                       />
                     </td>
                     <td className="p-2 text-right ">
-                      <AutoSizeInput
-                        
-                        value={fund.estateDutyToOthers || "0%"}
-                        onChange={(e) => handleInputChange(fund.id, "estateDutyToOthers", e.target.value)}
+                      <input
+                        defaultValue={fund.estateDutyToOthers || "0%"}
+                        onBlur={(e) => handleInputBlur(fund.id, "estateDutyToOthers", e.target.value)}
                         className="table-input"
                         placeholder="0%"
                         disabled={isUpdating}
                       />
                     </td>
                     <td className="p-2 text-right">
-                      <AutoSizeInput
-                        
-                        value={fund.executorsFee || "0%"}
-                        onChange={(e) => handleInputChange(fund.id, "executorsFee", e.target.value)}
+                      <input
+                        defaultValue={fund.executorsFee || "0%"}
+                        onBlur={(e) => handleInputBlur(fund.id, "executorsFee", e.target.value)}
                         className="table-input"
                         placeholder="0%"
                         disabled={isUpdating}
                       />
                     </td>
                     <td className="p-2 text-right">
-                      <AutoSizeInput
-                        
-                        value={fund.mastersFee || "0%"}
-                        onChange={(e) => handleInputChange(fund.id, "mastersFee", e.target.value)}
+                      <input
+                        defaultValue={fund.mastersFee || "0%"}
+                        onBlur={(e) => handleInputBlur(fund.id, "mastersFee", e.target.value)}
                         className="table-input"
                         placeholder="0%"
                         disabled={isUpdating}
