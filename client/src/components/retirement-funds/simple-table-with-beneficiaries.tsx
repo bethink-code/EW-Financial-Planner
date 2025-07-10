@@ -50,21 +50,31 @@ export function SimpleTableWithBeneficiaries({ funds, columnVisibility, tableMod
   
   // Format currency value
   const formatCurrencyValue = useCallback((value: string, field: string) => {
-    // Fields that should have currency formatting
+    // Fields that should have currency formatting (R prefix)
     const currencyFields = [
       'coverAmount', 'monthlyIncome', 'approvedLifeCover', 'fundValue', 'fundValueAtDeath', 
       'amount', 'lumpSumTaken', 'nondeductibleContribution', 'livingAnnuity', 'escalationAmount'
     ];
     
-    if (!currencyFields.includes(field)) return value;
+    // Fields that should have thousand separators but no R prefix  
+    const numericFields = [
+      'lumpSumLeftOverProvisions', 'currentAnnualIncome', 'annualIncomeAtDeath', 
+      'estateDeploymentDeceased', 'lumpSumDeath', 'previousLumpSums', 'additionalTaxFreeAmount'
+    ];
+    
+    if (!currencyFields.includes(field) && !numericFields.includes(field)) return value;
     
     // Remove existing formatting and non-numeric characters except decimals
     const numericValue = value.replace(/[^\d.-]/g, '');
     if (!numericValue || isNaN(Number(numericValue))) return value;
     
-    // Add R prefix and format with thousands separators
-    const formatted = `R ${Math.round(Number(numericValue)).toLocaleString()}`;
-    return formatted;
+    if (currencyFields.includes(field)) {
+      // Add R prefix and format with thousands separators
+      return `R ${Math.round(Number(numericValue)).toLocaleString()}`;
+    } else {
+      // Just format with thousands separators (no R prefix)
+      return Math.round(Number(numericValue)).toLocaleString();
+    }
   }, []);
   // Memoized handlers
   const handleInputChange = useCallback((fundId: number, field: keyof UpdateRetirementFund, value: string) => {
