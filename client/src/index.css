@@ -237,8 +237,17 @@ th, td {
     background-color: #EFF2F5;
   }
 
-  /* Apply background to iframe container */
-  iframe {
+  /* Apply background to all potential Replit containers */
+  iframe,
+  [data-replit-metadata],
+  .repl-frame,
+  .webview-container {
+    background-color: #EFF2F5 !important;
+  }
+
+  /* Target parent containers that might have different backgrounds */
+  body > *,
+  #root {
     background-color: #EFF2F5 !important;
   }
 
