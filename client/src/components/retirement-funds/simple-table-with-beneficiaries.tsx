@@ -571,6 +571,7 @@ export function SimpleTableWithBeneficiaries({ funds, columnVisibility, tableMod
             // Add additional beneficiary rows (starting from index 1)
             beneficiaries.slice(1).forEach((beneficiary, index) => {
               const actualIndex = index + 1; // Since we're starting from slice(1)
+              const beneficiaryIndex = actualIndex; // This is the correct index in the original array
               rows.push(
                 <tr key={`${fund.id}-beneficiary-${beneficiary.id}`} className="bg-teal-50/30 hover:bg-teal-50">
                   {/* Empty cells for overview columns */}
@@ -588,7 +589,7 @@ export function SimpleTableWithBeneficiaries({ funds, columnVisibility, tableMod
                         <input
                           type="text"
                           defaultValue={beneficiary.name}
-                          onBlur={(e) => handleBeneficiaryUpdate(fund.id, actualIndex, 'name', e.target.value)}
+                          onBlur={(e) => handleBeneficiaryUpdate(fund.id, beneficiaryIndex, 'name', e.target.value)}
                           placeholder="Beneficiary name"
                           disabled={isUpdating}
                           className="table-input h-7 text-sm bg-white border-gray-200 focus:border-primary w-full px-3 py-1 border rounded-md text-sm"
@@ -599,7 +600,7 @@ export function SimpleTableWithBeneficiaries({ funds, columnVisibility, tableMod
                         <input
                           type="number"
                           defaultValue={beneficiary.percentage || 0}
-                          onBlur={(e) => handleBeneficiaryUpdate(fund.id, actualIndex, 'percentage', e.target.value)}
+                          onBlur={(e) => handleBeneficiaryUpdate(fund.id, beneficiaryIndex, 'percentage', e.target.value)}
                           min="0"
                           max="100"
                           step="0.1"
@@ -618,7 +619,7 @@ export function SimpleTableWithBeneficiaries({ funds, columnVisibility, tableMod
                           <Button
                             variant="ghost"
                             size="sm"
-                            onClick={() => handleRemoveBeneficiary(fund.id, actualIndex)}
+                            onClick={() => handleRemoveBeneficiary(fund.id, beneficiaryIndex)}
                             disabled={isUpdating}
                             className="h-7 w-7 p-0 hover:bg-gray-100"
                             style={{ color: '#4F4F4F' }}
