@@ -67,7 +67,12 @@ export function SimpleTableWithBeneficiaries({ funds, columnVisibility, tableMod
       'increasePercentage', 'beneficiaryPercentageSplit', 'percentage'
     ];
     
-    if (!currencyFields.includes(field) && !numericFields.includes(field) && !percentageFields.includes(field)) return value;
+    // Fields that should have years formatting (years suffix)
+    const yearsFields = [
+      'termYears', 'incomeTerm'
+    ];
+    
+    if (!currencyFields.includes(field) && !numericFields.includes(field) && !percentageFields.includes(field) && !yearsFields.includes(field)) return value;
     
     // Remove existing formatting and non-numeric characters except decimals
     const numericValue = value.replace(/[^\d.-]/g, '');
@@ -79,6 +84,9 @@ export function SimpleTableWithBeneficiaries({ funds, columnVisibility, tableMod
     } else if (percentageFields.includes(field)) {
       // Add % suffix
       return `${Number(numericValue)}%`;
+    } else if (yearsFields.includes(field)) {
+      // Add years suffix
+      return `${Number(numericValue)} years`;
     } else {
       // Just format with thousands separators (no R prefix)
       return Math.round(Number(numericValue)).toLocaleString();
@@ -436,7 +444,13 @@ export function SimpleTableWithBeneficiaries({ funds, columnVisibility, tableMod
                     <td className="p-2 text-right">
                       <input
                         defaultValue={fund.termYears || ""}
-                        onBlur={(e) => handleInputBlur(fund.id, "termYears", e.target.value)}
+                        onBlur={(e) => {
+                          const formattedValue = formatCurrencyValue(e.target.value, "termYears");
+                          if (formattedValue !== e.target.value) {
+                            e.target.value = formattedValue;
+                          }
+                          handleInputBlur(fund.id, "termYears", e.target.value);
+                        }}
                         className="table-input h-7 text-sm bg-white border-gray-200 focus:border-primary w-full px-3 py-1 border rounded-md text-sm"
                         style={{ textAlign: "right", minWidth: "60px" }}
                         disabled={isUpdating}
@@ -648,7 +662,13 @@ export function SimpleTableWithBeneficiaries({ funds, columnVisibility, tableMod
                       <input
                         
                         defaultValue={fund.incomeTerm || ""}
-                        onBlur={(e) => handleInputBlur(fund.id, "incomeTerm", e.target.value)}
+                        onBlur={(e) => {
+                          const formattedValue = formatCurrencyValue(e.target.value, "incomeTerm");
+                          if (formattedValue !== e.target.value) {
+                            e.target.value = formattedValue;
+                          }
+                          handleInputBlur(fund.id, "incomeTerm", e.target.value);
+                        }}
                         className="table-input h-7 text-sm bg-white border-gray-200 focus:border-primary w-full px-3 py-1 border rounded-md text-sm"
                         style={{ textAlign: "right", minWidth: "80px" }}
                         placeholder="Income term"

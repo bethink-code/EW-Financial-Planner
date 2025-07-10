@@ -96,7 +96,12 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
       'increasePercentage', 'beneficiaryPercentageSplit', 'percentage'
     ];
     
-    if (!currencyFields.includes(field) && !numericFields.includes(field) && !percentageFields.includes(field)) return value;
+    // Fields that should have years formatting (years suffix)
+    const yearsFields = [
+      'termYears', 'incomeTerm'
+    ];
+    
+    if (!currencyFields.includes(field) && !numericFields.includes(field) && !percentageFields.includes(field) && !yearsFields.includes(field)) return value;
     
     // Remove existing formatting and non-numeric characters except decimals
     const numericValue = value.replace(/[^\d.-]/g, '');
@@ -108,6 +113,9 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
     } else if (percentageFields.includes(field)) {
       // Add % suffix
       return `${Number(numericValue)}%`;
+    } else if (yearsFields.includes(field)) {
+      // Add years suffix
+      return `${Number(numericValue)} years`;
     } else {
       // Just format with thousands separators (no R prefix)
       return Math.round(Number(numericValue)).toLocaleString();

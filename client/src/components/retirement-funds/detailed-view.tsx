@@ -92,7 +92,12 @@ export function DetailedView({ funds, columnVisibility, onFieldUpdate, isUpdatin
       'increasePercentage', 'beneficiaryPercentageSplit', 'percentage'
     ];
     
-    if (!currencyFields.includes(field) && !percentageFields.includes(field)) return value;
+    // Fields that should have years formatting (years suffix)
+    const yearsFields = [
+      'termYears', 'incomeTerm'
+    ];
+    
+    if (!currencyFields.includes(field) && !percentageFields.includes(field) && !yearsFields.includes(field)) return value;
     
     // Remove existing formatting and non-numeric characters except decimals
     const numericValue = value.replace(/[^\d.-]/g, '');
@@ -104,6 +109,9 @@ export function DetailedView({ funds, columnVisibility, onFieldUpdate, isUpdatin
     } else if (percentageFields.includes(field)) {
       // Add % suffix
       return `${Number(numericValue)}%`;
+    } else if (yearsFields.includes(field)) {
+      // Add years suffix
+      return `${Number(numericValue)} years`;
     }
     
     return value;
