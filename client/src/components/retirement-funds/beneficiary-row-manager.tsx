@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useMemo } from "react";
+import React, { useState, useCallback, useMemo, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Plus, Trash2 } from "lucide-react";
@@ -140,11 +140,16 @@ export function BeneficiaryRowManager({
             {/* Beneficiary Name */}
             <div className="flex-1 min-w-0">
               <input
-                key={`beneficiary-name-${beneficiary.id}`}
-                defaultValue={beneficiary.name}
+                ref={(el) => {
+                  if (el && !el.value && beneficiary.name) {
+                    el.value = beneficiary.name;
+                  }
+                }}
                 onBlur={(e) => {
                   console.log('Beneficiary name onBlur:', e.target.value);
-                  handleUpdateBeneficiary(beneficiary.id, 'name', e.target.value);
+                  if (e.target.value !== beneficiary.name) {
+                    handleUpdateBeneficiary(beneficiary.id, 'name', e.target.value);
+                  }
                 }}
                 placeholder="Enter beneficiary name"
                 disabled={isUpdating}
@@ -249,11 +254,16 @@ export function BeneficiaryRowManager({
           {/* Beneficiary Name */}
           <div className="col-span-5">
             <input
-              key={`beneficiary-table-name-${beneficiary.id}`}
-              defaultValue={beneficiary.name}
+              ref={(el) => {
+                if (el && !el.value && beneficiary.name) {
+                  el.value = beneficiary.name;
+                }
+              }}
               onBlur={(e) => {
                 console.log('Table beneficiary name onBlur:', e.target.value);
-                handleUpdateBeneficiary(beneficiary.id, 'name', e.target.value);
+                if (e.target.value !== beneficiary.name) {
+                  handleUpdateBeneficiary(beneficiary.id, 'name', e.target.value);
+                }
               }}
               placeholder="Enter beneficiary name"
               disabled={isUpdating}
