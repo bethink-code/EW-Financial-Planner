@@ -139,25 +139,21 @@ export function BeneficiaryRowManager({
 
             {/* Beneficiary Name */}
             <div className="flex-1 min-w-0">
-              <input
-                ref={(el) => {
-                  if (el && !el.value && beneficiary.name) {
-                    el.value = beneficiary.name;
-                  }
-                }}
+              <textarea
+                defaultValue={beneficiary.name}
                 onBlur={(e) => {
                   console.log('Beneficiary name onBlur:', e.target.value);
-                  if (e.target.value !== beneficiary.name) {
-                    handleUpdateBeneficiary(beneficiary.id, 'name', e.target.value);
-                  }
+                  handleUpdateBeneficiary(beneficiary.id, 'name', e.target.value);
                 }}
                 placeholder="Enter beneficiary name"
                 disabled={isUpdating}
-                className="h-8 text-sm table-input w-full px-3 py-1 border rounded-md text-sm"
+                rows={1}
+                className="h-8 text-sm table-input w-full px-3 py-1 border rounded-md text-sm resize-none overflow-hidden"
                 style={{ 
                   minWidth: '120px', 
                   maxWidth: '250px',
-                  width: 'auto'
+                  width: 'auto',
+                  lineHeight: '1.2'
                 }}
               />
             </div>
@@ -253,21 +249,17 @@ export function BeneficiaryRowManager({
 
           {/* Beneficiary Name */}
           <div className="col-span-5">
-            <input
-              ref={(el) => {
-                if (el && !el.value && beneficiary.name) {
-                  el.value = beneficiary.name;
-                }
-              }}
+            <textarea
+              defaultValue={beneficiary.name}
               onBlur={(e) => {
                 console.log('Table beneficiary name onBlur:', e.target.value);
-                if (e.target.value !== beneficiary.name) {
-                  handleUpdateBeneficiary(beneficiary.id, 'name', e.target.value);
-                }
+                handleUpdateBeneficiary(beneficiary.id, 'name', e.target.value);
               }}
               placeholder="Enter beneficiary name"
               disabled={isUpdating}
-              className="text-right table-input w-full px-3 py-1 border rounded-md text-sm"
+              rows={1}
+              className="text-right table-input w-full px-3 py-1 border rounded-md text-sm resize-none overflow-hidden"
+              style={{ lineHeight: '1.2' }}
             />
           </div>
 
