@@ -8,7 +8,7 @@ import { SimpleTableWithBeneficiaries } from "@/components/retirement-funds/simp
 import { DetailedView } from "@/components/retirement-funds/detailed-view";
 import { SummarySection } from "@/components/retirement-funds/summary-section";
 import { AddFundDialog } from "@/components/retirement-funds/add-fund-dialog";
-import { Input } from "@/components/ui/input";
+
 
 type ViewMode = "grouped" | "detailed";
 
@@ -35,7 +35,7 @@ export default function NewRetirementFunds() {
       setViewMode(newMode);
     }
   }, []);
-  const [searchQuery, setSearchQuery] = useState("");
+
   const [columnVisibility, setColumnVisibility] = useState<ColumnVisibility>({
     overview: true,
     unapprovedLifeCover: true,
@@ -99,29 +99,6 @@ export default function NewRetirementFunds() {
     }
   }, []);
 
-  // Memoized filter for performance
-  const filteredFunds = useMemo(() => {
-    if (!searchQuery) return funds;
-    const query = searchQuery.toLowerCase();
-    return funds.filter(fund => {
-      const basicMatch = fund.description.toLowerCase().includes(query) ||
-        fund.owner.toLowerCase().includes(query) ||
-        fund.beneficiaryName.toLowerCase().includes(query);
-      
-      // Search in beneficiaries JSON array
-      const beneficiariesMatch = (() => {
-        try {
-          const beneficiaries = JSON.parse(fund.beneficiaries || "[]");
-          return beneficiaries.some((b: any) => b.name?.toLowerCase().includes(query));
-        } catch {
-          return false;
-        }
-      })();
-      
-      return basicMatch || beneficiariesMatch;
-    });
-  }, [funds, searchQuery]);
-
   if (isLoading) {
     return (
       <div className="p-6">
@@ -143,11 +120,9 @@ export default function NewRetirementFunds() {
             onViewModeChange={handleViewModeChange}
             tableMode={tableMode}
             onTableModeChange={setTableMode}
-            searchQuery={searchQuery}
-            onSearchChange={setSearchQuery}
             columnVisibility={columnVisibility}
             onToggleColumnGroup={handleToggleColumnGroup}
-            fundsCount={filteredFunds.length}
+            fundsCount={funds.length}
             onAddFund={() => setShowAddDialog(true)}
           />
         </div>
@@ -162,7 +137,7 @@ export default function NewRetirementFunds() {
                   <div style={{ backgroundColor: '#F9F0E5' }} className="rounded-lg p-4 text-center">
                     <div className="text-xs font-medium text-neutral-600 mb-1">Cover Amount</div>
                     <div className="text-lg font-bold text-neutral-900">
-                      R {filteredFunds.reduce((sum, fund) => {
+                      R {funds.reduce((sum, fund) => {
                         const value = fund.coverAmount as string;
                         const amount = parseFloat(value.replace(/[^\d.-]/g, '')) || 0;
                         return sum + amount;
@@ -172,7 +147,7 @@ export default function NewRetirementFunds() {
                   <div style={{ backgroundColor: '#F9F0E5' }} className="rounded-lg p-4 text-center">
                     <div className="text-xs font-medium text-neutral-600 mb-1">Monthly Income</div>
                     <div className="text-lg font-bold text-neutral-900">
-                      R {filteredFunds.reduce((sum, fund) => {
+                      R {funds.reduce((sum, fund) => {
                         const value = fund.monthlyIncome as string;
                         const amount = parseFloat(value.replace(/[^\d.-]/g, '')) || 0;
                         return sum + amount;
@@ -182,7 +157,7 @@ export default function NewRetirementFunds() {
                   <div style={{ backgroundColor: '#F9F0E5' }} className="rounded-lg p-4 text-center">
                     <div className="text-xs font-medium text-neutral-600 mb-1">Approved Life Cover</div>
                     <div className="text-lg font-bold text-neutral-900">
-                      R {filteredFunds.reduce((sum, fund) => {
+                      R {funds.reduce((sum, fund) => {
                         const value = fund.approvedLifeCover as string;
                         const amount = parseFloat(value.replace(/[^\d.-]/g, '')) || 0;
                         return sum + amount;
@@ -192,7 +167,7 @@ export default function NewRetirementFunds() {
                   <div style={{ backgroundColor: '#F9F0E5' }} className="rounded-lg p-4 text-center">
                     <div className="text-xs font-medium text-neutral-600 mb-1">Fund Value</div>
                     <div className="text-lg font-bold text-neutral-900">
-                      R {filteredFunds.reduce((sum, fund) => {
+                      R {funds.reduce((sum, fund) => {
                         const value = fund.fundValue as string;
                         const amount = parseFloat(value.replace(/[^\d.-]/g, '')) || 0;
                         return sum + amount;
@@ -202,7 +177,7 @@ export default function NewRetirementFunds() {
                   <div style={{ backgroundColor: '#F9F0E5' }} className="rounded-lg p-4 text-center">
                     <div className="text-xs font-medium text-neutral-600 mb-1">Fund Value at Death</div>
                     <div className="text-lg font-bold text-neutral-900">
-                      R {filteredFunds.reduce((sum, fund) => {
+                      R {funds.reduce((sum, fund) => {
                         const value = fund.fundValueAtDeath as string;
                         const amount = parseFloat(value.replace(/[^\d.-]/g, '')) || 0;
                         return sum + amount;
@@ -221,7 +196,7 @@ export default function NewRetirementFunds() {
                   <div style={{ backgroundColor: '#E0F2FE' }} className="rounded-lg p-4 text-center">
                     <div className="text-xs font-medium text-teal-700 mb-1">Estate Provisions</div>
                     <div className="text-lg font-bold text-neutral-900">
-                      R {filteredFunds.reduce((sum, fund) => {
+                      R {funds.reduce((sum, fund) => {
                         const value = fund.lumpSumLeftOverProvisions as string;
                         const amount = parseFloat(value?.replace(/[^\d.-]/g, '') || '0') || 0;
                         return sum + amount;
@@ -231,7 +206,7 @@ export default function NewRetirementFunds() {
                   <div style={{ backgroundColor: '#E0F2FE' }} className="rounded-lg p-4 text-center">
                     <div className="text-xs font-medium text-teal-700 mb-1">Term (Years)</div>
                     <div className="text-lg font-bold text-neutral-900">
-                      {filteredFunds.reduce((sum, fund) => {
+                      {funds.reduce((sum, fund) => {
                         const value = fund.incomeTerm as string;
                         const amount = parseFloat(value?.replace(/[^\d.-]/g, '') || '0') || 0;
                         return sum + amount;
@@ -241,7 +216,7 @@ export default function NewRetirementFunds() {
                   <div style={{ backgroundColor: '#E0F2FE' }} className="rounded-lg p-4 text-center">
                     <div className="text-xs font-medium text-teal-700 mb-1">Monthly Payments</div>
                     <div className="text-lg font-bold text-neutral-900">
-                      R {filteredFunds.reduce((sum, fund) => {
+                      R {funds.reduce((sum, fund) => {
                         const value = fund.monthlyProvisionOffered as string;
                         const amount = parseFloat(value?.replace(/[^\d.-]/g, '') || '0') || 0;
                         return sum + amount;
@@ -251,7 +226,7 @@ export default function NewRetirementFunds() {
                   <div style={{ backgroundColor: '#E0F2FE' }} className="rounded-lg p-4 text-center">
                     <div className="text-xs font-medium text-teal-700 mb-1">Estate Duties</div>
                     <div className="text-lg font-bold text-neutral-900">
-                      R {filteredFunds.reduce((sum, fund) => {
+                      R {funds.reduce((sum, fund) => {
                         const value = fund.estateDeploymentDeceased as string;
                         const amount = parseFloat(value?.replace(/[^\d.-]/g, '') || '0') || 0;
                         return sum + amount;
@@ -271,7 +246,7 @@ export default function NewRetirementFunds() {
             <div className="mx-4 bg-white rounded-lg shadow-sm border border-neutral-200" style={{ viewTransitionName: 'table-view' }}>
               {tableMode === "inputs" ? (
                 <SimpleTableWithBeneficiaries
-                  funds={filteredFunds}
+                  funds={funds}
                   columnVisibility={columnVisibility}
                   tableMode={tableMode}
                   onFieldUpdate={handleFieldUpdate}
@@ -279,7 +254,7 @@ export default function NewRetirementFunds() {
                 />
               ) : (
                 <NewGroupedTableView
-                  funds={filteredFunds}
+                  funds={funds}
                   columnVisibility={columnVisibility}
                   tableMode={tableMode}
                   onFieldUpdate={handleFieldUpdate}
@@ -305,7 +280,7 @@ export default function NewRetirementFunds() {
                   <div style={{ backgroundColor: '#F9F0E5' }} className="rounded-lg p-4 text-center">
                     <div className="text-xs font-medium text-neutral-600 mb-1">Cover Amount</div>
                     <div className="text-lg font-bold text-neutral-900">
-                      R {filteredFunds.reduce((sum, fund) => {
+                      R {funds.reduce((sum, fund) => {
                         const value = fund.coverAmount as string;
                         const amount = parseFloat(value.replace(/[^\d.-]/g, '')) || 0;
                         return sum + amount;
@@ -315,7 +290,7 @@ export default function NewRetirementFunds() {
                   <div style={{ backgroundColor: '#F9F0E5' }} className="rounded-lg p-4 text-center">
                     <div className="text-xs font-medium text-neutral-600 mb-1">Monthly Income</div>
                     <div className="text-lg font-bold text-neutral-900">
-                      R {filteredFunds.reduce((sum, fund) => {
+                      R {funds.reduce((sum, fund) => {
                         const value = fund.monthlyIncome as string;
                         const amount = parseFloat(value.replace(/[^\d.-]/g, '')) || 0;
                         return sum + amount;
@@ -325,7 +300,7 @@ export default function NewRetirementFunds() {
                   <div style={{ backgroundColor: '#F9F0E5' }} className="rounded-lg p-4 text-center">
                     <div className="text-xs font-medium text-neutral-600 mb-1">Approved Life Cover</div>
                     <div className="text-lg font-bold text-neutral-900">
-                      R {filteredFunds.reduce((sum, fund) => {
+                      R {funds.reduce((sum, fund) => {
                         const value = fund.approvedLifeCover as string;
                         const amount = parseFloat(value.replace(/[^\d.-]/g, '')) || 0;
                         return sum + amount;
@@ -335,7 +310,7 @@ export default function NewRetirementFunds() {
                   <div style={{ backgroundColor: '#F9F0E5' }} className="rounded-lg p-4 text-center">
                     <div className="text-xs font-medium text-neutral-600 mb-1">Fund Value</div>
                     <div className="text-lg font-bold text-neutral-900">
-                      R {filteredFunds.reduce((sum, fund) => {
+                      R {funds.reduce((sum, fund) => {
                         const value = fund.fundValue as string;
                         const amount = parseFloat(value.replace(/[^\d.-]/g, '')) || 0;
                         return sum + amount;
@@ -345,7 +320,7 @@ export default function NewRetirementFunds() {
                   <div style={{ backgroundColor: '#F9F0E5' }} className="rounded-lg p-4 text-center">
                     <div className="text-xs font-medium text-neutral-600 mb-1">Fund Value at Death</div>
                     <div className="text-lg font-bold text-neutral-900">
-                      R {filteredFunds.reduce((sum, fund) => {
+                      R {funds.reduce((sum, fund) => {
                         const value = fund.fundValueAtDeath as string;
                         const amount = parseFloat(value.replace(/[^\d.-]/g, '')) || 0;
                         return sum + amount;
@@ -358,7 +333,7 @@ export default function NewRetirementFunds() {
 
             <div className="mx-4 bg-white rounded-lg shadow-sm border border-neutral-200" style={{ viewTransitionName: 'detailed-view' }}>
               <DetailedView
-                funds={filteredFunds}
+                funds={funds}
                 columnVisibility={columnVisibility}
                 onFieldUpdate={handleFieldUpdate}
                 isUpdating={updateMutation.isPending}

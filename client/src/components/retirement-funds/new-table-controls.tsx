@@ -1,6 +1,5 @@
-import { Search, Table, Layout, List, Eye, EyeOff, ChevronDown, Settings, Plus } from "lucide-react";
+import { Table, Layout, List, Eye, EyeOff, ChevronDown, Settings, Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -21,8 +20,7 @@ interface NewTableControlsProps {
   onViewModeChange: (mode: "grouped" | "detailed") => void;
   tableMode: "inputs" | "flows";
   onTableModeChange: (mode: "inputs" | "flows") => void;
-  searchQuery: string;
-  onSearchChange: (query: string) => void;
+
   columnVisibility: ColumnVisibility;
   onToggleColumnGroup: (group: keyof ColumnVisibility) => void;
   fundsCount: number;
@@ -34,8 +32,7 @@ export function NewTableControls({
   onViewModeChange,
   tableMode,
   onTableModeChange,
-  searchQuery,
-  onSearchChange,
+
   columnVisibility,
   onToggleColumnGroup,
   fundsCount,
@@ -58,20 +55,6 @@ export function NewTableControls({
             <Plus size={14} className="mr-1" />
             Add Fund
           </Button>
-        </div>
-
-        {/* Middle section: Search */}
-        <div className="flex-1 max-w-md">
-          <div className="relative">
-            <Search size={16} className="absolute left-3 top-1/2 transform -translate-y-1/2 text-neutral-400" />
-            <Input
-              type="text"
-              placeholder="Search funds..."
-              value={searchQuery}
-              onChange={(e) => onSearchChange(e.target.value)}
-              className="pl-10 h-8 text-sm"
-            />
-          </div>
         </div>
 
         {/* Right section: View modes and column toggles */}
