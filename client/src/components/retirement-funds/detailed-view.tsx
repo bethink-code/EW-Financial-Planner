@@ -248,7 +248,7 @@ export function DetailedView({ funds, columnVisibility, onFieldUpdate, isUpdatin
                     }
                     handleFieldChange("coverAmount", e.target.value);
                   }}
-                  className="h-9 px-3 py-2 text-sm text-right bg-white border border-neutral-200 rounded focus:border-blue-500 focus:outline-none min-w-[120px] max-w-[200px]"
+                  className="h-9 px-3 py-2 text-sm text-right bg-white border border-neutral-200 rounded focus:border-blue-500 focus:outline-none w-[140px]"
                   disabled={isUpdating}
                   placeholder="R 0"
                 />
@@ -280,7 +280,7 @@ export function DetailedView({ funds, columnVisibility, onFieldUpdate, isUpdatin
                       }
                       handleFieldChange("monthlyIncome", e.target.value);
                     }}
-                    className="h-9 px-3 py-2 text-sm text-right bg-white border border-neutral-200 rounded focus:border-blue-500 focus:outline-none w-[100px]"
+                    className="h-9 px-3 py-2 text-sm text-right bg-white border border-neutral-200 rounded focus:border-blue-500 focus:outline-none w-[140px]"
                     disabled={isUpdating}
                     placeholder="R 0"
                   />
@@ -330,7 +330,7 @@ export function DetailedView({ funds, columnVisibility, onFieldUpdate, isUpdatin
                       }
                       handleFieldChange("escalationAmount", e.target.value);
                     }}
-                    className="h-9 px-3 py-2 text-sm text-right bg-white border border-neutral-200 rounded focus:border-blue-500 focus:outline-none w-[120px]"
+                    className="h-9 px-3 py-2 text-sm text-right bg-white border border-neutral-200 rounded focus:border-blue-500 focus:outline-none w-[140px]"
                     disabled={isUpdating}
                     placeholder="R 0"
                   />
@@ -431,7 +431,7 @@ export function DetailedView({ funds, columnVisibility, onFieldUpdate, isUpdatin
                 </div>
                 <div>
                   <Label className="text-xs text-neutral-600 mb-1 block h-8 flex items-end">Amount (Read-only)</Label>
-                  <div className="h-9 px-3 py-2 text-sm text-right bg-neutral-50 border border-neutral-200 rounded w-[120px]">
+                  <div className="h-9 px-3 py-2 text-sm text-right bg-neutral-50 border border-neutral-200 rounded w-[140px]">
                     {selectedFund.amount || "R 0"}
                   </div>
                 </div>
@@ -447,7 +447,7 @@ export function DetailedView({ funds, columnVisibility, onFieldUpdate, isUpdatin
                       }
                       handleFieldChange("lumpSumTaken", e.target.value);
                     }}
-                    className="h-9 px-3 py-2 text-sm text-right bg-white border border-neutral-200 rounded focus:border-blue-500 focus:outline-none w-[120px]"
+                    className="h-9 px-3 py-2 text-sm text-right bg-white border border-neutral-200 rounded focus:border-blue-500 focus:outline-none w-[140px]"
                     disabled={isUpdating}
                     placeholder="R 0"
                   />
@@ -471,7 +471,7 @@ export function DetailedView({ funds, columnVisibility, onFieldUpdate, isUpdatin
                 </div>
                 <div>
                   <Label className="text-xs text-neutral-600 mb-1 block h-8 flex items-end">Living Annuity (Read-only)</Label>
-                  <div className="h-9 px-3 py-2 text-sm text-right bg-neutral-50 border border-neutral-200 rounded w-[120px]">
+                  <div className="h-9 px-3 py-2 text-sm text-right bg-neutral-50 border border-neutral-200 rounded w-[140px]">
                     {selectedFund.livingAnnuity || ""}
                   </div>
                 </div>
