@@ -52,7 +52,31 @@ export default function NewRetirementFunds() {
     mutationFn: async ({ id, updates }: { id: number; updates: UpdateRetirementFund }) => {
       return apiRequest("PATCH", `/api/retirement-funds/${id}`, updates);
     },
-    onSuccess: () => {
+    onMutate: async ({ id, updates }) => {
+      // Cancel any outgoing refetches
+      await queryClient.cancelQueries({ queryKey: ["/api/retirement-funds"] });
+      
+      // Snapshot the previous value
+      const previousFunds = queryClient.getQueryData<RetirementFund[]>(["/api/retirement-funds"]);
+      
+      // Optimistically update the cache
+      queryClient.setQueryData<RetirementFund[]>(["/api/retirement-funds"], (old) => {
+        if (!old) return old;
+        return old.map((fund) => 
+          fund.id === id ? { ...fund, ...updates } : fund
+        );
+      });
+      
+      return { previousFunds };
+    },
+    onError: (err, variables, context) => {
+      // Rollback on error
+      if (context?.previousFunds) {
+        queryClient.setQueryData(["/api/retirement-funds"], context.previousFunds);
+      }
+    },
+    onSettled: () => {
+      // Sync with server after mutation completes
       queryClient.invalidateQueries({ queryKey: ["/api/retirement-funds"] });
     },
   });
