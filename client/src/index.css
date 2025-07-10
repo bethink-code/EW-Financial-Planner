@@ -234,6 +234,12 @@ th, td {
     margin: 0;
     padding: 0;
     width: 100%;
+    background-color: #EFF2F5;
+  }
+
+  /* Apply background to iframe container */
+  iframe {
+    background-color: #EFF2F5 !important;
   }
 
   body {

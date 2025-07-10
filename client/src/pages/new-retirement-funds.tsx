@@ -113,7 +113,7 @@ export default function NewRetirementFunds() {
   }
 
   return (
-    <div className="min-h-screen w-screen" style={{ backgroundColor: '#EFF2F5', margin: 0, padding: 0 }}>
+    <div className="min-h-screen">
       <div className="py-4">
         <div className="px-4">
           <NewTableControls
