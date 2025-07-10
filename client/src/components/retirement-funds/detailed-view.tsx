@@ -187,7 +187,7 @@ export function DetailedView({ funds, columnVisibility, onFieldUpdate, isUpdatin
           {columnVisibility.overview && (
             <div className="bg-teal-50 rounded-lg p-4">
               <h4 className="text-sm font-bold text-teal-700 mb-4">Overview</h4>
-              <div className="grid grid-cols-1 md:grid-cols-4 xl:grid-cols-8 gap-4 items-end">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-end">
                 <div>
                   <Label className="text-xs text-neutral-600 mb-1 block h-8 flex items-end">Description</Label>
                   <input
@@ -200,7 +200,7 @@ export function DetailedView({ funds, columnVisibility, onFieldUpdate, isUpdatin
                       }
                       handleFieldChange("description", e.target.value);
                     }}
-                    className="h-9 px-3 py-2 text-sm bg-white border border-neutral-200 rounded focus:border-blue-500 focus:outline-none min-w-[120px] max-w-[250px]"
+                    className="h-9 px-3 py-2 text-sm bg-white border border-neutral-200 rounded focus:border-blue-500 focus:outline-none w-[200px]"
                     disabled={isUpdating}
                   />
                 </div>
@@ -211,7 +211,7 @@ export function DetailedView({ funds, columnVisibility, onFieldUpdate, isUpdatin
                     onValueChange={(value) => handleFieldChange("owner", value)}
                     disabled={isUpdating}
                   >
-                    <SelectTrigger className="h-9 text-sm">
+                    <SelectTrigger className="h-9 text-sm w-[140px]">
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
@@ -267,7 +267,7 @@ export function DetailedView({ funds, columnVisibility, onFieldUpdate, isUpdatin
           {columnVisibility.monthlyDeathBenefit && (
             <div className="bg-teal-50 rounded-lg p-4">
               <h4 className="text-sm font-bold text-teal-700 mb-4">Monthly Death Benefit</h4>
-              <div className="grid grid-cols-1 md:grid-cols-4 xl:grid-cols-8 gap-4 items-end">
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-6 items-end">
                 <div>
                   <Label className="text-xs text-neutral-600 mb-1 block h-8 flex items-end">Monthly Income</Label>
                   <input
@@ -280,7 +280,7 @@ export function DetailedView({ funds, columnVisibility, onFieldUpdate, isUpdatin
                       }
                       handleFieldChange("monthlyIncome", e.target.value);
                     }}
-                    className="h-9 px-2 py-2 text-sm text-right bg-white border border-neutral-200 rounded focus:border-blue-500 focus:outline-none w-[65px]"
+                    className="h-9 px-3 py-2 text-sm text-right bg-white border border-neutral-200 rounded focus:border-blue-500 focus:outline-none w-[100px]"
                     disabled={isUpdating}
                     placeholder="R 0"
                   />
@@ -297,7 +297,7 @@ export function DetailedView({ funds, columnVisibility, onFieldUpdate, isUpdatin
                       }
                       handleFieldChange("termYears", e.target.value);
                     }}
-                    className="h-9 px-2 py-2 text-sm text-right bg-white border border-neutral-200 rounded focus:border-blue-500 focus:outline-none w-[45px]"
+                    className="h-9 px-3 py-2 text-sm text-right bg-white border border-neutral-200 rounded focus:border-blue-500 focus:outline-none w-[80px]"
                     disabled={isUpdating}
                   />
                 </div>
@@ -313,7 +313,7 @@ export function DetailedView({ funds, columnVisibility, onFieldUpdate, isUpdatin
                       }
                       handleFieldChange("increasePercentage", e.target.value);
                     }}
-                    className="h-9 px-2 py-2 text-sm text-right bg-white border border-neutral-200 rounded focus:border-blue-500 focus:outline-none w-[45px]"
+                    className="h-9 px-3 py-2 text-sm text-right bg-white border border-neutral-200 rounded focus:border-blue-500 focus:outline-none w-[80px]"
                     disabled={isUpdating}
                     placeholder="5%"
                   />
@@ -330,7 +330,7 @@ export function DetailedView({ funds, columnVisibility, onFieldUpdate, isUpdatin
                       }
                       handleFieldChange("escalationAmount", e.target.value);
                     }}
-                    className="h-9 px-2 py-2 text-sm text-right bg-white border border-neutral-200 rounded focus:border-blue-500 focus:outline-none w-[55px]"
+                    className="h-9 px-3 py-2 text-sm text-right bg-white border border-neutral-200 rounded focus:border-blue-500 focus:outline-none w-[120px]"
                     disabled={isUpdating}
                     placeholder="R 0"
                   />
@@ -343,7 +343,7 @@ export function DetailedView({ funds, columnVisibility, onFieldUpdate, isUpdatin
           {columnVisibility.fundValue && (
             <div className="bg-teal-50 rounded-lg p-4">
               <h4 className="text-sm font-bold text-teal-700 mb-4">Fund Value</h4>
-              <div className="grid grid-cols-1 md:grid-cols-4 xl:grid-cols-8 gap-4 items-end">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-end">
                 <div>
                   <Label className="text-xs text-neutral-600 mb-1 block h-8 flex items-end">Approved Life Cover</Label>
                   <input
@@ -356,7 +356,7 @@ export function DetailedView({ funds, columnVisibility, onFieldUpdate, isUpdatin
                       }
                       handleFieldChange("approvedLifeCover", e.target.value);
                     }}
-                    className="h-9 px-3 py-2 text-sm text-right bg-white border border-neutral-200 rounded focus:border-blue-500 focus:outline-none min-w-[120px] max-w-[180px]"
+                    className="h-9 px-3 py-2 text-sm text-right bg-white border border-neutral-200 rounded focus:border-blue-500 focus:outline-none w-[140px]"
                     disabled={isUpdating}
                     placeholder="R 0"
                   />
@@ -373,14 +373,14 @@ export function DetailedView({ funds, columnVisibility, onFieldUpdate, isUpdatin
                       }
                       handleFieldChange("fundValue", e.target.value);
                     }}
-                    className="h-9 px-3 py-2 text-sm text-right bg-white border border-neutral-200 rounded focus:border-blue-500 focus:outline-none min-w-[120px] max-w-[180px]"
+                    className="h-9 px-3 py-2 text-sm text-right bg-white border border-neutral-200 rounded focus:border-blue-500 focus:outline-none w-[140px]"
                     disabled={isUpdating}
                     placeholder="R 0"
                   />
                 </div>
                 <div>
                   <Label className="text-xs text-neutral-600 mb-1 block h-8 flex items-end">Fund Value at Death</Label>
-                  <div className="h-9 px-3 py-2 text-sm text-right bg-neutral-50 border border-neutral-200 rounded">
+                  <div className="h-9 px-3 py-2 text-sm text-right bg-neutral-50 border border-neutral-200 rounded w-[140px]">
                     {selectedFund.fundValueAtDeath || "R 0"}
                   </div>
                 </div>
