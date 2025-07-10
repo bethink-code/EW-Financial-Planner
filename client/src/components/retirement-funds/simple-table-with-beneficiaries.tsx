@@ -77,10 +77,6 @@ export function SimpleTableWithBeneficiaries({ funds, columnVisibility, tableMod
     }
   }, []);
   // Memoized handlers
-  const handleInputChange = useCallback((fundId: number, field: keyof UpdateRetirementFund, value: string) => {
-    onFieldUpdate(fundId, field, value);
-  }, [onFieldUpdate]);
-
   const handleInputBlur = useCallback((fundId: number, field: keyof UpdateRetirementFund, value: string) => {
     const formattedValue = formatCurrencyValue(value, field);
     onFieldUpdate(fundId, field, formattedValue);
@@ -290,9 +286,8 @@ export function SimpleTableWithBeneficiaries({ funds, columnVisibility, tableMod
                   <>
                     <td className="table-cell whitespace-nowrap table-text-14 text-neutral-900">
                       <input
-                        
                         defaultValue={fund.description || ""}
-                        onBlur={(e) => handleInputChange(fund.id, "description", e.target.value)}
+                        onBlur={(e) => onFieldUpdate(fund.id, "description", e.target.value)}
                         className="table-input h-7 text-sm bg-white border-gray-200 focus:border-primary w-full px-3 py-1 border rounded-md text-sm"
                         style={{ textAlign: "left", fontWeight: "500", minWidth: "140px" }}
                         placeholder="Fund description"
@@ -326,7 +321,6 @@ export function SimpleTableWithBeneficiaries({ funds, columnVisibility, tableMod
                     <td className="p-2 text-right border-l border-neutral-300">
                       <input
                         defaultValue={fund.coverAmount || ""}
-                        onChange={(e) => handleInputChange(fund.id, "coverAmount", e.target.value)}
                         onBlur={(e) => handleInputBlur(fund.id, "coverAmount", e.target.value)}
                         className="table-input h-7 text-sm bg-white border-gray-200 focus:border-primary w-full px-3 py-1 border rounded-md text-sm"
                         style={{ textAlign: "right", minWidth: "100px" }}
@@ -412,7 +406,6 @@ export function SimpleTableWithBeneficiaries({ funds, columnVisibility, tableMod
                     <td className="p-2 text-right border-l border-neutral-300">
                       <input
                         defaultValue={fund.monthlyIncome || ""}
-                        onChange={(e) => handleInputChange(fund.id, "monthlyIncome", e.target.value)}
                         onBlur={(e) => handleInputBlur(fund.id, "monthlyIncome", e.target.value)}
                         className="table-input h-7 text-sm bg-white border-gray-200 focus:border-primary w-full px-3 py-1 border rounded-md text-sm"
                         style={{ textAlign: "right", minWidth: "80px" }}
