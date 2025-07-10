@@ -114,7 +114,7 @@ export default function NewRetirementFunds() {
 
   return (
     <div className="min-h-screen" style={{ backgroundColor: '#EFF2F5' }}>
-      <div className="p-4 max-w-full">
+      <div className="px-4 py-4">
         <NewTableControls
           viewMode={viewMode}
           onViewModeChange={handleViewModeChange}
