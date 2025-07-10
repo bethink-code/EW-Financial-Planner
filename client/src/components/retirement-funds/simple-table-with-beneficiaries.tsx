@@ -320,11 +320,19 @@ export function SimpleTableWithBeneficiaries({ funds, columnVisibility, tableMod
                   <>
                     <td className="p-2 text-right border-l border-neutral-300">
                       <input
-                        key={`cover-${fund.id}-${fund.coverAmount}`}
-                        defaultValue={fund.coverAmount || ""}
+                        value={fund.coverAmount || ""}
+                        onChange={() => {}} // Prevent controlled input warnings
+                        onInput={(e) => {
+                          // Allow typing without immediate formatting
+                          const target = e.target as HTMLInputElement;
+                          target.dataset.editing = "true";
+                        }}
                         onBlur={(e) => {
-                          console.log('Cover amount blur:', e.target.value);
-                          handleInputBlur(fund.id, "coverAmount", e.target.value);
+                          const target = e.target as HTMLInputElement;
+                          if (target.dataset.editing) {
+                            handleInputBlur(fund.id, "coverAmount", target.value);
+                            delete target.dataset.editing;
+                          }
                         }}
                         className="table-input h-7 text-sm bg-white border-gray-200 focus:border-primary w-full px-3 py-1 border rounded-md text-sm"
                         style={{ textAlign: "right", minWidth: "100px" }}
@@ -409,9 +417,20 @@ export function SimpleTableWithBeneficiaries({ funds, columnVisibility, tableMod
                   <>
                     <td className="p-2 text-right border-l border-neutral-300">
                       <input
-                        key={`monthlyIncome-${fund.id}-${fund.monthlyIncome}`}
-                        defaultValue={fund.monthlyIncome || ""}
-                        onBlur={(e) => handleInputBlur(fund.id, "monthlyIncome", e.target.value)}
+                        value={fund.monthlyIncome || ""}
+                        onChange={() => {}} // Prevent controlled input warnings
+                        onInput={(e) => {
+                          // Allow typing without immediate formatting
+                          const target = e.target as HTMLInputElement;
+                          target.dataset.editing = "true";
+                        }}
+                        onBlur={(e) => {
+                          const target = e.target as HTMLInputElement;
+                          if (target.dataset.editing) {
+                            handleInputBlur(fund.id, "monthlyIncome", target.value);
+                            delete target.dataset.editing;
+                          }
+                        }}
                         className="table-input h-7 text-sm bg-white border-gray-200 focus:border-primary w-full px-3 py-1 border rounded-md text-sm"
                         style={{ textAlign: "right", minWidth: "80px" }}
                         placeholder="R 0"
