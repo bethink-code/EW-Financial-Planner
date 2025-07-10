@@ -197,7 +197,7 @@ export function DetailedView({ funds, columnVisibility, onFieldUpdate, isUpdatin
                       }
                       handleFieldChange("description", e.target.value);
                     }}
-                    className="w-full h-9 px-3 py-2 text-sm bg-white border border-neutral-200 rounded focus:border-blue-500 focus:outline-none"
+                    className="h-9 px-3 py-2 text-sm bg-white border border-neutral-200 rounded focus:border-blue-500 focus:outline-none min-w-[120px] max-w-[250px]"
                     disabled={isUpdating}
                   />
                 </div>
@@ -245,7 +245,7 @@ export function DetailedView({ funds, columnVisibility, onFieldUpdate, isUpdatin
                     }
                     handleFieldChange("coverAmount", e.target.value);
                   }}
-                  className="w-full h-9 px-3 py-2 text-sm text-right bg-white border border-neutral-200 rounded focus:border-blue-500 focus:outline-none"
+                  className="h-9 px-3 py-2 text-sm text-right bg-white border border-neutral-200 rounded focus:border-blue-500 focus:outline-none min-w-[120px] max-w-[200px]"
                   disabled={isUpdating}
                   placeholder="R 0"
                 />
@@ -277,7 +277,7 @@ export function DetailedView({ funds, columnVisibility, onFieldUpdate, isUpdatin
                       }
                       handleFieldChange("monthlyIncome", e.target.value);
                     }}
-                    className="w-full h-9 px-3 py-2 text-sm text-right bg-white border border-neutral-200 rounded focus:border-blue-500 focus:outline-none"
+                    className="h-9 px-3 py-2 text-sm text-right bg-white border border-neutral-200 rounded focus:border-blue-500 focus:outline-none min-w-[100px] max-w-[150px]"
                     disabled={isUpdating}
                     placeholder="R 0"
                   />
@@ -294,7 +294,7 @@ export function DetailedView({ funds, columnVisibility, onFieldUpdate, isUpdatin
                       }
                       handleFieldChange("termYears", e.target.value);
                     }}
-                    className="w-full h-9 px-3 py-2 text-sm text-right bg-white border border-neutral-200 rounded focus:border-blue-500 focus:outline-none"
+                    className="h-9 px-3 py-2 text-sm text-right bg-white border border-neutral-200 rounded focus:border-blue-500 focus:outline-none min-w-[80px] max-w-[120px]"
                     disabled={isUpdating}
                   />
                 </div>
@@ -310,7 +310,7 @@ export function DetailedView({ funds, columnVisibility, onFieldUpdate, isUpdatin
                       }
                       handleFieldChange("increasePercentage", e.target.value);
                     }}
-                    className="w-full h-9 px-3 py-2 text-sm text-right bg-white border border-neutral-200 rounded focus:border-blue-500 focus:outline-none"
+                    className="h-9 px-3 py-2 text-sm text-right bg-white border border-neutral-200 rounded focus:border-blue-500 focus:outline-none min-w-[80px] max-w-[100px]"
                     disabled={isUpdating}
                     placeholder="5%"
                   />
@@ -327,7 +327,7 @@ export function DetailedView({ funds, columnVisibility, onFieldUpdate, isUpdatin
                       }
                       handleFieldChange("escalationAmount", e.target.value);
                     }}
-                    className="w-full h-9 px-3 py-2 text-sm text-right bg-white border border-neutral-200 rounded focus:border-blue-500 focus:outline-none"
+                    className="h-9 px-3 py-2 text-sm text-right bg-white border border-neutral-200 rounded focus:border-blue-500 focus:outline-none min-w-[100px] max-w-[150px]"
                     disabled={isUpdating}
                     placeholder="R 0"
                   />
@@ -353,7 +353,7 @@ export function DetailedView({ funds, columnVisibility, onFieldUpdate, isUpdatin
                       }
                       handleFieldChange("approvedLifeCover", e.target.value);
                     }}
-                    className="w-full h-9 px-3 py-2 text-sm text-right bg-white border border-neutral-200 rounded focus:border-blue-500 focus:outline-none"
+                    className="h-9 px-3 py-2 text-sm text-right bg-white border border-neutral-200 rounded focus:border-blue-500 focus:outline-none min-w-[120px] max-w-[180px]"
                     disabled={isUpdating}
                     placeholder="R 0"
                   />
@@ -370,7 +370,7 @@ export function DetailedView({ funds, columnVisibility, onFieldUpdate, isUpdatin
                       }
                       handleFieldChange("fundValue", e.target.value);
                     }}
-                    className="w-full h-9 px-3 py-2 text-sm text-right bg-white border border-neutral-200 rounded focus:border-blue-500 focus:outline-none"
+                    className="h-9 px-3 py-2 text-sm text-right bg-white border border-neutral-200 rounded focus:border-blue-500 focus:outline-none min-w-[120px] max-w-[180px]"
                     disabled={isUpdating}
                     placeholder="R 0"
                   />
@@ -421,7 +421,7 @@ export function DetailedView({ funds, columnVisibility, onFieldUpdate, isUpdatin
                       }
                       handleFieldChange("beneficiaryPercentageSplit", e.target.value);
                     }}
-                    className="w-full h-9 px-3 py-2 text-sm text-right bg-white border border-neutral-200 rounded focus:border-blue-500 focus:outline-none"
+                    className="h-9 px-3 py-2 text-sm text-right bg-white border border-neutral-200 rounded focus:border-blue-500 focus:outline-none min-w-[80px] max-w-[100px]"
                     disabled={isUpdating}
                     placeholder="0%"
                   />
@@ -444,7 +444,7 @@ export function DetailedView({ funds, columnVisibility, onFieldUpdate, isUpdatin
                       }
                       handleFieldChange("lumpSumTaken", e.target.value);
                     }}
-                    className="w-full h-9 px-3 py-2 text-sm text-right bg-white border border-neutral-200 rounded focus:border-blue-500 focus:outline-none"
+                    className="h-9 px-3 py-2 text-sm text-right bg-white border border-neutral-200 rounded focus:border-blue-500 focus:outline-none min-w-[100px] max-w-[150px]"
                     disabled={isUpdating}
                     placeholder="R 0"
                   />
@@ -461,7 +461,7 @@ export function DetailedView({ funds, columnVisibility, onFieldUpdate, isUpdatin
                       }
                       handleFieldChange("nondeductibleContribution", e.target.value);
                     }}
-                    className="w-full h-9 px-3 py-2 text-sm text-right bg-white border border-neutral-200 rounded focus:border-blue-500 focus:outline-none"
+                    className="h-9 px-3 py-2 text-sm text-right bg-white border border-neutral-200 rounded focus:border-blue-500 focus:outline-none min-w-[120px] max-w-[180px]"
                     disabled={isUpdating}
                     placeholder="R 0"
                   />
@@ -484,7 +484,7 @@ export function DetailedView({ funds, columnVisibility, onFieldUpdate, isUpdatin
                       }
                       handleFieldChange("incomeTerm", e.target.value);
                     }}
-                    className="w-full h-9 px-3 py-2 text-sm text-right bg-white border border-neutral-200 rounded focus:border-blue-500 focus:outline-none"
+                    className="h-9 px-3 py-2 text-sm text-right bg-white border border-neutral-200 rounded focus:border-blue-500 focus:outline-none min-w-[100px] max-w-[150px]"
                     disabled={isUpdating}
                     placeholder="Income term"
                   />
