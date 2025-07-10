@@ -273,10 +273,11 @@ export function SimpleTableWithBeneficiaries({ funds, columnVisibility, tableMod
                 {columnVisibility.overview && (
                   <>
                     <td className="table-cell whitespace-nowrap table-text-14 text-neutral-900">
-                      <Input
-                        value={fund.description || ""}
-                        onChange={(e) => handleInputChange(fund.id, "description", e.target.value)}
-                        className="table-input h-7 text-sm bg-white border-gray-200 focus:border-primary"
+                      <input
+                        key={`description-${fund.id}`}
+                        defaultValue={fund.description || ""}
+                        onBlur={(e) => handleInputChange(fund.id, "description", e.target.value)}
+                        className="table-input h-7 text-sm bg-white border-gray-200 focus:border-primary w-full px-3 py-1 border rounded-md text-sm"
                         style={{ textAlign: "left", fontWeight: "500", minWidth: "140px" }}
                         placeholder="Fund description"
                         disabled={isUpdating}
@@ -396,39 +397,43 @@ export function SimpleTableWithBeneficiaries({ funds, columnVisibility, tableMod
                 {columnVisibility.monthlyDeathBenefit && (
                   <>
                     <td className="p-2 text-right border-l border-neutral-300">
-                      <Input
-                        value={fund.monthlyIncome || ""}
-                        onChange={(e) => handleInputChange(fund.id, "monthlyIncome", e.target.value)}
-                        className="table-input h-7 text-sm bg-white border-gray-200 focus:border-primary"
+                      <input
+                        key={`monthlyIncome-${fund.id}`}
+                        defaultValue={fund.monthlyIncome || ""}
+                        onBlur={(e) => handleInputChange(fund.id, "monthlyIncome", e.target.value)}
+                        className="table-input h-7 text-sm bg-white border-gray-200 focus:border-primary w-full px-3 py-1 border rounded-md text-sm"
                         style={{ textAlign: "right", minWidth: "80px" }}
                         placeholder="R 0"
                         disabled={isUpdating}
                       />
                     </td>
                     <td className="p-2 text-right">
-                      <Input
-                        value={fund.termYears || ""}
-                        onChange={(e) => handleInputChange(fund.id, "termYears", e.target.value)}
-                        className="table-input h-7 text-sm bg-white border-gray-200 focus:border-primary"
+                      <input
+                        key={`termYears-${fund.id}`}
+                        defaultValue={fund.termYears || ""}
+                        onBlur={(e) => handleInputChange(fund.id, "termYears", e.target.value)}
+                        className="table-input h-7 text-sm bg-white border-gray-200 focus:border-primary w-full px-3 py-1 border rounded-md text-sm"
                         style={{ textAlign: "right", minWidth: "60px" }}
                         disabled={isUpdating}
                       />
                     </td>
                     <td className="p-2 text-right">
-                      <Input
-                        value={fund.increasePercentage || ""}
-                        onChange={(e) => handleInputChange(fund.id, "increasePercentage", e.target.value)}
-                        className="table-input h-7 text-sm bg-white border-gray-200 focus:border-primary"
+                      <input
+                        key={`increasePercentage-${fund.id}`}
+                        defaultValue={fund.increasePercentage || ""}
+                        onBlur={(e) => handleInputChange(fund.id, "increasePercentage", e.target.value)}
+                        className="table-input h-7 text-sm bg-white border-gray-200 focus:border-primary w-full px-3 py-1 border rounded-md text-sm"
                         style={{ textAlign: "right", minWidth: "60px" }}
                         placeholder="0%"
                         disabled={isUpdating}
                       />
                     </td>
                     <td className="p-2 text-right">
-                      <Input
-                        value={fund.escalationAmount || ""}
-                        onChange={(e) => handleInputChange(fund.id, "escalationAmount", e.target.value)}
-                        className="table-input h-7 text-sm bg-white border-gray-200 focus:border-primary"
+                      <input
+                        key={`escalationAmount-${fund.id}`}
+                        defaultValue={fund.escalationAmount || ""}
+                        onBlur={(e) => handleInputChange(fund.id, "escalationAmount", e.target.value)}
+                        className="table-input h-7 text-sm bg-white border-gray-200 focus:border-primary w-full px-3 py-1 border rounded-md text-sm"
                         style={{ textAlign: "right", minWidth: "80px" }}
                         placeholder="R 0"
                         disabled={isUpdating}
@@ -440,30 +445,33 @@ export function SimpleTableWithBeneficiaries({ funds, columnVisibility, tableMod
                 {columnVisibility.fundValue && (
                   <>
                     <td className="p-2 text-right border-l border-neutral-300">
-                      <Input
-                        value={fund.approvedLifeCover || ""}
-                        onChange={(e) => handleInputChange(fund.id, "approvedLifeCover", e.target.value)}
-                        className="table-input h-7 text-sm bg-white border-gray-200 focus:border-primary"
+                      <input
+                        key={`approvedLifeCover-${fund.id}`}
+                        defaultValue={fund.approvedLifeCover || ""}
+                        onBlur={(e) => handleInputChange(fund.id, "approvedLifeCover", e.target.value)}
+                        className="table-input h-7 text-sm bg-white border-gray-200 focus:border-primary w-full px-3 py-1 border rounded-md text-sm"
                         style={{ textAlign: "right", minWidth: "80px" }}
                         placeholder="R 0"
                         disabled={isUpdating}
                       />
                     </td>
                     <td className="p-2 text-right">
-                      <Input
-                        value={fund.fundValue || ""}
-                        onChange={(e) => handleInputChange(fund.id, "fundValue", e.target.value)}
-                        className="table-input h-7 text-sm bg-white border-gray-200 focus:border-primary"
+                      <input
+                        key={`fundValue-${fund.id}`}
+                        defaultValue={fund.fundValue || ""}
+                        onBlur={(e) => handleInputChange(fund.id, "fundValue", e.target.value)}
+                        className="table-input h-7 text-sm bg-white border-gray-200 focus:border-primary w-full px-3 py-1 border rounded-md text-sm"
                         style={{ textAlign: "right", minWidth: "80px" }}
                         placeholder="R 0"
                         disabled={isUpdating}
                       />
                     </td>
                     <td className="p-2 text-right">
-                      <Input
-                        value={fund.fundValueAtDeath || ""}
-                        onChange={(e) => handleInputChange(fund.id, "fundValueAtDeath", e.target.value)}
-                        className="table-input h-7 text-sm bg-white border-gray-200 focus:border-primary"
+                      <input
+                        key={`fundValueAtDeath-${fund.id}`}
+                        defaultValue={fund.fundValueAtDeath || ""}
+                        onBlur={(e) => handleInputChange(fund.id, "fundValueAtDeath", e.target.value)}
+                        className="table-input h-7 text-sm bg-white border-gray-200 focus:border-primary w-full px-3 py-1 border rounded-md text-sm"
                         style={{ textAlign: "right", minWidth: "80px" }}
                         placeholder="R 0"
                         disabled={isUpdating}
@@ -475,80 +483,88 @@ export function SimpleTableWithBeneficiaries({ funds, columnVisibility, tableMod
                 {columnVisibility.fundValueBeneficiaries && (
                   <>
                     <td className="p-2 text-right border-l border-neutral-300">
-                      <Input
-                        value={fund.beneficiaryName || ""}
-                        onChange={(e) => handleInputChange(fund.id, "beneficiaryName", e.target.value)}
-                        className="table-input h-7 text-sm bg-white border-gray-200 focus:border-primary"
+                      <input
+                        key={`beneficiaryName-${fund.id}`}
+                        defaultValue={fund.beneficiaryName || ""}
+                        onBlur={(e) => handleInputChange(fund.id, "beneficiaryName", e.target.value)}
+                        className="table-input h-7 text-sm bg-white border-gray-200 focus:border-primary w-full px-3 py-1 border rounded-md text-sm"
                         style={{ textAlign: "left", minWidth: "120px" }}
                         placeholder="Beneficiary name"
                         disabled={isUpdating}
                       />
                     </td>
                     <td className="p-2 text-right">
-                      <Input
-                        value={fund.beneficiaryPercentageSplit || ""}
-                        onChange={(e) => handleInputChange(fund.id, "beneficiaryPercentageSplit", e.target.value)}
-                        className="table-input h-7 text-sm bg-white border-gray-200 focus:border-primary"
+                      <input
+                        key={`beneficiaryPercentageSplit-${fund.id}`}
+                        defaultValue={fund.beneficiaryPercentageSplit || ""}
+                        onBlur={(e) => handleInputChange(fund.id, "beneficiaryPercentageSplit", e.target.value)}
+                        className="table-input h-7 text-sm bg-white border-gray-200 focus:border-primary w-full px-3 py-1 border rounded-md text-sm"
                         style={{ textAlign: "right", minWidth: "60px" }}
                         placeholder="0%"
                         disabled={isUpdating}
                       />
                     </td>
                     <td className="p-2 text-right">
-                      <Input
-                        value={fund.amount || ""}
-                        onChange={(e) => handleInputChange(fund.id, "amount", e.target.value)}
-                        className="table-input h-7 text-sm bg-white border-gray-200 focus:border-primary"
+                      <input
+                        key={`amount-${fund.id}`}
+                        defaultValue={fund.amount || ""}
+                        onBlur={(e) => handleInputChange(fund.id, "amount", e.target.value)}
+                        className="table-input h-7 text-sm bg-white border-gray-200 focus:border-primary w-full px-3 py-1 border rounded-md text-sm"
                         style={{ textAlign: "right", minWidth: "80px" }}
                         placeholder="R 0"
                         disabled={isUpdating}
                       />
                     </td>
                     <td className="p-2 text-right">
-                      <Input
-                        value={fund.lumpSumTaken || ""}
-                        onChange={(e) => handleInputChange(fund.id, "lumpSumTaken", e.target.value)}
-                        className="table-input h-7 text-sm bg-white border-gray-200 focus:border-primary"
+                      <input
+                        key={`lumpSumTaken-${fund.id}`}
+                        defaultValue={fund.lumpSumTaken || ""}
+                        onBlur={(e) => handleInputChange(fund.id, "lumpSumTaken", e.target.value)}
+                        className="table-input h-7 text-sm bg-white border-gray-200 focus:border-primary w-full px-3 py-1 border rounded-md text-sm"
                         style={{ textAlign: "right", minWidth: "80px" }}
                         placeholder="R 0"
                         disabled={isUpdating}
                       />
                     </td>
                     <td className="p-2 text-right">
-                      <Input
-                        value={fund.fundValueAtDeath || ""}
-                        onChange={(e) => handleInputChange(fund.id, "fundValueAtDeath", e.target.value)}
-                        className="table-input h-7 text-sm bg-white border-gray-200 focus:border-primary"
+                      <input
+                        key={`fundValueAtDeath-${fund.id}`}
+                        defaultValue={fund.fundValueAtDeath || ""}
+                        onBlur={(e) => handleInputChange(fund.id, "fundValueAtDeath", e.target.value)}
+                        className="table-input h-7 text-sm bg-white border-gray-200 focus:border-primary w-full px-3 py-1 border rounded-md text-sm"
                         style={{ textAlign: "right", minWidth: "80px" }}
                         placeholder="R 0"
                         disabled={isUpdating}
                       />
                     </td>
                     <td className="p-2 text-right">
-                      <Input
-                        value={fund.nondeductibleContribution || ""}
-                        onChange={(e) => handleInputChange(fund.id, "nondeductibleContribution", e.target.value)}
-                        className="table-input h-7 text-sm bg-white border-gray-200 focus:border-primary"
+                      <input
+                        key={`nondeductibleContribution-${fund.id}`}
+                        defaultValue={fund.nondeductibleContribution || ""}
+                        onBlur={(e) => handleInputChange(fund.id, "nondeductibleContribution", e.target.value)}
+                        className="table-input h-7 text-sm bg-white border-gray-200 focus:border-primary w-full px-3 py-1 border rounded-md text-sm"
                         style={{ textAlign: "right", minWidth: "80px" }}
                         placeholder="R 0"
                         disabled={isUpdating}
                       />
                     </td>
                     <td className="p-2 text-right">
-                      <Input
-                        value={fund.livingAnnuity || ""}
-                        onChange={(e) => handleInputChange(fund.id, "livingAnnuity", e.target.value)}
-                        className="table-input h-7 text-sm bg-white border-gray-200 focus:border-primary"
+                      <input
+                        key={`livingAnnuity-${fund.id}`}
+                        defaultValue={fund.livingAnnuity || ""}
+                        onBlur={(e) => handleInputChange(fund.id, "livingAnnuity", e.target.value)}
+                        className="table-input h-7 text-sm bg-white border-gray-200 focus:border-primary w-full px-3 py-1 border rounded-md text-sm"
                         style={{ textAlign: "right", minWidth: "80px" }}
                         placeholder="R 0"
                         disabled={isUpdating}
                       />
                     </td>
                     <td className="p-2 text-right">
-                      <Input
-                        value={fund.incomeTerm || ""}
-                        onChange={(e) => handleInputChange(fund.id, "incomeTerm", e.target.value)}
-                        className="table-input h-7 text-sm bg-white border-gray-200 focus:border-primary"
+                      <input
+                        key={`incomeTerm-${fund.id}`}
+                        defaultValue={fund.incomeTerm || ""}
+                        onBlur={(e) => handleInputChange(fund.id, "incomeTerm", e.target.value)}
+                        className="table-input h-7 text-sm bg-white border-gray-200 focus:border-primary w-full px-3 py-1 border rounded-md text-sm"
                         style={{ textAlign: "right", minWidth: "80px" }}
                         placeholder="Income term"
                         disabled={isUpdating}

@@ -25,20 +25,22 @@ interface NewGroupedTableViewProps {
 }
 
 // Auto-sizing input component
-const AutoSizeInput = ({ value, onChange, className, placeholder, disabled, style, ...props }: {
+const AutoSizeInput = ({ value, onChange, className, placeholder, disabled, style, fundId, field, ...props }: {
   value: string;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   className?: string;
   placeholder?: string;
   disabled?: boolean;
   style?: React.CSSProperties;
+  fundId?: number;
+  field?: string;
   type?: string;
 }) => {
   return (
     <input
-      type="text"
-      value={value}
-      onChange={onChange}
+      key={`${field}-${fundId}-${value.length}`}
+      defaultValue={value}
+      onBlur={onChange}
       className={`${className} table-input`}
       placeholder={placeholder}
       disabled={disabled}

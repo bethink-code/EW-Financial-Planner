@@ -17,6 +17,8 @@ const AutoSizeInput = ({
   placeholder = "",
   disabled = false,
   style = {},
+  fundId,
+  field,
   ...props 
 }: {
   value: string;
@@ -25,12 +27,15 @@ const AutoSizeInput = ({
   placeholder?: string;
   disabled?: boolean;
   style?: React.CSSProperties;
+  fundId?: number;
+  field?: string;
   type?: string;
 }) => {
   return (
-    <Input
-      value={value}
-      onChange={onChange}
+    <input
+      key={`${field}-${fundId}-${value.length}`}
+      defaultValue={value}
+      onBlur={onChange}
       className={className}
       placeholder={placeholder}
       disabled={disabled}
