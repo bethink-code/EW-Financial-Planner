@@ -52,10 +52,27 @@ function AutoSizeInput({
 
 export function SimpleTableWithBeneficiaries({ funds, columnVisibility, tableMode, onFieldUpdate, isUpdating }: SimpleTableWithBeneficiariesProps) {
   
+  // Format currency value
+  const formatCurrencyValue = useCallback((value: string, field: string) => {
+    // Fields that should have currency formatting
+    const currencyFields = ['coverAmount', 'monthlyIncome', 'approvedLifeCover', 'fundValue', 'fundValueAtDeath', 'amount', 'lumpSumTaken', 'nondeductibleContribution', 'livingAnnuity'];
+    
+    if (!currencyFields.includes(field)) return value;
+    
+    // Remove existing formatting and non-numeric characters except decimals
+    const numericValue = value.replace(/[^\d.-]/g, '');
+    if (!numericValue || isNaN(Number(numericValue))) return value;
+    
+    // Add R prefix and format with thousands separators
+    const formatted = `R ${Math.round(Number(numericValue)).toLocaleString()}`;
+    return formatted;
+  }, []);
+
   // Memoized handlers
   const handleInputChange = useCallback((fundId: number, field: keyof UpdateRetirementFund, value: string) => {
-    onFieldUpdate(fundId, field, value);
-  }, [onFieldUpdate]);
+    const formattedValue = formatCurrencyValue(value, field);
+    onFieldUpdate(fundId, field, formattedValue);
+  }, [onFieldUpdate, formatCurrencyValue]);
 
   const handleBeneficiaryUpdate = useCallback((fundId: number, beneficiaryIndex: number, field: keyof Beneficiary, value: string | number) => {
     const fund = funds.find(f => f.id === fundId);

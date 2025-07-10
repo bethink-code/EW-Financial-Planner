@@ -72,11 +72,28 @@ export function DetailedView({ funds, columnVisibility, onFieldUpdate, isUpdatin
     return funds.find(f => f.id === selectedFundId) || funds[0];
   }, [funds, selectedFundId]);
 
+  // Format currency value
+  const formatCurrencyValue = useCallback((value: string, field: string) => {
+    // Fields that should have currency formatting
+    const currencyFields = ['coverAmount', 'monthlyIncome', 'approvedLifeCover', 'fundValue', 'fundValueAtDeath', 'amount', 'lumpSumTaken', 'nondeductibleContribution', 'livingAnnuity'];
+    
+    if (!currencyFields.includes(field)) return value;
+    
+    // Remove existing formatting and non-numeric characters except decimals
+    const numericValue = value.replace(/[^\d.-]/g, '');
+    if (!numericValue || isNaN(Number(numericValue))) return value;
+    
+    // Add R prefix and format with thousands separators
+    const formatted = `R ${Math.round(Number(numericValue)).toLocaleString()}`;
+    return formatted;
+  }, []);
+
   const handleFieldChange = useCallback((field: keyof UpdateRetirementFund, value: string) => {
     if (selectedFund) {
-      onFieldUpdate(selectedFund.id, field, value);
+      const formattedValue = formatCurrencyValue(value, field);
+      onFieldUpdate(selectedFund.id, field, formattedValue);
     }
-  }, [selectedFund, onFieldUpdate]);
+  }, [selectedFund, onFieldUpdate, formatCurrencyValue]);
 
   const owners = useMemo(() => ["John Doe", "Jane Smith", "Sarah Johnson", "David Wilson"], []);
   const getOwnerBadgeColor = useCallback(() => "bg-white border border-neutral-300", []);
