@@ -9,52 +9,7 @@ import { FundActions } from "./fund-actions";
 import { parseBeneficiaries } from "@/lib/beneficiaries";
 import type { RetirementFund, UpdateRetirementFund } from "@shared/schema";
 
-// Auto-sizing input component for split-pane view
-const AutoSizeInput = ({ 
-  value, 
-  onChange, 
-  className = "", 
-  placeholder = "",
-  disabled = false,
-  style = {},
-  fundId,
-  field,
-  formatCurrencyValue,
-  ...props 
-}: {
-  value: string;
-  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  className?: string;
-  placeholder?: string;
-  disabled?: boolean;
-  style?: React.CSSProperties;
-  fundId?: number;
-  field?: string;
-  formatCurrencyValue?: (value: string, field: string) => string;
-  type?: string;
-}) => {
-  return (
-    <input
-      defaultValue={value}
-      onBlur={(e) => {
-        const formattedValue = formatCurrencyValue ? formatCurrencyValue(e.target.value, field || '') : e.target.value;
-        if (formattedValue !== e.target.value) {
-          e.target.value = formattedValue;
-        }
-        onChange(e);
-      }}
-      className={`table-input ${className}`}
-      placeholder={placeholder}
-      disabled={disabled}
-      style={{ 
-        ...style, 
-        minWidth: '120px', 
-        maxWidth: '300px'
-      }}
-      {...props}
-    />
-  );
-};
+// Removed AutoSizeInput component - simplified for better performance
 
 interface ColumnVisibility {
   overview: boolean;
@@ -232,13 +187,18 @@ export function DetailedView({ funds, columnVisibility, onFieldUpdate, isUpdatin
               <div className="grid grid-cols-1 md:grid-cols-4 xl:grid-cols-8 gap-4 items-end">
                 <div>
                   <Label className="text-xs text-neutral-600 mb-1 block h-8 flex items-end">Description</Label>
-                  <AutoSizeInput
-                    value={selectedFund.description}
-                    onChange={(e) => handleFieldChange("description", e.target.value)}
-                    className="h-9 text-sm"
+                  <input
+                    defaultValue={selectedFund.description}
+                    onBlur={(e) => {
+                      const formattedValue = formatCurrencyValue(e.target.value, "description");
+                      if (formattedValue !== e.target.value) {
+                        e.target.value = formattedValue;
+                      }
+                      handleFieldChange("description", e.target.value);
+                    }}
+                    className="table-input h-9 text-sm"
                     disabled={isUpdating}
-                    field="description"
-                    formatCurrencyValue={formatCurrencyValue}
+                    style={{ minWidth: '120px', maxWidth: '300px' }}
                   />
                 </div>
                 <div>
@@ -275,15 +235,19 @@ export function DetailedView({ funds, columnVisibility, onFieldUpdate, isUpdatin
               </div>
               <div className="mb-4">
                 <Label className="text-xs text-neutral-600 mb-1 block">Cover Amount</Label>
-                <AutoSizeInput
-                  value={selectedFund.coverAmount}
-                  onChange={(e) => handleFieldChange("coverAmount", e.target.value)}
-                  className="h-9 text-sm text-right"
+                <input
+                  defaultValue={selectedFund.coverAmount}
+                  onBlur={(e) => {
+                    const formattedValue = formatCurrencyValue(e.target.value, "coverAmount");
+                    if (formattedValue !== e.target.value) {
+                      e.target.value = formattedValue;
+                    }
+                    handleFieldChange("coverAmount", e.target.value);
+                  }}
+                  className="table-input h-9 text-sm text-right"
                   disabled={isUpdating}
                   placeholder="R 0"
-                  style={{ textAlign: 'right' }}
-                  field="coverAmount"
-                  formatCurrencyValue={formatCurrencyValue}
+                  style={{ textAlign: 'right', minWidth: '120px', maxWidth: '300px' }}
                 />
               </div>
               <BeneficiarySection
@@ -303,53 +267,69 @@ export function DetailedView({ funds, columnVisibility, onFieldUpdate, isUpdatin
               <div className="grid grid-cols-1 md:grid-cols-4 xl:grid-cols-8 gap-4 items-end">
                 <div>
                   <Label className="text-xs text-neutral-600 mb-1 block h-8 flex items-end">Monthly Income</Label>
-                  <AutoSizeInput
-                    value={selectedFund.monthlyIncome}
-                    onChange={(e) => handleFieldChange("monthlyIncome", e.target.value)}
-                    className="h-9 text-sm text-right"
+                  <input
+                    defaultValue={selectedFund.monthlyIncome}
+                    onBlur={(e) => {
+                      const formattedValue = formatCurrencyValue(e.target.value, "monthlyIncome");
+                      if (formattedValue !== e.target.value) {
+                        e.target.value = formattedValue;
+                      }
+                      handleFieldChange("monthlyIncome", e.target.value);
+                    }}
+                    className="table-input h-9 text-sm text-right"
                     disabled={isUpdating}
                     placeholder="R 0"
-                    style={{ textAlign: 'right' }}
-                    field="monthlyIncome"
-                    formatCurrencyValue={formatCurrencyValue}
+                    style={{ textAlign: 'right', minWidth: '120px', maxWidth: '300px' }}
                   />
                 </div>
                 <div>
                   <Label className="text-xs text-neutral-600 mb-1 block h-8 flex items-end">Term Years</Label>
-                  <AutoSizeInput
-                    value={selectedFund.termYears}
-                    onChange={(e) => handleFieldChange("termYears", e.target.value)}
-                    className="h-9 text-sm text-right"
+                  <input
+                    defaultValue={selectedFund.termYears}
+                    onBlur={(e) => {
+                      const formattedValue = formatCurrencyValue(e.target.value, "termYears");
+                      if (formattedValue !== e.target.value) {
+                        e.target.value = formattedValue;
+                      }
+                      handleFieldChange("termYears", e.target.value);
+                    }}
+                    className="table-input h-9 text-sm text-right"
                     disabled={isUpdating}
-                    style={{ textAlign: 'right' }}
-                    field="termYears"
-                    formatCurrencyValue={formatCurrencyValue}
+                    style={{ textAlign: 'right', minWidth: '120px', maxWidth: '300px' }}
                   />
                 </div>
                 <div>
                   <Label className="text-xs text-neutral-600 mb-1 block h-8 flex items-end">Increase %</Label>
-                  <AutoSizeInput
-                    value={selectedFund.increasePercentage}
-                    onChange={(e) => handleFieldChange("increasePercentage", e.target.value)}
-                    className="h-9 text-sm text-right"
+                  <input
+                    defaultValue={selectedFund.increasePercentage}
+                    onBlur={(e) => {
+                      const formattedValue = formatCurrencyValue(e.target.value, "increasePercentage");
+                      if (formattedValue !== e.target.value) {
+                        e.target.value = formattedValue;
+                      }
+                      handleFieldChange("increasePercentage", e.target.value);
+                    }}
+                    className="table-input h-9 text-sm text-right"
                     disabled={isUpdating}
                     placeholder="5%"
-                    style={{ textAlign: 'right' }}
-                    field="increasePercentage"
-                    formatCurrencyValue={formatCurrencyValue}
+                    style={{ textAlign: 'right', minWidth: '120px', maxWidth: '300px' }}
                   />
                 </div>
                 <div>
                   <Label className="text-xs text-neutral-600 mb-1 block h-8 flex items-end">Escalation Amount</Label>
-                  <AutoSizeInput
-                    value={selectedFund.lumpSumDeath}
-                    onChange={(e) => handleFieldChange("lumpSumDeath", e.target.value)}
-                    className="h-9 text-sm text-right"
+                  <input
+                    defaultValue={selectedFund.escalationAmount}
+                    onBlur={(e) => {
+                      const formattedValue = formatCurrencyValue(e.target.value, "escalationAmount");
+                      if (formattedValue !== e.target.value) {
+                        e.target.value = formattedValue;
+                      }
+                      handleFieldChange("escalationAmount", e.target.value);
+                    }}
+                    className="table-input h-9 text-sm text-right"
                     disabled={isUpdating}
                     placeholder="R 0"
-                    style={{ textAlign: 'right' }}
-                    field="lumpSumDeath"
-                    formatCurrencyValue={formatCurrencyValue}
+                    style={{ textAlign: 'right', minWidth: '120px', maxWidth: '300px' }}
                   />
                 </div>
               </div>
@@ -363,28 +343,36 @@ export function DetailedView({ funds, columnVisibility, onFieldUpdate, isUpdatin
               <div className="grid grid-cols-1 md:grid-cols-4 xl:grid-cols-8 gap-4 items-end">
                 <div>
                   <Label className="text-xs text-neutral-600 mb-1 block h-8 flex items-end">Approved Life Cover</Label>
-                  <AutoSizeInput
-                    value={selectedFund.approvedLifeCover}
-                    onChange={(e) => handleFieldChange("approvedLifeCover", e.target.value)}
-                    className="h-9 text-sm text-right"
+                  <input
+                    defaultValue={selectedFund.approvedLifeCover}
+                    onBlur={(e) => {
+                      const formattedValue = formatCurrencyValue(e.target.value, "approvedLifeCover");
+                      if (formattedValue !== e.target.value) {
+                        e.target.value = formattedValue;
+                      }
+                      handleFieldChange("approvedLifeCover", e.target.value);
+                    }}
+                    className="table-input h-9 text-sm text-right"
                     disabled={isUpdating}
                     placeholder="R 0"
-                    style={{ textAlign: 'right' }}
-                    field="approvedLifeCover"
-                    formatCurrencyValue={formatCurrencyValue}
+                    style={{ textAlign: 'right', minWidth: '120px', maxWidth: '300px' }}
                   />
                 </div>
                 <div>
                   <Label className="text-xs text-neutral-600 mb-1 block h-8 flex items-end">Fund Value</Label>
-                  <AutoSizeInput
-                    value={selectedFund.fundValue}
-                    onChange={(e) => handleFieldChange("fundValue", e.target.value)}
-                    className="h-9 text-sm text-right"
+                  <input
+                    defaultValue={selectedFund.fundValue}
+                    onBlur={(e) => {
+                      const formattedValue = formatCurrencyValue(e.target.value, "fundValue");
+                      if (formattedValue !== e.target.value) {
+                        e.target.value = formattedValue;
+                      }
+                      handleFieldChange("fundValue", e.target.value);
+                    }}
+                    className="table-input h-9 text-sm text-right"
                     disabled={isUpdating}
                     placeholder="R 0"
-                    style={{ textAlign: 'right' }}
-                    field="fundValue"
-                    formatCurrencyValue={formatCurrencyValue}
+                    style={{ textAlign: 'right', minWidth: '120px', maxWidth: '300px' }}
                   />
                 </div>
                 <div>
@@ -423,15 +411,19 @@ export function DetailedView({ funds, columnVisibility, onFieldUpdate, isUpdatin
                 </div>
                 <div>
                   <Label className="text-xs text-neutral-600 mb-1 block h-8 flex items-end">Percentage</Label>
-                  <AutoSizeInput
-                    value={selectedFund.beneficiaryPercentageSplit}
-                    onChange={(e) => handleFieldChange("beneficiaryPercentageSplit", e.target.value)}
-                    className="h-9 text-sm text-right"
+                  <input
+                    defaultValue={selectedFund.beneficiaryPercentageSplit}
+                    onBlur={(e) => {
+                      const formattedValue = formatCurrencyValue(e.target.value, "beneficiaryPercentageSplit");
+                      if (formattedValue !== e.target.value) {
+                        e.target.value = formattedValue;
+                      }
+                      handleFieldChange("beneficiaryPercentageSplit", e.target.value);
+                    }}
+                    className="table-input h-9 text-sm text-right"
                     disabled={isUpdating}
                     placeholder="0%"
-                    style={{ textAlign: 'right' }}
-                    field="beneficiaryPercentageSplit"
-                    formatCurrencyValue={formatCurrencyValue}
+                    style={{ textAlign: 'right', minWidth: '120px', maxWidth: '300px' }}
                   />
                 </div>
                 <div>
@@ -442,28 +434,36 @@ export function DetailedView({ funds, columnVisibility, onFieldUpdate, isUpdatin
                 </div>
                 <div>
                   <Label className="text-xs text-neutral-600 mb-1 block h-8 flex items-end">Lump Sum Taken</Label>
-                  <AutoSizeInput
-                    value={selectedFund.lumpSumTaken}
-                    onChange={(e) => handleFieldChange("lumpSumTaken", e.target.value)}
-                    className="h-9 text-sm text-right"
+                  <input
+                    defaultValue={selectedFund.lumpSumTaken}
+                    onBlur={(e) => {
+                      const formattedValue = formatCurrencyValue(e.target.value, "lumpSumTaken");
+                      if (formattedValue !== e.target.value) {
+                        e.target.value = formattedValue;
+                      }
+                      handleFieldChange("lumpSumTaken", e.target.value);
+                    }}
+                    className="table-input h-9 text-sm text-right"
                     disabled={isUpdating}
                     placeholder="R 0"
-                    style={{ textAlign: 'right' }}
-                    field="lumpSumTaken"
-                    formatCurrencyValue={formatCurrencyValue}
+                    style={{ textAlign: 'right', minWidth: '120px', maxWidth: '300px' }}
                   />
                 </div>
                 <div>
                   <Label className="text-xs text-neutral-600 mb-1 block h-8 flex items-end">Non-deductible Contribution</Label>
-                  <AutoSizeInput
-                    value={selectedFund.nondeductibleContribution}
-                    onChange={(e) => handleFieldChange("nondeductibleContribution", e.target.value)}
-                    className="h-9 text-sm text-right"
+                  <input
+                    defaultValue={selectedFund.nondeductibleContribution}
+                    onBlur={(e) => {
+                      const formattedValue = formatCurrencyValue(e.target.value, "nondeductibleContribution");
+                      if (formattedValue !== e.target.value) {
+                        e.target.value = formattedValue;
+                      }
+                      handleFieldChange("nondeductibleContribution", e.target.value);
+                    }}
+                    className="table-input h-9 text-sm text-right"
                     disabled={isUpdating}
                     placeholder="R 0"
-                    style={{ textAlign: 'right' }}
-                    field="nondeductibleContribution"
-                    formatCurrencyValue={formatCurrencyValue}
+                    style={{ textAlign: 'right', minWidth: '120px', maxWidth: '300px' }}
                   />
                 </div>
                 <div>
@@ -474,15 +474,19 @@ export function DetailedView({ funds, columnVisibility, onFieldUpdate, isUpdatin
                 </div>
                 <div>
                   <Label className="text-xs text-neutral-600 mb-1 block h-8 flex items-end">Income Term</Label>
-                  <AutoSizeInput
-                    value={selectedFund.incomeTerm}
-                    onChange={(e) => handleFieldChange("incomeTerm", e.target.value)}
-                    className="h-9 text-sm text-right"
+                  <input
+                    defaultValue={selectedFund.incomeTerm}
+                    onBlur={(e) => {
+                      const formattedValue = formatCurrencyValue(e.target.value, "incomeTerm");
+                      if (formattedValue !== e.target.value) {
+                        e.target.value = formattedValue;
+                      }
+                      handleFieldChange("incomeTerm", e.target.value);
+                    }}
+                    className="table-input h-9 text-sm text-right"
                     disabled={isUpdating}
                     placeholder="Income term"
-                    style={{ textAlign: 'right' }}
-                    field="incomeTerm"
-                    formatCurrencyValue={formatCurrencyValue}
+                    style={{ textAlign: 'right', minWidth: '120px', maxWidth: '300px' }}
                   />
                 </div>
               </div>

@@ -21,37 +21,7 @@ interface NewGroupedTableViewProps {
   onFieldUpdate: (id: number, field: keyof UpdateRetirementFund, value: string) => void;
   isUpdating: boolean;
 }
-// Auto-sizing input component
-const AutoSizeInput = ({ value, onChange, className, placeholder, disabled, style, fundId, field, ...props }: {
-  value: string;
-  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  className?: string;
-  placeholder?: string;
-  disabled?: boolean;
-  style?: React.CSSProperties;
-  fundId?: number;
-  field?: string;
-  type?: string;
-}) => {
-  return (
-    <input
-      defaultValue={value}
-      onBlur={onChange}
-      className={`${className} table-input`}
-      placeholder={placeholder}
-      disabled={disabled}
-      style={{ 
-        ...style, 
-        minWidth: '60px', 
-        maxWidth: '250px', 
-        textAlign: 'right', 
-        width: '100%',
-        outline: 'none'
-      }}
-      {...props}
-    />
-  );
-};
+// Removed AutoSizeInput - optimized for better performance
 export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFieldUpdate, isUpdating }: NewGroupedTableViewProps) {
   
   // Memoized calculations for better performance
@@ -807,7 +777,7 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
                 </tr>
                 {/* Beneficiary Rows */}
                 {beneficiaries.map((beneficiary, index) => (
-                  <tr key={beneficiary.id} className="hover:bg-neutral-50 border-l-4 border-l-teal-200">
+                  <tr key={`${fund.id}-beneficiary-${beneficiary.id}`} className="hover:bg-neutral-50 border-l-4 border-l-teal-200">
                     {/* Beneficiary details only in unapproved life cover section */}
                     {columnVisibility.unapprovedLifeCover && (
                       <>

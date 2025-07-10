@@ -7,40 +7,7 @@ import { Badge } from "@/components/ui/badge";
 import { BeneficiarySection } from "./beneficiary-section";
 import type { RetirementFund, UpdateRetirementFund } from "@shared/schema";
 
-// Auto-sizing input component for hybrid view
-const AutoSizeInput = ({ 
-  value, 
-  onChange, 
-  className = "", 
-  placeholder = "",
-  disabled = false,
-  style = {},
-  ...props 
-}: {
-  value: string;
-  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  className?: string;
-  placeholder?: string;
-  disabled?: boolean;
-  style?: React.CSSProperties;
-  type?: string;
-}) => {
-  return (
-    <Input
-      value={value}
-      onChange={onChange}
-      className={className}
-      placeholder={placeholder}
-      disabled={disabled}
-      style={{ 
-        ...style, 
-        minWidth: '120px', 
-        maxWidth: '300px'
-      }}
-      {...props}
-    />
-  );
-};
+// Removed AutoSizeInput - optimized for better performance
 
 interface ColumnVisibility {
   overview: boolean;
@@ -111,7 +78,7 @@ export const DetailedRow = memo(function DetailedRow({ fund, columnVisibility, o
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-4xl">
                 <div>
                   <Label className="text-xs text-neutral-600 mb-1 block">Description</Label>
-                  <AutoSizeInput
+                  <Input
                     value={fund.description}
                     onChange={(e) => handleFieldChange("description", e.target.value)}
                     className="h-9 text-sm"
@@ -152,7 +119,7 @@ export const DetailedRow = memo(function DetailedRow({ fund, columnVisibility, o
               </div>
               <div className="mb-4">
                 <Label className="text-xs text-neutral-600 mb-1 block">Cover Amount</Label>
-                <AutoSizeInput
+                <Input
                   value={fund.coverAmount}
                   onChange={(e) => handleFieldChange("coverAmount", e.target.value)}
                   className="h-9 text-sm text-right"
@@ -178,7 +145,7 @@ export const DetailedRow = memo(function DetailedRow({ fund, columnVisibility, o
               <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4 max-w-6xl">
                 <div>
                   <Label className="text-xs text-neutral-600 mb-1 block">Monthly Income</Label>
-                  <AutoSizeInput
+                  <Input
                     value={fund.monthlyIncome}
                     onChange={(e) => handleFieldChange("monthlyIncome", e.target.value)}
                     className="h-9 text-sm text-right"
@@ -189,7 +156,7 @@ export const DetailedRow = memo(function DetailedRow({ fund, columnVisibility, o
                 </div>
                 <div>
                   <Label className="text-xs text-neutral-600 mb-1 block">Term Years</Label>
-                  <AutoSizeInput
+                  <Input
                     value={fund.termYears}
                     onChange={(e) => handleFieldChange("termYears", e.target.value)}
                     className="h-9 text-sm text-right"
@@ -199,7 +166,7 @@ export const DetailedRow = memo(function DetailedRow({ fund, columnVisibility, o
                 </div>
                 <div>
                   <Label className="text-xs text-neutral-600 mb-1 block">Increase %</Label>
-                  <AutoSizeInput
+                  <Input
                     value={fund.increasePercentage}
                     onChange={(e) => handleFieldChange("increasePercentage", e.target.value)}
                     className="h-9 text-sm text-right"
@@ -210,7 +177,7 @@ export const DetailedRow = memo(function DetailedRow({ fund, columnVisibility, o
                 </div>
                 <div>
                   <Label className="text-xs text-neutral-600 mb-1 block">Escalation Amount</Label>
-                  <AutoSizeInput
+                  <Input
                     value={fund.lumpSumDeath}
                     onChange={(e) => handleFieldChange("lumpSumDeath", e.target.value)}
                     className="h-9 text-sm text-right"
@@ -230,7 +197,7 @@ export const DetailedRow = memo(function DetailedRow({ fund, columnVisibility, o
               <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 max-w-5xl">
                 <div>
                   <Label className="text-xs text-neutral-600 mb-1 block">Approved Life Cover</Label>
-                  <AutoSizeInput
+                  <Input
                     value={fund.approvedLifeCover}
                     onChange={(e) => handleFieldChange("approvedLifeCover", e.target.value)}
                     className="h-9 text-sm text-right"
@@ -241,7 +208,7 @@ export const DetailedRow = memo(function DetailedRow({ fund, columnVisibility, o
                 </div>
                 <div>
                   <Label className="text-xs text-neutral-600 mb-1 block">Fund Value</Label>
-                  <AutoSizeInput
+                  <Input
                     value={fund.fundValue}
                     onChange={(e) => handleFieldChange("fundValue", e.target.value)}
                     className="h-9 text-sm text-right"
@@ -288,7 +255,7 @@ export const DetailedRow = memo(function DetailedRow({ fund, columnVisibility, o
                   </div>
                   <div>
                     <Label className="text-xs text-neutral-600 mb-1 block">Percentage</Label>
-                    <AutoSizeInput
+                    <Input
                       value={fund.beneficiaryPercentageSplit}
                       onChange={(e) => handleFieldChange("beneficiaryPercentageSplit", e.target.value)}
                       className="h-9 text-sm text-right"
@@ -309,7 +276,7 @@ export const DetailedRow = memo(function DetailedRow({ fund, columnVisibility, o
                 <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4">
                   <div>
                     <Label className="text-xs text-neutral-600 mb-1 block">Lump Sum Taken</Label>
-                    <AutoSizeInput
+                    <Input
                       value={fund.lumpSumTaken}
                       onChange={(e) => handleFieldChange("lumpSumTaken", e.target.value)}
                       className="h-9 text-sm text-right"
@@ -320,7 +287,7 @@ export const DetailedRow = memo(function DetailedRow({ fund, columnVisibility, o
                   </div>
                   <div>
                     <Label className="text-xs text-neutral-600 mb-1 block">Non-deductible Contribution</Label>
-                    <AutoSizeInput
+                    <Input
                       value={fund.nondeductibleContribution}
                       onChange={(e) => handleFieldChange("nondeductibleContribution", e.target.value)}
                       className="h-9 text-sm text-right"
@@ -337,7 +304,7 @@ export const DetailedRow = memo(function DetailedRow({ fund, columnVisibility, o
                   </div>
                   <div>
                     <Label className="text-xs text-neutral-600 mb-1 block">Income Term</Label>
-                    <AutoSizeInput
+                    <Input
                       value={fund.incomeTerm}
                       onChange={(e) => handleFieldChange("incomeTerm", e.target.value)}
                       className="h-9 text-sm text-right"

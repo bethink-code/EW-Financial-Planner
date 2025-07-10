@@ -21,31 +21,7 @@ interface SimpleTableWithBeneficiariesProps {
   onFieldUpdate: (id: number, field: keyof UpdateRetirementFund, value: string) => void;
   isUpdating: boolean;
 }
-// Auto-resizing input component
-function AutoSizeInput({ 
-  value, 
-  onChange, 
-  className = "", 
-  style = {}, 
-  ...props 
-}: { 
-  value: string; 
-  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void; 
-  className?: string; 
-  style?: React.CSSProperties;
-  [key: string]: any;
-}) {
-  return (
-    <input
-      type="text"
-      value={value}
-      onChange={onChange}
-      className={`${className}`}
-      style={{ minWidth: '60px', ...style }}
-      {...props}
-    />
-  );
-}
+// Removed AutoSizeInput component - no longer needed for optimized performance
 export function SimpleTableWithBeneficiaries({ funds, columnVisibility, tableMode, onFieldUpdate, isUpdating }: SimpleTableWithBeneficiariesProps) {
   
   // Format currency value
