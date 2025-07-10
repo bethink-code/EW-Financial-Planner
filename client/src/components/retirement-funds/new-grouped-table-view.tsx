@@ -342,13 +342,13 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
                   <>
                     <td className="p-2 text-right border-l border-neutral-300">
                       <input
-                        defaultValue={fund.lumpSumLeftOverProvisions || "0"}
+                        defaultValue={fund.currentAnnualIncome || "0"}
                         onBlur={(e) => {
-                          const formattedValue = formatCurrencyValue(e.target.value, "lumpSumLeftOverProvisions");
+                          const formattedValue = formatCurrencyValue(e.target.value, "currentAnnualIncome");
                           if (formattedValue !== e.target.value) {
                             e.target.value = formattedValue;
                           }
-                          handleInputBlur(fund.id, "lumpSumLeftOverProvisions", e.target.value);
+                          handleInputBlur(fund.id, "currentAnnualIncome", e.target.value);
                         }}
                         className="table-input" style={{ textAlign: "right" }}
                         disabled={isUpdating}
@@ -356,21 +356,27 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
                     </td>
                     <td className="p-2 text-right ">
                       <input
-                        defaultValue={fund.incomeTerm || "0"}
-                        onBlur={(e) => handleInputBlur(fund.id, "incomeTerm", e.target.value)}
+                        defaultValue={fund.termYears || "0"}
+                        onBlur={(e) => {
+                          const formattedValue = formatCurrencyValue(e.target.value, "termYears");
+                          if (formattedValue !== e.target.value) {
+                            e.target.value = formattedValue;
+                          }
+                          handleInputBlur(fund.id, "termYears", e.target.value);
+                        }}
                         className="table-input" style={{ textAlign: "right" }}
                         disabled={isUpdating}
                       />
                     </td>
                     <td className="p-2 text-right ">
                       <input
-                        defaultValue={fund.incomeEscalation || "0%"}
+                        defaultValue={fund.increasePercentage || "0%"}
                         onBlur={(e) => {
-                          const formattedValue = formatCurrencyValue(e.target.value, "incomeEscalation");
+                          const formattedValue = formatCurrencyValue(e.target.value, "increasePercentage");
                           if (formattedValue !== e.target.value) {
                             e.target.value = formattedValue;
                           }
-                          handleInputBlur(fund.id, "incomeEscalation", e.target.value);
+                          handleInputBlur(fund.id, "increasePercentage", e.target.value);
                         }}
                         className="table-input" style={{ textAlign: "right" }}
                         disabled={isUpdating}
