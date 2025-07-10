@@ -236,25 +236,6 @@ th, td {
     width: 100%;
   }
 
-  /* Fix Replit container width constraint */
-  [data-replit-metadata], 
-  #root,
-  .replit-wrapper,
-  .app-container {
-    width: 100% !important;
-    max-width: none !important;
-    margin: 0 !important;
-    padding: 0 !important;
-    box-sizing: border-box !important;
-  }
-
-  /* Force full width on any potential container */
-  body > div,
-  #root > div {
-    width: 100% !important;
-    max-width: none !important;
-  }
-
   body {
     @apply font-sans antialiased bg-background text-foreground;
     font-family: 'Inter', sans-serif;
