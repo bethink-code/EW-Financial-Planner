@@ -85,6 +85,21 @@ export function AddFundDialog({ open, onOpenChange }: AddFundDialogProps) {
   });
 
   const onSubmit = (data: InsertRetirementFund) => {
+    // If cover amount and beneficiary name are provided, create initial beneficiary for unapproved life cover
+    if (data.coverAmount && data.beneficiaryName) {
+      const coverAmount = parseFloat(data.coverAmount.replace(/[^\d.-]/g, '')) || 0;
+      const percentage = parseFloat(data.beneficiaryPercentageSplit?.replace(/[^\d.-]/g, '') || '100') || 100;
+      
+      const initialBeneficiary = {
+        id: "1",
+        name: data.beneficiaryName,
+        percentage: percentage,
+        coverSplit: `R ${Math.round((coverAmount * percentage / 100)).toLocaleString()}`
+      };
+      
+      data.beneficiaries = JSON.stringify([initialBeneficiary]);
+    }
+    
     createMutation.mutate(data);
   };
 
