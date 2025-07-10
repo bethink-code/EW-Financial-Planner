@@ -350,13 +350,13 @@ export function SimpleTableWithBeneficiaries({ funds, columnVisibility, tableMod
                     {beneficiaries.length > 0 ? (
                       <>
                         <td className="p-2">
-                          <AutoSizeInput
+                          <Input
                             value={beneficiaries[0].name}
                             onChange={(e) => handleBeneficiaryUpdate(fund.id, 0, 'name', e.target.value)}
                             placeholder="Beneficiary name"
                             disabled={isUpdating}
-                            className="table-input"
-                            style={{ textAlign: "left" }}
+                            className="table-input h-7 text-sm bg-white border-gray-200 focus:border-primary"
+                            style={{ textAlign: "left", minWidth: "120px" }}
                           />
                         </td>
                         <td className="p-2 percentage-column">
@@ -595,13 +595,13 @@ export function SimpleTableWithBeneficiaries({ funds, columnVisibility, tableMod
                     <>
                       <td className="p-2 border-l border-neutral-300"></td>
                       <td className="p-2">
-                        <AutoSizeInput
+                        <Input
                           value={beneficiary.name}
                           onChange={(e) => handleBeneficiaryUpdate(fund.id, actualIndex, 'name', e.target.value)}
                           placeholder="Beneficiary name"
                           disabled={isUpdating}
-                          className="table-input"
-                          style={{ textAlign: "left" }}
+                          className="table-input h-7 text-sm bg-white border-gray-200 focus:border-primary"
+                          style={{ textAlign: "left", minWidth: "120px" }}
                         />
                       </td>
                       <td className="p-2 percentage-column">
