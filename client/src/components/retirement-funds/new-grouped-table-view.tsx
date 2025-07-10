@@ -91,7 +91,12 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
       'estateDeploymentDeceased', 'lumpSumDeath', 'previousLumpSums', 'additionalTaxFreeAmount'
     ];
     
-    if (!currencyFields.includes(field) && !numericFields.includes(field)) return value;
+    // Fields that should have percentage formatting (% suffix)
+    const percentageFields = [
+      'increasePercentage', 'beneficiaryPercentageSplit', 'percentage'
+    ];
+    
+    if (!currencyFields.includes(field) && !numericFields.includes(field) && !percentageFields.includes(field)) return value;
     
     // Remove existing formatting and non-numeric characters except decimals
     const numericValue = value.replace(/[^\d.-]/g, '');
@@ -100,6 +105,9 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
     if (currencyFields.includes(field)) {
       // Add R prefix and format with thousands separators
       return `R ${Math.round(Number(numericValue)).toLocaleString()}`;
+    } else if (percentageFields.includes(field)) {
+      // Add % suffix
+      return `${Number(numericValue)}%`;
     } else {
       // Just format with thousands separators (no R prefix)
       return Math.round(Number(numericValue)).toLocaleString();
@@ -799,12 +807,17 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
                         {/* Percentage */}
                         <td className="p-2 text-center">
                           <input
-                            type="number"
-                            defaultValue={beneficiary.percentage}
-                            onBlur={(e) => handleBeneficiaryUpdate(fund.id, index, 'percentage', e.target.value)}
-                            min="0"
-                            max="100"
-                            step="0.1"
+                            type="text"
+                            defaultValue={`${beneficiary.percentage}%`}
+                            onBlur={(e) => {
+                              const formattedValue = formatCurrencyValue(e.target.value, "percentage");
+                              if (formattedValue !== e.target.value) {
+                                e.target.value = formattedValue;
+                              }
+                              // Extract numeric value for backend
+                              const numericValue = e.target.value.replace(/[^\d.-]/g, '');
+                              handleBeneficiaryUpdate(fund.id, index, 'percentage', numericValue);
+                            }}
                             disabled={isUpdating}
                             className="h-6 text-xs text-center bg-[#F2F7FB] border-none focus:bg-white focus:border focus:border-primary w-full px-2 py-1 rounded"
                           />

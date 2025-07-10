@@ -62,7 +62,12 @@ export function SimpleTableWithBeneficiaries({ funds, columnVisibility, tableMod
       'estateDeploymentDeceased', 'lumpSumDeath', 'previousLumpSums', 'additionalTaxFreeAmount'
     ];
     
-    if (!currencyFields.includes(field) && !numericFields.includes(field)) return value;
+    // Fields that should have percentage formatting (% suffix)
+    const percentageFields = [
+      'increasePercentage', 'beneficiaryPercentageSplit', 'percentage'
+    ];
+    
+    if (!currencyFields.includes(field) && !numericFields.includes(field) && !percentageFields.includes(field)) return value;
     
     // Remove existing formatting and non-numeric characters except decimals
     const numericValue = value.replace(/[^\d.-]/g, '');
@@ -71,6 +76,9 @@ export function SimpleTableWithBeneficiaries({ funds, columnVisibility, tableMod
     if (currencyFields.includes(field)) {
       // Add R prefix and format with thousands separators
       return `R ${Math.round(Number(numericValue)).toLocaleString()}`;
+    } else if (percentageFields.includes(field)) {
+      // Add % suffix
+      return `${Number(numericValue)}%`;
     } else {
       // Just format with thousands separators (no R prefix)
       return Math.round(Number(numericValue)).toLocaleString();
@@ -437,7 +445,13 @@ export function SimpleTableWithBeneficiaries({ funds, columnVisibility, tableMod
                     <td className="p-2 text-right">
                       <input
                         defaultValue={fund.increasePercentage || ""}
-                        onBlur={(e) => handleInputBlur(fund.id, "increasePercentage", e.target.value)}
+                        onBlur={(e) => {
+                          const formattedValue = formatCurrencyValue(e.target.value, "increasePercentage");
+                          if (formattedValue !== e.target.value) {
+                            e.target.value = formattedValue;
+                          }
+                          handleInputBlur(fund.id, "increasePercentage", e.target.value);
+                        }}
                         className="table-input h-7 text-sm bg-white border-gray-200 focus:border-primary w-full px-3 py-1 border rounded-md text-sm"
                         style={{ textAlign: "right", minWidth: "60px" }}
                         placeholder="0%"
@@ -532,7 +546,13 @@ export function SimpleTableWithBeneficiaries({ funds, columnVisibility, tableMod
                       <input
                         
                         defaultValue={fund.beneficiaryPercentageSplit || ""}
-                        onBlur={(e) => handleInputBlur(fund.id, "beneficiaryPercentageSplit", e.target.value)}
+                        onBlur={(e) => {
+                          const formattedValue = formatCurrencyValue(e.target.value, "beneficiaryPercentageSplit");
+                          if (formattedValue !== e.target.value) {
+                            e.target.value = formattedValue;
+                          }
+                          handleInputBlur(fund.id, "beneficiaryPercentageSplit", e.target.value);
+                        }}
                         className="table-input h-7 text-sm bg-white border-gray-200 focus:border-primary w-full px-3 py-1 border rounded-md text-sm"
                         style={{ textAlign: "right", minWidth: "60px" }}
                         placeholder="0%"

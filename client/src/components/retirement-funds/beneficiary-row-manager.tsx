@@ -155,12 +155,17 @@ export function BeneficiaryRowManager({
             {/* Percentage */}
             <div className="w-16">
               <input
-                type="number"
-                defaultValue={beneficiary.percentage}
-                onBlur={(e) => handleUpdateBeneficiary(beneficiary.id, 'percentage', e.target.value)}
-                min="0"
-                max="100"
-                step="0.1"
+                type="text"
+                defaultValue={`${beneficiary.percentage}%`}
+                onBlur={(e) => {
+                  // Extract numeric value
+                  const numericValue = e.target.value.replace(/[^\d.-]/g, '');
+                  // Format display value with %
+                  if (numericValue) {
+                    e.target.value = `${numericValue}%`;
+                  }
+                  handleUpdateBeneficiary(beneficiary.id, 'percentage', numericValue);
+                }}
                 disabled={isUpdating}
                 className="h-8 text-sm text-center w-16 px-3 py-1 border rounded-md text-sm"
               />
@@ -255,12 +260,17 @@ export function BeneficiaryRowManager({
           {/* Percentage */}
           <div className="col-span-2">
             <input
-              type="number"
-              defaultValue={beneficiary.percentage}
-              onBlur={(e) => handleUpdateBeneficiary(beneficiary.id, 'percentage', e.target.value)}
-              min="0"
-              max="100"
-              step="0.1"
+              type="text"
+              defaultValue={`${beneficiary.percentage}%`}
+              onBlur={(e) => {
+                // Extract numeric value
+                const numericValue = e.target.value.replace(/[^\d.-]/g, '');
+                // Format display value with %
+                if (numericValue) {
+                  e.target.value = `${numericValue}%`;
+                }
+                handleUpdateBeneficiary(beneficiary.id, 'percentage', numericValue);
+              }}
               disabled={isUpdating}
               className="text-center w-full px-3 py-1 border rounded-md text-sm"
             />

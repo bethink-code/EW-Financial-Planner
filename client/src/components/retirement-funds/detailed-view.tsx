@@ -87,15 +87,26 @@ export function DetailedView({ funds, columnVisibility, onFieldUpdate, isUpdatin
       'amount', 'lumpSumTaken', 'nondeductibleContribution', 'livingAnnuity', 'escalationAmount'
     ];
     
-    if (!currencyFields.includes(field)) return value;
+    // Fields that should have percentage formatting (% suffix)
+    const percentageFields = [
+      'increasePercentage', 'beneficiaryPercentageSplit', 'percentage'
+    ];
+    
+    if (!currencyFields.includes(field) && !percentageFields.includes(field)) return value;
     
     // Remove existing formatting and non-numeric characters except decimals
     const numericValue = value.replace(/[^\d.-]/g, '');
     if (!numericValue || isNaN(Number(numericValue))) return value;
     
-    // Add R prefix and format with thousands separators
-    const formatted = `R ${Math.round(Number(numericValue)).toLocaleString()}`;
-    return formatted;
+    if (currencyFields.includes(field)) {
+      // Add R prefix and format with thousands separators
+      return `R ${Math.round(Number(numericValue)).toLocaleString()}`;
+    } else if (percentageFields.includes(field)) {
+      // Add % suffix
+      return `${Number(numericValue)}%`;
+    }
+    
+    return value;
   }, []);
 
   const handleFieldChange = useCallback((field: keyof UpdateRetirementFund, value: string) => {
