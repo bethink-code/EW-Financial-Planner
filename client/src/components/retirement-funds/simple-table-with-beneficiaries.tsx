@@ -51,7 +51,10 @@ export function SimpleTableWithBeneficiaries({ funds, columnVisibility, tableMod
   // Format currency value
   const formatCurrencyValue = useCallback((value: string, field: string) => {
     // Fields that should have currency formatting
-    const currencyFields = ['coverAmount', 'monthlyIncome', 'approvedLifeCover', 'fundValue', 'fundValueAtDeath', 'amount', 'lumpSumTaken', 'nondeductibleContribution', 'livingAnnuity'];
+    const currencyFields = [
+      'coverAmount', 'monthlyIncome', 'approvedLifeCover', 'fundValue', 'fundValueAtDeath', 
+      'amount', 'lumpSumTaken', 'nondeductibleContribution', 'livingAnnuity', 'escalationAmount'
+    ];
     
     if (!currencyFields.includes(field)) return value;
     
