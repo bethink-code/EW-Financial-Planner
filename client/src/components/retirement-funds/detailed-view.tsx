@@ -187,7 +187,7 @@ export function DetailedView({ funds, columnVisibility, onFieldUpdate, isUpdatin
           {columnVisibility.overview && (
             <div className="bg-teal-50 rounded-lg p-4">
               <h4 className="text-sm font-bold text-teal-700 mb-4">Overview</h4>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-end">
+              <div className="flex flex-wrap gap-6 items-end">
                 <div>
                   <Label className="text-xs text-neutral-600 mb-1 block h-8 flex items-end">Description</Label>
                   <input
@@ -267,7 +267,7 @@ export function DetailedView({ funds, columnVisibility, onFieldUpdate, isUpdatin
           {columnVisibility.monthlyDeathBenefit && (
             <div className="bg-teal-50 rounded-lg p-4">
               <h4 className="text-sm font-bold text-teal-700 mb-4">Monthly Death Benefit</h4>
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-6 items-end">
+              <div className="flex flex-wrap gap-6 items-end">
                 <div>
                   <Label className="text-xs text-neutral-600 mb-1 block h-8 flex items-end">Monthly Income</Label>
                   <input
@@ -343,7 +343,7 @@ export function DetailedView({ funds, columnVisibility, onFieldUpdate, isUpdatin
           {columnVisibility.fundValue && (
             <div className="bg-teal-50 rounded-lg p-4">
               <h4 className="text-sm font-bold text-teal-700 mb-4">Fund Value</h4>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-end">
+              <div className="flex flex-wrap gap-6 items-end">
                 <div>
                   <Label className="text-xs text-neutral-600 mb-1 block h-8 flex items-end">Approved Life Cover</Label>
                   <input
@@ -392,7 +392,7 @@ export function DetailedView({ funds, columnVisibility, onFieldUpdate, isUpdatin
           {columnVisibility.fundValueBeneficiaries && (
             <div className="bg-teal-50 rounded-lg p-4">
               <h4 className="text-sm font-bold text-teal-700 mb-4">Fund Value Beneficiaries</h4>
-              <div className="grid grid-cols-7 gap-4 items-end">
+              <div className="flex flex-wrap gap-6 items-end">
                 <div>
                   <Label className="text-xs text-neutral-600 mb-1 block h-8 flex items-end">Beneficiary Name</Label>
                   <Select
