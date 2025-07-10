@@ -6,6 +6,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Badge } from "@/components/ui/badge";
 import { BeneficiarySection } from "./beneficiary-section";
 import { FundActions } from "./fund-actions";
+import { parseBeneficiaries } from "@/lib/beneficiaries";
 import type { RetirementFund, UpdateRetirementFund } from "@shared/schema";
 
 // Auto-sizing input component for split-pane view
@@ -96,6 +97,23 @@ export function DetailedView({ funds, columnVisibility, onFieldUpdate, isUpdatin
   const owners = useMemo(() => ["John Doe", "Jane Smith", "Sarah Johnson", "David Wilson"], []);
   const getOwnerBadgeColor = useCallback(() => "bg-white border border-neutral-300", []);
 
+  // Helper function to get primary beneficiary display
+  const getPrimaryBeneficiary = useCallback((fund: RetirementFund) => {
+    // First check if there are dynamic beneficiaries from the beneficiaries field
+    const beneficiaries = parseBeneficiaries(fund.beneficiaries);
+    if (beneficiaries.length > 0) {
+      const primaryBeneficiary = beneficiaries[0];
+      if (beneficiaries.length === 1) {
+        return primaryBeneficiary.name;
+      } else {
+        return `${primaryBeneficiary.name} +${beneficiaries.length - 1} more`;
+      }
+    }
+    
+    // Fallback to the single beneficiaryName field
+    return fund.beneficiaryName || "No beneficiary";
+  }, []);
+
   if (!selectedFund) {
     return <div className="p-8 text-center text-gray-500">No funds available</div>;
   }
@@ -130,7 +148,7 @@ export function DetailedView({ funds, columnVisibility, onFieldUpdate, isUpdatin
                   Fund Value: <span className="font-medium text-neutral-900">{fund.fundValue}</span>
                 </div>
                 <div className="text-sm text-neutral-600">
-                  Beneficiary: <span className="font-medium">{fund.beneficiaryName}</span>
+                  Beneficiary: <span className="font-medium">{getPrimaryBeneficiary(fund)}</span>
                 </div>
               </div>
             </div>
