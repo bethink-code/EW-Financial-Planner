@@ -35,7 +35,7 @@ const AutoSizeInput = ({
     <input
       defaultValue={value}
       onBlur={onChange}
-      className={className}
+      className={`table-input ${className}`}
       placeholder={placeholder}
       disabled={disabled}
       style={{ 
