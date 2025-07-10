@@ -57,25 +57,9 @@ export default function NewRetirementFunds() {
     },
   });
 
-  // Debounced field update to prevent excessive API calls
-  const debouncedUpdates = useRef<Map<string, NodeJS.Timeout>>(new Map());
-  
+  // Immediate field update without debouncing to fix input issues
   const handleFieldUpdate = useCallback((id: number, field: keyof UpdateRetirementFund, value: string) => {
-    const key = `${id}-${field}`;
-    
-    // Clear existing timeout for this field
-    const existingTimeout = debouncedUpdates.current.get(key);
-    if (existingTimeout) {
-      clearTimeout(existingTimeout);
-    }
-    
-    // Set new timeout for this field
-    const newTimeout = setTimeout(() => {
-      updateMutation.mutate({ id, updates: { [field]: value } });
-      debouncedUpdates.current.delete(key);
-    }, 300); // 300ms debounce
-    
-    debouncedUpdates.current.set(key, newTimeout);
+    updateMutation.mutate({ id, updates: { [field]: value } });
   }, [updateMutation]);
 
   const handleToggleColumnGroup = useCallback((group: keyof ColumnVisibility) => {
