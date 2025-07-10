@@ -1,4 +1,4 @@
-import { useState, useMemo, useCallback } from "react";
+import { useState, useMemo, useCallback, useRef } from "react";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { RetirementFund, UpdateRetirementFund } from "@shared/schema";
 import { queryClient, apiRequest } from "@/lib/queryClient";
@@ -57,8 +57,25 @@ export default function NewRetirementFunds() {
     },
   });
 
+  // Debounced field update to prevent excessive API calls
+  const debouncedUpdates = useRef<Map<string, NodeJS.Timeout>>(new Map());
+  
   const handleFieldUpdate = useCallback((id: number, field: keyof UpdateRetirementFund, value: string) => {
-    updateMutation.mutate({ id, updates: { [field]: value } });
+    const key = `${id}-${field}`;
+    
+    // Clear existing timeout for this field
+    const existingTimeout = debouncedUpdates.current.get(key);
+    if (existingTimeout) {
+      clearTimeout(existingTimeout);
+    }
+    
+    // Set new timeout for this field
+    const newTimeout = setTimeout(() => {
+      updateMutation.mutate({ id, updates: { [field]: value } });
+      debouncedUpdates.current.delete(key);
+    }, 300); // 300ms debounce
+    
+    debouncedUpdates.current.set(key, newTimeout);
   }, [updateMutation]);
 
   const handleToggleColumnGroup = useCallback((group: keyof ColumnVisibility) => {

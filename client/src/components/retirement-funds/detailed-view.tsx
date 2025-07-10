@@ -29,21 +29,26 @@ const AutoSizeInput = ({
 }) => {
   const inputRef = useRef<HTMLInputElement>(null);
 
+  // Debounced canvas calculation to improve performance
   useEffect(() => {
-    if (inputRef.current) {
-      const canvas = document.createElement('canvas');
-      const context = canvas.getContext('2d');
-      if (context) {
-        const computedStyle = window.getComputedStyle(inputRef.current);
-        context.font = computedStyle.font;
-        
-        const textToMeasure = value || placeholder || '';
-        const textWidth = context.measureText(textToMeasure).width;
-        
-        const width = Math.max(120, Math.min(300, textWidth + 40));
-        inputRef.current.style.width = `${width}px`;
+    const timeoutId = setTimeout(() => {
+      if (inputRef.current) {
+        const canvas = document.createElement('canvas');
+        const context = canvas.getContext('2d');
+        if (context) {
+          const computedStyle = window.getComputedStyle(inputRef.current);
+          context.font = computedStyle.font;
+          
+          const textToMeasure = value || placeholder || '';
+          const textWidth = context.measureText(textToMeasure).width;
+          
+          const width = Math.max(120, Math.min(300, textWidth + 40));
+          inputRef.current.style.width = `${width}px`;
+        }
       }
-    }
+    }, 100); // Debounce canvas calculation
+
+    return () => clearTimeout(timeoutId);
   }, [value, placeholder]);
 
   return (
