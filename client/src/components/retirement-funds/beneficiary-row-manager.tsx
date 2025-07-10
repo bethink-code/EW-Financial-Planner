@@ -139,7 +139,8 @@ export function BeneficiaryRowManager({
 
             {/* Beneficiary Name */}
             <div className="flex-1 min-w-0">
-              <textarea
+              <input
+                type="text"
                 defaultValue={beneficiary.name}
                 onBlur={(e) => {
                   console.log('Beneficiary name onBlur:', e.target.value);
@@ -147,13 +148,11 @@ export function BeneficiaryRowManager({
                 }}
                 placeholder="Enter beneficiary name"
                 disabled={isUpdating}
-                rows={1}
-                className="h-8 text-sm table-input w-full px-3 py-1 border rounded-md text-sm resize-none overflow-hidden"
+                className="h-8 text-sm table-input w-full px-3 py-1 border rounded-md text-sm"
                 style={{ 
                   minWidth: '120px', 
                   maxWidth: '250px',
-                  width: 'auto',
-                  lineHeight: '1.2'
+                  width: 'auto'
                 }}
               />
             </div>
@@ -249,7 +248,8 @@ export function BeneficiaryRowManager({
 
           {/* Beneficiary Name */}
           <div className="col-span-5">
-            <textarea
+            <input
+              type="text"
               defaultValue={beneficiary.name}
               onBlur={(e) => {
                 console.log('Table beneficiary name onBlur:', e.target.value);
@@ -257,9 +257,7 @@ export function BeneficiaryRowManager({
               }}
               placeholder="Enter beneficiary name"
               disabled={isUpdating}
-              rows={1}
-              className="text-right table-input w-full px-3 py-1 border rounded-md text-sm resize-none overflow-hidden"
-              style={{ lineHeight: '1.2' }}
+              className="text-right table-input w-full px-3 py-1 border rounded-md text-sm"
             />
           </div>
 
