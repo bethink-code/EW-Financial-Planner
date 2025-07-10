@@ -297,7 +297,7 @@ export function SimpleTableWithBeneficiaries({ funds, columnVisibility, tableMod
                     <td className="p-2 text-right">
                       <Select
                         value={fund.owner || "John Doe"}
-                        onValueChange={(value) => handleInputChange(fund.id, "owner", value)}
+                        onValueChange={(value) => onFieldUpdate(fund.id, "owner", value)}
                         disabled={isUpdating}
                       >
                         <SelectTrigger className="table-input h-7 min-w-[140px] w-full max-w-[180px] text-right border-0 focus:bg-white focus:border focus:border-primary hover:bg-neutral-50 transition-colors duration-200 group">
