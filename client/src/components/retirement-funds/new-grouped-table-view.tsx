@@ -759,26 +759,27 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
                       <>
                         {/* Beneficiary Name */}
                         <td className="p-2 text-left border-l border-neutral-300">
-                          <Input
-                            value={beneficiary.name}
-                            onChange={(e) => handleBeneficiaryUpdate(fund.id, index, 'name', e.target.value)}
+                          <input
+                            type="text"
+                            defaultValue={beneficiary.name}
+                            onBlur={(e) => handleBeneficiaryUpdate(fund.id, index, 'name', e.target.value)}
                             placeholder="Beneficiary name"
                             disabled={isUpdating}
-                            className="h-6 text-xs text-left bg-[#F2F7FB] border-none focus:bg-white focus:border focus:border-primary"
+                            className="h-6 text-xs text-left bg-[#F2F7FB] border-none focus:bg-white focus:border focus:border-primary w-full px-2 py-1 rounded"
                           />
                         </td>
                         
                         {/* Percentage */}
                         <td className="p-2 text-center">
-                          <Input
+                          <input
                             type="number"
-                            value={beneficiary.percentage}
-                            onChange={(e) => handleBeneficiaryUpdate(fund.id, index, 'percentage', e.target.value)}
+                            defaultValue={beneficiary.percentage}
+                            onBlur={(e) => handleBeneficiaryUpdate(fund.id, index, 'percentage', e.target.value)}
                             min="0"
                             max="100"
                             step="0.1"
                             disabled={isUpdating}
-                            className="h-6 text-xs text-center bg-[#F2F7FB] border-none focus:bg-white focus:border focus:border-primary"
+                            className="h-6 text-xs text-center bg-[#F2F7FB] border-none focus:bg-white focus:border focus:border-primary w-full px-2 py-1 rounded"
                           />
                         </td>
                         

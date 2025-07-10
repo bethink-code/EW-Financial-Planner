@@ -83,7 +83,6 @@ export function BeneficiaryRowManager({
   }, [beneficiaries, adjustPercentages, onBeneficiariesChange]);
 
   const handleUpdateBeneficiary = useCallback((id: string, field: keyof Beneficiary, value: string | number) => {
-    console.log('handleUpdateBeneficiary called:', { id, field, value });
     // Immediate update without complex logic to prevent input interference
     const updatedBeneficiaries = beneficiaries.map(b => {
       if (b.id === id) {
@@ -100,7 +99,6 @@ export function BeneficiaryRowManager({
       return b;
     });
     
-    console.log('Updated beneficiaries:', updatedBeneficiaries);
     onBeneficiariesChange(updatedBeneficiaries);
   }, [beneficiaries, totalCoverAmount, onBeneficiariesChange]);
 
@@ -142,10 +140,7 @@ export function BeneficiaryRowManager({
               <input
                 type="text"
                 defaultValue={beneficiary.name}
-                onBlur={(e) => {
-                  console.log('Beneficiary name onBlur:', e.target.value);
-                  handleUpdateBeneficiary(beneficiary.id, 'name', e.target.value);
-                }}
+                onBlur={(e) => handleUpdateBeneficiary(beneficiary.id, 'name', e.target.value)}
                 placeholder="Enter beneficiary name"
                 disabled={isUpdating}
                 className="h-8 text-sm table-input w-full px-3 py-1 border rounded-md text-sm"
@@ -251,10 +246,7 @@ export function BeneficiaryRowManager({
             <input
               type="text"
               defaultValue={beneficiary.name}
-              onBlur={(e) => {
-                console.log('Table beneficiary name onBlur:', e.target.value);
-                handleUpdateBeneficiary(beneficiary.id, 'name', e.target.value);
-              }}
+              onBlur={(e) => handleUpdateBeneficiary(beneficiary.id, 'name', e.target.value)}
               placeholder="Enter beneficiary name"
               disabled={isUpdating}
               className="text-right table-input w-full px-3 py-1 border rounded-md text-sm"

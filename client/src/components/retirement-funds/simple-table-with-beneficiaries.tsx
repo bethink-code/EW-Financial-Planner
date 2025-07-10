@@ -333,15 +333,15 @@ export function SimpleTableWithBeneficiaries({ funds, columnVisibility, tableMod
                           />
                         </td>
                         <td className="p-2 percentage-column">
-                          <Input
+                          <input
                             type="number"
-                            value={beneficiaries[0].percentage || 0}
-                            onChange={(e) => handleBeneficiaryUpdate(fund.id, 0, 'percentage', e.target.value)}
+                            defaultValue={beneficiaries[0].percentage || 0}
+                            onBlur={(e) => handleBeneficiaryUpdate(fund.id, 0, 'percentage', e.target.value)}
                             min="0"
                             max="100"
                             step="0.1"
                             disabled={isUpdating}
-                            className="w-full h-7 text-sm text-center bg-white border-gray-200 focus:border-primary percentage-input"
+                            className="w-full h-7 text-sm text-center bg-white border-gray-200 focus:border-primary percentage-input px-3 py-1 border rounded-md"
                             placeholder="0"
                           />
                         </td>
@@ -609,15 +609,15 @@ export function SimpleTableWithBeneficiaries({ funds, columnVisibility, tableMod
                         />
                       </td>
                       <td className="p-2 percentage-column">
-                        <Input
+                        <input
                           type="number"
-                          value={beneficiary.percentage || 0}
-                          onChange={(e) => handleBeneficiaryUpdate(fund.id, actualIndex, 'percentage', e.target.value)}
+                          defaultValue={beneficiary.percentage || 0}
+                          onBlur={(e) => handleBeneficiaryUpdate(fund.id, actualIndex, 'percentage', e.target.value)}
                           min="0"
                           max="100"
                           step="0.1"
                           disabled={isUpdating}
-                          className="w-full h-7 text-sm text-center bg-white border-gray-200 focus:border-primary percentage-input"
+                          className="w-full h-7 text-sm text-center bg-white border-gray-200 focus:border-primary percentage-input px-3 py-1 border rounded-md"
                           placeholder="0"
                         />
                       </td>
