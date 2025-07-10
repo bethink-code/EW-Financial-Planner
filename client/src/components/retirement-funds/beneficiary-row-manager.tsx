@@ -155,7 +155,6 @@ export function BeneficiaryRowManager({
             {/* Percentage */}
             <div className="w-16">
               <input
-                key={`beneficiary-pct-${beneficiary.id}-${beneficiary.percentage}`}
                 type="number"
                 defaultValue={beneficiary.percentage}
                 onBlur={(e) => handleUpdateBeneficiary(beneficiary.id, 'percentage', e.target.value)}
@@ -256,7 +255,6 @@ export function BeneficiaryRowManager({
           {/* Percentage */}
           <div className="col-span-2">
             <input
-              key={`beneficiary-table-pct-${beneficiary.id}-${beneficiary.percentage}`}
               type="number"
               defaultValue={beneficiary.percentage}
               onBlur={(e) => handleUpdateBeneficiary(beneficiary.id, 'percentage', e.target.value)}
