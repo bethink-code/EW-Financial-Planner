@@ -392,7 +392,7 @@ export function DetailedView({ funds, columnVisibility, onFieldUpdate, isUpdatin
           {columnVisibility.fundValueBeneficiaries && (
             <div className="bg-teal-50 rounded-lg p-4">
               <h4 className="text-sm font-bold text-teal-700 mb-4">Fund Value Beneficiaries</h4>
-              <div className="grid grid-cols-7 gap-2 items-end">
+              <div className="grid grid-cols-7 gap-4 items-end">
                 <div>
                   <Label className="text-xs text-neutral-600 mb-1 block h-8 flex items-end">Beneficiary Name</Label>
                   <Select
@@ -400,7 +400,7 @@ export function DetailedView({ funds, columnVisibility, onFieldUpdate, isUpdatin
                     onValueChange={(value) => handleFieldChange("beneficiaryName", value)}
                     disabled={isUpdating}
                   >
-                    <SelectTrigger className="h-9 text-sm">
+                    <SelectTrigger className="h-9 text-sm w-[120px]">
                       <SelectValue placeholder="Select beneficiary" />
                     </SelectTrigger>
                     <SelectContent>
@@ -424,14 +424,14 @@ export function DetailedView({ funds, columnVisibility, onFieldUpdate, isUpdatin
                       }
                       handleFieldChange("beneficiaryPercentageSplit", e.target.value);
                     }}
-                    className="h-9 px-2 py-2 text-sm text-right bg-white border border-neutral-200 rounded focus:border-blue-500 focus:outline-none w-[45px]"
+                    className="h-9 px-2 py-2 text-sm text-right bg-white border border-neutral-200 rounded focus:border-blue-500 focus:outline-none w-[70px]"
                     disabled={isUpdating}
                     placeholder="0%"
                   />
                 </div>
                 <div>
                   <Label className="text-xs text-neutral-600 mb-1 block h-8 flex items-end">Amount (Read-only)</Label>
-                  <div className="h-9 px-3 py-2 text-sm text-right bg-neutral-50 border border-neutral-200 rounded">
+                  <div className="h-9 px-3 py-2 text-sm text-right bg-neutral-50 border border-neutral-200 rounded w-[120px]">
                     {selectedFund.amount || "R 0"}
                   </div>
                 </div>
@@ -447,7 +447,7 @@ export function DetailedView({ funds, columnVisibility, onFieldUpdate, isUpdatin
                       }
                       handleFieldChange("lumpSumTaken", e.target.value);
                     }}
-                    className="h-9 px-3 py-2 text-sm text-right bg-white border border-neutral-200 rounded focus:border-blue-500 focus:outline-none min-w-[100px] max-w-[150px]"
+                    className="h-9 px-3 py-2 text-sm text-right bg-white border border-neutral-200 rounded focus:border-blue-500 focus:outline-none w-[120px]"
                     disabled={isUpdating}
                     placeholder="R 0"
                   />
@@ -464,14 +464,14 @@ export function DetailedView({ funds, columnVisibility, onFieldUpdate, isUpdatin
                       }
                       handleFieldChange("nondeductibleContribution", e.target.value);
                     }}
-                    className="h-9 px-3 py-2 text-sm text-right bg-white border border-neutral-200 rounded focus:border-blue-500 focus:outline-none min-w-[120px] max-w-[180px]"
+                    className="h-9 px-3 py-2 text-sm text-right bg-white border border-neutral-200 rounded focus:border-blue-500 focus:outline-none w-[140px]"
                     disabled={isUpdating}
                     placeholder="R 0"
                   />
                 </div>
                 <div>
                   <Label className="text-xs text-neutral-600 mb-1 block h-8 flex items-end">Living Annuity (Read-only)</Label>
-                  <div className="h-9 px-3 py-2 text-sm text-right bg-neutral-50 border border-neutral-200 rounded">
+                  <div className="h-9 px-3 py-2 text-sm text-right bg-neutral-50 border border-neutral-200 rounded w-[120px]">
                     {selectedFund.livingAnnuity || ""}
                   </div>
                 </div>
@@ -487,7 +487,7 @@ export function DetailedView({ funds, columnVisibility, onFieldUpdate, isUpdatin
                       }
                       handleFieldChange("incomeTerm", e.target.value);
                     }}
-                    className="h-9 px-3 py-2 text-sm text-right bg-white border border-neutral-200 rounded focus:border-blue-500 focus:outline-none min-w-[100px] max-w-[150px]"
+                    className="h-9 px-3 py-2 text-sm text-right bg-white border border-neutral-200 rounded focus:border-blue-500 focus:outline-none w-[100px]"
                     disabled={isUpdating}
                     placeholder="Income term"
                   />
