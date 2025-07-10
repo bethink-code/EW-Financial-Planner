@@ -52,13 +52,13 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
     // Fields that should have currency formatting (R prefix)
     const currencyFields = [
       'coverAmount', 'monthlyIncome', 'approvedLifeCover', 'fundValue', 'fundValueAtDeath', 
-      'amount', 'lumpSumTaken', 'nondeductibleContribution', 'livingAnnuity', 'escalationAmount'
+      'amount', 'lumpSumTaken', 'nondeductibleContribution', 'livingAnnuity', 'escalationAmount',
+      'currentAnnualIncome', 'annualIncomeAtDeath', 'estateDeploymentDeceased', 'monthlyProvisionOffered'
     ];
     
     // Fields that should have thousand separators but no R prefix  
     const numericFields = [
-      'lumpSumLeftOverProvisions', 'currentAnnualIncome', 'annualIncomeAtDeath', 
-      'estateDeploymentDeceased', 'lumpSumDeath', 'previousLumpSums', 'additionalTaxFreeAmount'
+      'lumpSumLeftOverProvisions', 'lumpSumDeath', 'previousLumpSums', 'additionalTaxFreeAmount'
     ];
     
     // Fields that should have percentage formatting (% suffix)
@@ -382,13 +382,13 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
                   <>
                     <td className="p-2 text-right border-l border-neutral-300">
                       <input
-                        defaultValue={fund.estateDeploymentDeceased || "0"}
+                        defaultValue={fund.monthlyProvisionOffered || "0"}
                         onBlur={(e) => {
-                          const formattedValue = formatCurrencyValue(e.target.value, "estateDeploymentDeceased");
+                          const formattedValue = formatCurrencyValue(e.target.value, "monthlyProvisionOffered");
                           if (formattedValue !== e.target.value) {
                             e.target.value = formattedValue;
                           }
-                          handleInputBlur(fund.id, "estateDeploymentDeceased", e.target.value);
+                          handleInputBlur(fund.id, "monthlyProvisionOffered", e.target.value);
                         }}
                         className="table-input" style={{ textAlign: "right" }}
                         disabled={isUpdating}
@@ -397,7 +397,13 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
                     <td className="p-2 text-right ">
                       <input
                         defaultValue={fund.incomeTerm || "0"}
-                        onBlur={(e) => handleInputBlur(fund.id, "incomeTerm", e.target.value)}
+                        onBlur={(e) => {
+                          const formattedValue = formatCurrencyValue(e.target.value, "incomeTerm");
+                          if (formattedValue !== e.target.value) {
+                            e.target.value = formattedValue;
+                          }
+                          handleInputBlur(fund.id, "incomeTerm", e.target.value);
+                        }}
                         className="table-input" style={{ textAlign: "right" }}
                         disabled={isUpdating}
                       />

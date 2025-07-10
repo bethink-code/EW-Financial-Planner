@@ -54,6 +54,7 @@ export class MemStorage implements IStorage {
       currentAnnualIncome: "R 54,000",
       annualIncomeAtDeath: "R 60,000",
       estateDeploymentDeceased: "R 45,000",
+      incomeEscalation: "3%",
       executorsFee: "3.5%",
       mastersFee: "1.75%",
       
@@ -99,6 +100,7 @@ export class MemStorage implements IStorage {
       currentAnnualIncome: "R 38,400",
       annualIncomeAtDeath: "R 42,000",
       estateDeploymentDeceased: "R 35,000",
+      incomeEscalation: "0%",
       executorsFee: "3.5%",
       mastersFee: "1.75%",
       
@@ -143,6 +145,7 @@ export class MemStorage implements IStorage {
       nondeductibleContribution: insertFund.nondeductibleContribution || "",
       livingAnnuity: insertFund.livingAnnuity || "",
       incomeTerm: insertFund.incomeTerm || "",
+      incomeEscalation: insertFund.incomeEscalation || "0%",
       
       // Flows mode specific fields
       lumpSumLeftOverProvisions: insertFund.lumpSumLeftOverProvisions || "0",
