@@ -308,10 +308,11 @@ export function SimpleTableWithBeneficiaries({ funds, columnVisibility, tableMod
                 {columnVisibility.unapprovedLifeCover && (
                   <>
                     <td className="p-2 text-right border-l border-neutral-300">
-                      <Input
-                        value={fund.coverAmount || ""}
-                        onChange={(e) => handleInputChange(fund.id, "coverAmount", e.target.value)}
-                        className="table-input h-7 text-sm bg-white border-gray-200 focus:border-primary"
+                      <input
+                        key={`cover-${fund.id}`}
+                        defaultValue={fund.coverAmount || ""}
+                        onBlur={(e) => handleInputChange(fund.id, "coverAmount", e.target.value)}
+                        className="table-input h-7 text-sm bg-white border-gray-200 focus:border-primary w-full px-3 py-1 border rounded-md text-sm"
                         style={{ textAlign: "right", minWidth: "100px" }}
                         placeholder="R 0"
                         disabled={isUpdating}
@@ -320,12 +321,13 @@ export function SimpleTableWithBeneficiaries({ funds, columnVisibility, tableMod
                     {beneficiaries.length > 0 ? (
                       <>
                         <td className="p-2">
-                          <Input
-                            value={beneficiaries[0].name}
-                            onChange={(e) => handleBeneficiaryUpdate(fund.id, 0, 'name', e.target.value)}
+                          <input
+                            key={`beneficiary-${fund.id}-0-${beneficiaries[0].id}`}
+                            defaultValue={beneficiaries[0].name}
+                            onBlur={(e) => handleBeneficiaryUpdate(fund.id, 0, 'name', e.target.value)}
                             placeholder="Beneficiary name"
                             disabled={isUpdating}
-                            className="table-input h-7 text-sm bg-white border-gray-200 focus:border-primary"
+                            className="table-input h-7 text-sm bg-white border-gray-200 focus:border-primary w-full px-3 py-1 border rounded-md text-sm"
                             style={{ textAlign: "left", minWidth: "120px" }}
                           />
                         </td>

@@ -75,10 +75,7 @@ export default function NewRetirementFunds() {
         queryClient.setQueryData(["/api/retirement-funds"], context.previousFunds);
       }
     },
-    onSettled: () => {
-      // Sync with server after mutation completes
-      queryClient.invalidateQueries({ queryKey: ["/api/retirement-funds"] });
-    },
+    // Removed onSettled to prevent invalidation from overriding optimistic updates
   });
 
   // Immediate field update without debouncing to fix input issues
