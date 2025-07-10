@@ -696,10 +696,10 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
                     <>
                       {/* Description */}
                       <td className="table-cell whitespace-nowrap table-text-14 text-neutral-900" rowSpan={beneficiaries.length + 1}>
-                        <AutoSizeInput
-                          value={fund.description || ""}
-                          onChange={(e) => handleInputChange(fund.id, "description", e.target.value)}
-                          className="border-0 focus:bg-white focus:border focus:border-primary hover:bg-neutral-50 text-left font-medium"
+                        <input
+                          defaultValue={fund.description || ""}
+                          onBlur={(e) => handleInputBlur(fund.id, "description", e.target.value)}
+                          className="border-0 focus:bg-white focus:border focus:border-primary hover:bg-neutral-50 text-left font-medium table-input"
                           placeholder="Fund description"
                           disabled={isUpdating}
                         />
@@ -709,7 +709,7 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
                       <td className="p-2 text-right" rowSpan={beneficiaries.length + 1}>
                         <Select
                           value={fund.owner || "John Doe"}
-                          onValueChange={(value) => handleInputChange(fund.id, "owner", value)}
+                          onValueChange={(value) => handleInputBlur(fund.id, "owner", value)}
                           disabled={isUpdating}
                         >
                           <SelectTrigger className="compact-input border-0 focus:bg-white focus:border focus:border-primary hover:bg-neutral-50 transition-colors duration-200 group">
@@ -731,9 +731,15 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
                   {columnVisibility.unapprovedLifeCover && (
                     <>
                       <td className="p-2 text-right border-l border-neutral-300 bg-teal-50" rowSpan={beneficiaries.length + 1}>
-                        <AutoSizeInput
-                          value={fund.coverAmount || ""}
-                          onChange={(e) => handleInputChange(fund.id, "coverAmount", e.target.value)}
+                        <input
+                          defaultValue={fund.coverAmount || ""}
+                          onBlur={(e) => {
+                            const formattedValue = formatCurrencyValue(e.target.value, "coverAmount");
+                            if (formattedValue !== e.target.value) {
+                              e.target.value = formattedValue;
+                            }
+                            handleInputBlur(fund.id, "coverAmount", e.target.value);
+                          }}
                           className="table-input" style={{ textAlign: "right" }}
                           placeholder="R 0"
                           disabled={isUpdating}
