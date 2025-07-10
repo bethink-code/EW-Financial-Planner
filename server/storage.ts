@@ -67,7 +67,7 @@ export class MemStorage implements IStorage {
       // Overview
       description: "Provident Fund",
       owner: "Jane Smith",
-      coverAmount: "R 350,000",
+      coverAmount: "R 20,000,000",
       
       // Unapproved life cover - dynamic beneficiaries
       beneficiaries: JSON.stringify([
