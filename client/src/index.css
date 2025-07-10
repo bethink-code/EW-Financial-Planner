@@ -304,10 +304,10 @@ th, td {
   /* Input fields for editable content */
   .table-input {
     width: auto;
-    min-width: 80px;
-    max-width: 300px;
+    min-width: 35px;
+    max-width: 65px;
     height: 1.25rem;
-    padding: 1.2rem 0.75rem;
+    padding: 1.2rem 0.375rem;
     background-color: #F2F7FB;
     border: none;
     outline: none;
