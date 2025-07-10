@@ -78,7 +78,9 @@ export function SimpleTableWithBeneficiaries({ funds, columnVisibility, tableMod
   }, []);
   // Memoized handlers
   const handleInputBlur = useCallback((fundId: number, field: keyof UpdateRetirementFund, value: string) => {
+    console.log('handleInputBlur called:', { fundId, field, value });
     const formattedValue = formatCurrencyValue(value, field);
+    console.log('formatted value:', formattedValue);
     onFieldUpdate(fundId, field, formattedValue);
   }, [onFieldUpdate, formatCurrencyValue]);
   const handleBeneficiaryUpdate = useCallback((fundId: number, beneficiaryIndex: number, field: keyof Beneficiary, value: string | number) => {
@@ -320,8 +322,12 @@ export function SimpleTableWithBeneficiaries({ funds, columnVisibility, tableMod
                   <>
                     <td className="p-2 text-right border-l border-neutral-300">
                       <input
+                        key={`cover-${fund.id}`}
                         defaultValue={fund.coverAmount || ""}
-                        onBlur={(e) => handleInputBlur(fund.id, "coverAmount", e.target.value)}
+                        onBlur={(e) => {
+                          console.log('Cover amount blur:', e.target.value);
+                          handleInputBlur(fund.id, "coverAmount", e.target.value);
+                        }}
                         className="table-input h-7 text-sm bg-white border-gray-200 focus:border-primary w-full px-3 py-1 border rounded-md text-sm"
                         style={{ textAlign: "right", minWidth: "100px" }}
                         placeholder="R 0"
