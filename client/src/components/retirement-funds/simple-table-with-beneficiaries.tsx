@@ -598,12 +598,13 @@ export function SimpleTableWithBeneficiaries({ funds, columnVisibility, tableMod
                     <>
                       <td className="p-2 border-l border-neutral-300"></td>
                       <td className="p-2">
-                        <Input
-                          value={beneficiary.name}
-                          onChange={(e) => handleBeneficiaryUpdate(fund.id, actualIndex, 'name', e.target.value)}
+                        <input
+                          type="text"
+                          defaultValue={beneficiary.name}
+                          onBlur={(e) => handleBeneficiaryUpdate(fund.id, actualIndex, 'name', e.target.value)}
                           placeholder="Beneficiary name"
                           disabled={isUpdating}
-                          className="table-input h-7 text-sm bg-white border-gray-200 focus:border-primary"
+                          className="table-input h-7 text-sm bg-white border-gray-200 focus:border-primary w-full px-3 py-1 border rounded-md text-sm"
                           style={{ textAlign: "left", minWidth: "120px" }}
                         />
                       </td>
