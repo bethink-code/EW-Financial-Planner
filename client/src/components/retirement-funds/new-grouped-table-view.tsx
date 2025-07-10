@@ -5,6 +5,7 @@ import { Edit3, Plus, Trash2 } from "lucide-react";
 import { parseBeneficiaries } from "@/lib/beneficiaries";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { FundActions } from "./fund-actions";
 import { nanoid } from "nanoid";
 
 interface ColumnVisibility {
@@ -209,6 +210,7 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
                     <th className="text-right p-2 w-20">Spouse</th>
                     <th className="text-right p-2 w-20">Child</th>
                     <th className="text-right p-2 w-20">Amount</th>
+                    <th className="text-center p-2 w-20">Actions</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -226,6 +228,9 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
                       </td>
                       <td className="p-2 text-right">
                         {renderEditableCell(fund.lumpSumLeftOverProvisions || "0", (value) => onFieldUpdate(fund.id, "lumpSumLeftOverProvisions", value))}
+                      </td>
+                      <td className="p-2 text-center">
+                        <FundActions fund={fund} />
                       </td>
                     </tr>
                   ))}

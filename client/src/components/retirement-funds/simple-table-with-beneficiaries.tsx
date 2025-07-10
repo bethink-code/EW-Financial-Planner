@@ -5,6 +5,7 @@ import { Edit3, Plus, Trash2 } from "lucide-react";
 import { parseBeneficiaries } from "@/lib/beneficiaries";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { FundActions } from "./fund-actions";
 import { nanoid } from "nanoid";
 
 interface ColumnVisibility {
@@ -187,6 +188,10 @@ export function SimpleTableWithBeneficiaries({ funds, columnVisibility, tableMod
                 Fund value beneficiaries
               </th>
             )}
+            {/* Fund Actions Column */}
+            <th className="p-2 text-center font-medium text-neutral-600 uppercase tracking-wider text-xs border-l border-neutral-300" colSpan={1}>
+              Fund Actions
+            </th>
           </tr>
           
           {/* Second level headers */}
@@ -277,6 +282,10 @@ export function SimpleTableWithBeneficiaries({ funds, columnVisibility, tableMod
                 </th>
               </>
             )}
+            {/* Fund Actions Header */}
+            <th className="table-cell text-center table-header-12 text-neutral-600 uppercase tracking-wider border-l border-neutral-300">
+              Actions
+            </th>
           </tr>
         </thead>
         <tbody className="bg-white divide-y divide-neutral-200">
@@ -556,6 +565,11 @@ export function SimpleTableWithBeneficiaries({ funds, columnVisibility, tableMod
                     </td>
                   </>
                 )}
+
+                {/* Fund Actions Cell */}
+                <td className="p-2 text-center border-l border-neutral-300">
+                  <FundActions fund={fund} />
+                </td>
               </tr>
             );
 
@@ -651,6 +665,9 @@ export function SimpleTableWithBeneficiaries({ funds, columnVisibility, tableMod
                       <td className="p-2"></td>
                     </>
                   )}
+
+                  {/* Empty Fund Actions Cell */}
+                  <td className="p-2 border-l border-neutral-300"></td>
                 </tr>
               );
             });
@@ -743,6 +760,9 @@ export function SimpleTableWithBeneficiaries({ funds, columnVisibility, tableMod
                 <td className="p-2 text-right"></td>
               </>
             )}
+
+            {/* Empty Fund Actions Cell for Totals Row */}
+            <td className="p-2 border-l border-neutral-300"></td>
           </tr>
         </tbody>
       </table>

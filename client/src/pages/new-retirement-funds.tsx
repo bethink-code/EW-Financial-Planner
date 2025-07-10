@@ -7,6 +7,7 @@ import { NewGroupedTableView } from "@/components/retirement-funds/new-grouped-t
 import { SimpleTableWithBeneficiaries } from "@/components/retirement-funds/simple-table-with-beneficiaries";
 import { DetailedView } from "@/components/retirement-funds/detailed-view";
 import { SummarySection } from "@/components/retirement-funds/summary-section";
+import { AddFundDialog } from "@/components/retirement-funds/add-fund-dialog";
 import { Input } from "@/components/ui/input";
 
 type ViewMode = "grouped" | "detailed";
@@ -22,6 +23,7 @@ interface ColumnVisibility {
 export default function NewRetirementFunds() {
   const [viewMode, setViewMode] = useState<ViewMode>("grouped");
   const [tableMode, setTableMode] = useState<"inputs" | "flows">("inputs");
+  const [showAddDialog, setShowAddDialog] = useState(false);
 
   // Enhanced view mode change with transitions
   const handleViewModeChange = useCallback((newMode: ViewMode) => {
@@ -123,6 +125,7 @@ export default function NewRetirementFunds() {
           columnVisibility={columnVisibility}
           onToggleColumnGroup={handleToggleColumnGroup}
           fundsCount={filteredFunds.length}
+          onAddFund={() => setShowAddDialog(true)}
         />
 
         {viewMode === "grouped" && (
@@ -340,6 +343,12 @@ export default function NewRetirementFunds() {
             </div>
           </>
         )}
+
+        {/* Add Fund Dialog */}
+        <AddFundDialog
+          open={showAddDialog}
+          onOpenChange={setShowAddDialog}
+        />
       </div>
     </div>
   );
