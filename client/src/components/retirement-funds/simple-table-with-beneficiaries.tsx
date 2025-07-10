@@ -158,8 +158,7 @@ export function SimpleTableWithBeneficiaries({ funds, columnVisibility, tableMod
   const owners = useMemo(() => ["John Doe", "Jane Smith"], []);
 
   return (
-    <div className="overflow-x-auto">
-      <table className="min-w-full bg-white table-auto">
+    <table className="min-w-full bg-white table-auto">
         <thead>
           {/* First level headers */}
           <tr className="border-b border-neutral-200" style={{ backgroundColor: '#D6ECF5' }}>
@@ -766,6 +765,5 @@ export function SimpleTableWithBeneficiaries({ funds, columnVisibility, tableMod
           </tr>
         </tbody>
       </table>
-    </div>
   );
 }

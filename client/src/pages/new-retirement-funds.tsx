@@ -254,13 +254,9 @@ export default function NewRetirementFunds() {
                   isUpdating={updateMutation.isPending}
                 />
               ) : (
-                <NewGroupedTableView
-                  funds={filteredFunds}
-                  columnVisibility={columnVisibility}
-                  tableMode={tableMode}
-                  onFieldUpdate={handleFieldUpdate}
-                  isUpdating={updateMutation.isPending}
-                />
+                <div className="p-8 text-center text-gray-500">
+                  Flows view is temporarily disabled while fixing scrolling. Please use "Inputs" mode for now.
+                </div>
               )}
             </div>
             

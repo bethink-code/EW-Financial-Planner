@@ -201,8 +201,7 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
         {columnVisibility.overview && (
           <div style={{ backgroundColor: '#F0F9FF' }} className="border border-teal-200 rounded-lg p-4">
             <h3 className="table-text-14 font-semibold text-teal-800 mb-3">Lump sum life cover available as provision to</h3>
-            <div className="overflow-x-auto">
-              <table className="w-full text-xs border-collapse">
+            <table className="w-full text-xs border-collapse">
                 <thead>
                   <tr className="border-b border-teal-200">
                     <th className="text-left p-2 w-32">Client name</th>
