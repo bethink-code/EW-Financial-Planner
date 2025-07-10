@@ -217,7 +217,7 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
             {/* Second level headers - Flows */}
             <tr className="border-b border-neutral-200" style={{ backgroundColor: '#D6ECF5' }}>
               {columnVisibility.overview && (
-                <th className="p-2 text-left font-medium text-neutral-600 uppercase tracking-wider text-xs" style={{ minWidth: '140px', width: '140px' }}>
+                <th className="p-2 text-left font-medium text-neutral-600 uppercase tracking-wider text-xs" style={{ minWidth: '200px', width: '200px' }}>
                   Description
                 </th>
               )}
@@ -286,7 +286,7 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
             {funds.map((fund, index) => (
               <tr key={fund.id} className={index % 2 === 0 ? "bg-white" : "bg-teal-50/30"}>
                 {columnVisibility.overview && (
-                  <td className="p-2 table-text-14 text-neutral-900" style={{ minWidth: '140px', width: '140px' }}>
+                  <td className="p-2 table-text-14 text-neutral-900" style={{ minWidth: '200px', width: '200px' }}>
                     {fund.description}
                   </td>
                 )}
@@ -518,7 +518,7 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
               {columnVisibility.overview && (
                 <>
                 {/* Description */}
-                <td className="table-cell whitespace-nowrap table-text-14 font-bold" style={{ color: '#094161', minWidth: '140px', width: '140px' }}>
+                <td className="table-cell whitespace-nowrap table-text-14 font-bold" style={{ color: '#094161', minWidth: '200px', width: '200px' }}>
                   Total
                 </td>
                 
@@ -920,7 +920,7 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
             {columnVisibility.overview && (
               <>
                 {/* Description */}
-                <td className="table-cell whitespace-nowrap table-text-14 font-bold" style={{ color: '#094161', minWidth: '140px', width: '140px' }}>
+                <td className="table-cell whitespace-nowrap table-text-14 font-bold" style={{ color: '#094161', minWidth: '200px', width: '200px' }}>
                   Total
                 </td>
                 
