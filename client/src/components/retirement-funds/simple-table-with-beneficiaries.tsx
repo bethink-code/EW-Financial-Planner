@@ -375,15 +375,20 @@ export function SimpleTableWithBeneficiaries({ funds, columnVisibility, tableMod
                         </td>
                         <td className="p-2 percentage-column">
                           <input
-                            type="number"
-                            defaultValue={beneficiaries[0].percentage || 0}
-                            onBlur={(e) => handleBeneficiaryUpdate(fund.id, 0, 'percentage', e.target.value)}
-                            min="0"
-                            max="100"
-                            step="0.1"
+                            type="text"
+                            defaultValue={`${beneficiaries[0].percentage || 0}%`}
+                            onBlur={(e) => {
+                              const formattedValue = formatCurrencyValue(e.target.value, "percentage");
+                              if (formattedValue !== e.target.value) {
+                                e.target.value = formattedValue;
+                              }
+                              // Extract numeric value for backend
+                              const numericValue = e.target.value.replace(/[^\d.-]/g, '');
+                              handleBeneficiaryUpdate(fund.id, 0, 'percentage', numericValue);
+                            }}
                             disabled={isUpdating}
                             className="w-full h-7 text-sm text-center bg-white border-gray-200 focus:border-primary percentage-input px-3 py-1 border rounded-md"
-                            placeholder="0"
+                            placeholder="0%"
                           />
                         </td>
                         <td className="p-2">
@@ -724,15 +729,20 @@ export function SimpleTableWithBeneficiaries({ funds, columnVisibility, tableMod
                       </td>
                       <td className="p-2 percentage-column">
                         <input
-                          type="number"
-                          defaultValue={beneficiary.percentage || 0}
-                          onBlur={(e) => handleBeneficiaryUpdate(fund.id, beneficiaryIndex, 'percentage', e.target.value)}
-                          min="0"
-                          max="100"
-                          step="0.1"
+                          type="text"
+                          defaultValue={`${beneficiary.percentage || 0}%`}
+                          onBlur={(e) => {
+                            const formattedValue = formatCurrencyValue(e.target.value, "percentage");
+                            if (formattedValue !== e.target.value) {
+                              e.target.value = formattedValue;
+                            }
+                            // Extract numeric value for backend
+                            const numericValue = e.target.value.replace(/[^\d.-]/g, '');
+                            handleBeneficiaryUpdate(fund.id, beneficiaryIndex, 'percentage', numericValue);
+                          }}
                           disabled={isUpdating}
                           className="w-full h-7 text-sm text-center bg-white border-gray-200 focus:border-primary percentage-input px-3 py-1 border rounded-md"
-                          placeholder="0"
+                          placeholder="0%"
                         />
                       </td>
                       <td className="p-2">
