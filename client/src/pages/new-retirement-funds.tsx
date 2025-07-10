@@ -114,25 +114,27 @@ export default function NewRetirementFunds() {
 
   return (
     <div className="min-h-screen" style={{ backgroundColor: '#EFF2F5' }}>
-      <div className="px-4 py-4">
-        <NewTableControls
-          viewMode={viewMode}
-          onViewModeChange={handleViewModeChange}
-          tableMode={tableMode}
-          onTableModeChange={setTableMode}
-          searchQuery={searchQuery}
-          onSearchChange={setSearchQuery}
-          columnVisibility={columnVisibility}
-          onToggleColumnGroup={handleToggleColumnGroup}
-          fundsCount={filteredFunds.length}
-          onAddFund={() => setShowAddDialog(true)}
-        />
+      <div className="py-4">
+        <div className="px-4">
+          <NewTableControls
+            viewMode={viewMode}
+            onViewModeChange={handleViewModeChange}
+            tableMode={tableMode}
+            onTableModeChange={setTableMode}
+            searchQuery={searchQuery}
+            onSearchChange={setSearchQuery}
+            columnVisibility={columnVisibility}
+            onToggleColumnGroup={handleToggleColumnGroup}
+            fundsCount={filteredFunds.length}
+            onAddFund={() => setShowAddDialog(true)}
+          />
+        </div>
 
         {viewMode === "grouped" && (
           <>
             {/* Summary Section for Table View - Inputs */}
             {tableMode === "inputs" && (
-              <div className="bg-white rounded-lg shadow-sm border border-neutral-200 p-6 mb-4">
+              <div className="mx-4 bg-white rounded-lg shadow-sm border border-neutral-200 p-6 mb-4">
                 <h2 className="text-xl font-bold text-neutral-900 mb-4">Summary</h2>
                 <div className="grid grid-cols-2 lg:grid-cols-5 gap-4">
                   <div style={{ backgroundColor: '#F9F0E5' }} className="rounded-lg p-4 text-center">
@@ -191,7 +193,7 @@ export default function NewRetirementFunds() {
 
             {/* Summary Section for Table View - Flows */}
             {tableMode === "flows" && (
-              <div className="bg-white rounded-lg shadow-sm border border-neutral-200 p-6 mb-4">
+              <div className="mx-4 bg-white rounded-lg shadow-sm border border-neutral-200 p-6 mb-4">
                 <h2 className="text-xl font-bold text-neutral-900 mb-4">Flows Summary</h2>
                 <div className="grid grid-cols-2 lg:grid-cols-5 gap-4">
                   <div style={{ backgroundColor: '#E0F2FE' }} className="rounded-lg p-4 text-center">
@@ -244,7 +246,7 @@ export default function NewRetirementFunds() {
               </div>
             )}
 
-            <div className="bg-white rounded-lg shadow-sm border border-neutral-200" style={{ viewTransitionName: 'table-view' }}>
+            <div className="mx-4 bg-white rounded-lg shadow-sm border border-neutral-200" style={{ viewTransitionName: 'table-view' }}>
               {tableMode === "inputs" ? (
                 <SimpleTableWithBeneficiaries
                   funds={filteredFunds}
@@ -271,7 +273,7 @@ export default function NewRetirementFunds() {
           <>
             {/* Summary Section for Hybrid View */}
             {tableMode === "inputs" && (
-              <div className="bg-white rounded-lg shadow-sm border border-neutral-200 p-6 mb-4">
+              <div className="mx-4 bg-white rounded-lg shadow-sm border border-neutral-200 p-6 mb-4">
                 <h2 className="text-xl font-bold text-neutral-900 mb-4">Summary</h2>
                 <div className="grid grid-cols-2 lg:grid-cols-5 gap-4">
                   <div style={{ backgroundColor: '#F9F0E5' }} className="rounded-lg p-4 text-center">
@@ -328,7 +330,7 @@ export default function NewRetirementFunds() {
               </div>
             )}
 
-            <div className="bg-white rounded-lg shadow-sm border border-neutral-200" style={{ viewTransitionName: 'detailed-view' }}>
+            <div className="mx-4 bg-white rounded-lg shadow-sm border border-neutral-200" style={{ viewTransitionName: 'detailed-view' }}>
               <DetailedView
                 funds={filteredFunds}
                 columnVisibility={columnVisibility}
