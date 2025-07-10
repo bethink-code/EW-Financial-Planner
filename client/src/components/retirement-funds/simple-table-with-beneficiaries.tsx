@@ -428,7 +428,7 @@ export function SimpleTableWithBeneficiaries({ funds, columnVisibility, tableMod
                     <td className="p-2 text-right">
                       <input
                         defaultValue={fund.termYears || ""}
-                        onBlur={(e) => handleInputChange(fund.id, "termYears", e.target.value)}
+                        onBlur={(e) => handleInputBlur(fund.id, "termYears", e.target.value)}
                         className="table-input h-7 text-sm bg-white border-gray-200 focus:border-primary w-full px-3 py-1 border rounded-md text-sm"
                         style={{ textAlign: "right", minWidth: "60px" }}
                         disabled={isUpdating}
@@ -437,7 +437,7 @@ export function SimpleTableWithBeneficiaries({ funds, columnVisibility, tableMod
                     <td className="p-2 text-right">
                       <input
                         defaultValue={fund.increasePercentage || ""}
-                        onBlur={(e) => handleInputChange(fund.id, "increasePercentage", e.target.value)}
+                        onBlur={(e) => handleInputBlur(fund.id, "increasePercentage", e.target.value)}
                         className="table-input h-7 text-sm bg-white border-gray-200 focus:border-primary w-full px-3 py-1 border rounded-md text-sm"
                         style={{ textAlign: "right", minWidth: "60px" }}
                         placeholder="0%"
@@ -447,7 +447,13 @@ export function SimpleTableWithBeneficiaries({ funds, columnVisibility, tableMod
                     <td className="p-2 text-right">
                       <input
                         defaultValue={fund.escalationAmount || ""}
-                        onBlur={(e) => handleInputChange(fund.id, "escalationAmount", e.target.value)}
+                        onBlur={(e) => {
+                          const formattedValue = formatCurrencyValue(e.target.value, "escalationAmount");
+                          if (formattedValue !== e.target.value) {
+                            e.target.value = formattedValue;
+                          }
+                          handleInputBlur(fund.id, "escalationAmount", e.target.value);
+                        }}
                         className="table-input h-7 text-sm bg-white border-gray-200 focus:border-primary w-full px-3 py-1 border rounded-md text-sm"
                         style={{ textAlign: "right", minWidth: "80px" }}
                         placeholder="R 0"
@@ -461,7 +467,13 @@ export function SimpleTableWithBeneficiaries({ funds, columnVisibility, tableMod
                     <td className="p-2 text-right border-l border-neutral-300">
                       <input
                         defaultValue={fund.approvedLifeCover || ""}
-                        onBlur={(e) => handleInputChange(fund.id, "approvedLifeCover", e.target.value)}
+                        onBlur={(e) => {
+                          const formattedValue = formatCurrencyValue(e.target.value, "approvedLifeCover");
+                          if (formattedValue !== e.target.value) {
+                            e.target.value = formattedValue;
+                          }
+                          handleInputBlur(fund.id, "approvedLifeCover", e.target.value);
+                        }}
                         className="table-input h-7 text-sm bg-white border-gray-200 focus:border-primary w-full px-3 py-1 border rounded-md text-sm"
                         style={{ textAlign: "right", minWidth: "80px" }}
                         placeholder="R 0"
@@ -471,7 +483,13 @@ export function SimpleTableWithBeneficiaries({ funds, columnVisibility, tableMod
                     <td className="p-2 text-right">
                       <input
                         defaultValue={fund.fundValue || ""}
-                        onBlur={(e) => handleInputChange(fund.id, "fundValue", e.target.value)}
+                        onBlur={(e) => {
+                          const formattedValue = formatCurrencyValue(e.target.value, "fundValue");
+                          if (formattedValue !== e.target.value) {
+                            e.target.value = formattedValue;
+                          }
+                          handleInputBlur(fund.id, "fundValue", e.target.value);
+                        }}
                         className="table-input h-7 text-sm bg-white border-gray-200 focus:border-primary w-full px-3 py-1 border rounded-md text-sm"
                         style={{ textAlign: "right", minWidth: "80px" }}
                         placeholder="R 0"
@@ -482,7 +500,13 @@ export function SimpleTableWithBeneficiaries({ funds, columnVisibility, tableMod
                       <input
                         
                         defaultValue={fund.fundValueAtDeath || ""}
-                        onBlur={(e) => handleInputChange(fund.id, "fundValueAtDeath", e.target.value)}
+                        onBlur={(e) => {
+                          const formattedValue = formatCurrencyValue(e.target.value, "fundValueAtDeath");
+                          if (formattedValue !== e.target.value) {
+                            e.target.value = formattedValue;
+                          }
+                          handleInputBlur(fund.id, "fundValueAtDeath", e.target.value);
+                        }}
                         className="table-input h-7 text-sm bg-white border-gray-200 focus:border-primary w-full px-3 py-1 border rounded-md text-sm"
                         style={{ textAlign: "right", minWidth: "80px" }}
                         placeholder="R 0"
@@ -497,7 +521,7 @@ export function SimpleTableWithBeneficiaries({ funds, columnVisibility, tableMod
                       <input
                         
                         defaultValue={fund.beneficiaryName || ""}
-                        onBlur={(e) => handleInputChange(fund.id, "beneficiaryName", e.target.value)}
+                        onBlur={(e) => handleInputBlur(fund.id, "beneficiaryName", e.target.value)}
                         className="table-input h-7 text-sm bg-white border-gray-200 focus:border-primary w-full px-3 py-1 border rounded-md text-sm"
                         style={{ textAlign: "left", minWidth: "120px" }}
                         placeholder="Beneficiary name"
@@ -508,7 +532,7 @@ export function SimpleTableWithBeneficiaries({ funds, columnVisibility, tableMod
                       <input
                         
                         defaultValue={fund.beneficiaryPercentageSplit || ""}
-                        onBlur={(e) => handleInputChange(fund.id, "beneficiaryPercentageSplit", e.target.value)}
+                        onBlur={(e) => handleInputBlur(fund.id, "beneficiaryPercentageSplit", e.target.value)}
                         className="table-input h-7 text-sm bg-white border-gray-200 focus:border-primary w-full px-3 py-1 border rounded-md text-sm"
                         style={{ textAlign: "right", minWidth: "60px" }}
                         placeholder="0%"
@@ -519,7 +543,13 @@ export function SimpleTableWithBeneficiaries({ funds, columnVisibility, tableMod
                       <input
                         
                         defaultValue={fund.amount || ""}
-                        onBlur={(e) => handleInputChange(fund.id, "amount", e.target.value)}
+                        onBlur={(e) => {
+                          const formattedValue = formatCurrencyValue(e.target.value, "amount");
+                          if (formattedValue !== e.target.value) {
+                            e.target.value = formattedValue;
+                          }
+                          handleInputBlur(fund.id, "amount", e.target.value);
+                        }}
                         className="table-input h-7 text-sm bg-white border-gray-200 focus:border-primary w-full px-3 py-1 border rounded-md text-sm"
                         style={{ textAlign: "right", minWidth: "80px" }}
                         placeholder="R 0"
@@ -530,7 +560,13 @@ export function SimpleTableWithBeneficiaries({ funds, columnVisibility, tableMod
                       <input
                         
                         defaultValue={fund.lumpSumTaken || ""}
-                        onBlur={(e) => handleInputChange(fund.id, "lumpSumTaken", e.target.value)}
+                        onBlur={(e) => {
+                          const formattedValue = formatCurrencyValue(e.target.value, "lumpSumTaken");
+                          if (formattedValue !== e.target.value) {
+                            e.target.value = formattedValue;
+                          }
+                          handleInputBlur(fund.id, "lumpSumTaken", e.target.value);
+                        }}
                         className="table-input h-7 text-sm bg-white border-gray-200 focus:border-primary w-full px-3 py-1 border rounded-md text-sm"
                         style={{ textAlign: "right", minWidth: "80px" }}
                         placeholder="R 0"
@@ -541,7 +577,13 @@ export function SimpleTableWithBeneficiaries({ funds, columnVisibility, tableMod
                       <input
                         
                         defaultValue={fund.fundValueAtDeath || ""}
-                        onBlur={(e) => handleInputChange(fund.id, "fundValueAtDeath", e.target.value)}
+                        onBlur={(e) => {
+                          const formattedValue = formatCurrencyValue(e.target.value, "fundValueAtDeath");
+                          if (formattedValue !== e.target.value) {
+                            e.target.value = formattedValue;
+                          }
+                          handleInputBlur(fund.id, "fundValueAtDeath", e.target.value);
+                        }}
                         className="table-input h-7 text-sm bg-white border-gray-200 focus:border-primary w-full px-3 py-1 border rounded-md text-sm"
                         style={{ textAlign: "right", minWidth: "80px" }}
                         placeholder="R 0"
@@ -552,7 +594,13 @@ export function SimpleTableWithBeneficiaries({ funds, columnVisibility, tableMod
                       <input
                         
                         defaultValue={fund.nondeductibleContribution || ""}
-                        onBlur={(e) => handleInputChange(fund.id, "nondeductibleContribution", e.target.value)}
+                        onBlur={(e) => {
+                          const formattedValue = formatCurrencyValue(e.target.value, "nondeductibleContribution");
+                          if (formattedValue !== e.target.value) {
+                            e.target.value = formattedValue;
+                          }
+                          handleInputBlur(fund.id, "nondeductibleContribution", e.target.value);
+                        }}
                         className="table-input h-7 text-sm bg-white border-gray-200 focus:border-primary w-full px-3 py-1 border rounded-md text-sm"
                         style={{ textAlign: "right", minWidth: "80px" }}
                         placeholder="R 0"
@@ -563,7 +611,13 @@ export function SimpleTableWithBeneficiaries({ funds, columnVisibility, tableMod
                       <input
                         
                         defaultValue={fund.livingAnnuity || ""}
-                        onBlur={(e) => handleInputChange(fund.id, "livingAnnuity", e.target.value)}
+                        onBlur={(e) => {
+                          const formattedValue = formatCurrencyValue(e.target.value, "livingAnnuity");
+                          if (formattedValue !== e.target.value) {
+                            e.target.value = formattedValue;
+                          }
+                          handleInputBlur(fund.id, "livingAnnuity", e.target.value);
+                        }}
                         className="table-input h-7 text-sm bg-white border-gray-200 focus:border-primary w-full px-3 py-1 border rounded-md text-sm"
                         style={{ textAlign: "right", minWidth: "80px" }}
                         placeholder="R 0"
@@ -574,7 +628,7 @@ export function SimpleTableWithBeneficiaries({ funds, columnVisibility, tableMod
                       <input
                         
                         defaultValue={fund.incomeTerm || ""}
-                        onBlur={(e) => handleInputChange(fund.id, "incomeTerm", e.target.value)}
+                        onBlur={(e) => handleInputBlur(fund.id, "incomeTerm", e.target.value)}
                         className="table-input h-7 text-sm bg-white border-gray-200 focus:border-primary w-full px-3 py-1 border rounded-md text-sm"
                         style={{ textAlign: "right", minWidth: "80px" }}
                         placeholder="Income term"
