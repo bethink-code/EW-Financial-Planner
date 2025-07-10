@@ -83,28 +83,23 @@ export function BeneficiaryRowManager({
   }, [beneficiaries, adjustPercentages, onBeneficiariesChange]);
 
   const handleUpdateBeneficiary = useCallback((id: string, field: keyof Beneficiary, value: string | number) => {
+    // Immediate update without complex logic to prevent input interference
     const updatedBeneficiaries = beneficiaries.map(b => {
       if (b.id === id) {
         if (field === 'percentage') {
           const percentage = Math.max(0, Math.min(100, Number(value) || 0));
-          return { ...b, [field]: percentage };
+          return { 
+            ...b, 
+            [field]: percentage,
+            coverSplit: `R ${Math.round((totalCoverAmount * percentage / 100)).toLocaleString()}`
+          };
         }
         return { ...b, [field]: value };
       }
       return b;
     });
     
-    // Don't auto-adjust if user is actively editing percentages
-    if (field === 'percentage') {
-      // Just update cover splits
-      const withUpdatedSplits = updatedBeneficiaries.map(b => ({
-        ...b,
-        coverSplit: `R ${Math.round((totalCoverAmount * b.percentage / 100)).toLocaleString()}`
-      }));
-      onBeneficiariesChange(withUpdatedSplits);
-    } else {
-      onBeneficiariesChange(updatedBeneficiaries);
-    }
+    onBeneficiariesChange(updatedBeneficiaries);
   }, [beneficiaries, totalCoverAmount, onBeneficiariesChange]);
 
   const totalPercentage = beneficiaries.reduce((sum, b) => sum + b.percentage, 0);
