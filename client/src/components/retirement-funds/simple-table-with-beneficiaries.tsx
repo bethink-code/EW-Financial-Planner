@@ -78,6 +78,10 @@ export function SimpleTableWithBeneficiaries({ funds, columnVisibility, tableMod
   }, []);
   // Memoized handlers
   const handleInputChange = useCallback((fundId: number, field: keyof UpdateRetirementFund, value: string) => {
+    onFieldUpdate(fundId, field, value);
+  }, [onFieldUpdate]);
+
+  const handleInputBlur = useCallback((fundId: number, field: keyof UpdateRetirementFund, value: string) => {
     const formattedValue = formatCurrencyValue(value, field);
     onFieldUpdate(fundId, field, formattedValue);
   }, [onFieldUpdate, formatCurrencyValue]);
@@ -322,7 +326,8 @@ export function SimpleTableWithBeneficiaries({ funds, columnVisibility, tableMod
                     <td className="p-2 text-right border-l border-neutral-300">
                       <input
                         defaultValue={fund.coverAmount || ""}
-                        onBlur={(e) => handleInputChange(fund.id, "coverAmount", e.target.value)}
+                        onChange={(e) => handleInputChange(fund.id, "coverAmount", e.target.value)}
+                        onBlur={(e) => handleInputBlur(fund.id, "coverAmount", e.target.value)}
                         className="table-input h-7 text-sm bg-white border-gray-200 focus:border-primary w-full px-3 py-1 border rounded-md text-sm"
                         style={{ textAlign: "right", minWidth: "100px" }}
                         placeholder="R 0"
@@ -407,7 +412,8 @@ export function SimpleTableWithBeneficiaries({ funds, columnVisibility, tableMod
                     <td className="p-2 text-right border-l border-neutral-300">
                       <input
                         defaultValue={fund.monthlyIncome || ""}
-                        onBlur={(e) => handleInputChange(fund.id, "monthlyIncome", e.target.value)}
+                        onChange={(e) => handleInputChange(fund.id, "monthlyIncome", e.target.value)}
+                        onBlur={(e) => handleInputBlur(fund.id, "monthlyIncome", e.target.value)}
                         className="table-input h-7 text-sm bg-white border-gray-200 focus:border-primary w-full px-3 py-1 border rounded-md text-sm"
                         style={{ textAlign: "right", minWidth: "80px" }}
                         placeholder="R 0"
