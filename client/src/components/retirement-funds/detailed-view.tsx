@@ -197,9 +197,8 @@ export function DetailedView({ funds, columnVisibility, onFieldUpdate, isUpdatin
                       }
                       handleFieldChange("description", e.target.value);
                     }}
-                    className="table-input h-9 text-sm"
+                    className="w-full h-9 px-3 py-2 text-sm bg-white border border-neutral-200 rounded focus:border-blue-500 focus:outline-none"
                     disabled={isUpdating}
-                    style={{ minWidth: '120px', maxWidth: '300px' }}
                   />
                 </div>
                 <div>
@@ -246,10 +245,9 @@ export function DetailedView({ funds, columnVisibility, onFieldUpdate, isUpdatin
                     }
                     handleFieldChange("coverAmount", e.target.value);
                   }}
-                  className="table-input h-9 text-sm text-right"
+                  className="w-full h-9 px-3 py-2 text-sm text-right bg-white border border-neutral-200 rounded focus:border-blue-500 focus:outline-none"
                   disabled={isUpdating}
                   placeholder="R 0"
-                  style={{ textAlign: 'right', minWidth: '120px', maxWidth: '300px' }}
                 />
               </div>
               <BeneficiarySection
@@ -279,10 +277,9 @@ export function DetailedView({ funds, columnVisibility, onFieldUpdate, isUpdatin
                       }
                       handleFieldChange("monthlyIncome", e.target.value);
                     }}
-                    className="table-input h-9 text-sm text-right"
+                    className="w-full h-9 px-3 py-2 text-sm text-right bg-white border border-neutral-200 rounded focus:border-blue-500 focus:outline-none"
                     disabled={isUpdating}
                     placeholder="R 0"
-                    style={{ textAlign: 'right', minWidth: '120px', maxWidth: '300px' }}
                   />
                 </div>
                 <div>
@@ -297,9 +294,8 @@ export function DetailedView({ funds, columnVisibility, onFieldUpdate, isUpdatin
                       }
                       handleFieldChange("termYears", e.target.value);
                     }}
-                    className="table-input h-9 text-sm text-right"
+                    className="w-full h-9 px-3 py-2 text-sm text-right bg-white border border-neutral-200 rounded focus:border-blue-500 focus:outline-none"
                     disabled={isUpdating}
-                    style={{ textAlign: 'right', minWidth: '120px', maxWidth: '300px' }}
                   />
                 </div>
                 <div>
@@ -314,10 +310,9 @@ export function DetailedView({ funds, columnVisibility, onFieldUpdate, isUpdatin
                       }
                       handleFieldChange("increasePercentage", e.target.value);
                     }}
-                    className="table-input h-9 text-sm text-right"
+                    className="w-full h-9 px-3 py-2 text-sm text-right bg-white border border-neutral-200 rounded focus:border-blue-500 focus:outline-none"
                     disabled={isUpdating}
                     placeholder="5%"
-                    style={{ textAlign: 'right', minWidth: '120px', maxWidth: '300px' }}
                   />
                 </div>
                 <div>
@@ -332,10 +327,9 @@ export function DetailedView({ funds, columnVisibility, onFieldUpdate, isUpdatin
                       }
                       handleFieldChange("escalationAmount", e.target.value);
                     }}
-                    className="table-input h-9 text-sm text-right"
+                    className="w-full h-9 px-3 py-2 text-sm text-right bg-white border border-neutral-200 rounded focus:border-blue-500 focus:outline-none"
                     disabled={isUpdating}
                     placeholder="R 0"
-                    style={{ textAlign: 'right', minWidth: '120px', maxWidth: '300px' }}
                   />
                 </div>
               </div>
@@ -359,10 +353,9 @@ export function DetailedView({ funds, columnVisibility, onFieldUpdate, isUpdatin
                       }
                       handleFieldChange("approvedLifeCover", e.target.value);
                     }}
-                    className="table-input h-9 text-sm text-right"
+                    className="w-full h-9 px-3 py-2 text-sm text-right bg-white border border-neutral-200 rounded focus:border-blue-500 focus:outline-none"
                     disabled={isUpdating}
                     placeholder="R 0"
-                    style={{ textAlign: 'right', minWidth: '120px', maxWidth: '300px' }}
                   />
                 </div>
                 <div>
@@ -377,10 +370,9 @@ export function DetailedView({ funds, columnVisibility, onFieldUpdate, isUpdatin
                       }
                       handleFieldChange("fundValue", e.target.value);
                     }}
-                    className="table-input h-9 text-sm text-right"
+                    className="w-full h-9 px-3 py-2 text-sm text-right bg-white border border-neutral-200 rounded focus:border-blue-500 focus:outline-none"
                     disabled={isUpdating}
                     placeholder="R 0"
-                    style={{ textAlign: 'right', minWidth: '120px', maxWidth: '300px' }}
                   />
                 </div>
                 <div>
