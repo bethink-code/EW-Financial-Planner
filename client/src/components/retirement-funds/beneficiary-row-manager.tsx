@@ -168,7 +168,7 @@ export function BeneficiaryRowManager({
 
             {/* Cover Split (Read-only) */}
             <div className="w-32">
-              <div className="px-3 py-1 text-right text-sm font-medium text-gray-900 bg-gray-50 rounded border h-8 flex items-center justify-end">
+              <div className="px-3 py-1 text-right text-sm font-medium text-gray-900 rounded border h-8 flex items-center justify-end">
                 {beneficiary.coverSplit}
               </div>
             </div>
@@ -268,7 +268,7 @@ export function BeneficiaryRowManager({
 
           {/* Cover Split (Read-only) */}
           <div className="col-span-4">
-            <div className="px-3 py-2 text-right text-sm font-medium text-gray-900 bg-gray-50 rounded border">
+            <div className="px-3 py-2 text-right text-sm font-medium text-gray-900 rounded border">
               {beneficiary.coverSplit}
             </div>
           </div>
