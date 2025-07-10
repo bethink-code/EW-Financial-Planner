@@ -397,7 +397,7 @@ export function DetailedView({ funds, columnVisibility, onFieldUpdate, isUpdatin
           {columnVisibility.fundValueBeneficiaries && (
             <div className="bg-teal-50 rounded-lg p-4">
               <h4 className="text-sm font-bold text-teal-700 mb-4">Fund Value Beneficiaries</h4>
-              <div className="grid grid-cols-1 md:grid-cols-4 xl:grid-cols-8 gap-4 items-end">
+              <div className="grid grid-cols-7 gap-2 items-end">
                 <div>
                   <Label className="text-xs text-neutral-600 mb-1 block h-8 flex items-end">Beneficiary Name</Label>
                   <Select
@@ -429,10 +429,9 @@ export function DetailedView({ funds, columnVisibility, onFieldUpdate, isUpdatin
                       }
                       handleFieldChange("beneficiaryPercentageSplit", e.target.value);
                     }}
-                    className="table-input h-9 text-sm text-right"
+                    className="w-full h-9 px-3 py-2 text-sm text-right bg-white border border-neutral-200 rounded focus:border-blue-500 focus:outline-none"
                     disabled={isUpdating}
                     placeholder="0%"
-                    style={{ textAlign: 'right' }}
                   />
                 </div>
                 <div>
@@ -453,10 +452,9 @@ export function DetailedView({ funds, columnVisibility, onFieldUpdate, isUpdatin
                       }
                       handleFieldChange("lumpSumTaken", e.target.value);
                     }}
-                    className="table-input h-9 text-sm text-right"
+                    className="w-full h-9 px-3 py-2 text-sm text-right bg-white border border-neutral-200 rounded focus:border-blue-500 focus:outline-none"
                     disabled={isUpdating}
                     placeholder="R 0"
-                    style={{ textAlign: 'right' }}
                   />
                 </div>
                 <div>
@@ -471,10 +469,9 @@ export function DetailedView({ funds, columnVisibility, onFieldUpdate, isUpdatin
                       }
                       handleFieldChange("nondeductibleContribution", e.target.value);
                     }}
-                    className="table-input h-9 text-sm text-right"
+                    className="w-full h-9 px-3 py-2 text-sm text-right bg-white border border-neutral-200 rounded focus:border-blue-500 focus:outline-none"
                     disabled={isUpdating}
                     placeholder="R 0"
-                    style={{ textAlign: 'right' }}
                   />
                 </div>
                 <div>
@@ -495,10 +492,9 @@ export function DetailedView({ funds, columnVisibility, onFieldUpdate, isUpdatin
                       }
                       handleFieldChange("incomeTerm", e.target.value);
                     }}
-                    className="table-input h-9 text-sm text-right"
+                    className="w-full h-9 px-3 py-2 text-sm text-right bg-white border border-neutral-200 rounded focus:border-blue-500 focus:outline-none"
                     disabled={isUpdating}
                     placeholder="Income term"
-                    style={{ textAlign: 'right' }}
                   />
                 </div>
               </div>
