@@ -40,27 +40,32 @@ function AutoSizeInput({
 }) {
   const inputRef = useRef<HTMLInputElement>(null);
 
+  // Debounced sizing to prevent excessive calculations
   useEffect(() => {
-    if (inputRef.current) {
-      const textToMeasure = value || props.placeholder || '';
-      
-      if (textToMeasure) {
-        // Use canvas for more accurate text measurement
-        const canvas = document.createElement('canvas');
-        const context = canvas.getContext('2d');
-        const computedStyle = window.getComputedStyle(inputRef.current);
-        context.font = computedStyle.font;
+    const timeoutId = setTimeout(() => {
+      if (inputRef.current) {
+        const textToMeasure = value || props.placeholder || '';
         
-        const metrics = context.measureText(textToMeasure);
-        const textWidth = Math.ceil(metrics.width);
-        const width = Math.max(60, textWidth + 30); // More generous padding
-        
-        inputRef.current.style.width = `${width}px`;
-      } else {
-        // Fallback for empty content
-        inputRef.current.style.width = '60px';
+        if (textToMeasure) {
+          // Use canvas for more accurate text measurement
+          const canvas = document.createElement('canvas');
+          const context = canvas.getContext('2d');
+          const computedStyle = window.getComputedStyle(inputRef.current);
+          context.font = computedStyle.font;
+          
+          const metrics = context.measureText(textToMeasure);
+          const textWidth = Math.ceil(metrics.width);
+          const width = Math.max(60, textWidth + 30); // More generous padding
+          
+          inputRef.current.style.width = `${width}px`;
+        } else {
+          // Fallback for empty content
+          inputRef.current.style.width = '60px';
+        }
       }
-    }
+    }, 50); // Shorter debounce for immediate visual feedback
+
+    return () => clearTimeout(timeoutId);
   }, [value, props.placeholder]);
 
   return (
