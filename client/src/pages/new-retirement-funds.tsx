@@ -113,7 +113,7 @@ export default function NewRetirementFunds() {
   }
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen bg-[#eff2f5]">
       <div className="py-4">
         <div className="px-4">
           <NewTableControls
