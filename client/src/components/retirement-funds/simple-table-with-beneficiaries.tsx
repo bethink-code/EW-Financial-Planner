@@ -345,7 +345,7 @@ export function SimpleTableWithBeneficiaries({ funds, columnVisibility, tableMod
                           />
                         </td>
                         <td className="p-2">
-                          <div className="h-7 text-sm text-right px-2 py-1 border rounded text-gray-900 flex items-center">
+                          <div className="h-7 text-sm text-right px-2 py-1 text-gray-900 flex items-center">
                             <span className="truncate flex-1">{beneficiaries[0].coverSplit}</span>
                           </div>
                         </td>
@@ -610,7 +610,7 @@ export function SimpleTableWithBeneficiaries({ funds, columnVisibility, tableMod
                         />
                       </td>
                       <td className="p-2">
-                        <div className="h-7 text-sm text-right px-2 py-1 border rounded text-gray-900 flex items-center">
+                        <div className="h-7 text-sm text-right px-2 py-1 text-gray-900 flex items-center">
                           <span className="truncate flex-1">{beneficiary.coverSplit}</span>
                         </div>
                       </td>
