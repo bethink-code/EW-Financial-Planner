@@ -112,8 +112,11 @@ export function DetailedView({ funds, columnVisibility, onFieldUpdate, isUpdatin
             <div
               key={fund.id}
               className={`p-4 border-b border-neutral-100 cursor-pointer hover:bg-gray-50 ${
-                selectedFundId === fund.id ? 'bg-blue-50 border-l-4 border-l-blue-500' : ''
+                selectedFundId === fund.id ? 'border-l-4 border-l-[#016991]' : ''
               }`}
+              style={{ 
+                backgroundColor: selectedFundId === fund.id ? '#D4E8F4' : undefined 
+              }}
               onClick={() => setSelectedFundId(fund.id)}
             >
               <div className="space-y-2">
