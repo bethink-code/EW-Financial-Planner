@@ -34,29 +34,8 @@ const AutoSizeInput = ({ value, onChange, className, placeholder, disabled, styl
   style?: React.CSSProperties;
   type?: string;
 }) => {
-  const inputRef = useRef<HTMLInputElement>(null);
-
-  useEffect(() => {
-    if (inputRef.current) {
-      // Create a temporary span to measure text width
-      const span = document.createElement('span');
-      span.style.visibility = 'hidden';
-      span.style.position = 'absolute';
-      span.style.whiteSpace = 'pre';
-      span.style.font = window.getComputedStyle(inputRef.current).font;
-      span.textContent = value || placeholder || '';
-      document.body.appendChild(span);
-      
-      const width = Math.max(60, Math.min(250, span.offsetWidth + 30)); // Min 60px, max 250px, +30px for padding
-      inputRef.current.style.width = `${width}px`;
-      
-      document.body.removeChild(span);
-    }
-  }, [value, placeholder]);
-
   return (
     <input
-      ref={inputRef}
       type="text"
       value={value}
       onChange={onChange}

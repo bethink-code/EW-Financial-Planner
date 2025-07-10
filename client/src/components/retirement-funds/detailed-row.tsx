@@ -25,30 +25,8 @@ const AutoSizeInput = ({
   style?: React.CSSProperties;
   type?: string;
 }) => {
-  const inputRef = useRef<HTMLInputElement>(null);
-
-  useEffect(() => {
-    if (inputRef.current) {
-      // Create canvas to measure text width accurately
-      const canvas = document.createElement('canvas');
-      const context = canvas.getContext('2d');
-      if (context) {
-        const computedStyle = window.getComputedStyle(inputRef.current);
-        context.font = computedStyle.font;
-        
-        const textToMeasure = value || placeholder || '';
-        const textWidth = context.measureText(textToMeasure).width;
-        
-        // Add padding and set min/max constraints
-        const width = Math.max(120, Math.min(300, textWidth + 40));
-        inputRef.current.style.width = `${width}px`;
-      }
-    }
-  }, [value, placeholder]);
-
   return (
     <Input
-      ref={inputRef}
       value={value}
       onChange={onChange}
       className={className}
@@ -57,8 +35,7 @@ const AutoSizeInput = ({
       style={{ 
         ...style, 
         minWidth: '120px', 
-        maxWidth: '300px',
-        width: 'auto'
+        maxWidth: '300px'
       }}
       {...props}
     />
