@@ -115,7 +115,7 @@ export function DetailedView({ funds, columnVisibility, onFieldUpdate, isUpdatin
                 selectedFundId === fund.id ? 'border-l-4 border-l-[#016991]' : ''
               }`}
               style={{ 
-                backgroundColor: selectedFundId === fund.id ? '#D4E8F4' : undefined 
+                backgroundColor: selectedFundId === fund.id ? '#F6F7F9' : undefined 
               }}
               onClick={() => setSelectedFundId(fund.id)}
             >
