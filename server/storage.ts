@@ -32,7 +32,7 @@ export class MemStorage implements IStorage {
       
       // Monthly death benefit
       monthlyIncome: "R 5,000",
-      termYears: "10",
+      termYears: "10 years",
       increasePercentage: "5%",
       approvedLifeCover: "R 250,000",
       fundValue: "R 180,000",
@@ -45,7 +45,7 @@ export class MemStorage implements IStorage {
       lumpSumTaken: "R 25,000",
       nondeductibleContribution: "R 10,000",
       livingAnnuity: "R 120,000",
-      incomeTerm: "20",
+      incomeTerm: "20 years",
 
       // Flows mode fields
       lumpSumLeftOverProvisions: "R 300,000",
@@ -77,7 +77,7 @@ export class MemStorage implements IStorage {
       
       // Monthly death benefit
       monthlyIncome: "R 3,500",
-      termYears: "15",
+      termYears: "15 years",
       increasePercentage: "4%",
       approvedLifeCover: "R 175,000",
       fundValue: "R 120,000",
@@ -90,7 +90,7 @@ export class MemStorage implements IStorage {
       lumpSumTaken: "R 15,000",
       nondeductibleContribution: "R 8,000",
       livingAnnuity: "R 85,000",
-      incomeTerm: "25",
+      incomeTerm: "25 years",
 
       // Flows mode fields
       lumpSumLeftOverProvisions: "R 250,000",
