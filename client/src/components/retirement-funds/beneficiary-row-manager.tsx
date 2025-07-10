@@ -137,12 +137,13 @@ export function BeneficiaryRowManager({
 
             {/* Beneficiary Name */}
             <div className="flex-1 min-w-0">
-              <Input
-                value={beneficiary.name}
-                onChange={(e) => handleUpdateBeneficiary(beneficiary.id, 'name', e.target.value)}
+              <input
+                key={`beneficiary-name-${beneficiary.id}-${beneficiary.name.length}`}
+                defaultValue={beneficiary.name}
+                onBlur={(e) => handleUpdateBeneficiary(beneficiary.id, 'name', e.target.value)}
                 placeholder="Enter beneficiary name"
                 disabled={isUpdating}
-                className="h-8 text-sm table-input"
+                className="h-8 text-sm table-input w-full px-3 py-1 border rounded-md text-sm"
                 style={{ 
                   minWidth: '120px', 
                   maxWidth: '250px',
@@ -153,15 +154,16 @@ export function BeneficiaryRowManager({
 
             {/* Percentage */}
             <div className="w-16">
-              <Input
+              <input
+                key={`beneficiary-pct-${beneficiary.id}-${beneficiary.percentage}`}
                 type="number"
-                value={beneficiary.percentage}
-                onChange={(e) => handleUpdateBeneficiary(beneficiary.id, 'percentage', e.target.value)}
+                defaultValue={beneficiary.percentage}
+                onBlur={(e) => handleUpdateBeneficiary(beneficiary.id, 'percentage', e.target.value)}
                 min="0"
                 max="100"
                 step="0.1"
                 disabled={isUpdating}
-                className="h-8 text-sm text-center w-16"
+                className="h-8 text-sm text-center w-16 px-3 py-1 border rounded-md text-sm"
               />
             </div>
 
@@ -241,26 +243,28 @@ export function BeneficiaryRowManager({
 
           {/* Beneficiary Name */}
           <div className="col-span-5">
-            <Input
-              value={beneficiary.name}
-              onChange={(e) => handleUpdateBeneficiary(beneficiary.id, 'name', e.target.value)}
+            <input
+              key={`beneficiary-table-name-${beneficiary.id}-${beneficiary.name.length}`}
+              defaultValue={beneficiary.name}
+              onBlur={(e) => handleUpdateBeneficiary(beneficiary.id, 'name', e.target.value)}
               placeholder="Enter beneficiary name"
               disabled={isUpdating}
-              className="text-right table-input"
+              className="text-right table-input w-full px-3 py-1 border rounded-md text-sm"
             />
           </div>
 
           {/* Percentage */}
           <div className="col-span-2">
-            <Input
+            <input
+              key={`beneficiary-table-pct-${beneficiary.id}-${beneficiary.percentage}`}
               type="number"
-              value={beneficiary.percentage}
-              onChange={(e) => handleUpdateBeneficiary(beneficiary.id, 'percentage', e.target.value)}
+              defaultValue={beneficiary.percentage}
+              onBlur={(e) => handleUpdateBeneficiary(beneficiary.id, 'percentage', e.target.value)}
               min="0"
               max="100"
               step="0.1"
               disabled={isUpdating}
-              className="text-center"
+              className="text-center w-full px-3 py-1 border rounded-md text-sm"
             />
           </div>
 
