@@ -33,7 +33,6 @@ const AutoSizeInput = ({
 }) => {
   return (
     <input
-      key={`${field}-${fundId}-${value.length}`}
       defaultValue={value}
       onBlur={onChange}
       className={className}

@@ -7,7 +7,6 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { FundActions } from "./fund-actions";
 import { nanoid } from "nanoid";
-
 interface ColumnVisibility {
   overview: boolean;
   unapprovedLifeCover: boolean;
@@ -15,7 +14,6 @@ interface ColumnVisibility {
   fundValue: boolean;
   fundValueBeneficiaries: boolean;
 }
-
 interface SimpleTableWithBeneficiariesProps {
   funds: RetirementFund[];
   columnVisibility: ColumnVisibility;
@@ -23,7 +21,6 @@ interface SimpleTableWithBeneficiariesProps {
   onFieldUpdate: (id: number, field: keyof UpdateRetirementFund, value: string) => void;
   isUpdating: boolean;
 }
-
 // Auto-resizing input component
 function AutoSizeInput({ 
   value, 
@@ -49,7 +46,6 @@ function AutoSizeInput({
     />
   );
 }
-
 export function SimpleTableWithBeneficiaries({ funds, columnVisibility, tableMode, onFieldUpdate, isUpdating }: SimpleTableWithBeneficiariesProps) {
   
   // Format currency value
@@ -67,17 +63,14 @@ export function SimpleTableWithBeneficiaries({ funds, columnVisibility, tableMod
     const formatted = `R ${Math.round(Number(numericValue)).toLocaleString()}`;
     return formatted;
   }, []);
-
   // Memoized handlers
   const handleInputChange = useCallback((fundId: number, field: keyof UpdateRetirementFund, value: string) => {
     const formattedValue = formatCurrencyValue(value, field);
     onFieldUpdate(fundId, field, formattedValue);
   }, [onFieldUpdate, formatCurrencyValue]);
-
   const handleBeneficiaryUpdate = useCallback((fundId: number, beneficiaryIndex: number, field: keyof Beneficiary, value: string | number) => {
     const fund = funds.find(f => f.id === fundId);
     if (!fund) return;
-
     const currentBeneficiaries = parseBeneficiaries(fund.beneficiaries);
     const updatedBeneficiaries = [...currentBeneficiaries];
     
@@ -93,22 +86,18 @@ export function SimpleTableWithBeneficiaries({ funds, columnVisibility, tableMod
           [field]: value
         };
       }
-
       // Update cover splits when percentages change
       if (field === 'percentage') {
         const coverAmount = parseFloat(fund.coverAmount.replace(/[^\d.-]/g, '')) || 0;
         updatedBeneficiaries[beneficiaryIndex].coverSplit = 
           `R ${Math.round((coverAmount * updatedBeneficiaries[beneficiaryIndex].percentage / 100)).toLocaleString()}`;
       }
-
       onFieldUpdate(fundId, 'beneficiaries', JSON.stringify(updatedBeneficiaries));
     }
   }, [funds, onFieldUpdate]);
-
   const handleAddBeneficiary = useCallback((fundId: number) => {
     const fund = funds.find(f => f.id === fundId);
     if (!fund) return;
-
     const currentBeneficiaries = parseBeneficiaries(fund.beneficiaries);
     const coverAmount = parseFloat(fund.coverAmount?.replace(/[^\d.-]/g, '') || '0') || 0;
     const newBeneficiary: Beneficiary = {
@@ -117,18 +106,14 @@ export function SimpleTableWithBeneficiaries({ funds, columnVisibility, tableMod
       percentage: 100,
       coverSplit: `R ${Math.round(coverAmount).toLocaleString()}`
     };
-
     const updatedBeneficiaries = [...currentBeneficiaries, newBeneficiary];
     onFieldUpdate(fundId, 'beneficiaries', JSON.stringify(updatedBeneficiaries));
   }, [funds, onFieldUpdate]);
-
   const handleRemoveBeneficiary = useCallback((fundId: number, beneficiaryIndex: number) => {
     const fund = funds.find(f => f.id === fundId);
     if (!fund) return;
-
     const currentBeneficiaries = parseBeneficiaries(fund.beneficiaries);
     if (currentBeneficiaries.length <= 1) return;
-
     const updatedBeneficiaries = currentBeneficiaries.filter((_, index) => index !== beneficiaryIndex);
     
     // Auto-adjust percentages
@@ -142,12 +127,9 @@ export function SimpleTableWithBeneficiaries({ funds, columnVisibility, tableMod
         b.coverSplit = `R ${Math.round((coverAmount * b.percentage / 100)).toLocaleString()}`;
       });
     }
-
     onFieldUpdate(fundId, 'beneficiaries', JSON.stringify(updatedBeneficiaries));
   }, [funds, onFieldUpdate]);
-
   const owners = useMemo(() => ["John Doe", "Jane Smith"], []);
-
   return (
     <table className="min-w-full bg-white table-auto">
         <thead>
@@ -291,7 +273,7 @@ export function SimpleTableWithBeneficiaries({ funds, columnVisibility, tableMod
                   <>
                     <td className="table-cell whitespace-nowrap table-text-14 text-neutral-900">
                       <input
-                        key={`description-${fund.id}`}
+                        
                         defaultValue={fund.description || ""}
                         onBlur={(e) => handleInputChange(fund.id, "description", e.target.value)}
                         className="table-input h-7 text-sm bg-white border-gray-200 focus:border-primary w-full px-3 py-1 border rounded-md text-sm"
@@ -321,13 +303,11 @@ export function SimpleTableWithBeneficiaries({ funds, columnVisibility, tableMod
                     </td>
                   </>
                 )}
-
                 {/* Unapproved Life Cover Section */}
                 {columnVisibility.unapprovedLifeCover && (
                   <>
                     <td className="p-2 text-right border-l border-neutral-300">
                       <input
-                        key={`cover-${fund.id}`}
                         defaultValue={fund.coverAmount || ""}
                         onBlur={(e) => handleInputChange(fund.id, "coverAmount", e.target.value)}
                         className="table-input h-7 text-sm bg-white border-gray-200 focus:border-primary w-full px-3 py-1 border rounded-md text-sm"
@@ -340,7 +320,6 @@ export function SimpleTableWithBeneficiaries({ funds, columnVisibility, tableMod
                       <>
                         <td className="p-2">
                           <input
-                            key={`beneficiary-${fund.id}-0-${beneficiaries[0].id}`}
                             defaultValue={beneficiaries[0].name}
                             onBlur={(e) => handleBeneficiaryUpdate(fund.id, 0, 'name', e.target.value)}
                             placeholder="Beneficiary name"
@@ -409,13 +388,11 @@ export function SimpleTableWithBeneficiaries({ funds, columnVisibility, tableMod
                     )}
                   </>
                 )}
-
                 {/* Other sections for main row */}
                 {columnVisibility.monthlyDeathBenefit && (
                   <>
                     <td className="p-2 text-right border-l border-neutral-300">
                       <input
-                        key={`monthlyIncome-${fund.id}`}
                         defaultValue={fund.monthlyIncome || ""}
                         onBlur={(e) => handleInputChange(fund.id, "monthlyIncome", e.target.value)}
                         className="table-input h-7 text-sm bg-white border-gray-200 focus:border-primary w-full px-3 py-1 border rounded-md text-sm"
@@ -426,7 +403,6 @@ export function SimpleTableWithBeneficiaries({ funds, columnVisibility, tableMod
                     </td>
                     <td className="p-2 text-right">
                       <input
-                        key={`termYears-${fund.id}`}
                         defaultValue={fund.termYears || ""}
                         onBlur={(e) => handleInputChange(fund.id, "termYears", e.target.value)}
                         className="table-input h-7 text-sm bg-white border-gray-200 focus:border-primary w-full px-3 py-1 border rounded-md text-sm"
@@ -436,7 +412,6 @@ export function SimpleTableWithBeneficiaries({ funds, columnVisibility, tableMod
                     </td>
                     <td className="p-2 text-right">
                       <input
-                        key={`increasePercentage-${fund.id}`}
                         defaultValue={fund.increasePercentage || ""}
                         onBlur={(e) => handleInputChange(fund.id, "increasePercentage", e.target.value)}
                         className="table-input h-7 text-sm bg-white border-gray-200 focus:border-primary w-full px-3 py-1 border rounded-md text-sm"
@@ -447,7 +422,6 @@ export function SimpleTableWithBeneficiaries({ funds, columnVisibility, tableMod
                     </td>
                     <td className="p-2 text-right">
                       <input
-                        key={`escalationAmount-${fund.id}`}
                         defaultValue={fund.escalationAmount || ""}
                         onBlur={(e) => handleInputChange(fund.id, "escalationAmount", e.target.value)}
                         className="table-input h-7 text-sm bg-white border-gray-200 focus:border-primary w-full px-3 py-1 border rounded-md text-sm"
@@ -458,12 +432,10 @@ export function SimpleTableWithBeneficiaries({ funds, columnVisibility, tableMod
                     </td>
                   </>
                 )}
-
                 {columnVisibility.fundValue && (
                   <>
                     <td className="p-2 text-right border-l border-neutral-300">
                       <input
-                        key={`approvedLifeCover-${fund.id}`}
                         defaultValue={fund.approvedLifeCover || ""}
                         onBlur={(e) => handleInputChange(fund.id, "approvedLifeCover", e.target.value)}
                         className="table-input h-7 text-sm bg-white border-gray-200 focus:border-primary w-full px-3 py-1 border rounded-md text-sm"
@@ -474,7 +446,6 @@ export function SimpleTableWithBeneficiaries({ funds, columnVisibility, tableMod
                     </td>
                     <td className="p-2 text-right">
                       <input
-                        key={`fundValue-${fund.id}`}
                         defaultValue={fund.fundValue || ""}
                         onBlur={(e) => handleInputChange(fund.id, "fundValue", e.target.value)}
                         className="table-input h-7 text-sm bg-white border-gray-200 focus:border-primary w-full px-3 py-1 border rounded-md text-sm"
@@ -485,7 +456,7 @@ export function SimpleTableWithBeneficiaries({ funds, columnVisibility, tableMod
                     </td>
                     <td className="p-2 text-right">
                       <input
-                        key={`fundValueAtDeath-${fund.id}`}
+                        
                         defaultValue={fund.fundValueAtDeath || ""}
                         onBlur={(e) => handleInputChange(fund.id, "fundValueAtDeath", e.target.value)}
                         className="table-input h-7 text-sm bg-white border-gray-200 focus:border-primary w-full px-3 py-1 border rounded-md text-sm"
@@ -496,12 +467,11 @@ export function SimpleTableWithBeneficiaries({ funds, columnVisibility, tableMod
                     </td>
                   </>
                 )}
-
                 {columnVisibility.fundValueBeneficiaries && (
                   <>
                     <td className="p-2 text-right border-l border-neutral-300">
                       <input
-                        key={`beneficiaryName-${fund.id}`}
+                        
                         defaultValue={fund.beneficiaryName || ""}
                         onBlur={(e) => handleInputChange(fund.id, "beneficiaryName", e.target.value)}
                         className="table-input h-7 text-sm bg-white border-gray-200 focus:border-primary w-full px-3 py-1 border rounded-md text-sm"
@@ -512,7 +482,7 @@ export function SimpleTableWithBeneficiaries({ funds, columnVisibility, tableMod
                     </td>
                     <td className="p-2 text-right">
                       <input
-                        key={`beneficiaryPercentageSplit-${fund.id}`}
+                        
                         defaultValue={fund.beneficiaryPercentageSplit || ""}
                         onBlur={(e) => handleInputChange(fund.id, "beneficiaryPercentageSplit", e.target.value)}
                         className="table-input h-7 text-sm bg-white border-gray-200 focus:border-primary w-full px-3 py-1 border rounded-md text-sm"
@@ -523,7 +493,7 @@ export function SimpleTableWithBeneficiaries({ funds, columnVisibility, tableMod
                     </td>
                     <td className="p-2 text-right">
                       <input
-                        key={`amount-${fund.id}`}
+                        
                         defaultValue={fund.amount || ""}
                         onBlur={(e) => handleInputChange(fund.id, "amount", e.target.value)}
                         className="table-input h-7 text-sm bg-white border-gray-200 focus:border-primary w-full px-3 py-1 border rounded-md text-sm"
@@ -534,7 +504,7 @@ export function SimpleTableWithBeneficiaries({ funds, columnVisibility, tableMod
                     </td>
                     <td className="p-2 text-right">
                       <input
-                        key={`lumpSumTaken-${fund.id}`}
+                        
                         defaultValue={fund.lumpSumTaken || ""}
                         onBlur={(e) => handleInputChange(fund.id, "lumpSumTaken", e.target.value)}
                         className="table-input h-7 text-sm bg-white border-gray-200 focus:border-primary w-full px-3 py-1 border rounded-md text-sm"
@@ -545,7 +515,7 @@ export function SimpleTableWithBeneficiaries({ funds, columnVisibility, tableMod
                     </td>
                     <td className="p-2 text-right">
                       <input
-                        key={`fundValueAtDeath-${fund.id}`}
+                        
                         defaultValue={fund.fundValueAtDeath || ""}
                         onBlur={(e) => handleInputChange(fund.id, "fundValueAtDeath", e.target.value)}
                         className="table-input h-7 text-sm bg-white border-gray-200 focus:border-primary w-full px-3 py-1 border rounded-md text-sm"
@@ -556,7 +526,7 @@ export function SimpleTableWithBeneficiaries({ funds, columnVisibility, tableMod
                     </td>
                     <td className="p-2 text-right">
                       <input
-                        key={`nondeductibleContribution-${fund.id}`}
+                        
                         defaultValue={fund.nondeductibleContribution || ""}
                         onBlur={(e) => handleInputChange(fund.id, "nondeductibleContribution", e.target.value)}
                         className="table-input h-7 text-sm bg-white border-gray-200 focus:border-primary w-full px-3 py-1 border rounded-md text-sm"
@@ -567,7 +537,7 @@ export function SimpleTableWithBeneficiaries({ funds, columnVisibility, tableMod
                     </td>
                     <td className="p-2 text-right">
                       <input
-                        key={`livingAnnuity-${fund.id}`}
+                        
                         defaultValue={fund.livingAnnuity || ""}
                         onBlur={(e) => handleInputChange(fund.id, "livingAnnuity", e.target.value)}
                         className="table-input h-7 text-sm bg-white border-gray-200 focus:border-primary w-full px-3 py-1 border rounded-md text-sm"
@@ -578,7 +548,7 @@ export function SimpleTableWithBeneficiaries({ funds, columnVisibility, tableMod
                     </td>
                     <td className="p-2 text-right">
                       <input
-                        key={`incomeTerm-${fund.id}`}
+                        
                         defaultValue={fund.incomeTerm || ""}
                         onBlur={(e) => handleInputChange(fund.id, "incomeTerm", e.target.value)}
                         className="table-input h-7 text-sm bg-white border-gray-200 focus:border-primary w-full px-3 py-1 border rounded-md text-sm"
@@ -589,14 +559,12 @@ export function SimpleTableWithBeneficiaries({ funds, columnVisibility, tableMod
                     </td>
                   </>
                 )}
-
                 {/* Fund Actions Cell */}
                 <td className="p-2 text-center border-l border-neutral-300">
                   <FundActions fund={fund} />
                 </td>
               </tr>
             );
-
             // Add additional beneficiary rows (starting from index 1)
             beneficiaries.slice(1).forEach((beneficiary, index) => {
               const actualIndex = index + 1; // Since we're starting from slice(1)
@@ -609,7 +577,6 @@ export function SimpleTableWithBeneficiaries({ funds, columnVisibility, tableMod
                       <td className="p-2"></td>
                     </>
                   )}
-
                   {/* Beneficiary details in unapproved life cover section */}
                   {columnVisibility.unapprovedLifeCover && (
                     <>
@@ -659,7 +626,6 @@ export function SimpleTableWithBeneficiaries({ funds, columnVisibility, tableMod
                       </td>
                     </>
                   )}
-
                   {/* Empty cells for other sections */}
                   {columnVisibility.monthlyDeathBenefit && (
                     <>
@@ -669,7 +635,6 @@ export function SimpleTableWithBeneficiaries({ funds, columnVisibility, tableMod
                       <td className="p-2"></td>
                     </>
                   )}
-
                   {columnVisibility.fundValue && (
                     <>
                       <td className="p-2 border-l border-neutral-300"></td>
@@ -677,7 +642,6 @@ export function SimpleTableWithBeneficiaries({ funds, columnVisibility, tableMod
                       <td className="p-2"></td>
                     </>
                   )}
-
                   {columnVisibility.fundValueBeneficiaries && (
                     <>
                       <td className="p-2 border-l border-neutral-300"></td>
@@ -690,13 +654,11 @@ export function SimpleTableWithBeneficiaries({ funds, columnVisibility, tableMod
                       <td className="p-2"></td>
                     </>
                   )}
-
                   {/* Empty Fund Actions Cell */}
                   <td className="p-2 border-l border-neutral-300"></td>
                 </tr>
               );
             });
-
             return rows;
           })}
           
@@ -785,7 +747,6 @@ export function SimpleTableWithBeneficiaries({ funds, columnVisibility, tableMod
                 <td className="p-2 text-right"></td>
               </>
             )}
-
             {/* Empty Fund Actions Cell for Totals Row */}
             <td className="p-2 border-l border-neutral-300"></td>
           </tr>

@@ -7,7 +7,6 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { FundActions } from "./fund-actions";
 import { nanoid } from "nanoid";
-
 interface ColumnVisibility {
   overview: boolean;
   unapprovedLifeCover: boolean;
@@ -15,7 +14,6 @@ interface ColumnVisibility {
   fundValue: boolean;
   fundValueBeneficiaries: boolean;
 }
-
 interface NewGroupedTableViewProps {
   funds: RetirementFund[];
   columnVisibility: ColumnVisibility;
@@ -23,7 +21,6 @@ interface NewGroupedTableViewProps {
   onFieldUpdate: (id: number, field: keyof UpdateRetirementFund, value: string) => void;
   isUpdating: boolean;
 }
-
 // Auto-sizing input component
 const AutoSizeInput = ({ value, onChange, className, placeholder, disabled, style, fundId, field, ...props }: {
   value: string;
@@ -38,7 +35,7 @@ const AutoSizeInput = ({ value, onChange, className, placeholder, disabled, styl
 }) => {
   return (
     <input
-      key={`${field}-${fundId}-${value.length}`}
+      
       defaultValue={value}
       onBlur={onChange}
       className={`${className} table-input`}
@@ -56,7 +53,6 @@ const AutoSizeInput = ({ value, onChange, className, placeholder, disabled, styl
     />
   );
 };
-
 export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFieldUpdate, isUpdating }: NewGroupedTableViewProps) {
   
   // Memoized calculations for better performance
@@ -82,7 +78,6 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
     
     return totals;
   }, [funds]);
-
   // Format currency value
   const formatCurrencyValue = useCallback((value: string, field: string) => {
     // Fields that should have currency formatting
@@ -98,17 +93,14 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
     const formatted = `R ${Math.round(Number(numericValue)).toLocaleString()}`;
     return formatted;
   }, []);
-
   // Memoized handlers
   const handleInputChange = useCallback((fundId: number, field: keyof UpdateRetirementFund, value: string) => {
     const formattedValue = formatCurrencyValue(value, field);
     onFieldUpdate(fundId, field, formattedValue);
   }, [onFieldUpdate, formatCurrencyValue]);
-
   const handleBeneficiaryUpdate = useCallback((fundId: number, beneficiaryIndex: number, field: keyof Beneficiary, value: string | number) => {
     const fund = funds.find(f => f.id === fundId);
     if (!fund) return;
-
     const currentBeneficiaries = parseBeneficiaries(fund.beneficiaries);
     const updatedBeneficiaries = [...currentBeneficiaries];
     
@@ -124,22 +116,18 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
           [field]: value
         };
       }
-
       // Update cover splits when percentages change
       if (field === 'percentage') {
         const coverAmount = parseFloat(fund.coverAmount.replace(/[^\d.-]/g, '')) || 0;
         updatedBeneficiaries[beneficiaryIndex].coverSplit = 
           `R ${Math.round((coverAmount * updatedBeneficiaries[beneficiaryIndex].percentage / 100)).toLocaleString()}`;
       }
-
       onFieldUpdate(fundId, 'beneficiaries', JSON.stringify(updatedBeneficiaries));
     }
   }, [funds, onFieldUpdate]);
-
   const handleAddBeneficiary = useCallback((fundId: number) => {
     const fund = funds.find(f => f.id === fundId);
     if (!fund) return;
-
     const currentBeneficiaries = parseBeneficiaries(fund.beneficiaries);
     const newBeneficiary: Beneficiary = {
       id: nanoid(),
@@ -147,18 +135,14 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
       percentage: 0,
       coverSplit: "R 0"
     };
-
     const updatedBeneficiaries = [...currentBeneficiaries, newBeneficiary];
     onFieldUpdate(fundId, 'beneficiaries', JSON.stringify(updatedBeneficiaries));
   }, [funds, onFieldUpdate]);
-
   const handleRemoveBeneficiary = useCallback((fundId: number, beneficiaryIndex: number) => {
     const fund = funds.find(f => f.id === fundId);
     if (!fund) return;
-
     const currentBeneficiaries = parseBeneficiaries(fund.beneficiaries);
     if (currentBeneficiaries.length <= 1) return;
-
     const updatedBeneficiaries = currentBeneficiaries.filter((_, index) => index !== beneficiaryIndex);
     
     // Auto-adjust percentages
@@ -172,12 +156,9 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
         b.coverSplit = `R ${Math.round((coverAmount * b.percentage / 100)).toLocaleString()}`;
       });
     }
-
     onFieldUpdate(fundId, 'beneficiaries', JSON.stringify(updatedBeneficiaries));
   }, [funds, onFieldUpdate]);
-
   const owners = useMemo(() => ["John Doe", "Jane Smith"], []);
-
   // Memoized editable cell renderer
   const renderEditableCell = useCallback((value: string, onChange: (value: string) => void, className = "") => {
     return (
@@ -190,9 +171,7 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
       />
     );
   }, [isUpdating]);
-
   // Flows table structure - removed temporarily to fix JSX syntax error
-
   if (tableMode === "flows") {
     // Render flows table only
     return (
@@ -298,7 +277,7 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
           <tbody className="bg-white divide-y divide-neutral-200">
             {/* Flows data rows */}
             {funds.map((fund, index) => (
-              <tr key={`flows-${fund.id}`} className={index % 2 === 0 ? "bg-white" : "bg-teal-50/30"}>
+              <tr  className={index % 2 === 0 ? "bg-white" : "bg-teal-50/30"}>
                 {columnVisibility.overview && (
                   <td className="p-2  table-text-14 text-neutral-900">
                     {fund.description}
@@ -551,7 +530,6 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
       </div>
     );
   }
-
   // Render inputs table only
   return (
     <div className="overflow-x-auto">
@@ -718,7 +696,6 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
                       </td>
                     </>
                   )}
-
                   {/* Unapproved Life Cover Section - Header Row */}
                   {columnVisibility.unapprovedLifeCover && (
                     <>
@@ -745,21 +722,18 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
                       </td>
                     </>
                   )}
-
                   {/* Monthly Death Benefit Section - Placeholder for Main Row */}
                   {columnVisibility.monthlyDeathBenefit && (
                     <>
                       <td className="p-2 border-l border-neutral-300" colSpan={4}></td>
                     </>
                   )}
-
                   {/* Fund Value Section - Placeholder for Main Row */}
                   {columnVisibility.fundValue && (
                     <>
                       <td className="p-2 border-l border-neutral-300" colSpan={3}></td>
                     </>
                   )}
-
                   {/* Fund Value Beneficiaries Section - Placeholder for Main Row */}
                   {columnVisibility.fundValueBeneficiaries && (
                     <>
@@ -767,7 +741,6 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
                     </>
                   )}
                 </tr>
-
                 {/* Beneficiary Rows */}
                 {beneficiaries.map((beneficiary, index) => (
                   <tr key={beneficiary.id} className="hover:bg-neutral-50 border-l-4 border-l-teal-200">
@@ -823,20 +796,17 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
                         </td>
                       </>
                     )}
-
                     {/* Empty cells for other sections when not visible */}
                     {columnVisibility.monthlyDeathBenefit && (
                       <>
                         <td className="p-2 border-l border-neutral-300" colSpan={4}></td>
                       </>
                     )}
-
                     {columnVisibility.fundValue && (
                       <>
                         <td className="p-2 border-l border-neutral-300" colSpan={3}></td>
                       </>
                     )}
-
                     {columnVisibility.fundValueBeneficiaries && (
                       <>
                         <td className="p-2 border-l border-neutral-300" colSpan={8}></td>
@@ -987,7 +957,6 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
         </tbody>
       </table>
       
-
     </div>
   );
 }
