@@ -432,7 +432,7 @@ export function DetailedView({ funds, columnVisibility, onFieldUpdate, isUpdatin
                     className="table-input h-9 text-sm text-right"
                     disabled={isUpdating}
                     placeholder="0%"
-                    style={{ textAlign: 'right', minWidth: '120px', maxWidth: '300px' }}
+                    style={{ textAlign: 'right' }}
                   />
                 </div>
                 <div>
@@ -456,7 +456,7 @@ export function DetailedView({ funds, columnVisibility, onFieldUpdate, isUpdatin
                     className="table-input h-9 text-sm text-right"
                     disabled={isUpdating}
                     placeholder="R 0"
-                    style={{ textAlign: 'right', minWidth: '120px', maxWidth: '300px' }}
+                    style={{ textAlign: 'right' }}
                   />
                 </div>
                 <div>
@@ -474,7 +474,7 @@ export function DetailedView({ funds, columnVisibility, onFieldUpdate, isUpdatin
                     className="table-input h-9 text-sm text-right"
                     disabled={isUpdating}
                     placeholder="R 0"
-                    style={{ textAlign: 'right', minWidth: '120px', maxWidth: '300px' }}
+                    style={{ textAlign: 'right' }}
                   />
                 </div>
                 <div>
@@ -498,7 +498,7 @@ export function DetailedView({ funds, columnVisibility, onFieldUpdate, isUpdatin
                     className="table-input h-9 text-sm text-right"
                     disabled={isUpdating}
                     placeholder="Income term"
-                    style={{ textAlign: 'right', minWidth: '120px', maxWidth: '300px' }}
+                    style={{ textAlign: 'right' }}
                   />
                 </div>
               </div>
