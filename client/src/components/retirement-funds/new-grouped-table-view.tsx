@@ -33,16 +33,16 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
     };
     
     funds.forEach(fund => {
-      // Clean the value by removing currency symbols, commas, and spaces, then parse
-      const cleanValue = (fund.lumpSumLeftOverProvisions || "0")
-        .replace(/[R\s,]/g, '') // Remove R, spaces, and commas
-        .replace(/[^\d.-]/g, ''); // Keep only digits, dots, and minus signs
+      // Parse Estate value
+      const estateValue = parseFloat((fund.lumpSumProvisionEstate || "0").replace(/[R\s,]/g, '').replace(/[^\d.-]/g, '')) || 0;
+      // Parse Spouse value  
+      const spouseValue = parseFloat((fund.lumpSumProvisionSpouse || "0").replace(/[R\s,]/g, '').replace(/[^\d.-]/g, '')) || 0;
+      // Parse Other value
+      const otherValue = parseFloat((fund.lumpSumProvisionOther || "0").replace(/[R\s,]/g, '').replace(/[^\d.-]/g, '')) || 0;
       
-      const value = parseFloat(cleanValue) || 0; // Default to 0 if still NaN
-      
-      totals.estate += value;
-      totals.spouse += value; 
-      totals.other += value;
+      totals.estate += estateValue;
+      totals.spouse += spouseValue; 
+      totals.other += otherValue;
     });
     
     return totals;
@@ -53,7 +53,8 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
     const currencyFields = [
       'coverAmount', 'monthlyIncome', 'approvedLifeCover', 'fundValue', 'fundValueAtDeath', 
       'amount', 'lumpSumTaken', 'nondeductibleContribution', 'livingAnnuity', 'escalationAmount',
-      'currentAnnualIncome', 'annualIncomeAtDeath', 'estateDeploymentDeceased', 'monthlyProvisionOffered'
+      'currentAnnualIncome', 'annualIncomeAtDeath', 'estateDeploymentDeceased', 'monthlyProvisionOffered',
+      'lumpSumProvisionEstate', 'lumpSumProvisionSpouse', 'lumpSumProvisionOther'
     ];
     
     // Fields that should have thousand separators but no R prefix  
@@ -293,13 +294,13 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
                   <>
                     <td className="p-2 text-right ">
                       <input
-                        defaultValue={fund.lumpSumLeftOverProvisions || "0"}
+                        defaultValue={fund.lumpSumProvisionEstate || "0"}
                         onBlur={(e) => {
-                          const formattedValue = formatCurrencyValue(e.target.value, "lumpSumLeftOverProvisions");
+                          const formattedValue = formatCurrencyValue(e.target.value, "lumpSumProvisionEstate");
                           if (formattedValue !== e.target.value) {
                             e.target.value = formattedValue;
                           }
-                          handleInputBlur(fund.id, "lumpSumLeftOverProvisions", e.target.value);
+                          handleInputBlur(fund.id, "lumpSumProvisionEstate", e.target.value);
                         }}
                         className="table-input"
                         style={{ textAlign: 'right', minWidth: '60px' }}
@@ -308,13 +309,13 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
                     </td>
                     <td className="p-2 text-right ">
                       <input
-                        defaultValue={fund.lumpSumLeftOverProvisions || "0"}
+                        defaultValue={fund.lumpSumProvisionSpouse || "0"}
                         onBlur={(e) => {
-                          const formattedValue = formatCurrencyValue(e.target.value, "lumpSumLeftOverProvisions");
+                          const formattedValue = formatCurrencyValue(e.target.value, "lumpSumProvisionSpouse");
                           if (formattedValue !== e.target.value) {
                             e.target.value = formattedValue;
                           }
-                          handleInputBlur(fund.id, "lumpSumLeftOverProvisions", e.target.value);
+                          handleInputBlur(fund.id, "lumpSumProvisionSpouse", e.target.value);
                         }}
                         className="table-input"
                         style={{ textAlign: 'right', minWidth: '60px' }}
@@ -323,13 +324,13 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
                     </td>
                     <td className="p-2 text-right ">
                       <input
-                        defaultValue={fund.lumpSumLeftOverProvisions || "0"}
+                        defaultValue={fund.lumpSumProvisionOther || "0"}
                         onBlur={(e) => {
-                          const formattedValue = formatCurrencyValue(e.target.value, "lumpSumLeftOverProvisions");
+                          const formattedValue = formatCurrencyValue(e.target.value, "lumpSumProvisionOther");
                           if (formattedValue !== e.target.value) {
                             e.target.value = formattedValue;
                           }
-                          handleInputBlur(fund.id, "lumpSumLeftOverProvisions", e.target.value);
+                          handleInputBlur(fund.id, "lumpSumProvisionOther", e.target.value);
                         }}
                         className="table-input"
                         style={{ textAlign: 'right', minWidth: '60px' }}

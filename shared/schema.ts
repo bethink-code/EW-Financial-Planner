@@ -30,8 +30,10 @@ export const retirementFunds = pgTable("retirement_funds", {
   livingAnnuity: text("living_annuity").notNull().default("0"),
   incomeTerm: text("income_term").notNull().default("0"),
 
-  // Flows mode specific fields
-  lumpSumLeftOverProvisions: text("lump_sum_left_over_provisions").notNull().default("0"),
+  // Flows mode specific fields - Lump sum life cover provision
+  lumpSumProvisionEstate: text("lump_sum_provision_estate").notNull().default("0"),
+  lumpSumProvisionSpouse: text("lump_sum_provision_spouse").notNull().default("0"),
+  lumpSumProvisionOther: text("lump_sum_provision_other").notNull().default("0"),
   incomeProvisionOption: text("income_provision_option").notNull().default(""),
   monthlyProvisionOffered: text("monthly_provision_offered").notNull().default("0"),
   currentAnnualIncome: text("current_annual_income").notNull().default("0"),

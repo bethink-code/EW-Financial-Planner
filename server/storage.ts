@@ -48,7 +48,9 @@ export class MemStorage implements IStorage {
       incomeTerm: "20 years",
 
       // Flows mode fields
-      lumpSumLeftOverProvisions: "R 300,000",
+      lumpSumProvisionEstate: "R 300,000",
+      lumpSumProvisionSpouse: "R 200,000", 
+      lumpSumProvisionOther: "R 150,000",
       incomeProvisionOption: "Income guarantee",
       monthlyProvisionOffered: "R 4,500",
       currentAnnualIncome: "R 54,000",
@@ -94,7 +96,9 @@ export class MemStorage implements IStorage {
       incomeTerm: "25 years",
 
       // Flows mode fields
-      lumpSumLeftOverProvisions: "R 250,000",
+      lumpSumProvisionEstate: "R 250,000",
+      lumpSumProvisionSpouse: "R 180,000",
+      lumpSumProvisionOther: "R 120,000", 
       incomeProvisionOption: "Fixed income",
       monthlyProvisionOffered: "R 3,200",
       currentAnnualIncome: "R 38,400",
@@ -148,7 +152,9 @@ export class MemStorage implements IStorage {
       incomeEscalation: insertFund.incomeEscalation || "0%",
       
       // Flows mode specific fields
-      lumpSumLeftOverProvisions: insertFund.lumpSumLeftOverProvisions || "0",
+      lumpSumProvisionEstate: insertFund.lumpSumProvisionEstate || "0",
+      lumpSumProvisionSpouse: insertFund.lumpSumProvisionSpouse || "0",
+      lumpSumProvisionOther: insertFund.lumpSumProvisionOther || "0",
       incomeProvisionOption: insertFund.incomeProvisionOption || "",
       monthlyProvisionOffered: insertFund.monthlyProvisionOffered || "0",
       currentAnnualIncome: insertFund.currentAnnualIncome || "0",
