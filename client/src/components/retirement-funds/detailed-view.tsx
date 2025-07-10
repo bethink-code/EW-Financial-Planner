@@ -104,7 +104,7 @@ export function DetailedView({ funds, columnVisibility, onFieldUpdate, isUpdatin
     <div className="flex min-h-screen bg-white rounded-lg border border-neutral-200">
       {/* Left Sidebar - Fund List */}
       <div className="w-80 border-r border-neutral-200 flex flex-col">
-        <div className="p-4 border-b border-neutral-200 sticky top-0 bg-white z-10">
+        <div className="p-4 border-b border-neutral-200 sticky top-0 bg-white z-10 min-h-[73px] flex items-center">
           <h3 className="font-semibold text-neutral-900">Funds ({funds.length})</h3>
         </div>
         <div className="flex-1">
@@ -141,8 +141,8 @@ export function DetailedView({ funds, columnVisibility, onFieldUpdate, isUpdatin
       {/* Right Panel - Selected Fund Details */}
       <div className="flex-1 flex flex-col">
         {/* Header */}
-        <div className="p-4 border-b border-neutral-200 bg-gray-50 sticky top-0 z-10">
-          <div className="flex items-center justify-between">
+        <div className="p-4 border-b border-neutral-200 bg-gray-50 sticky top-0 z-10 min-h-[73px]">
+          <div className="flex items-center justify-between h-full">
             <div className="flex items-center gap-4">
               <h2 className="text-xl font-bold text-neutral-900">{selectedFund.description}</h2>
               <Badge variant="outline" className={getOwnerBadgeColor()} style={{ color: '#EA8A2E' }}>
