@@ -63,7 +63,9 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
     
     // Fields that should have percentage formatting (% suffix)
     const percentageFields = [
-      'increasePercentage', 'beneficiaryPercentageSplit', 'percentage'
+      'increasePercentage', 'beneficiaryPercentageSplit', 'percentage',
+      'estateDutyPoliciesOnLife', 'estateDutyToSpouse', 'estateDutyToOthers', 
+      'executorsFee', 'mastersFee', 'incomeEscalation'
     ];
     
     // Fields that should have years formatting (years suffix)
@@ -363,7 +365,13 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
                     <td className="p-2 text-right ">
                       <input
                         defaultValue={fund.incomeEscalation || "0%"}
-                        onBlur={(e) => handleInputBlur(fund.id, "incomeEscalation", e.target.value)}
+                        onBlur={(e) => {
+                          const formattedValue = formatCurrencyValue(e.target.value, "incomeEscalation");
+                          if (formattedValue !== e.target.value) {
+                            e.target.value = formattedValue;
+                          }
+                          handleInputBlur(fund.id, "incomeEscalation", e.target.value);
+                        }}
                         className="table-input" style={{ textAlign: "right" }}
                         disabled={isUpdating}
                       />
@@ -397,7 +405,13 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
                     <td className="p-2 text-right ">
                       <input
                         defaultValue={fund.incomeEscalation || "0%"}
-                        onBlur={(e) => handleInputBlur(fund.id, "incomeEscalation", e.target.value)}
+                        onBlur={(e) => {
+                          const formattedValue = formatCurrencyValue(e.target.value, "incomeEscalation");
+                          if (formattedValue !== e.target.value) {
+                            e.target.value = formattedValue;
+                          }
+                          handleInputBlur(fund.id, "incomeEscalation", e.target.value);
+                        }}
                         className="table-input" style={{ textAlign: "right" }}
                         disabled={isUpdating}
                       />
@@ -409,7 +423,13 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
                     <td className="p-2 text-right border-l border-neutral-300">
                       <input
                         defaultValue={fund.estateDutyPoliciesOnLife || "0%"}
-                        onBlur={(e) => handleInputBlur(fund.id, "estateDutyPoliciesOnLife", e.target.value)}
+                        onBlur={(e) => {
+                          const formattedValue = formatCurrencyValue(e.target.value, "estateDutyPoliciesOnLife");
+                          if (formattedValue !== e.target.value) {
+                            e.target.value = formattedValue;
+                          }
+                          handleInputBlur(fund.id, "estateDutyPoliciesOnLife", e.target.value);
+                        }}
                         className="table-input" 
                         placeholder="0%"
                         disabled={isUpdating}
@@ -418,7 +438,13 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
                     <td className="p-2 text-right ">
                       <input
                         defaultValue={fund.estateDutyToSpouse || "0%"}
-                        onBlur={(e) => handleInputBlur(fund.id, "estateDutyToSpouse", e.target.value)}
+                        onBlur={(e) => {
+                          const formattedValue = formatCurrencyValue(e.target.value, "estateDutyToSpouse");
+                          if (formattedValue !== e.target.value) {
+                            e.target.value = formattedValue;
+                          }
+                          handleInputBlur(fund.id, "estateDutyToSpouse", e.target.value);
+                        }}
                         className="table-input" style={{ textAlign: "right" }}
                         placeholder="0%"
                         disabled={isUpdating}
@@ -427,7 +453,13 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
                     <td className="p-2 text-right ">
                       <input
                         defaultValue={fund.estateDutyToOthers || "0%"}
-                        onBlur={(e) => handleInputBlur(fund.id, "estateDutyToOthers", e.target.value)}
+                        onBlur={(e) => {
+                          const formattedValue = formatCurrencyValue(e.target.value, "estateDutyToOthers");
+                          if (formattedValue !== e.target.value) {
+                            e.target.value = formattedValue;
+                          }
+                          handleInputBlur(fund.id, "estateDutyToOthers", e.target.value);
+                        }}
                         className="table-input"
                         placeholder="0%"
                         disabled={isUpdating}
@@ -436,7 +468,13 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
                     <td className="p-2 text-right">
                       <input
                         defaultValue={fund.executorsFee || "0%"}
-                        onBlur={(e) => handleInputBlur(fund.id, "executorsFee", e.target.value)}
+                        onBlur={(e) => {
+                          const formattedValue = formatCurrencyValue(e.target.value, "executorsFee");
+                          if (formattedValue !== e.target.value) {
+                            e.target.value = formattedValue;
+                          }
+                          handleInputBlur(fund.id, "executorsFee", e.target.value);
+                        }}
                         className="table-input"
                         placeholder="0%"
                         disabled={isUpdating}
@@ -445,7 +483,13 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
                     <td className="p-2 text-right">
                       <input
                         defaultValue={fund.mastersFee || "0%"}
-                        onBlur={(e) => handleInputBlur(fund.id, "mastersFee", e.target.value)}
+                        onBlur={(e) => {
+                          const formattedValue = formatCurrencyValue(e.target.value, "mastersFee");
+                          if (formattedValue !== e.target.value) {
+                            e.target.value = formattedValue;
+                          }
+                          handleInputBlur(fund.id, "mastersFee", e.target.value);
+                        }}
                         className="table-input"
                         placeholder="0%"
                         disabled={isUpdating}
