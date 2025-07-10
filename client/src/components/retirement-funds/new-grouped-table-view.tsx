@@ -755,6 +755,17 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
                               e.target.value = formattedValue;
                             }
                             handleInputBlur(fund.id, "coverAmount", e.target.value);
+                            
+                            // Recalculate cover splits for all beneficiaries
+                            const beneficiaries = parseBeneficiaries(fund.beneficiaries);
+                            if (beneficiaries.length > 0) {
+                              const newCoverAmount = parseFloat(e.target.value.replace(/[^\d.-]/g, '')) || 0;
+                              const updatedBeneficiaries = beneficiaries.map(b => ({
+                                ...b,
+                                coverSplit: `R ${Math.round((newCoverAmount * b.percentage / 100)).toLocaleString()}`
+                              }));
+                              handleInputBlur(fund.id, 'beneficiaries', JSON.stringify(updatedBeneficiaries));
+                            }
                           }}
                           className="table-input" style={{ textAlign: "right" }}
                           placeholder="R 0"

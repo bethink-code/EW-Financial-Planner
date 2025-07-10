@@ -121,6 +121,19 @@ export function DetailedView({ funds, columnVisibility, onFieldUpdate, isUpdatin
     if (selectedFund) {
       const formattedValue = formatCurrencyValue(value, field);
       onFieldUpdate(selectedFund.id, field, formattedValue);
+      
+      // Recalculate cover splits when cover amount changes
+      if (field === 'coverAmount') {
+        const beneficiaries = parseBeneficiaries(selectedFund.beneficiaries);
+        if (beneficiaries.length > 0) {
+          const newCoverAmount = parseFloat(value.replace(/[^\d.-]/g, '')) || 0;
+          const updatedBeneficiaries = beneficiaries.map(b => ({
+            ...b,
+            coverSplit: `R ${Math.round((newCoverAmount * b.percentage / 100)).toLocaleString()}`
+          }));
+          onFieldUpdate(selectedFund.id, 'beneficiaries', JSON.stringify(updatedBeneficiaries));
+        }
+      }
     }
   }, [selectedFund, onFieldUpdate, formatCurrencyValue]);
 
