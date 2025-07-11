@@ -182,7 +182,6 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
   if (tableMode === "flows") {
     // Render flows table only
     return (
-      <div className="overflow-x-auto">
         <table className="w-full bg-white table-auto">
           <thead>
             {/* First level headers - Flows */}
@@ -601,7 +600,6 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
             </tr>
           </tbody>
         </table>
-      </div>
     );
   }
   // Render inputs table only
