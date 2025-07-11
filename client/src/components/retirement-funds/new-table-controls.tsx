@@ -104,8 +104,8 @@ export function NewTableControls({
             </div>
           )}
 
-          {/* Section Visibility Dropdown - compact design */}
-          <DropdownMenu>
+          {/* Section Visibility Dropdown - compact design - HIDDEN */}
+          <DropdownMenu className="hidden">
             <DropdownMenuTrigger asChild>
               <Button
                 variant="ghost"
