@@ -145,7 +145,7 @@ export function AdditionalDetails({ funds, onFieldUpdate, isUpdating }: Addition
             </tbody>
             {/* Totals Row */}
             <tfoot>
-              <tr className="border-t-2 border-neutral-300 bg-gray-100 table-total-row">
+              <tr className="border-t border-neutral-300 bg-gray-100 table-total-row">
                 <td className="table-cell text-sm text-neutral-900" style={{ fontWeight: 700 }}>
                   Total
                 </td>
