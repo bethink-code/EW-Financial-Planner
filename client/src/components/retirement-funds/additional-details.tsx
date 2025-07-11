@@ -23,6 +23,22 @@ export function AdditionalDetails({ funds, onFieldUpdate, isUpdating }: Addition
     return `R ${Math.round(Number(numericValue)).toLocaleString()}`;
   }, []);
 
+  // Format display value for currency fields to ensure R prefix
+  const formatDisplayValue = useCallback((value: string, field: string) => {
+    const currencyFields = ['lumpSumDeath', 'previousLumpSums', 'additionalTaxFreeAmount'];
+    
+    if (!currencyFields.includes(field)) return value;
+    
+    // If value is just "0" or empty, return "R 0"
+    if (!value || value === "0") return "R 0";
+    
+    // If already formatted correctly, return as is
+    if (value.startsWith("R ")) return value;
+    
+    // Otherwise, format it
+    return formatCurrencyValue(value, field);
+  }, [formatCurrencyValue]);
+
   // Handle input blur for formatting and updating
   const handleInputBlur = useCallback((fundId: number, field: keyof UpdateRetirementFund, value: string) => {
     const formattedValue = formatCurrencyValue(value, field);
@@ -37,22 +53,32 @@ export function AdditionalDetails({ funds, onFieldUpdate, isUpdating }: Addition
 
   // Calculate totals for the table footer
   const totals = useMemo(() => {
+    const lumpSumDeathTotal = funds.reduce((sum, fund) => {
+      const value = fund.lumpSumDeath as string;
+      const amount = parseFloat(value.replace(/[^\d.-]/g, '')) || 0;
+      return sum + amount;
+    }, 0);
+    
+    const previousLumpSumsTotal = funds.reduce((sum, fund) => {
+      const value = fund.previousLumpSums as string;
+      const amount = parseFloat(value.replace(/[^\d.-]/g, '')) || 0;
+      return sum + amount;
+    }, 0);
+    
+    const additionalTaxFreeAmountTotal = funds.reduce((sum, fund) => {
+      const value = fund.additionalTaxFreeAmount as string;
+      const amount = parseFloat(value.replace(/[^\d.-]/g, '')) || 0;
+      return sum + amount;
+    }, 0);
+    
     return {
-      lumpSumDeath: funds.reduce((sum, fund) => {
-        const value = fund.lumpSumDeath as string;
-        const amount = parseFloat(value.replace(/[^\d.-]/g, '')) || 0;
-        return sum + amount;
-      }, 0),
-      previousLumpSums: funds.reduce((sum, fund) => {
-        const value = fund.previousLumpSums as string;
-        const amount = parseFloat(value.replace(/[^\d.-]/g, '')) || 0;
-        return sum + amount;
-      }, 0),
-      additionalTaxFreeAmount: funds.reduce((sum, fund) => {
-        const value = fund.additionalTaxFreeAmount as string;
-        const amount = parseFloat(value.replace(/[^\d.-]/g, '')) || 0;
-        return sum + amount;
-      }, 0)
+      lumpSumDeath: lumpSumDeathTotal,
+      previousLumpSums: previousLumpSumsTotal,
+      additionalTaxFreeAmount: additionalTaxFreeAmountTotal,
+      // Formatted display versions
+      lumpSumDeathFormatted: `R ${lumpSumDeathTotal.toLocaleString()}`,
+      previousLumpSumsFormatted: `R ${previousLumpSumsTotal.toLocaleString()}`,
+      additionalTaxFreeAmountFormatted: `R ${additionalTaxFreeAmountTotal.toLocaleString()}`
     };
   }, [funds]);
 
@@ -90,7 +116,7 @@ export function AdditionalDetails({ funds, onFieldUpdate, isUpdating }: Addition
                     <input
                       type="text"
                       data-field={`lumpSumDeath-${fund.id}`}
-                      defaultValue={fund.lumpSumDeath}
+                      defaultValue={formatDisplayValue(fund.lumpSumDeath, 'lumpSumDeath')}
                       onBlur={(e) => {
                         const formattedValue = formatCurrencyValue(e.target.value, 'lumpSumDeath');
                         if (formattedValue !== e.target.value) {
@@ -108,7 +134,7 @@ export function AdditionalDetails({ funds, onFieldUpdate, isUpdating }: Addition
                     <input
                       type="text"
                       data-field={`previousLumpSums-${fund.id}`}
-                      defaultValue={fund.previousLumpSums}
+                      defaultValue={formatDisplayValue(fund.previousLumpSums, 'previousLumpSums')}
                       onBlur={(e) => {
                         const formattedValue = formatCurrencyValue(e.target.value, 'previousLumpSums');
                         if (formattedValue !== e.target.value) {
@@ -126,7 +152,7 @@ export function AdditionalDetails({ funds, onFieldUpdate, isUpdating }: Addition
                     <input
                       type="text"
                       data-field={`additionalTaxFreeAmount-${fund.id}`}
-                      defaultValue={fund.additionalTaxFreeAmount}
+                      defaultValue={formatDisplayValue(fund.additionalTaxFreeAmount, 'additionalTaxFreeAmount')}
                       onBlur={(e) => {
                         const formattedValue = formatCurrencyValue(e.target.value, 'additionalTaxFreeAmount');
                         if (formattedValue !== e.target.value) {
@@ -150,13 +176,13 @@ export function AdditionalDetails({ funds, onFieldUpdate, isUpdating }: Addition
                   Total
                 </td>
                 <td className="table-cell text-right text-sm text-neutral-900" style={{ fontWeight: 700 }}>
-                  R {totals.lumpSumDeath.toLocaleString()}
+                  {totals.lumpSumDeathFormatted}
                 </td>
                 <td className="table-cell text-right text-sm text-neutral-900" style={{ fontWeight: 700 }}>
-                  R {totals.previousLumpSums.toLocaleString()}
+                  {totals.previousLumpSumsFormatted}
                 </td>
                 <td className="table-cell text-right text-sm text-neutral-900" style={{ fontWeight: 700 }}>
-                  R {totals.additionalTaxFreeAmount.toLocaleString()}
+                  {totals.additionalTaxFreeAmountFormatted}
                 </td>
               </tr>
             </tfoot>
