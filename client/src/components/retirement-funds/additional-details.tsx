@@ -63,60 +63,81 @@ export function AdditionalDetails({ funds, onFieldUpdate, isUpdating }: Addition
         
         {/* Detail Table */}
         <div className="overflow-x-auto">
-          <table className="w-full">
+          <table className="w-full bg-white table-auto">
             <thead>
               <tr className="border-b border-neutral-200" style={{ backgroundColor: '#D6ECF5' }}>
-                <th className="p-3 text-left font-medium text-neutral-600 uppercase tracking-wider text-xs">
-                  Fund Description
+                <th className="table-cell text-left table-header-12 text-neutral-600 uppercase tracking-wider">
+                  Description
                 </th>
-                <th className="p-3 text-center font-medium text-neutral-600 uppercase tracking-wider text-xs">
+                <th className="table-cell text-left table-header-12 text-neutral-600 uppercase tracking-wider">
                   Lump Sum Death
                 </th>
-                <th className="p-3 text-center font-medium text-neutral-600 uppercase tracking-wider text-xs">
+                <th className="table-cell text-left table-header-12 text-neutral-600 uppercase tracking-wider">
                   Previous Lump Sums
                 </th>
-                <th className="p-3 text-center font-medium text-neutral-600 uppercase tracking-wider text-xs">
+                <th className="table-cell text-left table-header-12 text-neutral-600 uppercase tracking-wider">
                   Additional Tax Free Amount
                 </th>
               </tr>
             </thead>
-            <tbody>
+            <tbody className="bg-white divide-y divide-neutral-200">
               {funds.map((fund, index) => (
-                <tr key={`additional-${fund.id}`} className={index % 2 === 0 ? "bg-white" : "bg-neutral-50"}>
-                  <td className="p-3 text-sm font-medium text-neutral-900">
+                <tr key={`additional-${fund.id}`} className="hover:bg-neutral-50">
+                  <td className="table-cell text-sm font-medium text-neutral-900">
                     {fund.description}
                   </td>
-                  <td className="p-3 text-center">
+                  <td className="p-2 text-right">
                     <input
                       type="text"
                       data-field={`lumpSumDeath-${fund.id}`}
                       defaultValue={fund.lumpSumDeath}
-                      onBlur={(e) => handleInputBlur(fund.id, 'lumpSumDeath', e.target.value)}
+                      onBlur={(e) => {
+                        const formattedValue = formatCurrencyValue(e.target.value, 'lumpSumDeath');
+                        if (formattedValue !== e.target.value) {
+                          e.target.value = formattedValue;
+                        }
+                        handleInputBlur(fund.id, 'lumpSumDeath', e.target.value);
+                      }}
                       disabled={isUpdating}
-                      className="w-full h-8 px-2 text-sm text-right bg-white border border-neutral-300 rounded focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary hover:border-neutral-400 transition-colors"
-                      style={{ minWidth: '120px' }}
+                      className="table-input h-7 text-sm bg-white border-gray-200 focus:border-primary w-full px-3 py-1 border rounded-md text-sm"
+                      style={{ textAlign: 'right', minWidth: '80px' }}
+                      placeholder="R 0"
                     />
                   </td>
-                  <td className="p-3 text-center">
+                  <td className="p-2 text-right">
                     <input
                       type="text"
                       data-field={`previousLumpSums-${fund.id}`}
                       defaultValue={fund.previousLumpSums}
-                      onBlur={(e) => handleInputBlur(fund.id, 'previousLumpSums', e.target.value)}
+                      onBlur={(e) => {
+                        const formattedValue = formatCurrencyValue(e.target.value, 'previousLumpSums');
+                        if (formattedValue !== e.target.value) {
+                          e.target.value = formattedValue;
+                        }
+                        handleInputBlur(fund.id, 'previousLumpSums', e.target.value);
+                      }}
                       disabled={isUpdating}
-                      className="w-full h-8 px-2 text-sm text-right bg-white border border-neutral-300 rounded focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary hover:border-neutral-400 transition-colors"
-                      style={{ minWidth: '120px' }}
+                      className="table-input h-7 text-sm bg-white border-gray-200 focus:border-primary w-full px-3 py-1 border rounded-md text-sm"
+                      style={{ textAlign: 'right', minWidth: '80px' }}
+                      placeholder="R 0"
                     />
                   </td>
-                  <td className="p-3 text-center">
+                  <td className="p-2 text-right">
                     <input
                       type="text"
                       data-field={`additionalTaxFreeAmount-${fund.id}`}
                       defaultValue={fund.additionalTaxFreeAmount}
-                      onBlur={(e) => handleInputBlur(fund.id, 'additionalTaxFreeAmount', e.target.value)}
+                      onBlur={(e) => {
+                        const formattedValue = formatCurrencyValue(e.target.value, 'additionalTaxFreeAmount');
+                        if (formattedValue !== e.target.value) {
+                          e.target.value = formattedValue;
+                        }
+                        handleInputBlur(fund.id, 'additionalTaxFreeAmount', e.target.value);
+                      }}
                       disabled={isUpdating}
-                      className="w-full h-8 px-2 text-sm text-right bg-white border border-neutral-300 rounded focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary hover:border-neutral-400 transition-colors"
-                      style={{ minWidth: '120px' }}
+                      className="table-input h-7 text-sm bg-white border-gray-200 focus:border-primary w-full px-3 py-1 border rounded-md text-sm"
+                      style={{ textAlign: 'right', minWidth: '80px' }}
+                      placeholder="R 0"
                     />
                   </td>
                 </tr>
@@ -124,17 +145,17 @@ export function AdditionalDetails({ funds, onFieldUpdate, isUpdating }: Addition
             </tbody>
             {/* Totals Row */}
             <tfoot>
-              <tr className="border-t-2 border-neutral-300 bg-neutral-100">
-                <td className="p-3 text-sm font-bold text-neutral-900">
+              <tr className="border-t-2 border-neutral-300 bg-gray-100 table-total-row">
+                <td className="table-cell text-sm text-neutral-900" style={{ fontWeight: 700 }}>
                   Total
                 </td>
-                <td className="p-3 text-center text-sm font-bold text-neutral-900" style={{ fontWeight: 700 }}>
+                <td className="table-cell text-right text-sm text-neutral-900" style={{ fontWeight: 700 }}>
                   R {totals.lumpSumDeath.toLocaleString()}
                 </td>
-                <td className="p-3 text-center text-sm font-bold text-neutral-900" style={{ fontWeight: 700 }}>
+                <td className="table-cell text-right text-sm text-neutral-900" style={{ fontWeight: 700 }}>
                   R {totals.previousLumpSums.toLocaleString()}
                 </td>
-                <td className="p-3 text-center text-sm font-bold text-neutral-900" style={{ fontWeight: 700 }}>
+                <td className="table-cell text-right text-sm text-neutral-900" style={{ fontWeight: 700 }}>
                   R {totals.additionalTaxFreeAmount.toLocaleString()}
                 </td>
               </tr>
