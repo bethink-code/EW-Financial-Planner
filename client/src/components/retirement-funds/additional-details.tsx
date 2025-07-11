@@ -59,7 +59,7 @@ export function AdditionalDetails({ funds, onFieldUpdate, isUpdating }: Addition
   return (
     <div className="bg-white rounded-lg shadow-sm border border-neutral-200">
       <div className="p-6">
-        <h2 className="text-xl font-bold text-neutral-900 mb-6">Additional Details</h2>
+        <h2 className="font-bold text-neutral-900 mb-6 text-[16px]">Additional Details</h2>
         
         {/* Detail Table */}
         <div className="overflow-x-auto">
