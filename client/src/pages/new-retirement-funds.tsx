@@ -8,6 +8,7 @@ import { SimpleTableWithBeneficiaries } from "@/components/retirement-funds/simp
 import { DetailedView } from "@/components/retirement-funds/detailed-view";
 import { SummarySection } from "@/components/retirement-funds/summary-section";
 import { AddFundDialog } from "@/components/retirement-funds/add-fund-dialog";
+import { AdditionalDetails } from "@/components/retirement-funds/additional-details";
 
 
 type ViewMode = "grouped" | "detailed";
@@ -263,6 +264,14 @@ export default function NewRetirementFunds() {
               )}
             </div>
             
+            {/* Additional Details Component - separated from main table */}
+            <div className="mx-4 mt-6">
+              <AdditionalDetails
+                funds={funds}
+                onFieldUpdate={handleFieldUpdate}
+                isUpdating={updateMutation.isPending}
+              />
+            </div>
 
 
 
@@ -338,6 +347,15 @@ export default function NewRetirementFunds() {
                 onFieldUpdate={handleFieldUpdate}
                 isUpdating={updateMutation.isPending}
                 tableMode={tableMode}
+              />
+            </div>
+            
+            {/* Additional Details Component - separated from detailed view */}
+            <div className="mx-4 mt-6">
+              <AdditionalDetails
+                funds={funds}
+                onFieldUpdate={handleFieldUpdate}
+                isUpdating={updateMutation.isPending}
               />
             </div>
           </>
