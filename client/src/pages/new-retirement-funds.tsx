@@ -244,6 +244,9 @@ export default function NewRetirementFunds() {
               </div>
             )}
 
+            <div className="mx-4 mb-4">
+              <h2 className="font-bold text-neutral-900 mb-4 text-[16px]">Details</h2>
+            </div>
             <div className="mx-4 bg-white rounded-lg shadow-sm border border-neutral-200" style={{ viewTransitionName: 'table-view' }}>
               {tableMode === "inputs" ? (
                 <SimpleTableWithBeneficiaries
@@ -340,6 +343,9 @@ export default function NewRetirementFunds() {
               </div>
             )}
 
+            <div className="mx-4 mb-4">
+              <h2 className="font-bold text-neutral-900 mb-4 text-[16px]">Details</h2>
+            </div>
             <div className="mx-4 bg-white rounded-lg shadow-sm border border-neutral-200" style={{ viewTransitionName: 'detailed-view' }}>
               <DetailedView
                 funds={funds}
