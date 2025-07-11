@@ -57,7 +57,7 @@ export function AdditionalDetails({ funds, onFieldUpdate, isUpdating }: Addition
   }, [funds]);
 
   return (
-    <div className="bg-white rounded-lg shadow-sm border border-neutral-200">
+    <div className="bg-white rounded-lg shadow-sm border border-neutral-200 inline-block">
       <div className="p-6">
         <h2 className="font-bold text-neutral-900 mb-6 text-[16px]">Additional Details</h2>
         
