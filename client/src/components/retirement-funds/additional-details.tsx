@@ -35,7 +35,7 @@ export function AdditionalDetails({ funds, onFieldUpdate, isUpdating }: Addition
     }
   }, [onFieldUpdate, formatCurrencyValue]);
 
-  // Calculate totals for summary display
+  // Calculate totals for the table footer
   const totals = useMemo(() => {
     return {
       lumpSumDeath: funds.reduce((sum, fund) => {
@@ -61,28 +61,6 @@ export function AdditionalDetails({ funds, onFieldUpdate, isUpdating }: Addition
       <div className="p-6">
         <h2 className="text-xl font-bold text-neutral-900 mb-6">Additional Details</h2>
         
-        {/* Summary Section */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-          <div style={{ backgroundColor: '#E8F4F8' }} className="rounded-lg p-4 text-center">
-            <div className="text-sm font-medium text-neutral-600 mb-2">Total Lump Sum Death</div>
-            <div className="text-xl font-bold text-neutral-900">
-              R {totals.lumpSumDeath.toLocaleString()}
-            </div>
-          </div>
-          <div style={{ backgroundColor: '#E8F4F8' }} className="rounded-lg p-4 text-center">
-            <div className="text-sm font-medium text-neutral-600 mb-2">Total Previous Lump Sums</div>
-            <div className="text-xl font-bold text-neutral-900">
-              R {totals.previousLumpSums.toLocaleString()}
-            </div>
-          </div>
-          <div style={{ backgroundColor: '#E8F4F8' }} className="rounded-lg p-4 text-center">
-            <div className="text-sm font-medium text-neutral-600 mb-2">Total Additional Tax Free</div>
-            <div className="text-xl font-bold text-neutral-900">
-              R {totals.additionalTaxFreeAmount.toLocaleString()}
-            </div>
-          </div>
-        </div>
-
         {/* Detail Table */}
         <div className="overflow-x-auto">
           <table className="w-full">
