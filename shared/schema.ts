@@ -1,4 +1,4 @@
-import { pgTable, text, serial, integer, decimal } from "drizzle-orm/pg-core";
+import { pgTable, text, serial, integer, decimal, boolean } from "drizzle-orm/pg-core";
 import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod";
 
@@ -100,5 +100,34 @@ export const updateLumpSumBequestSchema = createInsertSchema(lumpSumBequests).om
 
 export type InsertLumpSumBequest = z.infer<typeof insertLumpSumBequestSchema>;
 export type LumpSumBequest = typeof lumpSumBequests.$inferSelect;
+
+// Assurance schema
+export const assurance = pgTable("assurance", {
+  id: serial("id").primaryKey(),
+  
+  // Main fields
+  description: text("description").notNull().default(""),
+  owner: text("owner").notNull().default("Donald Edwards"),
+  lifeAssured: text("life_assured").notNull().default(""),
+  deathBenefit: text("death_benefit").notNull().default("0"),
+  beneficiary: text("beneficiary").notNull().default(""),
+  benefitSplit: text("benefit_split").notNull().default("0"),
+  amount: text("amount").notNull().default("0"),
+  excludedFromEstateDuty: boolean("excluded_from_estate_duty").notNull().default(false),
+  excludedFromProvisions: boolean("excluded_from_provisions").notNull().default(false),
+});
+
+export const insertAssuranceSchema = createInsertSchema(assurance).omit({
+  id: true,
+});
+
+export const updateAssuranceSchema = createInsertSchema(assurance).omit({
+  id: true,
+}).partial();
+
+export type InsertAssurance = z.infer<typeof insertAssuranceSchema>;
+export type Assurance = typeof assurance.$inferSelect;
+export type UpdateAssurance = z.infer<typeof updateAssuranceSchema>;
+
 export type UpdateRetirementFund = z.infer<typeof updateRetirementFundSchema>;
 export type RetirementFund = typeof retirementFunds.$inferSelect;

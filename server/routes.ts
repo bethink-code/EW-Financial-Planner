@@ -1,7 +1,7 @@
 import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
-import { insertRetirementFundSchema, updateRetirementFundSchema, insertLumpSumBequestSchema, updateLumpSumBequestSchema } from "@shared/schema";
+import { insertRetirementFundSchema, updateRetirementFundSchema, insertLumpSumBequestSchema, updateLumpSumBequestSchema, insertAssuranceSchema, updateAssuranceSchema } from "@shared/schema";
 
 export async function registerRoutes(app: Express): Promise<Server> {
   // Get all retirement funds
@@ -189,6 +189,101 @@ export async function registerRoutes(app: Express): Promise<Server> {
     } catch (error) {
       console.error("Error deleting lump sum bequest:", error);
       res.status(500).json({ message: "Failed to delete lump sum bequest" });
+    }
+  });
+
+  // Assurance API routes
+  
+  // Get all assurance policies
+  app.get("/api/assurance", async (req, res) => {
+    try {
+      const { search } = req.query;
+      let policies;
+      
+      if (search && typeof search === "string") {
+        policies = await storage.searchAssurance(search);
+      } else {
+        policies = await storage.getAssurance();
+      }
+      
+      res.json(policies);
+    } catch (error) {
+      console.error("Error fetching assurance policies:", error);
+      res.status(500).json({ message: "Failed to fetch assurance policies" });
+    }
+  });
+
+  // Get single assurance policy
+  app.get("/api/assurance/:id", async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      if (isNaN(id)) {
+        return res.status(400).json({ message: "Invalid assurance policy ID" });
+      }
+
+      const policy = await storage.getAssuranceById(id);
+      if (!policy) {
+        return res.status(404).json({ message: "Assurance policy not found" });
+      }
+
+      res.json(policy);
+    } catch (error) {
+      console.error("Error fetching assurance policy:", error);
+      res.status(500).json({ message: "Failed to fetch assurance policy" });
+    }
+  });
+
+  // Create new assurance policy
+  app.post("/api/assurance", async (req, res) => {
+    try {
+      const validatedData = insertAssuranceSchema.parse(req.body);
+      const policy = await storage.createAssurance(validatedData);
+      res.status(201).json(policy);
+    } catch (error) {
+      console.error("Error creating assurance policy:", error);
+      res.status(400).json({ message: "Invalid assurance policy data" });
+    }
+  });
+
+  // Update assurance policy
+  app.patch("/api/assurance/:id", async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      if (isNaN(id)) {
+        return res.status(400).json({ message: "Invalid assurance policy ID" });
+      }
+
+      const validatedData = updateAssuranceSchema.parse(req.body);
+      const policy = await storage.updateAssurance(id, validatedData);
+      
+      if (!policy) {
+        return res.status(404).json({ message: "Assurance policy not found" });
+      }
+
+      res.json(policy);
+    } catch (error) {
+      console.error("Error updating assurance policy:", error);
+      res.status(400).json({ message: "Invalid assurance policy data" });
+    }
+  });
+
+  // Delete assurance policy
+  app.delete("/api/assurance/:id", async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      if (isNaN(id)) {
+        return res.status(400).json({ message: "Invalid assurance policy ID" });
+      }
+
+      const success = await storage.deleteAssurance(id);
+      if (!success) {
+        return res.status(404).json({ message: "Assurance policy not found" });
+      }
+
+      res.status(204).send();
+    } catch (error) {
+      console.error("Error deleting assurance policy:", error);
+      res.status(500).json({ message: "Failed to delete assurance policy" });
     }
   });
 

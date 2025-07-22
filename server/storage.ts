@@ -1,4 +1,4 @@
-import { retirementFunds, lumpSumBequests, type RetirementFund, type InsertRetirementFund, type UpdateRetirementFund, type LumpSumBequest, type InsertLumpSumBequest } from "@shared/schema";
+import { retirementFunds, lumpSumBequests, assurance, type RetirementFund, type InsertRetirementFund, type UpdateRetirementFund, type LumpSumBequest, type InsertLumpSumBequest, type Assurance, type InsertAssurance, type UpdateAssurance } from "@shared/schema";
 
 export interface IStorage {
   // Retirement Funds
@@ -16,19 +16,31 @@ export interface IStorage {
   updateLumpSumBequest(id: number, updates: Partial<InsertLumpSumBequest>): Promise<LumpSumBequest | undefined>;
   deleteLumpSumBequest(id: number): Promise<boolean>;
   searchLumpSumBequests(query: string): Promise<LumpSumBequest[]>;
+  
+  // Assurance
+  getAssurance(): Promise<Assurance[]>;
+  getAssuranceById(id: number): Promise<Assurance | undefined>;
+  createAssurance(assurance: InsertAssurance): Promise<Assurance>;
+  updateAssurance(id: number, updates: UpdateAssurance): Promise<Assurance | undefined>;
+  deleteAssurance(id: number): Promise<boolean>;
+  searchAssurance(query: string): Promise<Assurance[]>;
 }
 
 export class MemStorage implements IStorage {
   private retirementFunds: Map<number, RetirementFund>;
   private lumpSumBequests: Map<number, LumpSumBequest>;
+  private assurance: Map<number, Assurance>;
   private currentFundId: number;
   private currentBequestId: number;
+  private currentAssuranceId: number;
 
   constructor() {
     this.retirementFunds = new Map();
     this.lumpSumBequests = new Map();
+    this.assurance = new Map();
     this.currentFundId = 1;
     this.currentBequestId = 1;
+    this.currentAssuranceId = 1;
     
     // Initialize with sample data
     this.createRetirementFund({
@@ -150,6 +162,19 @@ export class MemStorage implements IStorage {
       amount: "50000",
       valueAtDeath: "75000",
       charityNote: "Annual donation to local charity"
+    });
+    
+    // Initialize sample assurance policies
+    this.createAssurance({
+      description: "GB Assurance Term Life",
+      owner: "Donald Edwards",
+      lifeAssured: "Donald Edwards",
+      deathBenefit: "1000000",
+      beneficiary: "Betty Edwards",
+      benefitSplit: "100",
+      amount: "1000000",
+      excludedFromEstateDuty: false,
+      excludedFromProvisions: false
     });
   }
 
@@ -292,6 +317,59 @@ export class MemStorage implements IStorage {
       bequest.description.toLowerCase().includes(lowerQuery) ||
       bequest.entity.toLowerCase().includes(lowerQuery) ||
       bequest.charityNote.toLowerCase().includes(lowerQuery)
+    );
+  }
+
+  // Assurance methods
+  async getAssurance(): Promise<Assurance[]> {
+    return Array.from(this.assurance.values());
+  }
+
+  async getAssuranceById(id: number): Promise<Assurance | undefined> {
+    return this.assurance.get(id);
+  }
+
+  async createAssurance(insertAssurance: InsertAssurance): Promise<Assurance> {
+    const id = this.currentAssuranceId++;
+    const assurance: Assurance = {
+      id,
+      description: insertAssurance.description || "",
+      owner: insertAssurance.owner || "Donald Edwards",
+      lifeAssured: insertAssurance.lifeAssured || "",
+      deathBenefit: insertAssurance.deathBenefit || "0",
+      beneficiary: insertAssurance.beneficiary || "",
+      benefitSplit: insertAssurance.benefitSplit || "0",
+      amount: insertAssurance.amount || "0",
+      excludedFromEstateDuty: insertAssurance.excludedFromEstateDuty || false,
+      excludedFromProvisions: insertAssurance.excludedFromProvisions || false,
+    };
+    this.assurance.set(id, assurance);
+    return assurance;
+  }
+
+  async updateAssurance(id: number, updates: UpdateAssurance): Promise<Assurance | undefined> {
+    const existing = this.assurance.get(id);
+    if (!existing) return undefined;
+    
+    const updated: Assurance = { ...existing, ...updates };
+    this.assurance.set(id, updated);
+    return updated;
+  }
+
+  async deleteAssurance(id: number): Promise<boolean> {
+    return this.assurance.delete(id);
+  }
+
+  async searchAssurance(query: string): Promise<Assurance[]> {
+    const allAssurance = Array.from(this.assurance.values());
+    if (!query.trim()) return allAssurance;
+    
+    const lowerQuery = query.toLowerCase();
+    return allAssurance.filter(assurance => 
+      assurance.description.toLowerCase().includes(lowerQuery) ||
+      assurance.owner.toLowerCase().includes(lowerQuery) ||
+      assurance.lifeAssured.toLowerCase().includes(lowerQuery) ||
+      assurance.beneficiary.toLowerCase().includes(lowerQuery)
     );
   }
 }

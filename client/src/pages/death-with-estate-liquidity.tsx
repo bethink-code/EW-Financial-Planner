@@ -2,8 +2,9 @@ import { useState, useCallback } from "react";
 import { Link, useLocation } from "wouter";
 import NewRetirementFunds from "./new-retirement-funds";
 import LumpSumBequests from "./lump-sum-bequests";
+import Assurance from "./assurance";
 
-type TabType = "retirement-funds" | "lump-sum-bequests";
+type TabType = "retirement-funds" | "lump-sum-bequests" | "assurance";
 
 export default function DeathWithEstateLiquidity() {
   const [, setLocation] = useLocation();
@@ -46,6 +47,16 @@ export default function DeathWithEstateLiquidity() {
               >
                 Lump Sum Needs and Cash Bequests
               </button>
+              <button
+                onClick={() => handleTabChange("assurance")}
+                className={`py-4 px-1 border-b-2 font-medium text-sm transition-colors ${
+                  activeTab === "assurance"
+                    ? "border-[#016991] text-[#016991]"
+                    : "border-transparent text-neutral-500 hover:text-neutral-700 hover:border-neutral-300"
+                }`}
+              >
+                Assurance
+              </button>
             </nav>
           </div>
         </div>
@@ -60,6 +71,11 @@ export default function DeathWithEstateLiquidity() {
           {activeTab === "lump-sum-bequests" && (
             <div>
               <LumpSumBequests />
+            </div>
+          )}
+          {activeTab === "assurance" && (
+            <div>
+              <Assurance />
             </div>
           )}
         </div>
