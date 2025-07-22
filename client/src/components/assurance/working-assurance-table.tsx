@@ -118,7 +118,8 @@ export function AssuranceTable({ searchTerm }: AssuranceTableProps) {
 
   const handleUpdatePolicy = useCallback((id: number, field: keyof Assurance, value: string | boolean | string[]) => {
     setIsUpdating(true);
-    (updateMutation as any).mutate({ id, updates: { [field]: value } });
+    const updates = { [field]: value };
+    updateMutation.mutate({ id, updates });
   }, [updateMutation]);
 
   const handleDeletePolicy = useCallback((id: number) => {
@@ -136,17 +137,19 @@ export function AssuranceTable({ searchTerm }: AssuranceTableProps) {
   const handleAddOwner = useCallback((id: number) => {
     const policy = policies.find((p: Assurance) => p.id === id);
     if (policy) {
-      const newOwners = [...(policy.additionalOwners || []), ""];
+      const newOwners = [...(policy.additionalOwners || []), "New Owner"];
+      setIsUpdating(true);
       updateMutation.mutate({ id, updates: { additionalOwners: newOwners } });
     }
   }, [policies, updateMutation]);
 
-  // Add beneficiary to policy
+  // Add beneficiary to policy  
   const handleAddBeneficiary = useCallback((id: number) => {
     const policy = policies.find((p: Assurance) => p.id === id);
     if (policy) {
-      const newBeneficiaries = [...(policy.additionalBeneficiaries || []), ""];
+      const newBeneficiaries = [...(policy.additionalBeneficiaries || []), "New Beneficiary"];
       const newSplits = [...(policy.additionalBenefitSplits || []), "0"];
+      setIsUpdating(true);
       updateMutation.mutate({ 
         id, 
         updates: { 
@@ -173,19 +176,19 @@ export function AssuranceTable({ searchTerm }: AssuranceTableProps) {
   // Calculate totals
   const totals = useMemo(() => {
     return {
-      deathBenefit: filteredPolicies.reduce((sum, policy) => {
+      deathBenefit: filteredPolicies.reduce((sum: number, policy: Assurance) => {
         const value = parseFloat(policy.deathBenefit.replace(/[^\d.-]/g, '')) || 0;
         return sum + value;
       }, 0),
-      amount: filteredPolicies.reduce((sum, policy) => {
+      amount: filteredPolicies.reduce((sum: number, policy: Assurance) => {
         const value = parseFloat(policy.amount.replace(/[^\d.-]/g, '')) || 0;
         return sum + value;
       }, 0),
-      premiumsByOthers: filteredPolicies.reduce((sum, policy) => {
+      premiumsByOthers: filteredPolicies.reduce((sum: number, policy: Assurance) => {
         const value = parseFloat(policy.premiumsByOthers.replace(/[^\d.-]/g, '')) || 0;
         return sum + value;
       }, 0),
-      collateralSession: filteredPolicies.reduce((sum, policy) => {
+      collateralSession: filteredPolicies.reduce((sum: number, policy: Assurance) => {
         const value = parseFloat(policy.collateralSession.replace(/[^\d.-]/g, '')) || 0;
         return sum + value;
       }, 0)
@@ -224,6 +227,7 @@ export function AssuranceTable({ searchTerm }: AssuranceTableProps) {
               <th className="px-3 py-3 text-left text-xs font-medium text-neutral-600 uppercase tracking-wider">Life Assured</th>
               <th className="px-3 py-3 text-left text-xs font-medium text-neutral-600 uppercase tracking-wider">Death Benefit</th>
               <th className="px-3 py-3 text-left text-xs font-medium text-neutral-600 uppercase tracking-wider">Beneficiary</th>
+              <th className="px-3 py-3 text-left text-xs font-medium text-neutral-600 uppercase tracking-wider">Additional Info</th>
               <th className="px-3 py-3 text-left text-xs font-medium text-neutral-600 uppercase tracking-wider">Benefit Split</th>
               <th className="px-3 py-3 text-left text-xs font-medium text-neutral-600 uppercase tracking-wider">Amount</th>
               <th className="px-3 py-3 text-center text-xs font-medium text-neutral-600 uppercase tracking-wider">Buy/Sell</th>
@@ -237,6 +241,7 @@ export function AssuranceTable({ searchTerm }: AssuranceTableProps) {
           </thead>
           <tbody className="bg-white divide-y divide-neutral-200">
             {filteredPolicies.map((policy: Assurance) => (
+              <>
               <tr key={policy.id} className="hover:bg-neutral-50">
                 <td className="px-3 py-2">
                   <input
@@ -300,6 +305,15 @@ export function AssuranceTable({ searchTerm }: AssuranceTableProps) {
                       <Plus className="h-4 w-4" />
                     </button>
                   </div>
+                </td>
+                <td className="px-3 py-2">
+                  <input
+                    type="text"
+                    defaultValue=""
+                    onBlur={(e) => handleUpdatePolicy(policy.id, 'description', e.target.value)}
+                    className="table-input w-full px-2 py-1 text-sm border border-neutral-300 rounded bg-[#E3F2FD] focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    disabled={isUpdating}
+                  />
                 </td>
                 <td className="px-3 py-2 text-sm text-neutral-700 text-right bg-neutral-100">
                   {formatCurrencyValue(policy.benefitSplit, 'percentage')}
@@ -377,17 +391,64 @@ export function AssuranceTable({ searchTerm }: AssuranceTableProps) {
                   </button>
                 </td>
               </tr>
+              
+              {/* Additional Owner Rows */}
+              {(policy.additionalOwners || []).map((owner, index) => (
+                <tr key={`owner-${policy.id}-${index}`} className="hover:bg-neutral-50 border-b border-neutral-200">
+                  <td className="px-3 py-2 text-sm text-neutral-700"></td>
+                  <td className="px-3 py-2">
+                    <input
+                      type="text"
+                      defaultValue={owner}
+                      onBlur={(e) => {
+                        const newOwners = [...(policy.additionalOwners || [])];
+                        newOwners[index] = e.target.value;
+                        updateMutation.mutate({ id: policy.id, updates: { additionalOwners: newOwners } });
+                      }}
+                      className="table-input w-full px-2 py-1 text-sm border border-neutral-300 rounded bg-[#E3F2FD] focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      disabled={isUpdating}
+                    />
+                  </td>
+                  <td colSpan={13} className="px-3 py-2 text-sm text-neutral-700"></td>
+                </tr>
+              ))}
+              
+              {/* Additional Beneficiary Rows */}
+              {(policy.additionalBeneficiaries || []).map((beneficiary, index) => (
+                <tr key={`beneficiary-${policy.id}-${index}`} className="hover:bg-neutral-50 border-b border-neutral-200">
+                  <td colSpan={4} className="px-3 py-2 text-sm text-neutral-700"></td>
+                  <td className="px-3 py-2">
+                    <input
+                      type="text"
+                      defaultValue={beneficiary}
+                      onBlur={(e) => {
+                        const newBeneficiaries = [...(policy.additionalBeneficiaries || [])];
+                        newBeneficiaries[index] = e.target.value;
+                        updateMutation.mutate({ id: policy.id, updates: { additionalBeneficiaries: newBeneficiaries } });
+                      }}
+                      className="table-input w-full px-2 py-1 text-sm border border-neutral-300 rounded bg-[#E3F2FD] focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      disabled={isUpdating}
+                    />
+                  </td>
+                  <td className="px-3 py-2 text-sm text-neutral-700"></td>
+                  <td className="px-3 py-2 text-sm text-neutral-700 text-right bg-neutral-100">
+                    {formatCurrencyValue((policy.additionalBenefitSplits || [])[index] || "0", 'percentage')}
+                  </td>
+                  <td colSpan={8} className="px-3 py-2 text-sm text-neutral-700"></td>
+                </tr>
+              ))}
+              </>
             ))}
             
             {/* Total Row */}
             {filteredPolicies.length > 0 && (
               <tr className="bg-neutral-100 border-t-2 border-neutral-300 font-bold">
                 <td className="px-3 py-2 text-sm font-bold text-neutral-800">Total</td>
-                <td colSpan={2} className="px-3 py-2"></td>
+                <td colSpan={3} className="px-3 py-2"></td>
                 <td className="px-3 py-2 text-sm font-bold text-neutral-800 text-right">
                   {formatCurrencyValue(totals.deathBenefit.toString(), 'amount')}
                 </td>
-                <td colSpan={2} className="px-3 py-2"></td>
+                <td colSpan={3} className="px-3 py-2"></td>
                 <td className="px-3 py-2 text-sm font-bold text-neutral-800 text-right">
                   {formatCurrencyValue(totals.amount.toString(), 'amount')}
                 </td>
@@ -404,7 +465,7 @@ export function AssuranceTable({ searchTerm }: AssuranceTableProps) {
             
             {filteredPolicies.length === 0 && (
               <tr>
-                <td colSpan={14} className="px-3 py-8 text-center text-neutral-500">
+                <td colSpan={15} className="px-3 py-8 text-center text-neutral-500">
                   {searchTerm ? "No assurance policies found matching your search." : "No assurance policies found. Click 'Add Policy' to get started."}
                 </td>
               </tr>
