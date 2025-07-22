@@ -1,4 +1,4 @@
-import { retirementFunds, lumpSumBequests, assurance, definedBenefitFunds, voluntaryInvestments, assetsAndLiabilities, type RetirementFund, type InsertRetirementFund, type UpdateRetirementFund, type LumpSumBequest, type InsertLumpSumBequest, type Assurance, type InsertAssurance, type UpdateAssurance, type DefinedBenefitFund, type InsertDefinedBenefitFund, type UpdateDefinedBenefitFund, type VoluntaryInvestment, type InsertVoluntaryInvestment, type UpdateVoluntaryInvestment, type AssetAndLiability, type InsertAssetAndLiability, type UpdateAssetAndLiability } from "@shared/schema";
+import { retirementFunds, lumpSumBequests, assurance, definedBenefitFunds, voluntaryInvestments, assetsAndLiabilities, incomeNeeds, type RetirementFund, type InsertRetirementFund, type UpdateRetirementFund, type LumpSumBequest, type InsertLumpSumBequest, type Assurance, type InsertAssurance, type UpdateAssurance, type DefinedBenefitFund, type InsertDefinedBenefitFund, type UpdateDefinedBenefitFund, type VoluntaryInvestment, type InsertVoluntaryInvestment, type UpdateVoluntaryInvestment, type AssetAndLiability, type InsertAssetAndLiability, type UpdateAssetAndLiability, type IncomeNeed, type InsertIncomeNeed, type UpdateIncomeNeed } from "@shared/schema";
 
 export interface IStorage {
   // Retirement Funds
@@ -48,6 +48,14 @@ export interface IStorage {
   updateAssetAndLiability(id: number, updates: UpdateAssetAndLiability): Promise<AssetAndLiability | undefined>;
   deleteAssetAndLiability(id: number): Promise<boolean>;
   searchAssetsAndLiabilities(query: string): Promise<AssetAndLiability[]>;
+  
+  // Income Needs
+  getIncomeNeeds(): Promise<IncomeNeed[]>;
+  getIncomeNeed(id: number): Promise<IncomeNeed | undefined>;
+  createIncomeNeed(need: InsertIncomeNeed): Promise<IncomeNeed>;
+  updateIncomeNeed(id: number, updates: UpdateIncomeNeed): Promise<IncomeNeed | undefined>;
+  deleteIncomeNeed(id: number): Promise<boolean>;
+  searchIncomeNeeds(query: string): Promise<IncomeNeed[]>;
 }
 
 export class MemStorage implements IStorage {
@@ -57,12 +65,14 @@ export class MemStorage implements IStorage {
   private definedBenefitFunds: Map<number, DefinedBenefitFund>;
   private voluntaryInvestments: Map<number, VoluntaryInvestment>;
   private assetsAndLiabilities: Map<number, AssetAndLiability>;
+  private incomeNeeds: Map<number, IncomeNeed>;
   private currentFundId: number;
   private currentBequestId: number;
   private currentAssuranceId: number;
   private currentDefinedBenefitFundId: number;
   private currentVoluntaryInvestmentId: number;
   private currentAssetAndLiabilityId: number;
+  private currentIncomeNeedId: number;
 
   constructor() {
     this.retirementFunds = new Map();
@@ -71,12 +81,14 @@ export class MemStorage implements IStorage {
     this.definedBenefitFunds = new Map();
     this.voluntaryInvestments = new Map();
     this.assetsAndLiabilities = new Map();
+    this.incomeNeeds = new Map();
     this.currentFundId = 1;
     this.currentBequestId = 1;
     this.currentAssuranceId = 1;
     this.currentDefinedBenefitFundId = 1;
     this.currentVoluntaryInvestmentId = 1;
     this.currentAssetAndLiabilityId = 1;
+    this.currentIncomeNeedId = 1;
     
     // Initialize with sample data
     this.createRetirementFund({
@@ -298,6 +310,20 @@ export class MemStorage implements IStorage {
       category: "Immovable assets (primary residence)",
       isHeader: false,
       sortOrder: 1,
+    });
+    
+    // Initialize sample income needs
+    this.createIncomeNeed({
+      description: "Living Expenses",
+      entity: "Donald Edwards",
+      start: "0",
+      termYears: "20",
+      termEditable: true,
+      increasePercentage: "5%",
+      cpi: false,
+      frequency: "Monthly",
+      amount: "R 25,000",
+      capitalisedAmount: "R 3,750,000",
     });
   }
 
@@ -639,6 +665,49 @@ export class MemStorage implements IStorage {
     return allAssets.filter(asset => 
       asset.categoryAndDescription.toLowerCase().includes(lowerQuery) ||
       asset.category.toLowerCase().includes(lowerQuery)
+    );
+  }
+
+  // Income Needs methods
+  async getIncomeNeeds(): Promise<IncomeNeed[]> {
+    return Array.from(this.incomeNeeds.values());
+  }
+
+  async getIncomeNeed(id: number): Promise<IncomeNeed | undefined> {
+    return this.incomeNeeds.get(id);
+  }
+
+  async createIncomeNeed(need: InsertIncomeNeed): Promise<IncomeNeed> {
+    const newNeed: IncomeNeed = {
+      id: this.currentIncomeNeedId++,
+      ...need
+    };
+    
+    this.incomeNeeds.set(newNeed.id, newNeed);
+    return newNeed;
+  }
+
+  async updateIncomeNeed(id: number, updates: UpdateIncomeNeed): Promise<IncomeNeed | undefined> {
+    const existing = this.incomeNeeds.get(id);
+    if (!existing) return undefined;
+    
+    const updated: IncomeNeed = { ...existing, ...updates };
+    this.incomeNeeds.set(id, updated);
+    return updated;
+  }
+
+  async deleteIncomeNeed(id: number): Promise<boolean> {
+    return this.incomeNeeds.delete(id);
+  }
+
+  async searchIncomeNeeds(query: string): Promise<IncomeNeed[]> {
+    const allNeeds = Array.from(this.incomeNeeds.values());
+    if (!query.trim()) return allNeeds;
+    
+    const lowerQuery = query.toLowerCase();
+    return allNeeds.filter(need => 
+      need.description.toLowerCase().includes(lowerQuery) ||
+      need.entity.toLowerCase().includes(lowerQuery)
     );
   }
 }

@@ -1,7 +1,7 @@
 import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
-import { insertRetirementFundSchema, updateRetirementFundSchema, insertLumpSumBequestSchema, updateLumpSumBequestSchema, insertAssuranceSchema, updateAssuranceSchema, insertDefinedBenefitFundSchema, updateDefinedBenefitFundSchema, insertVoluntaryInvestmentSchema, updateVoluntaryInvestmentSchema, insertAssetAndLiabilitySchema, updateAssetAndLiabilitySchema } from "@shared/schema";
+import { insertRetirementFundSchema, updateRetirementFundSchema, insertLumpSumBequestSchema, updateLumpSumBequestSchema, insertAssuranceSchema, updateAssuranceSchema, insertDefinedBenefitFundSchema, updateDefinedBenefitFundSchema, insertVoluntaryInvestmentSchema, updateVoluntaryInvestmentSchema, insertAssetAndLiabilitySchema, updateAssetAndLiabilitySchema, insertIncomeNeedSchema, updateIncomeNeedSchema } from "@shared/schema";
 
 export async function registerRoutes(app: Express): Promise<Server> {
   // Get all retirement funds
@@ -569,6 +569,101 @@ export async function registerRoutes(app: Express): Promise<Server> {
     } catch (error) {
       console.error("Error deleting asset:", error);
       res.status(500).json({ message: "Failed to delete asset" });
+    }
+  });
+
+  // Income Needs Routes
+  
+  // Get all income needs
+  app.get("/api/income-needs", async (req, res) => {
+    try {
+      const { search } = req.query;
+      let needs;
+      
+      if (search && typeof search === "string") {
+        needs = await storage.searchIncomeNeeds(search);
+      } else {
+        needs = await storage.getIncomeNeeds();
+      }
+      
+      res.json(needs);
+    } catch (error) {
+      console.error("Error fetching income needs:", error);
+      res.status(500).json({ message: "Failed to fetch income needs" });
+    }
+  });
+
+  // Get single income need
+  app.get("/api/income-needs/:id", async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      if (isNaN(id)) {
+        return res.status(400).json({ message: "Invalid need ID" });
+      }
+
+      const need = await storage.getIncomeNeed(id);
+      if (!need) {
+        return res.status(404).json({ message: "Income need not found" });
+      }
+
+      res.json(need);
+    } catch (error) {
+      console.error("Error fetching income need:", error);
+      res.status(500).json({ message: "Failed to fetch income need" });
+    }
+  });
+
+  // Create new income need
+  app.post("/api/income-needs", async (req, res) => {
+    try {
+      const validatedData = insertIncomeNeedSchema.parse(req.body);
+      const need = await storage.createIncomeNeed(validatedData);
+      res.status(201).json(need);
+    } catch (error) {
+      console.error("Error creating income need:", error);
+      res.status(400).json({ message: "Invalid income need data" });
+    }
+  });
+
+  // Update income need
+  app.patch("/api/income-needs/:id", async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      if (isNaN(id)) {
+        return res.status(400).json({ message: "Invalid need ID" });
+      }
+
+      const validatedData = updateIncomeNeedSchema.parse(req.body);
+      const need = await storage.updateIncomeNeed(id, validatedData);
+      
+      if (!need) {
+        return res.status(404).json({ message: "Income need not found" });
+      }
+
+      res.json(need);
+    } catch (error) {
+      console.error("Error updating income need:", error);
+      res.status(400).json({ message: "Invalid income need data" });
+    }
+  });
+
+  // Delete income need
+  app.delete("/api/income-needs/:id", async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      if (isNaN(id)) {
+        return res.status(400).json({ message: "Invalid need ID" });
+      }
+
+      const success = await storage.deleteIncomeNeed(id);
+      if (!success) {
+        return res.status(404).json({ message: "Income need not found" });
+      }
+
+      res.status(204).send();
+    } catch (error) {
+      console.error("Error deleting income need:", error);
+      res.status(500).json({ message: "Failed to delete income need" });
     }
   });
 
