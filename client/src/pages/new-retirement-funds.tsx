@@ -124,7 +124,6 @@ export default function NewRetirementFunds() {
             columnVisibility={columnVisibility}
             onToggleColumnGroup={handleToggleColumnGroup}
             fundsCount={funds.length}
-            onAddFund={() => setShowAddDialog(true)}
           />
         </div>
 
@@ -255,6 +254,7 @@ export default function NewRetirementFunds() {
                   tableMode={tableMode}
                   onFieldUpdate={handleFieldUpdate}
                   isUpdating={updateMutation.isPending}
+                  onAddFund={() => setShowAddDialog(true)}
                 />
               ) : (
                 <NewGroupedTableView
@@ -263,6 +263,7 @@ export default function NewRetirementFunds() {
                   tableMode={tableMode}
                   onFieldUpdate={handleFieldUpdate}
                   isUpdating={updateMutation.isPending}
+                  onAddFund={() => setShowAddDialog(true)}
                 />
               )}
             </div>
@@ -353,6 +354,7 @@ export default function NewRetirementFunds() {
                 onFieldUpdate={handleFieldUpdate}
                 isUpdating={updateMutation.isPending}
                 tableMode={tableMode}
+                onAddFund={() => setShowAddDialog(true)}
               />
             </div>
             

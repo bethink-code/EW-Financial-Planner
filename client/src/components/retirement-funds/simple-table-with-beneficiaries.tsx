@@ -20,9 +20,10 @@ interface SimpleTableWithBeneficiariesProps {
   tableMode: "inputs" | "flows";
   onFieldUpdate: (id: number, field: keyof UpdateRetirementFund, value: string) => void;
   isUpdating: boolean;
+  onAddFund: () => void;
 }
 // Removed AutoSizeInput component - no longer needed for optimized performance
-export function SimpleTableWithBeneficiaries({ funds, columnVisibility, tableMode, onFieldUpdate, isUpdating }: SimpleTableWithBeneficiariesProps) {
+export function SimpleTableWithBeneficiaries({ funds, columnVisibility, tableMode, onFieldUpdate, isUpdating, onAddFund }: SimpleTableWithBeneficiariesProps) {
   
   // Format currency value
   const formatCurrencyValue = useCallback((value: string, field: string) => {
@@ -136,7 +137,20 @@ export function SimpleTableWithBeneficiaries({ funds, columnVisibility, tableMod
   }, [funds, onFieldUpdate]);
   const owners = useMemo(() => ["John Doe", "Jane Smith"], []);
   return (
-    <table className="min-w-full bg-white table-auto">
+    <div>
+      {/* Add Fund Button */}
+      <div className="mb-4 flex justify-end">
+        <Button 
+          onClick={onAddFund}
+          size="sm" 
+          className="h-8 px-3 text-xs bg-blue-600 hover:bg-blue-700"
+        >
+          <Plus size={14} className="mr-1" />
+          Add Fund
+        </Button>
+      </div>
+      
+      <table className="min-w-full bg-white table-auto">
         <thead>
           {/* First level headers */}
           <tr className="border-b border-neutral-200" style={{ backgroundColor: '#D6ECF5' }}>
@@ -868,5 +882,6 @@ export function SimpleTableWithBeneficiaries({ funds, columnVisibility, tableMod
           </tr>
         </tbody>
       </table>
+    </div>
   );
 }

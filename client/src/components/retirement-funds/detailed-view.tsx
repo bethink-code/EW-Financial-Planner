@@ -1,5 +1,6 @@
 import { useState, useCallback, memo, useMemo, useRef, useEffect } from "react";
-import { ChevronRight, ChevronDown, Edit } from "lucide-react";
+import { ChevronRight, ChevronDown, Edit, Plus } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -25,9 +26,10 @@ interface DetailedViewProps {
   onFieldUpdate: (id: number, field: keyof UpdateRetirementFund, value: string) => void;
   isUpdating: boolean;
   tableMode?: "inputs" | "flows";
+  onAddFund: () => void;
 }
 
-export function DetailedView({ funds, columnVisibility, onFieldUpdate, isUpdating, tableMode = "inputs" }: DetailedViewProps) {
+export function DetailedView({ funds, columnVisibility, onFieldUpdate, isUpdating, tableMode = "inputs", onAddFund }: DetailedViewProps) {
   const [selectedFundId, setSelectedFundId] = useState<number | null>(funds.length > 0 ? funds[0].id : null);
   
   const selectedFund = useMemo(() => {
@@ -130,8 +132,16 @@ export function DetailedView({ funds, columnVisibility, onFieldUpdate, isUpdatin
     <div className="flex min-h-screen bg-white rounded-lg border border-neutral-200">
       {/* Left Sidebar - Fund List */}
       <div className="w-80 border-r border-neutral-200 flex flex-col">
-        <div className="p-4 border-b border-neutral-200 sticky top-0 bg-white z-10 min-h-[73px] flex items-center">
+        <div className="p-4 border-b border-neutral-200 sticky top-0 bg-white z-10 min-h-[73px] flex items-center justify-between">
           <h3 className="font-semibold text-neutral-900">Funds ({funds.length})</h3>
+          <Button 
+            onClick={onAddFund}
+            size="sm" 
+            className="h-8 px-3 text-xs bg-blue-600 hover:bg-blue-700"
+          >
+            <Plus size={14} className="mr-1" />
+            Add Fund
+          </Button>
         </div>
         <div className="flex-1">
           {funds.map((fund) => (
