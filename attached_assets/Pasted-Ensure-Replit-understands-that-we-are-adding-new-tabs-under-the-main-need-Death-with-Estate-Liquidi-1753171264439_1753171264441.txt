@@ -1,0 +1,197 @@
+Ensure Replit understands that we are adding new tabs under the main need "Death with Estate Liquidity", where each tab corresponds to a section (e.g., Lump Sum Needs, Winding Up the Estate, etc.). Each section must:
+
+Follow the same table structure, hybrid layout, and design as the existing "Retirement Funds" section.
+
+Have a dedicated summary section (like in Retirement Funds).
+
+Not modify existing work—only extend it by adding new tabs with consistent styling.
+
+Detailed Prompts for Each Section
+Each section will be a new tab with tables, input fields, and summary sections matching the Retirement Funds layout.
+
+1. Lump Sum Needs and Cash Bequests
+Columns:
+
+Description (text input)
+
+Entity (dropdown: Donald Edwards, Betty Edwards)
+
+Start (numeric input)
+
+Increase % (dropdown: CPI or manual %)
+
+Amount (numeric input)
+
+Value at Death (auto-calculated)
+
+Rows:
+
+Each row represents a single bequest (e.g., "Charity XYZ", "Family Trust").
+
+Summary Row: "Total" (sum of all "Value at Death").
+
+Additional Notes:
+
+Include a subsection for "Bequest to Charities" (free-text).
+
+Follow the same grid alignment as Retirement Funds.
+
+2. Additional Estate Duty Items
+Columns:
+
+Description (text input)
+
+Amount (numeric input)
+
+Deduction? (checkbox)
+
+Exclude from Joint Estate? (checkbox)
+
+Rows:
+
+Each row is a duty item (e.g., "Property Transfer Tax").
+
+Summary Row: "Total Deductible Amount" (sum of checked items).
+
+Layout:
+
+Left-aligned labels, right-aligned inputs (like Retirement Funds).
+
+3. Winding Up the Estate
+Subsections:
+
+Capital Provided (checkboxes + numeric inputs):
+
+Life Cover to Estate
+
+Voluntary Investments
+
+Accrual Claim from Spouse
+
+Total Provided (auto-sum)
+
+Capital Required (checkboxes + numeric inputs):
+
+Estate Duty
+
+Executor’s Fees
+
+Death Bed Expenses
+
+Shortfall (Total Required – Total Provided)
+
+Rows:
+
+Each item is a bullet point with input fields.
+
+Summary: Bold headers for subsections.
+
+4. Monthly Death Benefit (GB Assurance)
+Columns:
+
+Description (text input)
+
+Owner (dropdown)
+
+Life Assured (text)
+
+Death Benefit (numeric)
+
+Beneficiary (text)
+
+Benefit Split (%)
+
+Amount (auto-calculated)
+
+Excluded from Estate Duty? (checkbox)
+
+Rows:
+
+Each row = one policy.
+
+Summary Row: "Total Death Benefit" (sum of all amounts).
+
+5. Defined Benefit Funds / GEPF
+Columns:
+
+Description (text)
+
+Owner (dropdown)
+
+Years of Service (numeric)
+
+Final Monthly Salary (numeric)
+
+Death Lump Sum (numeric)
+
+Additional Tax-Free Amount (numeric)
+
+Amount (auto-calculated: lump sum + tax-free)
+
+Rows:
+
+Each row = one fund entry.
+
+Summary Row: "Total Pension Benefits".
+
+6. Voluntary Investments
+Columns:
+
+Description (text)
+
+Owner (dropdown)
+
+Base Cost (numeric)
+
+Market Value (numeric)
+
+Liquidation % (numeric)
+
+Bequeath To (checkboxes: Spouse/Others)
+
+Excluded from Joint Estate? (checkbox)
+
+Rows:
+
+Each row = one investment.
+
+Summary Row: "Total Market Value".
+
+General Rules for All Sections
+Tabs: Each section is a new tab under "Death with Estate Liquidity".
+
+Tables: Use the same border style, padding, and font as Retirement Funds.
+
+Summary Sections: Always at the bottom (e.g., "Total", "Shortfall").
+
+Input Fields: Same styling (text alignment, hover effects).
+
+No Changes to Existing Work: Only add new tabs.
+
+Final Implementation Prompt for Replit
+"Create a new tab group titled 'Death with Estate Liquidity' with the following tabs:
+
+Lump Sum Needs
+
+Estate Duty Items
+
+Winding Up Estate
+
+Monthly Death Benefit
+
+Defined Benefit Funds
+
+Voluntary Investments
+(etc.)
+
+Each tab must:
+
+Use identical table structures, input fields, and summary sections as the 'Retirement Funds' tab.
+
+Maintain consistent styling (fonts, borders, alignment).
+
+Auto-calculate summary fields (e.g., totals, shortfalls).
+
+Not alter any existing code—only extend it by adding tabs.
+
+Refer to the 'Retirement Funds' tab for layout templates."

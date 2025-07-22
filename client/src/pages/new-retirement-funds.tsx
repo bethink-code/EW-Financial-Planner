@@ -107,7 +107,6 @@ export default function NewRetirementFunds() {
       beneficiaryName: "",
       beneficiaryPercentageSplit: "0%",
       fundValueAtDeath: "R 0",
-      beneficiaryAmount: "R 0",
       lumpSumTaken: "R 0",
       nondeductibleContribution: "R 0",
       livingAnnuity: "R 0",
@@ -125,7 +124,11 @@ export default function NewRetirementFunds() {
       incomeEscalation: "0%",
       lumpSumDeath: "R 0",
       previousLumpSums: "R 0",
-      additionalTaxFreeAmount: "R 0"
+      additionalTaxFreeAmount: "R 0",
+      amount: "R 0",
+      incomeProvisionOption: "",
+      currentAnnualIncome: "R 0",
+      annualIncomeAtDeath: "R 0"
     };
     addMutation.mutate(newFund);
   }, [addMutation]);
@@ -243,7 +246,7 @@ export default function NewRetirementFunds() {
                     <div className="text-xs font-medium text-teal-700 mb-1">Estate Provisions</div>
                     <div className="text-lg font-bold text-neutral-900">
                       R {funds.reduce((sum, fund) => {
-                        const value = fund.lumpSumLeftOverProvisions as string;
+                        const value = fund.lumpSumProvisionEstate as string;
                         const amount = parseFloat(value?.replace(/[^\d.-]/g, '') || '0') || 0;
                         return sum + amount;
                       }, 0).toLocaleString()}

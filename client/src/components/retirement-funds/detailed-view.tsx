@@ -335,13 +335,13 @@ export function DetailedView({ funds, columnVisibility, onFieldUpdate, isUpdatin
                   <Label className="text-xs text-neutral-600 mb-1 block h-8 flex items-end">Escalation Amount</Label>
                   <input
                     key={`escalationAmount-${selectedFund.id}`}
-                    defaultValue={selectedFund.escalationAmount || ""}
+                    defaultValue={selectedFund.approvedLifeCover || ""}
                     onBlur={(e) => {
-                      const formattedValue = formatCurrencyValue(e.target.value, "escalationAmount");
+                      const formattedValue = formatCurrencyValue(e.target.value, "approvedLifeCover");
                       if (formattedValue !== e.target.value) {
                         e.target.value = formattedValue;
                       }
-                      handleFieldChange("escalationAmount", e.target.value);
+                      handleFieldChange("approvedLifeCover", e.target.value);
                     }}
                     className="h-9 px-3 py-2 text-sm text-right bg-white border border-neutral-200 rounded focus:border-blue-500 focus:outline-none w-[140px]"
                     disabled={isUpdating}

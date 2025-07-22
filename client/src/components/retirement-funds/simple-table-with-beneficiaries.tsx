@@ -483,13 +483,13 @@ export function SimpleTableWithBeneficiaries({ funds, columnVisibility, tableMod
                     </td>
                     <td className="p-2 text-right">
                       <input
-                        defaultValue={fund.escalationAmount || ""}
+                        defaultValue={fund.approvedLifeCover || ""}
                         onBlur={(e) => {
-                          const formattedValue = formatCurrencyValue(e.target.value, "escalationAmount");
+                          const formattedValue = formatCurrencyValue(e.target.value, "approvedLifeCover");
                           if (formattedValue !== e.target.value) {
                             e.target.value = formattedValue;
                           }
-                          handleInputBlur(fund.id, "escalationAmount", e.target.value);
+                          handleInputBlur(fund.id, "approvedLifeCover", e.target.value);
                         }}
                         className="table-input h-7 text-sm bg-white border-gray-200 focus:border-primary w-full px-3 py-1 border rounded-md text-sm"
                         style={{ textAlign: "right", minWidth: "80px" }}
