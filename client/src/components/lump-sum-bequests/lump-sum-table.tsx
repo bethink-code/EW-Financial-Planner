@@ -129,7 +129,7 @@ export function LumpSumTable({ searchTerm }: LumpSumTableProps) {
         <div className="overflow-x-auto">
           <table className="w-full min-w-full">
             <thead>
-              <tr className="bg-slate-100 border-b border-neutral-300">
+              <tr className="bg-[#E0F2FE] border-b border-neutral-300">
                 <th className="p-3 text-left text-xs font-semibold text-neutral-700 uppercase tracking-wider w-8"></th>
                 <th className="p-3 text-left text-xs font-semibold text-neutral-700 uppercase tracking-wider min-w-[200px]">Description</th>
                 <th className="p-3 text-center text-xs font-semibold text-neutral-700 uppercase tracking-wider min-w-[140px]">Entity</th>
@@ -157,7 +157,7 @@ export function LumpSumTable({ searchTerm }: LumpSumTableProps) {
                       onBlur={(e) => {
                         handleInputBlur(bequest.id, "description", e.target.value);
                       }}
-                      className="table-input h-7 text-sm bg-white border-gray-200 focus:border-primary w-full px-3 py-1 border rounded-md text-sm"
+                      className="table-input h-7 text-sm bg-[#E3F2FD] border-gray-200 focus:border-[#016991] w-full px-3 py-1 border rounded-md text-sm"
                       style={{ textAlign: "left" }}
                       disabled={isUpdating}
                       placeholder="Enter description"
@@ -169,7 +169,7 @@ export function LumpSumTable({ searchTerm }: LumpSumTableProps) {
                       onChange={(e) => {
                         handleInputBlur(bequest.id, "entity", e.target.value);
                       }}
-                      className="table-input h-7 text-sm bg-white border-gray-200 focus:border-primary w-full px-2 py-1 border rounded-md text-sm"
+                      className="table-input h-7 text-sm bg-[#E3F2FD] border-gray-200 focus:border-[#016991] w-full px-2 py-1 border rounded-md text-sm"
                       disabled={isUpdating}
                     >
                       <option value="Donald Edwards">Donald Edwards</option>
@@ -186,7 +186,7 @@ export function LumpSumTable({ searchTerm }: LumpSumTableProps) {
                         }
                         handleInputBlur(bequest.id, "start", e.target.value);
                       }}
-                      className="table-input h-7 text-sm bg-white border-gray-200 focus:border-primary w-full px-3 py-1 border rounded-md text-sm"
+                      className="table-input h-7 text-sm bg-[#E3F2FD] border-gray-200 focus:border-[#016991] w-full px-3 py-1 border rounded-md text-sm"
                       style={{ textAlign: "right", minWidth: "80px" }}
                       placeholder="0"
                       disabled={isUpdating}
@@ -204,7 +204,7 @@ export function LumpSumTable({ searchTerm }: LumpSumTableProps) {
                           }
                           handleInputBlur(bequest.id, "increasePercentage", e.target.value);
                         }}
-                        className="table-input h-7 text-sm bg-white border-gray-200 focus:border-primary px-2 py-1 border rounded-md text-sm w-16"
+                        className="table-input h-7 text-sm bg-[#E3F2FD] border-gray-200 focus:border-[#016991] px-2 py-1 border rounded-md text-sm w-16"
                         style={{ textAlign: "right" }}
                         disabled={isUpdating}
                         min="0"
@@ -235,7 +235,7 @@ export function LumpSumTable({ searchTerm }: LumpSumTableProps) {
                         }
                         handleInputBlur(bequest.id, "amount", e.target.value);
                       }}
-                      className="table-input h-7 text-sm bg-white border-gray-200 focus:border-primary w-full px-3 py-1 border rounded-md text-sm"
+                      className="table-input h-7 text-sm bg-[#E3F2FD] border-gray-200 focus:border-[#016991] w-full px-3 py-1 border rounded-md text-sm"
                       style={{ textAlign: "right", minWidth: "100px" }}
                       placeholder="R 0"
                       disabled={isUpdating}
@@ -252,23 +252,15 @@ export function LumpSumTable({ searchTerm }: LumpSumTableProps) {
               
               {/* Charity Bequest Row */}
               <tr className="bg-neutral-50">
-                <td className="p-2 text-left font-medium text-neutral-700">
+                <td className="p-2"></td>
+                <td className="p-2 text-left font-medium text-neutral-700" colSpan={2}>
                   Bequest to charities and institutions
                 </td>
-                <td className="p-2"></td>
                 <td className="p-2 text-right">
                   <input
                     defaultValue="0"
-                    className="table-input h-7 text-sm bg-white border-gray-200 focus:border-primary w-full px-3 py-1 border rounded-md text-sm"
+                    className="table-input h-7 text-sm bg-[#E3F2FD] border-gray-200 focus:border-[#016991] w-full px-3 py-1 border rounded-md text-sm"
                     style={{ textAlign: "right", minWidth: "80px" }}
-                    disabled={isUpdating}
-                  />
-                </td>
-                <td className="p-2 text-center">
-                  <input
-                    defaultValue="6"
-                    className="table-input h-7 text-sm bg-white border-gray-200 focus:border-primary w-16 px-2 py-1 border rounded-md text-sm"
-                    style={{ textAlign: "right" }}
                     disabled={isUpdating}
                   />
                 </td>
@@ -277,7 +269,7 @@ export function LumpSumTable({ searchTerm }: LumpSumTableProps) {
                     <input
                       type="number"
                       defaultValue="6"
-                      className="table-input h-7 text-sm bg-white border-gray-200 focus:border-primary px-2 py-1 border rounded-md text-sm w-16"
+                      className="table-input h-7 text-sm bg-[#E3F2FD] border-gray-200 focus:border-[#016991] px-2 py-1 border rounded-md text-sm w-16"
                       style={{ textAlign: "right" }}
                       disabled={isUpdating}
                       min="0"
@@ -294,22 +286,22 @@ export function LumpSumTable({ searchTerm }: LumpSumTableProps) {
                     </label>
                   </div>
                 </td>
-                <td className="p-2 text-center">
+                <td className="p-2 text-right">
                   <input
                     defaultValue="0"
-                    className="table-input h-7 text-sm bg-white border-gray-200 focus:border-primary w-full px-3 py-1 border rounded-md text-sm"
+                    className="table-input h-7 text-sm bg-[#E3F2FD] border-gray-200 focus:border-[#016991] w-full px-3 py-1 border rounded-md text-sm"
                     style={{ textAlign: "right", minWidth: "100px" }}
                     placeholder="R 0"
                     disabled={isUpdating}
                   />
                 </td>
                 <td className="p-2 text-right">
-                  <span className="font-medium">0</span>
+                  <div className="text-sm text-neutral-700">R 0</div>
                 </td>
               </tr>
               
               {/* Total Row */}
-              <tr className="bg-neutral-100 border-t-2 border-neutral-300">
+              <tr className="bg-[#F5F5F5] border-t-2 border-neutral-300">
                 <td className="p-2"></td>
                 <td className="p-2 text-left font-bold text-neutral-900" style={{ fontFamily: "system-ui, -apple-system, sans-serif", fontWeight: 700 }}>
                   Total
@@ -319,7 +311,7 @@ export function LumpSumTable({ searchTerm }: LumpSumTableProps) {
                 <td className="p-2"></td>
                 <td className="p-2"></td>
                 <td className="p-2 text-right font-bold text-neutral-900" style={{ fontFamily: "system-ui, -apple-system, sans-serif", fontWeight: 700 }}>
-                  {totalValueAtDeath.toLocaleString()}
+                  R {totalValueAtDeath.toLocaleString()}
                 </td>
               </tr>
             </tbody>
