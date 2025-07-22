@@ -1,7 +1,7 @@
 import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
-import { insertRetirementFundSchema, updateRetirementFundSchema, insertLumpSumBequestSchema, updateLumpSumBequestSchema, insertAssuranceSchema, updateAssuranceSchema, insertDefinedBenefitFundSchema, updateDefinedBenefitFundSchema, insertVoluntaryInvestmentSchema, updateVoluntaryInvestmentSchema, insertAssetAndLiabilitySchema, updateAssetAndLiabilitySchema, insertIncomeNeedSchema, updateIncomeNeedSchema, insertIncomeProvisionSchema, updateIncomeProvisionSchema, insertResidueSchema, updateResidueSchema } from "@shared/schema";
+import { insertRetirementFundSchema, updateRetirementFundSchema, insertLumpSumBequestSchema, updateLumpSumBequestSchema, insertAssuranceSchema, updateAssuranceSchema, insertDefinedBenefitFundSchema, updateDefinedBenefitFundSchema, insertVoluntaryInvestmentSchema, updateVoluntaryInvestmentSchema, insertAssetAndLiabilitySchema, updateAssetAndLiabilitySchema, insertIncomeNeedSchema, updateIncomeNeedSchema, insertIncomeProvisionSchema, updateIncomeProvisionSchema, insertResidueSchema, updateResidueSchema, insertAdditionalEstateDutyItemSchema, updateAdditionalEstateDutyItemSchema } from "@shared/schema";
 
 export async function registerRoutes(app: Express): Promise<Server> {
   // Get all retirement funds
@@ -854,6 +854,101 @@ export async function registerRoutes(app: Express): Promise<Server> {
     } catch (error) {
       console.error("Error deleting residue item:", error);
       res.status(500).json({ message: "Failed to delete residue item" });
+    }
+  });
+
+  // Additional Estate Duty Items Routes
+  
+  // Get all additional estate duty items
+  app.get("/api/additional-estate-duty-items", async (req, res) => {
+    try {
+      const { search } = req.query;
+      let items;
+      
+      if (search && typeof search === "string") {
+        items = await storage.searchAdditionalEstateDutyItems(search);
+      } else {
+        items = await storage.getAdditionalEstateDutyItems();
+      }
+      
+      res.json(items);
+    } catch (error) {
+      console.error("Error fetching additional estate duty items:", error);
+      res.status(500).json({ message: "Failed to fetch additional estate duty items" });
+    }
+  });
+
+  // Get single additional estate duty item
+  app.get("/api/additional-estate-duty-items/:id", async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      if (isNaN(id)) {
+        return res.status(400).json({ message: "Invalid estate duty item ID" });
+      }
+
+      const item = await storage.getAdditionalEstateDutyItem(id);
+      if (!item) {
+        return res.status(404).json({ message: "Additional estate duty item not found" });
+      }
+
+      res.json(item);
+    } catch (error) {
+      console.error("Error fetching additional estate duty item:", error);
+      res.status(500).json({ message: "Failed to fetch additional estate duty item" });
+    }
+  });
+
+  // Create new additional estate duty item
+  app.post("/api/additional-estate-duty-items", async (req, res) => {
+    try {
+      const validatedData = insertAdditionalEstateDutyItemSchema.parse(req.body);
+      const item = await storage.createAdditionalEstateDutyItem(validatedData);
+      res.status(201).json(item);
+    } catch (error) {
+      console.error("Error creating additional estate duty item:", error);
+      res.status(400).json({ message: "Invalid additional estate duty item data" });
+    }
+  });
+
+  // Update additional estate duty item
+  app.patch("/api/additional-estate-duty-items/:id", async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      if (isNaN(id)) {
+        return res.status(400).json({ message: "Invalid estate duty item ID" });
+      }
+
+      const validatedData = updateAdditionalEstateDutyItemSchema.parse(req.body);
+      const item = await storage.updateAdditionalEstateDutyItem(id, validatedData);
+      
+      if (!item) {
+        return res.status(404).json({ message: "Additional estate duty item not found" });
+      }
+
+      res.json(item);
+    } catch (error) {
+      console.error("Error updating additional estate duty item:", error);
+      res.status(400).json({ message: "Invalid additional estate duty item data" });
+    }
+  });
+
+  // Delete additional estate duty item
+  app.delete("/api/additional-estate-duty-items/:id", async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      if (isNaN(id)) {
+        return res.status(400).json({ message: "Invalid estate duty item ID" });
+      }
+
+      const success = await storage.deleteAdditionalEstateDutyItem(id);
+      if (!success) {
+        return res.status(404).json({ message: "Additional estate duty item not found" });
+      }
+
+      res.status(204).send();
+    } catch (error) {
+      console.error("Error deleting additional estate duty item:", error);
+      res.status(500).json({ message: "Failed to delete additional estate duty item" });
     }
   });
 

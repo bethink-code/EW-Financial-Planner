@@ -325,3 +325,26 @@ export const updateResidueSchema = createInsertSchema(residue).omit({
 export type InsertResidue = z.infer<typeof insertResidueSchema>;
 export type Residue = typeof residue.$inferSelect;
 export type UpdateResidue = z.infer<typeof updateResidueSchema>;
+
+// Additional Estate Duty Items schema
+export const additionalEstateDutyItems = pgTable("additional_estate_duty_items", {
+  id: serial("id").primaryKey(),
+  
+  // Main fields
+  description: text("description").notNull().default(""),
+  amount: text("amount").notNull().default("0"),
+  isDeduction: boolean("is_deduction").notNull().default(false),
+  excludeFromJointEstate: boolean("exclude_from_joint_estate").notNull().default(false),
+});
+
+export const insertAdditionalEstateDutyItemSchema = createInsertSchema(additionalEstateDutyItems).omit({
+  id: true,
+});
+
+export const updateAdditionalEstateDutyItemSchema = createInsertSchema(additionalEstateDutyItems).omit({
+  id: true,
+}).partial();
+
+export type InsertAdditionalEstateDutyItem = z.infer<typeof insertAdditionalEstateDutyItemSchema>;
+export type AdditionalEstateDutyItem = typeof additionalEstateDutyItems.$inferSelect;
+export type UpdateAdditionalEstateDutyItem = z.infer<typeof updateAdditionalEstateDutyItemSchema>;

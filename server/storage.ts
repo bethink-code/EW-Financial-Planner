@@ -1,4 +1,4 @@
-import { retirementFunds, lumpSumBequests, assurance, definedBenefitFunds, voluntaryInvestments, assetsAndLiabilities, incomeNeeds, incomeProvisions, residue, type RetirementFund, type InsertRetirementFund, type UpdateRetirementFund, type LumpSumBequest, type InsertLumpSumBequest, type Assurance, type InsertAssurance, type UpdateAssurance, type DefinedBenefitFund, type InsertDefinedBenefitFund, type UpdateDefinedBenefitFund, type VoluntaryInvestment, type InsertVoluntaryInvestment, type UpdateVoluntaryInvestment, type AssetAndLiability, type InsertAssetAndLiability, type UpdateAssetAndLiability, type IncomeNeed, type InsertIncomeNeed, type UpdateIncomeNeed, type IncomeProvision, type InsertIncomeProvision, type UpdateIncomeProvision, type Residue, type InsertResidue, type UpdateResidue } from "@shared/schema";
+import { retirementFunds, lumpSumBequests, assurance, definedBenefitFunds, voluntaryInvestments, assetsAndLiabilities, incomeNeeds, incomeProvisions, residue, additionalEstateDutyItems, type RetirementFund, type InsertRetirementFund, type UpdateRetirementFund, type LumpSumBequest, type InsertLumpSumBequest, type Assurance, type InsertAssurance, type UpdateAssurance, type DefinedBenefitFund, type InsertDefinedBenefitFund, type UpdateDefinedBenefitFund, type VoluntaryInvestment, type InsertVoluntaryInvestment, type UpdateVoluntaryInvestment, type AssetAndLiability, type InsertAssetAndLiability, type UpdateAssetAndLiability, type IncomeNeed, type InsertIncomeNeed, type UpdateIncomeNeed, type IncomeProvision, type InsertIncomeProvision, type UpdateIncomeProvision, type Residue, type InsertResidue, type UpdateResidue, type AdditionalEstateDutyItem, type InsertAdditionalEstateDutyItem, type UpdateAdditionalEstateDutyItem } from "@shared/schema";
 
 export interface IStorage {
   // Retirement Funds
@@ -72,6 +72,14 @@ export interface IStorage {
   updateResidueItem(id: number, updates: UpdateResidue): Promise<Residue | undefined>;
   deleteResidueItem(id: number): Promise<boolean>;
   searchResidue(query: string): Promise<Residue[]>;
+  
+  // Additional Estate Duty Items
+  getAdditionalEstateDutyItems(): Promise<AdditionalEstateDutyItem[]>;
+  getAdditionalEstateDutyItem(id: number): Promise<AdditionalEstateDutyItem | undefined>;
+  createAdditionalEstateDutyItem(item: InsertAdditionalEstateDutyItem): Promise<AdditionalEstateDutyItem>;
+  updateAdditionalEstateDutyItem(id: number, updates: UpdateAdditionalEstateDutyItem): Promise<AdditionalEstateDutyItem | undefined>;
+  deleteAdditionalEstateDutyItem(id: number): Promise<boolean>;
+  searchAdditionalEstateDutyItems(query: string): Promise<AdditionalEstateDutyItem[]>;
 }
 
 export class MemStorage implements IStorage {
@@ -84,6 +92,7 @@ export class MemStorage implements IStorage {
   private incomeNeeds: Map<number, IncomeNeed>;
   private incomeProvisions: Map<number, IncomeProvision>;
   private residue: Map<number, Residue>;
+  private additionalEstateDutyItems: Map<number, AdditionalEstateDutyItem>;
   private currentFundId: number;
   private currentBequestId: number;
   private currentAssuranceId: number;
@@ -93,6 +102,7 @@ export class MemStorage implements IStorage {
   private currentIncomeNeedId: number;
   private currentIncomeProvisionId: number;
   private currentResidueId: number;
+  private currentAdditionalEstateDutyItemId: number;
 
   constructor() {
     this.retirementFunds = new Map();
@@ -104,6 +114,7 @@ export class MemStorage implements IStorage {
     this.incomeNeeds = new Map();
     this.incomeProvisions = new Map();
     this.residue = new Map();
+    this.additionalEstateDutyItems = new Map();
     this.currentFundId = 1;
     this.currentBequestId = 1;
     this.currentAssuranceId = 1;
@@ -113,6 +124,7 @@ export class MemStorage implements IStorage {
     this.currentIncomeNeedId = 1;
     this.currentIncomeProvisionId = 1;
     this.currentResidueId = 1;
+    this.currentAdditionalEstateDutyItemId = 1;
     
     // Initialize with sample data
     this.createRetirementFund({
@@ -384,6 +396,21 @@ export class MemStorage implements IStorage {
       entity: "Residue to registered charities",
       percentage: "0%",
       isCharityRow: true,
+    });
+    
+    // Initialize sample estate duty items
+    this.createAdditionalEstateDutyItem({
+      description: "Administration Fees",
+      amount: "R 50,000",
+      isDeduction: true,
+      excludeFromJointEstate: false,
+    });
+    
+    this.createAdditionalEstateDutyItem({
+      description: "Specific Bequest",
+      amount: "R 100,000",
+      isDeduction: false,
+      excludeFromJointEstate: true,
     });
   }
 
@@ -853,6 +880,48 @@ export class MemStorage implements IStorage {
     const lowerQuery = query.toLowerCase();
     return allItems.filter(item => 
       item.entity.toLowerCase().includes(lowerQuery)
+    );
+  }
+
+  // Additional Estate Duty Items methods
+  async getAdditionalEstateDutyItems(): Promise<AdditionalEstateDutyItem[]> {
+    return Array.from(this.additionalEstateDutyItems.values());
+  }
+
+  async getAdditionalEstateDutyItem(id: number): Promise<AdditionalEstateDutyItem | undefined> {
+    return this.additionalEstateDutyItems.get(id);
+  }
+
+  async createAdditionalEstateDutyItem(item: InsertAdditionalEstateDutyItem): Promise<AdditionalEstateDutyItem> {
+    const newItem: AdditionalEstateDutyItem = {
+      id: this.currentAdditionalEstateDutyItemId++,
+      ...item
+    };
+    
+    this.additionalEstateDutyItems.set(newItem.id, newItem);
+    return newItem;
+  }
+
+  async updateAdditionalEstateDutyItem(id: number, updates: UpdateAdditionalEstateDutyItem): Promise<AdditionalEstateDutyItem | undefined> {
+    const existing = this.additionalEstateDutyItems.get(id);
+    if (!existing) return undefined;
+    
+    const updated: AdditionalEstateDutyItem = { ...existing, ...updates };
+    this.additionalEstateDutyItems.set(id, updated);
+    return updated;
+  }
+
+  async deleteAdditionalEstateDutyItem(id: number): Promise<boolean> {
+    return this.additionalEstateDutyItems.delete(id);
+  }
+
+  async searchAdditionalEstateDutyItems(query: string): Promise<AdditionalEstateDutyItem[]> {
+    const allItems = Array.from(this.additionalEstateDutyItems.values());
+    if (!query.trim()) return allItems;
+    
+    const lowerQuery = query.toLowerCase();
+    return allItems.filter(item => 
+      item.description.toLowerCase().includes(lowerQuery)
     );
   }
 }
