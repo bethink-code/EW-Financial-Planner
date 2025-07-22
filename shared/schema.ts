@@ -138,3 +138,30 @@ export type UpdateAssurance = z.infer<typeof updateAssuranceSchema>;
 
 export type UpdateRetirementFund = z.infer<typeof updateRetirementFundSchema>;
 export type RetirementFund = typeof retirementFunds.$inferSelect;
+
+// Defined Benefit Funds schema
+export const definedBenefitFunds = pgTable("defined_benefit_funds", {
+  id: serial("id").primaryKey(),
+  
+  // Main fields
+  description: text("description").notNull().default(""),
+  owner: text("owner").notNull().default("Donald Edwards"),
+  yearsOfService: text("years_of_service").notNull().default("0"),
+  finalMonthlySalary: text("final_monthly_salary").notNull().default("0"),
+  deathLumpSum: text("death_lump_sum").notNull().default("0"),
+  additionalTaxFreeAmount: text("additional_tax_free_amount").notNull().default("0"),
+  pensionIncomeAmount: text("pension_income_amount").notNull().default("0"),
+  pensionIncomeIncrease: text("pension_income_increase").notNull().default("0"),
+});
+
+export const insertDefinedBenefitFundSchema = createInsertSchema(definedBenefitFunds).omit({
+  id: true,
+});
+
+export const updateDefinedBenefitFundSchema = createInsertSchema(definedBenefitFunds).omit({
+  id: true,
+}).partial();
+
+export type InsertDefinedBenefitFund = z.infer<typeof insertDefinedBenefitFundSchema>;
+export type DefinedBenefitFund = typeof definedBenefitFunds.$inferSelect;
+export type UpdateDefinedBenefitFund = z.infer<typeof updateDefinedBenefitFundSchema>;

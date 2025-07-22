@@ -1,4 +1,4 @@
-import { retirementFunds, lumpSumBequests, assurance, type RetirementFund, type InsertRetirementFund, type UpdateRetirementFund, type LumpSumBequest, type InsertLumpSumBequest, type Assurance, type InsertAssurance, type UpdateAssurance } from "@shared/schema";
+import { retirementFunds, lumpSumBequests, assurance, definedBenefitFunds, type RetirementFund, type InsertRetirementFund, type UpdateRetirementFund, type LumpSumBequest, type InsertLumpSumBequest, type Assurance, type InsertAssurance, type UpdateAssurance, type DefinedBenefitFund, type InsertDefinedBenefitFund, type UpdateDefinedBenefitFund } from "@shared/schema";
 
 export interface IStorage {
   // Retirement Funds
@@ -24,23 +24,35 @@ export interface IStorage {
   updateAssurance(id: number, updates: UpdateAssurance): Promise<Assurance | undefined>;
   deleteAssurance(id: number): Promise<boolean>;
   searchAssurance(query: string): Promise<Assurance[]>;
+  
+  // Defined Benefit Funds
+  getDefinedBenefitFunds(): Promise<DefinedBenefitFund[]>;
+  getDefinedBenefitFund(id: number): Promise<DefinedBenefitFund | undefined>;
+  createDefinedBenefitFund(fund: InsertDefinedBenefitFund): Promise<DefinedBenefitFund>;
+  updateDefinedBenefitFund(id: number, updates: UpdateDefinedBenefitFund): Promise<DefinedBenefitFund | undefined>;
+  deleteDefinedBenefitFund(id: number): Promise<boolean>;
+  searchDefinedBenefitFunds(query: string): Promise<DefinedBenefitFund[]>;
 }
 
 export class MemStorage implements IStorage {
   private retirementFunds: Map<number, RetirementFund>;
   private lumpSumBequests: Map<number, LumpSumBequest>;
   private assurance: Map<number, Assurance>;
+  private definedBenefitFunds: Map<number, DefinedBenefitFund>;
   private currentFundId: number;
   private currentBequestId: number;
   private currentAssuranceId: number;
+  private currentDefinedBenefitFundId: number;
 
   constructor() {
     this.retirementFunds = new Map();
     this.lumpSumBequests = new Map();
     this.assurance = new Map();
+    this.definedBenefitFunds = new Map();
     this.currentFundId = 1;
     this.currentBequestId = 1;
     this.currentAssuranceId = 1;
+    this.currentDefinedBenefitFundId = 1;
     
     // Initialize with sample data
     this.createRetirementFund({
@@ -182,6 +194,18 @@ export class MemStorage implements IStorage {
       collateralSession: "0",
       excludedFromEstateDuty: false,
       excludedFromProvisions: false
+    });
+    
+    // Initialize sample defined benefit funds
+    this.createDefinedBenefitFund({
+      description: "Government Pension Fund",
+      owner: "Donald Edwards",
+      yearsOfService: "25",
+      finalMonthlySalary: "R 15,000",
+      deathLumpSum: "R 450,000",
+      additionalTaxFreeAmount: "R 75,000",
+      pensionIncomeAmount: "R 8,000",
+      pensionIncomeIncrease: "5%",
     });
   }
 
@@ -384,6 +408,49 @@ export class MemStorage implements IStorage {
       assurance.owner.toLowerCase().includes(lowerQuery) ||
       assurance.lifeAssured.toLowerCase().includes(lowerQuery) ||
       assurance.beneficiary.toLowerCase().includes(lowerQuery)
+    );
+  }
+
+  // Defined Benefit Funds methods
+  async getDefinedBenefitFunds(): Promise<DefinedBenefitFund[]> {
+    return Array.from(this.definedBenefitFunds.values());
+  }
+
+  async getDefinedBenefitFund(id: number): Promise<DefinedBenefitFund | undefined> {
+    return this.definedBenefitFunds.get(id);
+  }
+
+  async createDefinedBenefitFund(fund: InsertDefinedBenefitFund): Promise<DefinedBenefitFund> {
+    const newFund: DefinedBenefitFund = {
+      id: this.currentDefinedBenefitFundId++,
+      ...fund
+    };
+    
+    this.definedBenefitFunds.set(newFund.id, newFund);
+    return newFund;
+  }
+
+  async updateDefinedBenefitFund(id: number, updates: UpdateDefinedBenefitFund): Promise<DefinedBenefitFund | undefined> {
+    const existing = this.definedBenefitFunds.get(id);
+    if (!existing) return undefined;
+    
+    const updated: DefinedBenefitFund = { ...existing, ...updates };
+    this.definedBenefitFunds.set(id, updated);
+    return updated;
+  }
+
+  async deleteDefinedBenefitFund(id: number): Promise<boolean> {
+    return this.definedBenefitFunds.delete(id);
+  }
+
+  async searchDefinedBenefitFunds(query: string): Promise<DefinedBenefitFund[]> {
+    const allFunds = Array.from(this.definedBenefitFunds.values());
+    if (!query.trim()) return allFunds;
+    
+    const lowerQuery = query.toLowerCase();
+    return allFunds.filter(fund => 
+      fund.description.toLowerCase().includes(lowerQuery) ||
+      fund.owner.toLowerCase().includes(lowerQuery)
     );
   }
 }
