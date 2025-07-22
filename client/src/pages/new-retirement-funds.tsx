@@ -7,7 +7,7 @@ import { NewGroupedTableView } from "@/components/retirement-funds/new-grouped-t
 import { SimpleTableWithBeneficiaries } from "@/components/retirement-funds/simple-table-with-beneficiaries";
 import { DetailedView } from "@/components/retirement-funds/detailed-view";
 import { SummarySection } from "@/components/retirement-funds/summary-section";
-import { AddFundDialog } from "@/components/retirement-funds/add-fund-dialog";
+
 import { AdditionalDetails } from "@/components/retirement-funds/additional-details";
 
 
@@ -24,7 +24,7 @@ interface ColumnVisibility {
 export default function NewRetirementFunds() {
   const [viewMode, setViewMode] = useState<ViewMode>("grouped");
   const [tableMode, setTableMode] = useState<"inputs" | "flows">("inputs");
-  const [showAddDialog, setShowAddDialog] = useState(false);
+
 
   // Enhanced view mode change with transitions
   const handleViewModeChange = useCallback((newMode: ViewMode) => {
@@ -47,6 +47,15 @@ export default function NewRetirementFunds() {
 
   const { data: funds = [], isLoading } = useQuery<RetirementFund[]>({
     queryKey: ["/api/retirement-funds"],
+  });
+
+  const addMutation = useMutation({
+    mutationFn: async (newFund: Omit<RetirementFund, 'id'>) => {
+      return apiRequest("POST", "/api/retirement-funds", newFund);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["/api/retirement-funds"] });
+    },
   });
 
   const updateMutation = useMutation({
@@ -83,6 +92,43 @@ export default function NewRetirementFunds() {
   const handleFieldUpdate = useCallback((id: number, field: keyof UpdateRetirementFund, value: string) => {
     updateMutation.mutate({ id, updates: { [field]: value } });
   }, [updateMutation]);
+
+  const handleAddFund = useCallback(() => {
+    const newFund: Omit<RetirementFund, 'id'> = {
+      description: "New Fund",
+      owner: "John Doe",
+      coverAmount: "R 0",
+      beneficiaries: "[]",
+      monthlyIncome: "R 0",
+      termYears: "0",
+      increasePercentage: "0%",
+      approvedLifeCover: "R 0",
+      fundValue: "R 0",
+      beneficiaryName: "",
+      beneficiaryPercentageSplit: "0%",
+      fundValueAtDeath: "R 0",
+      beneficiaryAmount: "R 0",
+      lumpSumTaken: "R 0",
+      nondeductibleContribution: "R 0",
+      livingAnnuity: "R 0",
+      incomeTerm: "0 years",
+      lumpSumProvisionEstate: "R 0",
+      lumpSumProvisionSpouse: "R 0",
+      lumpSumProvisionOther: "R 0",
+      monthlyProvisionOffered: "R 0",
+      estateDeploymentDeceased: "R 0",
+      estateDutyPoliciesOnLife: "0%",
+      estateDutyToSpouse: "0%",
+      estateDutyToOthers: "0%",
+      executorsFee: "0%",
+      mastersFee: "0%",
+      incomeEscalation: "0%",
+      lumpSumDeath: "R 0",
+      previousLumpSums: "R 0",
+      additionalTaxFreeAmount: "R 0"
+    };
+    addMutation.mutate(newFund);
+  }, [addMutation]);
 
   const handleToggleColumnGroup = useCallback((group: keyof ColumnVisibility) => {
     if (document.startViewTransition) {
@@ -254,7 +300,7 @@ export default function NewRetirementFunds() {
                   tableMode={tableMode}
                   onFieldUpdate={handleFieldUpdate}
                   isUpdating={updateMutation.isPending}
-                  onAddFund={() => setShowAddDialog(true)}
+                  onAddFund={handleAddFund}
                 />
               ) : (
                 <NewGroupedTableView
@@ -263,7 +309,7 @@ export default function NewRetirementFunds() {
                   tableMode={tableMode}
                   onFieldUpdate={handleFieldUpdate}
                   isUpdating={updateMutation.isPending}
-                  onAddFund={() => setShowAddDialog(true)}
+                  onAddFund={handleAddFund}
                 />
               )}
             </div>
@@ -354,7 +400,7 @@ export default function NewRetirementFunds() {
                 onFieldUpdate={handleFieldUpdate}
                 isUpdating={updateMutation.isPending}
                 tableMode={tableMode}
-                onAddFund={() => setShowAddDialog(true)}
+                onAddFund={handleAddFund}
               />
             </div>
             
@@ -369,11 +415,7 @@ export default function NewRetirementFunds() {
           </>
         )}
 
-        {/* Add Fund Dialog */}
-        <AddFundDialog
-          open={showAddDialog}
-          onOpenChange={setShowAddDialog}
-        />
+        {/* Remove Add Fund Dialog - now handled directly */}
       </div>
     </div>
   );

@@ -139,11 +139,14 @@ export function SimpleTableWithBeneficiaries({ funds, columnVisibility, tableMod
   return (
     <div>
       {/* Add Fund Button */}
-      <div className="mb-4 flex justify-end">
+      <div className="mb-4 flex justify-start">
         <Button 
           onClick={onAddFund}
           size="sm" 
-          className="h-8 px-3 text-xs bg-blue-600 hover:bg-blue-700"
+          className="h-8 px-3 text-xs"
+          style={{ backgroundColor: '#016991', color: 'white' }}
+          onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = '#014d6b'; }}
+          onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = '#016991'; }}
         >
           <Plus size={14} className="mr-1" />
           Add Fund
