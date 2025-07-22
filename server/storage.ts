@@ -1,4 +1,4 @@
-import { retirementFunds, lumpSumBequests, assurance, definedBenefitFunds, type RetirementFund, type InsertRetirementFund, type UpdateRetirementFund, type LumpSumBequest, type InsertLumpSumBequest, type Assurance, type InsertAssurance, type UpdateAssurance, type DefinedBenefitFund, type InsertDefinedBenefitFund, type UpdateDefinedBenefitFund } from "@shared/schema";
+import { retirementFunds, lumpSumBequests, assurance, definedBenefitFunds, voluntaryInvestments, type RetirementFund, type InsertRetirementFund, type UpdateRetirementFund, type LumpSumBequest, type InsertLumpSumBequest, type Assurance, type InsertAssurance, type UpdateAssurance, type DefinedBenefitFund, type InsertDefinedBenefitFund, type UpdateDefinedBenefitFund, type VoluntaryInvestment, type InsertVoluntaryInvestment, type UpdateVoluntaryInvestment } from "@shared/schema";
 
 export interface IStorage {
   // Retirement Funds
@@ -32,6 +32,14 @@ export interface IStorage {
   updateDefinedBenefitFund(id: number, updates: UpdateDefinedBenefitFund): Promise<DefinedBenefitFund | undefined>;
   deleteDefinedBenefitFund(id: number): Promise<boolean>;
   searchDefinedBenefitFunds(query: string): Promise<DefinedBenefitFund[]>;
+  
+  // Voluntary Investments
+  getVoluntaryInvestments(): Promise<VoluntaryInvestment[]>;
+  getVoluntaryInvestment(id: number): Promise<VoluntaryInvestment | undefined>;
+  createVoluntaryInvestment(investment: InsertVoluntaryInvestment): Promise<VoluntaryInvestment>;
+  updateVoluntaryInvestment(id: number, updates: UpdateVoluntaryInvestment): Promise<VoluntaryInvestment | undefined>;
+  deleteVoluntaryInvestment(id: number): Promise<boolean>;
+  searchVoluntaryInvestments(query: string): Promise<VoluntaryInvestment[]>;
 }
 
 export class MemStorage implements IStorage {
@@ -39,20 +47,24 @@ export class MemStorage implements IStorage {
   private lumpSumBequests: Map<number, LumpSumBequest>;
   private assurance: Map<number, Assurance>;
   private definedBenefitFunds: Map<number, DefinedBenefitFund>;
+  private voluntaryInvestments: Map<number, VoluntaryInvestment>;
   private currentFundId: number;
   private currentBequestId: number;
   private currentAssuranceId: number;
   private currentDefinedBenefitFundId: number;
+  private currentVoluntaryInvestmentId: number;
 
   constructor() {
     this.retirementFunds = new Map();
     this.lumpSumBequests = new Map();
     this.assurance = new Map();
     this.definedBenefitFunds = new Map();
+    this.voluntaryInvestments = new Map();
     this.currentFundId = 1;
     this.currentBequestId = 1;
     this.currentAssuranceId = 1;
     this.currentDefinedBenefitFundId = 1;
+    this.currentVoluntaryInvestmentId = 1;
     
     // Initialize with sample data
     this.createRetirementFund({
@@ -206,6 +218,22 @@ export class MemStorage implements IStorage {
       additionalTaxFreeAmount: "R 75,000",
       pensionIncomeAmount: "R 8,000",
       pensionIncomeIncrease: "5%",
+    });
+    
+    // Initialize sample voluntary investments
+    this.createVoluntaryInvestment({
+      description: "Unit Trust Portfolio",
+      owners: '["Donald Edwards"]',
+      ownershipPercentages: '["100"]',
+      baseCost: "R 500,000",
+      marketValue: "R 750,000",
+      liquidationPercentage: "85%",
+      spouse: "R 637,500",
+      others: "R 0",
+      excludedFromJointEstate: false,
+      excludedFromEstateDuty: false,
+      excludedFromCGT: false,
+      excludedFromExecutorsFees: false,
     });
   }
 
@@ -452,6 +480,50 @@ export class MemStorage implements IStorage {
       fund.description.toLowerCase().includes(lowerQuery) ||
       fund.owner.toLowerCase().includes(lowerQuery)
     );
+  }
+
+  // Voluntary Investments methods
+  async getVoluntaryInvestments(): Promise<VoluntaryInvestment[]> {
+    return Array.from(this.voluntaryInvestments.values());
+  }
+
+  async getVoluntaryInvestment(id: number): Promise<VoluntaryInvestment | undefined> {
+    return this.voluntaryInvestments.get(id);
+  }
+
+  async createVoluntaryInvestment(investment: InsertVoluntaryInvestment): Promise<VoluntaryInvestment> {
+    const newInvestment: VoluntaryInvestment = {
+      id: this.currentVoluntaryInvestmentId++,
+      ...investment
+    };
+    
+    this.voluntaryInvestments.set(newInvestment.id, newInvestment);
+    return newInvestment;
+  }
+
+  async updateVoluntaryInvestment(id: number, updates: UpdateVoluntaryInvestment): Promise<VoluntaryInvestment | undefined> {
+    const existing = this.voluntaryInvestments.get(id);
+    if (!existing) return undefined;
+    
+    const updated: VoluntaryInvestment = { ...existing, ...updates };
+    this.voluntaryInvestments.set(id, updated);
+    return updated;
+  }
+
+  async deleteVoluntaryInvestment(id: number): Promise<boolean> {
+    return this.voluntaryInvestments.delete(id);
+  }
+
+  async searchVoluntaryInvestments(query: string): Promise<VoluntaryInvestment[]> {
+    const allInvestments = Array.from(this.voluntaryInvestments.values());
+    if (!query.trim()) return allInvestments;
+    
+    const lowerQuery = query.toLowerCase();
+    return allInvestments.filter(investment => {
+      const owners = JSON.parse(investment.owners);
+      return investment.description.toLowerCase().includes(lowerQuery) ||
+             owners.some((owner: string) => owner.toLowerCase().includes(lowerQuery));
+    });
   }
 }
 

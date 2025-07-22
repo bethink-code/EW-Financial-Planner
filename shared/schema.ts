@@ -165,3 +165,38 @@ export const updateDefinedBenefitFundSchema = createInsertSchema(definedBenefitF
 export type InsertDefinedBenefitFund = z.infer<typeof insertDefinedBenefitFundSchema>;
 export type DefinedBenefitFund = typeof definedBenefitFunds.$inferSelect;
 export type UpdateDefinedBenefitFund = z.infer<typeof updateDefinedBenefitFundSchema>;
+
+// Voluntary Investments schema
+export const voluntaryInvestments = pgTable("voluntary_investments", {
+  id: serial("id").primaryKey(),
+  
+  // Overview fields
+  description: text("description").notNull().default(""),
+  owners: text("owners").notNull().default("[]"), // JSON array of owners
+  ownershipPercentages: text("ownership_percentages").notNull().default("[]"), // JSON array of percentages
+  
+  // Bequeath to fields
+  baseCost: text("base_cost").notNull().default("0"),
+  marketValue: text("market_value").notNull().default("0"),
+  liquidationPercentage: text("liquidation_percentage").notNull().default("0"),
+  spouse: text("spouse").notNull().default("0"),
+  others: text("others").notNull().default("0"),
+  
+  // Exclusion checkboxes
+  excludedFromJointEstate: boolean("excluded_from_joint_estate").notNull().default(false),
+  excludedFromEstateDuty: boolean("excluded_from_estate_duty").notNull().default(false),
+  excludedFromCGT: boolean("excluded_from_cgt").notNull().default(false),
+  excludedFromExecutorsFees: boolean("excluded_from_executors_fees").notNull().default(false),
+});
+
+export const insertVoluntaryInvestmentSchema = createInsertSchema(voluntaryInvestments).omit({
+  id: true,
+});
+
+export const updateVoluntaryInvestmentSchema = createInsertSchema(voluntaryInvestments).omit({
+  id: true,
+}).partial();
+
+export type InsertVoluntaryInvestment = z.infer<typeof insertVoluntaryInvestmentSchema>;
+export type VoluntaryInvestment = typeof voluntaryInvestments.$inferSelect;
+export type UpdateVoluntaryInvestment = z.infer<typeof updateVoluntaryInvestmentSchema>;

@@ -1,7 +1,7 @@
 import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
-import { insertRetirementFundSchema, updateRetirementFundSchema, insertLumpSumBequestSchema, updateLumpSumBequestSchema, insertAssuranceSchema, updateAssuranceSchema, insertDefinedBenefitFundSchema, updateDefinedBenefitFundSchema } from "@shared/schema";
+import { insertRetirementFundSchema, updateRetirementFundSchema, insertLumpSumBequestSchema, updateLumpSumBequestSchema, insertAssuranceSchema, updateAssuranceSchema, insertDefinedBenefitFundSchema, updateDefinedBenefitFundSchema, insertVoluntaryInvestmentSchema, updateVoluntaryInvestmentSchema } from "@shared/schema";
 
 export async function registerRoutes(app: Express): Promise<Server> {
   // Get all retirement funds
@@ -379,6 +379,101 @@ export async function registerRoutes(app: Express): Promise<Server> {
     } catch (error) {
       console.error("Error deleting defined benefit fund:", error);
       res.status(500).json({ message: "Failed to delete defined benefit fund" });
+    }
+  });
+
+  // Voluntary Investments Routes
+  
+  // Get all voluntary investments
+  app.get("/api/voluntary-investments", async (req, res) => {
+    try {
+      const { search } = req.query;
+      let investments;
+      
+      if (search && typeof search === "string") {
+        investments = await storage.searchVoluntaryInvestments(search);
+      } else {
+        investments = await storage.getVoluntaryInvestments();
+      }
+      
+      res.json(investments);
+    } catch (error) {
+      console.error("Error fetching voluntary investments:", error);
+      res.status(500).json({ message: "Failed to fetch voluntary investments" });
+    }
+  });
+
+  // Get single voluntary investment
+  app.get("/api/voluntary-investments/:id", async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      if (isNaN(id)) {
+        return res.status(400).json({ message: "Invalid investment ID" });
+      }
+
+      const investment = await storage.getVoluntaryInvestment(id);
+      if (!investment) {
+        return res.status(404).json({ message: "Voluntary investment not found" });
+      }
+
+      res.json(investment);
+    } catch (error) {
+      console.error("Error fetching voluntary investment:", error);
+      res.status(500).json({ message: "Failed to fetch voluntary investment" });
+    }
+  });
+
+  // Create new voluntary investment
+  app.post("/api/voluntary-investments", async (req, res) => {
+    try {
+      const validatedData = insertVoluntaryInvestmentSchema.parse(req.body);
+      const investment = await storage.createVoluntaryInvestment(validatedData);
+      res.status(201).json(investment);
+    } catch (error) {
+      console.error("Error creating voluntary investment:", error);
+      res.status(400).json({ message: "Invalid voluntary investment data" });
+    }
+  });
+
+  // Update voluntary investment
+  app.patch("/api/voluntary-investments/:id", async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      if (isNaN(id)) {
+        return res.status(400).json({ message: "Invalid investment ID" });
+      }
+
+      const validatedData = updateVoluntaryInvestmentSchema.parse(req.body);
+      const investment = await storage.updateVoluntaryInvestment(id, validatedData);
+      
+      if (!investment) {
+        return res.status(404).json({ message: "Voluntary investment not found" });
+      }
+
+      res.json(investment);
+    } catch (error) {
+      console.error("Error updating voluntary investment:", error);
+      res.status(400).json({ message: "Invalid voluntary investment data" });
+    }
+  });
+
+  // Delete voluntary investment
+  app.delete("/api/voluntary-investments/:id", async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      if (isNaN(id)) {
+        return res.status(400).json({ message: "Invalid investment ID" });
+      }
+
+      const success = await storage.deleteVoluntaryInvestment(id);
+      if (!success) {
+        return res.status(404).json({ message: "Voluntary investment not found" });
+      }
+
+      res.status(204).send();
+    } catch (error) {
+      console.error("Error deleting voluntary investment:", error);
+      res.status(500).json({ message: "Failed to delete voluntary investment" });
     }
   });
 
