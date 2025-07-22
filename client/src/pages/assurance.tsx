@@ -1,6 +1,6 @@
 import { useState, useCallback } from "react";
 import { Search } from "lucide-react";
-import { AssuranceTable } from "@/components/assurance/enhanced-assurance-table";
+import { AssuranceTable } from "@/components/assurance/simplified-assurance-table";
 import { AssuranceSummary } from "@/components/assurance/enhanced-assurance-summary";
 
 type ViewMode = "table" | "hybrid";
