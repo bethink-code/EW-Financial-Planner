@@ -10,9 +10,11 @@ export function AssuranceSummary({ searchTerm }: AssuranceSummaryProps) {
   // Fetch assurance policies for summary calculations
   const { data: policies = [], isLoading } = useQuery({
     queryKey: ["/api/assurance", { search: searchTerm }],
-    queryFn: () => apiRequest(
-      "/api/assurance" + (searchTerm ? `?search=${encodeURIComponent(searchTerm)}` : "")
-    ) as Promise<Assurance[]>
+    queryFn: async () => {
+      const response = await fetch("/api/assurance" + (searchTerm ? `?search=${encodeURIComponent(searchTerm)}` : ""));
+      if (!response.ok) throw new Error('Failed to fetch assurance policies');
+      return response.json() as Promise<Assurance[]>;
+    }
   });
 
   if (isLoading) {

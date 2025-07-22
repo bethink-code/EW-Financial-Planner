@@ -15,9 +15,11 @@ export function AssuranceTable({ searchTerm }: AssuranceTableProps) {
   // Fetch assurance policies
   const { data: policies = [], isLoading } = useQuery({
     queryKey: ["/api/assurance", { search: searchTerm }],
-    queryFn: () => apiRequest(
-      "/api/assurance" + (searchTerm ? `?search=${encodeURIComponent(searchTerm)}` : "")
-    ) as Promise<Assurance[]>
+    queryFn: async () => {
+      const response = await fetch("/api/assurance" + (searchTerm ? `?search=${encodeURIComponent(searchTerm)}` : ""));
+      if (!response.ok) throw new Error('Failed to fetch assurance policies');
+      return response.json() as Promise<Assurance[]>;
+    }
   });
 
   // Add new policy mutation
@@ -34,10 +36,7 @@ export function AssuranceTable({ searchTerm }: AssuranceTableProps) {
         excludedFromEstateDuty: false,
         excludedFromProvisions: false
       };
-      return apiRequest("/api/assurance", {
-        method: "POST",
-        body: newPolicy
-      });
+      return apiRequest("/api/assurance", "POST", newPolicy);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["/api/assurance"] });
@@ -47,10 +46,7 @@ export function AssuranceTable({ searchTerm }: AssuranceTableProps) {
   // Update policy mutation
   const updateMutation = useMutation({
     mutationFn: ({ id, updates }: { id: number; updates: Partial<Assurance> }) => {
-      return apiRequest(`/api/assurance/${id}`, {
-        method: "PATCH",
-        body: updates
-      });
+      return apiRequest(`/api/assurance/${id}`, "PATCH", updates);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["/api/assurance"] });
@@ -61,9 +57,7 @@ export function AssuranceTable({ searchTerm }: AssuranceTableProps) {
   // Delete policy mutation
   const deleteMutation = useMutation({
     mutationFn: (id: number) => {
-      return apiRequest(`/api/assurance/${id}`, {
-        method: "DELETE"
-      });
+      return apiRequest(`/api/assurance/${id}`, "DELETE");
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["/api/assurance"] });
