@@ -200,3 +200,46 @@ export const updateVoluntaryInvestmentSchema = createInsertSchema(voluntaryInves
 export type InsertVoluntaryInvestment = z.infer<typeof insertVoluntaryInvestmentSchema>;
 export type VoluntaryInvestment = typeof voluntaryInvestments.$inferSelect;
 export type UpdateVoluntaryInvestment = z.infer<typeof updateVoluntaryInvestmentSchema>;
+
+// Assets and Liabilities schema
+export const assetsAndLiabilities = pgTable("assets_and_liabilities", {
+  id: serial("id").primaryKey(),
+  
+  // Overview fields
+  include: boolean("include").notNull().default(true),
+  categoryAndDescription: text("category_and_description").notNull().default(""),
+  currency: text("currency").notNull().default("ZAR"),
+  baseCost: text("base_cost").notNull().default("0"),
+  marketValue: text("market_value").notNull().default("0"),
+  
+  // Owner fields
+  donaldEdwardsPercentage: text("donald_edwards_percentage").notNull().default("0"),
+  bettyEdwardsPercentage: text("betty_edwards_percentage").notNull().default("0"),
+  
+  // Bequeath to fields
+  liquidationPercentage: text("liquidation_percentage").notNull().default("0"),
+  spouse: text("spouse").notNull().default("0"),
+  others: text("others").notNull().default("0"),
+  
+  // Exclusion checkboxes
+  excludedFromJointEstate: boolean("excluded_from_joint_estate").notNull().default(false),
+  excludedFromEstateDuty: boolean("excluded_from_estate_duty").notNull().default(false),
+  excludedFromCGT: boolean("excluded_from_cgt").notNull().default(false),
+  
+  // Category for grouping
+  category: text("category").notNull().default(""),
+  isHeader: boolean("is_header").notNull().default(false),
+  sortOrder: integer("sort_order").notNull().default(0),
+});
+
+export const insertAssetAndLiabilitySchema = createInsertSchema(assetsAndLiabilities).omit({
+  id: true,
+});
+
+export const updateAssetAndLiabilitySchema = createInsertSchema(assetsAndLiabilities).omit({
+  id: true,
+}).partial();
+
+export type InsertAssetAndLiability = z.infer<typeof insertAssetAndLiabilitySchema>;
+export type AssetAndLiability = typeof assetsAndLiabilities.$inferSelect;
+export type UpdateAssetAndLiability = z.infer<typeof updateAssetAndLiabilitySchema>;

@@ -1,3 +1,4 @@
+
 import { useState, useCallback } from "react";
 import { Link, useLocation } from "wouter";
 import NewRetirementFunds from "./new-retirement-funds";
@@ -5,6 +6,7 @@ import LumpSumBequests from "./lump-sum-bequests";
 import Assurance from "./assurance";
 import DefinedBenefitFunds from "./defined-benefit-funds";
 import VoluntaryInvestments from "./voluntary-investments";
+import AssetsAndLiabilities from "./assets-and-liabilities";
 
 type TabType = 
   | "assurance" 
@@ -166,9 +168,8 @@ export default function DeathWithEstateLiquidity() {
             </div>
           )}
           {activeTab === "assets-and-liabilities" && (
-            <div className="p-8 text-center text-neutral-500">
-              <h3 className="text-lg font-medium mb-2">Assets and Liabilities</h3>
-              <p>This section is coming soon.</p>
+            <div>
+              <AssetsAndLiabilities />
             </div>
           )}
           {activeTab === "income-needs" && (
