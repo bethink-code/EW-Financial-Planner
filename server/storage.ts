@@ -1,4 +1,4 @@
-import { retirementFunds, lumpSumBequests, assurance, definedBenefitFunds, voluntaryInvestments, assetsAndLiabilities, incomeNeeds, incomeProvisions, type RetirementFund, type InsertRetirementFund, type UpdateRetirementFund, type LumpSumBequest, type InsertLumpSumBequest, type Assurance, type InsertAssurance, type UpdateAssurance, type DefinedBenefitFund, type InsertDefinedBenefitFund, type UpdateDefinedBenefitFund, type VoluntaryInvestment, type InsertVoluntaryInvestment, type UpdateVoluntaryInvestment, type AssetAndLiability, type InsertAssetAndLiability, type UpdateAssetAndLiability, type IncomeNeed, type InsertIncomeNeed, type UpdateIncomeNeed, type IncomeProvision, type InsertIncomeProvision, type UpdateIncomeProvision } from "@shared/schema";
+import { retirementFunds, lumpSumBequests, assurance, definedBenefitFunds, voluntaryInvestments, assetsAndLiabilities, incomeNeeds, incomeProvisions, residue, type RetirementFund, type InsertRetirementFund, type UpdateRetirementFund, type LumpSumBequest, type InsertLumpSumBequest, type Assurance, type InsertAssurance, type UpdateAssurance, type DefinedBenefitFund, type InsertDefinedBenefitFund, type UpdateDefinedBenefitFund, type VoluntaryInvestment, type InsertVoluntaryInvestment, type UpdateVoluntaryInvestment, type AssetAndLiability, type InsertAssetAndLiability, type UpdateAssetAndLiability, type IncomeNeed, type InsertIncomeNeed, type UpdateIncomeNeed, type IncomeProvision, type InsertIncomeProvision, type UpdateIncomeProvision, type Residue, type InsertResidue, type UpdateResidue } from "@shared/schema";
 
 export interface IStorage {
   // Retirement Funds
@@ -64,6 +64,14 @@ export interface IStorage {
   updateIncomeProvision(id: number, updates: UpdateIncomeProvision): Promise<IncomeProvision | undefined>;
   deleteIncomeProvision(id: number): Promise<boolean>;
   searchIncomeProvisions(query: string): Promise<IncomeProvision[]>;
+  
+  // Residue
+  getResidue(): Promise<Residue[]>;
+  getResidueItem(id: number): Promise<Residue | undefined>;
+  createResidueItem(item: InsertResidue): Promise<Residue>;
+  updateResidueItem(id: number, updates: UpdateResidue): Promise<Residue | undefined>;
+  deleteResidueItem(id: number): Promise<boolean>;
+  searchResidue(query: string): Promise<Residue[]>;
 }
 
 export class MemStorage implements IStorage {
@@ -75,6 +83,7 @@ export class MemStorage implements IStorage {
   private assetsAndLiabilities: Map<number, AssetAndLiability>;
   private incomeNeeds: Map<number, IncomeNeed>;
   private incomeProvisions: Map<number, IncomeProvision>;
+  private residue: Map<number, Residue>;
   private currentFundId: number;
   private currentBequestId: number;
   private currentAssuranceId: number;
@@ -83,6 +92,7 @@ export class MemStorage implements IStorage {
   private currentAssetAndLiabilityId: number;
   private currentIncomeNeedId: number;
   private currentIncomeProvisionId: number;
+  private currentResidueId: number;
 
   constructor() {
     this.retirementFunds = new Map();
@@ -93,6 +103,7 @@ export class MemStorage implements IStorage {
     this.assetsAndLiabilities = new Map();
     this.incomeNeeds = new Map();
     this.incomeProvisions = new Map();
+    this.residue = new Map();
     this.currentFundId = 1;
     this.currentBequestId = 1;
     this.currentAssuranceId = 1;
@@ -101,6 +112,7 @@ export class MemStorage implements IStorage {
     this.currentAssetAndLiabilityId = 1;
     this.currentIncomeNeedId = 1;
     this.currentIncomeProvisionId = 1;
+    this.currentResidueId = 1;
     
     // Initialize with sample data
     this.createRetirementFund({
@@ -352,6 +364,26 @@ export class MemStorage implements IStorage {
       taxablePercentage: "100%",
       taxPercentage: "35%",
       capitalisedAmount: "R 2,250,000",
+    });
+    
+    // Initialize sample residue
+    this.createResidueItem({
+      entity: "Donald Edwards",
+      percentage: "60%",
+      isCharityRow: false,
+    });
+    
+    this.createResidueItem({
+      entity: "Betty Edwards",
+      percentage: "40%",
+      isCharityRow: false,
+    });
+    
+    // Initialize charity row
+    this.createResidueItem({
+      entity: "Residue to registered charities",
+      percentage: "0%",
+      isCharityRow: true,
     });
   }
 
@@ -779,6 +811,48 @@ export class MemStorage implements IStorage {
     return allProvisions.filter(provision => 
       provision.description.toLowerCase().includes(lowerQuery) ||
       provision.entity.toLowerCase().includes(lowerQuery)
+    );
+  }
+
+  // Residue methods
+  async getResidue(): Promise<Residue[]> {
+    return Array.from(this.residue.values());
+  }
+
+  async getResidueItem(id: number): Promise<Residue | undefined> {
+    return this.residue.get(id);
+  }
+
+  async createResidueItem(item: InsertResidue): Promise<Residue> {
+    const newItem: Residue = {
+      id: this.currentResidueId++,
+      ...item
+    };
+    
+    this.residue.set(newItem.id, newItem);
+    return newItem;
+  }
+
+  async updateResidueItem(id: number, updates: UpdateResidue): Promise<Residue | undefined> {
+    const existing = this.residue.get(id);
+    if (!existing) return undefined;
+    
+    const updated: Residue = { ...existing, ...updates };
+    this.residue.set(id, updated);
+    return updated;
+  }
+
+  async deleteResidueItem(id: number): Promise<boolean> {
+    return this.residue.delete(id);
+  }
+
+  async searchResidue(query: string): Promise<Residue[]> {
+    const allItems = Array.from(this.residue.values());
+    if (!query.trim()) return allItems;
+    
+    const lowerQuery = query.toLowerCase();
+    return allItems.filter(item => 
+      item.entity.toLowerCase().includes(lowerQuery)
     );
   }
 }

@@ -303,3 +303,25 @@ export const updateIncomeProvisionSchema = createInsertSchema(incomeProvisions).
 export type InsertIncomeProvision = z.infer<typeof insertIncomeProvisionSchema>;
 export type IncomeProvision = typeof incomeProvisions.$inferSelect;
 export type UpdateIncomeProvision = z.infer<typeof updateIncomeProvisionSchema>;
+
+// Residue schema
+export const residue = pgTable("residue", {
+  id: serial("id").primaryKey(),
+  
+  // Main fields
+  entity: text("entity").notNull().default("Donald Edwards"),
+  percentage: text("percentage").notNull().default("0"),
+  isCharityRow: boolean("is_charity_row").notNull().default(false),
+});
+
+export const insertResidueSchema = createInsertSchema(residue).omit({
+  id: true,
+});
+
+export const updateResidueSchema = createInsertSchema(residue).omit({
+  id: true,
+}).partial();
+
+export type InsertResidue = z.infer<typeof insertResidueSchema>;
+export type Residue = typeof residue.$inferSelect;
+export type UpdateResidue = z.infer<typeof updateResidueSchema>;

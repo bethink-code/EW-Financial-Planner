@@ -1,7 +1,7 @@
 import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
-import { insertRetirementFundSchema, updateRetirementFundSchema, insertLumpSumBequestSchema, updateLumpSumBequestSchema, insertAssuranceSchema, updateAssuranceSchema, insertDefinedBenefitFundSchema, updateDefinedBenefitFundSchema, insertVoluntaryInvestmentSchema, updateVoluntaryInvestmentSchema, insertAssetAndLiabilitySchema, updateAssetAndLiabilitySchema, insertIncomeNeedSchema, updateIncomeNeedSchema, insertIncomeProvisionSchema, updateIncomeProvisionSchema } from "@shared/schema";
+import { insertRetirementFundSchema, updateRetirementFundSchema, insertLumpSumBequestSchema, updateLumpSumBequestSchema, insertAssuranceSchema, updateAssuranceSchema, insertDefinedBenefitFundSchema, updateDefinedBenefitFundSchema, insertVoluntaryInvestmentSchema, updateVoluntaryInvestmentSchema, insertAssetAndLiabilitySchema, updateAssetAndLiabilitySchema, insertIncomeNeedSchema, updateIncomeNeedSchema, insertIncomeProvisionSchema, updateIncomeProvisionSchema, insertResidueSchema, updateResidueSchema } from "@shared/schema";
 
 export async function registerRoutes(app: Express): Promise<Server> {
   // Get all retirement funds
@@ -759,6 +759,101 @@ export async function registerRoutes(app: Express): Promise<Server> {
     } catch (error) {
       console.error("Error deleting income provision:", error);
       res.status(500).json({ message: "Failed to delete income provision" });
+    }
+  });
+
+  // Residue Routes
+  
+  // Get all residue items
+  app.get("/api/residue", async (req, res) => {
+    try {
+      const { search } = req.query;
+      let items;
+      
+      if (search && typeof search === "string") {
+        items = await storage.searchResidue(search);
+      } else {
+        items = await storage.getResidue();
+      }
+      
+      res.json(items);
+    } catch (error) {
+      console.error("Error fetching residue:", error);
+      res.status(500).json({ message: "Failed to fetch residue" });
+    }
+  });
+
+  // Get single residue item
+  app.get("/api/residue/:id", async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      if (isNaN(id)) {
+        return res.status(400).json({ message: "Invalid residue ID" });
+      }
+
+      const item = await storage.getResidueItem(id);
+      if (!item) {
+        return res.status(404).json({ message: "Residue item not found" });
+      }
+
+      res.json(item);
+    } catch (error) {
+      console.error("Error fetching residue item:", error);
+      res.status(500).json({ message: "Failed to fetch residue item" });
+    }
+  });
+
+  // Create new residue item
+  app.post("/api/residue", async (req, res) => {
+    try {
+      const validatedData = insertResidueSchema.parse(req.body);
+      const item = await storage.createResidueItem(validatedData);
+      res.status(201).json(item);
+    } catch (error) {
+      console.error("Error creating residue item:", error);
+      res.status(400).json({ message: "Invalid residue data" });
+    }
+  });
+
+  // Update residue item
+  app.patch("/api/residue/:id", async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      if (isNaN(id)) {
+        return res.status(400).json({ message: "Invalid residue ID" });
+      }
+
+      const validatedData = updateResidueSchema.parse(req.body);
+      const item = await storage.updateResidueItem(id, validatedData);
+      
+      if (!item) {
+        return res.status(404).json({ message: "Residue item not found" });
+      }
+
+      res.json(item);
+    } catch (error) {
+      console.error("Error updating residue item:", error);
+      res.status(400).json({ message: "Invalid residue data" });
+    }
+  });
+
+  // Delete residue item
+  app.delete("/api/residue/:id", async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      if (isNaN(id)) {
+        return res.status(400).json({ message: "Invalid residue ID" });
+      }
+
+      const success = await storage.deleteResidueItem(id);
+      if (!success) {
+        return res.status(404).json({ message: "Residue item not found" });
+      }
+
+      res.status(204).send();
+    } catch (error) {
+      console.error("Error deleting residue item:", error);
+      res.status(500).json({ message: "Failed to delete residue item" });
     }
   });
 
