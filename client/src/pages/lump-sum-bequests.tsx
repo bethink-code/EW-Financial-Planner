@@ -3,11 +3,18 @@ import { Search } from "lucide-react";
 import { LumpSumTable } from "@/components/lump-sum-bequests/lump-sum-table";
 import { LumpSumSummary } from "@/components/lump-sum-bequests/lump-sum-summary";
 
+type ViewMode = "table" | "hybrid";
+
 export default function LumpSumBequests() {
   const [searchTerm, setSearchTerm] = useState("");
+  const [viewMode, setViewMode] = useState<ViewMode>("table");
 
   const handleSearch = useCallback((value: string) => {
     setSearchTerm(value);
+  }, []);
+
+  const handleViewModeChange = useCallback((newMode: ViewMode) => {
+    setViewMode(newMode);
   }, []);
 
   return (
@@ -19,17 +26,47 @@ export default function LumpSumBequests() {
           <p className="text-neutral-600">Manage and track lump sum bequests and cash distributions</p>
         </div>
 
-        {/* Search */}
-        <div className="mb-6">
-          <div className="relative max-w-md">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-neutral-400" size={16} />
-            <input
-              type="text"
-              value={searchTerm}
-              onChange={(e) => handleSearch(e.target.value)}
-              placeholder="Search bequests..."
-              className="w-full pl-10 pr-4 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
-            />
+        {/* Controls Section */}
+        <div className="mb-6 flex items-center justify-between">
+          {/* Search */}
+          <div className="flex items-center gap-4">
+            <div className="relative">
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-neutral-400" size={16} />
+              <input
+                type="text"
+                value={searchTerm}
+                onChange={(e) => handleSearch(e.target.value)}
+                placeholder="Search bequests..."
+                className="w-80 pl-10 pr-4 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
+              />
+            </div>
+          </div>
+
+          {/* View Mode Toggle */}
+          <div className="flex items-center gap-2">
+            <span className="text-sm font-medium text-neutral-700">View:</span>
+            <div className="flex items-center bg-neutral-100 rounded-lg p-1">
+              <button
+                onClick={() => handleViewModeChange("table")}
+                className={`px-3 py-1.5 text-sm font-medium rounded-md transition-colors ${
+                  viewMode === "table"
+                    ? "bg-white text-[#016991] shadow-sm"
+                    : "text-neutral-600 hover:text-neutral-900"
+                }`}
+              >
+                Table
+              </button>
+              <button
+                onClick={() => handleViewModeChange("hybrid")}
+                className={`px-3 py-1.5 text-sm font-medium rounded-md transition-colors ${
+                  viewMode === "hybrid"
+                    ? "bg-white text-[#016991] shadow-sm"
+                    : "text-neutral-600 hover:text-neutral-900"
+                }`}
+              >
+                Hybrid
+              </button>
+            </div>
           </div>
         </div>
 

@@ -113,7 +113,6 @@ export function LumpSumTable({ searchTerm }: LumpSumTableProps) {
     <div className="space-y-4">
       {/* Header with Add Button */}
       <div className="flex items-center justify-between">
-        <h3 className="text-lg font-semibold text-neutral-900">Details</h3>
         <button
           onClick={handleAddBequest}
           className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-white bg-[#016991] hover:bg-[#014d73] rounded-md transition-colors"
@@ -122,6 +121,7 @@ export function LumpSumTable({ searchTerm }: LumpSumTableProps) {
           <Plus size={16} />
           Add Bequest
         </button>
+        <h3 className="text-lg font-semibold text-neutral-900">Details</h3>
       </div>
 
       {/* Main Table */}
@@ -242,33 +242,31 @@ export function LumpSumTable({ searchTerm }: LumpSumTableProps) {
                     />
                   </td>
                   <td className="p-2 text-right">
-                    <input
-                      defaultValue={bequest.valueAtDeath || ""}
-                      onBlur={(e) => {
-                        const formattedValue = formatCurrencyValue(e.target.value, "valueAtDeath");
-                        if (formattedValue !== e.target.value) {
-                          e.target.value = formattedValue;
-                        }
-                        handleInputBlur(bequest.id, "valueAtDeath", e.target.value);
-                      }}
-                      className="table-input h-7 text-sm bg-white border-gray-200 focus:border-primary w-full px-3 py-1 border rounded-md text-sm"
-                      style={{ textAlign: "right", minWidth: "120px" }}
-                      placeholder="R 0"
-                      disabled={isUpdating}
-                    />
+                    <div className="table-input h-7 text-sm bg-gray-100 border-gray-200 w-full px-3 py-1 border rounded-md text-sm text-gray-700"
+                         style={{ textAlign: "right", minWidth: "120px" }}>
+                      {formatCurrencyValue(bequest.valueAtDeath || "0", "valueAtDeath")}
+                    </div>
                   </td>
                 </tr>
               ))}
               
               {/* Charity Bequest Row */}
               <tr className="bg-neutral-50">
-                <td className="p-2"></td>
                 <td className="p-2 text-left font-medium text-neutral-700">
                   Bequest to charities and institutions
                 </td>
-                <td className="p-2 text-center">
+                <td className="p-2"></td>
+                <td className="p-2 text-right">
                   <input
                     defaultValue="0"
+                    className="table-input h-7 text-sm bg-white border-gray-200 focus:border-primary w-full px-3 py-1 border rounded-md text-sm"
+                    style={{ textAlign: "right", minWidth: "80px" }}
+                    disabled={isUpdating}
+                  />
+                </td>
+                <td className="p-2 text-center">
+                  <input
+                    defaultValue="6"
                     className="table-input h-7 text-sm bg-white border-gray-200 focus:border-primary w-16 px-2 py-1 border rounded-md text-sm"
                     style={{ textAlign: "right" }}
                     disabled={isUpdating}
