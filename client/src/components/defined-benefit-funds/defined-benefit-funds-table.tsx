@@ -213,18 +213,6 @@ export default function DefinedBenefitFundsTable() {
           />
         </div>
       </div>
-      
-      {/* Add Fund Button */}
-      <div className="flex justify-start">
-        <button
-          onClick={handleAddFund}
-          disabled={addMutation.isPending}
-          className="bg-[#016991] text-white px-4 py-2 rounded-lg hover:bg-[#014d6b] disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2 font-medium"
-        >
-          <Plus className="h-4 w-4" />
-          Add Fund
-        </button>
-      </div>
 
       {/* Summary Section */}
       {filteredFunds.length > 0 && (
@@ -262,6 +250,18 @@ export default function DefinedBenefitFundsTable() {
           </div>
         </div>
       )}
+      
+      {/* Add Fund Button */}
+      <div className="flex justify-start mb-4">
+        <button
+          onClick={handleAddFund}
+          disabled={addMutation.isPending}
+          className="bg-[#016991] text-white px-4 py-2 rounded-lg hover:bg-[#014d6b] disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2 font-medium"
+        >
+          <Plus className="h-4 w-4" />
+          Add Fund
+        </button>
+      </div>
 
       {/* Table */}
       <div className="overflow-x-auto">
