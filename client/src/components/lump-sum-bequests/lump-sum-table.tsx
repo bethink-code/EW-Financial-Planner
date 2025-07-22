@@ -1,0 +1,333 @@
+import { useState, useCallback, useMemo } from "react";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { apiRequest } from "@/lib/queryClient";
+import { LumpSumBequest, InsertLumpSumBequest } from "@shared/schema";
+import { Trash2, Plus } from "lucide-react";
+
+// Currency formatting utility
+const formatCurrencyValue = (value: string, fieldType: string): string => {
+  if (!value?.trim()) return value;
+  
+  // Remove existing formatting
+  const cleanValue = value.replace(/[^\d.-]/g, '');
+  if (!cleanValue || isNaN(parseFloat(cleanValue))) return value;
+  
+  const numValue = parseFloat(cleanValue);
+  
+  if (fieldType.includes('percentage') || fieldType.includes('Percentage') || fieldType === 'increasePercentage') {
+    return `${numValue}%`;
+  }
+  
+  // Currency fields
+  if (fieldType.includes('amount') || fieldType.includes('Amount') || fieldType.includes('value') || fieldType.includes('Value') || fieldType.includes('start') || fieldType.includes('Start')) {
+    return `R ${numValue.toLocaleString()}`;
+  }
+  
+  return value;
+};
+
+interface LumpSumTableProps {
+  searchTerm: string;
+}
+
+export function LumpSumTable({ searchTerm }: LumpSumTableProps) {
+  const queryClient = useQueryClient();
+  const [isUpdating, setIsUpdating] = useState(false);
+
+  // Fetch lump sum bequests with search
+  const { data: bequests = [], isLoading } = useQuery<LumpSumBequest[]>({
+    queryKey: ['/api/lump-sum-bequests', searchTerm],
+    queryFn: async () => {
+      const url = searchTerm 
+        ? `/api/lump-sum-bequests?search=${encodeURIComponent(searchTerm)}`
+        : '/api/lump-sum-bequests';
+      const response = await fetch(url);
+      return await response.json();
+    }
+  });
+
+  // Update mutation
+  const updateMutation = useMutation({
+    mutationFn: async ({ id, field, value }: { id: number; field: keyof InsertLumpSumBequest; value: string }) => {
+      return await apiRequest('PATCH', `/api/lump-sum-bequests/${id}`, { [field]: value });
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['/api/lump-sum-bequests'] });
+      setIsUpdating(false);
+    }
+  });
+
+  // Add new bequest mutation
+  const addMutation = useMutation({
+    mutationFn: async (newBequest: InsertLumpSumBequest) => {
+      return await apiRequest('POST', '/api/lump-sum-bequests', newBequest);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['/api/lump-sum-bequests'] });
+    }
+  });
+
+  // Delete mutation
+  const deleteMutation = useMutation({
+    mutationFn: async (id: number) => {
+      return await apiRequest('DELETE', `/api/lump-sum-bequests/${id}`);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['/api/lump-sum-bequests'] });
+    }
+  });
+
+  const handleInputBlur = useCallback((id: number, field: keyof InsertLumpSumBequest, value: string) => {
+    if (value !== undefined) {
+      setIsUpdating(true);
+      updateMutation.mutate({ id, field, value });
+    }
+  }, [updateMutation]);
+
+  const handleAddBequest = useCallback(() => {
+    const newBequest: InsertLumpSumBequest = {
+      description: "",
+      entity: "Donald Edwards",
+      start: "0",
+      increasePercentage: "CPI",
+      amount: "0",
+      valueAtDeath: "0",
+      charityNote: "",
+    };
+    addMutation.mutate(newBequest);
+  }, [addMutation]);
+
+  // Calculate total value at death
+  const totalValueAtDeath = useMemo(() => {
+    return bequests.reduce((sum: number, bequest: LumpSumBequest) => {
+      const value = bequest.valueAtDeath?.replace(/[^\d.-]/g, '') || '0';
+      return sum + (parseFloat(value) || 0);
+    }, 0);
+  }, [bequests]);
+
+  if (isLoading) {
+    return <div className="flex justify-center p-8">Loading...</div>;
+  }
+
+  return (
+    <div className="space-y-4">
+      {/* Header with Add Button */}
+      <div className="flex items-center justify-between">
+        <h3 className="text-lg font-semibold text-neutral-900">Details</h3>
+        <button
+          onClick={handleAddBequest}
+          className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-white bg-[#016991] hover:bg-[#014d73] rounded-md transition-colors"
+          disabled={addMutation.isPending}
+        >
+          <Plus size={16} />
+          Add Bequest
+        </button>
+      </div>
+
+      {/* Main Table */}
+      <div className="bg-white rounded-lg border border-neutral-200 overflow-hidden">
+        <div className="overflow-x-auto">
+          <table className="w-full min-w-full">
+            <thead>
+              <tr className="bg-slate-100 border-b border-neutral-300">
+                <th className="p-3 text-left text-xs font-semibold text-neutral-700 uppercase tracking-wider w-8"></th>
+                <th className="p-3 text-left text-xs font-semibold text-neutral-700 uppercase tracking-wider min-w-[200px]">Description</th>
+                <th className="p-3 text-center text-xs font-semibold text-neutral-700 uppercase tracking-wider min-w-[140px]">Entity</th>
+                <th className="p-3 text-center text-xs font-semibold text-neutral-700 uppercase tracking-wider min-w-[100px]">Start</th>
+                <th className="p-3 text-center text-xs font-semibold text-neutral-700 uppercase tracking-wider min-w-[120px]">Increase %</th>
+                <th className="p-3 text-center text-xs font-semibold text-neutral-700 uppercase tracking-wider min-w-[120px]">Amount</th>
+                <th className="p-3 text-center text-xs font-semibold text-neutral-700 uppercase tracking-wider min-w-[140px]">Value at death</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-neutral-200">
+              {bequests.map((bequest: LumpSumBequest) => (
+                <tr key={bequest.id} className="hover:bg-neutral-50">
+                  <td className="p-2 text-center">
+                    <button
+                      onClick={() => deleteMutation.mutate(bequest.id)}
+                      className="text-[#4F4F4F] hover:text-red-600 transition-colors"
+                      disabled={deleteMutation.isPending}
+                    >
+                      <Trash2 size={16} />
+                    </button>
+                  </td>
+                  <td className="p-2">
+                    <input
+                      defaultValue={bequest.description || ""}
+                      onBlur={(e) => {
+                        handleInputBlur(bequest.id, "description", e.target.value);
+                      }}
+                      className="table-input h-7 text-sm bg-white border-gray-200 focus:border-primary w-full px-3 py-1 border rounded-md text-sm"
+                      style={{ textAlign: "left" }}
+                      disabled={isUpdating}
+                      placeholder="Enter description"
+                    />
+                  </td>
+                  <td className="p-2 text-center">
+                    <select
+                      defaultValue={bequest.entity || "Donald Edwards"}
+                      onChange={(e) => {
+                        handleInputBlur(bequest.id, "entity", e.target.value);
+                      }}
+                      className="table-input h-7 text-sm bg-white border-gray-200 focus:border-primary w-full px-2 py-1 border rounded-md text-sm"
+                      disabled={isUpdating}
+                    >
+                      <option value="Donald Edwards">Donald Edwards</option>
+                      <option value="Betty Edwards">Betty Edwards</option>
+                    </select>
+                  </td>
+                  <td className="p-2 text-right">
+                    <input
+                      defaultValue={bequest.start || ""}
+                      onBlur={(e) => {
+                        const formattedValue = formatCurrencyValue(e.target.value, "start");
+                        if (formattedValue !== e.target.value) {
+                          e.target.value = formattedValue;
+                        }
+                        handleInputBlur(bequest.id, "start", e.target.value);
+                      }}
+                      className="table-input h-7 text-sm bg-white border-gray-200 focus:border-primary w-full px-3 py-1 border rounded-md text-sm"
+                      style={{ textAlign: "right", minWidth: "80px" }}
+                      placeholder="0"
+                      disabled={isUpdating}
+                    />
+                  </td>
+                  <td className="p-2 text-center">
+                    <div className="flex items-center gap-1">
+                      <input
+                        type="number"
+                        defaultValue={bequest.increasePercentage?.replace(/[^\d.-]/g, '') || "6"}
+                        onBlur={(e) => {
+                          const formattedValue = formatCurrencyValue(e.target.value, "increasePercentage");
+                          if (formattedValue !== e.target.value) {
+                            e.target.value = formattedValue;
+                          }
+                          handleInputBlur(bequest.id, "increasePercentage", e.target.value);
+                        }}
+                        className="table-input h-7 text-sm bg-white border-gray-200 focus:border-primary px-2 py-1 border rounded-md text-sm w-16"
+                        style={{ textAlign: "right" }}
+                        disabled={isUpdating}
+                        min="0"
+                        max="100"
+                      />
+                      <label className="flex items-center text-xs">
+                        <input
+                          type="checkbox"
+                          checked={bequest.increasePercentage === "CPI" || bequest.increasePercentage?.includes("CPI")}
+                          onChange={(e) => {
+                            const value = e.target.checked ? "CPI" : "6%";
+                            handleInputBlur(bequest.id, "increasePercentage", value);
+                          }}
+                          className="mr-1"
+                          disabled={isUpdating}
+                        />
+                        CPI
+                      </label>
+                    </div>
+                  </td>
+                  <td className="p-2 text-right">
+                    <input
+                      defaultValue={bequest.amount || ""}
+                      onBlur={(e) => {
+                        const formattedValue = formatCurrencyValue(e.target.value, "amount");
+                        if (formattedValue !== e.target.value) {
+                          e.target.value = formattedValue;
+                        }
+                        handleInputBlur(bequest.id, "amount", e.target.value);
+                      }}
+                      className="table-input h-7 text-sm bg-white border-gray-200 focus:border-primary w-full px-3 py-1 border rounded-md text-sm"
+                      style={{ textAlign: "right", minWidth: "100px" }}
+                      placeholder="R 0"
+                      disabled={isUpdating}
+                    />
+                  </td>
+                  <td className="p-2 text-right">
+                    <input
+                      defaultValue={bequest.valueAtDeath || ""}
+                      onBlur={(e) => {
+                        const formattedValue = formatCurrencyValue(e.target.value, "valueAtDeath");
+                        if (formattedValue !== e.target.value) {
+                          e.target.value = formattedValue;
+                        }
+                        handleInputBlur(bequest.id, "valueAtDeath", e.target.value);
+                      }}
+                      className="table-input h-7 text-sm bg-white border-gray-200 focus:border-primary w-full px-3 py-1 border rounded-md text-sm"
+                      style={{ textAlign: "right", minWidth: "120px" }}
+                      placeholder="R 0"
+                      disabled={isUpdating}
+                    />
+                  </td>
+                </tr>
+              ))}
+              
+              {/* Charity Bequest Row */}
+              <tr className="bg-neutral-50">
+                <td className="p-2"></td>
+                <td className="p-2 text-left font-medium text-neutral-700">
+                  Bequest to charities and institutions
+                </td>
+                <td className="p-2 text-center">
+                  <input
+                    defaultValue="0"
+                    className="table-input h-7 text-sm bg-white border-gray-200 focus:border-primary w-16 px-2 py-1 border rounded-md text-sm"
+                    style={{ textAlign: "right" }}
+                    disabled={isUpdating}
+                  />
+                </td>
+                <td className="p-2 text-center">
+                  <div className="flex items-center gap-1 justify-center">
+                    <input
+                      type="number"
+                      defaultValue="6"
+                      className="table-input h-7 text-sm bg-white border-gray-200 focus:border-primary px-2 py-1 border rounded-md text-sm w-16"
+                      style={{ textAlign: "right" }}
+                      disabled={isUpdating}
+                      min="0"
+                      max="100"
+                    />
+                    <label className="flex items-center text-xs">
+                      <input
+                        type="checkbox"
+                        defaultChecked
+                        className="mr-1"
+                        disabled={isUpdating}
+                      />
+                      CPI
+                    </label>
+                  </div>
+                </td>
+                <td className="p-2 text-center">
+                  <input
+                    defaultValue="0"
+                    className="table-input h-7 text-sm bg-white border-gray-200 focus:border-primary w-full px-3 py-1 border rounded-md text-sm"
+                    style={{ textAlign: "right", minWidth: "100px" }}
+                    placeholder="R 0"
+                    disabled={isUpdating}
+                  />
+                </td>
+                <td className="p-2 text-right">
+                  <span className="font-medium">0</span>
+                </td>
+              </tr>
+              
+              {/* Total Row */}
+              <tr className="bg-neutral-100 border-t-2 border-neutral-300">
+                <td className="p-2"></td>
+                <td className="p-2 text-left font-bold text-neutral-900" style={{ fontFamily: "system-ui, -apple-system, sans-serif", fontWeight: 700 }}>
+                  Total
+                </td>
+                <td className="p-2"></td>
+                <td className="p-2"></td>
+                <td className="p-2"></td>
+                <td className="p-2"></td>
+                <td className="p-2 text-right font-bold text-neutral-900" style={{ fontFamily: "system-ui, -apple-system, sans-serif", fontWeight: 700 }}>
+                  {totalValueAtDeath.toLocaleString()}
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  );
+}

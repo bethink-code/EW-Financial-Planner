@@ -5,12 +5,16 @@ import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import NotFound from "@/pages/not-found";
 import NewRetirementFunds from "@/pages/new-retirement-funds";
+import LumpSumBequests from "@/pages/lump-sum-bequests";
+import DeathWithEstateLiquidity from "./pages/death-with-estate-liquidity";
 
 function Router() {
   return (
     <Switch>
-      <Route path="/" component={NewRetirementFunds} />
-      <Route path="/new-retirement-funds" component={NewRetirementFunds} />
+      <Route path="/" component={DeathWithEstateLiquidity} />
+      <Route path="/death-with-estate-liquidity" component={DeathWithEstateLiquidity} />
+      <Route path="/retirement-funds" component={NewRetirementFunds} />
+      <Route path="/lump-sum-bequests" component={LumpSumBequests} />
       <Route component={NotFound} />
     </Switch>
   );

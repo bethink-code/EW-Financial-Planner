@@ -1,7 +1,7 @@
 import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
-import { insertRetirementFundSchema, updateRetirementFundSchema } from "@shared/schema";
+import { insertRetirementFundSchema, updateRetirementFundSchema, insertLumpSumBequestSchema, updateLumpSumBequestSchema } from "@shared/schema";
 
 export async function registerRoutes(app: Express): Promise<Server> {
   // Get all retirement funds
@@ -94,6 +94,101 @@ export async function registerRoutes(app: Express): Promise<Server> {
     } catch (error) {
       console.error("Error deleting retirement fund:", error);
       res.status(500).json({ message: "Failed to delete retirement fund" });
+    }
+  });
+
+  // Lump Sum Bequests Routes
+  
+  // Get all lump sum bequests
+  app.get("/api/lump-sum-bequests", async (req, res) => {
+    try {
+      const { search } = req.query;
+      let bequests;
+      
+      if (search && typeof search === "string") {
+        bequests = await storage.searchLumpSumBequests(search);
+      } else {
+        bequests = await storage.getLumpSumBequests();
+      }
+      
+      res.json(bequests);
+    } catch (error) {
+      console.error("Error fetching lump sum bequests:", error);
+      res.status(500).json({ message: "Failed to fetch lump sum bequests" });
+    }
+  });
+
+  // Get single lump sum bequest
+  app.get("/api/lump-sum-bequests/:id", async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      if (isNaN(id)) {
+        return res.status(400).json({ message: "Invalid bequest ID" });
+      }
+
+      const bequest = await storage.getLumpSumBequest(id);
+      if (!bequest) {
+        return res.status(404).json({ message: "Lump sum bequest not found" });
+      }
+
+      res.json(bequest);
+    } catch (error) {
+      console.error("Error fetching lump sum bequest:", error);
+      res.status(500).json({ message: "Failed to fetch lump sum bequest" });
+    }
+  });
+
+  // Create new lump sum bequest
+  app.post("/api/lump-sum-bequests", async (req, res) => {
+    try {
+      const validatedData = insertLumpSumBequestSchema.parse(req.body);
+      const bequest = await storage.createLumpSumBequest(validatedData);
+      res.status(201).json(bequest);
+    } catch (error) {
+      console.error("Error creating lump sum bequest:", error);
+      res.status(400).json({ message: "Invalid bequest data" });
+    }
+  });
+
+  // Update lump sum bequest
+  app.patch("/api/lump-sum-bequests/:id", async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      if (isNaN(id)) {
+        return res.status(400).json({ message: "Invalid bequest ID" });
+      }
+
+      const validatedData = updateLumpSumBequestSchema.parse(req.body);
+      const bequest = await storage.updateLumpSumBequest(id, validatedData);
+      
+      if (!bequest) {
+        return res.status(404).json({ message: "Lump sum bequest not found" });
+      }
+
+      res.json(bequest);
+    } catch (error) {
+      console.error("Error updating lump sum bequest:", error);
+      res.status(400).json({ message: "Invalid bequest data" });
+    }
+  });
+
+  // Delete lump sum bequest
+  app.delete("/api/lump-sum-bequests/:id", async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      if (isNaN(id)) {
+        return res.status(400).json({ message: "Invalid bequest ID" });
+      }
+
+      const deleted = await storage.deleteLumpSumBequest(id);
+      if (!deleted) {
+        return res.status(404).json({ message: "Lump sum bequest not found" });
+      }
+
+      res.status(204).send();
+    } catch (error) {
+      console.error("Error deleting lump sum bequest:", error);
+      res.status(500).json({ message: "Failed to delete lump sum bequest" });
     }
   });
 

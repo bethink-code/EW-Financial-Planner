@@ -73,5 +73,32 @@ export const beneficiarySchema = z.object({
 export type Beneficiary = z.infer<typeof beneficiarySchema>;
 
 export type InsertRetirementFund = z.infer<typeof insertRetirementFundSchema>;
+
+// Lump Sum Bequests table
+export const lumpSumBequests = pgTable("lump_sum_bequests", {
+  id: serial("id").primaryKey(),
+  
+  // Main fields
+  description: text("description").notNull().default(""),
+  entity: text("entity").notNull().default(""), // Donald Edwards, Betty Edwards
+  start: text("start").notNull().default("0"),
+  increasePercentage: text("increase_percentage").notNull().default("CPI"),
+  amount: text("amount").notNull().default("0"),
+  valueAtDeath: text("value_at_death").notNull().default("0"),
+  
+  // Charity bequest note
+  charityNote: text("charity_note").notNull().default(""),
+});
+
+export const insertLumpSumBequestSchema = createInsertSchema(lumpSumBequests).omit({
+  id: true,
+});
+
+export const updateLumpSumBequestSchema = createInsertSchema(lumpSumBequests).omit({
+  id: true,
+}).partial();
+
+export type InsertLumpSumBequest = z.infer<typeof insertLumpSumBequestSchema>;
+export type LumpSumBequest = typeof lumpSumBequests.$inferSelect;
 export type UpdateRetirementFund = z.infer<typeof updateRetirementFundSchema>;
 export type RetirementFund = typeof retirementFunds.$inferSelect;

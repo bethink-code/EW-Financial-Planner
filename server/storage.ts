@@ -1,4 +1,4 @@
-import { retirementFunds, type RetirementFund, type InsertRetirementFund, type UpdateRetirementFund } from "@shared/schema";
+import { retirementFunds, lumpSumBequests, type RetirementFund, type InsertRetirementFund, type UpdateRetirementFund, type LumpSumBequest, type InsertLumpSumBequest } from "@shared/schema";
 
 export interface IStorage {
   // Retirement Funds
@@ -8,15 +8,27 @@ export interface IStorage {
   updateRetirementFund(id: number, updates: UpdateRetirementFund): Promise<RetirementFund | undefined>;
   deleteRetirementFund(id: number): Promise<boolean>;
   searchRetirementFunds(query: string): Promise<RetirementFund[]>;
+  
+  // Lump Sum Bequests
+  getLumpSumBequests(): Promise<LumpSumBequest[]>;
+  getLumpSumBequest(id: number): Promise<LumpSumBequest | undefined>;
+  createLumpSumBequest(bequest: InsertLumpSumBequest): Promise<LumpSumBequest>;
+  updateLumpSumBequest(id: number, updates: Partial<InsertLumpSumBequest>): Promise<LumpSumBequest | undefined>;
+  deleteLumpSumBequest(id: number): Promise<boolean>;
+  searchLumpSumBequests(query: string): Promise<LumpSumBequest[]>;
 }
 
 export class MemStorage implements IStorage {
   private retirementFunds: Map<number, RetirementFund>;
+  private lumpSumBequests: Map<number, LumpSumBequest>;
   private currentFundId: number;
+  private currentBequestId: number;
 
   constructor() {
     this.retirementFunds = new Map();
+    this.lumpSumBequests = new Map();
     this.currentFundId = 1;
+    this.currentBequestId = 1;
     
     // Initialize with sample data
     this.createRetirementFund({
@@ -118,6 +130,27 @@ export class MemStorage implements IStorage {
       previousLumpSums: "0",
       additionalTaxFreeAmount: "0"
     });
+
+    // Initialize sample lump sum bequests
+    this.createLumpSumBequest({
+      description: "Family Trust Distribution",
+      entity: "Donald Edwards",
+      start: "100000",
+      increasePercentage: "CPI",
+      amount: "100000",
+      valueAtDeath: "150000",
+      charityNote: ""
+    });
+    
+    this.createLumpSumBequest({
+      description: "Charity Donation",
+      entity: "Betty Edwards",
+      start: "50000",
+      increasePercentage: "5%",
+      amount: "50000",
+      valueAtDeath: "75000",
+      charityNote: "Annual donation to local charity"
+    });
   }
 
   async getRetirementFunds(): Promise<RetirementFund[]> {
@@ -210,6 +243,56 @@ export class MemStorage implements IStorage {
         fund.beneficiaryName.toLowerCase().includes(lowerQuery) ||
         beneficiariesMatch;
     });
+  }
+
+  // Lump Sum Bequests methods
+  async getLumpSumBequests(): Promise<LumpSumBequest[]> {
+    return Array.from(this.lumpSumBequests.values());
+  }
+
+  async getLumpSumBequest(id: number): Promise<LumpSumBequest | undefined> {
+    return this.lumpSumBequests.get(id);
+  }
+
+  async createLumpSumBequest(insertBequest: InsertLumpSumBequest): Promise<LumpSumBequest> {
+    const id = this.currentBequestId++;
+    const bequest: LumpSumBequest = {
+      id,
+      description: insertBequest.description || "",
+      entity: insertBequest.entity || "",
+      start: insertBequest.start || "0",
+      increasePercentage: insertBequest.increasePercentage || "CPI",
+      amount: insertBequest.amount || "0",
+      valueAtDeath: insertBequest.valueAtDeath || "0",
+      charityNote: insertBequest.charityNote || "",
+    };
+    this.lumpSumBequests.set(id, bequest);
+    return bequest;
+  }
+
+  async updateLumpSumBequest(id: number, updates: Partial<InsertLumpSumBequest>): Promise<LumpSumBequest | undefined> {
+    const existing = this.lumpSumBequests.get(id);
+    if (!existing) return undefined;
+    
+    const updated: LumpSumBequest = { ...existing, ...updates };
+    this.lumpSumBequests.set(id, updated);
+    return updated;
+  }
+
+  async deleteLumpSumBequest(id: number): Promise<boolean> {
+    return this.lumpSumBequests.delete(id);
+  }
+
+  async searchLumpSumBequests(query: string): Promise<LumpSumBequest[]> {
+    const allBequests = Array.from(this.lumpSumBequests.values());
+    if (!query.trim()) return allBequests;
+    
+    const lowerQuery = query.toLowerCase();
+    return allBequests.filter(bequest => 
+      bequest.description.toLowerCase().includes(lowerQuery) ||
+      bequest.entity.toLowerCase().includes(lowerQuery) ||
+      bequest.charityNote.toLowerCase().includes(lowerQuery)
+    );
   }
 }
 
