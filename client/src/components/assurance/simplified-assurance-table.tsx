@@ -46,47 +46,66 @@ export function AssuranceTable({ searchTerm }: AssuranceTableProps) {
 
   // Add new policy mutation
   const addMutation = useMutation({
-    mutationFn: () => {
-      const newPolicy: InsertAssurance = {
-        description: "",
-        owner: "Donald Edwards",
-        additionalOwners: [],
-        lifeAssured: "",
-        deathBenefit: "0",
-        beneficiary: "",
-        benefitSplit: "0",
-        additionalBeneficiaries: [],
-        additionalBenefitSplits: [],
-        amount: "0",
-        buySell: false,
-        keyMan: false,
-        premiumsByOthers: "0",
-        collateralSession: "0",
-        excludedFromEstateDuty: false,
-        excludedFromProvisions: false
-      };
-      return apiRequest("/api/assurance", "POST", newPolicy);
+    mutationFn: async () => {
+      try {
+        const newPolicy: InsertAssurance = {
+          description: "",
+          owner: "Donald Edwards",
+          additionalOwners: [],
+          lifeAssured: "",
+          deathBenefit: "0",
+          beneficiary: "",
+          benefitSplit: "0",
+          additionalBeneficiaries: [],
+          additionalBenefitSplits: [],
+          amount: "0",
+          buySell: false,
+          keyMan: false,
+          premiumsByOthers: "0",
+          collateralSession: "0",
+          excludedFromEstateDuty: false,
+          excludedFromProvisions: false
+        };
+        const response = await apiRequest("POST", "/api/assurance", newPolicy);
+        return await response.json();
+      } catch (error) {
+        console.error('Add policy error:', error);
+        throw error;
+      }
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["/api/assurance"] });
     },
+    onError: (error) => {
+      console.error('Add mutation error:', error);
+    }
   });
 
   // Update policy mutation
   const updateMutation = useMutation({
-    mutationFn: ({ id, updates }: { id: number; updates: Partial<Assurance> }) => {
-      return apiRequest(`/api/assurance/${id}`, "PATCH", updates);
+    mutationFn: async ({ id, updates }: { id: number; updates: Partial<Assurance> }) => {
+      try {
+        const response = await apiRequest("PATCH", `/api/assurance/${id}`, updates);
+        return await response.json();
+      } catch (error) {
+        console.error('Update policy error:', error);
+        throw error;
+      }
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["/api/assurance"] });
       setIsUpdating(false);
     },
+    onError: (error) => {
+      console.error('Update mutation error:', error);
+      setIsUpdating(false);
+    }
   });
 
   // Delete policy mutation
   const deleteMutation = useMutation({
     mutationFn: (id: number) => {
-      return apiRequest(`/api/assurance/${id}`, "DELETE");
+      return apiRequest("DELETE", `/api/assurance/${id}`);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["/api/assurance"] });
@@ -94,6 +113,7 @@ export function AssuranceTable({ searchTerm }: AssuranceTableProps) {
   });
 
   const handleAddPolicy = useCallback(() => {
+    console.log('Adding policy...');
     addMutation.mutate();
   }, [addMutation]);
 
@@ -135,9 +155,11 @@ export function AssuranceTable({ searchTerm }: AssuranceTableProps) {
 
   // Add owner to policy
   const handleAddOwner = useCallback((id: number) => {
+    console.log('Adding owner for policy:', id);
     const policy = policies.find((p: Assurance) => p.id === id);
     if (policy) {
       const newOwners = [...(policy.additionalOwners || []), ""];
+      console.log('New owners array:', newOwners);
       handleUpdatePolicy(id, 'additionalOwners', newOwners);
     }
   }, [policies, handleUpdatePolicy]);
