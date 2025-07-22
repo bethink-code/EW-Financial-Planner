@@ -61,10 +61,19 @@ export default function DefinedBenefitFundsTable() {
         pensionIncomeIncrease: "0",
       };
       
-      return await apiRequest('/api/defined-benefit-funds', {
+      const response = await fetch('/api/defined-benefit-funds', {
         method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
         body: JSON.stringify(newFund),
       });
+      
+      if (!response.ok) {
+        throw new Error('Failed to create fund');
+      }
+      
+      return response.json();
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['/api/defined-benefit-funds'] });
@@ -79,10 +88,19 @@ export default function DefinedBenefitFundsTable() {
   // Update fund mutation
   const updateMutation = useMutation({
     mutationFn: async ({ id, updates }: { id: number; updates: Partial<DefinedBenefitFund> }) => {
-      return await apiRequest(`/api/defined-benefit-funds/${id}`, {
+      const response = await fetch(`/api/defined-benefit-funds/${id}`, {
         method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+        },
         body: JSON.stringify(updates),
       });
+      
+      if (!response.ok) {
+        throw new Error('Failed to update fund');
+      }
+      
+      return response.json();
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['/api/defined-benefit-funds'] });
@@ -97,7 +115,13 @@ export default function DefinedBenefitFundsTable() {
   // Delete fund mutation
   const deleteMutation = useMutation({
     mutationFn: async (id: number) => {
-      await apiRequest(`/api/defined-benefit-funds/${id}`, { method: 'DELETE' });
+      const response = await fetch(`/api/defined-benefit-funds/${id}`, {
+        method: 'DELETE',
+      });
+      
+      if (!response.ok) {
+        throw new Error('Failed to delete fund');
+      }
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['/api/defined-benefit-funds'] });
@@ -176,8 +200,8 @@ export default function DefinedBenefitFundsTable() {
 
   return (
     <div className="space-y-4">
-      {/* Search and Add Fund Controls */}
-      <div className="flex justify-between items-center gap-4">
+      {/* Search Controls */}
+      <div className="flex justify-start items-center gap-4">
         <div className="relative flex-1 max-w-md">
           <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-neutral-400 h-4 w-4" />
           <input
@@ -188,7 +212,10 @@ export default function DefinedBenefitFundsTable() {
             className="pl-10 pr-4 py-2 w-full border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
           />
         </div>
-        
+      </div>
+      
+      {/* Add Fund Button */}
+      <div className="flex justify-start">
         <button
           onClick={handleAddFund}
           disabled={addMutation.isPending}
@@ -204,15 +231,15 @@ export default function DefinedBenefitFundsTable() {
         <table className="min-w-full bg-white border border-neutral-200 rounded-lg shadow-sm">
           <thead>
             <tr className="bg-[#E0F2FE] border-b border-neutral-200">
-              <th className="px-3 py-3 text-left text-xs font-medium text-neutral-600 uppercase tracking-wider">Description</th>
-              <th className="px-3 py-3 text-left text-xs font-medium text-neutral-600 uppercase tracking-wider">Owner</th>
-              <th className="px-3 py-3 text-center text-xs font-medium text-neutral-600 uppercase tracking-wider">Ownership</th>
-              <th className="px-3 py-3 text-left text-xs font-medium text-neutral-600 uppercase tracking-wider">Years of Service</th>
-              <th className="px-3 py-3 text-left text-xs font-medium text-neutral-600 uppercase tracking-wider">Final Monthly Salary</th>
-              <th className="px-3 py-3 text-left text-xs font-medium text-neutral-600 uppercase tracking-wider">Death Lump Sum</th>
-              <th className="px-3 py-3 text-left text-xs font-medium text-neutral-600 uppercase tracking-wider">Additional Tax Free Amount</th>
+              <th className="px-3 py-2 text-left text-xs font-medium text-neutral-600 uppercase tracking-wider">Description</th>
+              <th className="px-3 py-2 text-left text-xs font-medium text-neutral-600 uppercase tracking-wider">Owner</th>
+              <th className="px-3 py-2 text-center text-xs font-medium text-neutral-600 uppercase tracking-wider">Ownership</th>
+              <th className="px-3 py-2 text-left text-xs font-medium text-neutral-600 uppercase tracking-wider">Years of Service</th>
+              <th className="px-3 py-2 text-left text-xs font-medium text-neutral-600 uppercase tracking-wider">Final Monthly Salary</th>
+              <th className="px-3 py-2 text-left text-xs font-medium text-neutral-600 uppercase tracking-wider">Death Lump Sum</th>
+              <th className="px-3 py-2 text-left text-xs font-medium text-neutral-600 uppercase tracking-wider">Additional Tax Free Amount</th>
               <th className="px-3 py-3 text-left text-xs font-medium text-neutral-600 uppercase tracking-wider" colSpan={2}>Pension Income at Death</th>
-              <th className="px-3 py-3 text-center text-xs font-medium text-neutral-600 uppercase tracking-wider">Actions</th>
+              <th className="px-3 py-2 text-center text-xs font-medium text-neutral-600 uppercase tracking-wider">Actions</th>
             </tr>
             <tr className="bg-[#E0F2FE] border-b border-neutral-200">
               <th colSpan={7}></th>
@@ -344,6 +371,49 @@ export default function DefinedBenefitFundsTable() {
           </tbody>
         </table>
       </div>
+
+      {/* Summary Section */}
+      {filteredFunds.length > 0 && (
+        <div className="mt-6">
+          <h3 className="text-lg font-semibold text-gray-900 mb-4">Summary</h3>
+          <div className="bg-white border border-neutral-200 rounded-lg shadow-sm overflow-hidden">
+            <table className="min-w-full">
+              <thead>
+                <tr className="bg-[#E0F2FE] border-b border-neutral-200">
+                  <th className="px-3 py-2 text-left text-xs font-medium text-neutral-600 uppercase tracking-wider">Description</th>
+                  <th className="px-3 py-2 text-left text-xs font-medium text-neutral-600 uppercase tracking-wider">Amount</th>
+                </tr>
+              </thead>
+              <tbody className="bg-white divide-y divide-neutral-200">
+                <tr className="hover:bg-neutral-50">
+                  <td className="px-3 py-2 text-sm text-neutral-800">Total Final Monthly Salary</td>
+                  <td className="px-3 py-2 text-sm font-medium text-neutral-900 text-right">
+                    {formatCurrencyValue(totals.finalMonthlySalary.toString(), 'finalMonthlySalary')}
+                  </td>
+                </tr>
+                <tr className="hover:bg-neutral-50">
+                  <td className="px-3 py-2 text-sm text-neutral-800">Total Death Lump Sum</td>
+                  <td className="px-3 py-2 text-sm font-medium text-neutral-900 text-right">
+                    {formatCurrencyValue(totals.deathLumpSum.toString(), 'deathLumpSum')}
+                  </td>
+                </tr>
+                <tr className="hover:bg-neutral-50">
+                  <td className="px-3 py-2 text-sm text-neutral-800">Total Additional Tax Free Amount</td>
+                  <td className="px-3 py-2 text-sm font-medium text-neutral-900 text-right">
+                    {formatCurrencyValue(totals.additionalTaxFreeAmount.toString(), 'additionalTaxFreeAmount')}
+                  </td>
+                </tr>
+                <tr className="hover:bg-neutral-50">
+                  <td className="px-3 py-2 text-sm text-neutral-800">Pension Income Amount at Death</td>
+                  <td className="px-3 py-2 text-sm font-medium text-neutral-900 text-right">
+                    {formatCurrencyValue(totals.pensionIncomeAmount.toString(), 'pensionIncomeAmount')}
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
