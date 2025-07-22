@@ -118,28 +118,8 @@ export function AssuranceTable({ searchTerm }: AssuranceTableProps) {
 
   const handleUpdatePolicy = useCallback((id: number, field: keyof Assurance, value: string | boolean | string[]) => {
     setIsUpdating(true);
-    
-    let updates: Partial<Assurance> = {};
-    
-    // Handle auto-calculation for amount field
-    if (field === 'deathBenefit' || field === 'benefitSplit') {
-      const policy = policies.find((p: Assurance) => p.id === id);
-      if (policy) {
-        const deathBenefit = field === 'deathBenefit' ? 
-          parseFloat(String(value).replace(/[^\d.-]/g, '')) : 
-          parseFloat(policy.deathBenefit.replace(/[^\d.-]/g, ''));
-        const benefitSplit = field === 'benefitSplit' ? 
-          parseFloat(String(value).replace(/[^\d.-]/g, '')) : 
-          parseFloat(policy.benefitSplit.replace(/[^\d.-]/g, ''));
-        
-        const calculatedAmount = (deathBenefit * benefitSplit / 100).toString();
-        updates.amount = calculatedAmount;
-      }
-    }
-    
-    (updates as any)[field] = value;
-    updateMutation.mutate({ id, updates });
-  }, [policies, updateMutation]);
+    (updateMutation as any).mutate({ id, updates: { [field]: value } });
+  }, [updateMutation]);
 
   const handleDeletePolicy = useCallback((id: number) => {
     if (confirm('Are you sure you want to delete this policy?')) {
@@ -189,6 +169,28 @@ export function AssuranceTable({ searchTerm }: AssuranceTableProps) {
       policy.beneficiary.toLowerCase().includes(lowerQuery)
     );
   }, [policies, searchTerm]);
+
+  // Calculate totals
+  const totals = useMemo(() => {
+    return {
+      deathBenefit: filteredPolicies.reduce((sum, policy) => {
+        const value = parseFloat(policy.deathBenefit.replace(/[^\d.-]/g, '')) || 0;
+        return sum + value;
+      }, 0),
+      amount: filteredPolicies.reduce((sum, policy) => {
+        const value = parseFloat(policy.amount.replace(/[^\d.-]/g, '')) || 0;
+        return sum + value;
+      }, 0),
+      premiumsByOthers: filteredPolicies.reduce((sum, policy) => {
+        const value = parseFloat(policy.premiumsByOthers.replace(/[^\d.-]/g, '')) || 0;
+        return sum + value;
+      }, 0),
+      collateralSession: filteredPolicies.reduce((sum, policy) => {
+        const value = parseFloat(policy.collateralSession.replace(/[^\d.-]/g, '')) || 0;
+        return sum + value;
+      }, 0)
+    };
+  }, [filteredPolicies]);
 
   if (isLoading) {
     return (
@@ -375,62 +377,7 @@ export function AssuranceTable({ searchTerm }: AssuranceTableProps) {
                   </button>
                 </td>
               </tr>
-              
-              {/* Additional Owner Rows */}
-              {(policy.additionalOwners || []).map((owner, index) => (
-                <tr key={`owner-${policy.id}-${index}`} className="hover:bg-neutral-50 border-b border-neutral-200">
-                  <td className="px-3 py-2 text-sm text-neutral-700"></td>
-                  <td className="px-3 py-2">
-                    <input
-                      type="text"
-                      defaultValue={owner}
-                      onBlur={(e) => {
-                        const newOwners = [...(policy.additionalOwners || [])];
-                        newOwners[index] = e.target.value;
-                        updateMutation.mutate({ id: policy.id, updates: { additionalOwners: newOwners } });
-                      }}
-                      className="table-input w-full px-2 py-1 text-sm border border-neutral-300 rounded bg-[#E3F2FD] focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                      disabled={isUpdating}
-                    />
-                  </td>
-                  <td colSpan={12} className="px-3 py-2 text-sm text-neutral-700"></td>
-                </tr>
-              ))}
-              
-              {/* Additional Beneficiary Rows */}
-              {(policy.additionalBeneficiaries || []).map((beneficiary, index) => (
-                <tr key={`beneficiary-${policy.id}-${index}`} className="hover:bg-neutral-50 border-b border-neutral-200">
-                  <td colSpan={4} className="px-3 py-2 text-sm text-neutral-700"></td>
-                  <td className="px-3 py-2">
-                    <input
-                      type="text"
-                      defaultValue={beneficiary}
-                      onBlur={(e) => {
-                        const newBeneficiaries = [...(policy.additionalBeneficiaries || [])];
-                        newBeneficiaries[index] = e.target.value;
-                        updateMutation.mutate({ id: policy.id, updates: { additionalBeneficiaries: newBeneficiaries } });
-                      }}
-                      className="table-input w-full px-2 py-1 text-sm border border-neutral-300 rounded bg-[#E3F2FD] focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                      disabled={isUpdating}
-                    />
-                  </td>
-                  <td className="px-3 py-2">
-                    <input
-                      type="text"
-                      defaultValue={(policy.additionalBenefitSplits || [])[index] || "0"}
-                      onBlur={(e) => {
-                        const newSplits = [...(policy.additionalBenefitSplits || [])];
-                        newSplits[index] = e.target.value;
-                        updateMutation.mutate({ id: policy.id, updates: { additionalBenefitSplits: newSplits } });
-                      }}
-                      className="table-input w-20 px-2 py-1 text-sm text-right border border-neutral-300 rounded bg-[#E3F2FD] focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                      disabled={isUpdating}
-                    />
-                  </td>
-                  <td colSpan={8} className="px-3 py-2 text-sm text-neutral-700"></td>
-                </tr>
-              ))}
-            )}
+            ))}
             
             {/* Total Row */}
             {filteredPolicies.length > 0 && (
@@ -438,42 +385,18 @@ export function AssuranceTable({ searchTerm }: AssuranceTableProps) {
                 <td className="px-3 py-2 text-sm font-bold text-neutral-800">Total</td>
                 <td colSpan={2} className="px-3 py-2"></td>
                 <td className="px-3 py-2 text-sm font-bold text-neutral-800 text-right">
-                  {formatCurrencyValue(
-                    filteredPolicies.reduce((sum, policy) => {
-                      const value = parseFloat(policy.deathBenefit.replace(/[^\d.-]/g, '')) || 0;
-                      return sum + value;
-                    }, 0).toString(),
-                    'amount'
-                  )}
+                  {formatCurrencyValue(totals.deathBenefit.toString(), 'amount')}
                 </td>
                 <td colSpan={2} className="px-3 py-2"></td>
                 <td className="px-3 py-2 text-sm font-bold text-neutral-800 text-right">
-                  {formatCurrencyValue(
-                    filteredPolicies.reduce((sum, policy) => {
-                      const value = parseFloat(policy.amount.replace(/[^\d.-]/g, '')) || 0;
-                      return sum + value;
-                    }, 0).toString(),
-                    'amount'
-                  )}
+                  {formatCurrencyValue(totals.amount.toString(), 'amount')}
                 </td>
                 <td colSpan={4} className="px-3 py-2"></td>
                 <td className="px-3 py-2 text-sm font-bold text-neutral-800 text-right">
-                  {formatCurrencyValue(
-                    filteredPolicies.reduce((sum, policy) => {
-                      const value = parseFloat(policy.premiumsByOthers.replace(/[^\d.-]/g, '')) || 0;
-                      return sum + value;
-                    }, 0).toString(),
-                    'amount'
-                  )}
+                  {formatCurrencyValue(totals.premiumsByOthers.toString(), 'amount')}
                 </td>
                 <td className="px-3 py-2 text-sm font-bold text-neutral-800 text-right">
-                  {formatCurrencyValue(
-                    filteredPolicies.reduce((sum, policy) => {
-                      const value = parseFloat(policy.collateralSession.replace(/[^\d.-]/g, '')) || 0;
-                      return sum + value;
-                    }, 0).toString(),
-                    'amount'
-                  )}
+                  {formatCurrencyValue(totals.collateralSession.toString(), 'amount')}
                 </td>
                 <td className="px-3 py-2"></td>
               </tr>

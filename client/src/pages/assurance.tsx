@@ -1,6 +1,6 @@
 import { useState, useCallback } from "react";
 import { Search } from "lucide-react";
-import { AssuranceTable } from "@/components/assurance/simplified-assurance-table";
+import { AssuranceTable } from "@/components/assurance/working-assurance-table";
 import { AssuranceSummary } from "@/components/assurance/simple-assurance-summary";
 
 type ViewMode = "table" | "hybrid";
@@ -71,7 +71,9 @@ export default function Assurance() {
         </div>
 
         {/* Summary Section */}
-        <AssuranceSummary />
+        <div className="mb-8">
+          <AssuranceSummary />
+        </div>
 
         {/* Main Table */}
         <AssuranceTable searchTerm={searchTerm} />
