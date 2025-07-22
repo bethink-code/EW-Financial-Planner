@@ -4,11 +4,21 @@ import NewRetirementFunds from "./new-retirement-funds";
 import LumpSumBequests from "./lump-sum-bequests";
 import Assurance from "./assurance";
 
-type TabType = "retirement-funds" | "lump-sum-bequests" | "assurance";
+type TabType = 
+  | "assurance" 
+  | "retirement-funds" 
+  | "defined-benefit-funds" 
+  | "voluntary-investments" 
+  | "assets-and-liabilities" 
+  | "income-needs" 
+  | "income-provisions" 
+  | "residue" 
+  | "lump-sum-needs-cash-bequests" 
+  | "additional-estate-duty-items";
 
 export default function DeathWithEstateLiquidity() {
   const [, setLocation] = useLocation();
-  const [activeTab, setActiveTab] = useState<TabType>("retirement-funds");
+  const [activeTab, setActiveTab] = useState<TabType>("assurance");
 
   const handleTabChange = useCallback((tab: TabType) => {
     setActiveTab(tab);
@@ -26,7 +36,17 @@ export default function DeathWithEstateLiquidity() {
         {/* Tab Navigation */}
         <div className="mb-6">
           <div className="border-b border-neutral-200">
-            <nav className="flex space-x-8">
+            <nav className="flex flex-wrap gap-x-6 gap-y-2">
+              <button
+                onClick={() => handleTabChange("assurance")}
+                className={`py-4 px-1 border-b-2 font-medium text-sm transition-colors ${
+                  activeTab === "assurance"
+                    ? "border-[#016991] text-[#016991]"
+                    : "border-transparent text-neutral-500 hover:text-neutral-700 hover:border-neutral-300"
+                }`}
+              >
+                Assurance
+              </button>
               <button
                 onClick={() => handleTabChange("retirement-funds")}
                 className={`py-4 px-1 border-b-2 font-medium text-sm transition-colors ${
@@ -38,9 +58,69 @@ export default function DeathWithEstateLiquidity() {
                 Retirement Funds
               </button>
               <button
-                onClick={() => handleTabChange("lump-sum-bequests")}
+                onClick={() => handleTabChange("defined-benefit-funds")}
                 className={`py-4 px-1 border-b-2 font-medium text-sm transition-colors ${
-                  activeTab === "lump-sum-bequests"
+                  activeTab === "defined-benefit-funds"
+                    ? "border-[#016991] text-[#016991]"
+                    : "border-transparent text-neutral-500 hover:text-neutral-700 hover:border-neutral-300"
+                }`}
+              >
+                Defined Benefit Funds
+              </button>
+              <button
+                onClick={() => handleTabChange("voluntary-investments")}
+                className={`py-4 px-1 border-b-2 font-medium text-sm transition-colors ${
+                  activeTab === "voluntary-investments"
+                    ? "border-[#016991] text-[#016991]"
+                    : "border-transparent text-neutral-500 hover:text-neutral-700 hover:border-neutral-300"
+                }`}
+              >
+                Voluntary Investments
+              </button>
+              <button
+                onClick={() => handleTabChange("assets-and-liabilities")}
+                className={`py-4 px-1 border-b-2 font-medium text-sm transition-colors ${
+                  activeTab === "assets-and-liabilities"
+                    ? "border-[#016991] text-[#016991]"
+                    : "border-transparent text-neutral-500 hover:text-neutral-700 hover:border-neutral-300"
+                }`}
+              >
+                Assets and Liabilities
+              </button>
+              <button
+                onClick={() => handleTabChange("income-needs")}
+                className={`py-4 px-1 border-b-2 font-medium text-sm transition-colors ${
+                  activeTab === "income-needs"
+                    ? "border-[#016991] text-[#016991]"
+                    : "border-transparent text-neutral-500 hover:text-neutral-700 hover:border-neutral-300"
+                }`}
+              >
+                Income Needs
+              </button>
+              <button
+                onClick={() => handleTabChange("income-provisions")}
+                className={`py-4 px-1 border-b-2 font-medium text-sm transition-colors ${
+                  activeTab === "income-provisions"
+                    ? "border-[#016991] text-[#016991]"
+                    : "border-transparent text-neutral-500 hover:text-neutral-700 hover:border-neutral-300"
+                }`}
+              >
+                Income Provisions
+              </button>
+              <button
+                onClick={() => handleTabChange("residue")}
+                className={`py-4 px-1 border-b-2 font-medium text-sm transition-colors ${
+                  activeTab === "residue"
+                    ? "border-[#016991] text-[#016991]"
+                    : "border-transparent text-neutral-500 hover:text-neutral-700 hover:border-neutral-300"
+                }`}
+              >
+                Residue
+              </button>
+              <button
+                onClick={() => handleTabChange("lump-sum-needs-cash-bequests")}
+                className={`py-4 px-1 border-b-2 font-medium text-sm transition-colors ${
+                  activeTab === "lump-sum-needs-cash-bequests"
                     ? "border-[#016991] text-[#016991]"
                     : "border-transparent text-neutral-500 hover:text-neutral-700 hover:border-neutral-300"
                 }`}
@@ -48,14 +128,14 @@ export default function DeathWithEstateLiquidity() {
                 Lump Sum Needs and Cash Bequests
               </button>
               <button
-                onClick={() => handleTabChange("assurance")}
+                onClick={() => handleTabChange("additional-estate-duty-items")}
                 className={`py-4 px-1 border-b-2 font-medium text-sm transition-colors ${
-                  activeTab === "assurance"
+                  activeTab === "additional-estate-duty-items"
                     ? "border-[#016991] text-[#016991]"
                     : "border-transparent text-neutral-500 hover:text-neutral-700 hover:border-neutral-300"
                 }`}
               >
-                Assurance
+                Additional Estate Duty Items
               </button>
             </nav>
           </div>
@@ -63,19 +143,61 @@ export default function DeathWithEstateLiquidity() {
 
         {/* Tab Content */}
         <div className="tab-content">
+          {activeTab === "assurance" && (
+            <div>
+              <Assurance />
+            </div>
+          )}
           {activeTab === "retirement-funds" && (
             <div>
               <NewRetirementFunds />
             </div>
           )}
-          {activeTab === "lump-sum-bequests" && (
+          {activeTab === "defined-benefit-funds" && (
+            <div className="p-8 text-center text-neutral-500">
+              <h3 className="text-lg font-medium mb-2">Defined Benefit Funds</h3>
+              <p>This section is coming soon.</p>
+            </div>
+          )}
+          {activeTab === "voluntary-investments" && (
+            <div className="p-8 text-center text-neutral-500">
+              <h3 className="text-lg font-medium mb-2">Voluntary Investments</h3>
+              <p>This section is coming soon.</p>
+            </div>
+          )}
+          {activeTab === "assets-and-liabilities" && (
+            <div className="p-8 text-center text-neutral-500">
+              <h3 className="text-lg font-medium mb-2">Assets and Liabilities</h3>
+              <p>This section is coming soon.</p>
+            </div>
+          )}
+          {activeTab === "income-needs" && (
+            <div className="p-8 text-center text-neutral-500">
+              <h3 className="text-lg font-medium mb-2">Income Needs</h3>
+              <p>This section is coming soon.</p>
+            </div>
+          )}
+          {activeTab === "income-provisions" && (
+            <div className="p-8 text-center text-neutral-500">
+              <h3 className="text-lg font-medium mb-2">Income Provisions</h3>
+              <p>This section is coming soon.</p>
+            </div>
+          )}
+          {activeTab === "residue" && (
+            <div className="p-8 text-center text-neutral-500">
+              <h3 className="text-lg font-medium mb-2">Residue</h3>
+              <p>This section is coming soon.</p>
+            </div>
+          )}
+          {activeTab === "lump-sum-needs-cash-bequests" && (
             <div>
               <LumpSumBequests />
             </div>
           )}
-          {activeTab === "assurance" && (
-            <div>
-              <Assurance />
+          {activeTab === "additional-estate-duty-items" && (
+            <div className="p-8 text-center text-neutral-500">
+              <h3 className="text-lg font-medium mb-2">Additional Estate Duty Items</h3>
+              <p>This section is coming soon.</p>
             </div>
           )}
         </div>
