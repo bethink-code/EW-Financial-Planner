@@ -1,4 +1,4 @@
-import { retirementFunds, lumpSumBequests, assurance, definedBenefitFunds, voluntaryInvestments, assetsAndLiabilities, incomeNeeds, type RetirementFund, type InsertRetirementFund, type UpdateRetirementFund, type LumpSumBequest, type InsertLumpSumBequest, type Assurance, type InsertAssurance, type UpdateAssurance, type DefinedBenefitFund, type InsertDefinedBenefitFund, type UpdateDefinedBenefitFund, type VoluntaryInvestment, type InsertVoluntaryInvestment, type UpdateVoluntaryInvestment, type AssetAndLiability, type InsertAssetAndLiability, type UpdateAssetAndLiability, type IncomeNeed, type InsertIncomeNeed, type UpdateIncomeNeed } from "@shared/schema";
+import { retirementFunds, lumpSumBequests, assurance, definedBenefitFunds, voluntaryInvestments, assetsAndLiabilities, incomeNeeds, incomeProvisions, type RetirementFund, type InsertRetirementFund, type UpdateRetirementFund, type LumpSumBequest, type InsertLumpSumBequest, type Assurance, type InsertAssurance, type UpdateAssurance, type DefinedBenefitFund, type InsertDefinedBenefitFund, type UpdateDefinedBenefitFund, type VoluntaryInvestment, type InsertVoluntaryInvestment, type UpdateVoluntaryInvestment, type AssetAndLiability, type InsertAssetAndLiability, type UpdateAssetAndLiability, type IncomeNeed, type InsertIncomeNeed, type UpdateIncomeNeed, type IncomeProvision, type InsertIncomeProvision, type UpdateIncomeProvision } from "@shared/schema";
 
 export interface IStorage {
   // Retirement Funds
@@ -56,6 +56,14 @@ export interface IStorage {
   updateIncomeNeed(id: number, updates: UpdateIncomeNeed): Promise<IncomeNeed | undefined>;
   deleteIncomeNeed(id: number): Promise<boolean>;
   searchIncomeNeeds(query: string): Promise<IncomeNeed[]>;
+  
+  // Income Provisions
+  getIncomeProvisions(): Promise<IncomeProvision[]>;
+  getIncomeProvision(id: number): Promise<IncomeProvision | undefined>;
+  createIncomeProvision(provision: InsertIncomeProvision): Promise<IncomeProvision>;
+  updateIncomeProvision(id: number, updates: UpdateIncomeProvision): Promise<IncomeProvision | undefined>;
+  deleteIncomeProvision(id: number): Promise<boolean>;
+  searchIncomeProvisions(query: string): Promise<IncomeProvision[]>;
 }
 
 export class MemStorage implements IStorage {
@@ -66,6 +74,7 @@ export class MemStorage implements IStorage {
   private voluntaryInvestments: Map<number, VoluntaryInvestment>;
   private assetsAndLiabilities: Map<number, AssetAndLiability>;
   private incomeNeeds: Map<number, IncomeNeed>;
+  private incomeProvisions: Map<number, IncomeProvision>;
   private currentFundId: number;
   private currentBequestId: number;
   private currentAssuranceId: number;
@@ -73,6 +82,7 @@ export class MemStorage implements IStorage {
   private currentVoluntaryInvestmentId: number;
   private currentAssetAndLiabilityId: number;
   private currentIncomeNeedId: number;
+  private currentIncomeProvisionId: number;
 
   constructor() {
     this.retirementFunds = new Map();
@@ -82,6 +92,7 @@ export class MemStorage implements IStorage {
     this.voluntaryInvestments = new Map();
     this.assetsAndLiabilities = new Map();
     this.incomeNeeds = new Map();
+    this.incomeProvisions = new Map();
     this.currentFundId = 1;
     this.currentBequestId = 1;
     this.currentAssuranceId = 1;
@@ -89,6 +100,7 @@ export class MemStorage implements IStorage {
     this.currentVoluntaryInvestmentId = 1;
     this.currentAssetAndLiabilityId = 1;
     this.currentIncomeNeedId = 1;
+    this.currentIncomeProvisionId = 1;
     
     // Initialize with sample data
     this.createRetirementFund({
@@ -324,6 +336,22 @@ export class MemStorage implements IStorage {
       frequency: "Monthly",
       amount: "R 25,000",
       capitalisedAmount: "R 3,750,000",
+    });
+    
+    // Initialize sample income provisions
+    this.createIncomeProvision({
+      description: "Rental Income",
+      entity: "Donald Edwards",
+      start: "0",
+      termYears: "25",
+      termEditable: true,
+      increasePercentage: "3%",
+      cpi: true,
+      frequency: "Monthly",
+      amount: "R 15,000",
+      taxablePercentage: "100%",
+      taxPercentage: "35%",
+      capitalisedAmount: "R 2,250,000",
     });
   }
 
@@ -708,6 +736,49 @@ export class MemStorage implements IStorage {
     return allNeeds.filter(need => 
       need.description.toLowerCase().includes(lowerQuery) ||
       need.entity.toLowerCase().includes(lowerQuery)
+    );
+  }
+
+  // Income Provisions methods
+  async getIncomeProvisions(): Promise<IncomeProvision[]> {
+    return Array.from(this.incomeProvisions.values());
+  }
+
+  async getIncomeProvision(id: number): Promise<IncomeProvision | undefined> {
+    return this.incomeProvisions.get(id);
+  }
+
+  async createIncomeProvision(provision: InsertIncomeProvision): Promise<IncomeProvision> {
+    const newProvision: IncomeProvision = {
+      id: this.currentIncomeProvisionId++,
+      ...provision
+    };
+    
+    this.incomeProvisions.set(newProvision.id, newProvision);
+    return newProvision;
+  }
+
+  async updateIncomeProvision(id: number, updates: UpdateIncomeProvision): Promise<IncomeProvision | undefined> {
+    const existing = this.incomeProvisions.get(id);
+    if (!existing) return undefined;
+    
+    const updated: IncomeProvision = { ...existing, ...updates };
+    this.incomeProvisions.set(id, updated);
+    return updated;
+  }
+
+  async deleteIncomeProvision(id: number): Promise<boolean> {
+    return this.incomeProvisions.delete(id);
+  }
+
+  async searchIncomeProvisions(query: string): Promise<IncomeProvision[]> {
+    const allProvisions = Array.from(this.incomeProvisions.values());
+    if (!query.trim()) return allProvisions;
+    
+    const lowerQuery = query.toLowerCase();
+    return allProvisions.filter(provision => 
+      provision.description.toLowerCase().includes(lowerQuery) ||
+      provision.entity.toLowerCase().includes(lowerQuery)
     );
   }
 }

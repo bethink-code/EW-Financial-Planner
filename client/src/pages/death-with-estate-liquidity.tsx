@@ -8,6 +8,7 @@ import DefinedBenefitFunds from "./defined-benefit-funds";
 import VoluntaryInvestments from "./voluntary-investments";
 import AssetsAndLiabilities from "./assets-and-liabilities";
 import IncomeNeeds from "./income-needs";
+import IncomeProvisions from "./income-provisions";
 
 type TabType = 
   | "assurance" 
@@ -179,9 +180,8 @@ export default function DeathWithEstateLiquidity() {
             </div>
           )}
           {activeTab === "income-provisions" && (
-            <div className="p-8 text-center text-neutral-500">
-              <h3 className="text-lg font-medium mb-2">Income Provisions</h3>
-              <p>This section is coming soon.</p>
+            <div>
+              <IncomeProvisions />
             </div>
           )}
           {activeTab === "residue" && (

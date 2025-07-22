@@ -1,7 +1,7 @@
 import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
-import { insertRetirementFundSchema, updateRetirementFundSchema, insertLumpSumBequestSchema, updateLumpSumBequestSchema, insertAssuranceSchema, updateAssuranceSchema, insertDefinedBenefitFundSchema, updateDefinedBenefitFundSchema, insertVoluntaryInvestmentSchema, updateVoluntaryInvestmentSchema, insertAssetAndLiabilitySchema, updateAssetAndLiabilitySchema, insertIncomeNeedSchema, updateIncomeNeedSchema } from "@shared/schema";
+import { insertRetirementFundSchema, updateRetirementFundSchema, insertLumpSumBequestSchema, updateLumpSumBequestSchema, insertAssuranceSchema, updateAssuranceSchema, insertDefinedBenefitFundSchema, updateDefinedBenefitFundSchema, insertVoluntaryInvestmentSchema, updateVoluntaryInvestmentSchema, insertAssetAndLiabilitySchema, updateAssetAndLiabilitySchema, insertIncomeNeedSchema, updateIncomeNeedSchema, insertIncomeProvisionSchema, updateIncomeProvisionSchema } from "@shared/schema";
 
 export async function registerRoutes(app: Express): Promise<Server> {
   // Get all retirement funds
@@ -664,6 +664,101 @@ export async function registerRoutes(app: Express): Promise<Server> {
     } catch (error) {
       console.error("Error deleting income need:", error);
       res.status(500).json({ message: "Failed to delete income need" });
+    }
+  });
+
+  // Income Provisions Routes
+  
+  // Get all income provisions
+  app.get("/api/income-provisions", async (req, res) => {
+    try {
+      const { search } = req.query;
+      let provisions;
+      
+      if (search && typeof search === "string") {
+        provisions = await storage.searchIncomeProvisions(search);
+      } else {
+        provisions = await storage.getIncomeProvisions();
+      }
+      
+      res.json(provisions);
+    } catch (error) {
+      console.error("Error fetching income provisions:", error);
+      res.status(500).json({ message: "Failed to fetch income provisions" });
+    }
+  });
+
+  // Get single income provision
+  app.get("/api/income-provisions/:id", async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      if (isNaN(id)) {
+        return res.status(400).json({ message: "Invalid provision ID" });
+      }
+
+      const provision = await storage.getIncomeProvision(id);
+      if (!provision) {
+        return res.status(404).json({ message: "Income provision not found" });
+      }
+
+      res.json(provision);
+    } catch (error) {
+      console.error("Error fetching income provision:", error);
+      res.status(500).json({ message: "Failed to fetch income provision" });
+    }
+  });
+
+  // Create new income provision
+  app.post("/api/income-provisions", async (req, res) => {
+    try {
+      const validatedData = insertIncomeProvisionSchema.parse(req.body);
+      const provision = await storage.createIncomeProvision(validatedData);
+      res.status(201).json(provision);
+    } catch (error) {
+      console.error("Error creating income provision:", error);
+      res.status(400).json({ message: "Invalid income provision data" });
+    }
+  });
+
+  // Update income provision
+  app.patch("/api/income-provisions/:id", async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      if (isNaN(id)) {
+        return res.status(400).json({ message: "Invalid provision ID" });
+      }
+
+      const validatedData = updateIncomeProvisionSchema.parse(req.body);
+      const provision = await storage.updateIncomeProvision(id, validatedData);
+      
+      if (!provision) {
+        return res.status(404).json({ message: "Income provision not found" });
+      }
+
+      res.json(provision);
+    } catch (error) {
+      console.error("Error updating income provision:", error);
+      res.status(400).json({ message: "Invalid income provision data" });
+    }
+  });
+
+  // Delete income provision
+  app.delete("/api/income-provisions/:id", async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      if (isNaN(id)) {
+        return res.status(400).json({ message: "Invalid provision ID" });
+      }
+
+      const success = await storage.deleteIncomeProvision(id);
+      if (!success) {
+        return res.status(404).json({ message: "Income provision not found" });
+      }
+
+      res.status(204).send();
+    } catch (error) {
+      console.error("Error deleting income provision:", error);
+      res.status(500).json({ message: "Failed to delete income provision" });
     }
   });
 

@@ -272,3 +272,34 @@ export const updateIncomeNeedSchema = createInsertSchema(incomeNeeds).omit({
 export type InsertIncomeNeed = z.infer<typeof insertIncomeNeedSchema>;
 export type IncomeNeed = typeof incomeNeeds.$inferSelect;
 export type UpdateIncomeNeed = z.infer<typeof updateIncomeNeedSchema>;
+
+// Income Provisions schema
+export const incomeProvisions = pgTable("income_provisions", {
+  id: serial("id").primaryKey(),
+  
+  // Main fields
+  description: text("description").notNull().default(""),
+  entity: text("entity").notNull().default("Donald Edwards"),
+  start: text("start").notNull().default("0"),
+  termYears: text("term_years").notNull().default("0"),
+  termEditable: boolean("term_editable").notNull().default(false),
+  increasePercentage: text("increase_percentage").notNull().default("0"),
+  cpi: boolean("cpi").notNull().default(false),
+  frequency: text("frequency").notNull().default("Monthly"),
+  amount: text("amount").notNull().default("0"),
+  taxablePercentage: text("taxable_percentage").notNull().default("0"),
+  taxPercentage: text("tax_percentage").notNull().default("0"),
+  capitalisedAmount: text("capitalised_amount").notNull().default("0"),
+});
+
+export const insertIncomeProvisionSchema = createInsertSchema(incomeProvisions).omit({
+  id: true,
+});
+
+export const updateIncomeProvisionSchema = createInsertSchema(incomeProvisions).omit({
+  id: true,
+}).partial();
+
+export type InsertIncomeProvision = z.infer<typeof insertIncomeProvisionSchema>;
+export type IncomeProvision = typeof incomeProvisions.$inferSelect;
+export type UpdateIncomeProvision = z.infer<typeof updateIncomeProvisionSchema>;
