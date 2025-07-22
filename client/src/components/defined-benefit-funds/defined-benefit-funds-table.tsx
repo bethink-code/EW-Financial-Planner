@@ -226,6 +226,43 @@ export default function DefinedBenefitFundsTable() {
         </button>
       </div>
 
+      {/* Summary Section */}
+      {filteredFunds.length > 0 && (
+        <div className="bg-white border border-neutral-200 rounded-lg shadow-sm overflow-hidden mb-6">
+          <div className="bg-[#E0F2FE] px-4 py-3 border-b border-neutral-200">
+            <h3 className="text-sm font-semibold text-neutral-700 uppercase tracking-wide">Summary</h3>
+          </div>
+          <div className="p-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+              <div className="bg-neutral-50 p-3 rounded-lg">
+                <p className="text-xs text-neutral-500 uppercase tracking-wide mb-1">Total Final Monthly Salary</p>
+                <p className="text-lg font-semibold text-neutral-900">
+                  {formatCurrencyValue(totals.finalMonthlySalary.toString(), 'finalMonthlySalary')}
+                </p>
+              </div>
+              <div className="bg-neutral-50 p-3 rounded-lg">
+                <p className="text-xs text-neutral-500 uppercase tracking-wide mb-1">Total Death Lump Sum</p>
+                <p className="text-lg font-semibold text-neutral-900">
+                  {formatCurrencyValue(totals.deathLumpSum.toString(), 'deathLumpSum')}
+                </p>
+              </div>
+              <div className="bg-neutral-50 p-3 rounded-lg">
+                <p className="text-xs text-neutral-500 uppercase tracking-wide mb-1">Total Additional Tax Free Amount</p>
+                <p className="text-lg font-semibold text-neutral-900">
+                  {formatCurrencyValue(totals.additionalTaxFreeAmount.toString(), 'additionalTaxFreeAmount')}
+                </p>
+              </div>
+              <div className="bg-neutral-50 p-3 rounded-lg">
+                <p className="text-xs text-neutral-500 uppercase tracking-wide mb-1">Pension Income Amount at Death</p>
+                <p className="text-lg font-semibold text-neutral-900">
+                  {formatCurrencyValue(totals.pensionIncomeAmount.toString(), 'pensionIncomeAmount')}
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Table */}
       <div className="overflow-x-auto">
         <table className="min-w-full bg-white border border-neutral-200 rounded-lg shadow-sm">
@@ -371,49 +408,6 @@ export default function DefinedBenefitFundsTable() {
           </tbody>
         </table>
       </div>
-
-      {/* Summary Section */}
-      {filteredFunds.length > 0 && (
-        <div className="mt-6">
-          <h3 className="text-lg font-semibold text-gray-900 mb-4">Summary</h3>
-          <div className="bg-white border border-neutral-200 rounded-lg shadow-sm overflow-hidden">
-            <table className="min-w-full">
-              <thead>
-                <tr className="bg-[#E0F2FE] border-b border-neutral-200">
-                  <th className="px-3 py-2 text-left text-xs font-medium text-neutral-600 uppercase tracking-wider">Description</th>
-                  <th className="px-3 py-2 text-left text-xs font-medium text-neutral-600 uppercase tracking-wider">Amount</th>
-                </tr>
-              </thead>
-              <tbody className="bg-white divide-y divide-neutral-200">
-                <tr className="hover:bg-neutral-50">
-                  <td className="px-3 py-2 text-sm text-neutral-800">Total Final Monthly Salary</td>
-                  <td className="px-3 py-2 text-sm font-medium text-neutral-900 text-right">
-                    {formatCurrencyValue(totals.finalMonthlySalary.toString(), 'finalMonthlySalary')}
-                  </td>
-                </tr>
-                <tr className="hover:bg-neutral-50">
-                  <td className="px-3 py-2 text-sm text-neutral-800">Total Death Lump Sum</td>
-                  <td className="px-3 py-2 text-sm font-medium text-neutral-900 text-right">
-                    {formatCurrencyValue(totals.deathLumpSum.toString(), 'deathLumpSum')}
-                  </td>
-                </tr>
-                <tr className="hover:bg-neutral-50">
-                  <td className="px-3 py-2 text-sm text-neutral-800">Total Additional Tax Free Amount</td>
-                  <td className="px-3 py-2 text-sm font-medium text-neutral-900 text-right">
-                    {formatCurrencyValue(totals.additionalTaxFreeAmount.toString(), 'additionalTaxFreeAmount')}
-                  </td>
-                </tr>
-                <tr className="hover:bg-neutral-50">
-                  <td className="px-3 py-2 text-sm text-neutral-800">Pension Income Amount at Death</td>
-                  <td className="px-3 py-2 text-sm font-medium text-neutral-900 text-right">
-                    {formatCurrencyValue(totals.pensionIncomeAmount.toString(), 'pensionIncomeAmount')}
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-      )}
     </div>
   );
 }
