@@ -336,7 +336,7 @@ export function AssuranceTable({ searchTerm }: AssuranceTableProps) {
                         {rowIndex > 0 && (
                           <span className="text-blue-500 mr-1">↳</span>
                         )}
-                        <span className="text-xs text-gray-500 mr-2 min-w-[24px]">{allOwners[rowIndex].id}</span>
+
                         <input
                           type="text"
                           defaultValue={allOwners[rowIndex].name}
@@ -415,7 +415,7 @@ export function AssuranceTable({ searchTerm }: AssuranceTableProps) {
                         {rowIndex > 0 && (
                           <span className="text-green-500 mr-1">↳</span>
                         )}
-                        <span className="text-xs text-gray-500 mr-2 min-w-[24px]">{allBeneficiaries[rowIndex].id}</span>
+
                         <input
                           type="text"
                           defaultValue={allBeneficiaries[rowIndex].name}
