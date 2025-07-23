@@ -492,6 +492,18 @@ export function SimpleTableWithBeneficiaries({ funds, columnVisibility, tableMod
                             >
                               <Plus className="h-3 w-3" />
                             </Button>
+                            {beneficiaries.length > 1 && (
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                onClick={() => handleRemoveBeneficiary(fund.id, 0)}
+                                disabled={isUpdating}
+                                className="h-6 w-6 p-0 bg-white text-[#4F4F4F] hover:text-red-600 hover:bg-red-50 border border-gray-300"
+                                title="Remove beneficiary"
+                              >
+                                <Trash2 className="h-3 w-3" />
+                              </Button>
+                            )}
                           </div>
                         </td>
                       </>
@@ -525,6 +537,109 @@ export function SimpleTableWithBeneficiaries({ funds, columnVisibility, tableMod
                 </tr>
               );
             });
+            
+            // Add additional beneficiary rows if there are more than 1 beneficiary
+            if (beneficiaries.length > 1) {
+              for (let i = 1; i < beneficiaries.length; i++) {
+                rows.push(
+                  <tr key={`${fund.id}-beneficiary-${i}`} className="bg-neutral-25 hover:bg-neutral-50">
+                    {/* Empty cells for Overview section */}
+                    {columnVisibility.overview && (
+                      <>
+                        <td className="p-2">
+                          <span className="text-xs text-neutral-500 ml-4">↳ Beneficiary {i + 1}</span>
+                        </td>
+                        <td className="p-2"></td>
+                        <td className="p-2"></td>
+                      </>
+                    )}
+                    
+                    {/* Beneficiary details for additional beneficiaries */}
+                    {columnVisibility.unapprovedLifeCover && (
+                      <>
+                        <td className="p-2 border-l border-neutral-300"></td>
+                        <td className="p-2">
+                          <input
+                            defaultValue={beneficiaries[i].name}
+                            onBlur={(e) => handleBeneficiaryUpdate(fund.id, i, 'name', e.target.value)}
+                            placeholder="Beneficiary name"
+                            disabled={isUpdating}
+                            className="table-input h-7 text-sm bg-white border-gray-200 focus:border-primary w-full px-3 py-1 border rounded-md text-sm"
+                            style={{ textAlign: "left", minWidth: "120px" }}
+                          />
+                        </td>
+                        <td className="p-2">
+                          <input
+                            type="text"
+                            defaultValue={`${beneficiaries[i].percentage || 0}%`}
+                            onBlur={(e) => {
+                              const formattedValue = formatCurrencyValue(e.target.value, "percentage");
+                              if (formattedValue !== e.target.value) {
+                                e.target.value = formattedValue;
+                              }
+                              handleBeneficiaryUpdate(fund.id, i, 'percentage', parseFloat(e.target.value.replace('%', '')) || 0);
+                            }}
+                            className="table-input h-7 text-sm bg-white border-gray-200 focus:border-primary w-full px-3 py-1 border rounded-md text-sm"
+                            style={{ textAlign: "right", minWidth: "60px" }}
+                            disabled={isUpdating}
+                          />
+                        </td>
+                        <td className="p-2">
+                          <span className="table-text-14 text-neutral-900">
+                            {beneficiaries[i].coverSplit || 'R 0'}
+                          </span>
+                        </td>
+                        <td className="p-2">
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={() => handleRemoveBeneficiary(fund.id, i)}
+                            disabled={isUpdating}
+                            className="h-6 w-6 p-0 bg-white text-[#4F4F4F] hover:text-red-600 hover:bg-red-50 border border-gray-300"
+                            title="Remove beneficiary"
+                          >
+                            <Trash2 className="h-3 w-3" />
+                          </Button>
+                        </td>
+                      </>
+                    )}
+                    
+                    {/* Empty cells for other sections */}
+                    {columnVisibility.monthlyDeathBenefit && (
+                      <>
+                        <td className="p-2 border-l border-neutral-300"></td>
+                        <td className="p-2"></td>
+                        <td className="p-2"></td>
+                        <td className="p-2"></td>
+                      </>
+                    )}
+                    
+                    {columnVisibility.fundValue && (
+                      <>
+                        <td className="p-2 border-l border-neutral-300"></td>
+                        <td className="p-2"></td>
+                        <td className="p-2"></td>
+                      </>
+                    )}
+                    
+                    {columnVisibility.fundValueBeneficiaries && (
+                      <>
+                        <td className="p-2 border-l border-neutral-300"></td>
+                        <td className="p-2"></td>
+                        <td className="p-2"></td>
+                        <td className="p-2"></td>
+                        <td className="p-2"></td>
+                        <td className="p-2"></td>
+                        <td className="p-2"></td>
+                      </>
+                    )}
+                    
+                    {/* Fund Actions Cell */}
+                    <td className="p-2 border-l border-neutral-300"></td>
+                  </tr>
+                );
+              }
+            }
             
             return rows;
           })}
