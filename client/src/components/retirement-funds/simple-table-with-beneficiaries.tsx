@@ -529,10 +529,248 @@ export function SimpleTableWithBeneficiaries({ funds, columnVisibility, tableMod
                   </>
                 )}
                 
+                {/* Monthly Death Benefit Section - only show for first owner row */}
+                {isFirstOwner && columnVisibility.monthlyDeathBenefit && (
+                  <>
+                    <td className="p-2 text-right border-l border-neutral-300" rowSpan={fundOwners.length}>
+                      <input
+                        defaultValue={fund.monthlyIncome || ""}
+                        onBlur={(e) => {
+                          const formattedValue = formatCurrencyValue(e.target.value, "monthlyIncome");
+                          if (formattedValue !== e.target.value) {
+                            e.target.value = formattedValue;
+                          }
+                          handleInputBlur(fund.id, "monthlyIncome", e.target.value);
+                        }}
+                        className="table-input h-7 text-sm bg-white border-gray-200 focus:border-primary w-full px-3 py-1 border rounded-md text-sm"
+                        style={{ textAlign: "right", minWidth: "90px" }}
+                        placeholder="R 0"
+                        disabled={isUpdating}
+                      />
+                    </td>
+                    <td className="p-2 text-right" rowSpan={fundOwners.length}>
+                      <input
+                        defaultValue={fund.termYears || ""}
+                        onBlur={(e) => {
+                          const formattedValue = formatCurrencyValue(e.target.value, "termYears");
+                          if (formattedValue !== e.target.value) {
+                            e.target.value = formattedValue;
+                          }
+                          handleInputBlur(fund.id, "termYears", e.target.value);
+                        }}
+                        className="table-input h-7 text-sm bg-white border-gray-200 focus:border-primary w-full px-3 py-1 border rounded-md text-sm"
+                        style={{ textAlign: "right", minWidth: "80px" }}
+                        placeholder="0"
+                        disabled={isUpdating}
+                      />
+                    </td>
+                    <td className="p-2 text-right" rowSpan={fundOwners.length}>
+                      <input
+                        defaultValue={fund.increasePercentage || ""}
+                        onBlur={(e) => {
+                          const formattedValue = formatCurrencyValue(e.target.value, "increasePercentage");
+                          if (formattedValue !== e.target.value) {
+                            e.target.value = formattedValue;
+                          }
+                          handleInputBlur(fund.id, "increasePercentage", e.target.value);
+                        }}
+                        className="table-input h-7 text-sm bg-white border-gray-200 focus:border-primary w-full px-3 py-1 border rounded-md text-sm"
+                        style={{ textAlign: "right", minWidth: "70px" }}
+                        placeholder="0%"
+                        disabled={isUpdating}
+                      />
+                    </td>
+                    <td className="p-2 text-right" rowSpan={fundOwners.length}>
+                      <input
+                        defaultValue={fund.escalationAmount || ""}
+                        onBlur={(e) => {
+                          const formattedValue = formatCurrencyValue(e.target.value, "escalationAmount");
+                          if (formattedValue !== e.target.value) {
+                            e.target.value = formattedValue;
+                          }
+                          handleInputBlur(fund.id, "escalationAmount", e.target.value);
+                        }}
+                        className="table-input h-7 text-sm bg-white border-gray-200 focus:border-primary w-full px-3 py-1 border rounded-md text-sm"
+                        style={{ textAlign: "right", minWidth: "90px" }}
+                        placeholder="R 0"
+                        disabled={isUpdating}
+                      />
+                    </td>
+                  </>
+                )}
+                
+                {/* Fund Value Section - only show for first owner row */}
+                {isFirstOwner && columnVisibility.fundValue && (
+                  <>
+                    <td className="p-2 text-right border-l border-neutral-300" rowSpan={fundOwners.length}>
+                      <input
+                        defaultValue={fund.approvedLifeCover || ""}
+                        onBlur={(e) => {
+                          const formattedValue = formatCurrencyValue(e.target.value, "approvedLifeCover");
+                          if (formattedValue !== e.target.value) {
+                            e.target.value = formattedValue;
+                          }
+                          handleInputBlur(fund.id, "approvedLifeCover", e.target.value);
+                        }}
+                        className="table-input h-7 text-sm bg-white border-gray-200 focus:border-primary w-full px-3 py-1 border rounded-md text-sm"
+                        style={{ textAlign: "right", minWidth: "120px" }}
+                        placeholder="R 0"
+                        disabled={isUpdating}
+                      />
+                    </td>
+                    <td className="p-2 text-right" rowSpan={fundOwners.length}>
+                      <input
+                        defaultValue={fund.fundValue || ""}
+                        onBlur={(e) => {
+                          const formattedValue = formatCurrencyValue(e.target.value, "fundValue");
+                          if (formattedValue !== e.target.value) {
+                            e.target.value = formattedValue;
+                          }
+                          handleInputBlur(fund.id, "fundValue", e.target.value);
+                        }}
+                        className="table-input h-7 text-sm bg-white border-gray-200 focus:border-primary w-full px-3 py-1 border rounded-md text-sm"
+                        style={{ textAlign: "right", minWidth: "120px" }}
+                        placeholder="R 0"
+                        disabled={isUpdating}
+                      />
+                    </td>
+                    <td className="p-2 text-right" rowSpan={fundOwners.length}>
+                      <input
+                        defaultValue={fund.fundValueAtDeath || ""}
+                        onBlur={(e) => {
+                          const formattedValue = formatCurrencyValue(e.target.value, "fundValueAtDeath");
+                          if (formattedValue !== e.target.value) {
+                            e.target.value = formattedValue;
+                          }
+                          handleInputBlur(fund.id, "fundValueAtDeath", e.target.value);
+                        }}
+                        className="table-input h-7 text-sm bg-white border-gray-200 focus:border-primary w-full px-3 py-1 border rounded-md text-sm"
+                        style={{ textAlign: "right", minWidth: "120px" }}
+                        placeholder="R 0"
+                        disabled={isUpdating}
+                      />
+                    </td>
+                  </>
+                )}
+                
+                {/* Fund Value Beneficiaries Section - only show for first owner row */}
+                {isFirstOwner && columnVisibility.fundValueBeneficiaries && (
+                  <>
+                    <td className="p-2 text-left border-l border-neutral-300" rowSpan={fundOwners.length}>
+                      <input
+                        defaultValue={fund.beneficiaryName || ""}
+                        onBlur={(e) => handleInputBlur(fund.id, "beneficiaryName", e.target.value)}
+                        className="table-input h-7 text-sm bg-white border-gray-200 focus:border-primary w-full px-3 py-1 border rounded-md text-sm"
+                        style={{ textAlign: "left", minWidth: "120px" }}
+                        placeholder="Beneficiary name"
+                        disabled={isUpdating}
+                      />
+                    </td>
+                    <td className="p-2 text-right" rowSpan={fundOwners.length}>
+                      <input
+                        defaultValue={fund.beneficiaryPercentageSplit || ""}
+                        onBlur={(e) => {
+                          const formattedValue = formatCurrencyValue(e.target.value, "beneficiaryPercentageSplit");
+                          if (formattedValue !== e.target.value) {
+                            e.target.value = formattedValue;
+                          }
+                          handleInputBlur(fund.id, "beneficiaryPercentageSplit", e.target.value);
+                        }}
+                        className="table-input h-7 text-sm bg-white border-gray-200 focus:border-primary w-full px-3 py-1 border rounded-md text-sm"
+                        style={{ textAlign: "right", minWidth: "70px" }}
+                        placeholder="0%"
+                        disabled={isUpdating}
+                      />
+                    </td>
+                    <td className="p-2 text-right" rowSpan={fundOwners.length}>
+                      <input
+                        defaultValue={fund.amount || ""}
+                        onBlur={(e) => {
+                          const formattedValue = formatCurrencyValue(e.target.value, "amount");
+                          if (formattedValue !== e.target.value) {
+                            e.target.value = formattedValue;
+                          }
+                          handleInputBlur(fund.id, "amount", e.target.value);
+                        }}
+                        className="table-input h-7 text-sm bg-white border-gray-200 focus:border-primary w-full px-3 py-1 border rounded-md text-sm"
+                        style={{ textAlign: "right", minWidth: "90px" }}
+                        placeholder="R 0"
+                        disabled={isUpdating}
+                      />
+                    </td>
+                    <td className="p-2 text-right" rowSpan={fundOwners.length}>
+                      <input
+                        defaultValue={fund.lumpSumTaken || ""}
+                        onBlur={(e) => {
+                          const formattedValue = formatCurrencyValue(e.target.value, "lumpSumTaken");
+                          if (formattedValue !== e.target.value) {
+                            e.target.value = formattedValue;
+                          }
+                          handleInputBlur(fund.id, "lumpSumTaken", e.target.value);
+                        }}
+                        className="table-input h-7 text-sm bg-white border-gray-200 focus:border-primary w-full px-3 py-1 border rounded-md text-sm"
+                        style={{ textAlign: "right", minWidth: "90px" }}
+                        placeholder="R 0"
+                        disabled={isUpdating}
+                      />
+                    </td>
+                    <td className="p-2 text-right" rowSpan={fundOwners.length}>
+                      <input
+                        defaultValue={fund.nondeductibleContribution || ""}
+                        onBlur={(e) => {
+                          const formattedValue = formatCurrencyValue(e.target.value, "nondeductibleContribution");
+                          if (formattedValue !== e.target.value) {
+                            e.target.value = formattedValue;
+                          }
+                          handleInputBlur(fund.id, "nondeductibleContribution", e.target.value);
+                        }}
+                        className="table-input h-7 text-sm bg-white border-gray-200 focus:border-primary w-full px-3 py-1 border rounded-md text-sm"
+                        style={{ textAlign: "right", minWidth: "90px" }}
+                        placeholder="R 0"
+                        disabled={isUpdating}
+                      />
+                    </td>
+                    <td className="p-2 text-right" rowSpan={fundOwners.length}>
+                      <input
+                        defaultValue={fund.livingAnnuity || ""}
+                        onBlur={(e) => {
+                          const formattedValue = formatCurrencyValue(e.target.value, "livingAnnuity");
+                          if (formattedValue !== e.target.value) {
+                            e.target.value = formattedValue;
+                          }
+                          handleInputBlur(fund.id, "livingAnnuity", e.target.value);
+                        }}
+                        className="table-input h-7 text-sm bg-white border-gray-200 focus:border-primary w-full px-3 py-1 border rounded-md text-sm"
+                        style={{ textAlign: "right", minWidth: "90px" }}
+                        placeholder="R 0"
+                        disabled={isUpdating}
+                      />
+                    </td>
+                    <td className="p-2 text-right" rowSpan={fundOwners.length}>
+                      <input
+                        defaultValue={fund.incomeTerm || ""}
+                        onBlur={(e) => {
+                          const formattedValue = formatCurrencyValue(e.target.value, "incomeTerm");
+                          if (formattedValue !== e.target.value) {
+                            e.target.value = formattedValue;
+                          }
+                          handleInputBlur(fund.id, "incomeTerm", e.target.value);
+                        }}
+                        className="table-input h-7 text-sm bg-white border-gray-200 focus:border-primary w-full px-3 py-1 border rounded-md text-sm"
+                        style={{ textAlign: "right", minWidth: "80px" }}
+                        placeholder="0"
+                        disabled={isUpdating}
+                      />
+                    </td>
+                  </>
+                )}
+                
                 {/* Fund Actions Cell */}
-                <td className="p-2 border-l border-neutral-300">
-                  <FundActions fund={fund} />
-                </td>
+                {isFirstOwner && (
+                  <td className="p-2 border-l border-neutral-300" rowSpan={fundOwners.length}>
+                    <FundActions fund={fund} />
+                  </td>
+                )}
                 
                 </tr>
               );
