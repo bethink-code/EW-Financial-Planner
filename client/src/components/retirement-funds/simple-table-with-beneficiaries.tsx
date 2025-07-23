@@ -174,9 +174,10 @@ export function SimpleTableWithBeneficiaries({
   }, [onFieldUpdate]);
 
   const renderFundRows = useMemo(() => {
-    const rows: JSX.Element[] = [];
-    
-    funds.forEach((fund) => {
+    const fundsWithRows = funds.map((fund) => {
+      const rows: JSX.Element[] = [];
+      
+      // Process each fund
       const beneficiaries = parseBeneficiaries(fund.beneficiaries);
       const fundOwners = JSON.parse(fund.owners || '["John Doe"]');
       const ownershipPercentages = JSON.parse(fund.ownershipPercentages || '["100"]');
@@ -760,7 +761,7 @@ export function SimpleTableWithBeneficiaries({
     const allRows = fundsWithRows.flat();
     
     return allRows;
-  }, [funds, columnVisibility, isUpdating, owners, handleOwnerChange, handleAddOwner, handleRemoveOwner, handlePercentageChange, handleBeneficiaryUpdate, handleAddBeneficiary, handleRemoveBeneficiary, onFieldUpdate]);
+  }, [funds, columnVisibility, isUpdating, owners, handleOwnerChange, handleAddOwner, handleRemoveOwner, handlePercentageChange, handleBeneficiaryUpdate, handleAddBeneficiary, handleRemoveBeneficiary, onFieldUpdate, formatCurrencyValue, handleInputBlur]);
 
   if (funds.length === 0) {
     return (
