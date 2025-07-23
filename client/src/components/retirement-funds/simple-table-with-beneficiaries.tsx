@@ -305,9 +305,6 @@ export function SimpleTableWithBeneficiaries({ funds, columnVisibility, tableMod
                   Lump sum taken
                 </th>
                 <th className="table-cell text-left table-header-12 text-neutral-600 uppercase tracking-wider">
-                  Fund value at death
-                </th>
-                <th className="table-cell text-left table-header-12 text-neutral-600 uppercase tracking-wider">
                   Non deductible contribution amount
                 </th>
                 <th className="table-cell text-left table-header-12 text-neutral-600 uppercase tracking-wider">
