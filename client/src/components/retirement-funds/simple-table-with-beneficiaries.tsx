@@ -774,51 +774,51 @@ export function SimpleTableWithBeneficiaries({
   return (
     <div className="overflow-auto">
       <table className="w-full min-w-max table-fixed border-collapse">
+        <colgroup>
+          {/* Overview Section */}
+          {columnVisibility.overview && (
+            <>
+              <col style={{ width: "200px" }} />  {/* Fund Description */}
+              <col style={{ width: "160px" }} />  {/* Owner */}
+              <col style={{ width: "80px" }} />   {/* % */}
+            </>
+          )}
+          {/* Monthly Death Benefit Section */}
+          {columnVisibility.monthlyDeathBenefit && (
+            <>
+              <col style={{ width: "140px" }} />  {/* Monthly Income */}
+              <col style={{ width: "80px" }} />   {/* Increase % */}
+              <col style={{ width: "90px" }} />   {/* Term (Years) */}
+            </>
+          )}
+          {/* Fund Value Section */}
+          {columnVisibility.fundValue && (
+            <>
+              <col style={{ width: "140px" }} />  {/* Fund Value */}
+              <col style={{ width: "140px" }} />  {/* Fund Value at Death */}
+            </>
+          )}
+          {/* Fund Value Beneficiaries Section */}
+          {columnVisibility.fundValueBeneficiaries && (
+            <>
+              <col style={{ width: "140px" }} />  {/* Beneficiary Name */}
+              <col style={{ width: "70px" }} />   {/* Percentage */}
+              <col style={{ width: "140px" }} />  {/* Amount */}
+              <col style={{ width: "140px" }} />  {/* Lump Sum Taken */}
+              <col style={{ width: "140px" }} />  {/* Non-deductible Contribution */}
+              <col style={{ width: "140px" }} />  {/* Living Annuity */}
+              <col style={{ width: "90px" }} />   {/* Income Term */}
+            </>
+          )}
+          {/* Unapproved Life Cover Section */}
+          {columnVisibility.unapprovedLifeCover && (
+            <>
+              <col style={{ width: "140px" }} />  {/* Cover Amount */}
+              <col style={{ width: "70px" }} />   {/* Actions */}
+            </>
+          )}
+        </colgroup>
         <thead className="sticky top-0 z-10 bg-neutral-50 border-b border-neutral-300">
-          <colgroup>
-            {/* Overview Section */}
-            {columnVisibility.overview && (
-              <>
-                <col style={{ width: "200px" }} />  {/* Fund Description */}
-                <col style={{ width: "160px" }} />  {/* Owner */}
-                <col style={{ width: "80px" }} />   {/* % */}
-              </>
-            )}
-            {/* Monthly Death Benefit Section */}
-            {columnVisibility.monthlyDeathBenefit && (
-              <>
-                <col style={{ width: "140px" }} />  {/* Monthly Income */}
-                <col style={{ width: "80px" }} />   {/* Increase % */}
-                <col style={{ width: "90px" }} />   {/* Term (Years) */}
-              </>
-            )}
-            {/* Fund Value Section */}
-            {columnVisibility.fundValue && (
-              <>
-                <col style={{ width: "140px" }} />  {/* Fund Value */}
-                <col style={{ width: "140px" }} />  {/* Fund Value at Death */}
-              </>
-            )}
-            {/* Fund Value Beneficiaries Section */}
-            {columnVisibility.fundValueBeneficiaries && (
-              <>
-                <col style={{ width: "140px" }} />  {/* Beneficiary Name */}
-                <col style={{ width: "70px" }} />   {/* Percentage */}
-                <col style={{ width: "140px" }} />  {/* Amount */}
-                <col style={{ width: "140px" }} />  {/* Lump Sum Taken */}
-                <col style={{ width: "140px" }} />  {/* Non-deductible Contribution */}
-                <col style={{ width: "140px" }} />  {/* Living Annuity */}
-                <col style={{ width: "90px" }} />   {/* Income Term */}
-              </>
-            )}
-            {/* Unapproved Life Cover Section */}
-            {columnVisibility.unapprovedLifeCover && (
-              <>
-                <col style={{ width: "140px" }} />  {/* Cover Amount */}
-                <col style={{ width: "70px" }} />   {/* Actions */}
-              </>
-            )}
-          </colgroup>
           <tr>
             {columnVisibility.overview && (
               <>
