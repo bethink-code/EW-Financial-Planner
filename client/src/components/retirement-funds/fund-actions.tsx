@@ -97,7 +97,7 @@ export function FundActions({ fund, onDuplicate }: FundActionsProps) {
       nondeductibleContribution: fund.nondeductibleContribution,
       livingAnnuity: fund.livingAnnuity,
       incomeTerm: fund.incomeTerm,
-      lumpSumLeftOverProvisions: fund.lumpSumLeftOverProvisions,
+      // lumpSumLeftOverProvisions field does not exist in schema
       incomeProvisionOption: fund.incomeProvisionOption,
       monthlyProvisionOffered: fund.monthlyProvisionOffered,
       currentAnnualIncome: fund.currentAnnualIncome,

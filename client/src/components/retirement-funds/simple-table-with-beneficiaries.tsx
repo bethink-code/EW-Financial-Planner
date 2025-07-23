@@ -327,7 +327,7 @@ export function SimpleTableWithBeneficiaries({ funds, columnVisibility, tableMod
             const beneficiaries = parseBeneficiaries(fund.beneficiaries);
             const fundOwners = JSON.parse(fund.owners || '["John Doe"]');
             const ownershipPercentages = JSON.parse(fund.ownershipPercentages || '["100"]');
-            const rows = [];
+            const rows: JSX.Element[] = [];
             
             // Create rows for each owner
             fundOwners.forEach((owner: string, ownerIndex: number) => {
@@ -428,7 +428,7 @@ export function SimpleTableWithBeneficiaries({ funds, columnVisibility, tableMod
                 
                 {/* Fund Actions Cell */}
                 <td className="p-2 border-l border-neutral-300">
-                  <FundActions fundId={fund.id} />
+                  <FundActions fund={fund} />
                 </td>
                 
                 </tr>
