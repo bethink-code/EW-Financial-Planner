@@ -381,8 +381,17 @@ export function SimpleTableWithBeneficiaries({ funds, columnVisibility, tableMod
                               size="sm"
                               onClick={() => handleAddBeneficiary(fund.id)}
                               disabled={isUpdating || beneficiaries.length >= 10}
-                              className="h-7 w-7 p-0 hover:bg-blue-100"
-                              style={{ color: '#1B5C82' }}
+                              className="h-7 w-7 p-0 text-white"
+                              style={{ 
+                                backgroundColor: '#016991',
+                                borderColor: '#016991'
+                              }}
+                              onMouseEnter={(e) => { 
+                                e.currentTarget.style.backgroundColor = '#014d6b'; 
+                              }}
+                              onMouseLeave={(e) => { 
+                                e.currentTarget.style.backgroundColor = '#016991'; 
+                              }}
                             >
                               <Plus className="h-4 w-4" />
                             </Button>
@@ -405,8 +414,17 @@ export function SimpleTableWithBeneficiaries({ funds, columnVisibility, tableMod
                               size="sm"
                               onClick={() => handleAddBeneficiary(fund.id)}
                               disabled={isUpdating}
-                              className="h-7 w-7 p-0 hover:bg-blue-100"
-                              style={{ color: '#1B5C82' }}
+                              className="h-7 w-7 p-0 text-white"
+                              style={{ 
+                                backgroundColor: '#016991',
+                                borderColor: '#016991'
+                              }}
+                              onMouseEnter={(e) => { 
+                                e.currentTarget.style.backgroundColor = '#014d6b'; 
+                              }}
+                              onMouseLeave={(e) => { 
+                                e.currentTarget.style.backgroundColor = '#016991'; 
+                              }}
                             >
                               <Plus className="h-4 w-4" />
                             </Button>
@@ -735,8 +753,17 @@ export function SimpleTableWithBeneficiaries({ funds, columnVisibility, tableMod
                             size="sm"
                             onClick={() => handleRemoveBeneficiary(fund.id, beneficiaryIndex)}
                             disabled={isUpdating}
-                            className="h-7 w-7 p-0 hover:bg-gray-100"
-                            style={{ color: '#4F4F4F' }}
+                            className="h-7 w-7 p-0 text-white"
+                            style={{ 
+                              backgroundColor: '#016991',
+                              borderColor: '#016991'
+                            }}
+                            onMouseEnter={(e) => { 
+                              e.currentTarget.style.backgroundColor = '#014d6b'; 
+                            }}
+                            onMouseLeave={(e) => { 
+                              e.currentTarget.style.backgroundColor = '#016991'; 
+                            }}
                           >
                             <Trash2 className="h-4 w-4" />
                           </Button>
