@@ -140,12 +140,42 @@ export function AssuranceTable({ searchTerm }: AssuranceTableProps) {
     }
   }, [policies, updateMutation]);
 
+  // Remove specific owner
+  const handleRemoveOwner = useCallback((id: number, ownerIndex: number) => {
+    const policy = policies.find((p: Assurance) => p.id === id);
+    if (policy && ownerIndex > 0) { // Can't remove main owner (index 0)
+      const newOwners = [...(policy.additionalOwners || [])];
+      newOwners.splice(ownerIndex - 1, 1); // Convert to additional owners array index
+      setIsUpdating(true);
+      updateMutation.mutate({ id, updates: { additionalOwners: newOwners } });
+    }
+  }, [policies, updateMutation]);
+
   // Add beneficiary to policy  
   const handleAddBeneficiary = useCallback((id: number) => {
     const policy = policies.find((p: Assurance) => p.id === id);
     if (policy) {
       const newBeneficiaries = [...(policy.additionalBeneficiaries || []), "New Beneficiary"];
       const newSplits = [...(policy.additionalBenefitSplits || []), "0"];
+      setIsUpdating(true);
+      updateMutation.mutate({ 
+        id, 
+        updates: { 
+          additionalBeneficiaries: newBeneficiaries,
+          additionalBenefitSplits: newSplits
+        }
+      });
+    }
+  }, [policies, updateMutation]);
+
+  // Remove specific beneficiary
+  const handleRemoveBeneficiary = useCallback((id: number, beneficiaryIndex: number) => {
+    const policy = policies.find((p: Assurance) => p.id === id);
+    if (policy && beneficiaryIndex > 0) { // Can't remove main beneficiary (index 0)
+      const newBeneficiaries = [...(policy.additionalBeneficiaries || [])];
+      const newSplits = [...(policy.additionalBenefitSplits || [])];
+      newBeneficiaries.splice(beneficiaryIndex - 1, 1); // Convert to additional beneficiaries array index
+      newSplits.splice(beneficiaryIndex - 1, 1);
       setIsUpdating(true);
       updateMutation.mutate({ 
         id, 
@@ -293,11 +323,7 @@ export function AssuranceTable({ searchTerm }: AssuranceTableProps) {
                       )}
                       {ownerIndex > 0 && (
                         <button
-                          onClick={() => {
-                            const newOwners = [...(policy.additionalOwners || [])];
-                            newOwners.splice(ownerIndex - 1, 1);
-                            updateMutation.mutate({ id: policy.id, updates: { additionalOwners: newOwners } });
-                          }}
+                          onClick={() => handleRemoveOwner(policy.id, ownerIndex)}
                           className="h-6 w-6 p-0 bg-white text-[#4F4F4F] hover:text-red-600 hover:bg-red-50 border border-gray-300 rounded"
                           title="Remove owner"
                         >
@@ -365,19 +391,7 @@ export function AssuranceTable({ searchTerm }: AssuranceTableProps) {
                         )}
                         {ownerIndex > 0 && (
                           <button
-                            onClick={() => {
-                              const newBeneficiaries = [...(policy.additionalBeneficiaries || [])];
-                              const newSplits = [...(policy.additionalBenefitSplits || [])];
-                              newBeneficiaries.splice(ownerIndex - 1, 1);
-                              newSplits.splice(ownerIndex - 1, 1);
-                              updateMutation.mutate({ 
-                                id: policy.id, 
-                                updates: { 
-                                  additionalBeneficiaries: newBeneficiaries,
-                                  additionalBenefitSplits: newSplits
-                                }
-                              });
-                            }}
+                            onClick={() => handleRemoveBeneficiary(policy.id, ownerIndex)}
                             className="h-6 w-6 p-0 bg-white text-[#4F4F4F] hover:text-red-600 hover:bg-red-50 border border-gray-300 rounded"
                             title="Remove beneficiary"
                           >
