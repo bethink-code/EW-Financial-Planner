@@ -52,13 +52,13 @@ export function AssuranceTable({ searchTerm }: AssuranceTableProps) {
         const newPolicy: InsertAssurance = {
           description: "",
           owner: "Donald Edwards",
-          additionalOwners: [],
+          additionalOwners: "[]",
           lifeAssured: "",
           deathBenefit: "0",
           beneficiary: "",
           benefitSplit: "0",
-          additionalBeneficiaries: [],
-          additionalBenefitSplits: [],
+          additionalBeneficiaries: "[]",
+          additionalInfo: "",
           amount: "0",
           buySell: false,
           keyMan: false,
@@ -134,7 +134,12 @@ export function AssuranceTable({ searchTerm }: AssuranceTableProps) {
   const handleAddOwner = useCallback((id: number) => {
     const policy = policies.find((p: Assurance) => p.id === id);
     if (policy) {
-      const currentOwners = JSON.parse(policy.additionalOwners || "[]");
+      let currentOwners = [];
+      try {
+        currentOwners = JSON.parse(policy.additionalOwners || "[]");
+      } catch {
+        currentOwners = [];
+      }
       const newOwnerId = `O${Date.now()}`;
       const newOwners = [...currentOwners, { id: newOwnerId, name: "New Owner" }];
       setIsUpdating(true);
@@ -146,7 +151,12 @@ export function AssuranceTable({ searchTerm }: AssuranceTableProps) {
   const handleRemoveOwner = useCallback((id: number, ownerId: string) => {
     const policy = policies.find((p: Assurance) => p.id === id);
     if (policy) {
-      const currentOwners = JSON.parse(policy.additionalOwners || "[]");
+      let currentOwners = [];
+      try {
+        currentOwners = JSON.parse(policy.additionalOwners || "[]");
+      } catch {
+        currentOwners = [];
+      }
       const filteredOwners = currentOwners.filter((owner: any) => owner.id !== ownerId);
       setIsUpdating(true);
       updateMutation.mutate({ id, updates: { additionalOwners: JSON.stringify(filteredOwners) } });
@@ -157,7 +167,12 @@ export function AssuranceTable({ searchTerm }: AssuranceTableProps) {
   const handleAddBeneficiary = useCallback((id: number) => {
     const policy = policies.find((p: Assurance) => p.id === id);
     if (policy) {
-      const currentBeneficiaries = JSON.parse(policy.additionalBeneficiaries || "[]");
+      let currentBeneficiaries = [];
+      try {
+        currentBeneficiaries = JSON.parse(policy.additionalBeneficiaries || "[]");
+      } catch {
+        currentBeneficiaries = [];
+      }
       const newBeneficiaryId = `B${Date.now()}`;
       const newBeneficiaries = [...currentBeneficiaries, { id: newBeneficiaryId, name: "New Beneficiary", split: "0" }];
       setIsUpdating(true);
@@ -169,7 +184,12 @@ export function AssuranceTable({ searchTerm }: AssuranceTableProps) {
   const handleRemoveBeneficiary = useCallback((id: number, beneficiaryId: string) => {
     const policy = policies.find((p: Assurance) => p.id === id);
     if (policy) {
-      const currentBeneficiaries = JSON.parse(policy.additionalBeneficiaries || "[]");
+      let currentBeneficiaries = [];
+      try {
+        currentBeneficiaries = JSON.parse(policy.additionalBeneficiaries || "[]");
+      } catch {
+        currentBeneficiaries = [];
+      }
       const filteredBeneficiaries = currentBeneficiaries.filter((beneficiary: any) => beneficiary.id !== beneficiaryId);
       setIsUpdating(true);
       updateMutation.mutate({ id, updates: { additionalBeneficiaries: JSON.stringify(filteredBeneficiaries) } });
@@ -317,7 +337,12 @@ export function AssuranceTable({ searchTerm }: AssuranceTableProps) {
                             if (rowIndex === 0) {
                               handleUpdatePolicy(policy.id, 'owner', e.target.value);
                             } else {
-                              const currentOwners = JSON.parse(policy.additionalOwners || "[]");
+                              let currentOwners = [];
+                              try {
+                                currentOwners = JSON.parse(policy.additionalOwners || "[]");
+                              } catch {
+                                currentOwners = [];
+                              }
                               const updatedOwners = currentOwners.map((o: any) => 
                                 o.id === allOwners[rowIndex].id ? { ...o, name: e.target.value } : o
                               );
@@ -390,7 +415,12 @@ export function AssuranceTable({ searchTerm }: AssuranceTableProps) {
                             if (rowIndex === 0) {
                               handleUpdatePolicy(policy.id, 'beneficiary', e.target.value);
                             } else {
-                              const currentBeneficiaries = JSON.parse(policy.additionalBeneficiaries || "[]");
+                              let currentBeneficiaries = [];
+                              try {
+                                currentBeneficiaries = JSON.parse(policy.additionalBeneficiaries || "[]");
+                              } catch {
+                                currentBeneficiaries = [];
+                              }
                               const updatedBeneficiaries = currentBeneficiaries.map((b: any) => 
                                 b.id === allBeneficiaries[rowIndex].id ? { ...b, name: e.target.value } : b
                               );
