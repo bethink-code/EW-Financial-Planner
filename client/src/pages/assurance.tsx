@@ -1,6 +1,7 @@
 import { useState, useCallback } from "react";
 import { Search } from "lucide-react";
 import { AssuranceTable } from "@/components/assurance/working-assurance-table";
+import { GraphTableSwitcher } from "@/components/ui/switcher";
 import { AssuranceSummary } from "@/components/assurance/simple-assurance-summary";
 
 type ViewMode = "table" | "hybrid";
@@ -45,28 +46,11 @@ export default function Assurance() {
           {/* View Mode Toggle */}
           <div className="flex items-center gap-2">
             <span className="text-sm font-medium text-neutral-700">View:</span>
-            <div className="flex items-center bg-neutral-100 rounded-lg p-1">
-              <button
-                onClick={() => handleViewModeChange("table")}
-                className={`px-3 py-1.5 text-sm font-medium rounded-md transition-colors ${
-                  viewMode === "table"
-                    ? "bg-white text-primary shadow-sm"
-                    : "text-neutral-600 hover:text-neutral-900"
-                }`}
-              >
-                Table
-              </button>
-              <button
-                onClick={() => handleViewModeChange("hybrid")}
-                className={`px-3 py-1.5 text-sm font-medium rounded-md transition-colors ${
-                  viewMode === "hybrid"
-                    ? "bg-white text-primary shadow-sm"
-                    : "text-neutral-600 hover:text-neutral-900"
-                }`}
-              >
-                Hybrid
-              </button>
-            </div>
+            <GraphTableSwitcher
+              value={viewMode === "table" ? "table" : "graph"}
+              onChange={(value) => handleViewModeChange(value === "table" ? "table" : "hybrid")}
+              size="md"
+            />
           </div>
         </div>
 

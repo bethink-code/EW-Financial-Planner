@@ -1,6 +1,7 @@
 import { Table, Layout, List, Eye, EyeOff, ChevronDown, Settings, Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { AddButton } from "@/components/ui/action-buttons";
+import { InputFlowSwitcher } from "@/components/ui/switcher";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -87,24 +88,11 @@ export function NewTableControls({
 
           {/* Table Mode Toggle - only show for grouped view */}
           {viewMode === "grouped" && (
-            <div className="flex border border-neutral-200 rounded overflow-hidden">
-              <Button
-                variant={tableMode === "inputs" ? "default" : "ghost"}
-                size="sm"
-                onClick={() => onTableModeChange("inputs")}
-                className="rounded-none border-0 h-8 px-3 text-xs"
-              >
-                Inputs
-              </Button>
-              <Button
-                variant={tableMode === "flows" ? "default" : "ghost"}
-                size="sm"
-                onClick={() => onTableModeChange("flows")}
-                className="rounded-none border-0 border-l border-neutral-200 h-8 px-3 text-xs"
-              >
-                Flows
-              </Button>
-            </div>
+            <InputFlowSwitcher
+              value={tableMode === "inputs" ? "input" : "flow"}
+              onChange={(value) => onTableModeChange(value === "input" ? "inputs" : "flows")}
+              size="sm"
+            />
           )}
 
           {/* Section Visibility Dropdown - compact design - HIDDEN */}
