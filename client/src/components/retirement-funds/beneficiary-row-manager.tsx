@@ -128,10 +128,19 @@ export function BeneficiaryRowManager({
                   size="sm"
                   onClick={() => handleRemoveBeneficiary(beneficiary.id)}
                   disabled={isUpdating}
-                  className="h-8 w-8 p-0 hover:bg-red-50"
-                  style={{ color: '#4F4F4F' }}
+                  className="h-6 w-6 p-0 text-white"
+                  style={{ 
+                    backgroundColor: '#016991',
+                    borderColor: '#016991'
+                  }}
+                  onMouseEnter={(e) => { 
+                    e.currentTarget.style.backgroundColor = '#014d6b'; 
+                  }}
+                  onMouseLeave={(e) => { 
+                    e.currentTarget.style.backgroundColor = '#016991'; 
+                  }}
                 >
-                  <Trash2 className="h-4 w-4" />
+                  <Trash2 className="h-3 w-3" />
                 </Button>
               )}
             </div>
@@ -235,10 +244,19 @@ export function BeneficiaryRowManager({
                 size="sm"
                 onClick={() => handleRemoveBeneficiary(beneficiary.id)}
                 disabled={isUpdating}
-                className="h-8 w-8 p-0 hover:bg-red-50"
-                style={{ color: '#4F4F4F' }}
+                className="h-6 w-6 p-0 text-white"
+                style={{ 
+                  backgroundColor: '#016991',
+                  borderColor: '#016991'
+                }}
+                onMouseEnter={(e) => { 
+                  e.currentTarget.style.backgroundColor = '#014d6b'; 
+                }}
+                onMouseLeave={(e) => { 
+                  e.currentTarget.style.backgroundColor = '#016991'; 
+                }}
               >
-                <Trash2 className="h-4 w-4" />
+                <Trash2 className="h-3 w-3" />
               </Button>
             )}
           </div>
@@ -290,8 +308,17 @@ export function BeneficiaryRowManager({
           size="sm"
           onClick={handleAddBeneficiary}
           disabled={isUpdating || beneficiaries.length >= 10}
-          className="flex items-center gap-2 hover:bg-blue-50"
-          style={{ color: '#1B5C82' }}
+          className="flex items-center gap-2 text-white"
+          style={{ 
+            backgroundColor: '#016991',
+            borderColor: '#016991'
+          }}
+          onMouseEnter={(e) => { 
+            e.currentTarget.style.backgroundColor = '#014d6b'; 
+          }}
+          onMouseLeave={(e) => { 
+            e.currentTarget.style.backgroundColor = '#016991'; 
+          }}
         >
           <Plus className="h-4 w-4" />
           Add Beneficiary
