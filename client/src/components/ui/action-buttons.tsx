@@ -9,17 +9,19 @@ interface ActionButtonProps {
   className?: string;
   size?: "sm" | "lg" | "default" | "icon";
   variant?: "default" | "secondary" | "destructive" | "ghost";
+  children?: React.ReactNode;
 }
 
 /**
- * Add new item button with consistent styling
+ * Add new item button with consistent styling - Primary Blue
  */
 export function AddButton({ 
   onClick, 
   disabled = false, 
   className,
   size = "sm",
-  variant = "default"
+  variant = "default",
+  children
 }: ActionButtonProps) {
   return (
     <Button
@@ -28,12 +30,12 @@ export function AddButton({
       size={size}
       variant={variant}
       className={cn(
-        "flex items-center gap-2",
+        "flex items-center gap-2 bg-primary hover:bg-primary/90 text-primary-foreground",
         className
       )}
     >
       <Plus className="h-4 w-4" />
-      Add
+      {children || "Add"}
     </Button>
   );
 }
@@ -89,7 +91,7 @@ export function EditButton({
 }
 
 /**
- * Save button with consistent styling
+ * Save button with consistent styling - Primary Blue
  */
 export function SaveButton({ 
   onClick, 
@@ -104,7 +106,7 @@ export function SaveButton({
       size={size}
       variant="default"
       className={cn(
-        "flex items-center gap-1",
+        "flex items-center gap-1 bg-primary hover:bg-primary/90 text-primary-foreground",
         className
       )}
     >

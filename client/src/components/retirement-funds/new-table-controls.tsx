@@ -1,5 +1,6 @@
 import { Table, Layout, List, Eye, EyeOff, ChevronDown, Settings, Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { AddButton } from "@/components/ui/action-buttons";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -49,15 +50,14 @@ export function NewTableControls({
           <span className="px-2 py-1 bg-primary/10 text-primary text-xs font-medium rounded">
             {fundsCount} funds
           </span>
-          <Button
+          <AddButton
             onClick={onAddFund}
             disabled={isAddingFund}
             size="sm"
-            className="bg-primary hover:bg-primary/90 text-primary-foreground h-8 px-3"
+            className="h-8 px-3"
           >
-            <Plus size={14} className="mr-1" />
             {isAddingFund ? "Adding..." : "Add Fund"}
-          </Button>
+          </AddButton>
         </div>
 
         {/* Right section: View modes and column toggles */}

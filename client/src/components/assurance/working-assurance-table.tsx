@@ -2,6 +2,7 @@ import React, { useState, useCallback, useMemo } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { Plus, Trash2 } from "lucide-react";
 import { apiRequest } from "@/lib/queryClient";
+import { AddButton } from "@/components/ui/action-buttons";
 import type { Assurance, InsertAssurance } from "@shared/schema";
 
 interface AssuranceTableProps {
@@ -207,14 +208,13 @@ export function AssuranceTable({ searchTerm }: AssuranceTableProps) {
     <div className="space-y-6">
       {/* Add Policy Button */}
       <div className="flex justify-start">
-        <button
+        <AddButton
           onClick={handleAddPolicy}
           disabled={addMutation.isPending}
-          className="inline-flex items-center px-4 py-2 bg-primary hover:bg-primary/90 text-primary-foreground text-sm font-medium rounded-lg disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+          className="px-4 py-2"
         >
-          <Plus className="h-4 w-4 mr-2" />
           {addMutation.isPending ? "Adding Policy..." : "Add Policy"}
-        </button>
+        </AddButton>
       </div>
 
       {/* Table */}

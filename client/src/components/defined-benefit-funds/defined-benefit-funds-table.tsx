@@ -2,6 +2,7 @@ import React, { useState, useCallback, useMemo } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { Plus, Trash2, Search } from "lucide-react";
 import { apiRequest } from "@/lib/queryClient";
+import { AddButton } from "@/components/ui/action-buttons";
 import type { DefinedBenefitFund, InsertDefinedBenefitFund } from "@shared/schema";
 
 // Utility function for formatting currency values
@@ -253,14 +254,13 @@ export default function DefinedBenefitFundsTable() {
       
       {/* Add Fund Button */}
       <div className="flex justify-start mb-4">
-        <button
+        <AddButton
           onClick={handleAddFund}
           disabled={addMutation.isPending}
-          className="bg-primary text-white px-4 py-2 rounded-lg hover:bg-[#014d6b] disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2 font-medium"
+          className="px-4 py-2"
         >
-          <Plus className="h-4 w-4" />
           Add Fund
-        </button>
+        </AddButton>
       </div>
 
       {/* Table */}

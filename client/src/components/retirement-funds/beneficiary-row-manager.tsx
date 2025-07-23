@@ -2,6 +2,7 @@ import React, { useState, useCallback, useMemo, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Plus, Trash2 } from "lucide-react";
+import { AddButton } from "@/components/ui/action-buttons";
 import { Beneficiary } from "@shared/schema";
 import { nanoid } from "nanoid";
 
@@ -182,17 +183,14 @@ export function BeneficiaryRowManager({
 
         {/* Compact Controls */}
         <div className="flex justify-between items-center pt-2">
-          <Button
-            variant="outline"
-            size="sm"
+          <AddButton
             onClick={handleAddBeneficiary}
             disabled={isUpdating || beneficiaries.length >= 10}
-            className="flex items-center gap-2 hover:bg-blue-50"
-            style={{ color: '#1B5C82' }}
+            size="sm"
+            className="flex items-center gap-2"
           >
-            <Plus className="h-4 w-4" />
             Add Beneficiary
-          </Button>
+          </AddButton>
 
           <div className="flex items-center gap-2">
             <span className="text-sm text-gray-600">Total:</span>
