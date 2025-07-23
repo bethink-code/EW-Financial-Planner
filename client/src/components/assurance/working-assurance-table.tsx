@@ -240,205 +240,265 @@ export function AssuranceTable({ searchTerm }: AssuranceTableProps) {
             </tr>
           </thead>
           <tbody className="bg-white divide-y divide-neutral-200">
-            {filteredPolicies.map((policy: Assurance) => (
-              <React.Fragment key={`policy-${policy.id}`}>
-              <tr className="hover:bg-neutral-50">
-                <td className="px-3 py-2">
-                  <input
-                    type="text"
-                    defaultValue={policy.description}
-                    onBlur={(e) => handleUpdatePolicy(policy.id, 'description', e.target.value)}
-                    className="table-input w-full px-2 py-1 text-sm"
-                    disabled={isUpdating}
-                  />
-                </td>
-                <td className="px-3 py-2">
-                  <div className="flex items-center space-x-1">
-                    <input
-                      type="text"
-                      defaultValue={policy.owner}
-                      onBlur={(e) => handleUpdatePolicy(policy.id, 'owner', e.target.value)}
-                      className="table-input w-full px-2 py-1 text-sm border border-neutral-300 rounded bg-primary/5 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
-                      disabled={isUpdating}
-                    />
-                    <button
-                      onClick={() => handleAddOwner(policy.id)}
-                      className="text-primary hover:text-primary/80 transition-colors"
-                      title="Add owner"
-                    >
-                      <Plus className="h-4 w-4" />
-                    </button>
-                  </div>
-                </td>
-                <td className="px-3 py-2">
-                  <input
-                    type="text"
-                    defaultValue={policy.lifeAssured}
-                    onBlur={(e) => handleUpdatePolicy(policy.id, 'lifeAssured', e.target.value)}
-                    className="table-input w-full px-2 py-1 text-sm border border-neutral-300 rounded bg-primary/5 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
-                    disabled={isUpdating}
-                  />
-                </td>
-                <td className="px-3 py-2">
-                  <input
-                    type="text"
-                    defaultValue={policy.deathBenefit}
-                    onBlur={(e) => handleInputBlur(policy.id, 'deathBenefit', e.target.value)}
-                    className="table-input w-full px-2 py-1 text-sm text-right border border-neutral-300 rounded bg-primary/5 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
-                    disabled={isUpdating}
-                  />
-                </td>
-                <td className="px-3 py-2">
-                  <div className="flex items-center space-x-1">
-                    <input
-                      type="text"
-                      defaultValue={policy.beneficiary}
-                      onBlur={(e) => handleUpdatePolicy(policy.id, 'beneficiary', e.target.value)}
-                      className="table-input w-full px-2 py-1 text-sm border border-neutral-300 rounded bg-primary/5 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
-                      disabled={isUpdating}
-                    />
-                    <button
-                      onClick={() => handleAddBeneficiary(policy.id)}
-                      className="text-primary hover:text-primary/80 transition-colors"
-                      title="Add beneficiary"
-                    >
-                      <Plus className="h-4 w-4" />
-                    </button>
-                  </div>
-                </td>
-                <td className="px-3 py-2">
-                  <input
-                    type="text"
-                    defaultValue=""
-                    onBlur={(e) => handleUpdatePolicy(policy.id, 'description', e.target.value)}
-                    className="table-input w-full px-2 py-1 text-sm border border-neutral-300 rounded bg-primary/5 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
-                    disabled={isUpdating}
-                  />
-                </td>
-                <td className="px-3 py-2 text-sm text-neutral-700 text-right bg-neutral-100">
-                  {formatCurrencyValue(policy.benefitSplit, 'percentage')}
-                </td>
-                <td className="px-3 py-2">
-                  <input
-                    type="text"
-                    defaultValue={policy.amount}
-                    onBlur={(e) => handleInputBlur(policy.id, 'amount', e.target.value)}
-                    className="table-input w-full px-2 py-1 text-sm text-right border border-neutral-300 rounded bg-primary/5 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
-                    disabled={isUpdating}
-                  />
-                </td>
-                <td className="px-3 py-2 text-center">
-                  <input
-                    type="checkbox"
-                    checked={policy.buySell}
-                    onChange={(e) => handleUpdatePolicy(policy.id, 'buySell', e.target.checked)}
-                    className="h-4 w-4 text-blue-600 bg-primary/5 border-neutral-300 rounded focus:ring-primary focus:ring-2"
-                    disabled={isUpdating}
-                  />
-                </td>
-                <td className="px-3 py-2 text-center">
-                  <input
-                    type="checkbox"
-                    checked={policy.keyMan}
-                    onChange={(e) => handleUpdatePolicy(policy.id, 'keyMan', e.target.checked)}
-                    className="h-4 w-4 text-blue-600 bg-primary/5 border-neutral-300 rounded focus:ring-primary focus:ring-2"
-                    disabled={isUpdating}
-                  />
-                </td>
-                <td className="px-3 py-2 text-center">
-                  <input
-                    type="checkbox"
-                    checked={policy.excludedFromEstateDuty}
-                    onChange={(e) => handleUpdatePolicy(policy.id, 'excludedFromEstateDuty', e.target.checked)}
-                    className="h-4 w-4 text-blue-600 bg-white border-neutral-300 rounded focus:ring-primary focus:ring-2"
-                    disabled={isUpdating}
-                  />
-                </td>
-                <td className="px-3 py-2 text-center">
-                  <input
-                    type="checkbox"
-                    checked={policy.excludedFromProvisions}
-                    onChange={(e) => handleUpdatePolicy(policy.id, 'excludedFromProvisions', e.target.checked)}
-                    className="h-4 w-4 text-blue-600 bg-white border-neutral-300 rounded focus:ring-primary focus:ring-2"
-                    disabled={isUpdating}
-                  />
-                </td>
-                <td className="px-3 py-2">
-                  <input
-                    type="text"
-                    defaultValue={policy.premiumsByOthers}
-                    onBlur={(e) => handleInputBlur(policy.id, 'premiumsByOthers', e.target.value)}
-                    className="table-input w-full px-2 py-1 text-sm text-right border border-neutral-300 rounded bg-primary/5 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
-                    disabled={isUpdating}
-                  />
-                </td>
-                <td className="px-3 py-2">
-                  <input
-                    type="text"
-                    defaultValue={policy.collateralSession}
-                    onBlur={(e) => handleInputBlur(policy.id, 'collateralSession', e.target.value)}
-                    className="table-input w-full px-2 py-1 text-sm text-right border border-neutral-300 rounded bg-primary/5 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
-                    disabled={isUpdating}
-                  />
-                </td>
-                <td className="px-3 py-2 text-center">
-                  <button
-                    onClick={() => handleDeletePolicy(policy.id)}
-                    className="text-[#4F4F4F] hover:text-red-600 transition-colors"
-                    title="Delete policy"
-                  >
-                    <Trash2 className="h-4 w-4" />
-                  </button>
-                </td>
-              </tr>
+            {filteredPolicies.map((policy: Assurance) => {
+              const allOwners = [policy.owner, ...(policy.additionalOwners || [])];
+              const allBeneficiaries = [
+                { name: policy.beneficiary, split: policy.benefitSplit },
+                ...(policy.additionalBeneficiaries || []).map((name, index) => ({
+                  name,
+                  split: (policy.additionalBenefitSplits || [])[index] || "0"
+                }))
+              ];
               
-              {/* Additional Owner Rows */}
-              {(policy.additionalOwners || []).map((owner, index) => (
-                <tr key={`owner-${policy.id}-${index}`} className="hover:bg-neutral-50 border-b border-neutral-200">
-                  <td className="px-3 py-2 text-sm text-neutral-700"></td>
+              return allOwners.map((owner, ownerIndex) => (
+                <tr key={`${policy.id}-owner-${ownerIndex}`} className="hover:bg-neutral-50">
+                  {/* Description - rowSpan for main policy data */}
+                  {ownerIndex === 0 && (
+                    <td rowSpan={allOwners.length} className="px-3 py-2 align-top">
+                      <input
+                        type="text"
+                        defaultValue={policy.description}
+                        onBlur={(e) => handleUpdatePolicy(policy.id, 'description', e.target.value)}
+                        className="table-input w-full px-2 py-1 text-sm"
+                        disabled={isUpdating}
+                      />
+                    </td>
+                  )}
+                  
+                  {/* Owner column with visual indicators for additional owners */}
                   <td className="px-3 py-2">
-                    <input
-                      type="text"
-                      defaultValue={owner}
-                      onBlur={(e) => {
-                        const newOwners = [...(policy.additionalOwners || [])];
-                        newOwners[index] = e.target.value;
-                        updateMutation.mutate({ id: policy.id, updates: { additionalOwners: newOwners } });
-                      }}
-                      className="table-input w-full px-2 py-1 text-sm border border-neutral-300 rounded bg-primary/5 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
-                      disabled={isUpdating}
-                    />
+                    <div className="flex items-center space-x-1">
+                      {ownerIndex > 0 && (
+                        <span className="text-blue-500 mr-1">↳</span>
+                      )}
+                      <input
+                        type="text"
+                        defaultValue={owner}
+                        onBlur={(e) => {
+                          if (ownerIndex === 0) {
+                            handleUpdatePolicy(policy.id, 'owner', e.target.value);
+                          } else {
+                            const newOwners = [...(policy.additionalOwners || [])];
+                            newOwners[ownerIndex - 1] = e.target.value;
+                            updateMutation.mutate({ id: policy.id, updates: { additionalOwners: newOwners } });
+                          }
+                        }}
+                        className="table-input w-full px-2 py-1 text-sm border border-neutral-300 rounded bg-primary/5 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                        disabled={isUpdating}
+                      />
+                      {ownerIndex === 0 && (
+                        <button
+                          onClick={() => handleAddOwner(policy.id)}
+                          className="h-6 w-6 p-0 bg-blue-50 text-primary hover:bg-blue-100 border-0 rounded"
+                          title="Add owner"
+                        >
+                          <Plus className="h-3 w-3" />
+                        </button>
+                      )}
+                      {ownerIndex > 0 && (
+                        <button
+                          onClick={() => {
+                            const newOwners = [...(policy.additionalOwners || [])];
+                            newOwners.splice(ownerIndex - 1, 1);
+                            updateMutation.mutate({ id: policy.id, updates: { additionalOwners: newOwners } });
+                          }}
+                          className="h-6 w-6 p-0 bg-white text-[#4F4F4F] hover:text-red-600 hover:bg-red-50 border border-gray-300 rounded"
+                          title="Remove owner"
+                        >
+                          <Trash2 className="h-3 w-3" />
+                        </button>
+                      )}
+                    </div>
                   </td>
-                  <td colSpan={13} className="px-3 py-2 text-sm text-neutral-700"></td>
-                </tr>
-              ))}
-              
-              {/* Additional Beneficiary Rows */}
-              {(policy.additionalBeneficiaries || []).map((beneficiary, index) => (
-                <tr key={`beneficiary-${policy.id}-${index}`} className="hover:bg-neutral-50 border-b border-neutral-200">
-                  <td colSpan={4} className="px-3 py-2 text-sm text-neutral-700"></td>
+                  {/* Life Assured - rowSpan for main policy data */}
+                  {ownerIndex === 0 && (
+                    <td rowSpan={allOwners.length} className="px-3 py-2 align-top">
+                      <input
+                        type="text"
+                        defaultValue={policy.lifeAssured}
+                        onBlur={(e) => handleUpdatePolicy(policy.id, 'lifeAssured', e.target.value)}
+                        className="table-input w-full px-2 py-1 text-sm border border-neutral-300 rounded bg-primary/5 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                        disabled={isUpdating}
+                      />
+                    </td>
+                  )}
+                  
+                  {/* Death Benefit - rowSpan for main policy data */}
+                  {ownerIndex === 0 && (
+                    <td rowSpan={allOwners.length} className="px-3 py-2 align-top">
+                      <input
+                        type="text"
+                        defaultValue={policy.deathBenefit}
+                        onBlur={(e) => handleInputBlur(policy.id, 'deathBenefit', e.target.value)}
+                        className="table-input w-full px-2 py-1 text-sm text-right border border-neutral-300 rounded bg-primary/5 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                        disabled={isUpdating}
+                      />
+                    </td>
+                  )}
+                  
+                  {/* Beneficiary - show based on owner index */}
                   <td className="px-3 py-2">
-                    <input
-                      type="text"
-                      defaultValue={beneficiary}
-                      onBlur={(e) => {
-                        const newBeneficiaries = [...(policy.additionalBeneficiaries || [])];
-                        newBeneficiaries[index] = e.target.value;
-                        updateMutation.mutate({ id: policy.id, updates: { additionalBeneficiaries: newBeneficiaries } });
-                      }}
-                      className="table-input w-full px-2 py-1 text-sm border border-neutral-300 rounded bg-primary/5 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
-                      disabled={isUpdating}
-                    />
+                    {ownerIndex < allBeneficiaries.length ? (
+                      <div className="flex items-center space-x-1">
+                        {ownerIndex > 0 && (
+                          <span className="text-green-500 mr-1">↳</span>
+                        )}
+                        <input
+                          type="text"
+                          defaultValue={allBeneficiaries[ownerIndex].name}
+                          onBlur={(e) => {
+                            if (ownerIndex === 0) {
+                              handleUpdatePolicy(policy.id, 'beneficiary', e.target.value);
+                            } else {
+                              const newBeneficiaries = [...(policy.additionalBeneficiaries || [])];
+                              newBeneficiaries[ownerIndex - 1] = e.target.value;
+                              updateMutation.mutate({ id: policy.id, updates: { additionalBeneficiaries: newBeneficiaries } });
+                            }
+                          }}
+                          className="table-input w-full px-2 py-1 text-sm border border-neutral-300 rounded bg-primary/5 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                          disabled={isUpdating}
+                        />
+                        {ownerIndex === 0 && (
+                          <button
+                            onClick={() => handleAddBeneficiary(policy.id)}
+                            className="h-6 w-6 p-0 bg-blue-50 text-primary hover:bg-blue-100 border-0 rounded"
+                            title="Add beneficiary"
+                          >
+                            <Plus className="h-3 w-3" />
+                          </button>
+                        )}
+                        {ownerIndex > 0 && (
+                          <button
+                            onClick={() => {
+                              const newBeneficiaries = [...(policy.additionalBeneficiaries || [])];
+                              const newSplits = [...(policy.additionalBenefitSplits || [])];
+                              newBeneficiaries.splice(ownerIndex - 1, 1);
+                              newSplits.splice(ownerIndex - 1, 1);
+                              updateMutation.mutate({ 
+                                id: policy.id, 
+                                updates: { 
+                                  additionalBeneficiaries: newBeneficiaries,
+                                  additionalBenefitSplits: newSplits
+                                }
+                              });
+                            }}
+                            className="h-6 w-6 p-0 bg-white text-[#4F4F4F] hover:text-red-600 hover:bg-red-50 border border-gray-300 rounded"
+                            title="Remove beneficiary"
+                          >
+                            <Trash2 className="h-3 w-3" />
+                          </button>
+                        )}
+                      </div>
+                    ) : (
+                      <span className="text-neutral-400">-</span>
+                    )}
                   </td>
-                  <td className="px-3 py-2 text-sm text-neutral-700"></td>
+                  
+                  {/* Additional Info - rowSpan for main policy data */}
+                  {ownerIndex === 0 && (
+                    <td rowSpan={allOwners.length} className="px-3 py-2 align-top">
+                      <input
+                        type="text"
+                        defaultValue=""
+                        onBlur={(e) => handleUpdatePolicy(policy.id, 'description', e.target.value)}
+                        className="table-input w-full px-2 py-1 text-sm border border-neutral-300 rounded bg-primary/5 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                        disabled={isUpdating}
+                      />
+                    </td>
+                  )}
+                  
+                  {/* Benefit Split - show based on owner index */}
                   <td className="px-3 py-2 text-sm text-neutral-700 text-right bg-neutral-100">
-                    {formatCurrencyValue((policy.additionalBenefitSplits || [])[index] || "0", 'percentage')}
+                    {ownerIndex < allBeneficiaries.length ? 
+                      formatCurrencyValue(allBeneficiaries[ownerIndex].split, 'percentage') : 
+                      '-'
+                    }
                   </td>
-                  <td colSpan={8} className="px-3 py-2 text-sm text-neutral-700"></td>
+                  
+                  {/* Amount - rowSpan for main policy data */}
+                  {ownerIndex === 0 && (
+                    <td rowSpan={allOwners.length} className="px-3 py-2 align-top">
+                      <input
+                        type="text"
+                        defaultValue={policy.amount}
+                        onBlur={(e) => handleInputBlur(policy.id, 'amount', e.target.value)}
+                        className="table-input w-full px-2 py-1 text-sm text-right border border-neutral-300 rounded bg-primary/5 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                        disabled={isUpdating}
+                      />
+                    </td>
+                  )}
+                  
+                  {/* Checkboxes - rowSpan for main policy data */}
+                  {ownerIndex === 0 && (
+                    <>
+                      <td rowSpan={allOwners.length} className="px-3 py-2 text-center align-top">
+                        <input
+                          type="checkbox"
+                          checked={policy.buySell}
+                          onChange={(e) => handleUpdatePolicy(policy.id, 'buySell', e.target.checked)}
+                          className="h-4 w-4 text-blue-600 bg-primary/5 border-neutral-300 rounded focus:ring-primary focus:ring-2"
+                          disabled={isUpdating}
+                        />
+                      </td>
+                      <td rowSpan={allOwners.length} className="px-3 py-2 text-center align-top">
+                        <input
+                          type="checkbox"
+                          checked={policy.keyMan}
+                          onChange={(e) => handleUpdatePolicy(policy.id, 'keyMan', e.target.checked)}
+                          className="h-4 w-4 text-blue-600 bg-primary/5 border-neutral-300 rounded focus:ring-primary focus:ring-2"
+                          disabled={isUpdating}
+                        />
+                      </td>
+                      <td rowSpan={allOwners.length} className="px-3 py-2 text-center align-top">
+                        <input
+                          type="checkbox"
+                          checked={policy.excludedFromEstateDuty}
+                          onChange={(e) => handleUpdatePolicy(policy.id, 'excludedFromEstateDuty', e.target.checked)}
+                          className="h-4 w-4 text-blue-600 bg-white border-neutral-300 rounded focus:ring-primary focus:ring-2"
+                          disabled={isUpdating}
+                        />
+                      </td>
+                      <td rowSpan={allOwners.length} className="px-3 py-2 text-center align-top">
+                        <input
+                          type="checkbox"
+                          checked={policy.excludedFromProvisions}
+                          onChange={(e) => handleUpdatePolicy(policy.id, 'excludedFromProvisions', e.target.checked)}
+                          className="h-4 w-4 text-blue-600 bg-white border-neutral-300 rounded focus:ring-primary focus:ring-2"
+                          disabled={isUpdating}
+                        />
+                      </td>
+                      <td rowSpan={allOwners.length} className="px-3 py-2 align-top">
+                        <input
+                          type="text"
+                          defaultValue={policy.premiumsByOthers}
+                          onBlur={(e) => handleInputBlur(policy.id, 'premiumsByOthers', e.target.value)}
+                          className="table-input w-full px-2 py-1 text-sm text-right border border-neutral-300 rounded bg-primary/5 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                          disabled={isUpdating}
+                        />
+                      </td>
+                      <td rowSpan={allOwners.length} className="px-3 py-2 align-top">
+                        <input
+                          type="text"
+                          defaultValue={policy.collateralSession}
+                          onBlur={(e) => handleInputBlur(policy.id, 'collateralSession', e.target.value)}
+                          className="table-input w-full px-2 py-1 text-sm text-right border border-neutral-300 rounded bg-primary/5 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                          disabled={isUpdating}
+                        />
+                      </td>
+                      <td rowSpan={allOwners.length} className="px-3 py-2 text-center align-top">
+                        <button
+                          onClick={() => handleDeletePolicy(policy.id)}
+                          className="text-[#4F4F4F] hover:text-red-600 transition-colors"
+                          title="Delete policy"
+                        >
+                          <Trash2 className="h-4 w-4" />
+                        </button>
+                      </td>
+                    </>
+                  )}
                 </tr>
-              ))}
-              </React.Fragment>
-            ))}
+              ));
+            })}
             
             {/* Total Row */}
             {filteredPolicies.length > 0 && (
