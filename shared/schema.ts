@@ -110,13 +110,12 @@ export const assurance = pgTable("assurance", {
   // Main fields
   description: text("description").notNull().default(""),
   owner: text("owner").notNull().default("Donald Edwards"),
-  additionalOwners: text("additional_owners").array().notNull().default([]),
+  additionalOwners: text("additional_owners").notNull().default("[]"), // JSON string: [{id: string, name: string}]
   lifeAssured: text("life_assured").notNull().default(""),
   deathBenefit: text("death_benefit").notNull().default("0"),
   beneficiary: text("beneficiary").notNull().default(""),
   benefitSplit: text("benefit_split").notNull().default("0"),
-  additionalBeneficiaries: text("additional_beneficiaries").array().notNull().default([]),
-  additionalBenefitSplits: text("additional_benefit_splits").array().notNull().default([]),
+  additionalBeneficiaries: text("additional_beneficiaries").notNull().default("[]"), // JSON string: [{id: string, name: string, split: string}]
   additionalInfo: text("additional_info").notNull().default(""),
   amount: text("amount").notNull().default("0"),
   buySell: boolean("buy_sell").notNull().default(false),

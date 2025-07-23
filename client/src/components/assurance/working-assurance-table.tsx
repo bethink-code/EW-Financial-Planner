@@ -134,20 +134,22 @@ export function AssuranceTable({ searchTerm }: AssuranceTableProps) {
   const handleAddOwner = useCallback((id: number) => {
     const policy = policies.find((p: Assurance) => p.id === id);
     if (policy) {
-      const newOwners = [...(policy.additionalOwners || []), "New Owner"];
+      const currentOwners = JSON.parse(policy.additionalOwners || "[]");
+      const newOwnerId = `O${Date.now()}`;
+      const newOwners = [...currentOwners, { id: newOwnerId, name: "New Owner" }];
       setIsUpdating(true);
-      updateMutation.mutate({ id, updates: { additionalOwners: newOwners } });
+      updateMutation.mutate({ id, updates: { additionalOwners: JSON.stringify(newOwners) } });
     }
   }, [policies, updateMutation]);
 
-  // Remove specific owner
-  const handleRemoveOwner = useCallback((id: number, ownerIndex: number) => {
+  // Remove specific owner by ID
+  const handleRemoveOwner = useCallback((id: number, ownerId: string) => {
     const policy = policies.find((p: Assurance) => p.id === id);
-    if (policy && ownerIndex > 0) { // Can't remove main owner (index 0)
-      const newOwners = [...(policy.additionalOwners || [])];
-      newOwners.splice(ownerIndex - 1, 1); // Convert to additional owners array index
+    if (policy) {
+      const currentOwners = JSON.parse(policy.additionalOwners || "[]");
+      const filteredOwners = currentOwners.filter((owner: any) => owner.id !== ownerId);
       setIsUpdating(true);
-      updateMutation.mutate({ id, updates: { additionalOwners: newOwners } });
+      updateMutation.mutate({ id, updates: { additionalOwners: JSON.stringify(filteredOwners) } });
     }
   }, [policies, updateMutation]);
 
@@ -155,35 +157,22 @@ export function AssuranceTable({ searchTerm }: AssuranceTableProps) {
   const handleAddBeneficiary = useCallback((id: number) => {
     const policy = policies.find((p: Assurance) => p.id === id);
     if (policy) {
-      const newBeneficiaries = [...(policy.additionalBeneficiaries || []), "New Beneficiary"];
-      const newSplits = [...(policy.additionalBenefitSplits || []), "0"];
+      const currentBeneficiaries = JSON.parse(policy.additionalBeneficiaries || "[]");
+      const newBeneficiaryId = `B${Date.now()}`;
+      const newBeneficiaries = [...currentBeneficiaries, { id: newBeneficiaryId, name: "New Beneficiary", split: "0" }];
       setIsUpdating(true);
-      updateMutation.mutate({ 
-        id, 
-        updates: { 
-          additionalBeneficiaries: newBeneficiaries,
-          additionalBenefitSplits: newSplits
-        }
-      });
+      updateMutation.mutate({ id, updates: { additionalBeneficiaries: JSON.stringify(newBeneficiaries) } });
     }
   }, [policies, updateMutation]);
 
-  // Remove specific beneficiary
-  const handleRemoveBeneficiary = useCallback((id: number, beneficiaryIndex: number) => {
+  // Remove specific beneficiary by ID
+  const handleRemoveBeneficiary = useCallback((id: number, beneficiaryId: string) => {
     const policy = policies.find((p: Assurance) => p.id === id);
-    if (policy && beneficiaryIndex > 0) { // Can't remove main beneficiary (index 0)
-      const newBeneficiaries = [...(policy.additionalBeneficiaries || [])];
-      const newSplits = [...(policy.additionalBenefitSplits || [])];
-      newBeneficiaries.splice(beneficiaryIndex - 1, 1); // Convert to additional beneficiaries array index
-      newSplits.splice(beneficiaryIndex - 1, 1);
+    if (policy) {
+      const currentBeneficiaries = JSON.parse(policy.additionalBeneficiaries || "[]");
+      const filteredBeneficiaries = currentBeneficiaries.filter((beneficiary: any) => beneficiary.id !== beneficiaryId);
       setIsUpdating(true);
-      updateMutation.mutate({ 
-        id, 
-        updates: { 
-          additionalBeneficiaries: newBeneficiaries,
-          additionalBenefitSplits: newSplits
-        }
-      });
+      updateMutation.mutate({ id, updates: { additionalBeneficiaries: JSON.stringify(filteredBeneficiaries) } });
     }
   }, [policies, updateMutation]);
 
@@ -267,13 +256,33 @@ export function AssuranceTable({ searchTerm }: AssuranceTableProps) {
           </thead>
           <tbody className="bg-white divide-y divide-neutral-200">
             {filteredPolicies.map((policy: Assurance) => {
-              const allOwners = [policy.owner, ...(policy.additionalOwners || [])];
+              // Parse additional owners with fallback for old format
+              let additionalOwners = [];
+              try {
+                const parsed = JSON.parse(policy.additionalOwners || "[]");
+                additionalOwners = Array.isArray(parsed) && parsed.every(item => typeof item === 'object' && item.id) 
+                  ? parsed 
+                  : parsed.map((name: string, index: number) => ({ id: `O${index + 2}`, name }));
+              } catch {
+                // Old format: string array, convert to new format
+                additionalOwners = [];
+              }
+              const allOwners = [{ id: "O1", name: policy.owner }, ...additionalOwners];
+              
+              // Parse additional beneficiaries with fallback for old format
+              let additionalBeneficiaries = [];
+              try {
+                const parsed = JSON.parse(policy.additionalBeneficiaries || "[]");
+                additionalBeneficiaries = Array.isArray(parsed) && parsed.every(item => typeof item === 'object' && item.id) 
+                  ? parsed 
+                  : parsed.map((name: string, index: number) => ({ id: `B${index + 2}`, name, split: "0" }));
+              } catch {
+                // Old format: string array, convert to new format
+                additionalBeneficiaries = [];
+              }
               const allBeneficiaries = [
-                { name: policy.beneficiary, split: policy.benefitSplit },
-                ...(policy.additionalBeneficiaries || []).map((name, index) => ({
-                  name,
-                  split: (policy.additionalBenefitSplits || [])[index] || "0"
-                }))
+                { id: "B1", name: policy.beneficiary, split: policy.benefitSplit },
+                ...additionalBeneficiaries
               ];
               
               // Calculate the maximum rows needed for this policy
@@ -303,14 +312,16 @@ export function AssuranceTable({ searchTerm }: AssuranceTableProps) {
                         )}
                         <input
                           type="text"
-                          defaultValue={allOwners[rowIndex]}
+                          defaultValue={allOwners[rowIndex].name}
                           onBlur={(e) => {
                             if (rowIndex === 0) {
                               handleUpdatePolicy(policy.id, 'owner', e.target.value);
                             } else {
-                              const newOwners = [...(policy.additionalOwners || [])];
-                              newOwners[rowIndex - 1] = e.target.value;
-                              updateMutation.mutate({ id: policy.id, updates: { additionalOwners: newOwners } });
+                              const currentOwners = JSON.parse(policy.additionalOwners || "[]");
+                              const updatedOwners = currentOwners.map((o: any) => 
+                                o.id === allOwners[rowIndex].id ? { ...o, name: e.target.value } : o
+                              );
+                              updateMutation.mutate({ id: policy.id, updates: { additionalOwners: JSON.stringify(updatedOwners) } });
                             }
                           }}
                           className="table-input w-full px-2 py-1 text-sm border border-neutral-300 rounded bg-primary/5 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
@@ -327,7 +338,7 @@ export function AssuranceTable({ searchTerm }: AssuranceTableProps) {
                         )}
                         {rowIndex > 0 && rowIndex < allOwners.length && (
                           <button
-                            onClick={() => handleRemoveOwner(policy.id, rowIndex)}
+                            onClick={() => handleRemoveOwner(policy.id, allOwners[rowIndex].id)}
                             className="h-6 w-6 p-0 bg-white text-[#4F4F4F] hover:text-red-600 hover:bg-red-50 border border-gray-300 rounded"
                             title="Remove owner"
                           >
@@ -379,9 +390,11 @@ export function AssuranceTable({ searchTerm }: AssuranceTableProps) {
                             if (rowIndex === 0) {
                               handleUpdatePolicy(policy.id, 'beneficiary', e.target.value);
                             } else {
-                              const newBeneficiaries = [...(policy.additionalBeneficiaries || [])];
-                              newBeneficiaries[rowIndex - 1] = e.target.value;
-                              updateMutation.mutate({ id: policy.id, updates: { additionalBeneficiaries: newBeneficiaries } });
+                              const currentBeneficiaries = JSON.parse(policy.additionalBeneficiaries || "[]");
+                              const updatedBeneficiaries = currentBeneficiaries.map((b: any) => 
+                                b.id === allBeneficiaries[rowIndex].id ? { ...b, name: e.target.value } : b
+                              );
+                              updateMutation.mutate({ id: policy.id, updates: { additionalBeneficiaries: JSON.stringify(updatedBeneficiaries) } });
                             }
                           }}
                           className="table-input w-full px-2 py-1 text-sm border border-neutral-300 rounded bg-primary/5 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
@@ -398,7 +411,7 @@ export function AssuranceTable({ searchTerm }: AssuranceTableProps) {
                         )}
                         {rowIndex > 0 && rowIndex < allBeneficiaries.length && (
                           <button
-                            onClick={() => handleRemoveBeneficiary(policy.id, rowIndex)}
+                            onClick={() => handleRemoveBeneficiary(policy.id, allBeneficiaries[rowIndex].id)}
                             className="h-6 w-6 p-0 bg-white text-[#4F4F4F] hover:text-red-600 hover:bg-red-50 border border-gray-300 rounded"
                             title="Remove beneficiary"
                           >
