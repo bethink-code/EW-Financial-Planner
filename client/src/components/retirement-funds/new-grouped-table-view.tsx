@@ -20,10 +20,9 @@ interface NewGroupedTableViewProps {
   tableMode: "inputs" | "flows";
   onFieldUpdate: (id: number, field: keyof UpdateRetirementFund, value: string) => void;
   isUpdating: boolean;
-  onAddFund: () => void;
 }
 // Removed AutoSizeInput - optimized for better performance
-export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFieldUpdate, isUpdating, onAddFund }: NewGroupedTableViewProps) {
+export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFieldUpdate, isUpdating }: NewGroupedTableViewProps) {
   
   // Memoized calculations for better performance
   const flowsTotals = useMemo(() => {

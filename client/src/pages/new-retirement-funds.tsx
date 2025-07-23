@@ -305,7 +305,6 @@ export default function NewRetirementFunds() {
                   tableMode={tableMode}
                   onFieldUpdate={handleFieldUpdate}
                   isUpdating={updateMutation.isPending}
-                  onAddFund={handleAddFund}
                 />
               ) : (
                 <NewGroupedTableView
@@ -314,7 +313,6 @@ export default function NewRetirementFunds() {
                   tableMode={tableMode}
                   onFieldUpdate={handleFieldUpdate}
                   isUpdating={updateMutation.isPending}
-                  onAddFund={handleAddFund}
                 />
               )}
             </div>

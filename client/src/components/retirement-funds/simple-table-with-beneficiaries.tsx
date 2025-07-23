@@ -20,10 +20,9 @@ interface SimpleTableWithBeneficiariesProps {
   tableMode: "inputs" | "flows";
   onFieldUpdate: (id: number, field: keyof UpdateRetirementFund, value: string) => void;
   isUpdating: boolean;
-  onAddFund: () => void;
 }
 // Removed AutoSizeInput component - no longer needed for optimized performance
-export function SimpleTableWithBeneficiaries({ funds, columnVisibility, tableMode, onFieldUpdate, isUpdating, onAddFund }: SimpleTableWithBeneficiariesProps) {
+export function SimpleTableWithBeneficiaries({ funds, columnVisibility, tableMode, onFieldUpdate, isUpdating }: SimpleTableWithBeneficiariesProps) {
   
   // Format currency value
   const formatCurrencyValue = useCallback((value: string, field: string) => {
