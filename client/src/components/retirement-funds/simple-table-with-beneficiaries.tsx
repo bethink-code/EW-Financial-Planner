@@ -181,9 +181,9 @@ export function SimpleTableWithBeneficiaries({
       const fundOwners = JSON.parse(fund.owners || '["John Doe"]');
       const ownershipPercentages = JSON.parse(fund.ownershipPercentages || '["100"]');
       
-      // Main fund row
+      // Main fund row - TOP ALIGNED
       rows.push(
-        <tr key={`${fund.id}-main`} className="hover:bg-neutral-50">
+        <tr key={`${fund.id}-main`} className="hover:bg-neutral-50" style={{ verticalAlign: "top" }}>
           {/* Overview Section */}
           {columnVisibility.overview && (
             <>
@@ -543,67 +543,79 @@ export function SimpleTableWithBeneficiaries({
         </tr>
       );
       
-      // Additional owner rows (compact nested pattern)
+      // Additional owner rows - compact pattern under Overview section only
       if (fundOwners.length > 1) {
         fundOwners.slice(1).forEach((owner: string, index: number) => {
           const actualIndex = index + 1;
+          const totalColumns = 
+            (columnVisibility.overview ? 3 : 0) +
+            (columnVisibility.monthlyDeathBenefit ? 3 : 0) +
+            (columnVisibility.fundValue ? 2 : 0) +
+            (columnVisibility.fundValueBeneficiaries ? 7 : 0) +
+            (columnVisibility.unapprovedLifeCover ? 5 : 0);
+          
           rows.push(
             <tr key={`${fund.id}-owner-${actualIndex}`} className="hover:bg-neutral-50 border-l-2 border-blue-200">
-              {/* Only show owner fields for additional owners */}
+              {/* Empty cell for fund description */}
+              {columnVisibility.overview && <td></td>}
+              
+              {/* Owner name with nested indicator */}
               {columnVisibility.overview && (
-                <>
-                  <td className="p-2 text-right pl-6">
-                    <div className="flex items-center gap-2">
-                      <span className="text-blue-500 mr-1">↳</span>
-                      <Select
-                        value={owner}
-                        onValueChange={(value) => handleOwnerChange(fund.id, actualIndex, value)}
-                        disabled={isUpdating}
-                      >
-                        <SelectTrigger className="table-input h-7 min-w-[120px] w-full max-w-[160px] text-right border-0 focus:bg-white focus:border focus:border-primary hover:bg-neutral-50 transition-colors duration-200 group">
-                          <SelectValue className="text-right pr-6" />
-                          <Edit3 size={12} className="ml-1 text-teal-400 opacity-0 group-hover:opacity-100 transition-opacity duration-200" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          {owners.map((ownerOption) => (
-                            <SelectItem key={ownerOption} value={ownerOption}>
-                              {ownerOption}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        onClick={() => handleRemoveOwner(fund.id, actualIndex)}
-                        disabled={isUpdating}
-                        className="h-6 w-6 p-0 bg-white text-[#4F4F4F] hover:text-red-600 hover:bg-red-50 border border-gray-300"
-                        title="Remove owner"
-                      >
-                        <UserMinus className="h-3 w-3" />
-                      </Button>
-                    </div>
-                  </td>
-                  <td className="p-2 text-right">
-                    <input
-                      type="text"
-                      defaultValue={`${ownershipPercentages[actualIndex] || '0'}%`}
-                      onBlur={(e) => {
-                        const formattedValue = formatCurrencyValue(e.target.value, "percentage");
-                        if (formattedValue !== e.target.value) {
-                          e.target.value = formattedValue;
-                        }
-                        handlePercentageChange(fund.id, actualIndex, e.target.value.replace('%', ''));
-                      }}
-                      className="table-input h-7 text-sm bg-white border-gray-200 focus:border-primary w-full px-3 py-1 border rounded-md text-sm"
-                      style={{ textAlign: "right", minWidth: "70px" }}
+                <td className="p-2 text-right pl-6">
+                  <div className="flex items-center gap-2">
+                    <span className="text-blue-500 mr-1">↳</span>
+                    <Select
+                      value={owner}
+                      onValueChange={(value) => handleOwnerChange(fund.id, actualIndex, value)}
                       disabled={isUpdating}
-                    />
-                  </td>
-                </>
+                    >
+                      <SelectTrigger className="table-input h-7 min-w-[120px] w-full max-w-[160px] text-right border-0 focus:bg-white focus:border focus:border-primary hover:bg-neutral-50 transition-colors duration-200 group">
+                        <SelectValue className="text-right pr-6" />
+                        <Edit3 size={12} className="ml-1 text-teal-400 opacity-0 group-hover:opacity-100 transition-opacity duration-200" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {owners.map((ownerOption) => (
+                          <SelectItem key={ownerOption} value={ownerOption}>
+                            {ownerOption}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => handleRemoveOwner(fund.id, actualIndex)}
+                      disabled={isUpdating}
+                      className="h-6 w-6 p-0 bg-white text-[#4F4F4F] hover:text-red-600 hover:bg-red-50 border border-gray-300"
+                      title="Remove owner"
+                    >
+                      <UserMinus className="h-3 w-3" />
+                    </Button>
+                  </div>
+                </td>
               )}
               
-              {/* Skip other sections for additional owner rows */}
+              {/* Owner percentage */}
+              {columnVisibility.overview && (
+                <td className="p-2 text-right">
+                  <input
+                    type="text"
+                    defaultValue={`${ownershipPercentages[actualIndex] || '0'}%`}
+                    onBlur={(e) => {
+                      const formattedValue = formatCurrencyValue(e.target.value, "percentage");
+                      if (formattedValue !== e.target.value) {
+                        e.target.value = formattedValue;
+                      }
+                      handlePercentageChange(fund.id, actualIndex, e.target.value.replace('%', ''));
+                    }}
+                    className="table-input h-7 text-sm bg-white border-gray-200 focus:border-primary w-full px-3 py-1 border rounded-md text-sm"
+                    style={{ textAlign: "right", minWidth: "70px" }}
+                    disabled={isUpdating}
+                  />
+                </td>
+              )}
+              
+              {/* Empty cells for all other sections when overview is visible */}
               {columnVisibility.monthlyDeathBenefit && (
                 <>
                   <td></td>
@@ -645,15 +657,17 @@ export function SimpleTableWithBeneficiaries({
         });
       }
       
-      // Additional beneficiary rows (compact nested pattern)
+      // Additional beneficiary rows - compact pattern under Fund Value Beneficiaries section
       if (beneficiaries.length > 1) {
         beneficiaries.slice(1).forEach((beneficiary, index) => {
           const actualIndex = index + 1;
+          
           rows.push(
             <tr key={`${fund.id}-beneficiary-${actualIndex}`} className="hover:bg-neutral-50 border-l-2 border-green-200">
-              {/* Skip overview columns for beneficiary rows */}
+              {/* Skip overview columns */}
               {columnVisibility.overview && (
                 <>
+                  <td></td>
                   <td></td>
                   <td></td>
                 </>
@@ -725,64 +739,27 @@ export function SimpleTableWithBeneficiaries({
                 </>
               )}
               
-              {/* Unapproved Life Cover Section - only show beneficiary fields */}
+              {/* Skip Unapproved Life Cover columns */}
               {columnVisibility.unapprovedLifeCover && (
                 <>
                   <td></td>
-                  <td className="p-2 text-left pl-6">
-                    <div className="flex items-center gap-2">
-                      <span className="text-green-500 mr-1">↳</span>
-                      <input
-                        defaultValue={beneficiary.name || ""}
-                        onBlur={(e) => handleBeneficiaryUpdate(fund.id, actualIndex, 'name', e.target.value)}
-                        className="table-input h-7 text-sm bg-white border-gray-200 focus:border-primary w-full px-3 py-1 border rounded-md text-sm"
-                        style={{ textAlign: "left", minWidth: "120px" }}
-                        placeholder="Beneficiary name"
-                        disabled={isUpdating}
-                      />
-                    </div>
-                  </td>
-                  <td className="p-2 text-right">
-                    <input
-                      defaultValue={`${beneficiary.percentage || 0}%`}
-                      onBlur={(e) => {
-                        const formattedValue = formatCurrencyValue(e.target.value, "percentage");
-                        if (formattedValue !== e.target.value) {
-                          e.target.value = formattedValue;
-                        }
-                        handleBeneficiaryUpdate(fund.id, actualIndex, 'percentage', parseFloat(e.target.value.replace('%', '')) || 0);
-                      }}
-                      className="table-input h-7 text-sm bg-white border-gray-200 focus:border-primary w-full px-3 py-1 border rounded-md text-sm"
-                      style={{ textAlign: "right", minWidth: "60px" }}
-                      disabled={isUpdating}
-                    />
-                  </td>
-                  <td className="p-2 text-right">
-                    <span className="table-text-14 text-neutral-900">
-                      {beneficiary.coverSplit || 'R 0'}
-                    </span>
-                  </td>
-                  <td className="p-2">
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      onClick={() => handleRemoveBeneficiary(fund.id, actualIndex)}
-                      disabled={isUpdating}
-                      className="h-6 w-6 p-0 bg-white text-[#4F4F4F] hover:text-red-600 hover:bg-red-50 border border-gray-300"
-                      title="Remove beneficiary"
-                    >
-                      <Trash2 className="h-3 w-3" />
-                    </Button>
-                  </td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
                 </>
               )}
             </tr>
           );
         });
       }
+
+      return rows;
     });
+
+    const allRows = fundsWithRows.flat();
     
-    return rows;
+    return allRows;
   }, [funds, columnVisibility, isUpdating, owners, handleOwnerChange, handleAddOwner, handleRemoveOwner, handlePercentageChange, handleBeneficiaryUpdate, handleAddBeneficiary, handleRemoveBeneficiary, onFieldUpdate]);
 
   if (funds.length === 0) {
