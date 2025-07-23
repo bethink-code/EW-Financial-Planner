@@ -257,7 +257,7 @@ export default function VoluntaryInvestmentsTable() {
             placeholder="Search voluntary investments..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="pl-10 pr-4 py-2 w-full border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            className="pl-10 pr-4 py-2 w-full border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
           />
         </div>
       </div>
@@ -265,7 +265,7 @@ export default function VoluntaryInvestmentsTable() {
       {/* Summary Section */}
       {filteredInvestments.length > 0 && (
         <div className="bg-white border border-neutral-200 rounded-lg shadow-sm overflow-hidden mb-6">
-          <div className="bg-[#E0F2FE] px-4 py-3 border-b border-neutral-200">
+          <div className="bg-primary/10 px-4 py-3 border-b border-neutral-200">
             <h3 className="text-sm font-semibold text-neutral-700 uppercase tracking-wide">Summary</h3>
           </div>
           <div className="p-4">
@@ -298,7 +298,7 @@ export default function VoluntaryInvestmentsTable() {
         <button
           onClick={handleAddInvestment}
           disabled={addMutation.isPending}
-          className="bg-[#016991] text-white px-4 py-2 rounded-lg hover:bg-[#014d6b] disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2 font-medium"
+          className="bg-primary text-white px-4 py-2 rounded-lg hover:bg-[#014d6b] disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2 font-medium"
         >
           <Plus className="h-4 w-4" />
           Add Investment
@@ -309,13 +309,13 @@ export default function VoluntaryInvestmentsTable() {
       <div className="overflow-x-auto">
         <table className="min-w-full bg-white border border-neutral-200 rounded-lg shadow-sm">
           <thead>
-            <tr className="bg-[#E0F2FE] border-b border-neutral-200">
+            <tr className="bg-primary/10 border-b border-neutral-200">
               <th className="px-3 py-2 text-left text-xs font-medium text-neutral-600 uppercase tracking-wider" colSpan={3}>Overview</th>
               <th className="px-3 py-2 text-left text-xs font-medium text-neutral-600 uppercase tracking-wider" colSpan={5}>Bequeath To</th>
               <th className="px-3 py-2 text-left text-xs font-medium text-neutral-600 uppercase tracking-wider" colSpan={4}>Exclusions</th>
               <th className="px-3 py-2 text-center text-xs font-medium text-neutral-600 uppercase tracking-wider">Actions</th>
             </tr>
-            <tr className="bg-[#E0F2FE] border-b border-neutral-200">
+            <tr className="bg-primary/10 border-b border-neutral-200">
               <th className="px-3 py-2 text-left text-xs font-medium text-neutral-600 uppercase tracking-wider">Description</th>
               <th className="px-3 py-2 text-left text-xs font-medium text-neutral-600 uppercase tracking-wider">Owner</th>
               <th className="px-3 py-2 text-left text-xs font-medium text-neutral-600 uppercase tracking-wider">Percentage</th>
@@ -345,7 +345,7 @@ export default function VoluntaryInvestmentsTable() {
                           type="text"
                           defaultValue={investment.description}
                           onBlur={(e) => handleUpdateInvestment(investment.id, 'description', e.target.value)}
-                          className="table-input w-full px-2 py-1 text-sm border border-neutral-300 rounded bg-[#E3F2FD] focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                          className="table-input w-full px-2 py-1 text-sm border border-neutral-300 rounded bg-primary/5 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
                           disabled={isUpdating}
                         />
                       </td>
@@ -356,7 +356,7 @@ export default function VoluntaryInvestmentsTable() {
                       <select
                         value={owner}
                         onChange={(e) => handleOwnerChange(investment.id, ownerIndex, e.target.value)}
-                        className="table-input flex-1 px-2 py-1 text-sm border border-neutral-300 rounded bg-[#E3F2FD] focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                        className="table-input flex-1 px-2 py-1 text-sm border border-neutral-300 rounded bg-primary/5 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
                         disabled={isUpdating}
                       >
                         <option value="Donald Edwards">Donald Edwards</option>
@@ -374,7 +374,7 @@ export default function VoluntaryInvestmentsTable() {
                       {ownerIndex === owners.length - 1 && (
                         <button
                           onClick={() => handleAddOwner(investment.id)}
-                          className="text-[#1B5C82] hover:text-blue-700 transition-colors"
+                          className="text-primary hover:text-blue-700 transition-colors"
                           title="Add owner"
                         >
                           <UserPlus className="h-4 w-4" />
@@ -387,7 +387,7 @@ export default function VoluntaryInvestmentsTable() {
                       type="text"
                       defaultValue={percentages[ownerIndex] || '0'}
                       onBlur={(e) => handlePercentageChange(investment.id, ownerIndex, e.target.value)}
-                      className="table-input w-full px-2 py-1 text-sm text-right border border-neutral-300 rounded bg-[#E3F2FD] focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      className="table-input w-full px-2 py-1 text-sm text-right border border-neutral-300 rounded bg-primary/5 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
                       disabled={isUpdating}
                     />
                   </td>
@@ -398,7 +398,7 @@ export default function VoluntaryInvestmentsTable() {
                           type="text"
                           defaultValue={investment.baseCost}
                           onBlur={(e) => handleInputBlur(investment.id, 'baseCost', e.target.value)}
-                          className="table-input w-full px-2 py-1 text-sm text-right border border-neutral-300 rounded bg-[#E3F2FD] focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                          className="table-input w-full px-2 py-1 text-sm text-right border border-neutral-300 rounded bg-primary/5 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
                           disabled={isUpdating}
                         />
                       </td>
@@ -407,7 +407,7 @@ export default function VoluntaryInvestmentsTable() {
                           type="text"
                           defaultValue={investment.marketValue}
                           onBlur={(e) => handleInputBlur(investment.id, 'marketValue', e.target.value)}
-                          className="table-input w-full px-2 py-1 text-sm text-right border border-neutral-300 rounded bg-[#E3F2FD] focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                          className="table-input w-full px-2 py-1 text-sm text-right border border-neutral-300 rounded bg-primary/5 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
                           disabled={isUpdating}
                         />
                       </td>
@@ -416,7 +416,7 @@ export default function VoluntaryInvestmentsTable() {
                           type="text"
                           defaultValue={investment.liquidationPercentage}
                           onBlur={(e) => handleInputBlur(investment.id, 'liquidationPercentage', e.target.value)}
-                          className="table-input w-full px-2 py-1 text-sm text-right border border-neutral-300 rounded bg-[#E3F2FD] focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                          className="table-input w-full px-2 py-1 text-sm text-right border border-neutral-300 rounded bg-primary/5 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
                           disabled={isUpdating}
                         />
                       </td>
@@ -425,7 +425,7 @@ export default function VoluntaryInvestmentsTable() {
                           type="text"
                           defaultValue={investment.spouse}
                           onBlur={(e) => handleInputBlur(investment.id, 'spouse', e.target.value)}
-                          className="table-input w-full px-2 py-1 text-sm text-right border border-neutral-300 rounded bg-[#E3F2FD] focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                          className="table-input w-full px-2 py-1 text-sm text-right border border-neutral-300 rounded bg-primary/5 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
                           disabled={isUpdating}
                         />
                       </td>
@@ -434,7 +434,7 @@ export default function VoluntaryInvestmentsTable() {
                           type="text"
                           defaultValue={investment.others}
                           onBlur={(e) => handleInputBlur(investment.id, 'others', e.target.value)}
-                          className="table-input w-full px-2 py-1 text-sm text-right border border-neutral-300 rounded bg-[#E3F2FD] focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                          className="table-input w-full px-2 py-1 text-sm text-right border border-neutral-300 rounded bg-primary/5 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
                           disabled={isUpdating}
                         />
                       </td>
@@ -443,7 +443,7 @@ export default function VoluntaryInvestmentsTable() {
                           type="checkbox"
                           checked={investment.excludedFromJointEstate}
                           onChange={(e) => handleUpdateInvestment(investment.id, 'excludedFromJointEstate', e.target.checked)}
-                          className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+                          className="h-4 w-4 text-blue-600 focus:ring-primary border-gray-300 rounded"
                           disabled={isUpdating}
                         />
                       </td>
@@ -452,7 +452,7 @@ export default function VoluntaryInvestmentsTable() {
                           type="checkbox"
                           checked={investment.excludedFromEstateDuty}
                           onChange={(e) => handleUpdateInvestment(investment.id, 'excludedFromEstateDuty', e.target.checked)}
-                          className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+                          className="h-4 w-4 text-blue-600 focus:ring-primary border-gray-300 rounded"
                           disabled={isUpdating}
                         />
                       </td>
@@ -461,7 +461,7 @@ export default function VoluntaryInvestmentsTable() {
                           type="checkbox"
                           checked={investment.excludedFromCGT}
                           onChange={(e) => handleUpdateInvestment(investment.id, 'excludedFromCGT', e.target.checked)}
-                          className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+                          className="h-4 w-4 text-blue-600 focus:ring-primary border-gray-300 rounded"
                           disabled={isUpdating}
                         />
                       </td>
@@ -470,7 +470,7 @@ export default function VoluntaryInvestmentsTable() {
                           type="checkbox"
                           checked={investment.excludedFromExecutorsFees}
                           onChange={(e) => handleUpdateInvestment(investment.id, 'excludedFromExecutorsFees', e.target.checked)}
-                          className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+                          className="h-4 w-4 text-blue-600 focus:ring-primary border-gray-300 rounded"
                           disabled={isUpdating}
                         />
                       </td>

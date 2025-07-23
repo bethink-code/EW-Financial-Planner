@@ -135,7 +135,7 @@ export function AssuranceTable({ searchTerm }: AssuranceTableProps) {
       <div className="flex items-center justify-between">
         <button
           onClick={handleAddPolicy}
-          className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-white bg-[#016991] hover:bg-[#014d73] rounded-md transition-colors"
+          className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-white bg-primary hover:bg-[#014d73] rounded-md transition-colors"
           disabled={addMutation.isPending}
         >
           <Plus size={16} />
@@ -149,7 +149,7 @@ export function AssuranceTable({ searchTerm }: AssuranceTableProps) {
         <div className="overflow-x-auto">
           <table className="w-full min-w-full">
             <thead>
-              <tr className="bg-[#E0F2FE] border-b border-neutral-300">
+              <tr className="bg-primary/10 border-b border-neutral-300">
                 <th className="p-3 text-left text-xs font-semibold text-neutral-700 uppercase tracking-wider w-8"></th>
                 <th className="p-3 text-left text-xs font-semibold text-neutral-700 uppercase tracking-wider min-w-[200px]">Description</th>
                 <th className="p-3 text-center text-xs font-semibold text-neutral-700 uppercase tracking-wider min-w-[140px]">Owner</th>
@@ -180,7 +180,7 @@ export function AssuranceTable({ searchTerm }: AssuranceTableProps) {
                       onBlur={(e) => {
                         handleInputBlur(policy.id, "description", e.target.value);
                       }}
-                      className="table-input h-7 text-sm bg-[#E3F2FD] border-gray-200 focus:border-[#016991] w-full px-3 py-1 border rounded-md text-sm"
+                      className="table-input h-7 text-sm bg-primary/5 border-gray-200 focus:border-primary w-full px-3 py-1 border rounded-md text-sm"
                       style={{ textAlign: "left" }}
                       disabled={isUpdating}
                       placeholder="Policy name"
@@ -192,7 +192,7 @@ export function AssuranceTable({ searchTerm }: AssuranceTableProps) {
                       onChange={(e) => {
                         handleInputBlur(policy.id, "owner", e.target.value);
                       }}
-                      className="table-input h-7 text-sm bg-[#E3F2FD] border-gray-200 focus:border-[#016991] w-full px-2 py-1 border rounded-md text-sm"
+                      className="table-input h-7 text-sm bg-primary/5 border-gray-200 focus:border-primary w-full px-2 py-1 border rounded-md text-sm"
                       disabled={isUpdating}
                     >
                       <option value="Donald Edwards">Donald Edwards</option>
@@ -205,7 +205,7 @@ export function AssuranceTable({ searchTerm }: AssuranceTableProps) {
                       onBlur={(e) => {
                         handleInputBlur(policy.id, "lifeAssured", e.target.value);
                       }}
-                      className="table-input h-7 text-sm bg-[#E3F2FD] border-gray-200 focus:border-[#016991] w-full px-3 py-1 border rounded-md text-sm"
+                      className="table-input h-7 text-sm bg-primary/5 border-gray-200 focus:border-primary w-full px-3 py-1 border rounded-md text-sm"
                       style={{ textAlign: "left" }}
                       disabled={isUpdating}
                       placeholder="Insured person"
@@ -221,7 +221,7 @@ export function AssuranceTable({ searchTerm }: AssuranceTableProps) {
                         }
                         handleInputBlur(policy.id, "deathBenefit", e.target.value);
                       }}
-                      className="table-input h-7 text-sm bg-[#E3F2FD] border-gray-200 focus:border-[#016991] w-full px-3 py-1 border rounded-md text-sm"
+                      className="table-input h-7 text-sm bg-primary/5 border-gray-200 focus:border-primary w-full px-3 py-1 border rounded-md text-sm"
                       style={{ textAlign: "right", minWidth: "100px" }}
                       placeholder="R 0"
                       disabled={isUpdating}
@@ -233,7 +233,7 @@ export function AssuranceTable({ searchTerm }: AssuranceTableProps) {
                       onBlur={(e) => {
                         handleInputBlur(policy.id, "beneficiary", e.target.value);
                       }}
-                      className="table-input h-7 text-sm bg-[#E3F2FD] border-gray-200 focus:border-[#016991] w-full px-3 py-1 border rounded-md text-sm"
+                      className="table-input h-7 text-sm bg-primary/5 border-gray-200 focus:border-primary w-full px-3 py-1 border rounded-md text-sm"
                       style={{ textAlign: "left" }}
                       disabled={isUpdating}
                       placeholder="Beneficiary name"
@@ -249,7 +249,7 @@ export function AssuranceTable({ searchTerm }: AssuranceTableProps) {
                         }
                         handleInputBlur(policy.id, "benefitSplit", e.target.value);
                       }}
-                      className="table-input h-7 text-sm bg-[#E3F2FD] border-gray-200 focus:border-[#016991] w-16 px-2 py-1 border rounded-md text-sm"
+                      className="table-input h-7 text-sm bg-primary/5 border-gray-200 focus:border-primary w-16 px-2 py-1 border rounded-md text-sm"
                       style={{ textAlign: "right" }}
                       placeholder="0%"
                       disabled={isUpdating}
@@ -267,7 +267,7 @@ export function AssuranceTable({ searchTerm }: AssuranceTableProps) {
                       onChange={(e) => {
                         handleInputBlur(policy.id, "excludedFromEstateDuty", e.target.checked);
                       }}
-                      className="w-4 h-4 text-[#016991] border-gray-300 rounded focus:ring-[#016991] focus:ring-2"
+                      className="w-4 h-4 text-primary border-gray-300 rounded focus:ring-primary focus:ring-2"
                       disabled={isUpdating}
                     />
                   </td>
@@ -278,7 +278,7 @@ export function AssuranceTable({ searchTerm }: AssuranceTableProps) {
                       onChange={(e) => {
                         handleInputBlur(policy.id, "excludedFromProvisions", e.target.checked);
                       }}
-                      className="w-4 h-4 text-[#016991] border-gray-300 rounded focus:ring-[#016991] focus:ring-2"
+                      className="w-4 h-4 text-primary border-gray-300 rounded focus:ring-primary focus:ring-2"
                       disabled={isUpdating}
                     />
                   </td>

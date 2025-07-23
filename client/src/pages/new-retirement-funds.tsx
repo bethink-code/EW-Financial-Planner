@@ -242,7 +242,7 @@ export default function NewRetirementFunds() {
               <div className="mx-4 bg-white rounded-lg shadow-sm border border-neutral-200 p-6 mb-4">
                 <h2 className="text-xl font-bold text-neutral-900 mb-4">Flows Summary</h2>
                 <div className="grid grid-cols-2 lg:grid-cols-5 gap-4">
-                  <div style={{ backgroundColor: '#E0F2FE' }} className="rounded-lg p-4 text-center">
+                  <div style={{ backgroundColor: 'hsl(var(--primary) / 0.1)' }} className="rounded-lg p-4 text-center">
                     <div className="text-xs font-medium text-teal-700 mb-1">Estate Provisions</div>
                     <div className="text-lg font-bold text-neutral-900">
                       R {funds.reduce((sum, fund) => {
@@ -252,7 +252,7 @@ export default function NewRetirementFunds() {
                       }, 0).toLocaleString()}
                     </div>
                   </div>
-                  <div style={{ backgroundColor: '#E0F2FE' }} className="rounded-lg p-4 text-center">
+                  <div style={{ backgroundColor: 'hsl(var(--primary) / 0.1)' }} className="rounded-lg p-4 text-center">
                     <div className="text-xs font-medium text-teal-700 mb-1">Term (Years)</div>
                     <div className="text-lg font-bold text-neutral-900">
                       {funds.reduce((sum, fund) => {
@@ -262,7 +262,7 @@ export default function NewRetirementFunds() {
                       }, 0).toLocaleString()}
                     </div>
                   </div>
-                  <div style={{ backgroundColor: '#E0F2FE' }} className="rounded-lg p-4 text-center">
+                  <div style={{ backgroundColor: 'hsl(var(--primary) / 0.1)' }} className="rounded-lg p-4 text-center">
                     <div className="text-xs font-medium text-teal-700 mb-1">Monthly Payments</div>
                     <div className="text-lg font-bold text-neutral-900">
                       R {funds.reduce((sum, fund) => {
@@ -272,7 +272,7 @@ export default function NewRetirementFunds() {
                       }, 0).toLocaleString()}
                     </div>
                   </div>
-                  <div style={{ backgroundColor: '#E0F2FE' }} className="rounded-lg p-4 text-center">
+                  <div style={{ backgroundColor: 'hsl(var(--primary) / 0.1)' }} className="rounded-lg p-4 text-center">
                     <div className="text-xs font-medium text-teal-700 mb-1">Estate Duties</div>
                     <div className="text-lg font-bold text-neutral-900">
                       R {funds.reduce((sum, fund) => {
@@ -282,7 +282,7 @@ export default function NewRetirementFunds() {
                       }, 0).toLocaleString()}
                     </div>
                   </div>
-                  <div style={{ backgroundColor: '#E0F2FE' }} className="rounded-lg p-4 text-center">
+                  <div style={{ backgroundColor: 'hsl(var(--primary) / 0.1)' }} className="rounded-lg p-4 text-center">
                     <div className="text-xs font-medium text-teal-700 mb-1">Total Percentages</div>
                     <div className="text-lg font-bold text-neutral-900">
                       100%

@@ -190,9 +190,9 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
             onClick={onAddFund}
             size="sm" 
             className="h-8 px-3 text-xs"
-            style={{ backgroundColor: '#016991', color: 'white' }}
+            style={{ backgroundColor: 'hsl(var(--primary))', color: 'white' }}
             onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = '#014d6b'; }}
-            onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = '#016991'; }}
+            onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = 'hsl(var(--primary))'; }}
           >
             <Plus size={14} className="mr-1" />
             Add Fund
@@ -629,9 +629,9 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
           onClick={onAddFund}
           size="sm" 
           className="h-8 px-3 text-xs"
-          style={{ backgroundColor: '#016991', color: 'white' }}
+          style={{ backgroundColor: 'hsl(var(--primary))', color: 'white' }}
           onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = '#014d6b'; }}
-          onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = '#016991'; }}
+          onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = 'hsl(var(--primary))'; }}
         >
           <Plus size={14} className="mr-1" />
           Add Fund

@@ -37,7 +37,7 @@ export default function Assurance() {
                 value={searchTerm}
                 onChange={(e) => handleSearch(e.target.value)}
                 placeholder="Search policies..."
-                className="w-80 pl-10 pr-4 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
+                className="w-80 pl-10 pr-4 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary outline-none"
               />
             </div>
           </div>
@@ -50,7 +50,7 @@ export default function Assurance() {
                 onClick={() => handleViewModeChange("table")}
                 className={`px-3 py-1.5 text-sm font-medium rounded-md transition-colors ${
                   viewMode === "table"
-                    ? "bg-white text-[#016991] shadow-sm"
+                    ? "bg-white text-primary shadow-sm"
                     : "text-neutral-600 hover:text-neutral-900"
                 }`}
               >
@@ -60,7 +60,7 @@ export default function Assurance() {
                 onClick={() => handleViewModeChange("hybrid")}
                 className={`px-3 py-1.5 text-sm font-medium rounded-md transition-colors ${
                   viewMode === "hybrid"
-                    ? "bg-white text-[#016991] shadow-sm"
+                    ? "bg-white text-primary shadow-sm"
                     : "text-neutral-600 hover:text-neutral-900"
                 }`}
               >

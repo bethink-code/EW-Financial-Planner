@@ -53,7 +53,7 @@ export function AssuranceSummary() {
 
   return (
     <div className="bg-white border border-neutral-200 rounded-lg shadow-sm p-6 mt-6">
-      <div className="bg-[#E0F2FE] px-4 py-3 -mx-6 -mt-6 mb-6 rounded-t-lg">
+      <div className="bg-primary/10 px-4 py-3 -mx-6 -mt-6 mb-6 rounded-t-lg">
         <h2 className="text-lg font-semibold text-neutral-800">Assurance Summary</h2>
       </div>
       

@@ -128,7 +128,7 @@ export const BeneficiaryRowManagerAssurance = memo(({ policy, onUpdate }: Benefi
             type="text"
             defaultValue={policy.beneficiary}
             onBlur={(e) => handleInputBlur(e, 'beneficiary')}
-            className="table-input w-full px-2 py-1 text-sm border border-neutral-300 rounded bg-[#E3F2FD] focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            className="table-input w-full px-2 py-1 text-sm border border-neutral-300 rounded bg-primary/5 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
             disabled={isUpdating}
           />
         </td>
@@ -138,7 +138,7 @@ export const BeneficiaryRowManagerAssurance = memo(({ policy, onUpdate }: Benefi
             type="text"
             defaultValue={policy.benefitSplit}
             onBlur={(e) => handleInputBlur(e, 'benefitSplit')}
-            className="table-input w-20 px-2 py-1 text-sm text-right border border-neutral-300 rounded bg-[#E3F2FD] focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            className="table-input w-20 px-2 py-1 text-sm text-right border border-neutral-300 rounded bg-primary/5 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
             disabled={isUpdating}
           />
         </td>
@@ -154,7 +154,7 @@ export const BeneficiaryRowManagerAssurance = memo(({ policy, onUpdate }: Benefi
         <td className="px-3 py-2">
           <button
             onClick={handleAddBeneficiary}
-            className="text-[#1B5C82] hover:text-[#0d4660] transition-colors"
+            className="text-primary hover:text-primary/80 transition-colors"
             title="Add beneficiary"
           >
             <Plus className="h-4 w-4" />
@@ -175,7 +175,7 @@ export const BeneficiaryRowManagerAssurance = memo(({ policy, onUpdate }: Benefi
               type="text"
               defaultValue={beneficiary}
               onBlur={(e) => handleInputBlur(e, 'additionalBeneficiary', index)}
-              className="table-input w-full px-2 py-1 text-sm border border-neutral-300 rounded bg-[#E3F2FD] focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="table-input w-full px-2 py-1 text-sm border border-neutral-300 rounded bg-primary/5 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
               disabled={isUpdating}
             />
           </td>
@@ -185,7 +185,7 @@ export const BeneficiaryRowManagerAssurance = memo(({ policy, onUpdate }: Benefi
               type="text"
               defaultValue={additionalBenefitSplits[index] || "0"}
               onBlur={(e) => handleInputBlur(e, 'additionalBenefitSplit', index)}
-              className="table-input w-20 px-2 py-1 text-sm text-right border border-neutral-300 rounded bg-[#E3F2FD] focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="table-input w-20 px-2 py-1 text-sm text-right border border-neutral-300 rounded bg-primary/5 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
               disabled={isUpdating}
             />
           </td>

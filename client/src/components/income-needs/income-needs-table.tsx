@@ -216,7 +216,7 @@ export default function IncomeNeedsTable() {
             placeholder="Search income needs..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="pl-10 pr-4 py-2 w-full border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            className="pl-10 pr-4 py-2 w-full border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
           />
         </div>
       </div>
@@ -224,7 +224,7 @@ export default function IncomeNeedsTable() {
       {/* Summary Section */}
       {filteredNeeds.length > 0 && (
         <div className="bg-white border border-neutral-200 rounded-lg shadow-sm overflow-hidden mb-6">
-          <div className="bg-[#E0F2FE] px-4 py-3 border-b border-neutral-200">
+          <div className="bg-primary/10 px-4 py-3 border-b border-neutral-200">
             <h3 className="text-sm font-semibold text-neutral-700 uppercase tracking-wide">Summary</h3>
           </div>
           <div className="p-4">
@@ -251,7 +251,7 @@ export default function IncomeNeedsTable() {
         <button
           onClick={handleAddNeed}
           disabled={addMutation.isPending}
-          className="bg-[#016991] text-white px-4 py-2 rounded-lg hover:bg-[#014d6b] disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2 font-medium"
+          className="bg-primary text-white px-4 py-2 rounded-lg hover:bg-[#014d6b] disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2 font-medium"
         >
           <Plus className="h-4 w-4" />
           Add Need
@@ -262,7 +262,7 @@ export default function IncomeNeedsTable() {
       <div className="overflow-x-auto">
         <table className="min-w-full bg-white border border-neutral-200 rounded-lg shadow-sm">
           <thead>
-            <tr className="bg-[#E0F2FE] border-b border-neutral-200">
+            <tr className="bg-primary/10 border-b border-neutral-200">
               <th className="px-3 py-2 text-left text-xs font-medium text-neutral-600 uppercase tracking-wider">Description</th>
               <th className="px-3 py-2 text-left text-xs font-medium text-neutral-600 uppercase tracking-wider">Entity</th>
               <th className="px-3 py-2 text-left text-xs font-medium text-neutral-600 uppercase tracking-wider">Start</th>
@@ -283,7 +283,7 @@ export default function IncomeNeedsTable() {
                     type="text"
                     defaultValue={need.description}
                     onBlur={(e) => handleUpdateNeed(need.id, 'description', e.target.value)}
-                    className="table-input w-full px-2 py-1 text-sm border border-neutral-300 rounded bg-[#E3F2FD] focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="table-input w-full px-2 py-1 text-sm border border-neutral-300 rounded bg-primary/5 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
                     disabled={isUpdating}
                   />
                 </td>
@@ -291,7 +291,7 @@ export default function IncomeNeedsTable() {
                   <select
                     value={need.entity}
                     onChange={(e) => handleUpdateNeed(need.id, 'entity', e.target.value)}
-                    className="table-input w-full px-2 py-1 text-sm border border-neutral-300 rounded bg-[#E3F2FD] focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="table-input w-full px-2 py-1 text-sm border border-neutral-300 rounded bg-primary/5 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
                     disabled={isUpdating}
                   >
                     {ENTITY_OPTIONS.map(option => (
@@ -306,7 +306,7 @@ export default function IncomeNeedsTable() {
                     type="text"
                     defaultValue={need.start}
                     onBlur={(e) => handleInputBlur(need.id, 'start', e.target.value)}
-                    className="table-input w-full px-2 py-1 text-sm text-right border border-neutral-300 rounded bg-[#E3F2FD] focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="table-input w-full px-2 py-1 text-sm text-right border border-neutral-300 rounded bg-primary/5 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
                     disabled={isUpdating}
                   />
                 </td>
@@ -316,16 +316,16 @@ export default function IncomeNeedsTable() {
                       type="checkbox"
                       checked={need.termEditable}
                       onChange={(e) => handleUpdateNeed(need.id, 'termEditable', e.target.checked)}
-                      className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+                      className="h-4 w-4 text-blue-600 focus:ring-primary border-gray-300 rounded"
                       disabled={isUpdating}
                     />
                     <input
                       type="text"
                       defaultValue={need.termYears}
                       onBlur={(e) => handleInputBlur(need.id, 'termYears', e.target.value)}
-                      className="table-input flex-1 px-2 py-1 text-sm text-right border border-neutral-300 rounded bg-[#E3F2FD] focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      className="table-input flex-1 px-2 py-1 text-sm text-right border border-neutral-300 rounded bg-primary/5 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
                       disabled={isUpdating || !need.termEditable}
-                      style={{ backgroundColor: need.termEditable ? '#E3F2FD' : '#F5F5F5' }}
+                      style={{ backgroundColor: need.termEditable ? 'hsl(var(--primary) / 0.05)' : '#F5F5F5' }}
                     />
                   </div>
                 </td>
@@ -334,7 +334,7 @@ export default function IncomeNeedsTable() {
                     type="text"
                     defaultValue={need.increasePercentage}
                     onBlur={(e) => handleInputBlur(need.id, 'increasePercentage', e.target.value)}
-                    className="table-input w-full px-2 py-1 text-sm text-right border border-neutral-300 rounded bg-[#E3F2FD] focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="table-input w-full px-2 py-1 text-sm text-right border border-neutral-300 rounded bg-primary/5 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
                     disabled={isUpdating}
                   />
                 </td>
@@ -343,7 +343,7 @@ export default function IncomeNeedsTable() {
                     type="checkbox"
                     checked={need.cpi}
                     onChange={(e) => handleUpdateNeed(need.id, 'cpi', e.target.checked)}
-                    className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+                    className="h-4 w-4 text-blue-600 focus:ring-primary border-gray-300 rounded"
                     disabled={isUpdating}
                   />
                 </td>
@@ -351,7 +351,7 @@ export default function IncomeNeedsTable() {
                   <select
                     value={need.frequency}
                     onChange={(e) => handleUpdateNeed(need.id, 'frequency', e.target.value)}
-                    className="table-input w-full px-2 py-1 text-sm border border-neutral-300 rounded bg-[#E3F2FD] focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="table-input w-full px-2 py-1 text-sm border border-neutral-300 rounded bg-primary/5 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
                     disabled={isUpdating}
                   >
                     {FREQUENCY_OPTIONS.map(option => (
@@ -366,7 +366,7 @@ export default function IncomeNeedsTable() {
                     type="text"
                     defaultValue={need.amount}
                     onBlur={(e) => handleInputBlur(need.id, 'amount', e.target.value)}
-                    className="table-input w-full px-2 py-1 text-sm text-right border border-neutral-300 rounded bg-[#E3F2FD] focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="table-input w-full px-2 py-1 text-sm text-right border border-neutral-300 rounded bg-primary/5 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
                     disabled={isUpdating}
                   />
                 </td>

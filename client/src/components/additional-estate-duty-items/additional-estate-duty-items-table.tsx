@@ -184,7 +184,7 @@ export default function AdditionalEstateDutyItemsTable() {
             placeholder="Search estate duty items..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="pl-10 pr-4 py-2 w-full border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            className="pl-10 pr-4 py-2 w-full border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
           />
         </div>
       </div>
@@ -192,7 +192,7 @@ export default function AdditionalEstateDutyItemsTable() {
       {/* Summary Section */}
       {filteredItems.length > 0 && (
         <div className="bg-white border border-neutral-200 rounded-lg shadow-sm overflow-hidden mb-6">
-          <div className="bg-[#E0F2FE] px-4 py-3 border-b border-neutral-200">
+          <div className="bg-primary/10 px-4 py-3 border-b border-neutral-200">
             <h3 className="text-sm font-semibold text-neutral-700 uppercase tracking-wide">Summary</h3>
           </div>
           <div className="p-4">
@@ -213,7 +213,7 @@ export default function AdditionalEstateDutyItemsTable() {
         <button
           onClick={handleAddItem}
           disabled={addMutation.isPending}
-          className="bg-[#016991] text-white px-4 py-2 rounded-lg hover:bg-[#014d6b] disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2 font-medium"
+          className="bg-primary text-white px-4 py-2 rounded-lg hover:bg-[#014d6b] disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2 font-medium"
         >
           <Plus className="h-4 w-4" />
           Add Estate Duty Item
@@ -224,7 +224,7 @@ export default function AdditionalEstateDutyItemsTable() {
       <div className="overflow-x-auto">
         <table className="min-w-full bg-white border border-neutral-200 rounded-lg shadow-sm">
           <thead>
-            <tr className="bg-[#E0F2FE] border-b border-neutral-200">
+            <tr className="bg-primary/10 border-b border-neutral-200">
               <th className="px-3 py-2 text-left text-xs font-medium text-neutral-600 uppercase tracking-wider">Description</th>
               <th className="px-3 py-2 text-left text-xs font-medium text-neutral-600 uppercase tracking-wider">Amount</th>
               <th className="px-3 py-2 text-center text-xs font-medium text-neutral-600 uppercase tracking-wider">Deduction?</th>
@@ -240,7 +240,7 @@ export default function AdditionalEstateDutyItemsTable() {
                     type="text"
                     defaultValue={item.description}
                     onBlur={(e) => handleUpdateItem(item.id, 'description', e.target.value)}
-                    className="table-input w-full px-2 py-1 text-sm border border-neutral-300 rounded bg-[#E3F2FD] focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="table-input w-full px-2 py-1 text-sm border border-neutral-300 rounded bg-primary/5 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
                     disabled={isUpdating}
                   />
                 </td>
@@ -249,7 +249,7 @@ export default function AdditionalEstateDutyItemsTable() {
                     type="text"
                     defaultValue={item.amount}
                     onBlur={(e) => handleInputBlur(item.id, 'amount', e.target.value)}
-                    className="table-input w-full px-2 py-1 text-sm text-right border border-neutral-300 rounded bg-[#E3F2FD] focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="table-input w-full px-2 py-1 text-sm text-right border border-neutral-300 rounded bg-primary/5 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
                     disabled={isUpdating}
                   />
                 </td>
@@ -258,7 +258,7 @@ export default function AdditionalEstateDutyItemsTable() {
                     type="checkbox"
                     checked={item.isDeduction}
                     onChange={(e) => handleUpdateItem(item.id, 'isDeduction', e.target.checked)}
-                    className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+                    className="h-4 w-4 text-blue-600 focus:ring-primary border-gray-300 rounded"
                     disabled={isUpdating}
                   />
                 </td>
@@ -267,7 +267,7 @@ export default function AdditionalEstateDutyItemsTable() {
                     type="checkbox"
                     checked={item.excludeFromJointEstate}
                     onChange={(e) => handleUpdateItem(item.id, 'excludeFromJointEstate', e.target.checked)}
-                    className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+                    className="h-4 w-4 text-blue-600 focus:ring-primary border-gray-300 rounded"
                     disabled={isUpdating}
                   />
                 </td>

@@ -44,24 +44,24 @@ export function AssuranceSummary({ searchTerm }: AssuranceSummaryProps) {
         <h2 className="text-xl font-semibold text-neutral-900 mb-4">Assurance Summary</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           <div className="text-center">
-            <div className="text-2xl font-bold text-[#016991]">{totalPolicies}</div>
+            <div className="text-2xl font-bold text-primary">{totalPolicies}</div>
             <div className="text-sm text-neutral-600 mt-1">Total Policies</div>
           </div>
           
           <div className="text-center">
-            <div className="text-2xl font-bold text-[#016991]">
+            <div className="text-2xl font-bold text-primary">
               R {totalDeathBenefits.toLocaleString()}
             </div>
             <div className="text-sm text-neutral-600 mt-1">Total Death Benefits</div>
           </div>
           
           <div className="text-center">
-            <div className="text-2xl font-bold text-[#016991]">{totalExcludedFromEstateDuty}</div>
+            <div className="text-2xl font-bold text-primary">{totalExcludedFromEstateDuty}</div>
             <div className="text-sm text-neutral-600 mt-1">Excluded from Estate Duty</div>
           </div>
           
           <div className="text-center">
-            <div className="text-2xl font-bold text-[#016991]">
+            <div className="text-2xl font-bold text-primary">
               R {averageDeathBenefit.toLocaleString()}
             </div>
             <div className="text-sm text-neutral-600 mt-1">Average per Policy</div>
