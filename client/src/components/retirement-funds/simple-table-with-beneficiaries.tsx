@@ -557,22 +557,25 @@ export function SimpleTableWithBeneficiaries({
           
           rows.push(
             <tr key={`${fund.id}-owner-${actualIndex}`} className="hover:bg-neutral-50 border-l-2 border-blue-200">
-              {/* Empty cell for fund description */}
-              {columnVisibility.overview && <td></td>}
-              
-              {/* Owner name with nested indicator */}
+              {/* Fund Description column with nested indicator */}
               {columnVisibility.overview && (
-                <td className="p-2 text-right pl-6">
-                  <div className="flex items-center gap-2">
-                    <span className="text-blue-500 mr-1">↳</span>
+                <td className="p-2 text-left pl-6">
+                  <span className="text-blue-500 text-sm">↳ Additional Owner</span>
+                </td>
+              )}
+              
+              {/* Owner name */}
+              {columnVisibility.overview && (
+                <td className="p-2 text-right">
+                  <div className="flex items-center gap-1" style={{ maxWidth: "150px" }}>
                     <Select
                       value={owner}
                       onValueChange={(value) => handleOwnerChange(fund.id, actualIndex, value)}
                       disabled={isUpdating}
                     >
-                      <SelectTrigger className="table-input h-7 min-w-[120px] w-full max-w-[160px] text-right border-0 focus:bg-white focus:border focus:border-primary hover:bg-neutral-50 transition-colors duration-200 group">
-                        <SelectValue className="text-right pr-6" />
-                        <Edit3 size={12} className="ml-1 text-teal-400 opacity-0 group-hover:opacity-100 transition-opacity duration-200" />
+                      <SelectTrigger className="table-input h-7 text-right border-0 focus:bg-white focus:border focus:border-primary hover:bg-neutral-50 transition-colors duration-200 group overflow-hidden" style={{ width: "80px", maxWidth: "80px" }}>
+                        <SelectValue className="text-right truncate" />
+                        <Edit3 size={12} className="ml-1 text-teal-400 opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex-shrink-0" />
                       </SelectTrigger>
                       <SelectContent>
                         {owners.map((ownerOption) => (
@@ -587,7 +590,7 @@ export function SimpleTableWithBeneficiaries({
                       size="sm"
                       onClick={() => handleRemoveOwner(fund.id, actualIndex)}
                       disabled={isUpdating}
-                      className="h-6 w-6 p-0 bg-white text-[#4F4F4F] hover:text-red-600 hover:bg-red-50 border border-gray-300"
+                      className="h-6 w-6 p-0 bg-white text-[#4F4F4F] hover:text-red-600 hover:bg-red-50 border border-gray-300 flex-shrink-0"
                       title="Remove owner"
                     >
                       <UserMinus className="h-3 w-3" />
@@ -609,8 +612,8 @@ export function SimpleTableWithBeneficiaries({
                       }
                       handlePercentageChange(fund.id, actualIndex, e.target.value.replace('%', ''));
                     }}
-                    className="table-input h-7 text-sm bg-white border-gray-200 focus:border-primary w-full px-3 py-1 border rounded-md text-sm"
-                    style={{ textAlign: "right", minWidth: "70px" }}
+                    className="table-input h-7 text-sm bg-white border-gray-200 focus:border-primary px-2 py-1 border rounded-md text-sm overflow-hidden"
+                    style={{ textAlign: "right", width: "100%", maxWidth: "70px" }}
                     disabled={isUpdating}
                   />
                 </td>
