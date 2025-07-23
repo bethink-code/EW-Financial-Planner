@@ -51,14 +51,25 @@ export function NewTableControls({
           <span className="px-2 py-1 bg-primary/10 text-primary text-xs font-medium rounded">
             {fundsCount} funds
           </span>
-          <AddButton
+          <Button
             onClick={onAddFund}
             disabled={isAddingFund}
             size="sm"
-            className="h-8 px-3"
+            className="h-8 px-3 text-white"
+            style={{ 
+              backgroundColor: '#016991', 
+              borderColor: '#016991'
+            }}
+            onMouseEnter={(e) => { 
+              e.currentTarget.style.backgroundColor = '#014d6b'; 
+            }}
+            onMouseLeave={(e) => { 
+              e.currentTarget.style.backgroundColor = '#016991'; 
+            }}
           >
+            <Plus className="h-4 w-4 mr-1" />
             {isAddingFund ? "Adding..." : "Add Fund"}
-          </AddButton>
+          </Button>
         </div>
 
         {/* Right section: View modes and column toggles */}
