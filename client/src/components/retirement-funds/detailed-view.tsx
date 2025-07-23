@@ -132,19 +132,8 @@ export function DetailedView({ funds, columnVisibility, onFieldUpdate, isUpdatin
     <div className="flex min-h-screen bg-white rounded-lg border border-neutral-200">
       {/* Left Sidebar - Fund List */}
       <div className="w-80 border-r border-neutral-200 flex flex-col">
-        <div className="p-4 border-b border-neutral-200 sticky top-0 bg-white z-10 min-h-[73px] flex items-center justify-between">
+        <div className="p-4 border-b border-neutral-200 sticky top-0 bg-white z-10 min-h-[73px] flex items-center">
           <h3 className="font-semibold text-neutral-900">Funds ({funds.length})</h3>
-          <Button 
-            onClick={onAddFund}
-            size="sm" 
-            className="h-8 px-3 text-xs"
-            style={{ backgroundColor: 'hsl(var(--primary))', color: 'white' }}
-            onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = '#014d6b'; }}
-            onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = 'hsl(var(--primary))'; }}
-          >
-            <Plus size={14} className="mr-1" />
-            Add Fund
-          </Button>
         </div>
         <div className="flex-1">
           {funds.map((fund) => (

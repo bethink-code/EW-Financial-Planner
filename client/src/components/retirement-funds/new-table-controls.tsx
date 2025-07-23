@@ -24,6 +24,8 @@ interface NewTableControlsProps {
   columnVisibility: ColumnVisibility;
   onToggleColumnGroup: (group: keyof ColumnVisibility) => void;
   fundsCount: number;
+  onAddFund: () => void;
+  isAddingFund?: boolean;
 }
 
 export function NewTableControls({
@@ -35,16 +37,27 @@ export function NewTableControls({
   columnVisibility,
   onToggleColumnGroup,
   fundsCount,
+  onAddFund,
+  isAddingFund = false,
 }: NewTableControlsProps) {
   return (
     <div className="bg-white rounded-lg shadow-sm border border-neutral-200 p-4 mb-4">
       <div className="flex flex-col lg:flex-row gap-3 items-start lg:items-center justify-between">
-        {/* Left section: Title and count */}
+        {/* Left section: Title, count, and Add Fund button */}
         <div className="flex items-center gap-3">
           <h1 className="text-xl font-semibold text-neutral-900">Retirement Funds</h1>
           <span className="px-2 py-1 bg-primary/10 text-primary text-xs font-medium rounded">
             {fundsCount} funds
           </span>
+          <Button
+            onClick={onAddFund}
+            disabled={isAddingFund}
+            size="sm"
+            className="bg-primary hover:bg-primary/90 text-primary-foreground h-8 px-3"
+          >
+            <Plus size={14} className="mr-1" />
+            {isAddingFund ? "Adding..." : "Add Fund"}
+          </Button>
         </div>
 
         {/* Right section: View modes and column toggles */}

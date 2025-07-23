@@ -173,6 +173,8 @@ export default function NewRetirementFunds() {
             columnVisibility={columnVisibility}
             onToggleColumnGroup={handleToggleColumnGroup}
             fundsCount={funds.length}
+            onAddFund={handleAddFund}
+            isAddingFund={addMutation.isPending}
           />
         </div>
 

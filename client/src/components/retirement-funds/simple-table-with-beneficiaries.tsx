@@ -138,20 +138,6 @@ export function SimpleTableWithBeneficiaries({ funds, columnVisibility, tableMod
   const owners = useMemo(() => ["John Doe", "Jane Smith"], []);
   return (
     <div>
-      {/* Add Fund Button */}
-      <div className="mb-4 flex justify-start">
-        <Button 
-          onClick={onAddFund}
-          size="sm" 
-          className="h-8 px-3 text-xs"
-          style={{ backgroundColor: 'hsl(var(--primary))', color: 'white' }}
-          onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = '#014d6b'; }}
-          onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = 'hsl(var(--primary))'; }}
-        >
-          <Plus size={14} className="mr-1" />
-          Add Fund
-        </Button>
-      </div>
       
       <table className="min-w-full bg-white table-auto">
         <thead>
