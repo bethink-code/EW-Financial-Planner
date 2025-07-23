@@ -7,7 +7,9 @@ export const retirementFunds = pgTable("retirement_funds", {
   
   // Overview section
   description: text("description").notNull(),
-  owner: text("owner").notNull(),
+  owner: text("owner").notNull(), // Keep for backward compatibility
+  owners: text("owners").notNull().default("[]"), // JSON array of owners
+  ownershipPercentages: text("ownership_percentages").notNull().default("[]"), // JSON array of percentages
   coverAmount: text("cover_amount").notNull().default("0"),
   
   // Unapproved life cover section - dynamic beneficiaries

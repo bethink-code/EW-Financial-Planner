@@ -97,6 +97,8 @@ export default function NewRetirementFunds() {
     const newFund: Omit<RetirementFund, 'id'> = {
       description: "New Fund",
       owner: "John Doe",
+      owners: '["John Doe"]',
+      ownershipPercentages: '["100"]',
       coverAmount: "R 0",
       beneficiaries: "[]",
       monthlyIncome: "R 0",
