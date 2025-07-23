@@ -123,11 +123,7 @@ export function AssuranceTable({ searchTerm }: AssuranceTableProps) {
     updateMutation.mutate({ id, updates });
   }, [updateMutation]);
 
-  const handleDeletePolicy = useCallback((id: number) => {
-    if (confirm('Are you sure you want to delete this policy?')) {
-      deleteMutation.mutate(id);
-    }
-  }, [deleteMutation]);
+  // Note: Policy deletion removed - only individual owners/beneficiaries can be deleted
 
   const handleInputBlur = useCallback((id: number, field: keyof Assurance, value: string) => {
     const formattedValue = formatCurrencyValue(value, field);
@@ -486,13 +482,8 @@ export function AssuranceTable({ searchTerm }: AssuranceTableProps) {
                         />
                       </td>
                       <td rowSpan={allOwners.length} className="px-3 py-2 text-center align-top">
-                        <button
-                          onClick={() => handleDeletePolicy(policy.id)}
-                          className="text-[#4F4F4F] hover:text-red-600 transition-colors"
-                          title="Delete policy"
-                        >
-                          <Trash2 className="h-4 w-4" />
-                        </button>
+                        {/* Actions column - no policy delete button */}
+                        <span className="text-neutral-400">-</span>
                       </td>
                     </>
                   )}
