@@ -325,7 +325,7 @@ export function AssuranceTable({ searchTerm }: AssuranceTableProps) {
                             <Plus className="h-3 w-3" />
                           </button>
                         )}
-                        {rowIndex > 0 && (
+                        {rowIndex > 0 && rowIndex < allOwners.length && (
                           <button
                             onClick={() => handleRemoveOwner(policy.id, rowIndex)}
                             className="h-6 w-6 p-0 bg-white text-[#4F4F4F] hover:text-red-600 hover:bg-red-50 border border-gray-300 rounded"
@@ -396,7 +396,7 @@ export function AssuranceTable({ searchTerm }: AssuranceTableProps) {
                             <Plus className="h-3 w-3" />
                           </button>
                         )}
-                        {rowIndex > 0 && (
+                        {rowIndex > 0 && rowIndex < allBeneficiaries.length && (
                           <button
                             onClick={() => handleRemoveBeneficiary(policy.id, rowIndex)}
                             className="h-6 w-6 p-0 bg-white text-[#4F4F4F] hover:text-red-600 hover:bg-red-50 border border-gray-300 rounded"

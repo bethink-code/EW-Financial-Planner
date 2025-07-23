@@ -117,6 +117,7 @@ export const assurance = pgTable("assurance", {
   benefitSplit: text("benefit_split").notNull().default("0"),
   additionalBeneficiaries: text("additional_beneficiaries").array().notNull().default([]),
   additionalBenefitSplits: text("additional_benefit_splits").array().notNull().default([]),
+  additionalInfo: text("additional_info").notNull().default(""),
   amount: text("amount").notNull().default("0"),
   buySell: boolean("buy_sell").notNull().default(false),
   keyMan: boolean("key_man").notNull().default(false),
