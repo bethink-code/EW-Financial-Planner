@@ -188,26 +188,26 @@ export function SimpleTableWithBeneficiaries({
           {/* Overview Section */}
           {columnVisibility.overview && (
             <>
-              <td className="table-cell whitespace-nowrap table-text-14 text-neutral-900" rowSpan={fundOwners.length}>
+              <td className="p-2 text-left" rowSpan={fundOwners.length} style={{ width: "200px", maxWidth: "200px" }}>
                 <input
                   defaultValue={fund.description || ""}
                   onBlur={(e) => onFieldUpdate(fund.id, "description", e.target.value)}
-                  className="table-input h-7 text-sm bg-white border-gray-200 focus:border-primary w-full px-3 py-1 border rounded-md text-sm"
-                  style={{ textAlign: "left", fontWeight: "500", minWidth: "140px" }}
+                  className="table-input h-7 text-sm bg-white border-gray-200 focus:border-primary w-full px-3 py-1 border rounded-md text-sm overflow-hidden"
+                  style={{ textAlign: "left", fontWeight: "500", width: "100%", maxWidth: "190px" }}
                   placeholder="Fund description"
                   disabled={isUpdating}
                 />
               </td>
-              <td className="p-2 text-right">
-                <div className="flex items-center gap-2">
+              <td className="p-2 text-right" style={{ width: "160px", maxWidth: "160px" }}>
+                <div className="flex items-center gap-1" style={{ maxWidth: "150px" }}>
                   <Select
                     value={fundOwners[0]}
                     onValueChange={(value) => handleOwnerChange(fund.id, 0, value)}
                     disabled={isUpdating}
                   >
-                    <SelectTrigger className="table-input h-7 min-w-[120px] w-full max-w-[160px] text-right border-0 focus:bg-white focus:border focus:border-primary hover:bg-neutral-50 transition-colors duration-200 group">
-                      <SelectValue className="text-right pr-6" />
-                      <Edit3 size={12} className="ml-1 text-teal-400 opacity-0 group-hover:opacity-100 transition-opacity duration-200" />
+                    <SelectTrigger className="table-input h-7 text-right border-0 focus:bg-white focus:border focus:border-primary hover:bg-neutral-50 transition-colors duration-200 group overflow-hidden" style={{ width: "80px", maxWidth: "80px" }}>
+                      <SelectValue className="text-right truncate" />
+                      <Edit3 size={12} className="ml-1 text-teal-400 opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex-shrink-0" />
                     </SelectTrigger>
                     <SelectContent>
                       {owners.map((ownerOption) => (
@@ -223,7 +223,7 @@ export function SimpleTableWithBeneficiaries({
                       size="sm"
                       onClick={() => handleRemoveOwner(fund.id, 0)}
                       disabled={isUpdating}
-                      className="h-6 w-6 p-0 bg-white text-[#4F4F4F] hover:text-red-600 hover:bg-red-50 border border-gray-300"
+                      className="h-6 w-6 p-0 bg-white text-[#4F4F4F] hover:text-red-600 hover:bg-red-50 border border-gray-300 flex-shrink-0"
                       title="Remove owner"
                     >
                       <UserMinus className="h-3 w-3" />
@@ -234,14 +234,14 @@ export function SimpleTableWithBeneficiaries({
                     size="sm"
                     onClick={() => handleAddOwner(fund.id)}
                     disabled={isUpdating}
-                    className="h-6 w-6 p-0 bg-blue-50 text-primary hover:bg-blue-100 border-0"
+                    className="h-6 w-6 p-0 bg-blue-50 text-primary hover:bg-blue-100 border-0 flex-shrink-0"
                     title="Add owner"
                   >
                     <UserPlus className="h-3 w-3" />
                   </Button>
                 </div>
               </td>
-              <td className="p-2 text-right">
+              <td className="p-2 text-right" style={{ width: "80px", maxWidth: "80px" }}>
                 <input
                   type="text"
                   defaultValue={`${ownershipPercentages[0] || '100'}%`}
@@ -252,8 +252,8 @@ export function SimpleTableWithBeneficiaries({
                     }
                     handlePercentageChange(fund.id, 0, e.target.value.replace('%', ''));
                   }}
-                  className="table-input h-7 text-sm bg-white border-gray-200 focus:border-primary w-full px-3 py-1 border rounded-md text-sm"
-                  style={{ textAlign: "right", minWidth: "70px" }}
+                  className="table-input h-7 text-sm bg-white border-gray-200 focus:border-primary px-2 py-1 border rounded-md text-sm overflow-hidden"
+                  style={{ textAlign: "right", width: "100%", maxWidth: "70px" }}
                   disabled={isUpdating}
                 />
               </td>
@@ -264,7 +264,7 @@ export function SimpleTableWithBeneficiaries({
           {/* Monthly Death Benefit Section */}
           {columnVisibility.monthlyDeathBenefit && (
             <>
-              <td className="p-2 text-right border-l border-neutral-300" rowSpan={fundOwners.length}>
+              <td className="p-2 text-right border-l border-neutral-300" rowSpan={fundOwners.length} style={{ width: "140px", maxWidth: "140px" }}>
                 <input
                   defaultValue={fund.monthlyIncome || ""}
                   onBlur={(e) => {
@@ -274,13 +274,13 @@ export function SimpleTableWithBeneficiaries({
                     }
                     handleInputBlur(fund.id, "monthlyIncome", e.target.value);
                   }}
-                  className="table-input h-7 text-sm bg-white border-gray-200 focus:border-primary w-full px-3 py-1 border rounded-md text-sm"
-                  style={{ textAlign: "right", minWidth: "120px" }}
+                  className="table-input h-7 text-sm bg-white border-gray-200 focus:border-primary px-2 py-1 border rounded-md text-sm overflow-hidden"
+                  style={{ textAlign: "right", width: "100%", maxWidth: "130px" }}
                   placeholder="R 0"
                   disabled={isUpdating}
                 />
               </td>
-              <td className="p-2 text-right" rowSpan={fundOwners.length}>
+              <td className="p-2 text-right" rowSpan={fundOwners.length} style={{ width: "80px", maxWidth: "80px" }}>
                 <input
                   defaultValue={fund.increasePercentage || ""}
                   onBlur={(e) => {
@@ -290,13 +290,13 @@ export function SimpleTableWithBeneficiaries({
                     }
                     handleInputBlur(fund.id, "increasePercentage", e.target.value);
                   }}
-                  className="table-input h-7 text-sm bg-white border-gray-200 focus:border-primary w-full px-3 py-1 border rounded-md text-sm"
-                  style={{ textAlign: "right", minWidth: "80px" }}
+                  className="table-input h-7 text-sm bg-white border-gray-200 focus:border-primary px-2 py-1 border rounded-md text-sm overflow-hidden"
+                  style={{ textAlign: "right", width: "100%", maxWidth: "70px" }}
                   placeholder="0%"
                   disabled={isUpdating}
                 />
               </td>
-              <td className="p-2 text-right" rowSpan={fundOwners.length}>
+              <td className="p-2 text-right" rowSpan={fundOwners.length} style={{ width: "90px", maxWidth: "90px" }}>
                 <input
                   defaultValue={fund.termYears || ""}
                   onBlur={(e) => {
@@ -306,8 +306,8 @@ export function SimpleTableWithBeneficiaries({
                     }
                     handleInputBlur(fund.id, "termYears", e.target.value);
                   }}
-                  className="table-input h-7 text-sm bg-white border-gray-200 focus:border-primary w-full px-3 py-1 border rounded-md text-sm"
-                  style={{ textAlign: "right", minWidth: "90px" }}
+                  className="table-input h-7 text-sm bg-white border-gray-200 focus:border-primary px-2 py-1 border rounded-md text-sm overflow-hidden"
+                  style={{ textAlign: "right", width: "100%", maxWidth: "80px" }}
                   placeholder="0 years"
                   disabled={isUpdating}
                 />
@@ -318,7 +318,7 @@ export function SimpleTableWithBeneficiaries({
           {/* Fund Value Section */}
           {columnVisibility.fundValue && (
             <>
-              <td className="p-2 text-right border-l border-neutral-300" rowSpan={fundOwners.length}>
+              <td className="p-2 text-right border-l border-neutral-300" rowSpan={fundOwners.length} style={{ width: "140px", maxWidth: "140px" }}>
                 <input
                   defaultValue={fund.fundValue || ""}
                   onBlur={(e) => {
@@ -328,13 +328,13 @@ export function SimpleTableWithBeneficiaries({
                     }
                     handleInputBlur(fund.id, "fundValue", e.target.value);
                   }}
-                  className="table-input h-7 text-sm bg-white border-gray-200 focus:border-primary w-full px-3 py-1 border rounded-md text-sm"
-                  style={{ textAlign: "right", minWidth: "120px" }}
+                  className="table-input h-7 text-sm bg-white border-gray-200 focus:border-primary px-2 py-1 border rounded-md text-sm overflow-hidden"
+                  style={{ textAlign: "right", width: "100%", maxWidth: "130px" }}
                   placeholder="R 0"
                   disabled={isUpdating}
                 />
               </td>
-              <td className="p-2 text-right" rowSpan={fundOwners.length}>
+              <td className="p-2 text-right" rowSpan={fundOwners.length} style={{ width: "140px", maxWidth: "140px" }}>
                 <input
                   defaultValue={fund.fundValueAtDeath || ""}
                   onBlur={(e) => {
@@ -344,8 +344,8 @@ export function SimpleTableWithBeneficiaries({
                     }
                     handleInputBlur(fund.id, "fundValueAtDeath", e.target.value);
                   }}
-                  className="table-input h-7 text-sm bg-white border-gray-200 focus:border-primary w-full px-3 py-1 border rounded-md text-sm"
-                  style={{ textAlign: "right", minWidth: "120px" }}
+                  className="table-input h-7 text-sm bg-white border-gray-200 focus:border-primary px-2 py-1 border rounded-md text-sm overflow-hidden"
+                  style={{ textAlign: "right", width: "100%", maxWidth: "130px" }}
                   placeholder="R 0"
                   disabled={isUpdating}
                 />
@@ -356,12 +356,12 @@ export function SimpleTableWithBeneficiaries({
           {/* Fund Value Beneficiaries Section */}
           {columnVisibility.fundValueBeneficiaries && (
             <>
-              <td className="p-2 text-left border-l border-neutral-300" rowSpan={fundOwners.length}>
+              <td className="p-2 text-left border-l border-neutral-300" rowSpan={fundOwners.length} style={{ width: "140px", maxWidth: "140px" }}>
                 <input
                   defaultValue={beneficiaries[0]?.name || ""}
                   onBlur={(e) => handleBeneficiaryUpdate(fund.id, 0, 'name', e.target.value)}
-                  className="table-input h-7 text-sm bg-white border-gray-200 focus:border-primary w-full px-3 py-1 border rounded-md text-sm"
-                  style={{ textAlign: "left", minWidth: "120px" }}
+                  className="table-input h-7 text-sm bg-white border-gray-200 focus:border-primary px-2 py-1 border rounded-md text-sm overflow-hidden"
+                  style={{ textAlign: "left", width: "100%", maxWidth: "130px" }}
                   placeholder="Beneficiary name"
                   disabled={isUpdating}
                 />
@@ -773,8 +773,52 @@ export function SimpleTableWithBeneficiaries({
 
   return (
     <div className="overflow-auto">
-      <table className="w-full min-w-max table-fixed">
+      <table className="w-full min-w-max table-fixed border-collapse">
         <thead className="sticky top-0 z-10 bg-neutral-50 border-b border-neutral-300">
+          <colgroup>
+            {/* Overview Section */}
+            {columnVisibility.overview && (
+              <>
+                <col style={{ width: "200px" }} />  {/* Fund Description */}
+                <col style={{ width: "160px" }} />  {/* Owner */}
+                <col style={{ width: "80px" }} />   {/* % */}
+              </>
+            )}
+            {/* Monthly Death Benefit Section */}
+            {columnVisibility.monthlyDeathBenefit && (
+              <>
+                <col style={{ width: "140px" }} />  {/* Monthly Income */}
+                <col style={{ width: "80px" }} />   {/* Increase % */}
+                <col style={{ width: "90px" }} />   {/* Term (Years) */}
+              </>
+            )}
+            {/* Fund Value Section */}
+            {columnVisibility.fundValue && (
+              <>
+                <col style={{ width: "140px" }} />  {/* Fund Value */}
+                <col style={{ width: "140px" }} />  {/* Fund Value at Death */}
+              </>
+            )}
+            {/* Fund Value Beneficiaries Section */}
+            {columnVisibility.fundValueBeneficiaries && (
+              <>
+                <col style={{ width: "140px" }} />  {/* Beneficiary Name */}
+                <col style={{ width: "70px" }} />   {/* Percentage */}
+                <col style={{ width: "140px" }} />  {/* Amount */}
+                <col style={{ width: "140px" }} />  {/* Lump Sum Taken */}
+                <col style={{ width: "140px" }} />  {/* Non-deductible Contribution */}
+                <col style={{ width: "140px" }} />  {/* Living Annuity */}
+                <col style={{ width: "90px" }} />   {/* Income Term */}
+              </>
+            )}
+            {/* Unapproved Life Cover Section */}
+            {columnVisibility.unapprovedLifeCover && (
+              <>
+                <col style={{ width: "140px" }} />  {/* Cover Amount */}
+                <col style={{ width: "70px" }} />   {/* Actions */}
+              </>
+            )}
+          </colgroup>
           <tr>
             {columnVisibility.overview && (
               <>
