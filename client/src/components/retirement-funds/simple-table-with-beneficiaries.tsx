@@ -1,12 +1,11 @@
-import React, { useRef, useEffect, useMemo, useCallback } from "react";
+import React, { useCallback, useMemo } from "react";
 import { RetirementFund, UpdateRetirementFund, Beneficiary } from "@shared/schema";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Edit3, Plus, Trash2, UserPlus, UserMinus } from "lucide-react";
 import { parseBeneficiaries } from "@/lib/beneficiaries";
-import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { FundActions } from "./fund-actions";
 import { nanoid } from "nanoid";
+
 interface ColumnVisibility {
   overview: boolean;
   unapprovedLifeCover: boolean;
@@ -14,6 +13,7 @@ interface ColumnVisibility {
   fundValue: boolean;
   fundValueBeneficiaries: boolean;
 }
+
 interface SimpleTableWithBeneficiariesProps {
   funds: RetirementFund[];
   columnVisibility: ColumnVisibility;
@@ -21,63 +21,104 @@ interface SimpleTableWithBeneficiariesProps {
   onFieldUpdate: (id: number, field: keyof UpdateRetirementFund, value: string) => void;
   isUpdating: boolean;
 }
-// Removed AutoSizeInput component - no longer needed for optimized performance
-export function SimpleTableWithBeneficiaries({ funds, columnVisibility, tableMode, onFieldUpdate, isUpdating }: SimpleTableWithBeneficiariesProps) {
+
+// Format currency value
+const formatCurrencyValue = (value: string, field: string) => {
+  const currencyFields = [
+    'coverAmount', 'monthlyIncome', 'approvedLifeCover', 'fundValue', 'fundValueAtDeath', 
+    'amount', 'lumpSumTaken', 'nondeductibleContribution', 'livingAnnuity', 'escalationAmount'
+  ];
   
-  // Format currency value
-  const formatCurrencyValue = useCallback((value: string, field: string) => {
-    // Fields that should have currency formatting (R prefix)
-    const currencyFields = [
-      'coverAmount', 'monthlyIncome', 'approvedLifeCover', 'fundValue', 'fundValueAtDeath', 
-      'amount', 'lumpSumTaken', 'nondeductibleContribution', 'livingAnnuity', 'escalationAmount'
-    ];
-    
-    // Fields that should have thousand separators but no R prefix  
-    const numericFields = [
-      'lumpSumLeftOverProvisions', 'currentAnnualIncome', 'annualIncomeAtDeath', 
-      'estateDeploymentDeceased', 'lumpSumDeath', 'previousLumpSums', 'additionalTaxFreeAmount'
-    ];
-    
-    // Fields that should have percentage formatting (% suffix)
-    const percentageFields = [
-      'increasePercentage', 'beneficiaryPercentageSplit', 'percentage'
-    ];
-    
-    // Fields that should have years formatting (years suffix)
-    const yearsFields = [
-      'termYears', 'incomeTerm'
-    ];
-    
-    if (!currencyFields.includes(field) && !numericFields.includes(field) && !percentageFields.includes(field) && !yearsFields.includes(field)) return value;
-    
-    // Remove existing formatting and non-numeric characters except decimals
-    const numericValue = value.replace(/[^\d.-]/g, '');
-    if (!numericValue || isNaN(Number(numericValue))) return value;
-    
-    if (currencyFields.includes(field)) {
-      // Add R prefix and format with thousands separators
-      return `R ${Math.round(Number(numericValue)).toLocaleString()}`;
-    } else if (percentageFields.includes(field)) {
-      // Add % suffix
-      return `${Number(numericValue)}%`;
-    } else if (yearsFields.includes(field)) {
-      // Add years suffix
-      return `${Number(numericValue)} years`;
-    } else {
-      // Just format with thousands separators (no R prefix)
-      return Math.round(Number(numericValue)).toLocaleString();
-    }
-  }, []);
-  // Memoized handlers
-  const handleInputBlur = useCallback((fundId: number, field: keyof UpdateRetirementFund, value: string) => {
-    const formattedValue = formatCurrencyValue(value, field);
-    onFieldUpdate(fundId, field, formattedValue);
-  }, [onFieldUpdate, formatCurrencyValue]);
-  const handleBeneficiaryUpdate = useCallback((fundId: number, beneficiaryIndex: number, field: keyof Beneficiary, value: string | number) => {
+  const percentageFields = [
+    'increasePercentage', 'beneficiaryPercentageSplit', 'percentage'
+  ];
+  
+  const yearsFields = [
+    'termYears', 'incomeTerm'
+  ];
+  
+  if (!currencyFields.includes(field) && !percentageFields.includes(field) && !yearsFields.includes(field)) return value;
+  
+  const numericValue = value.replace(/[^\d.-]/g, '');
+  if (!numericValue || isNaN(Number(numericValue))) return value;
+  
+  if (currencyFields.includes(field)) {
+    return `R ${Math.round(Number(numericValue)).toLocaleString()}`;
+  } else if (percentageFields.includes(field)) {
+    return `${Number(numericValue)}%`;
+  } else if (yearsFields.includes(field)) {
+    return `${Number(numericValue)} years`;
+  } else {
+    return Math.round(Number(numericValue)).toLocaleString();
+  }
+};
+
+export function SimpleTableWithBeneficiaries({ 
+  funds, 
+  columnVisibility, 
+  tableMode, 
+  onFieldUpdate, 
+  isUpdating 
+}: SimpleTableWithBeneficiariesProps) {
+  
+  const owners = ["John Doe", "Jane Smith", "Bob Wilson"];
+
+  // Owner management handlers
+  const handleOwnerChange = useCallback((fundId: number, ownerIndex: number, newOwner: string) => {
     const fund = funds.find(f => f.id === fundId);
     if (!fund) return;
-    const currentBeneficiaries = parseBeneficiaries(fund.beneficiaries);
-    const updatedBeneficiaries = [...currentBeneficiaries];
+    
+    const currentOwners = JSON.parse(fund.owners || '["John Doe"]');
+    currentOwners[ownerIndex] = newOwner;
+    onFieldUpdate(fundId, 'owners', JSON.stringify(currentOwners));
+  }, [funds, onFieldUpdate]);
+
+  const handleAddOwner = useCallback((fundId: number) => {
+    const fund = funds.find(f => f.id === fundId);
+    if (!fund) return;
+    
+    const currentOwners = JSON.parse(fund.owners || '["John Doe"]');
+    const currentPercentages = JSON.parse(fund.ownershipPercentages || '["100"]');
+    
+    currentOwners.push("John Doe");
+    currentPercentages.push("0");
+    
+    onFieldUpdate(fundId, 'owners', JSON.stringify(currentOwners));
+    onFieldUpdate(fundId, 'ownershipPercentages', JSON.stringify(currentPercentages));
+  }, [funds, onFieldUpdate]);
+
+  const handleRemoveOwner = useCallback((fundId: number, ownerIndex: number) => {
+    const fund = funds.find(f => f.id === fundId);
+    if (!fund) return;
+    
+    const currentOwners = JSON.parse(fund.owners || '["John Doe"]');
+    const currentPercentages = JSON.parse(fund.ownershipPercentages || '["100"]');
+    
+    if (currentOwners.length <= 1) return;
+    
+    currentOwners.splice(ownerIndex, 1);
+    currentPercentages.splice(ownerIndex, 1);
+    
+    onFieldUpdate(fundId, 'owners', JSON.stringify(currentOwners));
+    onFieldUpdate(fundId, 'ownershipPercentages', JSON.stringify(currentPercentages));
+  }, [funds, onFieldUpdate]);
+
+  const handlePercentageChange = useCallback((fundId: number, ownerIndex: number, percentage: string) => {
+    const fund = funds.find(f => f.id === fundId);
+    if (!fund) return;
+    
+    const currentPercentages = JSON.parse(fund.ownershipPercentages || '["100"]');
+    currentPercentages[ownerIndex] = percentage;
+    onFieldUpdate(fundId, 'ownershipPercentages', JSON.stringify(currentPercentages));
+  }, [funds, onFieldUpdate]);
+
+  // Beneficiary management handlers
+  const handleBeneficiaryUpdate = useCallback((fundId: number, beneficiaryIndex: number, field: string, value: any) => {
+    const fund = funds.find(f => f.id === fundId);
+    if (!fund) return;
+    
+    const beneficiaries = parseBeneficiaries(fund.beneficiaries);
+    const updatedBeneficiaries = [...beneficiaries];
     
     if (updatedBeneficiaries[beneficiaryIndex]) {
       if (field === 'percentage') {
@@ -91,7 +132,7 @@ export function SimpleTableWithBeneficiaries({ funds, columnVisibility, tableMod
           [field]: value
         };
       }
-      // Update cover splits when percentages change
+      
       if (field === 'percentage') {
         const coverAmount = parseFloat(fund.coverAmount.replace(/[^\d.-]/g, '')) || 0;
         updatedBeneficiaries[beneficiaryIndex].coverSplit = 
@@ -100,775 +141,747 @@ export function SimpleTableWithBeneficiaries({ funds, columnVisibility, tableMod
       onFieldUpdate(fundId, 'beneficiaries', JSON.stringify(updatedBeneficiaries));
     }
   }, [funds, onFieldUpdate]);
+
   const handleAddBeneficiary = useCallback((fundId: number) => {
     const fund = funds.find(f => f.id === fundId);
     if (!fund) return;
-    const currentBeneficiaries = parseBeneficiaries(fund.beneficiaries);
-    const coverAmount = parseFloat(fund.coverAmount?.replace(/[^\d.-]/g, '') || '0') || 0;
+    
+    const beneficiaries = parseBeneficiaries(fund.beneficiaries);
     const newBeneficiary: Beneficiary = {
       id: nanoid(),
       name: "",
-      percentage: 100,
-      coverSplit: `R ${Math.round(coverAmount).toLocaleString()}`
+      percentage: 0,
+      coverSplit: "R 0"
     };
-    const updatedBeneficiaries = [...currentBeneficiaries, newBeneficiary];
-    onFieldUpdate(fundId, 'beneficiaries', JSON.stringify(updatedBeneficiaries));
+    
+    onFieldUpdate(fundId, 'beneficiaries', JSON.stringify([...beneficiaries, newBeneficiary]));
   }, [funds, onFieldUpdate]);
+
   const handleRemoveBeneficiary = useCallback((fundId: number, beneficiaryIndex: number) => {
     const fund = funds.find(f => f.id === fundId);
     if (!fund) return;
-    const currentBeneficiaries = parseBeneficiaries(fund.beneficiaries);
-    if (currentBeneficiaries.length <= 1) return;
-    const updatedBeneficiaries = currentBeneficiaries.filter((_, index) => index !== beneficiaryIndex);
     
-    // Auto-adjust percentages
-    const totalPercentage = updatedBeneficiaries.reduce((sum, b) => sum + b.percentage, 0);
-    if (totalPercentage > 0 && totalPercentage !== 100) {
-      const adjustmentFactor = 100 / totalPercentage;
-      const coverAmount = parseFloat(fund.coverAmount.replace(/[^\d.-]/g, '')) || 0;
-      
-      updatedBeneficiaries.forEach(b => {
-        b.percentage = Math.round(b.percentage * adjustmentFactor * 100) / 100;
-        b.coverSplit = `R ${Math.round((coverAmount * b.percentage / 100)).toLocaleString()}`;
-      });
-    }
+    const beneficiaries = parseBeneficiaries(fund.beneficiaries);
+    if (beneficiaries.length <= 1) return;
+    
+    const updatedBeneficiaries = beneficiaries.filter((_, index) => index !== beneficiaryIndex);
     onFieldUpdate(fundId, 'beneficiaries', JSON.stringify(updatedBeneficiaries));
   }, [funds, onFieldUpdate]);
-  
-  // Owner management functions
-  const handleAddOwner = useCallback((fundId: number) => {
-    const fund = funds.find(f => f.id === fundId);
-    if (!fund) return;
-    
-    const owners = JSON.parse(fund.owners || '["John Doe"]');
-    const percentages = JSON.parse(fund.ownershipPercentages || '["100"]');
-    
-    owners.push('John Doe');
-    percentages.push('0');
-    
-    onFieldUpdate(fundId, 'owners', JSON.stringify(owners));
-    onFieldUpdate(fundId, 'ownershipPercentages', JSON.stringify(percentages));
-  }, [funds, onFieldUpdate]);
 
-  const handleRemoveOwner = useCallback((fundId: number, ownerIndex: number) => {
-    const fund = funds.find(f => f.id === fundId);
-    if (!fund) return;
-    
-    const owners = JSON.parse(fund.owners || '["John Doe"]');
-    const percentages = JSON.parse(fund.ownershipPercentages || '["100"]');
-    
-    if (owners.length <= 1) return; // Don't allow removing the last owner
-    
-    owners.splice(ownerIndex, 1);
-    percentages.splice(ownerIndex, 1);
-    
-    onFieldUpdate(fundId, 'owners', JSON.stringify(owners));
-    onFieldUpdate(fundId, 'ownershipPercentages', JSON.stringify(percentages));
-  }, [funds, onFieldUpdate]);
+  const handleInputBlur = useCallback((fundId: number, field: keyof UpdateRetirementFund, value: string) => {
+    const formattedValue = formatCurrencyValue(value, field);
+    onFieldUpdate(fundId, field, formattedValue);
+  }, [onFieldUpdate]);
 
-  const handleOwnerChange = useCallback((fundId: number, ownerIndex: number, newOwner: string) => {
-    const fund = funds.find(f => f.id === fundId);
-    if (!fund) return;
+  const renderFundRows = useMemo(() => {
+    const rows: JSX.Element[] = [];
     
-    const owners = JSON.parse(fund.owners || '["John Doe"]');
-    owners[ownerIndex] = newOwner;
-    
-    onFieldUpdate(fundId, 'owners', JSON.stringify(owners));
-  }, [funds, onFieldUpdate]);
-
-  const handlePercentageChange = useCallback((fundId: number, ownerIndex: number, newPercentage: string) => {
-    const fund = funds.find(f => f.id === fundId);
-    if (!fund) return;
-    
-    const percentages = JSON.parse(fund.ownershipPercentages || '["100"]');
-    percentages[ownerIndex] = newPercentage;
-    
-    onFieldUpdate(fundId, 'ownershipPercentages', JSON.stringify(percentages));
-  }, [funds, onFieldUpdate]);
-
-
-
-  const owners = useMemo(() => ["John Doe", "Jane Smith", "Donald Edwards", "Betty Edwards"], []);
-  return (
-    <div>
+    funds.forEach((fund) => {
+      const beneficiaries = parseBeneficiaries(fund.beneficiaries);
+      const fundOwners = JSON.parse(fund.owners || '["John Doe"]');
+      const ownershipPercentages = JSON.parse(fund.ownershipPercentages || '["100"]');
       
-      <table className="min-w-full bg-white table-auto">
-        <thead>
-          {/* First level headers */}
-          <tr className="border-b border-neutral-200" style={{ backgroundColor: '#D6ECF5' }}>
-            {columnVisibility.overview && (
-              <th className="p-2 text-center font-medium text-neutral-600 uppercase tracking-wider text-xs" colSpan={3}>
-                Overview
-              </th>
-            )}
-            {columnVisibility.unapprovedLifeCover && (
-              <th className="p-2 text-center font-medium text-neutral-600 uppercase tracking-wider text-xs border-l border-neutral-300" colSpan={5}>
-                Unapproved life cover
-              </th>
-            )}
-            {columnVisibility.monthlyDeathBenefit && (
-              <th className="p-2 text-center font-medium text-neutral-600 uppercase tracking-wider text-xs border-l border-neutral-300" colSpan={4}>
-                Monthly death benefit
-              </th>
-            )}
-            {columnVisibility.fundValue && (
-              <th className="p-2 text-center font-medium text-neutral-600 uppercase tracking-wider text-xs border-l border-neutral-300" colSpan={3}>
-                Fund value
-              </th>
-            )}
-            {columnVisibility.fundValueBeneficiaries && (
-              <th className="p-2 text-center font-medium text-neutral-600 uppercase tracking-wider text-xs border-l border-neutral-300" colSpan={7}>
-                Fund value beneficiaries
-              </th>
-            )}
-            {/* Fund Actions Column */}
-            <th className="p-2 text-center font-medium text-neutral-600 uppercase tracking-wider text-xs border-l border-neutral-300" colSpan={1}>
-              Fund Actions
-            </th>
-          </tr>
-          
-          {/* Second level headers */}
-          <tr className="border-b border-neutral-200" style={{ backgroundColor: '#D6ECF5' }}>
-            {columnVisibility.overview && (
-              <>
-                <th className="table-cell text-left table-header-12 text-neutral-600 uppercase tracking-wider">
-                  Description
-                </th>
-                <th className="table-cell text-left table-header-12 text-neutral-600 uppercase tracking-wider min-w-[140px]">
-                  Owner
-                </th>
-                <th className="table-cell text-left table-header-12 text-neutral-600 uppercase tracking-wider percentage-column">
-                  %
-                </th>
-              </>
-            )}
-            {columnVisibility.unapprovedLifeCover && (
-              <>
-                <th className="table-cell text-left table-header-12 text-neutral-600 uppercase tracking-wider border-l border-neutral-300">
-                  Cover amount
-                </th>
-                <th className="table-cell text-left table-header-12 text-neutral-600 uppercase tracking-wider">
-                  Beneficiary
-                </th>
-                <th className="table-cell text-left table-header-12 text-neutral-600 uppercase tracking-wider percentage-column">
-                  %
-                </th>
-                <th className="table-cell text-left table-header-12 text-neutral-600 uppercase tracking-wider">
-                  Cover split
-                </th>
-                <th className="table-cell text-center table-header-12 text-neutral-600 uppercase tracking-wider">
-                  Actions
-                </th>
-              </>
-            )}
-            {columnVisibility.monthlyDeathBenefit && (
-              <>
-                <th className="table-cell text-left table-header-12 text-neutral-600 uppercase tracking-wider border-l border-neutral-300">
-                  Monthly income
-                </th>
-                <th className="table-cell text-left table-header-12 text-neutral-600 uppercase tracking-wider">
-                  Term (Years)
-                </th>
-                <th className="table-cell text-left table-header-12 text-neutral-600 uppercase tracking-wider">
-                  Increase %
-                </th>
-                <th className="table-cell text-left table-header-12 text-neutral-600 uppercase tracking-wider">
-                  Escalation amount
-                </th>
-              </>
-            )}
-            {columnVisibility.fundValue && (
-              <>
-                <th className="table-cell text-left table-header-12 text-neutral-600 uppercase tracking-wider border-l border-neutral-300">
-                  Approved life cover
-                </th>
-                <th className="table-cell text-left table-header-12 text-neutral-600 uppercase tracking-wider">
-                  Fund value
-                </th>
-                <th className="table-cell text-left table-header-12 text-neutral-600 uppercase tracking-wider">
-                  Fund value at death
-                </th>
-              </>
-            )}
-            {columnVisibility.fundValueBeneficiaries && (
-              <>
-                <th className="table-cell text-left table-header-12 text-neutral-600 uppercase tracking-wider border-l border-neutral-300">
-                  Name
-                </th>
-                <th className="table-cell text-left table-header-12 text-neutral-600 uppercase tracking-wider">
-                  %
-                </th>
-                <th className="table-cell text-left table-header-12 text-neutral-600 uppercase tracking-wider">
-                  Amount
-                </th>
-                <th className="table-cell text-left table-header-12 text-neutral-600 uppercase tracking-wider">
-                  Lump sum taken
-                </th>
-                <th className="table-cell text-left table-header-12 text-neutral-600 uppercase tracking-wider">
-                  Non deductible contribution amount
-                </th>
-                <th className="table-cell text-left table-header-12 text-neutral-600 uppercase tracking-wider">
-                  Living annuity
-                </th>
-                <th className="table-cell text-left table-header-12 text-neutral-600 uppercase tracking-wider">
-                  Income term
-                </th>
-              </>
-            )}
-            {/* Fund Actions Header */}
-            <th className="table-cell text-center table-header-12 text-neutral-600 uppercase tracking-wider border-l border-neutral-300">
-              Actions
-            </th>
-          </tr>
-        </thead>
-        <tbody className="bg-white divide-y divide-neutral-200">
-          {funds.flatMap((fund) => {
-            const beneficiaries = parseBeneficiaries(fund.beneficiaries);
-            const fundOwners = JSON.parse(fund.owners || '["John Doe"]');
-            const ownershipPercentages = JSON.parse(fund.ownershipPercentages || '["100"]');
-            const rows: JSX.Element[] = [];
-            
-            // Create rows for each owner
-            fundOwners.forEach((owner: string, ownerIndex: number) => {
-              const isFirstOwner = ownerIndex === 0;
-              const isLastOwner = ownerIndex === fundOwners.length - 1;
-              
-              rows.push(
-                <tr key={`${fund.id}-owner-${ownerIndex}`} className="hover:bg-neutral-50">
-                  {/* Overview Section */}
-                  {columnVisibility.overview && (
-                    <>
-                      {isFirstOwner && (
-                        <td className="table-cell whitespace-nowrap table-text-14 text-neutral-900" rowSpan={fundOwners.length}>
-                          <input
-                            defaultValue={fund.description || ""}
-                            onBlur={(e) => onFieldUpdate(fund.id, "description", e.target.value)}
-                            className="table-input h-7 text-sm bg-white border-gray-200 focus:border-primary w-full px-3 py-1 border rounded-md text-sm"
-                            style={{ textAlign: "left", fontWeight: "500", minWidth: "140px" }}
-                            placeholder="Fund description"
-                            disabled={isUpdating}
-                          />
-                        </td>
-                      )}
-                      <td className="p-2 text-right">
-                        <div className="flex items-center gap-2">
-                          <Select
-                            value={owner}
-                            onValueChange={(value) => handleOwnerChange(fund.id, ownerIndex, value)}
-                            disabled={isUpdating}
-                          >
-                            <SelectTrigger className="table-input h-7 min-w-[120px] w-full max-w-[160px] text-right border-0 focus:bg-white focus:border focus:border-primary hover:bg-neutral-50 transition-colors duration-200 group">
-                              <SelectValue className="text-right pr-6" />
-                              <Edit3 size={12} className="ml-1 text-teal-400 opacity-0 group-hover:opacity-100 transition-opacity duration-200" />
-                            </SelectTrigger>
-                            <SelectContent>
-                              {owners.map((ownerOption) => (
-                                <SelectItem key={ownerOption} value={ownerOption}>
-                                  {ownerOption}
-                                </SelectItem>
-                              ))}
-                            </SelectContent>
-                          </Select>
-                          {fundOwners.length > 1 && (
-                            <Button
-                              variant="ghost"
-                              size="sm"
-                              onClick={() => handleRemoveOwner(fund.id, ownerIndex)}
-                              disabled={isUpdating}
-                              className="h-6 w-6 p-0 bg-white text-[#4F4F4F] hover:text-red-600 hover:bg-red-50 border border-gray-300"
-                              title="Remove owner"
-                            >
-                              <UserMinus className="h-3 w-3" />
-                            </Button>
-                          )}
-                          {isLastOwner && (
-                            <Button
-                              variant="ghost"
-                              size="sm"
-                              onClick={() => handleAddOwner(fund.id)}
-                              disabled={isUpdating}
-                              className="h-6 w-6 p-0 bg-blue-50 text-primary hover:bg-blue-100 border-0"
-                              title="Add owner"
-                            >
-                              <UserPlus className="h-3 w-3" />
-                            </Button>
-                          )}
-                        </div>
-                      </td>
-                      <td className="p-2 text-right">
-                        <input
-                          type="text"
-                          defaultValue={`${ownershipPercentages[ownerIndex] || '0'}%`}
-                          onBlur={(e) => {
-                            const formattedValue = formatCurrencyValue(e.target.value, "percentage");
-                            if (formattedValue !== e.target.value) {
-                              e.target.value = formattedValue;
-                            }
-                            handlePercentageChange(fund.id, ownerIndex, e.target.value);
-                          }}
-                          className="table-input h-7 text-sm bg-white border-gray-200 focus:border-primary w-full px-3 py-1 border rounded-md text-sm"
-                          style={{ textAlign: "right", minWidth: "60px" }}
-                          disabled={isUpdating}
-                        />
-                      </td>
-                    </>
+      // Main fund row
+      rows.push(
+        <tr key={`${fund.id}-main`} className="hover:bg-neutral-50">
+          {/* Overview Section */}
+          {columnVisibility.overview && (
+            <>
+              <td className="table-cell whitespace-nowrap table-text-14 text-neutral-900" rowSpan={fundOwners.length}>
+                <input
+                  defaultValue={fund.description || ""}
+                  onBlur={(e) => onFieldUpdate(fund.id, "description", e.target.value)}
+                  className="table-input h-7 text-sm bg-white border-gray-200 focus:border-primary w-full px-3 py-1 border rounded-md text-sm"
+                  style={{ textAlign: "left", fontWeight: "500", minWidth: "140px" }}
+                  placeholder="Fund description"
+                  disabled={isUpdating}
+                />
+              </td>
+              <td className="p-2 text-right">
+                <div className="flex items-center gap-2">
+                  <Select
+                    value={fundOwners[0]}
+                    onValueChange={(value) => handleOwnerChange(fund.id, 0, value)}
+                    disabled={isUpdating}
+                  >
+                    <SelectTrigger className="table-input h-7 min-w-[120px] w-full max-w-[160px] text-right border-0 focus:bg-white focus:border focus:border-primary hover:bg-neutral-50 transition-colors duration-200 group">
+                      <SelectValue className="text-right pr-6" />
+                      <Edit3 size={12} className="ml-1 text-teal-400 opacity-0 group-hover:opacity-100 transition-opacity duration-200" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {owners.map((ownerOption) => (
+                        <SelectItem key={ownerOption} value={ownerOption}>
+                          {ownerOption}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  {fundOwners.length > 1 && (
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => handleRemoveOwner(fund.id, 0)}
+                      disabled={isUpdating}
+                      className="h-6 w-6 p-0 bg-white text-[#4F4F4F] hover:text-red-600 hover:bg-red-50 border border-gray-300"
+                      title="Remove owner"
+                    >
+                      <UserMinus className="h-3 w-3" />
+                    </Button>
                   )}
-                
-                {/* Unapproved Life Cover Section - only show for first owner row */}
-                {isFirstOwner && columnVisibility.unapprovedLifeCover && (
-                  <>
-                    <td className="p-2 text-right border-l border-neutral-300" rowSpan={fundOwners.length}>
-                      <input
-                        defaultValue={fund.coverAmount || ""}
-                        onBlur={(e) => {
-                          const formattedValue = formatCurrencyValue(e.target.value, "coverAmount");
-                          if (formattedValue !== e.target.value) {
-                            e.target.value = formattedValue;
-                          }
-                          handleInputBlur(fund.id, "coverAmount", e.target.value);
-                          
-                          // Recalculate cover splits for all beneficiaries
-                          const beneficiaries = parseBeneficiaries(fund.beneficiaries);
-                          if (beneficiaries.length > 0) {
-                            const newCoverAmount = parseFloat(e.target.value.replace(/[^\d.-]/g, '')) || 0;
-                            const updatedBeneficiaries = beneficiaries.map(b => ({
-                              ...b,
-                              coverSplit: `R ${Math.round((newCoverAmount * b.percentage / 100)).toLocaleString()}`
-                            }));
-                            onFieldUpdate(fund.id, 'beneficiaries', JSON.stringify(updatedBeneficiaries));
-                          }
-                        }}
-                        className="table-input h-7 text-sm bg-white border-gray-200 focus:border-primary w-full px-3 py-1 border rounded-md text-sm"
-                        style={{ textAlign: "right", minWidth: "100px" }}
-                        placeholder="R 0"
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => handleAddOwner(fund.id)}
+                    disabled={isUpdating}
+                    className="h-6 w-6 p-0 bg-blue-50 text-primary hover:bg-blue-100 border-0"
+                    title="Add owner"
+                  >
+                    <UserPlus className="h-3 w-3" />
+                  </Button>
+                </div>
+              </td>
+              <td className="p-2 text-right">
+                <input
+                  type="text"
+                  defaultValue={`${ownershipPercentages[0] || '100'}%`}
+                  onBlur={(e) => {
+                    const formattedValue = formatCurrencyValue(e.target.value, "percentage");
+                    if (formattedValue !== e.target.value) {
+                      e.target.value = formattedValue;
+                    }
+                    handlePercentageChange(fund.id, 0, e.target.value.replace('%', ''));
+                  }}
+                  className="table-input h-7 text-sm bg-white border-gray-200 focus:border-primary w-full px-3 py-1 border rounded-md text-sm"
+                  style={{ textAlign: "right", minWidth: "70px" }}
+                  disabled={isUpdating}
+                />
+              </td>
+            </>
+          )}
+          
+          
+          {/* Monthly Death Benefit Section */}
+          {columnVisibility.monthlyDeathBenefit && (
+            <>
+              <td className="p-2 text-right border-l border-neutral-300" rowSpan={fundOwners.length}>
+                <input
+                  defaultValue={fund.monthlyIncome || ""}
+                  onBlur={(e) => {
+                    const formattedValue = formatCurrencyValue(e.target.value, "monthlyIncome");
+                    if (formattedValue !== e.target.value) {
+                      e.target.value = formattedValue;
+                    }
+                    handleInputBlur(fund.id, "monthlyIncome", e.target.value);
+                  }}
+                  className="table-input h-7 text-sm bg-white border-gray-200 focus:border-primary w-full px-3 py-1 border rounded-md text-sm"
+                  style={{ textAlign: "right", minWidth: "120px" }}
+                  placeholder="R 0"
+                  disabled={isUpdating}
+                />
+              </td>
+              <td className="p-2 text-right" rowSpan={fundOwners.length}>
+                <input
+                  defaultValue={fund.increasePercentage || ""}
+                  onBlur={(e) => {
+                    const formattedValue = formatCurrencyValue(e.target.value, "increasePercentage");
+                    if (formattedValue !== e.target.value) {
+                      e.target.value = formattedValue;
+                    }
+                    handleInputBlur(fund.id, "increasePercentage", e.target.value);
+                  }}
+                  className="table-input h-7 text-sm bg-white border-gray-200 focus:border-primary w-full px-3 py-1 border rounded-md text-sm"
+                  style={{ textAlign: "right", minWidth: "80px" }}
+                  placeholder="0%"
+                  disabled={isUpdating}
+                />
+              </td>
+              <td className="p-2 text-right" rowSpan={fundOwners.length}>
+                <input
+                  defaultValue={fund.termYears || ""}
+                  onBlur={(e) => {
+                    const formattedValue = formatCurrencyValue(e.target.value, "termYears");
+                    if (formattedValue !== e.target.value) {
+                      e.target.value = formattedValue;
+                    }
+                    handleInputBlur(fund.id, "termYears", e.target.value);
+                  }}
+                  className="table-input h-7 text-sm bg-white border-gray-200 focus:border-primary w-full px-3 py-1 border rounded-md text-sm"
+                  style={{ textAlign: "right", minWidth: "90px" }}
+                  placeholder="0 years"
+                  disabled={isUpdating}
+                />
+              </td>
+            </>
+          )}
+          
+          {/* Fund Value Section */}
+          {columnVisibility.fundValue && (
+            <>
+              <td className="p-2 text-right border-l border-neutral-300" rowSpan={fundOwners.length}>
+                <input
+                  defaultValue={fund.fundValue || ""}
+                  onBlur={(e) => {
+                    const formattedValue = formatCurrencyValue(e.target.value, "fundValue");
+                    if (formattedValue !== e.target.value) {
+                      e.target.value = formattedValue;
+                    }
+                    handleInputBlur(fund.id, "fundValue", e.target.value);
+                  }}
+                  className="table-input h-7 text-sm bg-white border-gray-200 focus:border-primary w-full px-3 py-1 border rounded-md text-sm"
+                  style={{ textAlign: "right", minWidth: "120px" }}
+                  placeholder="R 0"
+                  disabled={isUpdating}
+                />
+              </td>
+              <td className="p-2 text-right" rowSpan={fundOwners.length}>
+                <input
+                  defaultValue={fund.fundValueAtDeath || ""}
+                  onBlur={(e) => {
+                    const formattedValue = formatCurrencyValue(e.target.value, "fundValueAtDeath");
+                    if (formattedValue !== e.target.value) {
+                      e.target.value = formattedValue;
+                    }
+                    handleInputBlur(fund.id, "fundValueAtDeath", e.target.value);
+                  }}
+                  className="table-input h-7 text-sm bg-white border-gray-200 focus:border-primary w-full px-3 py-1 border rounded-md text-sm"
+                  style={{ textAlign: "right", minWidth: "120px" }}
+                  placeholder="R 0"
+                  disabled={isUpdating}
+                />
+              </td>
+            </>
+          )}
+          
+          {/* Fund Value Beneficiaries Section */}
+          {columnVisibility.fundValueBeneficiaries && (
+            <>
+              <td className="p-2 text-left border-l border-neutral-300" rowSpan={fundOwners.length}>
+                <input
+                  defaultValue={beneficiaries[0]?.name || ""}
+                  onBlur={(e) => handleBeneficiaryUpdate(fund.id, 0, 'name', e.target.value)}
+                  className="table-input h-7 text-sm bg-white border-gray-200 focus:border-primary w-full px-3 py-1 border rounded-md text-sm"
+                  style={{ textAlign: "left", minWidth: "120px" }}
+                  placeholder="Beneficiary name"
+                  disabled={isUpdating}
+                />
+              </td>
+              <td className="p-2 text-right" rowSpan={fundOwners.length}>
+                <input
+                  defaultValue={`${beneficiaries[0]?.percentage || 0}%`}
+                  onBlur={(e) => {
+                    const formattedValue = formatCurrencyValue(e.target.value, "percentage");
+                    if (formattedValue !== e.target.value) {
+                      e.target.value = formattedValue;
+                    }
+                    handleBeneficiaryUpdate(fund.id, 0, 'percentage', parseFloat(e.target.value.replace('%', '')) || 0);
+                  }}
+                  className="table-input h-7 text-sm bg-white border-gray-200 focus:border-primary w-full px-3 py-1 border rounded-md text-sm"
+                  style={{ textAlign: "right", minWidth: "60px" }}
+                  disabled={isUpdating}
+                />
+              </td>
+              <td className="p-2 text-right" rowSpan={fundOwners.length}>
+                <input
+                  defaultValue={fund.amount || ""}
+                  onBlur={(e) => {
+                    const formattedValue = formatCurrencyValue(e.target.value, "amount");
+                    if (formattedValue !== e.target.value) {
+                      e.target.value = formattedValue;
+                    }
+                    handleInputBlur(fund.id, "amount", e.target.value);
+                  }}
+                  className="table-input h-7 text-sm bg-white border-gray-200 focus:border-primary w-full px-3 py-1 border rounded-md text-sm"
+                  style={{ textAlign: "right", minWidth: "120px" }}
+                  placeholder="R 0"
+                  disabled={isUpdating}
+                />
+              </td>
+              <td className="p-2 text-right" rowSpan={fundOwners.length}>
+                <input
+                  defaultValue={fund.lumpSumTaken || ""}
+                  onBlur={(e) => {
+                    const formattedValue = formatCurrencyValue(e.target.value, "lumpSumTaken");
+                    if (formattedValue !== e.target.value) {
+                      e.target.value = formattedValue;
+                    }
+                    handleInputBlur(fund.id, "lumpSumTaken", e.target.value);
+                  }}
+                  className="table-input h-7 text-sm bg-white border-gray-200 focus:border-primary w-full px-3 py-1 border rounded-md text-sm"
+                  style={{ textAlign: "right", minWidth: "120px" }}
+                  placeholder="R 0"
+                  disabled={isUpdating}
+                />
+              </td>
+              <td className="p-2 text-right" rowSpan={fundOwners.length}>
+                <input
+                  defaultValue={fund.nondeductibleContribution || ""}
+                  onBlur={(e) => {
+                    const formattedValue = formatCurrencyValue(e.target.value, "nondeductibleContribution");
+                    if (formattedValue !== e.target.value) {
+                      e.target.value = formattedValue;
+                    }
+                    handleInputBlur(fund.id, "nondeductibleContribution", e.target.value);
+                  }}
+                  className="table-input h-7 text-sm bg-white border-gray-200 focus:border-primary w-full px-3 py-1 border rounded-md text-sm"
+                  style={{ textAlign: "right", minWidth: "120px" }}
+                  placeholder="R 0"
+                  disabled={isUpdating}
+                />
+              </td>
+              <td className="p-2 text-right" rowSpan={fundOwners.length}>
+                <input
+                  defaultValue={fund.livingAnnuity || ""}
+                  onBlur={(e) => {
+                    const formattedValue = formatCurrencyValue(e.target.value, "livingAnnuity");
+                    if (formattedValue !== e.target.value) {
+                      e.target.value = formattedValue;
+                    }
+                    handleInputBlur(fund.id, "livingAnnuity", e.target.value);
+                  }}
+                  className="table-input h-7 text-sm bg-white border-gray-200 focus:border-primary w-full px-3 py-1 border rounded-md text-sm"
+                  style={{ textAlign: "right", minWidth: "120px" }}
+                  placeholder="R 0"
+                  disabled={isUpdating}
+                />
+              </td>
+              <td className="p-2 text-right" rowSpan={fundOwners.length}>
+                <input
+                  defaultValue={fund.incomeTerm || ""}
+                  onBlur={(e) => {
+                    const formattedValue = formatCurrencyValue(e.target.value, "incomeTerm");
+                    if (formattedValue !== e.target.value) {
+                      e.target.value = formattedValue;
+                    }
+                    handleInputBlur(fund.id, "incomeTerm", e.target.value);
+                  }}
+                  className="table-input h-7 text-sm bg-white border-gray-200 focus:border-primary w-full px-3 py-1 border rounded-md text-sm"
+                  style={{ textAlign: "right", minWidth: "90px" }}
+                  placeholder="0 years"
+                  disabled={isUpdating}
+                />
+              </td>
+            </>
+          )}
+          
+          {/* Unapproved Life Cover Section */}
+          {columnVisibility.unapprovedLifeCover && (
+            <>
+              <td className="p-2 text-right border-l border-neutral-300" rowSpan={fundOwners.length}>
+                <input
+                  defaultValue={fund.coverAmount || ""}
+                  onBlur={(e) => {
+                    const formattedValue = formatCurrencyValue(e.target.value, "coverAmount");
+                    if (formattedValue !== e.target.value) {
+                      e.target.value = formattedValue;
+                    }
+                    handleInputBlur(fund.id, "coverAmount", e.target.value);
+                  }}
+                  className="table-input h-7 text-sm bg-white border-gray-200 focus:border-primary w-full px-3 py-1 border rounded-md text-sm"
+                  style={{ textAlign: "right", minWidth: "120px" }}
+                  placeholder="R 0"
+                  disabled={isUpdating}
+                />
+              </td>
+              <td className="p-2 text-left" rowSpan={fundOwners.length}>
+                <input
+                  defaultValue={beneficiaries[0]?.name || ""}
+                  onBlur={(e) => handleBeneficiaryUpdate(fund.id, 0, 'name', e.target.value)}
+                  className="table-input h-7 text-sm bg-white border-gray-200 focus:border-primary w-full px-3 py-1 border rounded-md text-sm"
+                  style={{ textAlign: "left", minWidth: "120px" }}
+                  placeholder="Beneficiary name"
+                  disabled={isUpdating}
+                />
+              </td>
+              <td className="p-2 text-right" rowSpan={fundOwners.length}>
+                <input
+                  defaultValue={`${beneficiaries[0]?.percentage || 0}%`}
+                  onBlur={(e) => {
+                    const formattedValue = formatCurrencyValue(e.target.value, "percentage");
+                    if (formattedValue !== e.target.value) {
+                      e.target.value = formattedValue;
+                    }
+                    handleBeneficiaryUpdate(fund.id, 0, 'percentage', parseFloat(e.target.value.replace('%', '')) || 0);
+                  }}
+                  className="table-input h-7 text-sm bg-white border-gray-200 focus:border-primary w-full px-3 py-1 border rounded-md text-sm"
+                  style={{ textAlign: "right", minWidth: "60px" }}
+                  disabled={isUpdating}
+                />
+              </td>
+              <td className="p-2 text-right" rowSpan={fundOwners.length}>
+                <span className="table-text-14 text-neutral-900">
+                  {beneficiaries[0]?.coverSplit || 'R 0'}
+                </span>
+              </td>
+              <td className="p-2" rowSpan={fundOwners.length}>
+                <div className="flex items-center gap-2">
+                  {beneficiaries.length > 1 && (
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => handleRemoveBeneficiary(fund.id, 0)}
+                      disabled={isUpdating}
+                      className="h-6 w-6 p-0 bg-white text-[#4F4F4F] hover:text-red-600 hover:bg-red-50 border border-gray-300"
+                      title="Remove beneficiary"
+                    >
+                      <Trash2 className="h-3 w-3" />
+                    </Button>
+                  )}
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => handleAddBeneficiary(fund.id)}
+                    disabled={isUpdating}
+                    className="h-6 w-6 p-0 bg-blue-50 text-primary hover:bg-blue-100 border-0"
+                    title="Add beneficiary"
+                  >
+                    <Plus className="h-3 w-3" />
+                  </Button>
+                </div>
+              </td>
+            </>
+          )}
+        </tr>
+      );
+      
+      // Additional owner rows (compact nested pattern)
+      if (fundOwners.length > 1) {
+        fundOwners.slice(1).forEach((owner: string, index: number) => {
+          const actualIndex = index + 1;
+          rows.push(
+            <tr key={`${fund.id}-owner-${actualIndex}`} className="hover:bg-neutral-50 border-l-2 border-blue-200">
+              {/* Only show owner fields for additional owners */}
+              {columnVisibility.overview && (
+                <>
+                  <td className="p-2 text-right pl-6">
+                    <div className="flex items-center gap-2">
+                      <span className="text-blue-500 mr-1">↳</span>
+                      <Select
+                        value={owner}
+                        onValueChange={(value) => handleOwnerChange(fund.id, actualIndex, value)}
                         disabled={isUpdating}
-                      />
-                    </td>
-                    {beneficiaries.length > 0 ? (
-                      <>
-                        <td className="p-2" rowSpan={fundOwners.length}>
-                          <input
-                            defaultValue={beneficiaries[0].name}
-                            onBlur={(e) => handleBeneficiaryUpdate(fund.id, 0, 'name', e.target.value)}
-                            placeholder="Beneficiary name"
-                            disabled={isUpdating}
-                            className="table-input h-7 text-sm bg-white border-gray-200 focus:border-primary w-full px-3 py-1 border rounded-md text-sm"
-                            style={{ textAlign: "left", minWidth: "120px" }}
-                          />
-                        </td>
-                        <td className="p-2 percentage-column" rowSpan={fundOwners.length}>
-                          <input
-                            type="text"
-                            defaultValue={`${beneficiaries[0].percentage || 0}%`}
-                            onBlur={(e) => {
-                              const formattedValue = formatCurrencyValue(e.target.value, "percentage");
-                              if (formattedValue !== e.target.value) {
-                                e.target.value = formattedValue;
-                              }
-                              handleBeneficiaryUpdate(fund.id, 0, 'percentage', parseFloat(e.target.value.replace('%', '')) || 0);
-                            }}
-                            className="table-input h-7 text-sm bg-white border-gray-200 focus:border-primary w-full px-3 py-1 border rounded-md text-sm"
-                            style={{ textAlign: "right", minWidth: "60px" }}
-                            disabled={isUpdating}
-                          />
-                        </td>
-                        <td className="p-2" rowSpan={fundOwners.length}>
-                          <span className="table-text-14 text-neutral-900">
-                            {beneficiaries[0].coverSplit || 'R 0'}
-                          </span>
-                        </td>
-                        <td className="p-2" rowSpan={fundOwners.length}>
-                          <div className="flex items-center gap-1">
-                            <Button
-                              variant="ghost"
-                              size="sm"
-                              onClick={() => handleAddBeneficiary(fund.id)}
-                              disabled={isUpdating}
-                              className="h-6 w-6 p-0 bg-blue-50 text-primary hover:bg-blue-100 border-0"
-                              title="Add beneficiary"
-                            >
-                              <Plus className="h-3 w-3" />
-                            </Button>
-                            {beneficiaries.length > 1 && (
-                              <Button
-                                variant="ghost"
-                                size="sm"
-                                onClick={() => handleRemoveBeneficiary(fund.id, 0)}
-                                disabled={isUpdating}
-                                className="h-6 w-6 p-0 bg-white text-[#4F4F4F] hover:text-red-600 hover:bg-red-50 border border-gray-300"
-                                title="Remove beneficiary"
-                              >
-                                <Trash2 className="h-3 w-3" />
-                              </Button>
-                            )}
-                          </div>
-                        </td>
-                      </>
-                    ) : (
-                      <>
-                        <td className="p-2" rowSpan={fundOwners.length}>
-                          <Button
-                            variant="ghost"
-                            size="sm"
-                            onClick={() => handleAddBeneficiary(fund.id)}
-                            disabled={isUpdating}
-                            className="h-6 w-6 p-0 bg-blue-50 text-primary hover:bg-blue-100 border-0"
-                            title="Add beneficiary"
-                          >
-                            <Plus className="h-3 w-3" />
-                          </Button>
-                        </td>
-                        <td className="p-2" rowSpan={fundOwners.length}></td>
-                        <td className="p-2" rowSpan={fundOwners.length}></td>
-                        <td className="p-2" rowSpan={fundOwners.length}></td>
-                      </>
-                    )}
-                  </>
-                )}
-                
-                {/* Monthly Death Benefit Section - only show for first owner row */}
-                {isFirstOwner && columnVisibility.monthlyDeathBenefit && (
-                  <>
-                    <td className="p-2 text-right border-l border-neutral-300" rowSpan={fundOwners.length}>
-                      <input
-                        defaultValue={fund.monthlyIncome || ""}
-                        onBlur={(e) => {
-                          const formattedValue = formatCurrencyValue(e.target.value, "monthlyIncome");
-                          if (formattedValue !== e.target.value) {
-                            e.target.value = formattedValue;
-                          }
-                          handleInputBlur(fund.id, "monthlyIncome", e.target.value);
-                        }}
-                        className="table-input h-7 text-sm bg-white border-gray-200 focus:border-primary w-full px-3 py-1 border rounded-md text-sm"
-                        style={{ textAlign: "right", minWidth: "90px" }}
-                        placeholder="R 0"
+                      >
+                        <SelectTrigger className="table-input h-7 min-w-[120px] w-full max-w-[160px] text-right border-0 focus:bg-white focus:border focus:border-primary hover:bg-neutral-50 transition-colors duration-200 group">
+                          <SelectValue className="text-right pr-6" />
+                          <Edit3 size={12} className="ml-1 text-teal-400 opacity-0 group-hover:opacity-100 transition-opacity duration-200" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {owners.map((ownerOption) => (
+                            <SelectItem key={ownerOption} value={ownerOption}>
+                              {ownerOption}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => handleRemoveOwner(fund.id, actualIndex)}
                         disabled={isUpdating}
-                      />
-                    </td>
-                    <td className="p-2 text-right" rowSpan={fundOwners.length}>
+                        className="h-6 w-6 p-0 bg-white text-[#4F4F4F] hover:text-red-600 hover:bg-red-50 border border-gray-300"
+                        title="Remove owner"
+                      >
+                        <UserMinus className="h-3 w-3" />
+                      </Button>
+                    </div>
+                  </td>
+                  <td className="p-2 text-right">
+                    <input
+                      type="text"
+                      defaultValue={`${ownershipPercentages[actualIndex] || '0'}%`}
+                      onBlur={(e) => {
+                        const formattedValue = formatCurrencyValue(e.target.value, "percentage");
+                        if (formattedValue !== e.target.value) {
+                          e.target.value = formattedValue;
+                        }
+                        handlePercentageChange(fund.id, actualIndex, e.target.value.replace('%', ''));
+                      }}
+                      className="table-input h-7 text-sm bg-white border-gray-200 focus:border-primary w-full px-3 py-1 border rounded-md text-sm"
+                      style={{ textAlign: "right", minWidth: "70px" }}
+                      disabled={isUpdating}
+                    />
+                  </td>
+                </>
+              )}
+              
+              {/* Skip other sections for additional owner rows */}
+              {columnVisibility.monthlyDeathBenefit && (
+                <>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                </>
+              )}
+              
+              {columnVisibility.fundValue && (
+                <>
+                  <td></td>
+                  <td></td>
+                </>
+              )}
+              
+              {columnVisibility.fundValueBeneficiaries && (
+                <>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                </>
+              )}
+              
+              {columnVisibility.unapprovedLifeCover && (
+                <>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                </>
+              )}
+            </tr>
+          );
+        });
+      }
+      
+      // Additional beneficiary rows (compact nested pattern)
+      if (beneficiaries.length > 1) {
+        beneficiaries.slice(1).forEach((beneficiary, index) => {
+          const actualIndex = index + 1;
+          rows.push(
+            <tr key={`${fund.id}-beneficiary-${actualIndex}`} className="hover:bg-neutral-50 border-l-2 border-green-200">
+              {/* Skip overview columns for beneficiary rows */}
+              {columnVisibility.overview && (
+                <>
+                  <td></td>
+                  <td></td>
+                </>
+              )}
+              
+              {/* Skip Monthly Death Benefit columns */}
+              {columnVisibility.monthlyDeathBenefit && (
+                <>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                </>
+              )}
+              
+              {/* Skip Fund Value columns */}
+              {columnVisibility.fundValue && (
+                <>
+                  <td></td>
+                  <td></td>
+                </>
+              )}
+              
+              {/* Fund Value Beneficiaries Section - show beneficiary fields */}
+              {columnVisibility.fundValueBeneficiaries && (
+                <>
+                  <td className="p-2 text-left pl-6">
+                    <div className="flex items-center gap-2">
+                      <span className="text-green-500 mr-1">↳</span>
                       <input
-                        defaultValue={fund.termYears || ""}
-                        onBlur={(e) => {
-                          const formattedValue = formatCurrencyValue(e.target.value, "termYears");
-                          if (formattedValue !== e.target.value) {
-                            e.target.value = formattedValue;
-                          }
-                          handleInputBlur(fund.id, "termYears", e.target.value);
-                        }}
-                        className="table-input h-7 text-sm bg-white border-gray-200 focus:border-primary w-full px-3 py-1 border rounded-md text-sm"
-                        style={{ textAlign: "right", minWidth: "80px" }}
-                        placeholder="0"
-                        disabled={isUpdating}
-                      />
-                    </td>
-                    <td className="p-2 text-right" rowSpan={fundOwners.length}>
-                      <input
-                        defaultValue={fund.increasePercentage || ""}
-                        onBlur={(e) => {
-                          const formattedValue = formatCurrencyValue(e.target.value, "increasePercentage");
-                          if (formattedValue !== e.target.value) {
-                            e.target.value = formattedValue;
-                          }
-                          handleInputBlur(fund.id, "increasePercentage", e.target.value);
-                        }}
-                        className="table-input h-7 text-sm bg-white border-gray-200 focus:border-primary w-full px-3 py-1 border rounded-md text-sm"
-                        style={{ textAlign: "right", minWidth: "70px" }}
-                        placeholder="0%"
-                        disabled={isUpdating}
-                      />
-                    </td>
-                    <td className="p-2 text-right" rowSpan={fundOwners.length}>
-                      <span className="table-text-14 text-neutral-900">
-                        {/* Calculated field - escalation amount */}
-                        R 0
-                      </span>
-                    </td>
-                  </>
-                )}
-                
-                {/* Fund Value Section - only show for first owner row */}
-                {isFirstOwner && columnVisibility.fundValue && (
-                  <>
-                    <td className="p-2 text-right border-l border-neutral-300" rowSpan={fundOwners.length}>
-                      <input
-                        defaultValue={fund.approvedLifeCover || ""}
-                        onBlur={(e) => {
-                          const formattedValue = formatCurrencyValue(e.target.value, "approvedLifeCover");
-                          if (formattedValue !== e.target.value) {
-                            e.target.value = formattedValue;
-                          }
-                          handleInputBlur(fund.id, "approvedLifeCover", e.target.value);
-                        }}
-                        className="table-input h-7 text-sm bg-white border-gray-200 focus:border-primary w-full px-3 py-1 border rounded-md text-sm"
-                        style={{ textAlign: "right", minWidth: "120px" }}
-                        placeholder="R 0"
-                        disabled={isUpdating}
-                      />
-                    </td>
-                    <td className="p-2 text-right" rowSpan={fundOwners.length}>
-                      <input
-                        defaultValue={fund.fundValue || ""}
-                        onBlur={(e) => {
-                          const formattedValue = formatCurrencyValue(e.target.value, "fundValue");
-                          if (formattedValue !== e.target.value) {
-                            e.target.value = formattedValue;
-                          }
-                          handleInputBlur(fund.id, "fundValue", e.target.value);
-                        }}
-                        className="table-input h-7 text-sm bg-white border-gray-200 focus:border-primary w-full px-3 py-1 border rounded-md text-sm"
-                        style={{ textAlign: "right", minWidth: "120px" }}
-                        placeholder="R 0"
-                        disabled={isUpdating}
-                      />
-                    </td>
-                    <td className="p-2 text-right" rowSpan={fundOwners.length}>
-                      <input
-                        defaultValue={fund.fundValueAtDeath || ""}
-                        onBlur={(e) => {
-                          const formattedValue = formatCurrencyValue(e.target.value, "fundValueAtDeath");
-                          if (formattedValue !== e.target.value) {
-                            e.target.value = formattedValue;
-                          }
-                          handleInputBlur(fund.id, "fundValueAtDeath", e.target.value);
-                        }}
-                        className="table-input h-7 text-sm bg-white border-gray-200 focus:border-primary w-full px-3 py-1 border rounded-md text-sm"
-                        style={{ textAlign: "right", minWidth: "120px" }}
-                        placeholder="R 0"
-                        disabled={isUpdating}
-                      />
-                    </td>
-                  </>
-                )}
-                
-                {/* Fund Value Beneficiaries Section - only show for first owner row */}
-                {isFirstOwner && columnVisibility.fundValueBeneficiaries && (
-                  <>
-                    <td className="p-2 text-left border-l border-neutral-300" rowSpan={fundOwners.length}>
-                      <input
-                        defaultValue={fund.beneficiaryName || ""}
-                        onBlur={(e) => handleInputBlur(fund.id, "beneficiaryName", e.target.value)}
+                        defaultValue={beneficiary.name || ""}
+                        onBlur={(e) => handleBeneficiaryUpdate(fund.id, actualIndex, 'name', e.target.value)}
                         className="table-input h-7 text-sm bg-white border-gray-200 focus:border-primary w-full px-3 py-1 border rounded-md text-sm"
                         style={{ textAlign: "left", minWidth: "120px" }}
                         placeholder="Beneficiary name"
                         disabled={isUpdating}
                       />
-                    </td>
-                    <td className="p-2 text-right" rowSpan={fundOwners.length}>
-                      <input
-                        defaultValue={fund.beneficiaryPercentageSplit || ""}
-                        onBlur={(e) => {
-                          const formattedValue = formatCurrencyValue(e.target.value, "beneficiaryPercentageSplit");
-                          if (formattedValue !== e.target.value) {
-                            e.target.value = formattedValue;
-                          }
-                          handleInputBlur(fund.id, "beneficiaryPercentageSplit", e.target.value);
-                        }}
-                        className="table-input h-7 text-sm bg-white border-gray-200 focus:border-primary w-full px-3 py-1 border rounded-md text-sm"
-                        style={{ textAlign: "right", minWidth: "70px" }}
-                        placeholder="0%"
-                        disabled={isUpdating}
-                      />
-                    </td>
-                    <td className="p-2 text-right" rowSpan={fundOwners.length}>
-                      <input
-                        defaultValue={fund.amount || ""}
-                        onBlur={(e) => {
-                          const formattedValue = formatCurrencyValue(e.target.value, "amount");
-                          if (formattedValue !== e.target.value) {
-                            e.target.value = formattedValue;
-                          }
-                          handleInputBlur(fund.id, "amount", e.target.value);
-                        }}
-                        className="table-input h-7 text-sm bg-white border-gray-200 focus:border-primary w-full px-3 py-1 border rounded-md text-sm"
-                        style={{ textAlign: "right", minWidth: "90px" }}
-                        placeholder="R 0"
-                        disabled={isUpdating}
-                      />
-                    </td>
-                    <td className="p-2 text-right" rowSpan={fundOwners.length}>
-                      <input
-                        defaultValue={fund.lumpSumTaken || ""}
-                        onBlur={(e) => {
-                          const formattedValue = formatCurrencyValue(e.target.value, "lumpSumTaken");
-                          if (formattedValue !== e.target.value) {
-                            e.target.value = formattedValue;
-                          }
-                          handleInputBlur(fund.id, "lumpSumTaken", e.target.value);
-                        }}
-                        className="table-input h-7 text-sm bg-white border-gray-200 focus:border-primary w-full px-3 py-1 border rounded-md text-sm"
-                        style={{ textAlign: "right", minWidth: "90px" }}
-                        placeholder="R 0"
-                        disabled={isUpdating}
-                      />
-                    </td>
-                    <td className="p-2 text-right" rowSpan={fundOwners.length}>
-                      <input
-                        defaultValue={fund.nondeductibleContribution || ""}
-                        onBlur={(e) => {
-                          const formattedValue = formatCurrencyValue(e.target.value, "nondeductibleContribution");
-                          if (formattedValue !== e.target.value) {
-                            e.target.value = formattedValue;
-                          }
-                          handleInputBlur(fund.id, "nondeductibleContribution", e.target.value);
-                        }}
-                        className="table-input h-7 text-sm bg-white border-gray-200 focus:border-primary w-full px-3 py-1 border rounded-md text-sm"
-                        style={{ textAlign: "right", minWidth: "90px" }}
-                        placeholder="R 0"
-                        disabled={isUpdating}
-                      />
-                    </td>
-                    <td className="p-2 text-right" rowSpan={fundOwners.length}>
-                      <input
-                        defaultValue={fund.livingAnnuity || ""}
-                        onBlur={(e) => {
-                          const formattedValue = formatCurrencyValue(e.target.value, "livingAnnuity");
-                          if (formattedValue !== e.target.value) {
-                            e.target.value = formattedValue;
-                          }
-                          handleInputBlur(fund.id, "livingAnnuity", e.target.value);
-                        }}
-                        className="table-input h-7 text-sm bg-white border-gray-200 focus:border-primary w-full px-3 py-1 border rounded-md text-sm"
-                        style={{ textAlign: "right", minWidth: "90px" }}
-                        placeholder="R 0"
-                        disabled={isUpdating}
-                      />
-                    </td>
-                    <td className="p-2 text-right" rowSpan={fundOwners.length}>
-                      <input
-                        defaultValue={fund.incomeTerm || ""}
-                        onBlur={(e) => {
-                          const formattedValue = formatCurrencyValue(e.target.value, "incomeTerm");
-                          if (formattedValue !== e.target.value) {
-                            e.target.value = formattedValue;
-                          }
-                          handleInputBlur(fund.id, "incomeTerm", e.target.value);
-                        }}
-                        className="table-input h-7 text-sm bg-white border-gray-200 focus:border-primary w-full px-3 py-1 border rounded-md text-sm"
-                        style={{ textAlign: "right", minWidth: "80px" }}
-                        placeholder="0"
-                        disabled={isUpdating}
-                      />
-                    </td>
-                  </>
-                )}
-                
-                {/* Fund Actions Cell */}
-                {isFirstOwner && (
-                  <td className="p-2 border-l border-neutral-300" rowSpan={fundOwners.length}>
-                    <FundActions fund={fund} />
+                    </div>
                   </td>
-                )}
-                
-                </tr>
-              );
-            });
-            
-            // Add additional beneficiary rows if there are more than 1 beneficiary
-            if (beneficiaries.length > 1) {
-              for (let i = 1; i < beneficiaries.length; i++) {
-                rows.push(
-                  <tr key={`${fund.id}-beneficiary-${i}`} className="bg-neutral-25 hover:bg-neutral-50">
-                    {/* Empty cells for Overview section */}
-                    {columnVisibility.overview && (
-                      <>
-                        <td className="p-2"></td>
-                        <td className="p-2"></td>
-                        <td className="p-2"></td>
-                      </>
-                    )}
-                    
-                    {/* Beneficiary details for additional beneficiaries */}
-                    {columnVisibility.unapprovedLifeCover && (
-                      <>
-                        <td className="p-2 border-l border-neutral-300"></td>
-                        <td className="p-2">
-                          <div className="flex items-center gap-2">
-                            <span className="text-xs text-neutral-500">↳ Beneficiary {i + 1}:</span>
-                            <input
-                              defaultValue={beneficiaries[i].name}
-                              onBlur={(e) => handleBeneficiaryUpdate(fund.id, i, 'name', e.target.value)}
-                              placeholder="Beneficiary name"
-                              disabled={isUpdating}
-                              className="table-input h-7 text-sm bg-white border-gray-200 focus:border-primary flex-1 px-3 py-1 border rounded-md text-sm"
-                              style={{ textAlign: "left", minWidth: "100px" }}
-                            />
-                          </div>
-                        </td>
-                        <td className="p-2">
-                          <input
-                            type="text"
-                            defaultValue={`${beneficiaries[i].percentage || 0}%`}
-                            onBlur={(e) => {
-                              const formattedValue = formatCurrencyValue(e.target.value, "percentage");
-                              if (formattedValue !== e.target.value) {
-                                e.target.value = formattedValue;
-                              }
-                              handleBeneficiaryUpdate(fund.id, i, 'percentage', parseFloat(e.target.value.replace('%', '')) || 0);
-                            }}
-                            className="table-input h-7 text-sm bg-white border-gray-200 focus:border-primary w-full px-3 py-1 border rounded-md text-sm"
-                            style={{ textAlign: "right", minWidth: "60px" }}
-                            disabled={isUpdating}
-                          />
-                        </td>
-                        <td className="p-2">
-                          <span className="table-text-14 text-neutral-900">
-                            {beneficiaries[i].coverSplit || 'R 0'}
-                          </span>
-                        </td>
-                        <td className="p-2">
-                          <Button
-                            variant="ghost"
-                            size="sm"
-                            onClick={() => handleRemoveBeneficiary(fund.id, i)}
-                            disabled={isUpdating}
-                            className="h-6 w-6 p-0 bg-white text-[#4F4F4F] hover:text-red-600 hover:bg-red-50 border border-gray-300"
-                            title="Remove beneficiary"
-                          >
-                            <Trash2 className="h-3 w-3" />
-                          </Button>
-                        </td>
-                      </>
-                    )}
-                    
-                    {/* Empty cells for other sections */}
-                    {columnVisibility.monthlyDeathBenefit && (
-                      <>
-                        <td className="p-2 border-l border-neutral-300"></td>
-                        <td className="p-2"></td>
-                        <td className="p-2"></td>
-                        <td className="p-2"></td>
-                      </>
-                    )}
-                    
-                    {columnVisibility.fundValue && (
-                      <>
-                        <td className="p-2 border-l border-neutral-300"></td>
-                        <td className="p-2"></td>
-                        <td className="p-2"></td>
-                      </>
-                    )}
-                    
-                    {columnVisibility.fundValueBeneficiaries && (
-                      <>
-                        <td className="p-2 border-l border-neutral-300"></td>
-                        <td className="p-2"></td>
-                        <td className="p-2"></td>
-                        <td className="p-2"></td>
-                        <td className="p-2"></td>
-                        <td className="p-2"></td>
-                        <td className="p-2"></td>
-                      </>
-                    )}
-                    
-                    {/* Fund Actions Cell */}
-                    <td className="p-2 border-l border-neutral-300"></td>
-                  </tr>
-                );
-              }
-            }
-            
-            return rows;
-          })}
+                  <td className="p-2 text-right">
+                    <input
+                      defaultValue={`${beneficiary.percentage || 0}%`}
+                      onBlur={(e) => {
+                        const formattedValue = formatCurrencyValue(e.target.value, "percentage");
+                        if (formattedValue !== e.target.value) {
+                          e.target.value = formattedValue;
+                        }
+                        handleBeneficiaryUpdate(fund.id, actualIndex, 'percentage', parseFloat(e.target.value.replace('%', '')) || 0);
+                      }}
+                      className="table-input h-7 text-sm bg-white border-gray-200 focus:border-primary w-full px-3 py-1 border rounded-md text-sm"
+                      style={{ textAlign: "right", minWidth: "60px" }}
+                      disabled={isUpdating}
+                    />
+                  </td>
+                  <td className="p-2 text-right">
+                    <span className="table-text-14 text-neutral-900">R 0</span>
+                  </td>
+                  <td className="p-2 text-right">
+                    <span className="table-text-14 text-neutral-900">R 0</span>
+                  </td>
+                  <td className="p-2 text-right">
+                    <span className="table-text-14 text-neutral-900">R 0</span>
+                  </td>
+                  <td className="p-2 text-right">
+                    <span className="table-text-14 text-neutral-900">R 0</span>
+                  </td>
+                  <td className="p-2 text-right">
+                    <span className="table-text-14 text-neutral-900">0 years</span>
+                  </td>
+                </>
+              )}
+              
+              {/* Unapproved Life Cover Section - only show beneficiary fields */}
+              {columnVisibility.unapprovedLifeCover && (
+                <>
+                  <td></td>
+                  <td className="p-2 text-left pl-6">
+                    <div className="flex items-center gap-2">
+                      <span className="text-green-500 mr-1">↳</span>
+                      <input
+                        defaultValue={beneficiary.name || ""}
+                        onBlur={(e) => handleBeneficiaryUpdate(fund.id, actualIndex, 'name', e.target.value)}
+                        className="table-input h-7 text-sm bg-white border-gray-200 focus:border-primary w-full px-3 py-1 border rounded-md text-sm"
+                        style={{ textAlign: "left", minWidth: "120px" }}
+                        placeholder="Beneficiary name"
+                        disabled={isUpdating}
+                      />
+                    </div>
+                  </td>
+                  <td className="p-2 text-right">
+                    <input
+                      defaultValue={`${beneficiary.percentage || 0}%`}
+                      onBlur={(e) => {
+                        const formattedValue = formatCurrencyValue(e.target.value, "percentage");
+                        if (formattedValue !== e.target.value) {
+                          e.target.value = formattedValue;
+                        }
+                        handleBeneficiaryUpdate(fund.id, actualIndex, 'percentage', parseFloat(e.target.value.replace('%', '')) || 0);
+                      }}
+                      className="table-input h-7 text-sm bg-white border-gray-200 focus:border-primary w-full px-3 py-1 border rounded-md text-sm"
+                      style={{ textAlign: "right", minWidth: "60px" }}
+                      disabled={isUpdating}
+                    />
+                  </td>
+                  <td className="p-2 text-right">
+                    <span className="table-text-14 text-neutral-900">
+                      {beneficiary.coverSplit || 'R 0'}
+                    </span>
+                  </td>
+                  <td className="p-2">
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => handleRemoveBeneficiary(fund.id, actualIndex)}
+                      disabled={isUpdating}
+                      className="h-6 w-6 p-0 bg-white text-[#4F4F4F] hover:text-red-600 hover:bg-red-50 border border-gray-300"
+                      title="Remove beneficiary"
+                    >
+                      <Trash2 className="h-3 w-3" />
+                    </Button>
+                  </td>
+                </>
+              )}
+            </tr>
+          );
+        });
+      }
+    });
+    
+    return rows;
+  }, [funds, columnVisibility, isUpdating, owners, handleOwnerChange, handleAddOwner, handleRemoveOwner, handlePercentageChange, handleBeneficiaryUpdate, handleAddBeneficiary, handleRemoveBeneficiary, onFieldUpdate]);
+
+  if (funds.length === 0) {
+    return (
+      <div className="text-center py-8 text-gray-500">
+        No retirement funds to display.
+      </div>
+    );
+  }
+
+  return (
+    <div className="overflow-auto">
+      <table className="w-full min-w-max table-fixed">
+        <thead className="sticky top-0 z-10 bg-neutral-50 border-b border-neutral-300">
+          <tr>
+            {columnVisibility.overview && (
+              <>
+                <th className="table-header text-left text-xs font-medium text-neutral-600 uppercase p-3" style={{ width: "200px" }}>
+                  Fund Description
+                </th>
+                <th className="table-header text-right text-xs font-medium text-neutral-600 uppercase p-3" style={{ width: "160px" }}>
+                  Owner
+                </th>
+                <th className="table-header text-right text-xs font-medium text-neutral-600 uppercase p-3" style={{ width: "80px" }}>
+                  %
+                </th>
+              </>
+            )}
+            {columnVisibility.monthlyDeathBenefit && (
+              <>
+                <th className="table-header text-right text-xs font-medium text-neutral-600 uppercase p-3 border-l border-neutral-300" style={{ width: "140px" }}>
+                  Monthly Income
+                </th>
+                <th className="table-header text-right text-xs font-medium text-neutral-600 uppercase p-3" style={{ width: "80px" }}>
+                  Increase %
+                </th>
+                <th className="table-header text-right text-xs font-medium text-neutral-600 uppercase p-3" style={{ width: "90px" }}>
+                  Term (Years)
+                </th>
+              </>
+            )}
+            {columnVisibility.fundValue && (
+              <>
+                <th className="table-header text-right text-xs font-medium text-neutral-600 uppercase p-3 border-l border-neutral-300" style={{ width: "140px" }}>
+                  Fund Value
+                </th>
+                <th className="table-header text-right text-xs font-medium text-neutral-600 uppercase p-3" style={{ width: "140px" }}>
+                  Fund Value at Death
+                </th>
+              </>
+            )}
+            {columnVisibility.fundValueBeneficiaries && (
+              <>
+                <th className="table-header text-left text-xs font-medium text-neutral-600 uppercase p-3 border-l border-neutral-300" style={{ width: "140px" }}>
+                  Beneficiary Name
+                </th>
+                <th className="table-header text-right text-xs font-medium text-neutral-600 uppercase p-3" style={{ width: "80px" }}>
+                  %
+                </th>
+                <th className="table-header text-right text-xs font-medium text-neutral-600 uppercase p-3" style={{ width: "120px" }}>
+                  Amount
+                </th>
+                <th className="table-header text-right text-xs font-medium text-neutral-600 uppercase p-3" style={{ width: "120px" }}>
+                  Lump Sum Taken
+                </th>
+                <th className="table-header text-right text-xs font-medium text-neutral-600 uppercase p-3" style={{ width: "140px" }}>
+                  Non-deductible Contribution
+                </th>
+                <th className="table-header text-right text-xs font-medium text-neutral-600 uppercase p-3" style={{ width: "120px" }}>
+                  Living Annuity
+                </th>
+                <th className="table-header text-right text-xs font-medium text-neutral-600 uppercase p-3" style={{ width: "90px" }}>
+                  Income Term
+                </th>
+              </>
+            )}
+            {columnVisibility.unapprovedLifeCover && (
+              <>
+                <th className="table-header text-right text-xs font-medium text-neutral-600 uppercase p-3 border-l border-neutral-300" style={{ width: "140px" }}>
+                  Cover Amount
+                </th>
+                <th className="table-header text-left text-xs font-medium text-neutral-600 uppercase p-3" style={{ width: "140px" }}>
+                  Beneficiary Name
+                </th>
+                <th className="table-header text-right text-xs font-medium text-neutral-600 uppercase p-3" style={{ width: "80px" }}>
+                  %
+                </th>
+                <th className="table-header text-right text-xs font-medium text-neutral-600 uppercase p-3" style={{ width: "120px" }}>
+                  Cover Split
+                </th>
+                <th className="table-header text-center text-xs font-medium text-neutral-600 uppercase p-3" style={{ width: "80px" }}>
+                  Actions
+                </th>
+              </>
+            )}
+          </tr>
+        </thead>
+        <tbody>
+          {renderFundRows}
         </tbody>
       </table>
     </div>
