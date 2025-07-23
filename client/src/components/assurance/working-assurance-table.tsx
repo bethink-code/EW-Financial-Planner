@@ -1,6 +1,6 @@
 import React, { useState, useCallback, useMemo } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { Plus, Trash2 } from "lucide-react";
+import { Plus, Trash2, Copy } from "lucide-react";
 import { apiRequest } from "@/lib/queryClient";
 import { AddButton } from "@/components/ui/action-buttons";
 import type { Assurance, InsertAssurance } from "@shared/schema";
@@ -113,9 +113,56 @@ export function AssuranceTable({ searchTerm }: AssuranceTableProps) {
     },
   });
 
+  // Duplicate policy mutation
+  const duplicateMutation = useMutation({
+    mutationFn: async (policy: Assurance) => {
+      try {
+        const newPolicy: InsertAssurance = {
+          description: policy.description + " (Copy)",
+          owner: policy.owner,
+          additionalOwners: policy.additionalOwners,
+          lifeAssured: policy.lifeAssured,
+          deathBenefit: policy.deathBenefit,
+          beneficiary: policy.beneficiary,
+          benefitSplit: policy.benefitSplit,
+          additionalBeneficiaries: policy.additionalBeneficiaries,
+          additionalInfo: policy.additionalInfo,
+          amount: policy.amount,
+          buySell: policy.buySell,
+          keyMan: policy.keyMan,
+          premiumsByOthers: policy.premiumsByOthers,
+          collateralSession: policy.collateralSession,
+          excludedFromEstateDuty: policy.excludedFromEstateDuty,
+          excludedFromProvisions: policy.excludedFromProvisions
+        };
+        const response = await apiRequest("POST", "/api/assurance", newPolicy);
+        return await response.json();
+      } catch (error) {
+        console.error('Duplicate policy error:', error);
+        throw error;
+      }
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["/api/assurance"] });
+    },
+    onError: (error) => {
+      console.error('Duplicate mutation error:', error);
+    }
+  });
+
   const handleAddPolicy = useCallback(() => {
     addMutation.mutate();
   }, [addMutation]);
+
+  const handleDeletePolicy = useCallback((id: number) => {
+    if (confirm('Are you sure you want to delete this policy?')) {
+      deleteMutation.mutate(id);
+    }
+  }, [deleteMutation]);
+
+  const handleDuplicatePolicy = useCallback((policy: Assurance) => {
+    duplicateMutation.mutate(policy);
+  }, [duplicateMutation]);
 
   const handleUpdatePolicy = useCallback((id: number, field: keyof Assurance, value: string | boolean | string[]) => {
     setIsUpdating(true);
@@ -552,8 +599,24 @@ export function AssuranceTable({ searchTerm }: AssuranceTableProps) {
                         />
                       </td>
                       <td rowSpan={maxRows} className="px-3 py-2 text-center align-top">
-                        {/* Actions column - no policy delete button */}
-                        <span className="text-neutral-400">-</span>
+                        <div className="flex items-center justify-center space-x-1">
+                          <button
+                            onClick={() => handleDuplicatePolicy(policy)}
+                            className="h-6 w-6 p-0 bg-white text-primary hover:text-primary hover:bg-blue-50 border border-primary rounded"
+                            title="Duplicate policy"
+                            disabled={isUpdating || duplicateMutation.isPending}
+                          >
+                            <Copy className="h-3 w-3" />
+                          </button>
+                          <button
+                            onClick={() => handleDeletePolicy(policy.id)}
+                            className="h-6 w-6 p-0 bg-white text-[#4F4F4F] hover:text-red-600 hover:bg-red-50 border border-gray-300 rounded"
+                            title="Delete policy"
+                            disabled={isUpdating || deleteMutation.isPending}
+                          >
+                            <Trash2 className="h-3 w-3" />
+                          </button>
+                        </div>
                       </td>
                     </>
                   )}
