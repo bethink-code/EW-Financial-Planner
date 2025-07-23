@@ -217,7 +217,7 @@ export function SimpleTableWithBeneficiaries({ funds, columnVisibility, tableMod
               </th>
             )}
             {columnVisibility.fundValueBeneficiaries && (
-              <th className="p-2 text-center font-medium text-neutral-600 uppercase tracking-wider text-xs border-l border-neutral-300" colSpan={8}>
+              <th className="p-2 text-center font-medium text-neutral-600 uppercase tracking-wider text-xs border-l border-neutral-300" colSpan={7}>
                 Fund value beneficiaries
               </th>
             )}
