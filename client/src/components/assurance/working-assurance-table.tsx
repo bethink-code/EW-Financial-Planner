@@ -336,7 +336,15 @@ export function AssuranceTable({ searchTerm }: AssuranceTableProps) {
                         {rowIndex > 0 && (
                           <span className="text-blue-500 mr-1">↳</span>
                         )}
-
+                        {rowIndex === 0 && (
+                          <button
+                            onClick={() => handleAddOwner(policy.id)}
+                            className="h-6 w-6 p-0 bg-blue-50 text-primary hover:bg-blue-100 border-0 rounded"
+                            title="Add owner"
+                          >
+                            <Plus className="h-3 w-3" />
+                          </button>
+                        )}
                         <input
                           type="text"
                           defaultValue={allOwners[rowIndex].name}
@@ -359,15 +367,6 @@ export function AssuranceTable({ searchTerm }: AssuranceTableProps) {
                           className="table-input w-full px-2 py-1 text-sm border border-neutral-300 rounded bg-primary/5 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
                           disabled={isUpdating}
                         />
-                        {rowIndex === 0 && (
-                          <button
-                            onClick={() => handleAddOwner(policy.id)}
-                            className="h-6 w-6 p-0 bg-blue-50 text-primary hover:bg-blue-100 border-0 rounded"
-                            title="Add owner"
-                          >
-                            <Plus className="h-3 w-3" />
-                          </button>
-                        )}
                         {rowIndex > 0 && rowIndex < allOwners.length && (
                           <button
                             onClick={() => handleRemoveOwner(policy.id, allOwners[rowIndex].id)}
@@ -415,7 +414,15 @@ export function AssuranceTable({ searchTerm }: AssuranceTableProps) {
                         {rowIndex > 0 && (
                           <span className="text-green-500 mr-1">↳</span>
                         )}
-
+                        {rowIndex === 0 && (
+                          <button
+                            onClick={() => handleAddBeneficiary(policy.id)}
+                            className="h-6 w-6 p-0 bg-blue-50 text-primary hover:bg-blue-100 border-0 rounded"
+                            title="Add beneficiary"
+                          >
+                            <Plus className="h-3 w-3" />
+                          </button>
+                        )}
                         <input
                           type="text"
                           defaultValue={allBeneficiaries[rowIndex].name}
@@ -438,15 +445,6 @@ export function AssuranceTable({ searchTerm }: AssuranceTableProps) {
                           className="table-input w-full px-2 py-1 text-sm border border-neutral-300 rounded bg-primary/5 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
                           disabled={isUpdating}
                         />
-                        {rowIndex === 0 && (
-                          <button
-                            onClick={() => handleAddBeneficiary(policy.id)}
-                            className="h-6 w-6 p-0 bg-blue-50 text-primary hover:bg-blue-100 border-0 rounded"
-                            title="Add beneficiary"
-                          >
-                            <Plus className="h-3 w-3" />
-                          </button>
-                        )}
                         {rowIndex > 0 && rowIndex < allBeneficiaries.length && (
                           <button
                             onClick={() => handleRemoveBeneficiary(policy.id, allBeneficiaries[rowIndex].id)}
