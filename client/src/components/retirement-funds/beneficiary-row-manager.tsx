@@ -124,11 +124,11 @@ export function BeneficiaryRowManager({
             <div className="w-8">
               {beneficiaries.length > 1 && (
                 <Button
-                  variant="outline"
+                  variant="ghost"
                   size="sm"
                   onClick={() => handleRemoveBeneficiary(beneficiary.id)}
                   disabled={isUpdating}
-                  className="h-6 w-6 p-0 bg-white border border-neutral-300 text-neutral-600 hover:bg-neutral-50 hover:text-neutral-700"
+                  className="h-6 w-6 p-0 bg-blue-50 text-primary hover:bg-blue-100 border-0"
                 >
                   <Trash2 className="h-3 w-3" />
                 </Button>
@@ -230,11 +230,11 @@ export function BeneficiaryRowManager({
           <div className="col-span-1">
             {beneficiaries.length > 1 && (
               <Button
-                variant="outline"
+                variant="ghost"
                 size="sm"
                 onClick={() => handleRemoveBeneficiary(beneficiary.id)}
                 disabled={isUpdating}
-                className="h-6 w-6 p-0 bg-white border border-neutral-300 text-neutral-600 hover:bg-neutral-50 hover:text-neutral-700"
+                className="h-6 w-6 p-0 bg-blue-50 text-primary hover:bg-blue-100 border-0"
               >
                 <Trash2 className="h-3 w-3" />
               </Button>
@@ -284,11 +284,11 @@ export function BeneficiaryRowManager({
       {/* Add Beneficiary Button */}
       <div className="flex justify-between items-center pt-2">
         <Button
-          variant="outline"
+          variant="ghost"
           size="sm"
           onClick={handleAddBeneficiary}
           disabled={isUpdating || beneficiaries.length >= 10}
-          className="flex items-center gap-2 bg-white border border-neutral-300 text-neutral-600 hover:bg-neutral-50 hover:text-neutral-700"
+          className="flex items-center gap-2 bg-blue-50 text-primary hover:bg-blue-100 border-0"
         >
           <Plus className="h-4 w-4" />
           Add Beneficiary

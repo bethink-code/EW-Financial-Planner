@@ -377,11 +377,11 @@ export function SimpleTableWithBeneficiaries({ funds, columnVisibility, tableMod
                         <td className="p-2">
                           <div className="flex gap-1 justify-start">
                             <Button
-                              variant="outline"
+                              variant="ghost"
                               size="sm"
                               onClick={() => handleAddBeneficiary(fund.id)}
                               disabled={isUpdating || beneficiaries.length >= 10}
-                              className="h-6 w-6 p-0 bg-white border border-neutral-300 text-neutral-600 hover:bg-neutral-50 hover:text-neutral-700"
+                              className="h-6 w-6 p-0 bg-blue-50 text-primary hover:bg-blue-100 border-0"
                             >
                               <Plus className="h-3 w-3" />
                             </Button>
@@ -400,11 +400,11 @@ export function SimpleTableWithBeneficiaries({ funds, columnVisibility, tableMod
                         <td className="p-2">
                           <div className="flex justify-start">
                             <Button
-                              variant="outline"
+                              variant="ghost"
                               size="sm"
                               onClick={() => handleAddBeneficiary(fund.id)}
                               disabled={isUpdating}
-                              className="h-6 w-6 p-0 bg-white border border-neutral-300 text-neutral-600 hover:bg-neutral-50 hover:text-neutral-700"
+                              className="h-6 w-6 p-0 bg-blue-50 text-primary hover:bg-blue-100 border-0"
                             >
                               <Plus className="h-3 w-3" />
                             </Button>
@@ -729,11 +729,11 @@ export function SimpleTableWithBeneficiaries({ funds, columnVisibility, tableMod
                       <td className="p-2">
                         <div className="flex justify-start">
                           <Button
-                            variant="outline"
+                            variant="ghost"
                             size="sm"
                             onClick={() => handleRemoveBeneficiary(fund.id, beneficiaryIndex)}
                             disabled={isUpdating}
-                            className="h-6 w-6 p-0 bg-white border border-neutral-300 text-neutral-600 hover:bg-neutral-50 hover:text-neutral-700"
+                            className="h-6 w-6 p-0 bg-blue-50 text-primary hover:bg-blue-100 border-0"
                           >
                             <Trash2 className="h-3 w-3" />
                           </Button>
