@@ -276,11 +276,14 @@ export function AssuranceTable({ searchTerm }: AssuranceTableProps) {
                 }))
               ];
               
-              return allOwners.map((owner, ownerIndex) => (
-                <tr key={`${policy.id}-owner-${ownerIndex}`} className="hover:bg-neutral-50">
+              // Calculate the maximum rows needed for this policy
+              const maxRows = Math.max(allOwners.length, allBeneficiaries.length);
+              
+              return Array.from({ length: maxRows }, (_, rowIndex) => (
+                <tr key={`${policy.id}-row-${rowIndex}`} className="hover:bg-neutral-50">
                   {/* Description - rowSpan for main policy data */}
-                  {ownerIndex === 0 && (
-                    <td rowSpan={allOwners.length} className="px-3 py-2 align-top">
+                  {rowIndex === 0 && (
+                    <td rowSpan={maxRows} className="px-3 py-2 align-top">
                       <input
                         type="text"
                         defaultValue={policy.description}
@@ -291,50 +294,54 @@ export function AssuranceTable({ searchTerm }: AssuranceTableProps) {
                     </td>
                   )}
                   
-                  {/* Owner column with visual indicators for additional owners */}
+                  {/* Owner column */}
                   <td className="px-3 py-2">
-                    <div className="flex items-center space-x-1">
-                      {ownerIndex > 0 && (
-                        <span className="text-blue-500 mr-1">↳</span>
-                      )}
-                      <input
-                        type="text"
-                        defaultValue={owner}
-                        onBlur={(e) => {
-                          if (ownerIndex === 0) {
-                            handleUpdatePolicy(policy.id, 'owner', e.target.value);
-                          } else {
-                            const newOwners = [...(policy.additionalOwners || [])];
-                            newOwners[ownerIndex - 1] = e.target.value;
-                            updateMutation.mutate({ id: policy.id, updates: { additionalOwners: newOwners } });
-                          }
-                        }}
-                        className="table-input w-full px-2 py-1 text-sm border border-neutral-300 rounded bg-primary/5 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
-                        disabled={isUpdating}
-                      />
-                      {ownerIndex === 0 && (
-                        <button
-                          onClick={() => handleAddOwner(policy.id)}
-                          className="h-6 w-6 p-0 bg-blue-50 text-primary hover:bg-blue-100 border-0 rounded"
-                          title="Add owner"
-                        >
-                          <Plus className="h-3 w-3" />
-                        </button>
-                      )}
-                      {ownerIndex > 0 && (
-                        <button
-                          onClick={() => handleRemoveOwner(policy.id, ownerIndex)}
-                          className="h-6 w-6 p-0 bg-white text-[#4F4F4F] hover:text-red-600 hover:bg-red-50 border border-gray-300 rounded"
-                          title="Remove owner"
-                        >
-                          <Trash2 className="h-3 w-3" />
-                        </button>
-                      )}
-                    </div>
+                    {rowIndex < allOwners.length ? (
+                      <div className="flex items-center space-x-1">
+                        {rowIndex > 0 && (
+                          <span className="text-blue-500 mr-1">↳</span>
+                        )}
+                        <input
+                          type="text"
+                          defaultValue={allOwners[rowIndex]}
+                          onBlur={(e) => {
+                            if (rowIndex === 0) {
+                              handleUpdatePolicy(policy.id, 'owner', e.target.value);
+                            } else {
+                              const newOwners = [...(policy.additionalOwners || [])];
+                              newOwners[rowIndex - 1] = e.target.value;
+                              updateMutation.mutate({ id: policy.id, updates: { additionalOwners: newOwners } });
+                            }
+                          }}
+                          className="table-input w-full px-2 py-1 text-sm border border-neutral-300 rounded bg-primary/5 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                          disabled={isUpdating}
+                        />
+                        {rowIndex === 0 && (
+                          <button
+                            onClick={() => handleAddOwner(policy.id)}
+                            className="h-6 w-6 p-0 bg-blue-50 text-primary hover:bg-blue-100 border-0 rounded"
+                            title="Add owner"
+                          >
+                            <Plus className="h-3 w-3" />
+                          </button>
+                        )}
+                        {rowIndex > 0 && (
+                          <button
+                            onClick={() => handleRemoveOwner(policy.id, rowIndex)}
+                            className="h-6 w-6 p-0 bg-white text-[#4F4F4F] hover:text-red-600 hover:bg-red-50 border border-gray-300 rounded"
+                            title="Remove owner"
+                          >
+                            <Trash2 className="h-3 w-3" />
+                          </button>
+                        )}
+                      </div>
+                    ) : (
+                      <span className="text-neutral-400">-</span>
+                    )}
                   </td>
                   {/* Life Assured - rowSpan for main policy data */}
-                  {ownerIndex === 0 && (
-                    <td rowSpan={allOwners.length} className="px-3 py-2 align-top">
+                  {rowIndex === 0 && (
+                    <td rowSpan={maxRows} className="px-3 py-2 align-top">
                       <input
                         type="text"
                         defaultValue={policy.lifeAssured}
@@ -346,8 +353,8 @@ export function AssuranceTable({ searchTerm }: AssuranceTableProps) {
                   )}
                   
                   {/* Death Benefit - rowSpan for main policy data */}
-                  {ownerIndex === 0 && (
-                    <td rowSpan={allOwners.length} className="px-3 py-2 align-top">
+                  {rowIndex === 0 && (
+                    <td rowSpan={maxRows} className="px-3 py-2 align-top">
                       <input
                         type="text"
                         defaultValue={policy.deathBenefit}
@@ -358,29 +365,29 @@ export function AssuranceTable({ searchTerm }: AssuranceTableProps) {
                     </td>
                   )}
                   
-                  {/* Beneficiary - show based on owner index */}
+                  {/* Beneficiary column */}
                   <td className="px-3 py-2">
-                    {ownerIndex < allBeneficiaries.length ? (
+                    {rowIndex < allBeneficiaries.length ? (
                       <div className="flex items-center space-x-1">
-                        {ownerIndex > 0 && (
+                        {rowIndex > 0 && (
                           <span className="text-green-500 mr-1">↳</span>
                         )}
                         <input
                           type="text"
-                          defaultValue={allBeneficiaries[ownerIndex].name}
+                          defaultValue={allBeneficiaries[rowIndex].name}
                           onBlur={(e) => {
-                            if (ownerIndex === 0) {
+                            if (rowIndex === 0) {
                               handleUpdatePolicy(policy.id, 'beneficiary', e.target.value);
                             } else {
                               const newBeneficiaries = [...(policy.additionalBeneficiaries || [])];
-                              newBeneficiaries[ownerIndex - 1] = e.target.value;
+                              newBeneficiaries[rowIndex - 1] = e.target.value;
                               updateMutation.mutate({ id: policy.id, updates: { additionalBeneficiaries: newBeneficiaries } });
                             }
                           }}
                           className="table-input w-full px-2 py-1 text-sm border border-neutral-300 rounded bg-primary/5 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
                           disabled={isUpdating}
                         />
-                        {ownerIndex === 0 && (
+                        {rowIndex === 0 && (
                           <button
                             onClick={() => handleAddBeneficiary(policy.id)}
                             className="h-6 w-6 p-0 bg-blue-50 text-primary hover:bg-blue-100 border-0 rounded"
@@ -389,9 +396,9 @@ export function AssuranceTable({ searchTerm }: AssuranceTableProps) {
                             <Plus className="h-3 w-3" />
                           </button>
                         )}
-                        {ownerIndex > 0 && (
+                        {rowIndex > 0 && (
                           <button
-                            onClick={() => handleRemoveBeneficiary(policy.id, ownerIndex)}
+                            onClick={() => handleRemoveBeneficiary(policy.id, rowIndex)}
                             className="h-6 w-6 p-0 bg-white text-[#4F4F4F] hover:text-red-600 hover:bg-red-50 border border-gray-300 rounded"
                             title="Remove beneficiary"
                           >
@@ -405,29 +412,29 @@ export function AssuranceTable({ searchTerm }: AssuranceTableProps) {
                   </td>
                   
                   {/* Additional Info - rowSpan for main policy data */}
-                  {ownerIndex === 0 && (
-                    <td rowSpan={allOwners.length} className="px-3 py-2 align-top">
+                  {rowIndex === 0 && (
+                    <td rowSpan={maxRows} className="px-3 py-2 align-top">
                       <input
                         type="text"
                         defaultValue=""
-                        onBlur={(e) => handleUpdatePolicy(policy.id, 'description', e.target.value)}
+                        onBlur={(e) => handleUpdatePolicy(policy.id, 'additionalInfo', e.target.value)}
                         className="table-input w-full px-2 py-1 text-sm border border-neutral-300 rounded bg-primary/5 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
                         disabled={isUpdating}
                       />
                     </td>
                   )}
                   
-                  {/* Benefit Split - show based on owner index */}
+                  {/* Benefit Split */}
                   <td className="px-3 py-2 text-sm text-neutral-700 text-right bg-neutral-100">
-                    {ownerIndex < allBeneficiaries.length ? 
-                      formatCurrencyValue(allBeneficiaries[ownerIndex].split, 'percentage') : 
+                    {rowIndex < allBeneficiaries.length ? 
+                      formatCurrencyValue(allBeneficiaries[rowIndex].split, 'percentage') : 
                       '-'
                     }
                   </td>
                   
                   {/* Amount - rowSpan for main policy data */}
-                  {ownerIndex === 0 && (
-                    <td rowSpan={allOwners.length} className="px-3 py-2 align-top">
+                  {rowIndex === 0 && (
+                    <td rowSpan={maxRows} className="px-3 py-2 align-top">
                       <input
                         type="text"
                         defaultValue={policy.amount}
@@ -439,9 +446,9 @@ export function AssuranceTable({ searchTerm }: AssuranceTableProps) {
                   )}
                   
                   {/* Checkboxes - rowSpan for main policy data */}
-                  {ownerIndex === 0 && (
+                  {rowIndex === 0 && (
                     <>
-                      <td rowSpan={allOwners.length} className="px-3 py-2 text-center align-top">
+                      <td rowSpan={maxRows} className="px-3 py-2 text-center align-top">
                         <input
                           type="checkbox"
                           checked={policy.buySell}
@@ -450,7 +457,7 @@ export function AssuranceTable({ searchTerm }: AssuranceTableProps) {
                           disabled={isUpdating}
                         />
                       </td>
-                      <td rowSpan={allOwners.length} className="px-3 py-2 text-center align-top">
+                      <td rowSpan={maxRows} className="px-3 py-2 text-center align-top">
                         <input
                           type="checkbox"
                           checked={policy.keyMan}
@@ -459,7 +466,7 @@ export function AssuranceTable({ searchTerm }: AssuranceTableProps) {
                           disabled={isUpdating}
                         />
                       </td>
-                      <td rowSpan={allOwners.length} className="px-3 py-2 text-center align-top">
+                      <td rowSpan={maxRows} className="px-3 py-2 text-center align-top">
                         <input
                           type="checkbox"
                           checked={policy.excludedFromEstateDuty}
@@ -468,7 +475,7 @@ export function AssuranceTable({ searchTerm }: AssuranceTableProps) {
                           disabled={isUpdating}
                         />
                       </td>
-                      <td rowSpan={allOwners.length} className="px-3 py-2 text-center align-top">
+                      <td rowSpan={maxRows} className="px-3 py-2 text-center align-top">
                         <input
                           type="checkbox"
                           checked={policy.excludedFromProvisions}
@@ -477,7 +484,7 @@ export function AssuranceTable({ searchTerm }: AssuranceTableProps) {
                           disabled={isUpdating}
                         />
                       </td>
-                      <td rowSpan={allOwners.length} className="px-3 py-2 align-top">
+                      <td rowSpan={maxRows} className="px-3 py-2 align-top">
                         <input
                           type="text"
                           defaultValue={policy.premiumsByOthers}
@@ -486,7 +493,7 @@ export function AssuranceTable({ searchTerm }: AssuranceTableProps) {
                           disabled={isUpdating}
                         />
                       </td>
-                      <td rowSpan={allOwners.length} className="px-3 py-2 align-top">
+                      <td rowSpan={maxRows} className="px-3 py-2 align-top">
                         <input
                           type="text"
                           defaultValue={policy.collateralSession}
@@ -495,7 +502,7 @@ export function AssuranceTable({ searchTerm }: AssuranceTableProps) {
                           disabled={isUpdating}
                         />
                       </td>
-                      <td rowSpan={allOwners.length} className="px-3 py-2 text-center align-top">
+                      <td rowSpan={maxRows} className="px-3 py-2 text-center align-top">
                         {/* Actions column - no policy delete button */}
                         <span className="text-neutral-400">-</span>
                       </td>
