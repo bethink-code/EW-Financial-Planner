@@ -19,6 +19,7 @@ interface SimpleTableWithBeneficiariesProps {
   columnVisibility: ColumnVisibility;
   tableMode: "inputs" | "flows";
   onFieldUpdate: (id: number, field: keyof UpdateRetirementFund, value: string) => void;
+  onRemoveFund?: (id: number) => void;
   isUpdating: boolean;
 }
 
@@ -58,6 +59,7 @@ export function SimpleTableWithBeneficiaries({
   columnVisibility, 
   tableMode, 
   onFieldUpdate, 
+  onRemoveFund,
   isUpdating 
 }: SimpleTableWithBeneficiariesProps) {
   
@@ -461,58 +463,7 @@ export function SimpleTableWithBeneficiaries({
                   disabled={isUpdating}
                 />
               </td>
-            </>
-          )}
-          
-          {/* Unapproved Life Cover Section */}
-          {columnVisibility.unapprovedLifeCover && (
-            <>
-              <td className="p-2 text-right border-l border-neutral-300" rowSpan={fundOwners.length}>
-                <input
-                  defaultValue={fund.coverAmount || ""}
-                  onBlur={(e) => {
-                    const formattedValue = formatCurrencyValue(e.target.value, "coverAmount");
-                    if (formattedValue !== e.target.value) {
-                      e.target.value = formattedValue;
-                    }
-                    handleInputBlur(fund.id, "coverAmount", e.target.value);
-                  }}
-                  className="table-input h-7 text-sm bg-white border-gray-200 focus:border-primary w-full px-3 py-1 border rounded-md text-sm"
-                  style={{ textAlign: "right", minWidth: "120px" }}
-                  placeholder="R 0"
-                  disabled={isUpdating}
-                />
-              </td>
-              <td className="p-2 text-left" rowSpan={fundOwners.length}>
-                <input
-                  defaultValue={beneficiaries[0]?.name || ""}
-                  onBlur={(e) => handleBeneficiaryUpdate(fund.id, 0, 'name', e.target.value)}
-                  className="table-input h-7 text-sm bg-white border-gray-200 focus:border-primary w-full px-3 py-1 border rounded-md text-sm"
-                  style={{ textAlign: "left", minWidth: "120px" }}
-                  placeholder="Beneficiary name"
-                  disabled={isUpdating}
-                />
-              </td>
-              <td className="p-2 text-right" rowSpan={fundOwners.length}>
-                <input
-                  defaultValue={`${beneficiaries[0]?.percentage || 0}%`}
-                  onBlur={(e) => {
-                    const formattedValue = formatCurrencyValue(e.target.value, "percentage");
-                    if (formattedValue !== e.target.value) {
-                      e.target.value = formattedValue;
-                    }
-                    handleBeneficiaryUpdate(fund.id, 0, 'percentage', parseFloat(e.target.value.replace('%', '')) || 0);
-                  }}
-                  className="table-input h-7 text-sm bg-white border-gray-200 focus:border-primary w-full px-3 py-1 border rounded-md text-sm"
-                  style={{ textAlign: "right", minWidth: "60px" }}
-                  disabled={isUpdating}
-                />
-              </td>
-              <td className="p-2 text-right" rowSpan={fundOwners.length}>
-                <span className="table-text-14 text-neutral-900">
-                  {beneficiaries[0]?.coverSplit || 'R 0'}
-                </span>
-              </td>
+              {/* Beneficiary Actions in Fund Value Beneficiaries Section */}
               <td className="p-2" rowSpan={fundOwners.length}>
                 <div className="flex items-center gap-2">
                   {beneficiaries.length > 1 && (
@@ -536,6 +487,43 @@ export function SimpleTableWithBeneficiaries({
                     title="Add beneficiary"
                   >
                     <Plus className="h-3 w-3" />
+                  </Button>
+                </div>
+              </td>
+            </>
+          )}
+          
+          {/* Unapproved Life Cover Section */}
+          {columnVisibility.unapprovedLifeCover && (
+            <>
+              <td className="p-2 text-right border-l border-neutral-300" rowSpan={fundOwners.length}>
+                <input
+                  defaultValue={fund.coverAmount || ""}
+                  onBlur={(e) => {
+                    const formattedValue = formatCurrencyValue(e.target.value, "coverAmount");
+                    if (formattedValue !== e.target.value) {
+                      e.target.value = formattedValue;
+                    }
+                    handleInputBlur(fund.id, "coverAmount", e.target.value);
+                  }}
+                  className="table-input h-7 text-sm bg-white border-gray-200 focus:border-primary w-full px-3 py-1 border rounded-md text-sm"
+                  style={{ textAlign: "right", minWidth: "120px" }}
+                  placeholder="R 0"
+                  disabled={isUpdating}
+                />
+              </td>
+              {/* Fund-level Actions */}
+              <td className="p-2" rowSpan={fundOwners.length}>
+                <div className="flex items-center gap-2">
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => onRemoveFund && onRemoveFund(fund.id)}
+                    disabled={isUpdating}
+                    className="h-6 w-6 p-0 bg-white text-[#4F4F4F] hover:text-red-600 hover:bg-red-50 border border-gray-300"
+                    title="Remove fund"
+                  >
+                    <Trash2 className="h-3 w-3" />
                   </Button>
                 </div>
               </td>
@@ -644,14 +632,12 @@ export function SimpleTableWithBeneficiaries({
                   <td></td>
                   <td></td>
                   <td></td>
+                  <td></td>
                 </>
               )}
               
               {columnVisibility.unapprovedLifeCover && (
                 <>
-                  <td></td>
-                  <td></td>
-                  <td></td>
                   <td></td>
                   <td></td>
                 </>
@@ -740,15 +726,27 @@ export function SimpleTableWithBeneficiaries({
                   <td className="p-2 text-right">
                     <span className="table-text-14 text-neutral-900">0 years</span>
                   </td>
+                  {/* Beneficiary Actions */}
+                  <td className="p-2">
+                    <div className="flex items-center gap-2">
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => handleRemoveBeneficiary(fund.id, actualIndex)}
+                        disabled={isUpdating}
+                        className="h-6 w-6 p-0 bg-white text-[#4F4F4F] hover:text-red-600 hover:bg-red-50 border border-gray-300"
+                        title="Remove beneficiary"
+                      >
+                        <Trash2 className="h-3 w-3" />
+                      </Button>
+                    </div>
+                  </td>
                 </>
               )}
               
               {/* Skip Unapproved Life Cover columns */}
               {columnVisibility.unapprovedLifeCover && (
                 <>
-                  <td></td>
-                  <td></td>
-                  <td></td>
                   <td></td>
                   <td></td>
                 </>
@@ -811,13 +809,14 @@ export function SimpleTableWithBeneficiaries({
               <col style={{ width: "140px" }} />  {/* Non-deductible Contribution */}
               <col style={{ width: "140px" }} />  {/* Living Annuity */}
               <col style={{ width: "90px" }} />   {/* Income Term */}
+              <col style={{ width: "70px" }} />   {/* Beneficiary Actions */}
             </>
           )}
           {/* Unapproved Life Cover Section */}
           {columnVisibility.unapprovedLifeCover && (
             <>
               <col style={{ width: "140px" }} />  {/* Cover Amount */}
-              <col style={{ width: "70px" }} />   {/* Actions */}
+              <col style={{ width: "70px" }} />   {/* Fund Actions */}
             </>
           )}
         </colgroup>
@@ -882,6 +881,9 @@ export function SimpleTableWithBeneficiaries({
                 <th className="table-header text-right text-xs font-medium text-neutral-600 uppercase p-3" style={{ width: "90px" }}>
                   Income Term
                 </th>
+                <th className="table-header text-center text-xs font-medium text-neutral-600 uppercase p-3" style={{ width: "70px" }}>
+                  Actions
+                </th>
               </>
             )}
             {columnVisibility.unapprovedLifeCover && (
@@ -889,17 +891,8 @@ export function SimpleTableWithBeneficiaries({
                 <th className="table-header text-right text-xs font-medium text-neutral-600 uppercase p-3 border-l border-neutral-300" style={{ width: "140px" }}>
                   Cover Amount
                 </th>
-                <th className="table-header text-left text-xs font-medium text-neutral-600 uppercase p-3" style={{ width: "140px" }}>
-                  Beneficiary Name
-                </th>
-                <th className="table-header text-right text-xs font-medium text-neutral-600 uppercase p-3" style={{ width: "80px" }}>
-                  %
-                </th>
-                <th className="table-header text-right text-xs font-medium text-neutral-600 uppercase p-3" style={{ width: "120px" }}>
-                  Cover Split
-                </th>
-                <th className="table-header text-center text-xs font-medium text-neutral-600 uppercase p-3" style={{ width: "80px" }}>
-                  Actions
+                <th className="table-header text-center text-xs font-medium text-neutral-600 uppercase p-3" style={{ width: "70px" }}>
+                  Fund Actions
                 </th>
               </>
             )}
