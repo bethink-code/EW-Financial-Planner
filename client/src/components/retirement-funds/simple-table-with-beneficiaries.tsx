@@ -581,20 +581,10 @@ export function SimpleTableWithBeneficiaries({ funds, columnVisibility, tableMod
                       />
                     </td>
                     <td className="p-2 text-right" rowSpan={fundOwners.length}>
-                      <input
-                        defaultValue={fund.escalationAmount || ""}
-                        onBlur={(e) => {
-                          const formattedValue = formatCurrencyValue(e.target.value, "escalationAmount");
-                          if (formattedValue !== e.target.value) {
-                            e.target.value = formattedValue;
-                          }
-                          handleInputBlur(fund.id, "escalationAmount", e.target.value);
-                        }}
-                        className="table-input h-7 text-sm bg-white border-gray-200 focus:border-primary w-full px-3 py-1 border rounded-md text-sm"
-                        style={{ textAlign: "right", minWidth: "90px" }}
-                        placeholder="R 0"
-                        disabled={isUpdating}
-                      />
+                      <span className="table-text-14 text-neutral-900">
+                        {/* Calculated field - escalation amount */}
+                        R 0
+                      </span>
                     </td>
                   </>
                 )}
