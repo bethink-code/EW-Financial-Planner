@@ -1,4 +1,5 @@
 // Design system tokens for consistent styling across the application
+import { defaultFieldTypes, type FieldTypeConfig } from './field-types';
 
 export const designTokens = {
   // Brand Colors
@@ -93,7 +94,10 @@ export const designTokens = {
     transition: "transition-colors duration-200",
     fadeIn: "section-enter",
     slideIn: "animate-in slide-in-from-bottom-2 duration-300",
-  }
+  },
+
+  // Field type system integration
+  fieldTypes: defaultFieldTypes
 } as const;
 
 // Utility functions for consistent styling
@@ -122,3 +126,37 @@ export const getTabClass = (isActive = false) => {
 export const getButtonClass = (variant: keyof typeof designTokens.components.buttons = 'primary') => {
   return `inline-flex items-center justify-center rounded-md px-4 py-2 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 ${designTokens.components.buttons[variant]}`;
 };
+
+// Field type utility functions for consistent table behavior
+export const getFieldClass = (fieldName: string, additionalClasses = '') => {
+  const config = designTokens.fieldTypes[fieldName] || designTokens.fieldTypes.text;
+  return `${config.inputProps?.className || 'table-input'} ${additionalClasses}`.trim();
+};
+
+export const getFieldWidth = (fieldName: string) => {
+  const config = designTokens.fieldTypes[fieldName] || designTokens.fieldTypes.text;
+  return {
+    minWidth: config.inputProps?.minWidth || '80px',
+    maxWidth: config.inputProps?.maxWidth || '200px'
+  };
+};
+
+export const getFieldDefaultValue = (fieldName: string) => {
+  const config = designTokens.fieldTypes[fieldName] || designTokens.fieldTypes.text;
+  return config.defaultValue;
+};
+
+// Table column width standards for consistent layouts
+export const tableColumnWidths = {
+  description: '200px',
+  name: '150px',
+  owner: '150px',
+  beneficiary: '150px',
+  amount: '120px',
+  currency: '120px',
+  percentage: '80px',
+  years: '90px',
+  checkbox: '60px',
+  actions: '100px',
+  additionalInfo: '200px'
+} as const;
