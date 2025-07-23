@@ -771,9 +771,7 @@ export function SimpleTableWithBeneficiaries({ funds, columnVisibility, tableMod
                     {/* Empty cells for Overview section */}
                     {columnVisibility.overview && (
                       <>
-                        <td className="p-2">
-                          <span className="text-xs text-neutral-500 ml-4">↳ Beneficiary {i + 1}</span>
-                        </td>
+                        <td className="p-2"></td>
                         <td className="p-2"></td>
                         <td className="p-2"></td>
                       </>
@@ -784,14 +782,17 @@ export function SimpleTableWithBeneficiaries({ funds, columnVisibility, tableMod
                       <>
                         <td className="p-2 border-l border-neutral-300"></td>
                         <td className="p-2">
-                          <input
-                            defaultValue={beneficiaries[i].name}
-                            onBlur={(e) => handleBeneficiaryUpdate(fund.id, i, 'name', e.target.value)}
-                            placeholder="Beneficiary name"
-                            disabled={isUpdating}
-                            className="table-input h-7 text-sm bg-white border-gray-200 focus:border-primary w-full px-3 py-1 border rounded-md text-sm"
-                            style={{ textAlign: "left", minWidth: "120px" }}
-                          />
+                          <div className="flex items-center gap-2">
+                            <span className="text-xs text-neutral-500">↳ Beneficiary {i + 1}:</span>
+                            <input
+                              defaultValue={beneficiaries[i].name}
+                              onBlur={(e) => handleBeneficiaryUpdate(fund.id, i, 'name', e.target.value)}
+                              placeholder="Beneficiary name"
+                              disabled={isUpdating}
+                              className="table-input h-7 text-sm bg-white border-gray-200 focus:border-primary flex-1 px-3 py-1 border rounded-md text-sm"
+                              style={{ textAlign: "left", minWidth: "100px" }}
+                            />
+                          </div>
                         </td>
                         <td className="p-2">
                           <input
