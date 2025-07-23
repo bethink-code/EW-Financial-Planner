@@ -186,6 +186,8 @@ export function SimpleTableWithBeneficiaries({ funds, columnVisibility, tableMod
     onFieldUpdate(fundId, 'ownershipPercentages', JSON.stringify(percentages));
   }, [funds, onFieldUpdate]);
 
+
+
   const owners = useMemo(() => ["John Doe", "Jane Smith", "Donald Edwards", "Betty Edwards"], []);
   return (
     <div>
@@ -415,14 +417,103 @@ export function SimpleTableWithBeneficiaries({ funds, columnVisibility, tableMod
                     </>
                   )}
                 
-                {/* Remaining sections - only show for first owner row */}
+                {/* Unapproved Life Cover Section - only show for first owner row */}
                 {isFirstOwner && columnVisibility.unapprovedLifeCover && (
                   <>
-                    <td className="p-2 text-right border-l border-neutral-300" rowSpan={fundOwners.length}>Cover Amount</td>
-                    <td className="p-2" rowSpan={fundOwners.length}>Beneficiary</td>
-                    <td className="p-2" rowSpan={fundOwners.length}>%</td>
-                    <td className="p-2" rowSpan={fundOwners.length}>Cover Split</td>
-                    <td className="p-2" rowSpan={fundOwners.length}>Actions</td>
+                    <td className="p-2 text-right border-l border-neutral-300" rowSpan={fundOwners.length}>
+                      <input
+                        defaultValue={fund.coverAmount || ""}
+                        onBlur={(e) => {
+                          const formattedValue = formatCurrencyValue(e.target.value, "coverAmount");
+                          if (formattedValue !== e.target.value) {
+                            e.target.value = formattedValue;
+                          }
+                          handleInputBlur(fund.id, "coverAmount", e.target.value);
+                          
+                          // Recalculate cover splits for all beneficiaries
+                          const beneficiaries = parseBeneficiaries(fund.beneficiaries);
+                          if (beneficiaries.length > 0) {
+                            const newCoverAmount = parseFloat(e.target.value.replace(/[^\d.-]/g, '')) || 0;
+                            const updatedBeneficiaries = beneficiaries.map(b => ({
+                              ...b,
+                              coverSplit: `R ${Math.round((newCoverAmount * b.percentage / 100)).toLocaleString()}`
+                            }));
+                            onFieldUpdate(fund.id, 'beneficiaries', JSON.stringify(updatedBeneficiaries));
+                          }
+                        }}
+                        className="table-input h-7 text-sm bg-white border-gray-200 focus:border-primary w-full px-3 py-1 border rounded-md text-sm"
+                        style={{ textAlign: "right", minWidth: "100px" }}
+                        placeholder="R 0"
+                        disabled={isUpdating}
+                      />
+                    </td>
+                    {beneficiaries.length > 0 ? (
+                      <>
+                        <td className="p-2" rowSpan={fundOwners.length}>
+                          <input
+                            defaultValue={beneficiaries[0].name}
+                            onBlur={(e) => handleBeneficiaryUpdate(fund.id, 0, 'name', e.target.value)}
+                            placeholder="Beneficiary name"
+                            disabled={isUpdating}
+                            className="table-input h-7 text-sm bg-white border-gray-200 focus:border-primary w-full px-3 py-1 border rounded-md text-sm"
+                            style={{ textAlign: "left", minWidth: "120px" }}
+                          />
+                        </td>
+                        <td className="p-2 percentage-column" rowSpan={fundOwners.length}>
+                          <input
+                            type="text"
+                            defaultValue={`${beneficiaries[0].percentage || 0}%`}
+                            onBlur={(e) => {
+                              const formattedValue = formatCurrencyValue(e.target.value, "percentage");
+                              if (formattedValue !== e.target.value) {
+                                e.target.value = formattedValue;
+                              }
+                              handleBeneficiaryUpdate(fund.id, 0, 'percentage', parseFloat(e.target.value.replace('%', '')) || 0);
+                            }}
+                            className="table-input h-7 text-sm bg-white border-gray-200 focus:border-primary w-full px-3 py-1 border rounded-md text-sm"
+                            style={{ textAlign: "right", minWidth: "60px" }}
+                            disabled={isUpdating}
+                          />
+                        </td>
+                        <td className="p-2" rowSpan={fundOwners.length}>
+                          <span className="table-text-14 text-neutral-900">
+                            {beneficiaries[0].coverSplit || 'R 0'}
+                          </span>
+                        </td>
+                        <td className="p-2" rowSpan={fundOwners.length}>
+                          <div className="flex items-center gap-1">
+                            <Button
+                              variant="ghost"
+                              size="sm"
+                              onClick={() => handleAddBeneficiary(fund.id)}
+                              disabled={isUpdating}
+                              className="h-6 w-6 p-0 bg-blue-50 text-primary hover:bg-blue-100 border-0"
+                              title="Add beneficiary"
+                            >
+                              <Plus className="h-3 w-3" />
+                            </Button>
+                          </div>
+                        </td>
+                      </>
+                    ) : (
+                      <>
+                        <td className="p-2" rowSpan={fundOwners.length}>
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={() => handleAddBeneficiary(fund.id)}
+                            disabled={isUpdating}
+                            className="h-6 w-6 p-0 bg-blue-50 text-primary hover:bg-blue-100 border-0"
+                            title="Add beneficiary"
+                          >
+                            <Plus className="h-3 w-3" />
+                          </Button>
+                        </td>
+                        <td className="p-2" rowSpan={fundOwners.length}></td>
+                        <td className="p-2" rowSpan={fundOwners.length}></td>
+                        <td className="p-2" rowSpan={fundOwners.length}></td>
+                      </>
+                    )}
                   </>
                 )}
                 
