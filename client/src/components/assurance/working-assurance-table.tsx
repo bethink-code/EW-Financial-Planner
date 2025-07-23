@@ -140,7 +140,10 @@ export function AssuranceTable({ searchTerm }: AssuranceTableProps) {
       } catch {
         currentOwners = [];
       }
-      const newOwnerId = `O${Date.now()}`;
+      // Generate next sequential ID based on existing owners
+      const existingIds = currentOwners.map((o: any) => parseInt(o.id.replace('O', '')));
+      const nextId = existingIds.length > 0 ? Math.max(...existingIds) + 1 : 2; // Start from O2 since O1 is main owner
+      const newOwnerId = `O${nextId}`;
       const newOwners = [...currentOwners, { id: newOwnerId, name: "New Owner" }];
       setIsUpdating(true);
       updateMutation.mutate({ id, updates: { additionalOwners: JSON.stringify(newOwners) } });
@@ -173,7 +176,10 @@ export function AssuranceTable({ searchTerm }: AssuranceTableProps) {
       } catch {
         currentBeneficiaries = [];
       }
-      const newBeneficiaryId = `B${Date.now()}`;
+      // Generate next sequential ID based on existing beneficiaries
+      const existingIds = currentBeneficiaries.map((b: any) => parseInt(b.id.replace('B', '')));
+      const nextId = existingIds.length > 0 ? Math.max(...existingIds) + 1 : 2; // Start from B2 since B1 is main beneficiary
+      const newBeneficiaryId = `B${nextId}`;
       const newBeneficiaries = [...currentBeneficiaries, { id: newBeneficiaryId, name: "New Beneficiary", split: "0" }];
       setIsUpdating(true);
       updateMutation.mutate({ id, updates: { additionalBeneficiaries: JSON.stringify(newBeneficiaries) } });
@@ -330,6 +336,7 @@ export function AssuranceTable({ searchTerm }: AssuranceTableProps) {
                         {rowIndex > 0 && (
                           <span className="text-blue-500 mr-1">↳</span>
                         )}
+                        <span className="text-xs text-gray-500 mr-2 min-w-[24px]">{allOwners[rowIndex].id}</span>
                         <input
                           type="text"
                           defaultValue={allOwners[rowIndex].name}
@@ -408,6 +415,7 @@ export function AssuranceTable({ searchTerm }: AssuranceTableProps) {
                         {rowIndex > 0 && (
                           <span className="text-green-500 mr-1">↳</span>
                         )}
+                        <span className="text-xs text-gray-500 mr-2 min-w-[24px]">{allBeneficiaries[rowIndex].id}</span>
                         <input
                           type="text"
                           defaultValue={allBeneficiaries[rowIndex].name}
