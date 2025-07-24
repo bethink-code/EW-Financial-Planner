@@ -371,13 +371,11 @@ export default function VoluntaryInvestmentsTable() {
                       type="text"
                       key={`percentage-${investment.id}-${ownerIndex}-${percentages[ownerIndex]}`}
                       defaultValue={percentages[ownerIndex] || '0%'}
-                      onBlur={(e) => {
-                        const formattedValue = formatPercentageValue(e.target.value);
-                        if (formattedValue !== e.target.value) {
-                          e.target.value = formattedValue;
-                        }
-                        handlePercentageChange(investment.id, ownerIndex, e.target.value);
-                      }}
+                      onFocus={handleDefaultValueFocus}
+                      onBlur={createEnhancedBlurHandler(
+                        (e) => handlePercentageChange(investment.id, ownerIndex, e.target.value),
+                        'percentage'
+                      )}
                       className={`${getFieldClass('percentage')} ${getValueClass(percentages[ownerIndex] || '0%', 'percentage')}`}
                       disabled={isUpdating}
                     />
@@ -409,7 +407,11 @@ export default function VoluntaryInvestmentsTable() {
                           key={`liquidationPercentage-${investment.id}-${investment.liquidationPercentage}`}
                           type="text"
                           defaultValue={investment.liquidationPercentage || "0%"}
-                          onBlur={(e) => handleInputBlur(investment.id, 'liquidationPercentage', e.target.value)}
+                          onFocus={handleDefaultValueFocus}
+                          onBlur={createEnhancedBlurHandler(
+                            (e) => handleInputBlur(investment.id, 'liquidationPercentage', e.target.value),
+                            'percentage'
+                          )}
                           className={`${getFieldClass('percentage')} ${getValueClass(investment.liquidationPercentage || "0%", 'percentage')}`}
                           disabled={isUpdating}
                         />
@@ -419,14 +421,12 @@ export default function VoluntaryInvestmentsTable() {
                           key={`spouse-${investment.id}-${investment.spouse}`}
                           type="text"
                           defaultValue={investment.spouse || "0%"}
-                          onBlur={(e) => {
-                            const formattedValue = formatPercentageValue(e.target.value);
-                            if (formattedValue !== e.target.value) {
-                              e.target.value = formattedValue;
-                            }
-                            handleInputBlur(investment.id, 'spouse', e.target.value);
-                          }}
-                          className={getFieldClass('percentage')}
+                          onFocus={handleDefaultValueFocus}
+                          onBlur={createEnhancedBlurHandler(
+                            (e) => handleInputBlur(investment.id, 'spouse', e.target.value),
+                            'percentage'
+                          )}
+                          className={`${getFieldClass('percentage')} ${getValueClass(investment.spouse || "0%", 'percentage')}`}
                           disabled={isUpdating}
                         />
                       </td>
@@ -435,14 +435,12 @@ export default function VoluntaryInvestmentsTable() {
                           key={`others-${investment.id}-${investment.others}`}
                           type="text"
                           defaultValue={investment.others || "0%"}
-                          onBlur={(e) => {
-                            const formattedValue = formatPercentageValue(e.target.value);
-                            if (formattedValue !== e.target.value) {
-                              e.target.value = formattedValue;
-                            }
-                            handleInputBlur(investment.id, 'others', e.target.value);
-                          }}
-                          className={getFieldClass('percentage')}
+                          onFocus={handleDefaultValueFocus}
+                          onBlur={createEnhancedBlurHandler(
+                            (e) => handleInputBlur(investment.id, 'others', e.target.value),
+                            'percentage'
+                          )}
+                          className={`${getFieldClass('percentage')} ${getValueClass(investment.others || "0%", 'percentage')}`}
                           disabled={isUpdating}
                         />
                       </td>

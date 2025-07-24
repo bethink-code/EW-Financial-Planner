@@ -397,7 +397,11 @@ export default function AssetsAndLiabilitiesTable() {
                       <input
                         type="text"
                         defaultValue={asset.donaldEdwardsPercentage || "0%"}
-                        onBlur={(e) => handleInputBlur(asset.id, 'donaldEdwardsPercentage', e.target.value)}
+                        onFocus={handleDefaultValueFocus}
+                        onBlur={createEnhancedBlurHandler(
+                          (e) => handleInputBlur(asset.id, 'donaldEdwardsPercentage', e.target.value),
+                          'percentage'
+                        )}
                         className={`${getFieldClass('percentage')} ${getValueClass(asset.donaldEdwardsPercentage || "0%", 'percentage')}`}
                         
                         disabled={isUpdating}
@@ -407,7 +411,11 @@ export default function AssetsAndLiabilitiesTable() {
                       <input
                         type="text"
                         defaultValue={asset.bettyEdwardsPercentage || "0%"}
-                        onBlur={(e) => handleInputBlur(asset.id, 'bettyEdwardsPercentage', e.target.value)}
+                        onFocus={handleDefaultValueFocus}
+                        onBlur={createEnhancedBlurHandler(
+                          (e) => handleInputBlur(asset.id, 'bettyEdwardsPercentage', e.target.value),
+                          'percentage'
+                        )}
                         className={`${getFieldClass('percentage')} ${getValueClass(asset.bettyEdwardsPercentage || "0%", 'percentage')}`}
                         
                         disabled={isUpdating}
@@ -417,7 +425,11 @@ export default function AssetsAndLiabilitiesTable() {
                       <input
                         type="text"
                         defaultValue={asset.liquidationPercentage || "0%"}
-                        onBlur={(e) => handleInputBlur(asset.id, 'liquidationPercentage', e.target.value)}
+                        onFocus={handleDefaultValueFocus}
+                        onBlur={createEnhancedBlurHandler(
+                          (e) => handleInputBlur(asset.id, 'liquidationPercentage', e.target.value),
+                          'percentage'
+                        )}
                         className={`${getFieldClass('percentage')} ${getValueClass(asset.liquidationPercentage || "0%", 'percentage')}`}
                         
                         disabled={isUpdating}

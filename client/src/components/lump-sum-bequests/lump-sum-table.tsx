@@ -179,14 +179,12 @@ export function LumpSumTable({ searchTerm }: LumpSumTableProps) {
                       <input
                         type="text"
                         defaultValue={bequest.increasePercentage || "6%"}
-                        onBlur={(e) => {
-                          const formattedValue = formatPercentageValue(e.target.value);
-                          if (formattedValue !== e.target.value) {
-                            e.target.value = formattedValue;
-                          }
-                          handleInputBlur(bequest.id, "increasePercentage", e.target.value);
-                        }}
-                        className={`${getFieldClass('percentage')} table-input text-right`}
+                        onFocus={handleDefaultValueFocus}
+                        onBlur={createEnhancedBlurHandler(
+                          (e) => handleInputBlur(bequest.id, "increasePercentage", e.target.value),
+                          'percentage'
+                        )}
+                        className={`${getFieldClass('percentage')} table-input text-right ${getValueClass(bequest.increasePercentage || "6%", 'percentage')}`}
                         disabled={isUpdating}
                       />
                       <label className="flex items-center text-xs">
@@ -248,13 +246,14 @@ export function LumpSumTable({ searchTerm }: LumpSumTableProps) {
                     <input
                       type="text"
                       defaultValue="6%"
-                      onBlur={(e) => {
-                        const formattedValue = formatPercentageValue(e.target.value);
-                        if (formattedValue !== e.target.value) {
-                          e.target.value = formattedValue;
-                        }
-                      }}
-                      className={`${getFieldClass('percentage')} table-input text-right`}
+                      onFocus={handleDefaultValueFocus}
+                      onBlur={createEnhancedBlurHandler(
+                        (e) => {
+                          // Charity row - no specific handling needed
+                        },
+                        'percentage'
+                      )}
+                      className={`${getFieldClass('percentage')} table-input text-right ${getValueClass("6%", 'percentage')}`}
                       disabled={isUpdating}
                     />
                     <label className="flex items-center text-xs">

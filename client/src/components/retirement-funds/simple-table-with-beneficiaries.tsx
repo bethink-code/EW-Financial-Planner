@@ -292,10 +292,6 @@ export function SimpleTableWithBeneficiaries({
                   defaultValue={fund.increasePercentage || "0%"}
                   onFocus={handleDefaultValueFocus}
                   onBlur={createEnhancedBlurHandler((e) => {
-                    const formattedValue = formatCurrencyValue(e.target.value, "increasePercentage");
-                    if (formattedValue !== e.target.value) {
-                      e.target.value = formattedValue;
-                    }
                     handleInputBlur(fund.id, "increasePercentage", e.target.value, e.target);
                   }, 'percentage')}
                   className={`${getFieldClass('percentage')} ${getValueClass(fund.increasePercentage || "0%", 'percentage')} table-input text-right`}

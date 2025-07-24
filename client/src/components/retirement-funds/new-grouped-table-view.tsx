@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button";
 import { FundActions } from "./fund-actions";
 import { nanoid } from "nanoid";
 import { getFieldClass } from "@/lib/design-tokens";
-import { getValueClass, isDefaultValue, handleDefaultValueFocus } from "@/lib/formatting";
+import { getValueClass, isDefaultValue, handleDefaultValueFocus, createEnhancedBlurHandler } from "@/lib/formatting";
 interface ColumnVisibility {
   overview: boolean;
   unapprovedLifeCover: boolean;
@@ -374,14 +374,12 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
                     <td className="p-2 text-right ">
                       <input
                         defaultValue={fund.increasePercentage || "0%"}
-                        onBlur={(e) => {
-                          const formattedValue = formatCurrencyValue(e.target.value, "increasePercentage");
-                          if (formattedValue !== e.target.value) {
-                            e.target.value = formattedValue;
-                          }
-                          handleInputBlur(fund.id, "increasePercentage", e.target.value);
-                        }}
-                        className={`${getFieldClass('percentage')} table-input text-right`}
+                        onFocus={handleDefaultValueFocus}
+                        onBlur={createEnhancedBlurHandler(
+                          (e) => handleInputBlur(fund.id, "increasePercentage", e.target.value),
+                          'percentage'
+                        )}
+                        className={`${getFieldClass('percentage')} table-input text-right ${getValueClass(fund.increasePercentage || "0%", 'percentage')}`}
                         disabled={isUpdating}
                       />
                     </td>
