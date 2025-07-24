@@ -222,8 +222,8 @@ export const defaultFieldTypes: Record<string, FieldTypeConfig> = {
     },
     inputProps: {
       className: 'table-input text-right',
-      minWidth: '70px',
-      maxWidth: '90px'
+      minWidth: '60px',
+      maxWidth: '80px'
     }
   },
 
