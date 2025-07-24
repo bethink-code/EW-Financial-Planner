@@ -367,7 +367,12 @@ export function AssuranceTable({ searchTerm }: AssuranceTableProps) {
               // Calculate the maximum rows needed for this policy
               const maxRows = Math.max(allOwners.length, allBeneficiaries.length);
               
-              return Array.from({ length: maxRows }, (_, rowIndex) => (
+              return Array.from({ length: maxRows }, (_, rowIndex) => {
+                // Create policy-specific variables to avoid cross-contamination
+                const currentOwners = allOwners;
+                const currentBeneficiaries = allBeneficiaries;
+                
+                return (
                 <tr key={`${policy.id}-row-${rowIndex}`} className="hover:bg-neutral-50">
                   {/* Description - rowSpan for main policy data */}
                   {rowIndex === 0 && (
@@ -388,7 +393,7 @@ export function AssuranceTable({ searchTerm }: AssuranceTableProps) {
                   
                   {/* Owner column */}
                   <td className="px-3 py-2">
-                    {rowIndex < allOwners.length ? (
+                    {rowIndex < currentOwners.length ? (
                       <div className="flex items-center space-x-1">
                         {rowIndex > 0 && (
                           <span className="text-blue-500 mr-1">↳</span>
@@ -404,30 +409,33 @@ export function AssuranceTable({ searchTerm }: AssuranceTableProps) {
                         )}
                         <input
                           type="text"
-                          defaultValue={allOwners[rowIndex].name || "Enter here ..."}
+                          defaultValue={currentOwners[rowIndex].name || "Enter here ..."}
                           onFocus={handleDefaultValueFocus}
                           onBlur={createEnhancedBlurHandler((e) => {
                             if (rowIndex === 0) {
                               handleUpdatePolicy(policy.id, 'owner', e.target.value);
                             } else {
-                              let currentOwners = [];
+                              let ownersToUpdate = [];
                               try {
-                                currentOwners = JSON.parse(policy.additionalOwners || "[]");
+                                ownersToUpdate = JSON.parse(policy.additionalOwners || "[]");
                               } catch {
-                                currentOwners = [];
+                                ownersToUpdate = [];
                               }
-                              const updatedOwners = currentOwners.map((o: any) => 
-                                o.id === allOwners[rowIndex].id ? { ...o, name: e.target.value } : o
+                              const updatedOwners = ownersToUpdate.map((o: any) => 
+                                o.id === currentOwners[rowIndex].id ? { ...o, name: e.target.value } : o
                               );
                               updateMutation.mutate({ id: policy.id, updates: { additionalOwners: JSON.stringify(updatedOwners) } });
                             }
                           }, 'text')}
-                          className={`${getFieldClass("text")} ${getValueClass(allOwners[rowIndex].name || "Enter here ...", 'text')}`} 
+                          className={`${getFieldClass("text")} ${getValueClass(currentOwners[rowIndex].name || "Enter here ...", 'text')}`} 
                           disabled={isUpdating}
                         />
-                        {rowIndex > 0 && rowIndex < allOwners.length && allOwners[rowIndex] && (
+                        {rowIndex > 0 && rowIndex < currentOwners.length && currentOwners[rowIndex] && (
                           <button
-                            onClick={() => handleRemoveOwner(policy.id, allOwners[rowIndex].id)}
+                            onClick={() => {
+                              console.log('Policy:', policy.id, 'Delete owner:', currentOwners[rowIndex].id, 'rowIndex:', rowIndex);
+                              handleRemoveOwner(policy.id, currentOwners[rowIndex].id);
+                            }}
                             className="h-6 w-6 p-0 bg-white text-[#4F4F4F] hover:text-red-600 hover:bg-red-50 border border-gray-300 rounded"
                             title="Remove owner"
                           >
@@ -471,7 +479,7 @@ export function AssuranceTable({ searchTerm }: AssuranceTableProps) {
                   
                   {/* Beneficiary column */}
                   <td className="px-3 py-2">
-                    {rowIndex < allBeneficiaries.length ? (
+                    {rowIndex < currentBeneficiaries.length ? (
                       <div className="flex items-center space-x-1">
                         {rowIndex > 0 && (
                           <span className="text-green-500 mr-1">↳</span>
@@ -487,30 +495,30 @@ export function AssuranceTable({ searchTerm }: AssuranceTableProps) {
                         )}
                         <input
                           type="text"
-                          defaultValue={allBeneficiaries[rowIndex].name || "Enter here ..."}
+                          defaultValue={currentBeneficiaries[rowIndex].name || "Enter here ..."}
                           onFocus={handleDefaultValueFocus}
                           onBlur={createEnhancedBlurHandler((e) => {
                             if (rowIndex === 0) {
                               handleUpdatePolicy(policy.id, 'beneficiary', e.target.value);
                             } else {
-                              let currentBeneficiaries = [];
+                              let beneficiariesToUpdate = [];
                               try {
-                                currentBeneficiaries = JSON.parse(policy.additionalBeneficiaries || "[]");
+                                beneficiariesToUpdate = JSON.parse(policy.additionalBeneficiaries || "[]");
                               } catch {
-                                currentBeneficiaries = [];
+                                beneficiariesToUpdate = [];
                               }
-                              const updatedBeneficiaries = currentBeneficiaries.map((b: any) => 
-                                b.id === allBeneficiaries[rowIndex].id ? { ...b, name: e.target.value } : b
+                              const updatedBeneficiaries = beneficiariesToUpdate.map((b: any) => 
+                                b.id === currentBeneficiaries[rowIndex].id ? { ...b, name: e.target.value } : b
                               );
                               updateMutation.mutate({ id: policy.id, updates: { additionalBeneficiaries: JSON.stringify(updatedBeneficiaries) } });
                             }
                           }, 'text')}
-                          className={`${getFieldClass("text")} ${getValueClass(allBeneficiaries[rowIndex].name || "Enter here ...", 'text')}`} 
+                          className={`${getFieldClass("text")} ${getValueClass(currentBeneficiaries[rowIndex].name || "Enter here ...", 'text')}`} 
                           disabled={isUpdating}
                         />
-                        {rowIndex > 0 && rowIndex < allBeneficiaries.length && allBeneficiaries[rowIndex] && (
+                        {rowIndex > 0 && rowIndex < currentBeneficiaries.length && currentBeneficiaries[rowIndex] && (
                           <button
-                            onClick={() => handleRemoveBeneficiary(policy.id, allBeneficiaries[rowIndex].id)}
+                            onClick={() => handleRemoveBeneficiary(policy.id, currentBeneficiaries[rowIndex].id)}
                             className="h-6 w-6 p-0 bg-white text-[#4F4F4F] hover:text-red-600 hover:bg-red-50 border border-gray-300 rounded"
                             title="Remove beneficiary"
                           >
@@ -542,8 +550,8 @@ export function AssuranceTable({ searchTerm }: AssuranceTableProps) {
                   
                   {/* Benefit Split */}
                   <td className="px-3 py-2 text-sm text-neutral-700 text-right bg-neutral-100">
-                    {rowIndex < allBeneficiaries.length ? 
-                      formatCurrencyValue(allBeneficiaries[rowIndex].split, 'percentage') : 
+                    {rowIndex < currentBeneficiaries.length ? 
+                      formatCurrencyValue(currentBeneficiaries[rowIndex].split, 'percentage') : 
                       '-'
                     }
                   </td>
@@ -641,7 +649,8 @@ export function AssuranceTable({ searchTerm }: AssuranceTableProps) {
                     </>
                   )}
                 </tr>
-              ));
+                );
+              });
             })}
             
             {/* Total Row */}
