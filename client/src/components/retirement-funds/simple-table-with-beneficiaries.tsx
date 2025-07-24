@@ -4,6 +4,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Edit3, Plus, Trash2, UserPlus, UserMinus, Copy } from "lucide-react";
 import { parseBeneficiaries } from "@/lib/beneficiaries";
 import { Button } from "@/components/ui/button";
+import { DuplicateButton, DeleteButton, ActionButtonGroup } from "@/components/ui/action-buttons";
 import { getFieldClass, getFieldWidth } from "@/lib/design-tokens";
 import { formatPercentageValue, getValueClass, isDefaultValue, handleDefaultValueFocus } from "@/lib/formatting";
 import { nanoid } from "nanoid";
@@ -196,28 +197,20 @@ export function SimpleTableWithBeneficiaries({
         <tr key={`${fund.id}-main`} className="hover:bg-neutral-50" style={{ verticalAlign: "top" }}>
           {/* Actions Column - FIRST COLUMN */}
           <td className="px-3 py-2 text-center" rowSpan={Math.max(fundOwners.length, beneficiaries.length || 1)}>
-            <div className="flex items-center justify-center space-x-1">
-              <Button
-                variant="ghost"
-                size="sm"
+            <ActionButtonGroup className="justify-center">
+              <DuplicateButton
                 onClick={() => onDuplicateFund?.(fund)}
                 disabled={isUpdating}
-                className="h-6 w-6 p-0 bg-white text-[#4F4F4F] hover:text-blue-600 hover:bg-blue-50 border border-gray-300"
-                title="Duplicate fund"
-              >
-                <Copy className="h-3 w-3" />
-              </Button>
-              <Button
-                variant="ghost"
+                className="h-6 w-6 p-0"
                 size="sm"
+              />
+              <DeleteButton
                 onClick={() => onRemoveFund?.(fund.id)}
                 disabled={isUpdating}
-                className="h-6 w-6 p-0 bg-white text-[#4F4F4F] hover:text-red-600 hover:bg-red-50 border border-gray-300"
-                title="Delete fund"
-              >
-                <Trash2 className="h-3 w-3" />
-              </Button>
-            </div>
+                className="h-6 w-6 p-0"
+                size="sm"
+              />
+            </ActionButtonGroup>
           </td>
           
           {/* Overview Section */}

@@ -1,7 +1,7 @@
 import React from "react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
-import { Plus, Trash2, Edit3, Save, X } from "lucide-react";
+import { Plus, Trash2, Edit3, Save, X, Copy } from "lucide-react";
 
 interface ActionButtonProps {
   onClick: () => void;
@@ -61,6 +61,31 @@ export function DeleteButton({
       )}
     >
       <Trash2 className="h-4 w-4" />
+    </Button>
+  );
+}
+
+/**
+ * Duplicate item button with consistent styling
+ */
+export function DuplicateButton({ 
+  onClick, 
+  disabled = false, 
+  className,
+  size = "sm" 
+}: Omit<ActionButtonProps, 'variant'>) {
+  return (
+    <Button
+      onClick={onClick}
+      disabled={disabled}
+      size={size}
+      variant="ghost"
+      className={cn(
+        "flex items-center gap-1 bg-white text-primary hover:text-primary hover:bg-blue-50 border border-primary",
+        className
+      )}
+    >
+      <Copy className="h-4 w-4" />
     </Button>
   );
 }
