@@ -28,17 +28,17 @@ export function VoluntaryInvestmentsSummary() {
   return (
     <div className="px-5 pb-5">
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div style={{ backgroundColor: 'hsl(var(--primary) / 0.1)' }} className="rounded-lg p-4 text-center">
+        <div  className="rounded-lg p-4 text-center">
           <div className="text-xs font-medium text-teal-700 mb-1">Total Investments</div>
           <div className="text-lg font-bold text-neutral-900">{totalInvestments}</div>
         </div>
         
-        <div style={{ backgroundColor: 'hsl(var(--primary) / 0.1)' }} className="rounded-lg p-4 text-center">
+        <div  className="rounded-lg p-4 text-center">
           <div className="text-xs font-medium text-teal-700 mb-1">Total Market Value</div>
           <div className="text-lg font-bold text-neutral-900">R {totalMarketValue.toLocaleString()}</div>
         </div>
         
-        <div style={{ backgroundColor: 'hsl(var(--primary) / 0.1)' }} className="rounded-lg p-4 text-center">
+        <div  className="rounded-lg p-4 text-center">
           <div className="text-xs font-medium text-teal-700 mb-1">Total Base Cost</div>
           <div className="text-lg font-bold text-neutral-900">R {totalBaseCost.toLocaleString()}</div>
         </div>
