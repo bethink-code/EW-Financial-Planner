@@ -2,16 +2,14 @@ import { useQuery } from "@tanstack/react-query";
 import { apiRequest } from "@/lib/queryClient";
 import type { Assurance } from "@shared/schema";
 
-interface AssuranceSummaryProps {
-  searchTerm: string;
-}
+interface AssuranceSummaryProps {}
 
-export function AssuranceSummary({ searchTerm }: AssuranceSummaryProps) {
+export function AssuranceSummary({}: AssuranceSummaryProps) {
   // Fetch assurance policies for summary calculations
   const { data: policies = [], isLoading } = useQuery({
-    queryKey: ["/api/assurance", { search: searchTerm }],
+    queryKey: ["/api/assurance"],
     queryFn: async () => {
-      const response = await fetch("/api/assurance" + (searchTerm ? `?search=${encodeURIComponent(searchTerm)}` : ""));
+      const response = await fetch("/api/assurance");
       if (!response.ok) throw new Error('Failed to fetch assurance policies');
       return response.json() as Promise<Assurance[]>;
     }
@@ -19,7 +17,7 @@ export function AssuranceSummary({ searchTerm }: AssuranceSummaryProps) {
 
   if (isLoading) {
     return (
-      <div className="bg-white rounded-lg border border-neutral-200 p-6 mb-6">
+      <div className="bg-white rounded-lg border border-neutral-200 p-6 mb-4">
         <div className="text-center text-neutral-600">Loading summary...</div>
       </div>
     );
@@ -39,7 +37,7 @@ export function AssuranceSummary({ searchTerm }: AssuranceSummaryProps) {
   const averageDeathBenefit = totalPolicies > 0 ? totalDeathBenefits / totalPolicies : 0;
 
   return (
-    <div className="bg-white rounded-lg border border-neutral-200 mb-6">
+    <div className="bg-white rounded-lg border border-neutral-200 mb-4">
       <div className="p-6">
         <h2 className="text-xl font-semibold text-neutral-900 mb-4">Assurance Summary</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">

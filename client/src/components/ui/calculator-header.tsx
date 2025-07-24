@@ -27,7 +27,7 @@ export function CalculatorHeader({
   className = ""
 }: CalculatorHeaderProps) {
   return (
-    <div className={`bg-white rounded-lg shadow-sm border border-neutral-200 p-5 mb-6 ${className}`}>
+    <div className={`bg-white rounded-lg shadow-sm border border-neutral-200 p-5 mb-4 ${className}`}>
       <div className="flex flex-col lg:flex-row gap-4 items-start lg:items-center justify-between">
         {/* Left section: Title, count, and Add button */}
         <div className="flex items-center gap-4">
