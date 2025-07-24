@@ -45,18 +45,14 @@ export function AssuranceSummary() {
 
   if (isLoading) {
     return (
-      <div className="bg-white border border-neutral-200 rounded-lg shadow-sm p-6 mt-6">
+      <div className="px-5 pb-5">
         <div className="text-neutral-500">Loading summary...</div>
       </div>
     );
   }
 
   return (
-    <div className="bg-white border border-neutral-200 rounded-lg shadow-sm p-6 mb-6">
-      <div className="bg-primary/10 px-4 py-3 -mx-6 -mt-6 mb-6 rounded-t-lg">
-        <h2 className="text-lg font-semibold text-neutral-800">Summary</h2>
-      </div>
-      
+    <div className="px-5 pb-5">
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6">
         <div className="bg-neutral-50 p-4 rounded-lg border border-neutral-200">
           <div className="text-sm font-medium text-neutral-600 mb-1">Total Policies</div>
