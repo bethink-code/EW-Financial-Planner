@@ -413,6 +413,7 @@ export function AssuranceTable({ searchTerm }: AssuranceTableProps) {
                         )}
                         <input
                           type="text"
+                          key={`owner-${policy.id}-${rowIndex}-${currentOwners[rowIndex].id}`}
                           defaultValue={currentOwners[rowIndex].name || "Enter here ..."}
                           onFocus={handleDefaultValueFocus}
                           onBlur={createEnhancedBlurHandler((e) => {
@@ -496,6 +497,7 @@ export function AssuranceTable({ searchTerm }: AssuranceTableProps) {
                         )}
                         <input
                           type="text"
+                          key={`beneficiary-${policy.id}-${rowIndex}-${currentBeneficiaries[rowIndex].id}`}
                           defaultValue={currentBeneficiaries[rowIndex].name || "Enter here ..."}
                           onFocus={handleDefaultValueFocus}
                           onBlur={createEnhancedBlurHandler((e) => {
