@@ -1,80 +1,73 @@
 import { useState, useCallback } from "react";
-import { Search } from "lucide-react";
+import { useQuery, useMutation } from "@tanstack/react-query";
 import { LumpSumTable } from "@/components/lump-sum-bequests/lump-sum-table";
 import { LumpSumSummary } from "@/components/lump-sum-bequests/lump-sum-summary";
+import { CalculatorHeader } from "@/components/ui/calculator-header";
+import { apiRequest, queryClient } from "@/lib/queryClient";
+import type { InsertLumpSumBequest } from "@shared/schema";
 
 type ViewMode = "table" | "hybrid";
 
 export default function LumpSumBequests() {
-  const [searchTerm, setSearchTerm] = useState("");
   const [viewMode, setViewMode] = useState<ViewMode>("table");
 
-  const handleSearch = useCallback((value: string) => {
-    setSearchTerm(value);
-  }, []);
+  // Fetch bequests for count
+  const { data: bequests = [] } = useQuery({
+    queryKey: ["/api/lump-sum-bequests"],  
+    queryFn: async () => {
+      const response = await fetch("/api/lump-sum-bequests");
+      if (!response.ok) throw new Error('Failed to fetch lump sum bequests');
+      return response.json();
+    }
+  });
+
+  // Add new bequest mutation
+  const addMutation = useMutation({
+    mutationFn: async () => {
+      const newBequest: InsertLumpSumBequest = {
+        description: "Enter here ...",
+        entity: "Donald Edwards",
+        additionalEntities: "[]",
+        amount: "0",
+        increasePercentage: "0%",
+        cpi: false,
+        yearsFromNow: "0"
+      };
+      return apiRequest("POST", "/api/lump-sum-bequests", newBequest);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["/api/lump-sum-bequests"] });
+    },
+  });
 
   const handleViewModeChange = useCallback((newMode: ViewMode) => {
     setViewMode(newMode);
   }, []);
 
+  const handleAddBequest = useCallback(() => {
+    addMutation.mutate();
+  }, [addMutation]);
+
   return (
     <div className="min-h-screen bg-neutral-50">
       <div className="max-w-7xl mx-auto px-4 py-8">
-        {/* Header */}
-        <div className="mb-6">
-          <h1 className="text-3xl font-bold text-neutral-900 mb-2">Lump Sum Needs and Cash Bequests</h1>
-          <p className="text-neutral-600">Manage and track lump sum bequests and cash distributions</p>
-        </div>
-
-        {/* Controls Section */}
-        <div className="mb-6 flex items-center justify-between">
-          {/* Search */}
-          <div className="flex items-center gap-4">
-            <div className="relative">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-neutral-400" size={16} />
-              <input
-                type="text"
-                value={searchTerm}
-                onChange={(e) => handleSearch(e.target.value)}
-                placeholder="Search bequests..."
-                className="w-80 pl-10 pr-4 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary outline-none"
-              />
-            </div>
-          </div>
-
-          {/* View Mode Toggle */}
-          <div className="flex items-center gap-2">
-            <span className="text-sm font-medium text-neutral-700">View:</span>
-            <div className="flex items-center bg-neutral-100 rounded-lg p-1">
-              <button
-                onClick={() => handleViewModeChange("table")}
-                className={`px-3 py-1.5 text-sm font-medium rounded-md transition-colors ${
-                  viewMode === "table"
-                    ? "bg-white text-primary shadow-sm"
-                    : "text-neutral-600 hover:text-neutral-900"
-                }`}
-              >
-                Table
-              </button>
-              <button
-                onClick={() => handleViewModeChange("hybrid")}
-                className={`px-3 py-1.5 text-sm font-medium rounded-md transition-colors ${
-                  viewMode === "hybrid"
-                    ? "bg-white text-primary shadow-sm"
-                    : "text-neutral-600 hover:text-neutral-900"
-                }`}
-              >
-                Hybrid
-              </button>
-            </div>
-          </div>
-        </div>
+        {/* Standardized Calculator Header */}
+        <CalculatorHeader
+          title="Lump Sum Needs and Cash Bequests"
+          itemCount={bequests.length}
+          itemLabel="bequests"
+          onAddItem={handleAddBequest}
+          addButtonText="Add Bequest"
+          isAddingItem={addMutation.isPending}
+          viewMode={viewMode}
+          onViewModeChange={handleViewModeChange}
+        />
 
         {/* Summary Section */}
-        <LumpSumSummary searchTerm={searchTerm} />
+        <LumpSumSummary searchTerm="" />
 
         {/* Main Table */}
-        <LumpSumTable searchTerm={searchTerm} />
+        <LumpSumTable searchTerm="" />
       </div>
     </div>
   );

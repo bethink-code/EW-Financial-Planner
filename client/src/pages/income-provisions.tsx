@@ -1,15 +1,73 @@
-import React from "react";
+import React, { useState, useCallback } from "react";
+import { useQuery, useMutation } from "@tanstack/react-query";
 import IncomeProvisionsTable from "../components/income-provisions/income-provisions-table";
+import { CalculatorHeader } from "@/components/ui/calculator-header";
+import { apiRequest, queryClient } from "@/lib/queryClient";
+import type { InsertIncomeProvision } from "@shared/schema";
+
+type ViewMode = "table" | "hybrid";
 
 export default function IncomeProvisions() {
+  const [viewMode, setViewMode] = useState<ViewMode>("table");
+
+  // Fetch provisions for count
+  const { data: provisions = [] } = useQuery({
+    queryKey: ["/api/income-provisions"],  
+    queryFn: async () => {
+      const response = await fetch("/api/income-provisions");
+      if (!response.ok) throw new Error('Failed to fetch income provisions');
+      return response.json();
+    }
+  });
+
+  // Add new provision mutation
+  const addMutation = useMutation({
+    mutationFn: async () => {
+      const newProvision: InsertIncomeProvision = {
+        description: "Enter here ...",
+        entity: "Donald Edwards",
+        additionalEntities: "[]",
+        monthlyAmount: "0",
+        yearsRequired: "0",
+        inflationRate: "0%",
+        discountRate: "0%",
+        taxRate: "0%",
+        capitalisedValue: "0",
+        taxOnCapital: "0",
+        capitalShortfall: "0"
+      };
+      return apiRequest("POST", "/api/income-provisions", newProvision);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["/api/income-provisions"] });
+    },
+  });
+
+  const handleViewModeChange = useCallback((newMode: ViewMode) => {
+    setViewMode(newMode);
+  }, []);
+
+  const handleAddProvision = useCallback(() => {
+    addMutation.mutate();
+  }, [addMutation]);
+
   return (
-    <div className="space-y-6">
-      <div>
-        <h2 className="text-2xl font-bold text-gray-900 mb-4">Income Provisions</h2>
-        <p className="text-gray-600 mb-6">Manage income provisions with tax calculations and capital shortfall requirements</p>
+    <div className="min-h-screen bg-neutral-50">
+      <div className="max-w-7xl mx-auto px-4 py-8">
+        {/* Standardized Calculator Header */}
+        <CalculatorHeader
+          title="Income Provisions"
+          itemCount={provisions.length}
+          itemLabel="provisions"
+          onAddItem={handleAddProvision}
+          addButtonText="Add Provision"
+          isAddingItem={addMutation.isPending}
+          viewMode={viewMode}
+          onViewModeChange={handleViewModeChange}
+        />
+        
+        <IncomeProvisionsTable />
       </div>
-      
-      <IncomeProvisionsTable />
     </div>
   );
 }

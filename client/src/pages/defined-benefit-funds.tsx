@@ -1,15 +1,71 @@
-import React from "react";
+import React, { useState, useCallback } from "react";
+import { useQuery, useMutation } from "@tanstack/react-query";
 import DefinedBenefitFundsTable from "../components/defined-benefit-funds/defined-benefit-funds-table";
+import { CalculatorHeader } from "@/components/ui/calculator-header";
+import { apiRequest, queryClient } from "@/lib/queryClient";
+import type { InsertDefinedBenefitFund } from "@shared/schema";
+
+type ViewMode = "table" | "hybrid";
 
 export default function DefinedBenefitFunds() {
+  const [viewMode, setViewMode] = useState<ViewMode>("table");
+
+  // Fetch funds for count
+  const { data: funds = [] } = useQuery({
+    queryKey: ["/api/defined-benefit-funds"],  
+    queryFn: async () => {
+      const response = await fetch("/api/defined-benefit-funds");
+      if (!response.ok) throw new Error('Failed to fetch defined benefit funds');
+      return response.json();
+    }
+  });
+
+  // Add new fund mutation
+  const addMutation = useMutation({
+    mutationFn: async () => {
+      const newFund: InsertDefinedBenefitFund = {
+        description: "Enter here ...",
+        owner: "Donald Edwards",
+        additionalOwners: "[]",
+        currentValue: "0",
+        pensionIncomeAmount: "0",
+        pensionIncomeIncrease: "0%",
+        beneficiary: "Enter here ...",
+        beneficiaryPercentage: "0%",
+        additionalBeneficiaries: "[]"
+      };
+      return apiRequest("POST", "/api/defined-benefit-funds", newFund);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["/api/defined-benefit-funds"] });
+    },
+  });
+
+  const handleViewModeChange = useCallback((newMode: ViewMode) => {
+    setViewMode(newMode);
+  }, []);
+
+  const handleAddFund = useCallback(() => {
+    addMutation.mutate();
+  }, [addMutation]);
+
   return (
-    <div className="space-y-6">
-      <div>
-        <h2 className="text-2xl font-bold text-gray-900 mb-4">Defined Benefit Funds</h2>
-        <p className="text-gray-600 mb-6">Manage defined benefit pension funds and their details</p>
+    <div className="min-h-screen bg-neutral-50">
+      <div className="max-w-7xl mx-auto px-4 py-8">
+        {/* Standardized Calculator Header */}
+        <CalculatorHeader
+          title="Defined Benefit Funds"
+          itemCount={funds.length}
+          itemLabel="funds"
+          onAddItem={handleAddFund}
+          addButtonText="Add Fund"
+          isAddingItem={addMutation.isPending}
+          viewMode={viewMode}
+          onViewModeChange={handleViewModeChange}
+        />
+        
+        <DefinedBenefitFundsTable />
       </div>
-      
-      <DefinedBenefitFundsTable />
     </div>
   );
 }
