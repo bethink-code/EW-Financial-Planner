@@ -130,7 +130,7 @@ export function DetailedView({ funds, columnVisibility, onFieldUpdate, isUpdatin
   }
 
   return (
-    <div className="flex min-h-screen bg-white rounded-lg border border-neutral-200">
+    <div className="flex bg-white rounded-lg border border-neutral-200">
       {/* Left Sidebar - Fund List */}
       <div className="w-80 border-r border-neutral-200 flex flex-col">
         <div className="p-4 border-b border-neutral-200 sticky top-0 bg-white z-10 min-h-[73px] flex items-center">
