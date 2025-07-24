@@ -130,14 +130,15 @@ export const getButtonClass = (variant: keyof typeof designTokens.components.but
 // Field type utility functions for consistent table behavior
 export const getFieldClass = (fieldName: string, additionalClasses = '') => {
   const config = designTokens.fieldTypes[fieldName] || designTokens.fieldTypes.text;
-  return `${config.inputProps?.className || 'table-input'} ${additionalClasses}`.trim();
+  const className = config?.inputProps?.className || 'table-input';
+  return `${className} ${additionalClasses}`.trim();
 };
 
 export const getFieldWidth = (fieldName: string) => {
   const config = designTokens.fieldTypes[fieldName] || designTokens.fieldTypes.text;
   return {
-    minWidth: config.inputProps?.minWidth || '80px',
-    maxWidth: config.inputProps?.maxWidth || '200px'
+    minWidth: config?.inputProps?.minWidth || '80px',
+    maxWidth: config?.inputProps?.maxWidth || '200px'
   };
 };
 

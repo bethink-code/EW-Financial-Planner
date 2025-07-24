@@ -1,6 +1,7 @@
 import { useState, useCallback, useMemo, memo } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { Plus, Trash2 } from "lucide-react";
+import { getFieldClass, getFieldWidth } from "@/lib/design-tokens";
 import { apiRequest } from "@/lib/queryClient";
 import type { Assurance, InsertAssurance } from "@shared/schema";
 
@@ -75,7 +76,7 @@ const OwnerRowManager = memo(({ policy, onUpdate, onDelete }: {
             type="text"
             defaultValue={policy.description}
             onBlur={(e) => onUpdate(policy.id, { description: e.target.value })}
-            className="table-input w-full px-2 py-1 text-sm border border-neutral-300 rounded bg-primary/5 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+            className={getFieldClass("text")} style={getFieldWidth("text")}
             disabled={isUpdating}
           />
         </td>
@@ -85,7 +86,7 @@ const OwnerRowManager = memo(({ policy, onUpdate, onDelete }: {
             type="text"
             defaultValue={policy.owner}
             onBlur={(e) => handleOwnerUpdate('owner', e.target.value)}
-            className="table-input w-full px-2 py-1 text-sm border border-neutral-300 rounded bg-primary/5 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+            className={getFieldClass("text")} style={getFieldWidth("text")}
             disabled={isUpdating}
           />
           <button
@@ -102,7 +103,7 @@ const OwnerRowManager = memo(({ policy, onUpdate, onDelete }: {
             type="text"
             defaultValue={policy.lifeAssured}
             onBlur={(e) => onUpdate(policy.id, { lifeAssured: e.target.value })}
-            className="table-input w-full px-2 py-1 text-sm border border-neutral-300 rounded bg-primary/5 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+            className={getFieldClass("text")} style={getFieldWidth("text")}
             disabled={isUpdating}
           />
         </td>
@@ -116,7 +117,7 @@ const OwnerRowManager = memo(({ policy, onUpdate, onDelete }: {
               e.target.value = formattedValue;
               onUpdate(policy.id, { deathBenefit: formattedValue });
             }}
-            className="table-input w-full px-2 py-1 text-sm text-right border border-neutral-300 rounded bg-primary/5 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+            className={getFieldClass("amount")} style={getFieldWidth("amount")}
             disabled={isUpdating}
           />
         </td>
@@ -126,7 +127,7 @@ const OwnerRowManager = memo(({ policy, onUpdate, onDelete }: {
             type="text"
             defaultValue={policy.beneficiary}
             onBlur={(e) => onUpdate(policy.id, { beneficiary: e.target.value })}
-            className="table-input w-full px-2 py-1 text-sm border border-neutral-300 rounded bg-primary/5 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+            className={getFieldClass("text")} style={getFieldWidth("text")}
             disabled={isUpdating}
           />
         </td>
@@ -198,7 +199,7 @@ const OwnerRowManager = memo(({ policy, onUpdate, onDelete }: {
               e.target.value = formattedValue;
               onUpdate(policy.id, { premiumsByOthers: formattedValue });
             }}
-            className="table-input w-full px-2 py-1 text-sm text-right border border-neutral-300 rounded bg-primary/5 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+            className={getFieldClass("amount")} style={getFieldWidth("amount")}
             disabled={isUpdating}
           />
         </td>
@@ -212,7 +213,7 @@ const OwnerRowManager = memo(({ policy, onUpdate, onDelete }: {
               e.target.value = formattedValue;
               onUpdate(policy.id, { collateralSession: formattedValue });
             }}
-            className="table-input w-full px-2 py-1 text-sm text-right border border-neutral-300 rounded bg-primary/5 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+            className={getFieldClass("amount")} style={getFieldWidth("amount")}
             disabled={isUpdating}
           />
         </td>
@@ -241,7 +242,7 @@ const OwnerRowManager = memo(({ policy, onUpdate, onDelete }: {
               type="text"
               defaultValue={owner}
               onBlur={(e) => handleOwnerUpdate('additionalOwner', e.target.value, index)}
-              className="table-input w-full px-2 py-1 text-sm border border-neutral-300 rounded bg-primary/5 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+              className={getFieldClass("text")} style={getFieldWidth("text")}
               disabled={isUpdating}
             />
             <button

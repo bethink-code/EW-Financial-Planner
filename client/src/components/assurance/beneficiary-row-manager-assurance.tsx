@@ -1,5 +1,6 @@
 import { useState, useCallback, memo } from "react";
 import { Plus, Trash2 } from "lucide-react";
+import { getFieldClass, getFieldWidth } from "@/lib/design-tokens";
 import { Assurance } from "@shared/schema";
 
 interface BeneficiaryRowManagerAssuranceProps {
@@ -128,7 +129,7 @@ export const BeneficiaryRowManagerAssurance = memo(({ policy, onUpdate }: Benefi
             type="text"
             defaultValue={policy.beneficiary}
             onBlur={(e) => handleInputBlur(e, 'beneficiary')}
-            className="table-input w-full px-2 py-1 text-sm border border-neutral-300 rounded bg-primary/5 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+            className={getFieldClass("name")} style={getFieldWidth("name")}
             disabled={isUpdating}
           />
         </td>
@@ -175,7 +176,7 @@ export const BeneficiaryRowManagerAssurance = memo(({ policy, onUpdate }: Benefi
               type="text"
               defaultValue={beneficiary}
               onBlur={(e) => handleInputBlur(e, 'additionalBeneficiary', index)}
-              className="table-input w-full px-2 py-1 text-sm border border-neutral-300 rounded bg-primary/5 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+              className={getFieldClass("name")} style={getFieldWidth("name")}
               disabled={isUpdating}
             />
           </td>

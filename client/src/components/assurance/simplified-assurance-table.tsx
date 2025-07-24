@@ -1,6 +1,7 @@
 import { useState, useCallback, useMemo } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { Plus, Trash2 } from "lucide-react";
+import { getFieldClass, getFieldWidth } from "@/lib/design-tokens";
 import { apiRequest } from "@/lib/queryClient";
 import type { Assurance, InsertAssurance } from "@shared/schema";
 
@@ -241,7 +242,7 @@ export function AssuranceTable({ searchTerm }: AssuranceTableProps) {
                     type="text"
                     defaultValue={policy.description}
                     onBlur={(e) => handleUpdatePolicy(policy.id, 'description', e.target.value)}
-                    className="table-input w-full px-2 py-1 text-sm border border-neutral-300 rounded bg-primary/5 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                    className={getFieldClass("text")} style={getFieldWidth("text")}
                     disabled={isUpdating}
                   />
                 </td>
@@ -251,7 +252,7 @@ export function AssuranceTable({ searchTerm }: AssuranceTableProps) {
                       type="text"
                       defaultValue={policy.owner}
                       onBlur={(e) => handleUpdatePolicy(policy.id, 'owner', e.target.value)}
-                      className="table-input w-full px-2 py-1 text-sm border border-neutral-300 rounded bg-primary/5 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                      className={getFieldClass("text")} style={getFieldWidth("text")}
                       disabled={isUpdating}
                     />
                     <button
@@ -268,7 +269,7 @@ export function AssuranceTable({ searchTerm }: AssuranceTableProps) {
                     type="text"
                     defaultValue={policy.lifeAssured}
                     onBlur={(e) => handleUpdatePolicy(policy.id, 'lifeAssured', e.target.value)}
-                    className="table-input w-full px-2 py-1 text-sm border border-neutral-300 rounded bg-primary/5 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                    className={getFieldClass("text")} style={getFieldWidth("text")}
                     disabled={isUpdating}
                   />
                 </td>
@@ -277,7 +278,7 @@ export function AssuranceTable({ searchTerm }: AssuranceTableProps) {
                     type="text"
                     defaultValue={policy.deathBenefit}
                     onBlur={(e) => handleInputBlur(policy.id, 'deathBenefit', e.target.value)}
-                    className="table-input w-full px-2 py-1 text-sm text-right border border-neutral-300 rounded bg-primary/5 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                    className={getFieldClass("amount")} style={getFieldWidth("amount")}
                     disabled={isUpdating}
                   />
                 </td>
@@ -287,7 +288,7 @@ export function AssuranceTable({ searchTerm }: AssuranceTableProps) {
                       type="text"
                       defaultValue={policy.beneficiary}
                       onBlur={(e) => handleUpdatePolicy(policy.id, 'beneficiary', e.target.value)}
-                      className="table-input w-full px-2 py-1 text-sm border border-neutral-300 rounded bg-primary/5 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                      className={getFieldClass("text")} style={getFieldWidth("text")}
                       disabled={isUpdating}
                     />
                     <button
@@ -307,7 +308,7 @@ export function AssuranceTable({ searchTerm }: AssuranceTableProps) {
                     type="text"
                     defaultValue={policy.amount}
                     onBlur={(e) => handleInputBlur(policy.id, 'amount', e.target.value)}
-                    className="table-input w-full px-2 py-1 text-sm text-right border border-neutral-300 rounded bg-primary/5 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                    className={getFieldClass("amount")} style={getFieldWidth("amount")}
                     disabled={isUpdating}
                   />
                 </td>
@@ -352,7 +353,7 @@ export function AssuranceTable({ searchTerm }: AssuranceTableProps) {
                     type="text"
                     defaultValue={policy.premiumsByOthers}
                     onBlur={(e) => handleInputBlur(policy.id, 'premiumsByOthers', e.target.value)}
-                    className="table-input w-full px-2 py-1 text-sm text-right border border-neutral-300 rounded bg-primary/5 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                    className={getFieldClass("amount")} style={getFieldWidth("amount")}
                     disabled={isUpdating}
                   />
                 </td>
@@ -361,7 +362,7 @@ export function AssuranceTable({ searchTerm }: AssuranceTableProps) {
                     type="text"
                     defaultValue={policy.collateralSession}
                     onBlur={(e) => handleInputBlur(policy.id, 'collateralSession', e.target.value)}
-                    className="table-input w-full px-2 py-1 text-sm text-right border border-neutral-300 rounded bg-primary/5 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                    className={getFieldClass("amount")} style={getFieldWidth("amount")}
                     disabled={isUpdating}
                   />
                 </td>
@@ -389,7 +390,7 @@ export function AssuranceTable({ searchTerm }: AssuranceTableProps) {
                         newOwners[index] = e.target.value;
                         updateMutation.mutate({ id: policy.id, updates: { additionalOwners: newOwners } });
                       }}
-                      className="table-input w-full px-2 py-1 text-sm border border-neutral-300 rounded bg-primary/5 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                      className={getFieldClass("text")} style={getFieldWidth("text")}
                       disabled={isUpdating}
                     />
                   </td>
@@ -410,7 +411,7 @@ export function AssuranceTable({ searchTerm }: AssuranceTableProps) {
                         newBeneficiaries[index] = e.target.value;
                         updateMutation.mutate({ id: policy.id, updates: { additionalBeneficiaries: newBeneficiaries } });
                       }}
-                      className="table-input w-full px-2 py-1 text-sm border border-neutral-300 rounded bg-primary/5 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                      className={getFieldClass("text")} style={getFieldWidth("text")}
                       disabled={isUpdating}
                     />
                   </td>

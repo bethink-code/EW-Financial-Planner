@@ -346,7 +346,8 @@ export default function VoluntaryInvestmentsTable() {
                           type="text"
                           defaultValue={investment.description}
                           onBlur={(e) => handleUpdateInvestment(investment.id, 'description', e.target.value)}
-                          className="table-input w-full px-2 py-1 text-sm border border-neutral-300 rounded bg-primary/5 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                          className={getFieldClass('description')}
+                          style={getFieldWidth('description')}
                           disabled={isUpdating}
                         />
                       </td>
@@ -388,7 +389,8 @@ export default function VoluntaryInvestmentsTable() {
                       type="text"
                       defaultValue={percentages[ownerIndex] || '0'}
                       onBlur={(e) => handlePercentageChange(investment.id, ownerIndex, e.target.value)}
-                      className="table-input w-full px-2 py-1 text-sm text-right border border-neutral-300 rounded bg-primary/5 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                      className={getFieldClass('percentage')}
+                      style={getFieldWidth('percentage')}
                       disabled={isUpdating}
                     />
                   </td>
@@ -399,7 +401,8 @@ export default function VoluntaryInvestmentsTable() {
                           type="text"
                           defaultValue={investment.baseCost}
                           onBlur={(e) => handleInputBlur(investment.id, 'baseCost', e.target.value)}
-                          className="table-input w-full px-2 py-1 text-sm text-right border border-neutral-300 rounded bg-primary/5 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                          className={getFieldClass('amount')}
+                          style={getFieldWidth('amount')}
                           disabled={isUpdating}
                         />
                       </td>
@@ -408,7 +411,8 @@ export default function VoluntaryInvestmentsTable() {
                           type="text"
                           defaultValue={investment.marketValue}
                           onBlur={(e) => handleInputBlur(investment.id, 'marketValue', e.target.value)}
-                          className="table-input w-full px-2 py-1 text-sm text-right border border-neutral-300 rounded bg-primary/5 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                          className={getFieldClass('amount')}
+                          style={getFieldWidth('amount')}
                           disabled={isUpdating}
                         />
                       </td>
@@ -417,7 +421,8 @@ export default function VoluntaryInvestmentsTable() {
                           type="text"
                           defaultValue={investment.liquidationPercentage}
                           onBlur={(e) => handleInputBlur(investment.id, 'liquidationPercentage', e.target.value)}
-                          className="table-input w-full px-2 py-1 text-sm text-right border border-neutral-300 rounded bg-primary/5 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                          className={getFieldClass('percentage')}
+                          style={getFieldWidth('percentage')}
                           disabled={isUpdating}
                         />
                       </td>
@@ -426,7 +431,8 @@ export default function VoluntaryInvestmentsTable() {
                           type="text"
                           defaultValue={investment.spouse}
                           onBlur={(e) => handleInputBlur(investment.id, 'spouse', e.target.value)}
-                          className="table-input w-full px-2 py-1 text-sm text-right border border-neutral-300 rounded bg-primary/5 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                          className={getFieldClass('percentage')}
+                          style={getFieldWidth('percentage')}
                           disabled={isUpdating}
                         />
                       </td>
@@ -435,7 +441,8 @@ export default function VoluntaryInvestmentsTable() {
                           type="text"
                           defaultValue={investment.others}
                           onBlur={(e) => handleInputBlur(investment.id, 'others', e.target.value)}
-                          className="table-input w-full px-2 py-1 text-sm text-right border border-neutral-300 rounded bg-primary/5 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                          className={getFieldClass('percentage')}
+                          style={getFieldWidth('percentage')}
                           disabled={isUpdating}
                         />
                       </td>
