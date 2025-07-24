@@ -71,8 +71,9 @@ export default function Assurance() {
             isAddingItem={addMutation.isPending}
             viewMode={viewMode}
             onViewModeChange={handleViewModeChange}
-          />
-          <AssuranceSummary />
+          >
+            <AssuranceSummary />
+          </CalculatorHeader>
         </div>
 
         {/* Main Table */}

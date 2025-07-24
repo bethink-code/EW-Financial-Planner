@@ -12,6 +12,7 @@ interface CalculatorHeaderProps {
   onViewModeChange?: (mode: "table" | "hybrid") => void;
   additionalControls?: React.ReactNode;
   className?: string;
+  children?: React.ReactNode;
 }
 
 export function CalculatorHeader({
@@ -24,7 +25,8 @@ export function CalculatorHeader({
   viewMode = "table",
   onViewModeChange,
   additionalControls,
-  className = ""
+  className = "",
+  children
 }: CalculatorHeaderProps) {
   return (
     <div className={`bg-white rounded-lg shadow-sm border border-neutral-200 ${className}`}>
@@ -93,6 +95,7 @@ export function CalculatorHeader({
           </div>
         </div>
       </div>
+      {children}
     </div>
   );
 }
