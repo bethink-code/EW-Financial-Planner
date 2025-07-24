@@ -208,7 +208,7 @@ export function SimpleTableWithBeneficiaries({
                     onValueChange={(value) => handleOwnerChange(fund.id, 0, value)}
                     disabled={isUpdating}
                   >
-                    <SelectTrigger className={`${getFieldClass('percentage')} table-input text-right`}>
+                    <SelectTrigger className={`${getFieldClass('text')} table-input`}>
                       <SelectValue className="text-right truncate" />
                       <Edit3 size={12} className="ml-1 text-teal-400 opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex-shrink-0" />
                     </SelectTrigger>
@@ -576,7 +576,7 @@ export function SimpleTableWithBeneficiaries({
                       <input
                         defaultValue={beneficiary.name || ""}
                         onBlur={(e) => handleBeneficiaryUpdate(fund.id, actualIndex, 'name', e.target.value)}
-                        className={`${getFieldClass('percentage')} table-input text-right`}
+                        className={`${getFieldClass('text')} table-input`}
                         
                         placeholder="Beneficiary name"
                         disabled={isUpdating}
@@ -661,13 +661,13 @@ export function SimpleTableWithBeneficiaries({
               {/* Owner name */}
               {columnVisibility.overview && (
                 <td className="px-3 py-2 text-right">
-                  <div className="flex items-center gap-1" style={{ maxWidth: "150px" }}>
+                  <div className="flex items-center gap-1">
                     <Select
                       value={owner}
                       onValueChange={(value) => handleOwnerChange(fund.id, actualIndex, value)}
                       disabled={isUpdating}
                     >
-                      <SelectTrigger className={`${getFieldClass('percentage')} table-input text-right`}>
+                      <SelectTrigger className={`${getFieldClass('text')} table-input`}>
                         <SelectValue className="text-right truncate" />
                         <Edit3 size={12} className="ml-1 text-teal-400 opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex-shrink-0" />
                       </SelectTrigger>
