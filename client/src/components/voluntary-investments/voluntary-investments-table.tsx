@@ -1,6 +1,7 @@
 import React, { useState, useCallback, useMemo } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { Plus, Trash2, Search, UserPlus, UserMinus } from "lucide-react";
+import { getFieldClass, getFieldWidth } from "@/lib/design-tokens";
 import type { VoluntaryInvestment, InsertVoluntaryInvestment } from "@shared/schema";
 
 // Utility function for formatting currency values

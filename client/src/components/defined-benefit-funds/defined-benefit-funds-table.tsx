@@ -3,6 +3,7 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { Plus, Trash2, Search } from "lucide-react";
 import { apiRequest } from "@/lib/queryClient";
 import { AddButton } from "@/components/ui/action-buttons";
+import { getFieldClass, getFieldWidth } from "@/lib/design-tokens";
 import type { DefinedBenefitFund, InsertDefinedBenefitFund } from "@shared/schema";
 
 // Utility function for formatting currency values
@@ -293,7 +294,8 @@ export default function DefinedBenefitFundsTable() {
                     type="text"
                     defaultValue={fund.description}
                     onBlur={(e) => handleUpdateFund(fund.id, 'description', e.target.value)}
-                    className="table-input w-full px-2 py-1 text-sm border border-neutral-300 rounded bg-primary/5 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                    className={getFieldClass('description')}
+                    style={getFieldWidth('description')}
                     disabled={isUpdating}
                   />
                 </td>
@@ -301,7 +303,8 @@ export default function DefinedBenefitFundsTable() {
                   <select
                     value={fund.owner}
                     onChange={(e) => handleUpdateFund(fund.id, 'owner', e.target.value)}
-                    className="table-input w-full px-2 py-1 text-sm border border-neutral-300 rounded bg-primary/5 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                    className={getFieldClass('owner')}
+                    style={getFieldWidth('owner')}
                     disabled={isUpdating}
                   >
                     <option value="Donald Edwards">Donald Edwards</option>
@@ -316,7 +319,8 @@ export default function DefinedBenefitFundsTable() {
                     type="text"
                     defaultValue={fund.yearsOfService}
                     onBlur={(e) => handleUpdateFund(fund.id, 'yearsOfService', e.target.value)}
-                    className="table-input w-full px-2 py-1 text-sm text-right border border-neutral-300 rounded bg-primary/5 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                    className={getFieldClass('years')}
+                    style={getFieldWidth('years')}
                     disabled={isUpdating}
                   />
                 </td>
@@ -325,7 +329,8 @@ export default function DefinedBenefitFundsTable() {
                     type="text"
                     defaultValue={fund.finalMonthlySalary}
                     onBlur={(e) => handleInputBlur(fund.id, 'finalMonthlySalary', e.target.value)}
-                    className="table-input w-full px-2 py-1 text-sm text-right border border-neutral-300 rounded bg-primary/5 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                    className={getFieldClass('amount')}
+                    style={getFieldWidth('amount')}
                     disabled={isUpdating}
                   />
                 </td>
@@ -334,7 +339,8 @@ export default function DefinedBenefitFundsTable() {
                     type="text"
                     defaultValue={fund.deathLumpSum}
                     onBlur={(e) => handleInputBlur(fund.id, 'deathLumpSum', e.target.value)}
-                    className="table-input w-full px-2 py-1 text-sm text-right border border-neutral-300 rounded bg-primary/5 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                    className={getFieldClass('lumpSum')}
+                    style={getFieldWidth('lumpSum')}
                     disabled={isUpdating}
                   />
                 </td>
@@ -343,7 +349,8 @@ export default function DefinedBenefitFundsTable() {
                     type="text"
                     defaultValue={fund.additionalTaxFreeAmount}
                     onBlur={(e) => handleInputBlur(fund.id, 'additionalTaxFreeAmount', e.target.value)}
-                    className="table-input w-full px-2 py-1 text-sm text-right border border-neutral-300 rounded bg-primary/5 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                    className={getFieldClass('amount')}
+                    style={getFieldWidth('amount')}
                     disabled={isUpdating}
                   />
                 </td>
@@ -352,7 +359,8 @@ export default function DefinedBenefitFundsTable() {
                     type="text"
                     defaultValue={fund.pensionIncomeAmount}
                     onBlur={(e) => handleInputBlur(fund.id, 'pensionIncomeAmount', e.target.value)}
-                    className="table-input w-full px-2 py-1 text-sm text-right border border-neutral-300 rounded bg-primary/5 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                    className={getFieldClass('amount')}
+                    style={getFieldWidth('amount')}
                     disabled={isUpdating}
                   />
                 </td>
@@ -361,7 +369,8 @@ export default function DefinedBenefitFundsTable() {
                     type="text"
                     defaultValue={fund.pensionIncomeIncrease}
                     onBlur={(e) => handleInputBlur(fund.id, 'pensionIncomeIncrease', e.target.value)}
-                    className="table-input w-full px-2 py-1 text-sm text-right border border-neutral-300 rounded bg-primary/5 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                    className={getFieldClass('percentage')}
+                    style={getFieldWidth('percentage')}
                     disabled={isUpdating}
                   />
                 </td>
