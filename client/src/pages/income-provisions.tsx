@@ -56,7 +56,7 @@ export default function IncomeProvisions() {
     <div className="bg-neutral-50">
       <div className="w-full px-6 py-6">
         {/* Combined Header and Summary */}
-        <div className="mb-6 max-w-6xl mx-auto">
+        <div className="mb-6 max-w-6xl">
           <CalculatorHeader
             title="Income Provisions"
             itemCount={provisions.length}
