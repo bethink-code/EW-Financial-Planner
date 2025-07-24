@@ -387,10 +387,10 @@ export default function VoluntaryInvestmentsTable() {
                   <td className="px-3 py-2">
                     <input
                       type="text"
+                      key={`percentage-${investment.id}-${ownerIndex}-${percentages[ownerIndex]}`}
                       defaultValue={percentages[ownerIndex] || '0'}
                       onBlur={(e) => handlePercentageChange(investment.id, ownerIndex, e.target.value)}
                       className={getFieldClass('percentage')}
-                      style={getFieldWidth('percentage')}
                       disabled={isUpdating}
                     />
                   </td>
@@ -398,51 +398,51 @@ export default function VoluntaryInvestmentsTable() {
                     <>
                       <td rowSpan={owners.length} className="px-3 py-2 border-l border-neutral-200">
                         <input
+                          key={`baseCost-${investment.id}-${investment.baseCost}`}
                           type="text"
                           defaultValue={investment.baseCost}
                           onBlur={(e) => handleInputBlur(investment.id, 'baseCost', e.target.value)}
                           className={getFieldClass('amount')}
-                          style={getFieldWidth('amount')}
                           disabled={isUpdating}
                         />
                       </td>
                       <td rowSpan={owners.length} className="px-3 py-2">
                         <input
+                          key={`marketValue-${investment.id}-${investment.marketValue}`}
                           type="text"
                           defaultValue={investment.marketValue}
                           onBlur={(e) => handleInputBlur(investment.id, 'marketValue', e.target.value)}
                           className={getFieldClass('amount')}
-                          style={getFieldWidth('amount')}
                           disabled={isUpdating}
                         />
                       </td>
                       <td rowSpan={owners.length} className="px-3 py-2">
                         <input
+                          key={`liquidationPercentage-${investment.id}-${investment.liquidationPercentage}`}
                           type="text"
                           defaultValue={investment.liquidationPercentage}
                           onBlur={(e) => handleInputBlur(investment.id, 'liquidationPercentage', e.target.value)}
                           className={getFieldClass('percentage')}
-                          style={getFieldWidth('percentage')}
                           disabled={isUpdating}
                         />
                       </td>
                       <td rowSpan={owners.length} className="px-3 py-2">
                         <input
+                          key={`spouse-${investment.id}-${investment.spouse}`}
                           type="text"
                           defaultValue={investment.spouse}
                           onBlur={(e) => handleInputBlur(investment.id, 'spouse', e.target.value)}
                           className={getFieldClass('percentage')}
-                          style={getFieldWidth('percentage')}
                           disabled={isUpdating}
                         />
                       </td>
                       <td rowSpan={owners.length} className="px-3 py-2 border-r border-neutral-200">
                         <input
+                          key={`others-${investment.id}-${investment.others}`}
                           type="text"
                           defaultValue={investment.others}
                           onBlur={(e) => handleInputBlur(investment.id, 'others', e.target.value)}
                           className={getFieldClass('percentage')}
-                          style={getFieldWidth('percentage')}
                           disabled={isUpdating}
                         />
                       </td>

@@ -396,11 +396,11 @@ export default function IncomeProvisionsTable() {
                 </td>
                 <td className="px-3 py-2">
                   <input
+                    key={`amount-${provision.id}-${provision.amount}`}
                     type="text"
                     defaultValue={provision.amount}
                     onBlur={(e) => handleInputBlur(provision.id, 'amount', e.target.value)}
                     className={getFieldClass('amount')}
-                    style={getFieldWidth('amount')}
                     disabled={isUpdating}
                   />
                 </td>
@@ -419,7 +419,7 @@ export default function IncomeProvisionsTable() {
                     type="text"
                     value={provision.taxPercentage}
                     className={getFieldClass('percentage')}
-                    style={{...getFieldWidth('percentage'), backgroundColor: '#F5F5F5', cursor: 'not-allowed'}}
+                    style={{backgroundColor: '#F5F5F5', cursor: 'not-allowed'}}
                     disabled
                     readOnly
                   />
@@ -429,7 +429,7 @@ export default function IncomeProvisionsTable() {
                     type="text"
                     value={provision.capitalisedAmount}
                     className={getFieldClass('amount')}
-                    style={{...getFieldWidth('amount'), backgroundColor: '#F5F5F5', cursor: 'not-allowed'}}
+                    style={{backgroundColor: '#F5F5F5', cursor: 'not-allowed'}}
                     disabled
                     readOnly
                   />

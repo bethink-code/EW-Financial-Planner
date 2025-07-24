@@ -341,51 +341,51 @@ export default function DefinedBenefitFundsTable() {
                 </td>
                 <td className="px-3 py-2">
                   <input
+                    key={`finalMonthlySalary-${fund.id}-${fund.finalMonthlySalary}`}
                     type="text"
                     defaultValue={fund.finalMonthlySalary}
                     onBlur={(e) => handleInputBlur(fund.id, 'finalMonthlySalary', e.target.value)}
                     className={getFieldClass('amount')}
-                    style={getFieldWidth('amount')}
                     disabled={isUpdating}
                   />
                 </td>
                 <td className="px-3 py-2">
                   <input
+                    key={`deathLumpSum-${fund.id}-${fund.deathLumpSum}`}
                     type="text"
                     defaultValue={fund.deathLumpSum}
                     onBlur={(e) => handleInputBlur(fund.id, 'deathLumpSum', e.target.value)}
-                    className={getFieldClass('lumpSum')}
-                    style={getFieldWidth('lumpSum')}
+                    className={getFieldClass('amount')}
                     disabled={isUpdating}
                   />
                 </td>
                 <td className="px-3 py-2">
                   <input
+                    key={`additionalTaxFreeAmount-${fund.id}-${fund.additionalTaxFreeAmount}`}
                     type="text"
                     defaultValue={fund.additionalTaxFreeAmount}
                     onBlur={(e) => handleInputBlur(fund.id, 'additionalTaxFreeAmount', e.target.value)}
                     className={getFieldClass('amount')}
-                    style={getFieldWidth('amount')}
                     disabled={isUpdating}
                   />
                 </td>
                 <td className="px-3 py-2">
                   <input
+                    key={`pensionIncomeAmount-${fund.id}-${fund.pensionIncomeAmount}`}
                     type="text"
                     defaultValue={fund.pensionIncomeAmount}
                     onBlur={(e) => handleInputBlur(fund.id, 'pensionIncomeAmount', e.target.value)}
                     className={getFieldClass('amount')}
-                    style={getFieldWidth('amount')}
                     disabled={isUpdating}
                   />
                 </td>
                 <td className="px-3 py-2">
                   <input
+                    key={`pensionIncomeIncrease-${fund.id}-${fund.pensionIncomeIncrease}`}
                     type="text"
                     defaultValue={fund.pensionIncomeIncrease}
                     onBlur={(e) => handleInputBlur(fund.id, 'pensionIncomeIncrease', e.target.value)}
                     className={getFieldClass('percentage')}
-                    style={getFieldWidth('percentage')}
                     disabled={isUpdating}
                   />
                 </td>

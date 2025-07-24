@@ -242,17 +242,17 @@ export default function AdditionalEstateDutyItemsTable() {
                     defaultValue={item.description}
                     onBlur={(e) => handleUpdateItem(item.id, 'description', e.target.value)}
                     className={getFieldClass('description')}
-                    style={getFieldWidth('description')}
+                    
                     disabled={isUpdating}
                   />
                 </td>
                 <td className="px-3 py-2">
                   <input
+                    key={`amount-${item.id}-${item.amount}`}
                     type="text"
                     defaultValue={item.amount}
                     onBlur={(e) => handleInputBlur(item.id, 'amount', e.target.value)}
                     className={getFieldClass('amount')}
-                    style={getFieldWidth('amount')}
                     disabled={isUpdating}
                   />
                 </td>

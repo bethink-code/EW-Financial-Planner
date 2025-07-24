@@ -76,7 +76,7 @@ const OwnerRowManager = memo(({ policy, onUpdate, onDelete }: {
             type="text"
             defaultValue={policy.description}
             onBlur={(e) => onUpdate(policy.id, { description: e.target.value })}
-            className={getFieldClass("text")} style={getFieldWidth("text")}
+            className={getFieldClass("text")} 
             disabled={isUpdating}
           />
         </td>
@@ -86,7 +86,7 @@ const OwnerRowManager = memo(({ policy, onUpdate, onDelete }: {
             type="text"
             defaultValue={policy.owner}
             onBlur={(e) => handleOwnerUpdate('owner', e.target.value)}
-            className={getFieldClass("text")} style={getFieldWidth("text")}
+            className={getFieldClass("text")} 
             disabled={isUpdating}
           />
           <button
@@ -103,7 +103,7 @@ const OwnerRowManager = memo(({ policy, onUpdate, onDelete }: {
             type="text"
             defaultValue={policy.lifeAssured}
             onBlur={(e) => onUpdate(policy.id, { lifeAssured: e.target.value })}
-            className={getFieldClass("text")} style={getFieldWidth("text")}
+            className={getFieldClass("text")} 
             disabled={isUpdating}
           />
         </td>
@@ -117,7 +117,7 @@ const OwnerRowManager = memo(({ policy, onUpdate, onDelete }: {
               e.target.value = formattedValue;
               onUpdate(policy.id, { deathBenefit: formattedValue });
             }}
-            className={getFieldClass("amount")} style={getFieldWidth("amount")}
+            className={getFieldClass("amount")} 
             disabled={isUpdating}
           />
         </td>
@@ -127,7 +127,7 @@ const OwnerRowManager = memo(({ policy, onUpdate, onDelete }: {
             type="text"
             defaultValue={policy.beneficiary}
             onBlur={(e) => onUpdate(policy.id, { beneficiary: e.target.value })}
-            className={getFieldClass("text")} style={getFieldWidth("text")}
+            className={getFieldClass("text")} 
             disabled={isUpdating}
           />
         </td>
@@ -199,7 +199,7 @@ const OwnerRowManager = memo(({ policy, onUpdate, onDelete }: {
               e.target.value = formattedValue;
               onUpdate(policy.id, { premiumsByOthers: formattedValue });
             }}
-            className={getFieldClass("amount")} style={getFieldWidth("amount")}
+            className={getFieldClass("amount")} 
             disabled={isUpdating}
           />
         </td>
@@ -213,7 +213,7 @@ const OwnerRowManager = memo(({ policy, onUpdate, onDelete }: {
               e.target.value = formattedValue;
               onUpdate(policy.id, { collateralSession: formattedValue });
             }}
-            className={getFieldClass("amount")} style={getFieldWidth("amount")}
+            className={getFieldClass("amount")} 
             disabled={isUpdating}
           />
         </td>
@@ -242,7 +242,7 @@ const OwnerRowManager = memo(({ policy, onUpdate, onDelete }: {
               type="text"
               defaultValue={owner}
               onBlur={(e) => handleOwnerUpdate('additionalOwner', e.target.value, index)}
-              className={getFieldClass("text")} style={getFieldWidth("text")}
+              className={getFieldClass("text")} 
               disabled={isUpdating}
             />
             <button

@@ -380,11 +380,11 @@ export default function IncomeNeedsTable() {
                 </td>
                 <td className="px-3 py-2">
                   <input
+                    key={`amount-${need.id}-${need.amount}`}
                     type="text"
                     defaultValue={need.amount}
                     onBlur={(e) => handleInputBlur(need.id, 'amount', e.target.value)}
                     className={getFieldClass('amount')}
-                    style={getFieldWidth('amount')}
                     disabled={isUpdating}
                   />
                 </td>
@@ -393,7 +393,6 @@ export default function IncomeNeedsTable() {
                     type="text"
                     value={need.capitalisedAmount}
                     className={getFieldClass('amount')}
-                    style={getFieldWidth('amount')}
                     disabled
                     readOnly
                   />

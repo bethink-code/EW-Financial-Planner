@@ -371,7 +371,7 @@ export function AssuranceTable({ searchTerm }: AssuranceTableProps) {
                         type="text"
                         defaultValue={policy.description}
                         onBlur={(e) => handleUpdatePolicy(policy.id, 'description', e.target.value)}
-                        className={getFieldClass("text")} style={getFieldWidth("text")}
+                        className={getFieldClass("text")} 
                         disabled={isUpdating}
                       />
                     </td>
@@ -412,7 +412,7 @@ export function AssuranceTable({ searchTerm }: AssuranceTableProps) {
                               updateMutation.mutate({ id: policy.id, updates: { additionalOwners: JSON.stringify(updatedOwners) } });
                             }
                           }}
-                          className={getFieldClass("text")} style={getFieldWidth("text")}
+                          className={getFieldClass("text")} 
                           disabled={isUpdating}
                         />
                         {rowIndex > 0 && rowIndex < allOwners.length && (
@@ -436,7 +436,7 @@ export function AssuranceTable({ searchTerm }: AssuranceTableProps) {
                         type="text"
                         defaultValue={policy.lifeAssured}
                         onBlur={(e) => handleUpdatePolicy(policy.id, 'lifeAssured', e.target.value)}
-                        className={getFieldClass("text")} style={getFieldWidth("text")}
+                        className={getFieldClass("text")} 
                         disabled={isUpdating}
                       />
                     </td>
@@ -449,7 +449,7 @@ export function AssuranceTable({ searchTerm }: AssuranceTableProps) {
                         type="text"
                         defaultValue={policy.deathBenefit}
                         onBlur={(e) => handleInputBlur(policy.id, 'deathBenefit', e.target.value)}
-                        className={getFieldClass("amount")} style={getFieldWidth("amount")}
+                        className={getFieldClass("amount")} 
                         disabled={isUpdating}
                       />
                     </td>
@@ -490,7 +490,7 @@ export function AssuranceTable({ searchTerm }: AssuranceTableProps) {
                               updateMutation.mutate({ id: policy.id, updates: { additionalBeneficiaries: JSON.stringify(updatedBeneficiaries) } });
                             }
                           }}
-                          className={getFieldClass("text")} style={getFieldWidth("text")}
+                          className={getFieldClass("text")} 
                           disabled={isUpdating}
                         />
                         {rowIndex > 0 && rowIndex < allBeneficiaries.length && (
@@ -515,7 +515,7 @@ export function AssuranceTable({ searchTerm }: AssuranceTableProps) {
                         type="text"
                         defaultValue=""
                         onBlur={(e) => handleUpdatePolicy(policy.id, 'additionalInfo', e.target.value)}
-                        className={getFieldClass("text")} style={getFieldWidth("text")}
+                        className={getFieldClass("text")} 
                         disabled={isUpdating}
                       />
                     </td>
@@ -536,7 +536,7 @@ export function AssuranceTable({ searchTerm }: AssuranceTableProps) {
                         type="text"
                         defaultValue={policy.amount}
                         onBlur={(e) => handleInputBlur(policy.id, 'amount', e.target.value)}
-                        className={getFieldClass("amount")} style={getFieldWidth("amount")}
+                        className={getFieldClass("amount")} 
                         disabled={isUpdating}
                       />
                     </td>
@@ -586,7 +586,7 @@ export function AssuranceTable({ searchTerm }: AssuranceTableProps) {
                           type="text"
                           defaultValue={policy.premiumsByOthers}
                           onBlur={(e) => handleInputBlur(policy.id, 'premiumsByOthers', e.target.value)}
-                          className={getFieldClass("amount")} style={getFieldWidth("amount")}
+                          className={getFieldClass("amount")} 
                           disabled={isUpdating}
                         />
                       </td>
@@ -595,7 +595,7 @@ export function AssuranceTable({ searchTerm }: AssuranceTableProps) {
                           type="text"
                           defaultValue={policy.collateralSession}
                           onBlur={(e) => handleInputBlur(policy.id, 'collateralSession', e.target.value)}
-                          className={getFieldClass("amount")} style={getFieldWidth("amount")}
+                          className={getFieldClass("amount")} 
                           disabled={isUpdating}
                         />
                       </td>
