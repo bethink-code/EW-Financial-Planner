@@ -183,7 +183,7 @@ export function AssuranceTable({ searchTerm }: AssuranceTableProps) {
     handleUpdatePolicy(id, field, formattedValue);
   }, [handleUpdatePolicy]);
 
-  // Add owner to policy
+  // Add owner to policy with sequential numbering
   const handleAddOwner = useCallback((id: number) => {
     const policy = policies.find((p: Assurance) => p.id === id);
     if (policy) {
@@ -193,9 +193,8 @@ export function AssuranceTable({ searchTerm }: AssuranceTableProps) {
       } catch {
         currentOwners = [];
       }
-      // Generate next sequential ID based on existing owners
-      const existingIds = currentOwners.map((o: any) => parseInt(o.id.replace('O', '')));
-      const nextId = existingIds.length > 0 ? Math.max(...existingIds) + 1 : 2; // Start from O2 since O1 is main owner
+      // Add new owner with next sequential number (length + 2 since O1 is main owner)
+      const nextId = currentOwners.length + 2;
       const newOwnerId = `O${nextId}`;
       const newOwners = [...currentOwners, { id: newOwnerId, name: `Owner ${nextId}` }];
       setIsUpdating(true);
@@ -228,7 +227,7 @@ export function AssuranceTable({ searchTerm }: AssuranceTableProps) {
     }
   }, [policies, updateMutation]);
 
-  // Add beneficiary to policy  
+  // Add beneficiary to policy with sequential numbering
   const handleAddBeneficiary = useCallback((id: number) => {
     const policy = policies.find((p: Assurance) => p.id === id);
     if (policy) {
@@ -238,9 +237,8 @@ export function AssuranceTable({ searchTerm }: AssuranceTableProps) {
       } catch {
         currentBeneficiaries = [];
       }
-      // Generate next sequential ID based on existing beneficiaries
-      const existingIds = currentBeneficiaries.map((b: any) => parseInt(b.id.replace('B', '')));
-      const nextId = existingIds.length > 0 ? Math.max(...existingIds) + 1 : 2; // Start from B2 since B1 is main beneficiary
+      // Add new beneficiary with next sequential number (length + 2 since B1 is main beneficiary)
+      const nextId = currentBeneficiaries.length + 2;
       const newBeneficiaryId = `B${nextId}`;
       const newBeneficiaries = [...currentBeneficiaries, { id: newBeneficiaryId, name: `Beneficiary ${nextId}`, split: "0" }];
       setIsUpdating(true);
