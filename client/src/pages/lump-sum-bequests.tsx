@@ -49,7 +49,7 @@ export default function LumpSumBequests() {
   }, [addMutation]);
 
   return (
-    <div className="min-h-screen bg-neutral-50">
+    <div className="bg-neutral-50">
       <div className="w-full px-6 py-6">
         {/* Combined Header and Summary */}
         <div className="mb-6">
