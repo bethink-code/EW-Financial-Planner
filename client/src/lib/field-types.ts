@@ -231,8 +231,8 @@ export const defaultFieldTypes: Record<string, FieldTypeConfig> = {
   years: {
     type: 'years',
     label: 'Years',
-    placeholder: '0',
-    defaultValue: '0',
+    placeholder: '0 years',
+    defaultValue: '0 years',
     formatting: {
       suffix: ' years',
       decimals: 0
