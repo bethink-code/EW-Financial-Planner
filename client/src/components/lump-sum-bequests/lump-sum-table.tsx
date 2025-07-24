@@ -181,10 +181,13 @@ export function LumpSumTable({ searchTerm }: LumpSumTableProps) {
                         type="text"
                         defaultValue={bequest.increasePercentage || "6%"}
                         onFocus={handleDefaultValueFocus}
-                        onBlur={createEnhancedBlurHandler(
-                          (e) => handleInputBlur(bequest.id, "increasePercentage", e.target.value),
-                          'percentage'
-                        )}
+                        onBlur={(e) => {
+                          const formattedValue = formatPercentageValue(e.target.value);
+                          if (formattedValue !== e.target.value) {
+                            e.target.value = formattedValue;
+                          }
+                          handleInputBlur(bequest.id, "increasePercentage", e.target.value);
+                        }}
                         className={`${getFieldClass('percentage')} table-input text-right ${getValueClass(bequest.increasePercentage || "6%", 'percentage')}`}
                         disabled={isUpdating}
                       />
