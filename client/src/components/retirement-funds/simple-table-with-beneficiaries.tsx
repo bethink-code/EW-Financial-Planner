@@ -288,7 +288,7 @@ export function SimpleTableWithBeneficiaries({
               </td>
               <td className="px-3 py-2 border-r border-neutral-200" rowSpan={fundOwners.length}>
                 <input
-                  defaultValue={fund.increasePercentage || ""}
+                  defaultValue={fund.increasePercentage || "0%"}
                   onBlur={(e) => {
                     const formattedValue = formatCurrencyValue(e.target.value, "increasePercentage");
                     if (formattedValue !== e.target.value) {
