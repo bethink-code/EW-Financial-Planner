@@ -255,6 +255,11 @@ th, td {
     min-width: max-content;
   }
   
+  /* Force minimum table width for horizontal scrolling */
+  table {
+    min-width: 1200px !important;
+  }
+  
   /* Teal color utilities */
   .bg-teal-50 { background-color: var(--teal-50); }
   .bg-teal-100 { background-color: var(--teal-100); }
