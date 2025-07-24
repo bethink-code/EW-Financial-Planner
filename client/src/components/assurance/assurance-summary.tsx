@@ -17,7 +17,7 @@ export function AssuranceSummary({}: AssuranceSummaryProps) {
 
   if (isLoading) {
     return (
-      <div className="p-6">
+      <div className="px-5 pb-5">
         <div className="text-center text-neutral-600">Loading summary...</div>
       </div>
     );
@@ -37,8 +37,7 @@ export function AssuranceSummary({}: AssuranceSummaryProps) {
   const averageDeathBenefit = totalPolicies > 0 ? totalDeathBenefits / totalPolicies : 0;
 
   return (
-    <div className="p-6">
-      <h2 className="text-xl font-semibold text-neutral-900 mb-4">Assurance Summary</h2>
+    <div className="px-5 pb-5">
       <div className="grid grid-cols-1 md:grid-cols-5 gap-6">
           <div className="text-center">
             <div className="text-2xl font-bold text-primary">{totalPolicies}</div>
