@@ -233,16 +233,16 @@ th, td {
   html, body {
     margin: 0;
     padding: 0;
-    width: 100%;
-    min-width: 100%;
     background-color: #EFF2F5;
-    overflow-x: auto;
-    overflow-y: auto;
+  }
+  
+  body {
+    overflow-x: auto; /* Enable horizontal scrolling at browser level */  
   }
   
   #root {
-    width: 100%;
-    min-width: 1400px; /* Forces horizontal scrollbar when content exceeds viewport */
+    width: max-content; /* Size to content width */
+    min-width: 100vw; /* At least viewport width */
   }
 
   /* Apply background to iframe container */
