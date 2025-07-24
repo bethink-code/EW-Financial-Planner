@@ -425,9 +425,12 @@ export function AssuranceTable({ searchTerm }: AssuranceTableProps) {
                           className={`${getFieldClass("text")} ${getValueClass(allOwners[rowIndex].name || "Enter here ...", 'text')}`} 
                           disabled={isUpdating}
                         />
-                        {rowIndex > 0 && rowIndex < allOwners.length && (
+                        {rowIndex > 0 && rowIndex < allOwners.length && allOwners[rowIndex] && (
                           <button
-                            onClick={() => handleRemoveOwner(policy.id, allOwners[rowIndex].id)}
+                            onClick={() => {
+                              console.log('Delete owner clicked:', allOwners[rowIndex].id, 'rowIndex:', rowIndex);
+                              handleRemoveOwner(policy.id, allOwners[rowIndex].id);
+                            }}
                             className="h-6 w-6 p-0 bg-white text-[#4F4F4F] hover:text-red-600 hover:bg-red-50 border border-gray-300 rounded"
                             title="Remove owner"
                           >
@@ -508,9 +511,12 @@ export function AssuranceTable({ searchTerm }: AssuranceTableProps) {
                           className={`${getFieldClass("text")} ${getValueClass(allBeneficiaries[rowIndex].name || "Enter here ...", 'text')}`} 
                           disabled={isUpdating}
                         />
-                        {rowIndex > 0 && rowIndex < allBeneficiaries.length && (
+                        {rowIndex > 0 && rowIndex < allBeneficiaries.length && allBeneficiaries[rowIndex] && (
                           <button
-                            onClick={() => handleRemoveBeneficiary(policy.id, allBeneficiaries[rowIndex].id)}
+                            onClick={() => {
+                              console.log('Delete beneficiary clicked:', allBeneficiaries[rowIndex].id, 'rowIndex:', rowIndex);
+                              handleRemoveBeneficiary(policy.id, allBeneficiaries[rowIndex].id);
+                            }}
                             className="h-6 w-6 p-0 bg-white text-[#4F4F4F] hover:text-red-600 hover:bg-red-50 border border-gray-300 rounded"
                             title="Remove beneficiary"
                           >
