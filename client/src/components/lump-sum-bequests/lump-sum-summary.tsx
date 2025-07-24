@@ -36,25 +36,27 @@ export function LumpSumSummary({}: LumpSumSummaryProps) {
   }, [bequests]);
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
-      <div style={{ backgroundColor: 'hsl(var(--primary) / 0.1)' }} className="rounded-lg p-4 text-center">
-        <div className="text-xs font-medium text-teal-700 mb-1">Total Bequests</div>
-        <div className="text-lg font-bold text-neutral-900">
-          {summaryData.count}
+    <div className="px-5 pb-5">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div style={{ backgroundColor: 'hsl(var(--primary) / 0.1)' }} className="rounded-lg p-4 text-center">
+          <div className="text-xs font-medium text-teal-700 mb-1">Total Bequests</div>
+          <div className="text-lg font-bold text-neutral-900">
+            {summaryData.count}
+          </div>
         </div>
-      </div>
-      
-      <div style={{ backgroundColor: 'hsl(var(--primary) / 0.1)' }} className="rounded-lg p-4 text-center">
-        <div className="text-xs font-medium text-teal-700 mb-1">Total Amount</div>
-        <div className="text-lg font-bold text-neutral-900">
-          R {summaryData.totalAmount.toLocaleString()}
+        
+        <div style={{ backgroundColor: 'hsl(var(--primary) / 0.1)' }} className="rounded-lg p-4 text-center">
+          <div className="text-xs font-medium text-teal-700 mb-1">Total Amount</div>
+          <div className="text-lg font-bold text-neutral-900">
+            R {summaryData.totalAmount.toLocaleString()}
+          </div>
         </div>
-      </div>
-      
-      <div style={{ backgroundColor: 'hsl(var(--primary) / 0.1)' }} className="rounded-lg p-4 text-center">
-        <div className="text-xs font-medium text-teal-700 mb-1">Total Value at Death</div>
-        <div className="text-lg font-bold text-neutral-900">
-          R {summaryData.totalValueAtDeath.toLocaleString()}
+        
+        <div style={{ backgroundColor: 'hsl(var(--primary) / 0.1)' }} className="rounded-lg p-4 text-center">
+          <div className="text-xs font-medium text-teal-700 mb-1">Total Value at Death</div>
+          <div className="text-lg font-bold text-neutral-900">
+            R {summaryData.totalValueAtDeath.toLocaleString()}
+          </div>
         </div>
       </div>
     </div>

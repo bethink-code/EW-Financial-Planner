@@ -1,6 +1,7 @@
 import React, { useState, useCallback } from "react";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import IncomeProvisionsTable from "../components/income-provisions/income-provisions-table";
+import { IncomeProvisionsSummary } from "@/components/income-provisions/income-provisions-summary";
 import { CalculatorHeader } from "@/components/ui/calculator-header";
 import { apiRequest, queryClient } from "@/lib/queryClient";
 import type { InsertIncomeProvision } from "@shared/schema";
@@ -54,17 +55,21 @@ export default function IncomeProvisions() {
   return (
     <div className="min-h-screen bg-neutral-50">
       <div className="max-w-7xl mx-auto px-4 py-6">
-        {/* Calculator Header */}
-        <CalculatorHeader
-          title="Income Provisions"
-          itemCount={provisions.length}
-          itemLabel="provisions"
-          onAddItem={handleAddProvision}
-          addButtonText="Add Provision"
-          isAddingItem={addMutation.isPending}
-          viewMode={viewMode}
-          onViewModeChange={handleViewModeChange}
-        />
+        {/* Combined Header and Summary */}
+        <div className="mb-6">
+          <CalculatorHeader
+            title="Income Provisions"
+            itemCount={provisions.length}
+            itemLabel="provisions"
+            onAddItem={handleAddProvision}
+            addButtonText="Add Provision"
+            isAddingItem={addMutation.isPending}
+            viewMode={viewMode}
+            onViewModeChange={handleViewModeChange}
+          >
+            <IncomeProvisionsSummary />
+          </CalculatorHeader>
+        </div>
         
         <IncomeProvisionsTable />
       </div>

@@ -1,6 +1,7 @@
 import React, { useState, useCallback } from "react";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import VoluntaryInvestmentsTable from "../components/voluntary-investments/voluntary-investments-table";
+import { VoluntaryInvestmentsSummary } from "@/components/voluntary-investments/voluntary-investments-summary";
 import { CalculatorHeader } from "@/components/ui/calculator-header";
 import { apiRequest, queryClient } from "@/lib/queryClient";
 import type { InsertVoluntaryInvestment } from "@shared/schema";
@@ -53,17 +54,21 @@ export default function VoluntaryInvestments() {
   return (
     <div className="min-h-screen bg-neutral-50">
       <div className="max-w-7xl mx-auto px-4 py-6">
-        {/* Calculator Header */}
-        <CalculatorHeader
-          title="Voluntary Investments"
-          itemCount={investments.length}
-          itemLabel="investments"
-          onAddItem={handleAddInvestment}
-          addButtonText="Add Investment"
-          isAddingItem={addMutation.isPending}
-          viewMode={viewMode}
-          onViewModeChange={handleViewModeChange}
-        />
+        {/* Combined Header and Summary */}
+        <div className="mb-6">
+          <CalculatorHeader
+            title="Voluntary Investments"
+            itemCount={investments.length}
+            itemLabel="investments"
+            onAddItem={handleAddInvestment}
+            addButtonText="Add Investment"
+            isAddingItem={addMutation.isPending}
+            viewMode={viewMode}
+            onViewModeChange={handleViewModeChange}
+          >
+            <VoluntaryInvestmentsSummary />
+          </CalculatorHeader>
+        </div>
         
         <VoluntaryInvestmentsTable />
       </div>
