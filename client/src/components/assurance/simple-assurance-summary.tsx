@@ -54,17 +54,17 @@ export function AssuranceSummary() {
   return (
     <div className="px-5 pb-5">
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div  >
+        <div className="bg-blue-50 rounded-lg p-4 text-center border border-blue-200 shadow-sm">
           <div className="text-xs font-medium text-teal-700 mb-1">Total Policies</div>
           <div className="text-lg font-bold text-neutral-900">{totalPolicies}</div>
         </div>
         
-        <div  >
+        <div className="bg-blue-50 rounded-lg p-4 text-center border border-blue-200 shadow-sm">
           <div className="text-xs font-medium text-teal-700 mb-1">Total Death Benefits</div>
           <div className="text-lg font-bold text-neutral-900">{formatCurrency(totalDeathBenefits.toString())}</div>
         </div>
         
-        <div  >
+        <div className="bg-blue-50 rounded-lg p-4 text-center border border-blue-200 shadow-sm">
           <div className="text-xs font-medium text-teal-700 mb-1">Total Premiums by Others</div>
           <div className="text-lg font-bold text-neutral-900">{formatCurrency(totalPremiumsByOthers.toString())}</div>
         </div>
