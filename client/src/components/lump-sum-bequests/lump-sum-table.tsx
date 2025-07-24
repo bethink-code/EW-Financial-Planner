@@ -2,7 +2,7 @@ import { useState, useCallback, useMemo } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { apiRequest } from "@/lib/queryClient";
 import { getFieldClass, getFieldWidth } from "@/lib/design-tokens";
-import { formatPercentageValue, formatCurrencyValue, getValueClass, isDefaultValue, handleDefaultValueFocus } from "@/lib/formatting";
+import { formatPercentageValue, formatCurrencyValue, getValueClass, isDefaultValue, handleDefaultValueFocus, createEnhancedBlurHandler } from "@/lib/formatting";
 import { LumpSumBequest, InsertLumpSumBequest } from "@shared/schema";
 import { Trash2, Plus } from "lucide-react";
 
@@ -135,9 +135,10 @@ export function LumpSumTable({ searchTerm }: LumpSumTableProps) {
                     <input
                       defaultValue={bequest.description || "Enter here ..."}
                       onFocus={handleDefaultValueFocus}
-                      onBlur={(e) => {
-                        handleInputBlur(bequest.id, "description", e.target.value);
-                      }}
+                      onBlur={createEnhancedBlurHandler(
+                        (e) => handleInputBlur(bequest.id, "description", e.target.value),
+                        'text'
+                      )}
                       className={`table-input h-7 text-sm bg-primary/5 border-gray-200 focus:border-primary w-full px-3 py-1 border rounded-md text-sm ${getValueClass(bequest.description || "Enter here ...", 'text')}`}
                       style={{ textAlign: "left" }}
                       disabled={isUpdating}

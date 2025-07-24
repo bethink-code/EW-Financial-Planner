@@ -2,7 +2,7 @@ import React, { useState, useCallback, useMemo } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { Plus, Trash2, Copy } from "lucide-react";
 import { getFieldClass, getFieldWidth } from "@/lib/design-tokens";
-import { getValueClass, isDefaultValue, handleDefaultValueFocus } from "@/lib/formatting";
+import { getValueClass, isDefaultValue, handleDefaultValueFocus, createEnhancedBlurHandler } from "@/lib/formatting";
 import { apiRequest } from "@/lib/queryClient";
 import { AddButton } from "@/components/ui/action-buttons";
 import type { Assurance, InsertAssurance } from "@shared/schema";
@@ -376,7 +376,10 @@ export function AssuranceTable({ searchTerm }: AssuranceTableProps) {
                         type="text"
                         defaultValue={policy.description || "Enter here ..."}
                         onFocus={handleDefaultValueFocus}
-                        onBlur={(e) => handleUpdatePolicy(policy.id, 'description', e.target.value)}
+                        onBlur={createEnhancedBlurHandler(
+                          (e) => handleUpdatePolicy(policy.id, 'description', e.target.value),
+                          'text'
+                        )}
                         className={`${getFieldClass("text")} ${getValueClass(policy.description || "Enter here ...", 'text')}`} 
                         disabled={isUpdating}
                       />
@@ -403,7 +406,7 @@ export function AssuranceTable({ searchTerm }: AssuranceTableProps) {
                           type="text"
                           defaultValue={allOwners[rowIndex].name || "Enter here ..."}
                           onFocus={handleDefaultValueFocus}
-                          onBlur={(e) => {
+                          onBlur={createEnhancedBlurHandler((e) => {
                             if (rowIndex === 0) {
                               handleUpdatePolicy(policy.id, 'owner', e.target.value);
                             } else {
@@ -418,7 +421,7 @@ export function AssuranceTable({ searchTerm }: AssuranceTableProps) {
                               );
                               updateMutation.mutate({ id: policy.id, updates: { additionalOwners: JSON.stringify(updatedOwners) } });
                             }
-                          }}
+                          }, 'text')}
                           className={`${getFieldClass("text")} ${getValueClass(allOwners[rowIndex].name || "Enter here ...", 'text')}`} 
                           disabled={isUpdating}
                         />
@@ -443,7 +446,10 @@ export function AssuranceTable({ searchTerm }: AssuranceTableProps) {
                         type="text"
                         defaultValue={policy.lifeAssured || "Enter here ..."}
                         onFocus={handleDefaultValueFocus}
-                        onBlur={(e) => handleUpdatePolicy(policy.id, 'lifeAssured', e.target.value)}
+                        onBlur={createEnhancedBlurHandler(
+                          (e) => handleUpdatePolicy(policy.id, 'lifeAssured', e.target.value),
+                          'text'
+                        )}
                         className={`${getFieldClass("text")} ${getValueClass(policy.lifeAssured || "Enter here ...", 'text')}`} 
                         disabled={isUpdating}
                       />
@@ -483,7 +489,7 @@ export function AssuranceTable({ searchTerm }: AssuranceTableProps) {
                           type="text"
                           defaultValue={allBeneficiaries[rowIndex].name || "Enter here ..."}
                           onFocus={handleDefaultValueFocus}
-                          onBlur={(e) => {
+                          onBlur={createEnhancedBlurHandler((e) => {
                             if (rowIndex === 0) {
                               handleUpdatePolicy(policy.id, 'beneficiary', e.target.value);
                             } else {
@@ -498,7 +504,7 @@ export function AssuranceTable({ searchTerm }: AssuranceTableProps) {
                               );
                               updateMutation.mutate({ id: policy.id, updates: { additionalBeneficiaries: JSON.stringify(updatedBeneficiaries) } });
                             }
-                          }}
+                          }, 'text')}
                           className={`${getFieldClass("text")} ${getValueClass(allBeneficiaries[rowIndex].name || "Enter here ...", 'text')}`} 
                           disabled={isUpdating}
                         />
@@ -524,7 +530,10 @@ export function AssuranceTable({ searchTerm }: AssuranceTableProps) {
                         type="text"
                         defaultValue={policy.additionalInfo || "Enter here ..."}
                         onFocus={handleDefaultValueFocus}
-                        onBlur={(e) => handleUpdatePolicy(policy.id, 'additionalInfo', e.target.value)}
+                        onBlur={createEnhancedBlurHandler(
+                          (e) => handleUpdatePolicy(policy.id, 'additionalInfo', e.target.value),
+                          'text'
+                        )}
                         className={`${getFieldClass("text")} ${getValueClass(policy.additionalInfo || "Enter here ...", 'text')}`} 
                         disabled={isUpdating}
                       />

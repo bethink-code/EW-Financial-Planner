@@ -148,6 +148,57 @@ export const handleDefaultValueFocus = (e: React.FocusEvent<HTMLInputElement>) =
 };
 
 /**
+ * Handle blur event for input fields to restore defaults when empty
+ * Restores appropriate default values when field is left empty
+ * @param e - The blur event
+ * @param fieldType - The type of field (text, currency, percentage, years)
+ */
+export const handleDefaultValueBlur = (e: React.FocusEvent<HTMLInputElement>, fieldType: string) => {
+  const value = e.target.value.trim();
+  if (!value) {
+    let defaultValue = "";
+    switch (fieldType) {
+      case 'currency':
+        defaultValue = "R 0";
+        break;
+      case 'percentage': 
+        defaultValue = "0%";
+        break;
+      case 'years':
+        defaultValue = "0 years";
+        break;
+      case 'text':
+      default:
+        defaultValue = "Enter here ...";
+        break;
+    }
+    e.target.value = defaultValue;
+    e.target.className = e.target.className.replace('entered-value', 'default-value');
+  } else {
+    e.target.className = e.target.className.replace('default-value', 'entered-value');
+  }
+};
+
+/**
+ * Create a wrapper for onBlur that combines existing functionality with default restoration
+ * @param originalBlurHandler - The original onBlur function
+ * @param fieldType - The type of field for default restoration
+ * @returns Combined blur handler
+ */
+export const createEnhancedBlurHandler = (
+  originalBlurHandler: (e: React.FocusEvent<HTMLInputElement>) => void,
+  fieldType: string
+) => {
+  return (e: React.FocusEvent<HTMLInputElement>) => {
+    // First, handle default restoration if field is empty
+    handleDefaultValueBlur(e, fieldType);
+    
+    // Then call the original blur handler for data saving
+    originalBlurHandler(e);
+  };
+};
+
+/**
  * Legacy years formatting for backward compatibility
  */
 export const formatYears = (value: string | number): string => {
