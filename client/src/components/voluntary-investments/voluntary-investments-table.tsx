@@ -164,8 +164,14 @@ export default function VoluntaryInvestmentsTable() {
     const investment = filteredInvestments.find(inv => inv.id === investmentId);
     if (!investment) return;
     
-    const owners = JSON.parse(investment.owners || '[]');
-    const percentages = JSON.parse(investment.ownershipPercentages || '[]');
+    let owners: string[], percentages: string[];
+    try {
+      owners = JSON.parse(investment.owners || '["Donald Edwards"]');
+      percentages = JSON.parse(investment.ownershipPercentages || '["100%"]');
+    } catch (error) {
+      owners = [investment.owners || 'Donald Edwards'];
+      percentages = [investment.ownershipPercentages || '100%'];
+    }
     
     owners.push('Donald Edwards');
     percentages.push('0%');
@@ -178,8 +184,14 @@ export default function VoluntaryInvestmentsTable() {
     const investment = filteredInvestments.find(inv => inv.id === investmentId);
     if (!investment) return;
     
-    const owners = JSON.parse(investment.owners || '[]');
-    const percentages = JSON.parse(investment.ownershipPercentages || '[]');
+    let owners: string[], percentages: string[];
+    try {
+      owners = JSON.parse(investment.owners || '["Donald Edwards"]');
+      percentages = JSON.parse(investment.ownershipPercentages || '["100%"]');
+    } catch (error) {
+      owners = [investment.owners || 'Donald Edwards'];
+      percentages = [investment.ownershipPercentages || '100%'];
+    }
     
     if (owners.length <= 1) return; // Don't remove the last owner
     
@@ -194,7 +206,12 @@ export default function VoluntaryInvestmentsTable() {
     const investment = filteredInvestments.find(inv => inv.id === investmentId);
     if (!investment) return;
     
-    const owners = JSON.parse(investment.owners || '[]');
+    let owners: string[];
+    try {
+      owners = JSON.parse(investment.owners || '["Donald Edwards"]');
+    } catch (error) {
+      owners = [investment.owners || 'Donald Edwards'];
+    }
     owners[ownerIndex] = newOwner;
     
     handleUpdateInvestment(investmentId, 'owners', JSON.stringify(owners));
@@ -204,7 +221,12 @@ export default function VoluntaryInvestmentsTable() {
     const investment = filteredInvestments.find(inv => inv.id === investmentId);
     if (!investment) return;
     
-    const percentages = JSON.parse(investment.ownershipPercentages || '[]');
+    let percentages: string[];
+    try {
+      percentages = JSON.parse(investment.ownershipPercentages || '["100%"]');
+    } catch (error) {
+      percentages = [investment.ownershipPercentages || '100%'];
+    }
     const formattedValue = formatPercentageValue(newPercentage);
     percentages[ownerIndex] = formattedValue;
     
@@ -249,8 +271,15 @@ export default function VoluntaryInvestmentsTable() {
           </thead>
           <tbody className="bg-white divide-y divide-neutral-200">
             {investments.map((investment: VoluntaryInvestment) => {
-              const owners = JSON.parse(investment.owners || '[]');
-              const percentages = JSON.parse(investment.ownershipPercentages || '[]');
+              let owners: string[], percentages: string[];
+              try {
+                owners = JSON.parse(investment.owners || '["Donald Edwards"]');
+                percentages = JSON.parse(investment.ownershipPercentages || '["100%"]');
+              } catch (error) {
+                // Fallback for malformed JSON
+                owners = [investment.owners || 'Donald Edwards'];
+                percentages = [investment.ownershipPercentages || '100%'];
+              }
               
               return owners.map((owner: string, ownerIndex: number) => (
                 <tr key={`${investment.id}-${ownerIndex}`} className="hover:bg-neutral-50">
