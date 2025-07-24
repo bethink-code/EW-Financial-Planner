@@ -22,9 +22,10 @@ export function CustomTabs({ tabs, activeTab, onTabChange, className }: CustomTa
   return (
     <div className={cn("mb-6", className)}>
       <div className="border-b border-neutral-200 dark:border-neutral-700">
-        <nav className="flex flex-wrap gap-x-6 gap-y-2">
-          {tabs.map((tab) => (
-            <button
+        <div className="max-w-6xl mx-auto">
+          <nav className="flex flex-wrap gap-x-6 gap-y-2">
+            {tabs.map((tab) => (
+              <button
               key={tab.id}
               onClick={() => onTabChange(tab.id)}
               className={cn(
@@ -47,7 +48,8 @@ export function CustomTabs({ tabs, activeTab, onTabChange, className }: CustomTa
               )}
             </button>
           ))}
-        </nav>
+          </nav>
+        </div>
       </div>
     </div>
   );
