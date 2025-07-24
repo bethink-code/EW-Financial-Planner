@@ -414,10 +414,7 @@ export function AssuranceTable({ searchTerm }: AssuranceTableProps) {
                         <input
                           type="text"
                           key={`owner-${policy.id}-${rowIndex}-${currentOwners[rowIndex].id}`}
-                          defaultValue={(() => {
-                            console.log(`Owner ${rowIndex}:`, currentOwners[rowIndex]);
-                            return currentOwners[rowIndex].name || "Enter here ...";
-                          })()}
+                          defaultValue={currentOwners[rowIndex].name || "Enter here ..."}
                           onFocus={handleDefaultValueFocus}
                           onBlur={createEnhancedBlurHandler((e) => {
                             if (rowIndex === 0) {
