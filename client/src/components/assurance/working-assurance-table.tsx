@@ -174,8 +174,11 @@ export function AssuranceTable({ searchTerm }: AssuranceTableProps) {
 
   // Note: Policy deletion removed - only individual owners/beneficiaries can be deleted
 
-  const handleInputBlur = useCallback((id: number, field: keyof Assurance, value: string) => {
+  const handleInputBlur = useCallback((id: number, field: keyof Assurance, value: string, element: HTMLInputElement) => {
     const formattedValue = formatCurrencyValue(value, field);
+    if (formattedValue !== value) {
+      element.value = formattedValue;
+    }
     handleUpdatePolicy(id, field, formattedValue);
   }, [handleUpdatePolicy]);
 
@@ -449,7 +452,7 @@ export function AssuranceTable({ searchTerm }: AssuranceTableProps) {
                       <input
                         type="text"
                         defaultValue={formatCurrencyValue(policy.deathBenefit, 'deathBenefit')}
-                        onBlur={(e) => handleInputBlur(policy.id, 'deathBenefit', e.target.value)}
+                        onBlur={(e) => handleInputBlur(policy.id, 'deathBenefit', e.target.value, e.target)}
                         className={getFieldClass("amount")} 
                         disabled={isUpdating}
                       />
@@ -536,7 +539,7 @@ export function AssuranceTable({ searchTerm }: AssuranceTableProps) {
                       <input
                         type="text"
                         defaultValue={formatCurrencyValue(policy.amount, 'amount')}
-                        onBlur={(e) => handleInputBlur(policy.id, 'amount', e.target.value)}
+                        onBlur={(e) => handleInputBlur(policy.id, 'amount', e.target.value, e.target)}
                         className={getFieldClass("amount")} 
                         disabled={isUpdating}
                       />
@@ -586,7 +589,7 @@ export function AssuranceTable({ searchTerm }: AssuranceTableProps) {
                         <input
                           type="text"
                           defaultValue={formatCurrencyValue(policy.premiumsByOthers, 'premiumsByOthers')}
-                          onBlur={(e) => handleInputBlur(policy.id, 'premiumsByOthers', e.target.value)}
+                          onBlur={(e) => handleInputBlur(policy.id, 'premiumsByOthers', e.target.value, e.target)}
                           className={getFieldClass("amount")} 
                           disabled={isUpdating}
                         />
@@ -595,7 +598,7 @@ export function AssuranceTable({ searchTerm }: AssuranceTableProps) {
                         <input
                           type="text"
                           defaultValue={formatCurrencyValue(policy.collateralSession, 'collateralSession')}
-                          onBlur={(e) => handleInputBlur(policy.id, 'collateralSession', e.target.value)}
+                          onBlur={(e) => handleInputBlur(policy.id, 'collateralSession', e.target.value, e.target)}
                           className={getFieldClass("amount")} 
                           disabled={isUpdating}
                         />
