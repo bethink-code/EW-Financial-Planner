@@ -198,7 +198,7 @@ export function AssuranceTable({ searchTerm }: AssuranceTableProps) {
       // Add new owner with next sequential number (length + 2 since O1 is main owner)
       const nextId = currentOwners.length + 2;
       const newOwnerId = `O${nextId}`;
-      const newOwners = [...currentOwners, { id: newOwnerId, name: `Owner ${nextId}` }];
+      const newOwners = [...currentOwners, { id: newOwnerId, name: "Enter here ..." }];
       setIsUpdating(true);
       updateMutation.mutate({ id, updates: { additionalOwners: JSON.stringify(newOwners) } });
     }
@@ -235,7 +235,7 @@ export function AssuranceTable({ searchTerm }: AssuranceTableProps) {
       // Add new beneficiary with next sequential number (length + 2 since B1 is main beneficiary)
       const nextId = currentBeneficiaries.length + 2;
       const newBeneficiaryId = `B${nextId}`;
-      const newBeneficiaries = [...currentBeneficiaries, { id: newBeneficiaryId, name: `Beneficiary ${nextId}`, split: "0" }];
+      const newBeneficiaries = [...currentBeneficiaries, { id: newBeneficiaryId, name: "Enter here ...", split: "0" }];
       setIsUpdating(true);
       updateMutation.mutate({ id, updates: { additionalBeneficiaries: JSON.stringify(newBeneficiaries) } });
     }
