@@ -150,7 +150,7 @@ export function AssuranceTable({ searchTerm }: AssuranceTableProps) {
       {/* Main Table */}
       <div className="rounded-lg border border-neutral-200 overflow-hidden">
         <div className="overflow-x-auto">
-          <table className="bg-white rounded-lg shadow-sm border border-neutral-200" className="w-full min-w-full">
+          <table className="w-full min-w-full">
             <thead>
               <tr className="border-b border-neutral-300">
                 <th className="p-3 text-center text-xs font-semibold text-neutral-700 uppercase tracking-wider w-16">Actions</th>

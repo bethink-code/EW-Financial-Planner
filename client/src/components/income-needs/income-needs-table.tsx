@@ -200,7 +200,7 @@ export default function IncomeNeedsTable() {
   return (
     <div>
       {/* Table */}
-      <table className="bg-white rounded-lg shadow-sm border border-neutral-200" className="min-w-full border border-neutral-200 bg-white rounded-lg shadow-sm">
+      <table className="min-w-full border border-neutral-200 bg-white rounded-lg shadow-sm">
           <thead>
             <tr className="border-b border-neutral-200">
               <th className="px-3 py-2 text-center text-xs font-medium text-neutral-600 uppercase tracking-wider w-16">Actions</th>
