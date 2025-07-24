@@ -205,7 +205,7 @@ export default function DefinedBenefitFundsTable() {
   }
 
   return (
-    <div className="">
+    <div >
       {/* Table */}
       <table className="min-w-full  border border-neutral-200 ">
           <thead>
@@ -229,7 +229,7 @@ export default function DefinedBenefitFundsTable() {
           </thead>
           <tbody className="divide-y divide-neutral-200">
             {funds.map((fund: DefinedBenefitFund) => (
-              <tr key={fund.id} className="">
+              <tr key={fund.id} >
                 <td className="table-actions-cell text-center">
                   <ActionButtonGroup>
                     <DuplicateButton

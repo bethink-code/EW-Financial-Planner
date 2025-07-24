@@ -236,7 +236,7 @@ export function AssuranceTable({ searchTerm }: AssuranceTableProps) {
           </thead>
           <tbody className="divide-y divide-neutral-200">
             {filteredPolicies.map((policy: Assurance) => (
-              <tr key={policy.id} className="">
+              <tr key={policy.id} >
                 <td className="px-3 py-2">
                   <input
                     type="text"

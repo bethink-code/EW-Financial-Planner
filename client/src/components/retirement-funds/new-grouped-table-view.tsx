@@ -737,7 +737,7 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
             return (
               <React.Fragment key={fund.id}>
                 {/* Main fund row */}
-                <tr className="">
+                <tr >
                   {/* Overview Section */}
                   {columnVisibility.overview && (
                     <>

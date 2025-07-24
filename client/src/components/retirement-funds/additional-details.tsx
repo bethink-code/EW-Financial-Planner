@@ -85,7 +85,7 @@ export function AdditionalDetails({ funds, onFieldUpdate, isUpdating }: Addition
   return (
     <>
       <h2 className="font-bold text-neutral-900 mb-4 text-[16px]">Additional Details</h2>
-      <table className="table-auto bg-white rounded-lg shadow-sm border border-neutral-200">
+      <table >
             <thead>
               <tr className="border-b border-neutral-200" style={{ backgroundColor: '#D6ECF5' }}>
                 <th className="table-cell text-left table-header-12 text-neutral-600 uppercase tracking-wider" style={{ width: '250px' }}>

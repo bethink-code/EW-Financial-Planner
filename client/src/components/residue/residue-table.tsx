@@ -180,7 +180,7 @@ export default function ResidueTable() {
   }
 
   return (
-    <div className="">
+    <div >
       {/* Table */}
       <table className="min-w-full  border border-neutral-200 ">
           <thead>
@@ -193,7 +193,7 @@ export default function ResidueTable() {
           <tbody className="divide-y divide-neutral-200">
             {/* Regular Entity Rows */}
             {regularEntities.map((item: Residue) => (
-              <tr key={item.id} className="">
+              <tr key={item.id} >
                 <td className="table-actions-cell text-center">
                   <ActionButtonGroup>
                     <DuplicateButton

@@ -268,7 +268,7 @@ export default function VoluntaryInvestmentsTable() {
   }
 
   return (
-    <div className="">
+    <div >
       {/* Table */}
       <table className="min-w-full  border border-neutral-200 ">
           <thead>
@@ -307,7 +307,7 @@ export default function VoluntaryInvestmentsTable() {
               }
               
               return owners.map((owner: string, ownerIndex: number) => (
-                <tr key={`${investment.id}-${ownerIndex}`} className="">
+                <tr key={`${investment.id}-${ownerIndex}`} >
                   {ownerIndex === 0 && (
                     <>
                       <td rowSpan={owners.length} className="table-actions-cell text-center">

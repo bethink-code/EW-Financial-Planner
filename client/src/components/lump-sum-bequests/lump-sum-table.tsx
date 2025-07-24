@@ -101,7 +101,7 @@ export function LumpSumTable({}: LumpSumTableProps) {
   }
 
   return (
-    <div className="">
+    <div >
       {/* Header with Add Button */}
       <div className="flex items-center justify-between">
         <button
@@ -117,7 +117,7 @@ export function LumpSumTable({}: LumpSumTableProps) {
 
       {/* Main Table */}
       <div className="rounded-lg border border-neutral-200 overflow-hidden">
-        <table className="bg-white rounded-lg shadow-sm border border-neutral-200 w-full min-w-full">
+        <table >
             <thead>
               <tr className="border-b border-neutral-300">
                 <th className="p-3 text-left text-xs font-semibold text-neutral-700 uppercase tracking-wider w-8"></th>
@@ -131,7 +131,7 @@ export function LumpSumTable({}: LumpSumTableProps) {
             </thead>
             <tbody className="divide-y divide-neutral-200">
               {bequests.map((bequest: LumpSumBequest) => (
-                <tr key={bequest.id} className="">
+                <tr key={bequest.id} >
                   <td className="table-actions-cell text-center">
                     <ActionButtonGroup>
                       <DuplicateButton

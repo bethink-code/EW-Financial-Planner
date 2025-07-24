@@ -199,7 +199,7 @@ export function SimpleTableWithBeneficiaries({
         const currentOwnershipPercentage = ownershipPercentages[rowIndex];
         
         return (
-          <tr key={`${fund.id}-row-${rowIndex}`} className="">
+          <tr key={`${fund.id}-row-${rowIndex}`} >
             {/* Actions Column - rowSpan for main fund data */}
             {rowIndex === 0 && (
               <td rowSpan={maxRows} className="table-actions-cell text-center">

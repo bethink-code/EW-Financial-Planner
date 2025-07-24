@@ -258,7 +258,7 @@ export function AssuranceTable({}: AssuranceTableProps) {
       {/* Note: Add Policy Button moved to parent component header */}
 
       {/* Table */}
-      <table className="bg-white rounded-lg shadow-sm border border-neutral-200 min-w-full">
+      <table >
           <thead>
             <tr className="border-b border-border">
               <th className="px-3 py-3 text-center text-xs font-medium text-neutral-600 uppercase tracking-wider w-16">Actions</th>
@@ -318,7 +318,7 @@ export function AssuranceTable({}: AssuranceTableProps) {
                 const currentBeneficiaries = allBeneficiaries;
                 
                 return (
-                <tr key={`${policy.id}-row-${rowIndex}`} className="">
+                <tr key={`${policy.id}-row-${rowIndex}`} >
                   {/* Actions - rowSpan for main policy data - FIRST COLUMN */}
                   {rowIndex === 0 && (
                     <td rowSpan={maxRows} className="table-actions-cell text-center">

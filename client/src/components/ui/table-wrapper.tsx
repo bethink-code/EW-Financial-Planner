@@ -76,7 +76,7 @@ interface TableProps {
  */
 export function ConsistentTable({ children, className }: TableProps) {
   return (
-    <table className="bg-white rounded-lg shadow-sm border border-neutral-200" className={cn(
+    <table  className={cn(
       "w-full border-collapse  dark:bg-neutral-800  rounded-lg overflow-hidden",
       className
     )}>

@@ -265,9 +265,9 @@ export default function AssetsAndLiabilitiesTable() {
   }));
 
   return (
-    <div className="">
+    <div >
       {/* Table */}
-      <table className="min-w-full border border-neutral-200 bg-white rounded-lg shadow-sm">
+      <table >
           <thead>
             <tr className="border-b border-neutral-200">
               <th className="px-3 py-2 text-center text-xs font-medium text-neutral-600 uppercase tracking-wider w-16">Actions</th>
@@ -317,7 +317,7 @@ export default function AssetsAndLiabilitiesTable() {
 
                 {/* Category Assets */}
                 {assets.map((asset: AssetAndLiability) => (
-                  <tr key={asset.id} className="">
+                  <tr key={asset.id} >
                     <td className="table-actions-cell text-center">
                       <ActionButtonGroup>
                         <DuplicateButton

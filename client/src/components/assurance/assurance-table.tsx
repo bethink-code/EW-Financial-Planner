@@ -133,7 +133,7 @@ export function AssuranceTable({ searchTerm }: AssuranceTableProps) {
   }
 
   return (
-    <div className="">
+    <div >
       {/* Header with Add Button */}
       <div className="flex items-center justify-between">
         <button
@@ -167,7 +167,7 @@ export function AssuranceTable({ searchTerm }: AssuranceTableProps) {
             </thead>
             <tbody className="divide-y divide-neutral-200">
               {policies.map((policy: Assurance) => (
-                <tr key={policy.id} className="">
+                <tr key={policy.id} >
                   <td className="p-2 text-center">
                     <DeleteButton
                       onClick={() => deleteMutation.mutate(policy.id)}

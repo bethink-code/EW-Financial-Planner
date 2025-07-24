@@ -204,9 +204,9 @@ export default function IncomeProvisionsTable() {
   }
 
   return (
-    <div className="">
+    <div >
       {/* Table */}
-      <table className="min-w-full border border-neutral-200 bg-white rounded-lg shadow-sm">
+      <table >
           <thead>
             <tr className="border-b border-neutral-200">
               <th className="px-3 py-2 text-center text-xs font-medium text-neutral-600 uppercase tracking-wider w-16">Actions</th>
@@ -225,7 +225,7 @@ export default function IncomeProvisionsTable() {
           </thead>
           <tbody className="divide-y divide-neutral-200">
             {provisions.map((provision: IncomeProvision) => (
-              <tr key={provision.id} className="">
+              <tr key={provision.id} >
                 <td className="table-actions-cell text-center">
                   <ActionButtonGroup>
                     <DuplicateButton
