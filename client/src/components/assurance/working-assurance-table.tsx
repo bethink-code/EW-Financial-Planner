@@ -53,15 +53,15 @@ export function AssuranceTable({ searchTerm }: AssuranceTableProps) {
     mutationFn: async () => {
       try {
         const newPolicy: InsertAssurance = {
-          description: "",
+          description: "Enter here ...",
           owner: "Donald Edwards",
           additionalOwners: "[]",
-          lifeAssured: "",
+          lifeAssured: "Enter here ...",
           deathBenefit: "0",
-          beneficiary: "",
+          beneficiary: "Enter here ...",
           benefitSplit: "0",
           additionalBeneficiaries: "[]",
-          additionalInfo: "",
+          additionalInfo: "Enter here ...",
           amount: "0",
           buySell: false,
           keyMan: false,
@@ -197,7 +197,7 @@ export function AssuranceTable({ searchTerm }: AssuranceTableProps) {
       const existingIds = currentOwners.map((o: any) => parseInt(o.id.replace('O', '')));
       const nextId = existingIds.length > 0 ? Math.max(...existingIds) + 1 : 2; // Start from O2 since O1 is main owner
       const newOwnerId = `O${nextId}`;
-      const newOwners = [...currentOwners, { id: newOwnerId, name: "New Owner" }];
+      const newOwners = [...currentOwners, { id: newOwnerId, name: "Enter here ..." }];
       setIsUpdating(true);
       updateMutation.mutate({ id, updates: { additionalOwners: JSON.stringify(newOwners) } });
     }
@@ -233,7 +233,7 @@ export function AssuranceTable({ searchTerm }: AssuranceTableProps) {
       const existingIds = currentBeneficiaries.map((b: any) => parseInt(b.id.replace('B', '')));
       const nextId = existingIds.length > 0 ? Math.max(...existingIds) + 1 : 2; // Start from B2 since B1 is main beneficiary
       const newBeneficiaryId = `B${nextId}`;
-      const newBeneficiaries = [...currentBeneficiaries, { id: newBeneficiaryId, name: "New Beneficiary", split: "0" }];
+      const newBeneficiaries = [...currentBeneficiaries, { id: newBeneficiaryId, name: "Enter here ...", split: "0" }];
       setIsUpdating(true);
       updateMutation.mutate({ id, updates: { additionalBeneficiaries: JSON.stringify(newBeneficiaries) } });
     }
@@ -374,9 +374,9 @@ export function AssuranceTable({ searchTerm }: AssuranceTableProps) {
                     <td rowSpan={maxRows} className="px-3 py-2 align-top">
                       <input
                         type="text"
-                        defaultValue={policy.description}
+                        defaultValue={policy.description || "Enter here ..."}
                         onBlur={(e) => handleUpdatePolicy(policy.id, 'description', e.target.value)}
-                        className={`${getFieldClass("text")} ${getValueClass(policy.description, 'text')}`} 
+                        className={`${getFieldClass("text")} ${getValueClass(policy.description || "Enter here ...", 'text')}`} 
                         disabled={isUpdating}
                       />
                     </td>
@@ -400,7 +400,7 @@ export function AssuranceTable({ searchTerm }: AssuranceTableProps) {
                         )}
                         <input
                           type="text"
-                          defaultValue={allOwners[rowIndex].name}
+                          defaultValue={allOwners[rowIndex].name || "Enter here ..."}
                           onBlur={(e) => {
                             if (rowIndex === 0) {
                               handleUpdatePolicy(policy.id, 'owner', e.target.value);
@@ -417,7 +417,7 @@ export function AssuranceTable({ searchTerm }: AssuranceTableProps) {
                               updateMutation.mutate({ id: policy.id, updates: { additionalOwners: JSON.stringify(updatedOwners) } });
                             }
                           }}
-                          className={`${getFieldClass("text")} ${getValueClass(allOwners[rowIndex].name, 'text')}`} 
+                          className={`${getFieldClass("text")} ${getValueClass(allOwners[rowIndex].name || "Enter here ...", 'text')}`} 
                           disabled={isUpdating}
                         />
                         {rowIndex > 0 && rowIndex < allOwners.length && (
@@ -439,9 +439,9 @@ export function AssuranceTable({ searchTerm }: AssuranceTableProps) {
                     <td rowSpan={maxRows} className="px-3 py-2 align-top">
                       <input
                         type="text"
-                        defaultValue={policy.lifeAssured}
+                        defaultValue={policy.lifeAssured || "Enter here ..."}
                         onBlur={(e) => handleUpdatePolicy(policy.id, 'lifeAssured', e.target.value)}
-                        className={`${getFieldClass("text")} ${getValueClass(policy.lifeAssured, 'text')}`} 
+                        className={`${getFieldClass("text")} ${getValueClass(policy.lifeAssured || "Enter here ...", 'text')}`} 
                         disabled={isUpdating}
                       />
                     </td>
@@ -478,7 +478,7 @@ export function AssuranceTable({ searchTerm }: AssuranceTableProps) {
                         )}
                         <input
                           type="text"
-                          defaultValue={allBeneficiaries[rowIndex].name}
+                          defaultValue={allBeneficiaries[rowIndex].name || "Enter here ..."}
                           onBlur={(e) => {
                             if (rowIndex === 0) {
                               handleUpdatePolicy(policy.id, 'beneficiary', e.target.value);
@@ -495,7 +495,7 @@ export function AssuranceTable({ searchTerm }: AssuranceTableProps) {
                               updateMutation.mutate({ id: policy.id, updates: { additionalBeneficiaries: JSON.stringify(updatedBeneficiaries) } });
                             }
                           }}
-                          className={`${getFieldClass("text")} ${getValueClass(allBeneficiaries[rowIndex].name, 'text')}`} 
+                          className={`${getFieldClass("text")} ${getValueClass(allBeneficiaries[rowIndex].name || "Enter here ...", 'text')}`} 
                           disabled={isUpdating}
                         />
                         {rowIndex > 0 && rowIndex < allBeneficiaries.length && (
@@ -518,9 +518,9 @@ export function AssuranceTable({ searchTerm }: AssuranceTableProps) {
                     <td rowSpan={maxRows} className="px-3 py-2 align-top">
                       <input
                         type="text"
-                        defaultValue=""
+                        defaultValue={policy.additionalInfo || "Enter here ..."}
                         onBlur={(e) => handleUpdatePolicy(policy.id, 'additionalInfo', e.target.value)}
-                        className={`${getFieldClass("text")} ${getValueClass("", 'text')}`} 
+                        className={`${getFieldClass("text")} ${getValueClass(policy.additionalInfo || "Enter here ...", 'text')}`} 
                         disabled={isUpdating}
                       />
                     </td>

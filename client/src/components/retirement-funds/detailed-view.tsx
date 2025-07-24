@@ -194,7 +194,7 @@ export function DetailedView({ funds, columnVisibility, onFieldUpdate, isUpdatin
                   <Label className="text-xs text-neutral-600 mb-1 block h-8 flex items-end">Description</Label>
                   <input
                     key={`description-${selectedFund.id}`}
-                    defaultValue={selectedFund.description || ""}
+                    defaultValue={selectedFund.description || "Enter here ..."}
                     onBlur={(e) => {
                       const formattedValue = formatCurrencyValue(e.target.value, "description");
                       if (formattedValue !== e.target.value) {
@@ -242,7 +242,7 @@ export function DetailedView({ funds, columnVisibility, onFieldUpdate, isUpdatin
                 <Label className="text-xs text-neutral-600 mb-1 block">Cover Amount</Label>
                 <input
                   key={`coverAmount-${selectedFund.id}`}
-                  defaultValue={selectedFund.coverAmount || ""}
+                  defaultValue={selectedFund.coverAmount || "Enter here ..."}
                   onBlur={(e) => {
                     const formattedValue = formatCurrencyValue(e.target.value, "coverAmount");
                     if (formattedValue !== e.target.value) {
@@ -274,7 +274,7 @@ export function DetailedView({ funds, columnVisibility, onFieldUpdate, isUpdatin
                   <Label className="text-xs text-neutral-600 mb-1 block h-8 flex items-end">Monthly Income</Label>
                   <input
                     key={`monthlyIncome-${selectedFund.id}`}
-                    defaultValue={selectedFund.monthlyIncome || ""}
+                    defaultValue={selectedFund.monthlyIncome || "Enter here ..."}
                     onBlur={(e) => {
                       const formattedValue = formatCurrencyValue(e.target.value, "monthlyIncome");
                       if (formattedValue !== e.target.value) {
@@ -291,7 +291,7 @@ export function DetailedView({ funds, columnVisibility, onFieldUpdate, isUpdatin
                   <Label className="text-xs text-neutral-600 mb-1 block h-8 flex items-end">Term Years</Label>
                   <input
                     key={`termYears-${selectedFund.id}`}
-                    defaultValue={selectedFund.termYears || ""}
+                    defaultValue={selectedFund.termYears || "Enter here ..."}
                     onBlur={(e) => {
                       const formattedValue = formatCurrencyValue(e.target.value, "termYears");
                       if (formattedValue !== e.target.value) {
@@ -307,7 +307,7 @@ export function DetailedView({ funds, columnVisibility, onFieldUpdate, isUpdatin
                   <Label className="text-xs text-neutral-600 mb-1 block h-8 flex items-end">Increase %</Label>
                   <input
                     key={`increasePercentage-${selectedFund.id}`}
-                    defaultValue={selectedFund.increasePercentage || ""}
+                    defaultValue={selectedFund.increasePercentage || "Enter here ..."}
                     onBlur={(e) => {
                       const formattedValue = formatCurrencyValue(e.target.value, "increasePercentage");
                       if (formattedValue !== e.target.value) {
@@ -324,7 +324,7 @@ export function DetailedView({ funds, columnVisibility, onFieldUpdate, isUpdatin
                   <Label className="text-xs text-neutral-600 mb-1 block h-8 flex items-end">Escalation Amount</Label>
                   <input
                     key={`escalationAmount-${selectedFund.id}`}
-                    defaultValue={selectedFund.approvedLifeCover || ""}
+                    defaultValue={selectedFund.approvedLifeCover || "Enter here ..."}
                     onBlur={(e) => {
                       const formattedValue = formatCurrencyValue(e.target.value, "approvedLifeCover");
                       if (formattedValue !== e.target.value) {
@@ -350,7 +350,7 @@ export function DetailedView({ funds, columnVisibility, onFieldUpdate, isUpdatin
                   <Label className="text-xs text-neutral-600 mb-1 block h-8 flex items-end">Approved Life Cover</Label>
                   <input
                     key={`approvedLifeCover-${selectedFund.id}`}
-                    defaultValue={selectedFund.approvedLifeCover || ""}
+                    defaultValue={selectedFund.approvedLifeCover || "Enter here ..."}
                     onBlur={(e) => {
                       const formattedValue = formatCurrencyValue(e.target.value, "approvedLifeCover");
                       if (formattedValue !== e.target.value) {
@@ -418,7 +418,7 @@ export function DetailedView({ funds, columnVisibility, onFieldUpdate, isUpdatin
                   <Label className="text-xs text-neutral-600 mb-1 block h-8 flex items-end">Percentage</Label>
                   <input
                     key={`beneficiaryPercentageSplit-${selectedFund.id}`}
-                    defaultValue={selectedFund.beneficiaryPercentageSplit || ""}
+                    defaultValue={selectedFund.beneficiaryPercentageSplit || "Enter here ..."}
                     onBlur={(e) => {
                       const formattedValue = formatCurrencyValue(e.target.value, "beneficiaryPercentageSplit");
                       if (formattedValue !== e.target.value) {
@@ -441,7 +441,7 @@ export function DetailedView({ funds, columnVisibility, onFieldUpdate, isUpdatin
                   <Label className="text-xs text-neutral-600 mb-1 block h-8 flex items-end">Lump Sum Taken</Label>
                   <input
                     key={`lumpSumTaken-${selectedFund.id}`}
-                    defaultValue={selectedFund.lumpSumTaken || ""}
+                    defaultValue={selectedFund.lumpSumTaken || "Enter here ..."}
                     onBlur={(e) => {
                       const formattedValue = formatCurrencyValue(e.target.value, "lumpSumTaken");
                       if (formattedValue !== e.target.value) {
@@ -458,7 +458,7 @@ export function DetailedView({ funds, columnVisibility, onFieldUpdate, isUpdatin
                   <Label className="text-xs text-neutral-600 mb-1 block h-8 flex items-end">Non-deductible Contribution</Label>
                   <input
                     key={`nondeductibleContribution-${selectedFund.id}`}
-                    defaultValue={selectedFund.nondeductibleContribution || ""}
+                    defaultValue={selectedFund.nondeductibleContribution || "Enter here ..."}
                     onBlur={(e) => {
                       const formattedValue = formatCurrencyValue(e.target.value, "nondeductibleContribution");
                       if (formattedValue !== e.target.value) {
@@ -481,7 +481,7 @@ export function DetailedView({ funds, columnVisibility, onFieldUpdate, isUpdatin
                   <Label className="text-xs text-neutral-600 mb-1 block h-8 flex items-end">Income Term</Label>
                   <input
                     key={`incomeTerm-${selectedFund.id}`}
-                    defaultValue={selectedFund.incomeTerm || ""}
+                    defaultValue={selectedFund.incomeTerm || "Enter here ..."}
                     onBlur={(e) => {
                       const formattedValue = formatCurrencyValue(e.target.value, "incomeTerm");
                       if (formattedValue !== e.target.value) {

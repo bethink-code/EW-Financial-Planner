@@ -197,7 +197,7 @@ export function SimpleTableWithBeneficiaries({
             <>
               <td className="px-3 py-2 border-r border-neutral-200" rowSpan={fundOwners.length}>
                 <input
-                  defaultValue={fund.description || ""}
+                  defaultValue={fund.description || "Enter here ..."}
                   onBlur={(e) => onFieldUpdate(fund.id, "description", e.target.value)}
                   className={`${getFieldClass('text')} table-input`}
                   
@@ -273,7 +273,7 @@ export function SimpleTableWithBeneficiaries({
             <>
               <td className="px-3 py-2 border-l border-neutral-200 border-r border-neutral-200" rowSpan={fundOwners.length}>
                 <input
-                  defaultValue={fund.monthlyIncome || ""}
+                  defaultValue={fund.monthlyIncome || "Enter here ..."}
                   onBlur={(e) => {
                     const formattedValue = formatCurrencyValue(e.target.value, "monthlyIncome");
                     if (formattedValue !== e.target.value) {
@@ -366,7 +366,7 @@ export function SimpleTableWithBeneficiaries({
             <>
               <td className="px-3 py-2 border-l border-neutral-200 border-r border-neutral-200" rowSpan={fundOwners.length}>
                 <input
-                  defaultValue={beneficiaries[0]?.name || ""}
+                  defaultValue={beneficiaries[0]?.name || "Enter here ..."}
                   onBlur={(e) => handleBeneficiaryUpdate(fund.id, 0, 'name', e.target.value)}
                   className={`${getFieldClass('text')} table-input`}
                   
@@ -391,7 +391,7 @@ export function SimpleTableWithBeneficiaries({
               </td>
               <td className="px-3 py-2 border-r border-neutral-200" rowSpan={fundOwners.length}>
                 <input
-                  defaultValue={fund.amount || ""}
+                  defaultValue={fund.amount || "Enter here ..."}
                   onBlur={(e) => {
                     const formattedValue = formatCurrencyValue(e.target.value, "amount");
                     if (formattedValue !== e.target.value) {
@@ -407,7 +407,7 @@ export function SimpleTableWithBeneficiaries({
               </td>
               <td className="px-3 py-2 border-r border-neutral-200" rowSpan={fundOwners.length}>
                 <input
-                  defaultValue={fund.lumpSumTaken || ""}
+                  defaultValue={fund.lumpSumTaken || "Enter here ..."}
                   onBlur={(e) => {
                     const formattedValue = formatCurrencyValue(e.target.value, "lumpSumTaken");
                     if (formattedValue !== e.target.value) {
@@ -423,7 +423,7 @@ export function SimpleTableWithBeneficiaries({
               </td>
               <td className="px-3 py-2 border-r border-neutral-200" rowSpan={fundOwners.length}>
                 <input
-                  defaultValue={fund.nondeductibleContribution || ""}
+                  defaultValue={fund.nondeductibleContribution || "Enter here ..."}
                   onBlur={(e) => {
                     const formattedValue = formatCurrencyValue(e.target.value, "nondeductibleContribution");
                     if (formattedValue !== e.target.value) {
@@ -439,7 +439,7 @@ export function SimpleTableWithBeneficiaries({
               </td>
               <td className="px-3 py-2 border-r border-neutral-200" rowSpan={fundOwners.length}>
                 <input
-                  defaultValue={fund.livingAnnuity || ""}
+                  defaultValue={fund.livingAnnuity || "Enter here ..."}
                   onBlur={(e) => {
                     const formattedValue = formatCurrencyValue(e.target.value, "livingAnnuity");
                     if (formattedValue !== e.target.value) {
@@ -505,7 +505,7 @@ export function SimpleTableWithBeneficiaries({
             <>
               <td className="px-3 py-2 border-l border-neutral-200 border-r border-neutral-200" rowSpan={fundOwners.length}>
                 <input
-                  defaultValue={fund.coverAmount || ""}
+                  defaultValue={fund.coverAmount || "Enter here ..."}
                   onBlur={(e) => {
                     const formattedValue = formatCurrencyValue(e.target.value, "coverAmount");
                     if (formattedValue !== e.target.value) {
@@ -580,7 +580,7 @@ export function SimpleTableWithBeneficiaries({
                     <div className="flex items-center gap-2">
                       <span className="text-green-500 mr-1">↳</span>
                       <input
-                        defaultValue={beneficiary.name || ""}
+                        defaultValue={beneficiary.name || "Enter here ..."}
                         onBlur={(e) => handleBeneficiaryUpdate(fund.id, actualIndex, 'name', e.target.value)}
                         className={`${getFieldClass('text')} table-input`}
                         

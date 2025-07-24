@@ -66,13 +66,13 @@ export function LumpSumTable({ searchTerm }: LumpSumTableProps) {
 
   const handleAddBequest = useCallback(() => {
     const newBequest: InsertLumpSumBequest = {
-      description: "",
+      description: "Enter here ...",
       entity: "Donald Edwards",
       start: "0",
       increasePercentage: "CPI",
       amount: "0",
       valueAtDeath: "0",
-      charityNote: "",
+      charityNote: "Enter here ...",
     };
     addMutation.mutate(newBequest);
   }, [addMutation]);
@@ -133,11 +133,11 @@ export function LumpSumTable({ searchTerm }: LumpSumTableProps) {
                   </td>
                   <td className="p-2">
                     <input
-                      defaultValue={bequest.description || ""}
+                      defaultValue={bequest.description || "Enter here ..."}
                       onBlur={(e) => {
                         handleInputBlur(bequest.id, "description", e.target.value);
                       }}
-                      className="table-input h-7 text-sm bg-primary/5 border-gray-200 focus:border-primary w-full px-3 py-1 border rounded-md text-sm"
+                      className={`table-input h-7 text-sm bg-primary/5 border-gray-200 focus:border-primary w-full px-3 py-1 border rounded-md text-sm ${getValueClass(bequest.description || "Enter here ...", 'text')}`}
                       style={{ textAlign: "left" }}
                       disabled={isUpdating}
                       placeholder="Enter description"
@@ -158,7 +158,7 @@ export function LumpSumTable({ searchTerm }: LumpSumTableProps) {
                   </td>
                   <td className="p-2 text-right">
                     <input
-                      defaultValue={bequest.start || ""}
+                      defaultValue={formatCurrencyValue(bequest.start || "0")}
                       onBlur={(e) => {
                         const formattedValue = formatCurrencyValue(e.target.value);
                         if (formattedValue !== e.target.value) {
@@ -166,7 +166,7 @@ export function LumpSumTable({ searchTerm }: LumpSumTableProps) {
                         }
                         handleInputBlur(bequest.id, "start", e.target.value);
                       }}
-                      className="table-input h-7 text-sm bg-primary/5 border-gray-200 focus:border-primary w-full px-3 py-1 border rounded-md text-sm"
+                      className={`table-input h-7 text-sm bg-primary/5 border-gray-200 focus:border-primary w-full px-3 py-1 border rounded-md text-sm ${getValueClass(formatCurrencyValue(bequest.start || "0"), 'currency')}`}
                       style={{ textAlign: "right", minWidth: "80px" }}
                       placeholder="0"
                       disabled={isUpdating}
@@ -204,7 +204,7 @@ export function LumpSumTable({ searchTerm }: LumpSumTableProps) {
                   </td>
                   <td className="p-2 text-right">
                     <input
-                      defaultValue={formatCurrencyValue(bequest.amount || "")}
+                      defaultValue={formatCurrencyValue(bequest.amount || "0")}
                       onBlur={(e) => {
                         const formattedValue = formatCurrencyValue(e.target.value);
                         if (formattedValue !== e.target.value) {
@@ -212,7 +212,7 @@ export function LumpSumTable({ searchTerm }: LumpSumTableProps) {
                         }
                         handleInputBlur(bequest.id, "amount", e.target.value);
                       }}
-                      className="table-input h-7 text-sm bg-primary/5 border-gray-200 focus:border-primary w-full px-3 py-1 border rounded-md text-sm"
+                      className={`table-input h-7 text-sm bg-primary/5 border-gray-200 focus:border-primary w-full px-3 py-1 border rounded-md text-sm ${getValueClass(formatCurrencyValue(bequest.amount || "0"), 'currency')}`}
                       style={{ textAlign: "right", minWidth: "100px" }}
                       placeholder="R 0"
                       disabled={isUpdating}

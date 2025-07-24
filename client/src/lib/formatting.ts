@@ -49,10 +49,10 @@ export const formatYearsValue = (value: string): string => {
 };
 
 /**
- * Format text value with trimming
+ * Format text value with trimming - uses "Enter here ..." as default for empty values
  */
 export const formatTextValue = (value: string): string => {
-  return value?.trim() || '';
+  return value?.trim() || 'Enter here ...';
 };
 
 /**
@@ -120,7 +120,7 @@ export const isDefaultValue = (value: string, fieldType: FieldType): boolean => 
     case 'years':
       return value === '0 years' || value === '0';
     case 'text':
-      return value.trim() === '' || value === 'Donald Edwards';
+      return value.trim() === '' || value === 'Enter here ...' || value === 'Donald Edwards';
     case 'number':
       return value === '0';
     default:
