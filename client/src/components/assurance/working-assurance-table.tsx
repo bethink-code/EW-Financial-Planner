@@ -197,7 +197,7 @@ export function AssuranceTable({ searchTerm }: AssuranceTableProps) {
       const existingIds = currentOwners.map((o: any) => parseInt(o.id.replace('O', '')));
       const nextId = existingIds.length > 0 ? Math.max(...existingIds) + 1 : 2; // Start from O2 since O1 is main owner
       const newOwnerId = `O${nextId}`;
-      const newOwners = [...currentOwners, { id: newOwnerId, name: "Enter here ..." }];
+      const newOwners = [...currentOwners, { id: newOwnerId, name: `Owner ${nextId}` }];
       setIsUpdating(true);
       updateMutation.mutate({ id, updates: { additionalOwners: JSON.stringify(newOwners) } });
     }
@@ -233,7 +233,7 @@ export function AssuranceTable({ searchTerm }: AssuranceTableProps) {
       const existingIds = currentBeneficiaries.map((b: any) => parseInt(b.id.replace('B', '')));
       const nextId = existingIds.length > 0 ? Math.max(...existingIds) + 1 : 2; // Start from B2 since B1 is main beneficiary
       const newBeneficiaryId = `B${nextId}`;
-      const newBeneficiaries = [...currentBeneficiaries, { id: newBeneficiaryId, name: "Enter here ...", split: "0" }];
+      const newBeneficiaries = [...currentBeneficiaries, { id: newBeneficiaryId, name: `Beneficiary ${nextId}`, split: "0" }];
       setIsUpdating(true);
       updateMutation.mutate({ id, updates: { additionalBeneficiaries: JSON.stringify(newBeneficiaries) } });
     }
