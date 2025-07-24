@@ -3,7 +3,7 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { Plus, Trash2 } from "lucide-react";
 import { apiRequest } from "@/lib/queryClient";
 import { getFieldClass, getFieldWidth } from "@/lib/design-tokens";
-import { getValueClass, isDefaultValue } from "@/lib/formatting";
+import { formatCurrencyValue, formatTextValue, getValueClass, isDefaultValue } from "@/lib/formatting";
 import type { Assurance, InsertAssurance } from "@shared/schema";
 
 interface AssuranceTableProps {
@@ -28,13 +28,13 @@ export function AssuranceTable({ searchTerm }: AssuranceTableProps) {
   const addMutation = useMutation({
     mutationFn: () => {
       const newPolicy: InsertAssurance = {
-        description: "",
+        description: "New Policy",
         owner: "Donald Edwards",
-        lifeAssured: "",
-        deathBenefit: "0",
-        beneficiary: "",
-        benefitSplit: "0",
-        amount: "0",
+        lifeAssured: "Life Assured",
+        deathBenefit: "1000000",
+        beneficiary: "Beneficiary",
+        benefitSplit: "100",
+        amount: "1000000",
         excludedFromEstateDuty: false,
         excludedFromProvisions: false
       };
@@ -178,11 +178,12 @@ export function AssuranceTable({ searchTerm }: AssuranceTableProps) {
                   </td>
                   <td className="p-2">
                     <input
-                      defaultValue={policy.description || ""}
+                      key={`description-${policy.id}-${policy.description}`}
+                      defaultValue={formatTextValue(policy.description)}
                       onBlur={(e) => {
                         handleInputBlur(policy.id, "description", e.target.value);
                       }}
-                      className="table-input h-7 text-sm bg-primary/5 border-gray-200 focus:border-primary w-full px-3 py-1 border rounded-md text-sm"
+                      className={`table-input h-7 text-sm bg-primary/5 border-gray-200 focus:border-primary w-full px-3 py-1 border rounded-md text-sm ${getValueClass(policy.description || "Enter here ...", 'text')}`}
                       style={{ textAlign: "left" }}
                       disabled={isUpdating}
                       placeholder="Policy name"
@@ -203,11 +204,12 @@ export function AssuranceTable({ searchTerm }: AssuranceTableProps) {
                   </td>
                   <td className="p-2">
                     <input
-                      defaultValue={policy.lifeAssured || ""}
+                      key={`lifeAssured-${policy.id}-${policy.lifeAssured}`}
+                      defaultValue={formatTextValue(policy.lifeAssured)}
                       onBlur={(e) => {
                         handleInputBlur(policy.id, "lifeAssured", e.target.value);
                       }}
-                      className="table-input h-7 text-sm bg-primary/5 border-gray-200 focus:border-primary w-full px-3 py-1 border rounded-md text-sm"
+                      className={`table-input h-7 text-sm bg-primary/5 border-gray-200 focus:border-primary w-full px-3 py-1 border rounded-md text-sm ${getValueClass(policy.lifeAssured || "Enter here ...", 'text')}`}
                       style={{ textAlign: "left" }}
                       disabled={isUpdating}
                       placeholder="Insured person"
@@ -215,15 +217,16 @@ export function AssuranceTable({ searchTerm }: AssuranceTableProps) {
                   </td>
                   <td className="p-2 text-right">
                     <input
-                      defaultValue={policy.deathBenefit || ""}
+                      key={`deathBenefit-${policy.id}-${policy.deathBenefit}`}
+                      defaultValue={formatCurrencyValue(policy.deathBenefit)}
                       onBlur={(e) => {
-                        const formattedValue = formatCurrencyValue(e.target.value, "deathBenefit");
+                        const formattedValue = formatCurrencyValue(e.target.value);
                         if (formattedValue !== e.target.value) {
                           e.target.value = formattedValue;
                         }
                         handleInputBlur(policy.id, "deathBenefit", e.target.value);
                       }}
-                      className="table-input h-7 text-sm bg-primary/5 border-gray-200 focus:border-primary w-full px-3 py-1 border rounded-md text-sm"
+                      className={`table-input h-7 text-sm bg-primary/5 border-gray-200 focus:border-primary w-full px-3 py-1 border rounded-md text-sm ${getValueClass(formatCurrencyValue(policy.deathBenefit), 'currency')}`}
                       style={{ textAlign: "right", minWidth: "100px" }}
                       placeholder="R 0"
                       disabled={isUpdating}
@@ -231,11 +234,12 @@ export function AssuranceTable({ searchTerm }: AssuranceTableProps) {
                   </td>
                   <td className="p-2">
                     <input
-                      defaultValue={policy.beneficiary || ""}
+                      key={`beneficiary-${policy.id}-${policy.beneficiary}`}
+                      defaultValue={formatTextValue(policy.beneficiary)}
                       onBlur={(e) => {
                         handleInputBlur(policy.id, "beneficiary", e.target.value);
                       }}
-                      className="table-input h-7 text-sm bg-primary/5 border-gray-200 focus:border-primary w-full px-3 py-1 border rounded-md text-sm"
+                      className={`table-input h-7 text-sm bg-primary/5 border-gray-200 focus:border-primary w-full px-3 py-1 border rounded-md text-sm ${getValueClass(policy.beneficiary || "Enter here ...", 'text')}`}
                       style={{ textAlign: "left" }}
                       disabled={isUpdating}
                       placeholder="Beneficiary name"
