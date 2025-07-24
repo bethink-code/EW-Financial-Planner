@@ -622,66 +622,65 @@ export function SimpleTableWithBeneficiaries({
           
           rows.push(
             <tr key={`${fund.id}-owner-${actualIndex}`} className="hover:bg-neutral-50 border-l-2 border-blue-200">
-              {/* Actions Column - empty for additional owner rows */}
+              {/* Actions Column - always present */}
               <td className="px-3 py-2"></td>
               
-              {/* Fund Description column with nested indicator */}
-              {columnVisibility.overview && (
-                <td className="px-3 py-2 border-r border-neutral-200">
-                  <span className="text-blue-500 text-sm">↳ Additional Owner</span>
-                </td>
-              )}
-              
-              {/* Owner name */}
-              {columnVisibility.overview && (
-                <td className="px-3 py-2 text-right">
-                  <div className="flex items-center gap-1">
-                    <Select
-                      value={owner}
-                      onValueChange={(value) => handleOwnerChange(fund.id, actualIndex, value)}
-                      disabled={isUpdating}
-                    >
-                      <SelectTrigger className={`${getFieldClass('text')} table-input`}>
-                        <SelectValue className="text-right truncate" />
-                        <Edit3 size={12} className="ml-1 text-teal-400 opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex-shrink-0" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {owners.map((ownerOption) => (
-                          <SelectItem key={ownerOption} value={ownerOption}>
-                            {ownerOption}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                    <DeleteButton
-                      onClick={() => handleRemoveOwner(fund.id, actualIndex)}
+              {/* Overview Section - only show if overview is visible */}
+              {columnVisibility.overview ? (
+                <>
+                  {/* Fund Description column with nested indicator */}
+                  <td className="px-3 py-2 border-r border-neutral-200">
+                    <span className="text-blue-500 text-sm">↳ Additional Owner</span>
+                  </td>
+                  
+                  {/* Owner name */}
+                  <td className="px-3 py-2 text-right">
+                    <div className="flex items-center gap-1">
+                      <Select
+                        value={owner}
+                        onValueChange={(value) => handleOwnerChange(fund.id, actualIndex, value)}
+                        disabled={isUpdating}
+                      >
+                        <SelectTrigger className={`${getFieldClass('text')} table-input`}>
+                          <SelectValue className="text-right truncate" />
+                          <Edit3 size={12} className="ml-1 text-teal-400 opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex-shrink-0" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {owners.map((ownerOption) => (
+                            <SelectItem key={ownerOption} value={ownerOption}>
+                              {ownerOption}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                      <DeleteButton
+                        onClick={() => handleRemoveOwner(fund.id, actualIndex)}
+                        disabled={isUpdating}
+                      />
+                    </div>
+                  </td>
+                  
+                  {/* Owner percentage */}
+                  <td className="px-3 py-2 text-right">
+                    <input
+                      type="text"
+                      defaultValue={`${ownershipPercentages[actualIndex] || '0'}%`}
+                      onBlur={(e) => {
+                        const formattedValue = formatCurrencyValue(e.target.value, "percentage");
+                        if (formattedValue !== e.target.value) {
+                          e.target.value = formattedValue;
+                        }
+                        handlePercentageChange(fund.id, actualIndex, e.target.value.replace('%', ''));
+                      }}
+                      className={`${getFieldClass('percentage')} table-input text-right`}
+                      
                       disabled={isUpdating}
                     />
-                  </div>
-                </td>
-              )}
+                  </td>
+                </>
+              ) : null}
               
-              {/* Owner percentage */}
-              {columnVisibility.overview && (
-                <td className="px-3 py-2 text-right">
-                  <input
-                    type="text"
-                    defaultValue={`${ownershipPercentages[actualIndex] || '0'}%`}
-                    onBlur={(e) => {
-                      const formattedValue = formatCurrencyValue(e.target.value, "percentage");
-                      if (formattedValue !== e.target.value) {
-                        e.target.value = formattedValue;
-                      }
-                      handlePercentageChange(fund.id, actualIndex, e.target.value.replace('%', ''));
-                    }}
-                    className={`${getFieldClass('percentage')} table-input text-right`}
-                    
-                    disabled={isUpdating}
-                  />
-                </td>
-              )}
-              
-              {/* Empty cells for all other sections when overview is visible */}
+              {/* Empty cells for all other sections */}
               {columnVisibility.monthlyDeathBenefit && (
                 <>
                   <td></td>
