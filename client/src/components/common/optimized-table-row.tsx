@@ -77,7 +77,7 @@ interface OptimizedTableProps {
  */
 export function OptimizedTable({ children, className }: OptimizedTableProps) {
   return (
-    <table className={cn(
+    <table className="bg-white rounded-lg shadow-sm border border-neutral-200" className={cn(
       "w-full border-collapse  dark:bg-neutral-800  rounded-lg overflow-hidden",
       className
     )}>

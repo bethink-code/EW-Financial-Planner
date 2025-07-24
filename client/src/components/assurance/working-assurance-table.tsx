@@ -258,7 +258,7 @@ export function AssuranceTable({}: AssuranceTableProps) {
       {/* Note: Add Policy Button moved to parent component header */}
 
       {/* Table */}
-      <table className="min-w-full  border border-neutral-200 ">
+      <table className="bg-white rounded-lg shadow-sm border border-neutral-200" className="min-w-full  border border-neutral-200 ">
           <thead>
             <tr className="border-b border-border">
               <th className="px-3 py-3 text-center text-xs font-medium text-neutral-600 uppercase tracking-wider w-16">Actions</th>

@@ -502,7 +502,7 @@ export function SimpleTableWithBeneficiaries({
   }
 
   return (
-    <table className="min-w-full border-collapse">
+    <table className="bg-white rounded-lg shadow-sm border border-neutral-200" className="min-w-full border-collapse">
         <thead className="bg-neutral-50">
           <tr>
             <th className="px-3 py-3 text-center text-xs font-medium text-neutral-600 uppercase tracking-wider">Actions</th>

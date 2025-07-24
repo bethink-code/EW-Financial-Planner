@@ -186,7 +186,7 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
     // Render flows table only
     return (
       <div>
-        <table className="w-full  table-auto">
+        <table className="bg-white rounded-lg shadow-sm border border-neutral-200" className="w-full  table-auto">
           <thead>
             {/* First level headers - Flows */}
             <tr className="border-b border-neutral-200" style={{ backgroundColor: '#D6ECF5' }}>
@@ -611,7 +611,7 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
   // Render inputs table only
   return (
     <div>
-      <table className="min-w-full  table-auto">
+      <table className="bg-white rounded-lg shadow-sm border border-neutral-200" className="min-w-full  table-auto">
         <thead>
           {/* First level headers */}
           <tr className="border-b border-neutral-200" style={{ backgroundColor: '#D6ECF5' }}>
