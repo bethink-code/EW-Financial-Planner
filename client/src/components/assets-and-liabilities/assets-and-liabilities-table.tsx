@@ -2,7 +2,7 @@ import React, { useState, useCallback, useMemo } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { Plus, Trash2, Search } from "lucide-react";
 import { getFieldClass, getFieldWidth } from "@/lib/design-tokens";
-import { formatCurrencyValue, formatPercentageValue, getValueClass, isDefaultValue, handleDefaultValueFocus, createEnhancedBlurHandler } from "@/lib/formatting";
+import { formatCurrencyValue, formatPercentageValue, getValueClass, isDefaultValue, handleDefaultValueFocus } from "@/lib/formatting";
 import { SafeFragment } from "@/lib/react-utils";
 import type { AssetAndLiability, InsertAssetAndLiability } from "@shared/schema";
 
@@ -398,10 +398,13 @@ export default function AssetsAndLiabilitiesTable() {
                         type="text"
                         defaultValue={asset.donaldEdwardsPercentage || "0%"}
                         onFocus={handleDefaultValueFocus}
-                        onBlur={createEnhancedBlurHandler(
-                          (e) => handleInputBlur(asset.id, 'donaldEdwardsPercentage', e.target.value),
-                          'percentage'
-                        )}
+                        onBlur={(e) => {
+                          const formattedValue = formatPercentageValue(e.target.value);
+                          if (formattedValue !== e.target.value) {
+                            e.target.value = formattedValue;
+                          }
+                          handleInputBlur(asset.id, 'donaldEdwardsPercentage', e.target.value);
+                        }}
                         className={`${getFieldClass('percentage')} ${getValueClass(asset.donaldEdwardsPercentage || "0%", 'percentage')}`}
                         
                         disabled={isUpdating}
@@ -412,10 +415,13 @@ export default function AssetsAndLiabilitiesTable() {
                         type="text"
                         defaultValue={asset.bettyEdwardsPercentage || "0%"}
                         onFocus={handleDefaultValueFocus}
-                        onBlur={createEnhancedBlurHandler(
-                          (e) => handleInputBlur(asset.id, 'bettyEdwardsPercentage', e.target.value),
-                          'percentage'
-                        )}
+                        onBlur={(e) => {
+                          const formattedValue = formatPercentageValue(e.target.value);
+                          if (formattedValue !== e.target.value) {
+                            e.target.value = formattedValue;
+                          }
+                          handleInputBlur(asset.id, 'bettyEdwardsPercentage', e.target.value);
+                        }}
                         className={`${getFieldClass('percentage')} ${getValueClass(asset.bettyEdwardsPercentage || "0%", 'percentage')}`}
                         
                         disabled={isUpdating}
@@ -426,10 +432,13 @@ export default function AssetsAndLiabilitiesTable() {
                         type="text"
                         defaultValue={asset.liquidationPercentage || "0%"}
                         onFocus={handleDefaultValueFocus}
-                        onBlur={createEnhancedBlurHandler(
-                          (e) => handleInputBlur(asset.id, 'liquidationPercentage', e.target.value),
-                          'percentage'
-                        )}
+                        onBlur={(e) => {
+                          const formattedValue = formatPercentageValue(e.target.value);
+                          if (formattedValue !== e.target.value) {
+                            e.target.value = formattedValue;
+                          }
+                          handleInputBlur(asset.id, 'liquidationPercentage', e.target.value);
+                        }}
                         className={`${getFieldClass('percentage')} ${getValueClass(asset.liquidationPercentage || "0%", 'percentage')}`}
                         
                         disabled={isUpdating}

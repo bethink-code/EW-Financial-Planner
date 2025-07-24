@@ -2,7 +2,7 @@ import React, { useState, useCallback, useMemo } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { Plus, Trash2, Search } from "lucide-react";
 import { getFieldClass, getFieldWidth } from "@/lib/design-tokens";
-import { formatCurrencyValue, formatPercentageValue, formatYearsValue, getValueClass, isDefaultValue, handleDefaultValueFocus, createEnhancedBlurHandler } from "@/lib/formatting";
+import { formatCurrencyValue, formatPercentageValue, formatYearsValue, getValueClass, isDefaultValue, handleDefaultValueFocus } from "@/lib/formatting";
 import type { IncomeProvision, InsertIncomeProvision } from "@shared/schema";
 
 const ENTITY_OPTIONS = [
@@ -334,10 +334,13 @@ export default function IncomeProvisionsTable() {
                     type="text"
                     defaultValue={provision.increasePercentage || "0%"}
                     onFocus={handleDefaultValueFocus}
-                    onBlur={createEnhancedBlurHandler(
-                      (e) => handleInputBlur(provision.id, 'increasePercentage', e.target.value),
-                      'percentage'
-                    )}
+                    onBlur={(e) => {
+                      const formattedValue = formatPercentageValue(e.target.value);
+                      if (formattedValue !== e.target.value) {
+                        e.target.value = formattedValue;
+                      }
+                      handleInputBlur(provision.id, 'increasePercentage', e.target.value);
+                    }}
                     className={`${getFieldClass('percentage')} ${getValueClass(provision.increasePercentage || "0%", 'percentage')}`}
                     style={getFieldWidth('percentage')}
                     disabled={isUpdating}
@@ -382,10 +385,13 @@ export default function IncomeProvisionsTable() {
                     type="text"
                     defaultValue={provision.taxablePercentage || "0%"}
                     onFocus={handleDefaultValueFocus}
-                    onBlur={createEnhancedBlurHandler(
-                      (e) => handleInputBlur(provision.id, 'taxablePercentage', e.target.value),
-                      'percentage'
-                    )}
+                    onBlur={(e) => {
+                      const formattedValue = formatPercentageValue(e.target.value);
+                      if (formattedValue !== e.target.value) {
+                        e.target.value = formattedValue;
+                      }
+                      handleInputBlur(provision.id, 'taxablePercentage', e.target.value);
+                    }}
                     className={`${getFieldClass('percentage')} ${getValueClass(provision.taxablePercentage || "0%", 'percentage')}`}
                     style={getFieldWidth('percentage')}
                     disabled={isUpdating}

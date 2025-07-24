@@ -5,7 +5,7 @@ import { Edit3, Plus, Trash2, UserPlus, UserMinus } from "lucide-react";
 import { parseBeneficiaries } from "@/lib/beneficiaries";
 import { Button } from "@/components/ui/button";
 import { getFieldClass, getFieldWidth } from "@/lib/design-tokens";
-import { getValueClass, isDefaultValue, handleDefaultValueFocus, createEnhancedBlurHandler } from "@/lib/formatting";
+import { formatPercentageValue, getValueClass, isDefaultValue, handleDefaultValueFocus } from "@/lib/formatting";
 import { nanoid } from "nanoid";
 
 interface ColumnVisibility {
@@ -291,9 +291,13 @@ export function SimpleTableWithBeneficiaries({
                 <input
                   defaultValue={fund.increasePercentage || "0%"}
                   onFocus={handleDefaultValueFocus}
-                  onBlur={createEnhancedBlurHandler((e) => {
+                  onBlur={(e) => {
+                    const formattedValue = formatPercentageValue(e.target.value);
+                    if (formattedValue !== e.target.value) {
+                      e.target.value = formattedValue;
+                    }
                     handleInputBlur(fund.id, "increasePercentage", e.target.value, e.target);
-                  }, 'percentage')}
+                  }}
                   className={`${getFieldClass('percentage')} ${getValueClass(fund.increasePercentage || "0%", 'percentage')} table-input text-right`}
                   placeholder="0%"
                   disabled={isUpdating}

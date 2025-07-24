@@ -5,7 +5,7 @@ import { Plus, Trash2 } from "lucide-react";
 import { AddButton } from "@/components/ui/action-buttons";
 import { Beneficiary } from "@shared/schema";
 import { nanoid } from "nanoid";
-import { getValueClass, isDefaultValue, handleDefaultValueFocus, createEnhancedBlurHandler } from "@/lib/formatting";
+import { formatPercentageValue, getValueClass, isDefaultValue, handleDefaultValueFocus } from "@/lib/formatting";
 
 interface BeneficiaryRowManagerProps {
   coverAmount: string;
@@ -159,15 +159,15 @@ export function BeneficiaryRowManager({
                 type="text"
                 defaultValue={`${beneficiary.percentage}%`}
                 onFocus={handleDefaultValueFocus}
-                onBlur={createEnhancedBlurHandler((e) => {
+                onBlur={(e) => {
+                  const formattedValue = formatPercentageValue(e.target.value);
+                  if (formattedValue !== e.target.value) {
+                    e.target.value = formattedValue;
+                  }
                   // Extract numeric value
                   const numericValue = e.target.value.replace(/[^\d.-]/g, '');
-                  // Format display value with %
-                  if (numericValue) {
-                    e.target.value = `${numericValue}%`;
-                  }
                   handleUpdateBeneficiary(beneficiary.id, 'percentage', numericValue);
-                }, 'percentage')}
+                }}
                 disabled={isUpdating}
                 className={`h-8 text-sm text-center w-16 px-3 py-1 border rounded-md text-sm ${getValueClass(`${beneficiary.percentage}%`, 'percentage')}`}
               />
