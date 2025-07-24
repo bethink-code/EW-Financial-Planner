@@ -1,6 +1,7 @@
 import { useState, useCallback, useMemo } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { Plus, Trash2 } from "lucide-react";
+import { DeleteButton } from "@/components/ui/action-buttons";
 import { getFieldClass, getFieldWidth } from "@/lib/design-tokens";
 import { apiRequest } from "@/lib/queryClient";
 import type { Assurance, InsertAssurance } from "@shared/schema";
@@ -367,13 +368,9 @@ export function AssuranceTable({ searchTerm }: AssuranceTableProps) {
                   />
                 </td>
                 <td className="px-3 py-2 text-center">
-                  <button
+                  <DeleteButton
                     onClick={() => handleDeletePolicy(policy.id)}
-                    className="text-[#4F4F4F] hover:text-red-600 transition-colors"
-                    title="Delete policy"
-                  >
-                    <Trash2 className="h-4 w-4" />
-                  </button>
+                  />
                 </td>
               </tr>
               

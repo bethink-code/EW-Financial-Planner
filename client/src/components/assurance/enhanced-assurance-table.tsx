@@ -1,6 +1,7 @@
 import { useState, useCallback, useMemo, memo } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { Plus, Trash2 } from "lucide-react";
+import { DeleteButton } from "@/components/ui/action-buttons";
 import { getFieldClass, getFieldWidth } from "@/lib/design-tokens";
 import { apiRequest } from "@/lib/queryClient";
 import type { Assurance, InsertAssurance } from "@shared/schema";
@@ -218,17 +219,13 @@ const OwnerRowManager = memo(({ policy, onUpdate, onDelete }: {
           />
         </td>
         <td className="px-3 py-2">
-          <button
+          <DeleteButton
             onClick={() => {
               if (confirm('Are you sure you want to delete this policy?')) {
                 onDelete(policy.id);
               }
             }}
-            className="text-[#4F4F4F] hover:text-red-600 transition-colors"
-            title="Delete policy"
-          >
-            <Trash2 className="h-4 w-4" />
-          </button>
+          />
         </td>
       </tr>
 
@@ -245,13 +242,9 @@ const OwnerRowManager = memo(({ policy, onUpdate, onDelete }: {
               className={getFieldClass("text")} 
               disabled={isUpdating}
             />
-            <button
+            <DeleteButton
               onClick={() => handleRemoveOwner(index)}
-              className="ml-2 text-[#4F4F4F] hover:text-red-600 transition-colors"
-              title="Remove owner"
-            >
-              <Trash2 className="h-4 w-4" />
-            </button>
+            />
           </td>
           <td colSpan={11} className="px-3 py-2 text-sm text-neutral-700"></td>
         </tr>

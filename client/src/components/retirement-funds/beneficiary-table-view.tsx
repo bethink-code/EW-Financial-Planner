@@ -4,6 +4,7 @@ import { parseBeneficiaries } from "@/lib/beneficiaries";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Plus, Trash2 } from "lucide-react";
+import { AddButton, DeleteButton } from "@/components/ui/action-buttons";
 import { nanoid } from "nanoid";
 
 interface BeneficiaryTableViewProps {
@@ -179,15 +180,10 @@ export function BeneficiaryTableView({ funds, onFieldUpdate, isUpdating }: Benef
                       {/* Remove Button */}
                       <td className="p-2 text-center">
                         {beneficiary && fundData.beneficiaries.length > 1 ? (
-                          <Button
-                            variant="ghost"
-                            size="sm"
+                          <DeleteButton
                             onClick={() => handleRemoveBeneficiary(fundData.fundId, beneficiaryIndex)}
                             disabled={isUpdating}
-                            className="h-6 w-6 p-0 text-red-500 hover:text-red-700 hover:bg-red-50"
-                          >
-                            <Trash2 className="h-3 w-3" />
-                          </Button>
+                          />
                         ) : (
                           <div className="h-6"></div>
                         )}
@@ -198,15 +194,10 @@ export function BeneficiaryTableView({ funds, onFieldUpdate, isUpdating }: Benef
                 
                 {/* Add Beneficiary Button */}
                 <td className="p-2 text-center">
-                  <Button
-                    variant="ghost"
-                    size="sm"
+                  <AddButton
                     onClick={() => handleAddBeneficiary(fundData.fundId)}
                     disabled={isUpdating || fundData.beneficiaries.length >= 10}
-                    className="h-6 w-6 p-0 text-teal-600 hover:text-teal-800 hover:bg-teal-50"
-                  >
-                    <Plus className="h-3 w-3" />
-                  </Button>
+                  />
                 </td>
               </tr>
             ))}

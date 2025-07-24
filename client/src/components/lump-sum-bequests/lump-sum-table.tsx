@@ -5,6 +5,7 @@ import { getFieldClass, getFieldWidth } from "@/lib/design-tokens";
 import { formatPercentageValue, formatCurrencyValue, getValueClass, isDefaultValue, handleDefaultValueFocus } from "@/lib/formatting";
 import { LumpSumBequest, InsertLumpSumBequest } from "@shared/schema";
 import { Trash2, Plus } from "lucide-react";
+import { ActionButtonGroup, DeleteButton } from "@/components/ui/action-buttons";
 
 interface LumpSumTableProps {}
 
@@ -118,13 +119,10 @@ export function LumpSumTable({}: LumpSumTableProps) {
               {bequests.map((bequest: LumpSumBequest) => (
                 <tr key={bequest.id} className="hover:bg-neutral-50">
                   <td className="p-2 text-center">
-                    <button
+                    <DeleteButton
                       onClick={() => deleteMutation.mutate(bequest.id)}
-                      className="text-[#4F4F4F] hover:text-red-600 transition-colors"
                       disabled={deleteMutation.isPending}
-                    >
-                      <Trash2 size={16} />
-                    </button>
+                    />
                   </td>
                   <td className="p-2">
                     <input

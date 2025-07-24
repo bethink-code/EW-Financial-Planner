@@ -1,6 +1,7 @@
 import { useState, useCallback } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { Plus, Trash2 } from "lucide-react";
+import { DeleteButton } from "@/components/ui/action-buttons";
 import { apiRequest } from "@/lib/queryClient";
 import { getFieldClass, getFieldWidth } from "@/lib/design-tokens";
 import { formatCurrencyValue, formatTextValue, getValueClass, isDefaultValue } from "@/lib/formatting";
@@ -168,13 +169,10 @@ export function AssuranceTable({ searchTerm }: AssuranceTableProps) {
               {policies.map((policy: Assurance) => (
                 <tr key={policy.id} className="hover:bg-neutral-50">
                   <td className="p-2 text-center">
-                    <button
+                    <DeleteButton
                       onClick={() => deleteMutation.mutate(policy.id)}
-                      className="text-[#4F4F4F] hover:text-red-600 transition-colors"
                       disabled={deleteMutation.isPending}
-                    >
-                      <Trash2 size={16} />
-                    </button>
+                    />
                   </td>
                   <td className="p-2">
                     <input

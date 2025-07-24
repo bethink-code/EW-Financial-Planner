@@ -226,15 +226,10 @@ export function BeneficiaryRowManager({
           {/* Remove Button */}
           <div className="col-span-1">
             {beneficiaries.length > 1 && (
-              <Button
-                variant="ghost"
-                size="sm"
+              <DeleteButton
                 onClick={() => handleRemoveBeneficiary(beneficiary.id)}
                 disabled={isUpdating}
-                className="h-6 w-6 p-0 bg-blue-50 text-primary hover:bg-blue-100 border-0"
-              >
-                <Trash2 className="h-3 w-3" />
-              </Button>
+              />
             )}
           </div>
 

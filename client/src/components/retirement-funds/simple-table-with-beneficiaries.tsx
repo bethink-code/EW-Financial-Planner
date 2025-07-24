@@ -4,7 +4,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Edit3, Plus, Trash2, UserPlus, UserMinus, Copy } from "lucide-react";
 import { parseBeneficiaries } from "@/lib/beneficiaries";
 import { Button } from "@/components/ui/button";
-import { DuplicateButton, DeleteButton, ActionButtonGroup } from "@/components/ui/action-buttons";
+import { DuplicateButton, DeleteButton, ActionButtonGroup, AddButton } from "@/components/ui/action-buttons";
 import { getFieldClass, getFieldWidth } from "@/lib/design-tokens";
 import { formatPercentageValue, getValueClass, isDefaultValue, handleDefaultValueFocus } from "@/lib/formatting";
 import { nanoid } from "nanoid";

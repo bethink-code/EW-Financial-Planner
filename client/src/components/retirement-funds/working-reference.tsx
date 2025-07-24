@@ -1,6 +1,7 @@
 import React, { useState, useCallback, useMemo } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { Plus, Trash2, Search, UserPlus, UserMinus } from "lucide-react";
+import { DeleteButton } from "@/components/ui/action-buttons";
 import { getFieldClass, getFieldWidth } from "@/lib/design-tokens";
 import type { VoluntaryInvestment, InsertVoluntaryInvestment } from "@shared/schema";
 
@@ -364,13 +365,9 @@ export default function VoluntaryInvestmentsTable() {
                         <option value="Betty Edwards">Betty Edwards</option>
                       </select>
                       {owners.length > 1 && (
-                        <button
+                        <DeleteButton
                           onClick={() => handleRemoveOwner(investment.id, ownerIndex)}
-                          className="text-[#4F4F4F] hover:text-red-600 transition-colors"
-                          title="Remove owner"
-                        >
-                          <UserMinus className="h-4 w-4" />
-                        </button>
+                        />
                       )}
                       {ownerIndex === owners.length - 1 && (
                         <button
@@ -476,13 +473,9 @@ export default function VoluntaryInvestmentsTable() {
                         />
                       </td>
                       <td rowSpan={owners.length} className="px-3 py-2 text-center">
-                        <button
+                        <DeleteButton
                           onClick={() => handleDeleteInvestment(investment.id)}
-                          className="text-[#4F4F4F] hover:text-red-600 transition-colors"
-                          title="Delete investment"
-                        >
-                          <Trash2 className="h-4 w-4" />
-                        </button>
+                        />
                       </td>
                     </>
                   )}
