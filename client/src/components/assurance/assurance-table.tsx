@@ -133,7 +133,7 @@ export function AssuranceTable({ searchTerm }: AssuranceTableProps) {
   }
 
   return (
-    <div className="space-y-4">
+    <div className="">
       {/* Header with Add Button */}
       <div className="flex items-center justify-between">
         <button

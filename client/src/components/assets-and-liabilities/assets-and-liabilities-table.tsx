@@ -265,7 +265,7 @@ export default function AssetsAndLiabilitiesTable() {
   }));
 
   return (
-    <div className="space-y-4">
+    <div className="">
       {/* Table */}
       <table className="min-w-full border border-neutral-200">
           <thead>

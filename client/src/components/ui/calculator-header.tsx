@@ -35,7 +35,7 @@ export function CalculatorHeader({
   children
 }: CalculatorHeaderProps) {
   return (
-    <div className={`bg-white rounded-lg shadow-sm border border-neutral-200 ${className}`}>
+    <div className={`${className}`}>
       <div className="px-5 pt-5 pb-6">
         <div className="flex flex-col lg:flex-row gap-4 items-start lg:items-center justify-between">
           {/* Left section: Title, count, and Add button */}

@@ -198,7 +198,7 @@ export default function IncomeNeedsTable() {
   }
 
   return (
-    <div className="space-y-4">
+    <div>
       {/* Table */}
       <table className="min-w-full border border-neutral-200">
           <thead>

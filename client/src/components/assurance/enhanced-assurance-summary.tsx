@@ -57,7 +57,7 @@ export function AssuranceSummary({ searchTerm }: AssuranceSummaryProps) {
   }
 
   return (
-    <div className="bg-white border border-neutral-200 rounded-lg shadow-sm p-6">
+    <div className=" border border-neutral-200 rounded-lg shadow-sm p-6">
       <h3 className="text-lg font-semibold text-neutral-900 mb-4">Assurance Summary</h3>
       
       <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-6">
