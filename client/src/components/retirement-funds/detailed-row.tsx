@@ -31,7 +31,7 @@ export const DetailedRow = memo(function DetailedRow({ fund, columnVisibility, o
     onFieldUpdate(fund.id, field, value);
   }, [fund.id, onFieldUpdate]);
 
-  const owners = useMemo(() => ["John Doe", "Jane Smith", "Sarah Johnson", "David Wilson"], []);
+  const owners = useMemo(() => ["Donald Edwards", "Betty Edwards"], []);
   const getOwnerBadgeColor = useCallback(() => "bg-white border border-neutral-300", []);
 
   return (

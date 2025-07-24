@@ -94,8 +94,8 @@ export default function NewRetirementFunds() {
   const handleAddFund = useCallback(() => {
     const newFund: Omit<RetirementFund, 'id'> = {
       description: "New Fund",
-      owner: "John Doe",
-      owners: '["John Doe"]',
+      owner: "Donald Edwards",
+      owners: '["Donald Edwards"]',
       ownershipPercentages: '["100"]',
       coverAmount: "R 0",
       beneficiaries: "[]",

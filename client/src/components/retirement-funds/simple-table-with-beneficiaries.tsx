@@ -65,14 +65,14 @@ export function SimpleTableWithBeneficiaries({
   isUpdating 
 }: SimpleTableWithBeneficiariesProps) {
   
-  const owners = ["John Doe", "Jane Smith", "Bob Wilson"];
+  const owners = ["Donald Edwards", "Betty Edwards"];
 
   // Owner management handlers
   const handleOwnerChange = useCallback((fundId: number, ownerIndex: number, newOwner: string) => {
     const fund = funds.find(f => f.id === fundId);
     if (!fund) return;
     
-    const currentOwners = JSON.parse(fund.owners || '["John Doe"]');
+    const currentOwners = JSON.parse(fund.owners || '["Donald Edwards"]');
     currentOwners[ownerIndex] = newOwner;
     onFieldUpdate(fundId, 'owners', JSON.stringify(currentOwners));
   }, [funds, onFieldUpdate]);
@@ -81,10 +81,10 @@ export function SimpleTableWithBeneficiaries({
     const fund = funds.find(f => f.id === fundId);
     if (!fund) return;
     
-    const currentOwners = JSON.parse(fund.owners || '["John Doe"]');
+    const currentOwners = JSON.parse(fund.owners || '["Donald Edwards"]');
     const currentPercentages = JSON.parse(fund.ownershipPercentages || '["100"]');
     
-    currentOwners.push("John Doe");
+    currentOwners.push("Donald Edwards");
     currentPercentages.push("0");
     
     onFieldUpdate(fundId, 'owners', JSON.stringify(currentOwners));
@@ -95,7 +95,7 @@ export function SimpleTableWithBeneficiaries({
     const fund = funds.find(f => f.id === fundId);
     if (!fund) return;
     
-    const currentOwners = JSON.parse(fund.owners || '["John Doe"]');
+    const currentOwners = JSON.parse(fund.owners || '["Donald Edwards"]');
     const currentPercentages = JSON.parse(fund.ownershipPercentages || '["100"]');
     
     if (currentOwners.length <= 1) return;

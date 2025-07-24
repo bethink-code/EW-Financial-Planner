@@ -161,7 +161,7 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
     }
     onFieldUpdate(fundId, 'beneficiaries', JSON.stringify(updatedBeneficiaries));
   }, [funds, onFieldUpdate]);
-  const owners = useMemo(() => ["John Doe", "Jane Smith"], []);
+  const owners = useMemo(() => ["Donald Edwards", "Betty Edwards"], []);
   // Memoized editable cell renderer
   const renderEditableCell = useCallback((value: string, onChange: (value: string) => void, className = "", field = "") => {
     return (

@@ -331,7 +331,7 @@ export default function DefinedBenefitFundsTable() {
             {filteredFunds.length === 0 && (
               <tr>
                 <td colSpan={10} className="px-3 py-8 text-center text-neutral-500">
-                  {searchTerm ? "No defined benefit funds found matching your search." : "No defined benefit funds found. Click 'Add Fund' to get started."}
+                  No defined benefit funds found. Click 'Add Fund' to get started.
                 </td>
               </tr>
             )}

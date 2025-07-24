@@ -282,7 +282,7 @@ export function AddFundDialog({ open, onOpenChange }: AddFundDialogProps) {
                       <FormLabel>Beneficiary Name</FormLabel>
                       <FormControl>
                         <Input 
-                          placeholder="e.g., Jane Smith"
+                          placeholder="e.g., Donald Edwards"
                           {...field} 
                         />
                       </FormControl>

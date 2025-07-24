@@ -105,7 +105,7 @@ export function DetailedView({ funds, columnVisibility, onFieldUpdate, isUpdatin
     }
   }, [selectedFund, onFieldUpdate, formatCurrencyValue]);
 
-  const owners = useMemo(() => ["John Doe", "Jane Smith", "Sarah Johnson", "David Wilson"], []);
+  const owners = useMemo(() => ["Donald Edwards", "Betty Edwards"], []);
   const getOwnerBadgeColor = useCallback(() => "bg-white border border-neutral-300", []);
 
   // Helper function to get primary beneficiary display
