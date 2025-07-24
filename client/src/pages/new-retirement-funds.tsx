@@ -133,6 +133,28 @@ export default function NewRetirementFunds() {
     addMutation.mutate(newFund);
   }, [addMutation]);
 
+  const deleteMutation = useMutation({
+    mutationFn: async (id: number) => {
+      return apiRequest("DELETE", `/api/retirement-funds/${id}`);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["/api/retirement-funds"] });
+    },
+  });
+
+  const handleRemoveFund = useCallback((id: number) => {
+    deleteMutation.mutate(id);
+  }, [deleteMutation]);
+
+  const handleDuplicateFund = useCallback((fund: RetirementFund) => {
+    const { id, ...fundWithoutId } = fund;
+    const duplicatedFund = {
+      ...fundWithoutId,
+      description: `${fund.description} (Copy)`,
+    };
+    addMutation.mutate(duplicatedFund);
+  }, [addMutation]);
+
   const handleToggleColumnGroup = useCallback((group: keyof ColumnVisibility) => {
     if (document.startViewTransition) {
       document.startViewTransition(() => {
@@ -192,6 +214,8 @@ export default function NewRetirementFunds() {
                 columnVisibility={columnVisibility}
                 tableMode={tableMode}
                 onFieldUpdate={handleFieldUpdate}
+                onRemoveFund={handleRemoveFund}
+                onDuplicateFund={handleDuplicateFund}
                 isUpdating={updateMutation.isPending}
               />
             ) : (

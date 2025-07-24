@@ -1,7 +1,7 @@
 import React, { useCallback, useMemo } from "react";
 import { RetirementFund, UpdateRetirementFund, Beneficiary } from "@shared/schema";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Edit3, Plus, Trash2, UserPlus, UserMinus } from "lucide-react";
+import { Edit3, Plus, Trash2, UserPlus, UserMinus, Copy } from "lucide-react";
 import { parseBeneficiaries } from "@/lib/beneficiaries";
 import { Button } from "@/components/ui/button";
 import { getFieldClass, getFieldWidth } from "@/lib/design-tokens";
@@ -22,6 +22,7 @@ interface SimpleTableWithBeneficiariesProps {
   tableMode: "inputs" | "flows";
   onFieldUpdate: (id: number, field: keyof UpdateRetirementFund, value: string) => void;
   onRemoveFund?: (id: number) => void;
+  onDuplicateFund?: (fund: RetirementFund) => void;
   isUpdating: boolean;
 }
 
@@ -62,6 +63,7 @@ export function SimpleTableWithBeneficiaries({
   tableMode, 
   onFieldUpdate, 
   onRemoveFund,
+  onDuplicateFund,
   isUpdating 
 }: SimpleTableWithBeneficiariesProps) {
   
@@ -195,6 +197,16 @@ export function SimpleTableWithBeneficiaries({
           {/* Actions Column - FIRST COLUMN */}
           <td className="px-3 py-2 text-center" rowSpan={Math.max(fundOwners.length, beneficiaries.length || 1)}>
             <div className="flex items-center justify-center space-x-1">
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => onDuplicateFund?.(fund)}
+                disabled={isUpdating}
+                className="h-6 w-6 p-0 bg-white text-[#4F4F4F] hover:text-blue-600 hover:bg-blue-50 border border-gray-300"
+                title="Duplicate fund"
+              >
+                <Copy className="h-3 w-3" />
+              </Button>
               <Button
                 variant="ghost"
                 size="sm"
