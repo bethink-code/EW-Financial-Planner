@@ -2,38 +2,10 @@ import React, { useState, useCallback, useMemo } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { Plus, Trash2, Search } from "lucide-react";
 import { getFieldClass, getFieldWidth } from "@/lib/design-tokens";
+import { formatCurrencyValue, formatPercentageValue, formatYearsValue, getValueClass, isDefaultValue } from "@/lib/formatting";
 import type { IncomeNeed, InsertIncomeNeed } from "@shared/schema";
 
-// Utility function for formatting currency values
-const formatCurrencyValue = (value: string, fieldType: string): string => {
-  if (!value || value.trim() === '') return 'R 0';
-  
-  // Remove existing formatting
-  const cleanValue = value.replace(/[^\d.-]/g, '');
-  if (!cleanValue) return 'R 0';
-  if (isNaN(parseFloat(cleanValue))) return 'R 0';
-  
-  const numValue = parseFloat(cleanValue);
-  
-  if (fieldType === 'percentage' || fieldType.includes('percentage')) {
-    return `${numValue}%`;
-  }
-  
-  if (fieldType === 'years' || fieldType.includes('years')) {
-    return `${numValue} years`;
-  }
-  
-  // Currency formatting
-  if (numValue === 0) return 'R 0';
-  
-  // Format with thousands separators
-  const formatted = new Intl.NumberFormat('en-ZA', {
-    minimumFractionDigits: 0,
-    maximumFractionDigits: 0,
-  }).format(Math.abs(numValue));
-  
-  return `R ${formatted}`;
-};
+
 
 const ENTITY_OPTIONS = [
   { value: "Donald Edwards", label: "Donald Edwards" },
@@ -295,7 +267,7 @@ export default function IncomeNeedsTable() {
                     type="text"
                     defaultValue={need.description}
                     onBlur={(e) => handleUpdateNeed(need.id, 'description', e.target.value)}
-                    className={getFieldClass('description')}
+                    className={`${getFieldClass('description')} ${getValueClass(need.description, 'text')}`}
                     style={getFieldWidth('description')}
                     disabled={isUpdating}
                   />

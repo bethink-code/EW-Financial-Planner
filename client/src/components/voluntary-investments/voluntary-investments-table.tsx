@@ -328,7 +328,7 @@ export default function VoluntaryInvestmentsTable() {
                           type="text"
                           defaultValue={investment.description}
                           onBlur={(e) => handleUpdateInvestment(investment.id, 'description', e.target.value)}
-                          className={getFieldClass('description')}
+                          className={`${getFieldClass('description')} ${getValueClass(investment.description, 'text')}`}
                           style={getFieldWidth('description')}
                           disabled={isUpdating}
                         />
@@ -378,7 +378,7 @@ export default function VoluntaryInvestmentsTable() {
                         }
                         handlePercentageChange(investment.id, ownerIndex, e.target.value);
                       }}
-                      className={getFieldClass('percentage')}
+                      className={`${getFieldClass('percentage')} ${getValueClass(percentages[ownerIndex] || '0%', 'percentage')}`}
                       disabled={isUpdating}
                     />
                   </td>
@@ -390,7 +390,7 @@ export default function VoluntaryInvestmentsTable() {
                           type="text"
                           defaultValue={formatCurrencyValue(investment.baseCost)}
                           onBlur={(e) => handleInputBlur(investment.id, 'baseCost', e.target.value)}
-                          className={getFieldClass('amount')}
+                          className={`${getFieldClass('amount')} ${getValueClass(formatCurrencyValue(investment.baseCost), 'currency')}`}
                           disabled={isUpdating}
                         />
                       </td>
@@ -400,7 +400,7 @@ export default function VoluntaryInvestmentsTable() {
                           type="text"
                           defaultValue={formatCurrencyValue(investment.marketValue)}
                           onBlur={(e) => handleInputBlur(investment.id, 'marketValue', e.target.value)}
-                          className={getFieldClass('amount')}
+                          className={`${getFieldClass('amount')} ${getValueClass(formatCurrencyValue(investment.marketValue), 'currency')}`}
                           disabled={isUpdating}
                         />
                       </td>
@@ -410,7 +410,7 @@ export default function VoluntaryInvestmentsTable() {
                           type="text"
                           defaultValue={investment.liquidationPercentage || "0%"}
                           onBlur={(e) => handleInputBlur(investment.id, 'liquidationPercentage', e.target.value)}
-                          className={getFieldClass('percentage')}
+                          className={`${getFieldClass('percentage')} ${getValueClass(investment.liquidationPercentage || "0%", 'percentage')}`}
                           disabled={isUpdating}
                         />
                       </td>

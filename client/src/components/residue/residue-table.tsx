@@ -2,19 +2,10 @@ import React, { useState, useCallback, useMemo } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { Plus, Trash2, Search } from "lucide-react";
 import { getFieldClass, getFieldWidth } from "@/lib/design-tokens";
+import { formatPercentageValue, getValueClass, isDefaultValue } from "@/lib/formatting";
 import type { Residue, InsertResidue } from "@shared/schema";
 
-// Utility function for formatting percentage values
-const formatPercentageValue = (value: string): string => {
-  if (!value || value.trim() === '') return value;
-  
-  // Remove existing formatting
-  const cleanValue = value.replace(/[^\d.-]/g, '');
-  if (!cleanValue || isNaN(parseFloat(cleanValue))) return value;
-  
-  const numValue = parseFloat(cleanValue);
-  return `${numValue}%`;
-};
+
 
 const ENTITY_OPTIONS = [
   { value: "Donald Edwards", label: "Donald Edwards" },

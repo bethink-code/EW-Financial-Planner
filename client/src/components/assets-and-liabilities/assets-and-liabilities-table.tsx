@@ -353,7 +353,7 @@ export default function AssetsAndLiabilitiesTable() {
                         type="text"
                         defaultValue={asset.categoryAndDescription}
                         onBlur={(e) => handleUpdateAsset(asset.id, 'categoryAndDescription', e.target.value)}
-                        className={getFieldClass('description')}
+                        className={`${getFieldClass('description')} ${getValueClass(asset.categoryAndDescription, 'text')}`}
                         
                         disabled={isUpdating}
                       />
@@ -379,7 +379,7 @@ export default function AssetsAndLiabilitiesTable() {
                         type="text"
                         defaultValue={formatCurrencyValue(asset.baseCost)}
                         onBlur={(e) => handleInputBlur(asset.id, 'baseCost', e.target.value)}
-                        className={getFieldClass('amount')}
+                        className={`${getFieldClass('amount')} ${getValueClass(formatCurrencyValue(asset.baseCost), 'currency')}`}
                         disabled={isUpdating}
                       />
                     </td>
@@ -389,7 +389,7 @@ export default function AssetsAndLiabilitiesTable() {
                         type="text"
                         defaultValue={formatCurrencyValue(asset.marketValue)}
                         onBlur={(e) => handleInputBlur(asset.id, 'marketValue', e.target.value)}
-                        className={getFieldClass('amount')}
+                        className={`${getFieldClass('amount')} ${getValueClass(formatCurrencyValue(asset.marketValue), 'currency')}`}
                         disabled={isUpdating}
                       />
                     </td>
@@ -398,7 +398,7 @@ export default function AssetsAndLiabilitiesTable() {
                         type="text"
                         defaultValue={asset.donaldEdwardsPercentage || "0%"}
                         onBlur={(e) => handleInputBlur(asset.id, 'donaldEdwardsPercentage', e.target.value)}
-                        className={getFieldClass('percentage')}
+                        className={`${getFieldClass('percentage')} ${getValueClass(asset.donaldEdwardsPercentage || "0%", 'percentage')}`}
                         
                         disabled={isUpdating}
                       />
@@ -408,7 +408,7 @@ export default function AssetsAndLiabilitiesTable() {
                         type="text"
                         defaultValue={asset.bettyEdwardsPercentage || "0%"}
                         onBlur={(e) => handleInputBlur(asset.id, 'bettyEdwardsPercentage', e.target.value)}
-                        className={getFieldClass('percentage')}
+                        className={`${getFieldClass('percentage')} ${getValueClass(asset.bettyEdwardsPercentage || "0%", 'percentage')}`}
                         
                         disabled={isUpdating}
                       />
@@ -418,7 +418,7 @@ export default function AssetsAndLiabilitiesTable() {
                         type="text"
                         defaultValue={asset.liquidationPercentage || "0%"}
                         onBlur={(e) => handleInputBlur(asset.id, 'liquidationPercentage', e.target.value)}
-                        className={getFieldClass('percentage')}
+                        className={`${getFieldClass('percentage')} ${getValueClass(asset.liquidationPercentage || "0%", 'percentage')}`}
                         
                         disabled={isUpdating}
                       />
@@ -428,7 +428,7 @@ export default function AssetsAndLiabilitiesTable() {
                         type="text"
                         defaultValue={asset.spouse || "0%"}
                         onBlur={(e) => handleInputBlur(asset.id, 'spouse', e.target.value)}
-                        className={getFieldClass('percentage')}
+                        className={`${getFieldClass('percentage')} ${getValueClass(asset.spouse || "0%", 'percentage')}`}
                         
                         disabled={isUpdating}
                       />
@@ -438,7 +438,7 @@ export default function AssetsAndLiabilitiesTable() {
                         type="text"
                         defaultValue={asset.others || "0%"}
                         onBlur={(e) => handleInputBlur(asset.id, 'others', e.target.value)}
-                        className={getFieldClass('percentage')}
+                        className={`${getFieldClass('percentage')} ${getValueClass(asset.others || "0%", 'percentage')}`}
                         
                         disabled={isUpdating}
                       />
