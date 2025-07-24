@@ -4,7 +4,7 @@ import { Plus, Trash2, Search } from "lucide-react";
 import { apiRequest } from "@/lib/queryClient";
 import { AddButton } from "@/components/ui/action-buttons";
 import { getFieldClass, getFieldWidth } from "@/lib/design-tokens";
-import { formatCurrencyValue, formatPercentageValue, formatYearsValue, getValueClass, isDefaultValue } from "@/lib/formatting";
+import { formatCurrencyValue, formatPercentageValue, formatYearsValue, getValueClass, isDefaultValue, handleDefaultValueFocus, createEnhancedBlurHandler } from "@/lib/formatting";
 import type { DefinedBenefitFund, InsertDefinedBenefitFund } from "@shared/schema";
 
 export default function DefinedBenefitFundsTable() {
@@ -160,7 +160,9 @@ export default function DefinedBenefitFundsTable() {
     };
     
     const fieldType = fieldTypeMap[field] || field;
-    const formattedValue = formatCurrencyValue(value, fieldType);
+    const formattedValue = fieldType === 'percentage' ? formatPercentageValue(value) : 
+                         fieldType === 'years' ? formatYearsValue(value) : 
+                         formatCurrencyValue(value);
     handleUpdateFund(id, field, formattedValue);
     
     // Update DOM element directly for immediate visual feedback
@@ -355,7 +357,11 @@ export default function DefinedBenefitFundsTable() {
                     key={`pensionIncomeIncrease-${fund.id}-${fund.pensionIncomeIncrease}`}
                     type="text"
                     defaultValue={fund.pensionIncomeIncrease || "0%"}
-                    onBlur={(e) => handleInputBlur(fund.id, 'pensionIncomeIncrease', e.target.value)}
+                    onFocus={handleDefaultValueFocus}
+                    onBlur={createEnhancedBlurHandler(
+                      (e) => handleInputBlur(fund.id, 'pensionIncomeIncrease', e.target.value),
+                      'percentage'
+                    )}
                     className={`${getFieldClass('percentage')} ${getValueClass(fund.pensionIncomeIncrease || "0%", 'percentage')}`}
                     disabled={isUpdating}
                   />

@@ -2,7 +2,7 @@ import React, { useState, useCallback, useMemo } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { Plus, Trash2, Search } from "lucide-react";
 import { getFieldClass, getFieldWidth } from "@/lib/design-tokens";
-import { formatCurrencyValue, formatPercentageValue, getValueClass, isDefaultValue } from "@/lib/formatting";
+import { formatCurrencyValue, formatPercentageValue, getValueClass, isDefaultValue, handleDefaultValueFocus, createEnhancedBlurHandler } from "@/lib/formatting";
 import { SafeFragment } from "@/lib/react-utils";
 import type { AssetAndLiability, InsertAssetAndLiability } from "@shared/schema";
 
