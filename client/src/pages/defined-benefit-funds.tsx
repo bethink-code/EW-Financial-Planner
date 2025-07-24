@@ -51,7 +51,7 @@ export default function DefinedBenefitFunds() {
 
   return (
     <div className="bg-neutral-50">
-      <div className="w-full px-6 py-6">
+      <div className="w-full px-6 py-6 bg-[#eff2f5]">
         {/* Combined Header and Summary */}
         <div className="mb-6 max-w-6xl">
           <CalculatorHeader
