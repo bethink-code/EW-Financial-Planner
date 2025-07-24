@@ -1,6 +1,6 @@
 import React, { useState, useCallback, useMemo } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { Plus, Trash2, Search } from "lucide-react";
+import { Plus, Trash2 } from "lucide-react";
 import { getFieldClass, getFieldWidth } from "@/lib/design-tokens";
 import { formatCurrencyValue, formatPercentageValue, getValueClass, isDefaultValue, handleDefaultValueFocus } from "@/lib/formatting";
 import { SafeFragment } from "@/lib/react-utils";
@@ -23,7 +23,6 @@ const CATEGORIES = [
 ];
 
 export default function AssetsAndLiabilitiesTable() {
-  const [searchTerm, setSearchTerm] = useState("");
   const [isUpdating, setIsUpdating] = useState(false);
   const queryClient = useQueryClient();
 
@@ -135,16 +134,8 @@ export default function AssetsAndLiabilitiesTable() {
     }
   });
 
-  // Filter assets based on search term
-  const filteredAssets = useMemo(() => {
-    if (!searchTerm.trim()) return assets;
-    
-    const lowerQuery = searchTerm.toLowerCase();
-    return assets.filter(asset => 
-      asset.categoryAndDescription.toLowerCase().includes(lowerQuery) ||
-      asset.category.toLowerCase().includes(lowerQuery)
-    );
-  }, [assets, searchTerm]);
+  // No filtering needed - show all assets
+  const filteredAssets = assets;
 
   // Calculate category and overall totals
   const totals = useMemo(() => {
@@ -154,7 +145,7 @@ export default function AssetsAndLiabilitiesTable() {
       bettyEdwards: number;
     }> = {};
 
-    const assetsByCategory = filteredAssets.filter(asset => !asset.isHeader);
+    const assetsByCategory = assets.filter(asset => !asset.isHeader);
     
     // Calculate category totals
     CATEGORIES.forEach(category => {
@@ -186,7 +177,7 @@ export default function AssetsAndLiabilitiesTable() {
     };
 
     return { categoryTotals, overallTotals };
-  }, [filteredAssets]);
+  }, [assets]);
 
   const handleAddAsset = useCallback((category: string) => {
     addMutation.mutate(category);
@@ -234,29 +225,16 @@ export default function AssetsAndLiabilitiesTable() {
   // Group assets by category for display
   const assetsByCategory = CATEGORIES.map(category => ({
     category,
-    header: filteredAssets.find(asset => asset.category === category && asset.isHeader),
-    assets: filteredAssets.filter(asset => asset.category === category && !asset.isHeader),
+    header: assets.find(asset => asset.category === category && asset.isHeader),
+    assets: assets.filter(asset => asset.category === category && !asset.isHeader),
     totals: totals.categoryTotals[category]
   }));
 
   return (
     <div className="space-y-4">
-      {/* Search Controls */}
-      <div className="flex justify-start items-center gap-4">
-        <div className="relative flex-1 max-w-md">
-          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-neutral-400 h-4 w-4" />
-          <input
-            type="text"
-            placeholder="Search assets and liabilities..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            className="pl-10 pr-4 py-2 w-full border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
-          />
-        </div>
-      </div>
 
       {/* Summary Section */}
-      {filteredAssets.length > 0 && (
+      {assets.length > 0 && (
         <div className="bg-white border border-neutral-200 rounded-lg shadow-sm overflow-hidden mb-6">
           <div className="bg-primary/10 px-4 py-3 border-b border-neutral-200">
             <h3 className="text-sm font-semibold text-neutral-700 uppercase tracking-wide">Overall Totals</h3>
@@ -525,7 +503,7 @@ export default function AssetsAndLiabilitiesTable() {
             ))}
 
             {/* Overall Total Row */}
-            {filteredAssets.length > 0 && (
+            {assets.length > 0 && (
               <tr className="bg-neutral-200 border-t-2 border-neutral-400">
                 <td colSpan={4} className="px-3 py-2 text-sm font-bold text-neutral-900">
                   OVERALL TOTAL
@@ -543,10 +521,10 @@ export default function AssetsAndLiabilitiesTable() {
               </tr>
             )}
             
-            {filteredAssets.length === 0 && (
+            {assets.length === 0 && (
               <tr>
                 <td colSpan={14} className="px-3 py-8 text-center text-neutral-500">
-                  {searchTerm ? "No assets found matching your search." : "No assets found."}
+                  No assets found. Add new assets using the header button.
                 </td>
               </tr>
             )}

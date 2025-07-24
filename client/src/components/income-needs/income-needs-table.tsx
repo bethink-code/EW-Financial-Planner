@@ -1,6 +1,6 @@
 import React, { useState, useCallback, useMemo } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { Plus, Trash2, Search } from "lucide-react";
+import { Plus, Trash2 } from "lucide-react";
 import { getFieldClass, getFieldWidth } from "@/lib/design-tokens";
 import { formatCurrencyValue, formatPercentageValue, formatYearsValue, getValueClass, isDefaultValue } from "@/lib/formatting";
 import type { IncomeNeed, InsertIncomeNeed } from "@shared/schema";
@@ -21,7 +21,6 @@ const FREQUENCY_OPTIONS = [
 ];
 
 export default function IncomeNeedsTable() {
-  const [searchTerm, setSearchTerm] = useState("");
   const [isUpdating, setIsUpdating] = useState(false);
   const queryClient = useQueryClient();
 
@@ -120,27 +119,19 @@ export default function IncomeNeedsTable() {
     }
   });
 
-  // Filter needs based on search term
-  const filteredNeeds = useMemo(() => {
-    if (!searchTerm.trim()) return needs;
-    
-    const lowerQuery = searchTerm.toLowerCase();
-    return needs.filter(need => 
-      need.description.toLowerCase().includes(lowerQuery) ||
-      need.entity.toLowerCase().includes(lowerQuery)
-    );
-  }, [needs, searchTerm]);
+  // No filtering needed - show all needs
+  const filteredNeeds = needs;
 
   // Calculate totals
   const totals = useMemo(() => {
     return {
-      count: filteredNeeds.length,
-      capitalisedAmount: filteredNeeds.reduce((sum: number, need: IncomeNeed) => {
+      count: needs.length,
+      capitalisedAmount: needs.reduce((sum: number, need: IncomeNeed) => {
         const value = parseFloat(need.capitalisedAmount.replace(/[^\d.-]/g, '')) || 0;
         return sum + value;
       }, 0),
     };
-  }, [filteredNeeds]);
+  }, [needs]);
 
   const handleAddNeed = useCallback(() => {
     addMutation.mutate();
@@ -191,22 +182,9 @@ export default function IncomeNeedsTable() {
 
   return (
     <div className="space-y-4">
-      {/* Search Controls */}
-      <div className="flex justify-start items-center gap-4">
-        <div className="relative flex-1 max-w-md">
-          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-neutral-400 h-4 w-4" />
-          <input
-            type="text"
-            placeholder="Search income needs..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            className="pl-10 pr-4 py-2 w-full border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
-          />
-        </div>
-      </div>
 
       {/* Summary Section */}
-      {filteredNeeds.length > 0 && (
+      {needs.length > 0 && (
         <div className="bg-white border border-neutral-200 rounded-lg shadow-sm overflow-hidden mb-6">
           <div className="bg-primary/10 px-4 py-3 border-b border-neutral-200">
             <h3 className="text-sm font-semibold text-neutral-700 uppercase tracking-wide">Summary</h3>
@@ -260,7 +238,7 @@ export default function IncomeNeedsTable() {
             </tr>
           </thead>
           <tbody className="bg-white divide-y divide-neutral-200">
-            {filteredNeeds.map((need: IncomeNeed) => (
+            {needs.map((need: IncomeNeed) => (
               <tr key={need.id} className="hover:bg-neutral-50">
                 <td className="px-3 py-2">
                   <input
@@ -383,7 +361,7 @@ export default function IncomeNeedsTable() {
             ))}
             
             {/* Total Row */}
-            {filteredNeeds.length > 0 && (
+            {needs.length > 0 && (
               <tr className="bg-neutral-100 border-t-2 border-neutral-300 font-bold">
                 <td className="px-3 py-2 text-sm font-bold text-neutral-800">Total</td>
                 <td colSpan={7} className="px-3 py-2"></td>
@@ -394,10 +372,10 @@ export default function IncomeNeedsTable() {
               </tr>
             )}
             
-            {filteredNeeds.length === 0 && (
+            {needs.length === 0 && (
               <tr>
                 <td colSpan={10} className="px-3 py-8 text-center text-neutral-500">
-                  {searchTerm ? "No income needs found matching your search." : "No income needs found. Click 'Add Need' to get started."}
+                  No income needs found. Add new needs using the header button.
                 </td>
               </tr>
             )}

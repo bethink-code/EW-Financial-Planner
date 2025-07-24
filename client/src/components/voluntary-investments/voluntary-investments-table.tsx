@@ -1,12 +1,11 @@
 import React, { useState, useCallback, useMemo } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { Plus, Trash2, Search, UserPlus, UserMinus } from "lucide-react";
+import { Plus, Trash2, UserPlus, UserMinus } from "lucide-react";
 import { getFieldClass, getFieldWidth } from "@/lib/design-tokens";
 import { formatCurrencyValue, formatPercentageValue, getValueClass, isDefaultValue, handleDefaultValueFocus, createEnhancedBlurHandler } from "@/lib/formatting";
 import type { VoluntaryInvestment, InsertVoluntaryInvestment } from "@shared/schema";
 
 export default function VoluntaryInvestmentsTable() {
-  const [searchTerm, setSearchTerm] = useState("");
   const [isUpdating, setIsUpdating] = useState(false);
   const queryClient = useQueryClient();
 
@@ -107,32 +106,23 @@ export default function VoluntaryInvestmentsTable() {
     }
   });
 
-  // Filter investments based on search term
-  const filteredInvestments = useMemo(() => {
-    if (!searchTerm.trim()) return investments;
-    
-    const lowerQuery = searchTerm.toLowerCase();
-    return investments.filter(investment => {
-      const owners = JSON.parse(investment.owners || '[]');
-      return investment.description.toLowerCase().includes(lowerQuery) ||
-             owners.some((owner: string) => owner.toLowerCase().includes(lowerQuery));
-    });
-  }, [investments, searchTerm]);
+  // No filtering needed - show all investments
+  const filteredInvestments = investments;
 
   // Calculate totals
   const totals = useMemo(() => {
     return {
-      count: filteredInvestments.length,
-      baseCost: filteredInvestments.reduce((sum: number, investment: VoluntaryInvestment) => {
+      count: investments.length,
+      baseCost: investments.reduce((sum: number, investment: VoluntaryInvestment) => {
         const value = parseFloat(investment.baseCost.replace(/[^\d.-]/g, '')) || 0;
         return sum + value;
       }, 0),
-      marketValue: filteredInvestments.reduce((sum: number, investment: VoluntaryInvestment) => {
+      marketValue: investments.reduce((sum: number, investment: VoluntaryInvestment) => {
         const value = parseFloat(investment.marketValue.replace(/[^\d.-]/g, '')) || 0;
         return sum + value;
       }, 0),
     };
-  }, [filteredInvestments]);
+  }, [investments]);
 
   const handleAddInvestment = useCallback(() => {
     addMutation.mutate();
@@ -231,34 +221,9 @@ export default function VoluntaryInvestmentsTable() {
 
   return (
     <div className="space-y-4">
-      {/* Search Controls */}
-      <div className="flex justify-start items-center gap-4">
-        <div className="relative flex-1 max-w-md">
-          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-neutral-400 h-4 w-4" />
-          <input
-            type="text"
-            placeholder="Search voluntary investments..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            className="pl-10 pr-4 py-2 w-full border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
-          />
-        </div>
-      </div>
-      
-      {/* Add Investment Button */}
-      <div className="flex justify-start mb-4">
-        <button
-          onClick={() => addMutation.mutate()}
-          disabled={addMutation.isPending}
-          className="bg-primary text-white px-4 py-2 rounded-lg hover:bg-[#014d6b] disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2 font-medium"
-        >
-          <Plus className="h-4 w-4" />
-          Add Investment
-        </button>
-      </div>
 
       {/* Summary Section */}
-      {filteredInvestments.length > 0 && (
+      {investments.length > 0 && (
         <div className="bg-white border border-neutral-200 rounded-lg shadow-sm overflow-hidden mb-6">
           <div className="bg-primary/10 px-4 py-3 border-b border-neutral-200">
             <h3 className="text-sm font-semibold text-neutral-700 uppercase tracking-wide">Summary</h3>
@@ -327,7 +292,7 @@ export default function VoluntaryInvestmentsTable() {
             </tr>
           </thead>
           <tbody className="bg-white divide-y divide-neutral-200">
-            {filteredInvestments.map((investment: VoluntaryInvestment) => {
+            {investments.map((investment: VoluntaryInvestment) => {
               const owners = JSON.parse(investment.owners || '[]');
               const percentages = JSON.parse(investment.ownershipPercentages || '[]');
               
@@ -508,7 +473,7 @@ export default function VoluntaryInvestmentsTable() {
             })}
             
             {/* Total Row */}
-            {filteredInvestments.length > 0 && (
+            {investments.length > 0 && (
               <tr className="bg-neutral-100 border-t-2 border-neutral-300 font-bold">
                 <td className="px-3 py-2 text-sm font-bold text-neutral-800">Total</td>
                 <td colSpan={2} className="px-3 py-2"></td>
@@ -522,10 +487,10 @@ export default function VoluntaryInvestmentsTable() {
               </tr>
             )}
             
-            {filteredInvestments.length === 0 && (
+            {investments.length === 0 && (
               <tr>
                 <td colSpan={13} className="px-3 py-8 text-center text-neutral-500">
-                  {searchTerm ? "No voluntary investments found matching your search." : "No voluntary investments found. Click 'Add Investment' to get started."}
+                  No voluntary investments found. Add new investments using the header button.
                 </td>
               </tr>
             )}

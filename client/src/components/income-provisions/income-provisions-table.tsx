@@ -1,6 +1,6 @@
 import React, { useState, useCallback, useMemo } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { Plus, Trash2, Search } from "lucide-react";
+import { Plus, Trash2 } from "lucide-react";
 import { getFieldClass, getFieldWidth } from "@/lib/design-tokens";
 import { formatCurrencyValue, formatPercentageValue, formatYearsValue, getValueClass, isDefaultValue, handleDefaultValueFocus } from "@/lib/formatting";
 import type { IncomeProvision, InsertIncomeProvision } from "@shared/schema";
@@ -19,7 +19,6 @@ const FREQUENCY_OPTIONS = [
 ];
 
 export default function IncomeProvisionsTable() {
-  const [searchTerm, setSearchTerm] = useState("");
   const [isUpdating, setIsUpdating] = useState(false);
   const queryClient = useQueryClient();
 
@@ -120,20 +119,12 @@ export default function IncomeProvisionsTable() {
     }
   });
 
-  // Filter provisions based on search term
-  const filteredProvisions = useMemo(() => {
-    if (!searchTerm.trim()) return provisions;
-    
-    const lowerQuery = searchTerm.toLowerCase();
-    return provisions.filter(provision => 
-      provision.description.toLowerCase().includes(lowerQuery) ||
-      provision.entity.toLowerCase().includes(lowerQuery)
-    );
-  }, [provisions, searchTerm]);
+  // No filtering needed - show all provisions
+  const filteredProvisions = provisions;
 
   // Calculate totals
   const totals = useMemo(() => {
-    const capitalisedAmount = filteredProvisions.reduce((sum: number, provision: IncomeProvision) => {
+    const capitalisedAmount = provisions.reduce((sum: number, provision: IncomeProvision) => {
       const value = parseFloat(provision.capitalisedAmount.replace(/[^\d.-]/g, '')) || 0;
       return sum + value;
     }, 0);
@@ -142,11 +133,11 @@ export default function IncomeProvisionsTable() {
     const capitalShortfall = capitalisedAmount;
 
     return {
-      count: filteredProvisions.length,
+      count: provisions.length,
       capitalisedAmount,
       capitalShortfall,
     };
-  }, [filteredProvisions]);
+  }, [provisions]);
 
   const handleAddProvision = useCallback(() => {
     addMutation.mutate();
@@ -195,22 +186,9 @@ export default function IncomeProvisionsTable() {
 
   return (
     <div className="space-y-4">
-      {/* Search Controls */}
-      <div className="flex justify-start items-center gap-4">
-        <div className="relative flex-1 max-w-md">
-          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-neutral-400 h-4 w-4" />
-          <input
-            type="text"
-            placeholder="Search income provisions..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            className="pl-10 pr-4 py-2 w-full border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
-          />
-        </div>
-      </div>
 
       {/* Summary Section */}
-      {filteredProvisions.length > 0 && (
+      {provisions.length > 0 && (
         <div className="bg-white border border-neutral-200 rounded-lg shadow-sm overflow-hidden mb-6">
           <div className="bg-primary/10 px-4 py-3 border-b border-neutral-200">
             <h3 className="text-sm font-semibold text-neutral-700 uppercase tracking-wide">Summary</h3>
@@ -272,7 +250,7 @@ export default function IncomeProvisionsTable() {
             </tr>
           </thead>
           <tbody className="bg-white divide-y divide-neutral-200">
-            {filteredProvisions.map((provision: IncomeProvision) => (
+            {provisions.map((provision: IncomeProvision) => (
               <tr key={provision.id} className="hover:bg-neutral-50">
                 <td className="px-3 py-2">
                   <input
@@ -430,7 +408,7 @@ export default function IncomeProvisionsTable() {
             ))}
             
             {/* Total Row */}
-            {filteredProvisions.length > 0 && (
+            {provisions.length > 0 && (
               <tr className="bg-neutral-100 border-t-2 border-neutral-300 font-bold">
                 <td className="px-3 py-2 text-sm font-bold text-neutral-800">Total</td>
                 <td colSpan={9} className="px-3 py-2"></td>
@@ -442,7 +420,7 @@ export default function IncomeProvisionsTable() {
             )}
             
             {/* Capital Shortfall Row */}
-            {filteredProvisions.length > 0 && (
+            {provisions.length > 0 && (
               <tr className="bg-neutral-100 border-t border-neutral-300 font-bold">
                 <td className="px-3 py-2 text-sm font-bold text-neutral-800">Capital required to provide for income shortfall</td>
                 <td colSpan={9} className="px-3 py-2"></td>
@@ -453,10 +431,10 @@ export default function IncomeProvisionsTable() {
               </tr>
             )}
             
-            {filteredProvisions.length === 0 && (
+            {provisions.length === 0 && (
               <tr>
                 <td colSpan={12} className="px-3 py-8 text-center text-neutral-500">
-                  {searchTerm ? "No income provisions found matching your search." : "No income provisions found. Click 'Add Income' to get started."}
+                  No income provisions found. Add new provisions using the header button.
                 </td>
               </tr>
             )}

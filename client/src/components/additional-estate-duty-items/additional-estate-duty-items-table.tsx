@@ -1,6 +1,6 @@
 import React, { useState, useCallback, useMemo } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { Plus, Trash2, Search } from "lucide-react";
+import { Plus, Trash2 } from "lucide-react";
 import { getFieldClass, getFieldWidth } from "@/lib/design-tokens";
 import { formatCurrencyValue, getValueClass, isDefaultValue } from "@/lib/formatting";
 import type { AdditionalEstateDutyItem, InsertAdditionalEstateDutyItem } from "@shared/schema";
@@ -8,7 +8,6 @@ import type { AdditionalEstateDutyItem, InsertAdditionalEstateDutyItem } from "@
 
 
 export default function AdditionalEstateDutyItemsTable() {
-  const [searchTerm, setSearchTerm] = useState("");
   const [isUpdating, setIsUpdating] = useState(false);
   const queryClient = useQueryClient();
 
@@ -101,22 +100,15 @@ export default function AdditionalEstateDutyItemsTable() {
     }
   });
 
-  // Filter items based on search term
-  const filteredItems = useMemo(() => {
-    if (!searchTerm.trim()) return items;
-    
-    const lowerQuery = searchTerm.toLowerCase();
-    return items.filter(item => 
-      item.description.toLowerCase().includes(lowerQuery)
-    );
-  }, [items, searchTerm]);
+  // No filtering needed - show all items
+  const filteredItems = items;
 
   // Calculate totals
   const totals = useMemo(() => {
     return {
-      count: filteredItems.length,
+      count: items.length,
     };
-  }, [filteredItems]);
+  }, [items]);
 
   const handleAddItem = useCallback(() => {
     addMutation.mutate();
@@ -157,22 +149,9 @@ export default function AdditionalEstateDutyItemsTable() {
 
   return (
     <div className="space-y-4">
-      {/* Search Controls */}
-      <div className="flex justify-start items-center gap-4">
-        <div className="relative flex-1 max-w-md">
-          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-neutral-400 h-4 w-4" />
-          <input
-            type="text"
-            placeholder="Search estate duty items..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            className="pl-10 pr-4 py-2 w-full border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
-          />
-        </div>
-      </div>
 
       {/* Summary Section */}
-      {filteredItems.length > 0 && (
+      {items.length > 0 && (
         <div className="bg-white border border-neutral-200 rounded-lg shadow-sm overflow-hidden mb-6">
           <div className="bg-primary/10 px-4 py-3 border-b border-neutral-200">
             <h3 className="text-sm font-semibold text-neutral-700 uppercase tracking-wide">Summary</h3>
@@ -189,18 +168,7 @@ export default function AdditionalEstateDutyItemsTable() {
           </div>
         </div>
       )}
-      
-      {/* Add Estate Duty Item Button */}
-      <div className="flex justify-start mb-4">
-        <button
-          onClick={handleAddItem}
-          disabled={addMutation.isPending}
-          className="bg-primary text-white px-4 py-2 rounded-lg hover:bg-[#014d6b] disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2 font-medium"
-        >
-          <Plus className="h-4 w-4" />
-          Add Estate Duty Item
-        </button>
-      </div>
+
 
       {/* Table */}
       <div className="overflow-x-auto">
@@ -215,7 +183,7 @@ export default function AdditionalEstateDutyItemsTable() {
             </tr>
           </thead>
           <tbody className="bg-white divide-y divide-neutral-200">
-            {filteredItems.map((item: AdditionalEstateDutyItem) => (
+            {items.map((item: AdditionalEstateDutyItem) => (
               <tr key={item.id} className="hover:bg-neutral-50">
                 <td className="px-3 py-2">
                   <input
@@ -267,10 +235,10 @@ export default function AdditionalEstateDutyItemsTable() {
               </tr>
             ))}
             
-            {filteredItems.length === 0 && (
+            {items.length === 0 && (
               <tr>
                 <td colSpan={5} className="px-3 py-8 text-center text-neutral-500">
-                  {searchTerm ? "No estate duty items found matching your search." : "No estate duty items found. Click 'Add Estate Duty Item' to get started."}
+                  No estate duty items found. Add new items using the header button.
                 </td>
               </tr>
             )}

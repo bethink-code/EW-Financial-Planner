@@ -1,6 +1,6 @@
 import React, { useState, useCallback, useMemo } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { Plus, Trash2, Search } from "lucide-react";
+import { Plus, Trash2 } from "lucide-react";
 import { getFieldClass, getFieldWidth } from "@/lib/design-tokens";
 import { formatPercentageValue, getValueClass, isDefaultValue } from "@/lib/formatting";
 import type { Residue, InsertResidue } from "@shared/schema";
@@ -14,7 +14,6 @@ const ENTITY_OPTIONS = [
 ];
 
 export default function ResidueTable() {
-  const [searchTerm, setSearchTerm] = useState("");
   const [isUpdating, setIsUpdating] = useState(false);
   const queryClient = useQueryClient();
 
@@ -106,22 +105,15 @@ export default function ResidueTable() {
     }
   });
 
-  // Filter items based on search term
-  const filteredItems = useMemo(() => {
-    if (!searchTerm.trim()) return residueItems;
-    
-    const lowerQuery = searchTerm.toLowerCase();
-    return residueItems.filter(item => 
-      item.entity.toLowerCase().includes(lowerQuery)
-    );
-  }, [residueItems, searchTerm]);
+  // No filtering needed - show all items
+  const filteredItems = residueItems;
 
   // Separate regular entities from charity row
   const { regularEntities, charityRow } = useMemo(() => {
-    const regular = filteredItems.filter(item => !item.isCharityRow);
-    const charity = filteredItems.find(item => item.isCharityRow);
+    const regular = residueItems.filter(item => !item.isCharityRow);
+    const charity = residueItems.find(item => item.isCharityRow);
     return { regularEntities: regular, charityRow: charity };
-  }, [filteredItems]);
+  }, [residueItems]);
 
   // Calculate totals
   const totals = useMemo(() => {
@@ -179,22 +171,9 @@ export default function ResidueTable() {
 
   return (
     <div className="space-y-4">
-      {/* Search Controls */}
-      <div className="flex justify-start items-center gap-4">
-        <div className="relative flex-1 max-w-md">
-          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-neutral-400 h-4 w-4" />
-          <input
-            type="text"
-            placeholder="Search entities..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            className="pl-10 pr-4 py-2 w-full border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
-          />
-        </div>
-      </div>
 
       {/* Summary Section */}
-      {filteredItems.length > 0 && (
+      {residueItems.length > 0 && (
         <div className="bg-white border border-neutral-200 rounded-lg shadow-sm overflow-hidden mb-6">
           <div className="bg-primary/10 px-4 py-3 border-b border-neutral-200">
             <h3 className="text-sm font-semibold text-neutral-700 uppercase tracking-wide">Summary</h3>
@@ -311,7 +290,7 @@ export default function ResidueTable() {
             )}
             
             {/* Total Row */}
-            {filteredItems.length > 0 && (
+            {residueItems.length > 0 && (
               <tr className="bg-neutral-100 border-t-2 border-neutral-300 font-bold">
                 <td className="px-3 py-2 text-sm font-bold text-neutral-800">Total</td>
                 <td className="px-3 py-2 text-sm font-bold text-neutral-800 text-right">
@@ -321,10 +300,10 @@ export default function ResidueTable() {
               </tr>
             )}
             
-            {filteredItems.length === 0 && (
+            {residueItems.length === 0 && (
               <tr>
                 <td colSpan={3} className="px-3 py-8 text-center text-neutral-500">
-                  {searchTerm ? "No entities found matching your search." : "No entities found. Click 'Add Entity' to get started."}
+                  No entities found. Add new entities using the header button.
                 </td>
               </tr>
             )}

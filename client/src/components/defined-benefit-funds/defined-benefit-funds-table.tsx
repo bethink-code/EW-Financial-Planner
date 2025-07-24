@@ -1,6 +1,6 @@
 import React, { useState, useCallback, useMemo } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { Plus, Trash2, Search } from "lucide-react";
+import { Plus, Trash2 } from "lucide-react";
 import { apiRequest } from "@/lib/queryClient";
 import { AddButton } from "@/components/ui/action-buttons";
 import { getFieldClass, getFieldWidth } from "@/lib/design-tokens";
@@ -8,7 +8,6 @@ import { formatCurrencyValue, formatPercentageValue, formatYearsValue, getValueC
 import type { DefinedBenefitFund, InsertDefinedBenefitFund } from "@shared/schema";
 
 export default function DefinedBenefitFundsTable() {
-  const [searchTerm, setSearchTerm] = useState("");
   const [isUpdating, setIsUpdating] = useState(false);
   const queryClient = useQueryClient();
 
@@ -105,38 +104,30 @@ export default function DefinedBenefitFundsTable() {
     }
   });
 
-  // Filter funds based on search term
-  const filteredFunds = useMemo(() => {
-    if (!searchTerm.trim()) return funds;
-    
-    const lowerQuery = searchTerm.toLowerCase();
-    return funds.filter(fund =>
-      fund.description.toLowerCase().includes(lowerQuery) ||
-      fund.owner.toLowerCase().includes(lowerQuery)
-    );
-  }, [funds, searchTerm]);
+  // No filtering needed - show all funds
+  const filteredFunds = funds;
 
   // Calculate totals
   const totals = useMemo(() => {
     return {
-      finalMonthlySalary: filteredFunds.reduce((sum: number, fund: DefinedBenefitFund) => {
+      finalMonthlySalary: funds.reduce((sum: number, fund: DefinedBenefitFund) => {
         const value = parseFloat(fund.finalMonthlySalary.replace(/[^\d.-]/g, '')) || 0;
         return sum + value;
       }, 0),
-      deathLumpSum: filteredFunds.reduce((sum: number, fund: DefinedBenefitFund) => {
+      deathLumpSum: funds.reduce((sum: number, fund: DefinedBenefitFund) => {
         const value = parseFloat(fund.deathLumpSum.replace(/[^\d.-]/g, '')) || 0;
         return sum + value;
       }, 0),
-      additionalTaxFreeAmount: filteredFunds.reduce((sum: number, fund: DefinedBenefitFund) => {
+      additionalTaxFreeAmount: funds.reduce((sum: number, fund: DefinedBenefitFund) => {
         const value = parseFloat(fund.additionalTaxFreeAmount.replace(/[^\d.-]/g, '')) || 0;
         return sum + value;
       }, 0),
-      pensionIncomeAmount: filteredFunds.reduce((sum: number, fund: DefinedBenefitFund) => {
+      pensionIncomeAmount: funds.reduce((sum: number, fund: DefinedBenefitFund) => {
         const value = parseFloat(fund.pensionIncomeAmount.replace(/[^\d.-]/g, '')) || 0;
         return sum + value;
       }, 0)
     };
-  }, [filteredFunds]);
+  }, [funds]);
 
   const handleAddFund = useCallback(() => {
     addMutation.mutate();
@@ -190,22 +181,9 @@ export default function DefinedBenefitFundsTable() {
 
   return (
     <div className="space-y-4">
-      {/* Search Controls */}
-      <div className="flex justify-start items-center gap-4">
-        <div className="relative flex-1 max-w-md">
-          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-neutral-400 h-4 w-4" />
-          <input
-            type="text"
-            placeholder="Search defined benefit funds..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            className="pl-10 pr-4 py-2 w-full border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
-          />
-        </div>
-      </div>
 
       {/* Summary Section */}
-      {filteredFunds.length > 0 && (
+      {funds.length > 0 && (
         <div className="bg-white border border-neutral-200 rounded-lg shadow-sm overflow-hidden mb-6">
           <div className="bg-primary/10 px-4 py-3 border-b border-neutral-200">
             <h3 className="text-sm font-semibold text-neutral-700 uppercase tracking-wide">Summary</h3>
@@ -240,17 +218,7 @@ export default function DefinedBenefitFundsTable() {
           </div>
         </div>
       )}
-      
-      {/* Add Fund Button */}
-      <div className="flex justify-start mb-4">
-        <AddButton
-          onClick={handleAddFund}
-          disabled={addMutation.isPending}
-          className="px-4 py-2"
-        >
-          Add Fund
-        </AddButton>
-      </div>
+
 
       {/* Table */}
       <div className="overflow-x-auto">
@@ -275,7 +243,7 @@ export default function DefinedBenefitFundsTable() {
             </tr>
           </thead>
           <tbody className="bg-white divide-y divide-neutral-200">
-            {filteredFunds.map((fund: DefinedBenefitFund) => (
+            {funds.map((fund: DefinedBenefitFund) => (
               <tr key={fund.id} className="hover:bg-neutral-50">
                 <td className="px-3 py-2">
                   <input
