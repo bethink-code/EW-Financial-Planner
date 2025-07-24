@@ -27,7 +27,7 @@ export default function LumpSumBequests() {
       const newBequest: InsertLumpSumBequest = {
         description: "Enter here ...",
         entity: "Donald Edwards",
-        additionalEntities: "[]",
+
         amount: "0",
         increasePercentage: "0%",
         cpi: false,
@@ -50,7 +50,7 @@ export default function LumpSumBequests() {
 
   return (
     <div className="min-h-screen bg-neutral-50">
-      <div className="max-w-7xl mx-auto px-4 py-6">
+      <div className="w-full px-6 py-6">
         {/* Combined Header and Summary */}
         <div className="mb-6">
           <CalculatorHeader
