@@ -70,8 +70,8 @@ export default function IncomeNeedsTable() {
       const newNeed: InsertIncomeNeed = {
         description: "",
         entity: "Donald Edwards",
-        start: "0",
-        termYears: "0",
+        start: "0 years",
+        termYears: "0 years",
         termEditable: false,
         increasePercentage: "0",
         cpi: false,
@@ -310,7 +310,6 @@ export default function IncomeNeedsTable() {
                     defaultValue={need.start}
                     onBlur={(e) => handleInputBlur(need.id, 'start', e.target.value)}
                     className={getFieldClass('years')}
-                    style={getFieldWidth('years')}
                     disabled={isUpdating}
                   />
                 </td>
@@ -328,7 +327,7 @@ export default function IncomeNeedsTable() {
                       defaultValue={need.termYears}
                       onBlur={(e) => handleInputBlur(need.id, 'termYears', e.target.value)}
                       className={getFieldClass('years')}
-                      style={{...getFieldWidth('years'), backgroundColor: need.termEditable ? 'hsl(var(--primary) / 0.05)' : '#F5F5F5'}}
+                      style={{backgroundColor: need.termEditable ? 'hsl(var(--primary) / 0.05)' : '#F5F5F5'}}
                       disabled={isUpdating || !need.termEditable}
                     />
                   </div>
