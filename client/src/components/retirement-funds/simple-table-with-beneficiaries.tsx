@@ -171,8 +171,11 @@ export function SimpleTableWithBeneficiaries({
     onFieldUpdate(fundId, 'beneficiaries', JSON.stringify(updatedBeneficiaries));
   }, [funds, onFieldUpdate]);
 
-  const handleInputBlur = useCallback((fundId: number, field: keyof UpdateRetirementFund, value: string) => {
+  const handleInputBlur = useCallback((fundId: number, field: keyof UpdateRetirementFund, value: string, element?: HTMLInputElement) => {
     const formattedValue = formatCurrencyValue(value, field);
+    if (element && formattedValue !== value) {
+      element.value = formattedValue;
+    }
     onFieldUpdate(fundId, field, formattedValue);
   }, [onFieldUpdate]);
 
@@ -275,7 +278,7 @@ export function SimpleTableWithBeneficiaries({
                     if (formattedValue !== e.target.value) {
                       e.target.value = formattedValue;
                     }
-                    handleInputBlur(fund.id, "monthlyIncome", e.target.value);
+                    handleInputBlur(fund.id, "monthlyIncome", e.target.value, e.target);
                   }}
                   className={`${getFieldClass('percentage')} table-input text-right`}
                   
@@ -291,7 +294,7 @@ export function SimpleTableWithBeneficiaries({
                     if (formattedValue !== e.target.value) {
                       e.target.value = formattedValue;
                     }
-                    handleInputBlur(fund.id, "increasePercentage", e.target.value);
+                    handleInputBlur(fund.id, "increasePercentage", e.target.value, e.target);
                   }}
                   className={`${getFieldClass('percentage')} table-input text-right`}
                   
@@ -308,7 +311,7 @@ export function SimpleTableWithBeneficiaries({
                     if (formattedValue !== e.target.value) {
                       e.target.value = formattedValue;
                     }
-                    handleInputBlur(fund.id, "termYears", e.target.value);
+                    handleInputBlur(fund.id, "termYears", e.target.value, e.target);
                   }}
                   className={`${getFieldClass('years')} table-input text-right`}
                   
@@ -330,7 +333,7 @@ export function SimpleTableWithBeneficiaries({
                     if (formattedValue !== e.target.value) {
                       e.target.value = formattedValue;
                     }
-                    handleInputBlur(fund.id, "fundValue", e.target.value);
+                    handleInputBlur(fund.id, "fundValue", e.target.value, e.target);
                   }}
                   className={`${getFieldClass('percentage')} table-input text-right`}
                   
@@ -346,7 +349,7 @@ export function SimpleTableWithBeneficiaries({
                     if (formattedValue !== e.target.value) {
                       e.target.value = formattedValue;
                     }
-                    handleInputBlur(fund.id, "fundValueAtDeath", e.target.value);
+                    handleInputBlur(fund.id, "fundValueAtDeath", e.target.value, e.target);
                   }}
                   className={`${getFieldClass('percentage')} table-input text-right`}
                   
@@ -393,7 +396,7 @@ export function SimpleTableWithBeneficiaries({
                     if (formattedValue !== e.target.value) {
                       e.target.value = formattedValue;
                     }
-                    handleInputBlur(fund.id, "amount", e.target.value);
+                    handleInputBlur(fund.id, "amount", e.target.value, e.target);
                   }}
                   className={`${getFieldClass('percentage')} table-input text-right`}
                   
@@ -409,7 +412,7 @@ export function SimpleTableWithBeneficiaries({
                     if (formattedValue !== e.target.value) {
                       e.target.value = formattedValue;
                     }
-                    handleInputBlur(fund.id, "lumpSumTaken", e.target.value);
+                    handleInputBlur(fund.id, "lumpSumTaken", e.target.value, e.target);
                   }}
                   className={`${getFieldClass('percentage')} table-input text-right`}
                   
@@ -425,7 +428,7 @@ export function SimpleTableWithBeneficiaries({
                     if (formattedValue !== e.target.value) {
                       e.target.value = formattedValue;
                     }
-                    handleInputBlur(fund.id, "nondeductibleContribution", e.target.value);
+                    handleInputBlur(fund.id, "nondeductibleContribution", e.target.value, e.target);
                   }}
                   className={`${getFieldClass('percentage')} table-input text-right`}
                   
@@ -441,7 +444,7 @@ export function SimpleTableWithBeneficiaries({
                     if (formattedValue !== e.target.value) {
                       e.target.value = formattedValue;
                     }
-                    handleInputBlur(fund.id, "livingAnnuity", e.target.value);
+                    handleInputBlur(fund.id, "livingAnnuity", e.target.value, e.target);
                   }}
                   className={`${getFieldClass('percentage')} table-input text-right`}
                   
@@ -458,7 +461,7 @@ export function SimpleTableWithBeneficiaries({
                     if (formattedValue !== e.target.value) {
                       e.target.value = formattedValue;
                     }
-                    handleInputBlur(fund.id, "incomeTerm", e.target.value);
+                    handleInputBlur(fund.id, "incomeTerm", e.target.value, e.target);
                   }}
                   className={`${getFieldClass('years')} table-input text-right`}
                   
@@ -507,7 +510,7 @@ export function SimpleTableWithBeneficiaries({
                     if (formattedValue !== e.target.value) {
                       e.target.value = formattedValue;
                     }
-                    handleInputBlur(fund.id, "coverAmount", e.target.value);
+                    handleInputBlur(fund.id, "coverAmount", e.target.value, e.target);
                   }}
                   className={`${getFieldClass('percentage')} table-input text-right`}
                   
