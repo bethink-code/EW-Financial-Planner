@@ -432,10 +432,7 @@ export function AssuranceTable({ searchTerm }: AssuranceTableProps) {
                         />
                         {rowIndex > 0 && rowIndex < currentOwners.length && currentOwners[rowIndex] && (
                           <button
-                            onClick={() => {
-                              console.log('Policy:', policy.id, 'Delete owner:', currentOwners[rowIndex].id, 'rowIndex:', rowIndex);
-                              handleRemoveOwner(policy.id, currentOwners[rowIndex].id);
-                            }}
+                            onClick={() => handleRemoveOwner(policy.id, currentOwners[rowIndex].id)}
                             className="h-6 w-6 p-0 bg-white text-[#4F4F4F] hover:text-red-600 hover:bg-red-50 border border-gray-300 rounded"
                             title="Remove owner"
                           >
