@@ -113,8 +113,8 @@ export const defaultFieldTypes: Record<string, FieldTypeConfig> = {
     },
     inputProps: {
       className: 'table-input text-right',
-      minWidth: '90px',
-      maxWidth: '150px'
+      minWidth: '80px',
+      maxWidth: '120px'
     }
   },
 
@@ -130,8 +130,8 @@ export const defaultFieldTypes: Record<string, FieldTypeConfig> = {
     },
     inputProps: {
       className: 'table-input text-right',
-      minWidth: '100px',
-      maxWidth: '180px'
+      minWidth: '80px',
+      maxWidth: '120px'
     }
   },
 
@@ -147,8 +147,8 @@ export const defaultFieldTypes: Record<string, FieldTypeConfig> = {
     },
     inputProps: {
       className: 'table-input text-right',
-      minWidth: '100px',
-      maxWidth: '180px'
+      minWidth: '80px',
+      maxWidth: '120px'
     }
   },
 
@@ -164,8 +164,8 @@ export const defaultFieldTypes: Record<string, FieldTypeConfig> = {
     },
     inputProps: {
       className: 'table-input text-right',
-      minWidth: '90px',
-      maxWidth: '150px'
+      minWidth: '80px',
+      maxWidth: '120px'
     }
   },
 
@@ -181,8 +181,8 @@ export const defaultFieldTypes: Record<string, FieldTypeConfig> = {
     },
     inputProps: {
       className: 'table-input text-right',
-      minWidth: '90px',
-      maxWidth: '150px'
+      minWidth: '80px',
+      maxWidth: '120px'
     }
   },
 

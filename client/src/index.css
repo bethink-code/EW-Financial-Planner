@@ -376,8 +376,8 @@ th, td {
   }
 
   .field-currency {
-    min-width: 90px;
-    max-width: 180px;
+    min-width: 80px;
+    max-width: 120px;
   }
 
   .field-percentage {
