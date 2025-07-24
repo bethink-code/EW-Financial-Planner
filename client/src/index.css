@@ -295,9 +295,9 @@ th, td {
     box-sizing: border-box;
   }
   
-  /* Action buttons vertical alignment in table cells */
+  /* Action buttons alignment in table cells */
   .table-actions-cell {
-    vertical-align: middle !important;
+    vertical-align: top !important;
     padding: 0.375rem 0.75rem;
   }
   
@@ -305,7 +305,7 @@ th, td {
     display: flex;
     align-items: center;
     justify-content: center;
-    height: 100%;
+    margin-top: 0.625rem; /* 10px offset to align with input field centers */
   }
   
   /* Standard table row - enforces consistent height */
