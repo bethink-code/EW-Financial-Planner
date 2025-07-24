@@ -48,42 +48,7 @@ export function AssuranceTable({ searchTerm }: AssuranceTableProps) {
     }
   });
 
-  // Add new policy mutation
-  const addMutation = useMutation({
-    mutationFn: async () => {
-      try {
-        const newPolicy: InsertAssurance = {
-          description: "Enter here ...",
-          owner: "Donald Edwards",
-          additionalOwners: "[]",
-          lifeAssured: "Enter here ...",
-          deathBenefit: "0",
-          beneficiary: "Enter here ...",
-          benefitSplit: "0",
-          additionalBeneficiaries: "[]",
-          additionalInfo: "Enter here ...",
-          amount: "0",
-          buySell: false,
-          keyMan: false,
-          premiumsByOthers: "0",
-          collateralSession: "0",
-          excludedFromEstateDuty: false,
-          excludedFromProvisions: false
-        };
-        const response = await apiRequest("POST", "/api/assurance", newPolicy);
-        return await response.json();
-      } catch (error) {
-        console.error('Add policy error:', error);
-        throw error;
-      }
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["/api/assurance"] });
-    },
-    onError: (error) => {
-      console.error('Add mutation error:', error);
-    }
-  });
+  // Note: Add policy functionality moved to parent component
 
   // Update policy mutation
   const updateMutation = useMutation({
@@ -155,9 +120,7 @@ export function AssuranceTable({ searchTerm }: AssuranceTableProps) {
     }
   });
 
-  const handleAddPolicy = useCallback(() => {
-    addMutation.mutate();
-  }, [addMutation]);
+  // Note: handleAddPolicy moved to parent component
 
   const handleDeletePolicy = useCallback((id: number) => {
     if (confirm('Are you sure you want to delete this policy?')) {
@@ -304,16 +267,7 @@ export function AssuranceTable({ searchTerm }: AssuranceTableProps) {
 
   return (
     <div className="space-y-6">
-      {/* Add Policy Button */}
-      <div className="flex justify-start">
-        <AddButton
-          onClick={handleAddPolicy}
-          disabled={addMutation.isPending}
-          className="px-4 py-2"
-        >
-          {addMutation.isPending ? "Adding Policy..." : "Add Policy"}
-        </AddButton>
-      </div>
+      {/* Note: Add Policy Button moved to parent component header */}
 
       {/* Table */}
       <div className="overflow-x-auto">

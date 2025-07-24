@@ -1,14 +1,55 @@
 import { useState, useCallback } from "react";
+import { useQuery, useMutation } from "@tanstack/react-query";
 import { Search } from "lucide-react";
 import { AssuranceTable } from "@/components/assurance/working-assurance-table";
-import { GraphTableSwitcher } from "@/components/ui/switcher";
 import { AssuranceSummary } from "@/components/assurance/simple-assurance-summary";
+import { CalculatorHeader } from "@/components/ui/calculator-header";
+import { apiRequest, queryClient } from "@/lib/queryClient";
+import type { InsertAssurance } from "@shared/schema";
 
 type ViewMode = "table" | "hybrid";
 
 export default function Assurance() {
   const [searchTerm, setSearchTerm] = useState("");
   const [viewMode, setViewMode] = useState<ViewMode>("table");
+
+  // Fetch policies for count
+  const { data: policies = [] } = useQuery({
+    queryKey: ["/api/assurance"],  
+    queryFn: async () => {
+      const response = await fetch("/api/assurance");
+      if (!response.ok) throw new Error('Failed to fetch assurance policies');
+      return response.json();
+    }
+  });
+
+  // Add new policy mutation
+  const addMutation = useMutation({
+    mutationFn: async () => {
+      const newPolicy: InsertAssurance = {
+        description: "Enter here ...",
+        owner: "Donald Edwards",
+        additionalOwners: "[]",
+        lifeAssured: "Enter here ...",
+        deathBenefit: "0",
+        beneficiary: "Enter here ...",
+        benefitSplit: "0",
+        additionalBeneficiaries: "[]",
+        additionalInfo: "Enter here ...",
+        amount: "0",
+        buySell: false,
+        keyMan: false,
+        premiumsByOthers: "0",
+        collateralSession: "0",
+        excludedFromEstateDuty: false,
+        excludedFromProvisions: false
+      };
+      return apiRequest("POST", "/api/assurance", newPolicy);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["/api/assurance"] });
+    },
+  });
 
   const handleSearch = useCallback((value: string) => {
     setSearchTerm(value);
@@ -18,19 +59,24 @@ export default function Assurance() {
     setViewMode(newMode);
   }, []);
 
+  const handleAddPolicy = useCallback(() => {
+    addMutation.mutate();
+  }, [addMutation]);
+
   return (
     <div className="min-h-screen bg-neutral-50">
       <div className="max-w-7xl mx-auto px-4 py-8">
-        {/* Header */}
-        <div className="mb-6">
-          <h1 className="text-3xl font-bold text-neutral-900 mb-2">Assurance</h1>
-          <p className="text-neutral-600">Manage life assurance policies and death benefits</p>
-        </div>
-
-        {/* Controls Section */}
-        <div className="mb-6 flex items-center justify-between">
-          {/* Search */}
-          <div className="flex items-center gap-4">
+        {/* Standardized Calculator Header */}
+        <CalculatorHeader
+          title="Assurance"
+          itemCount={policies.length}
+          itemLabel="policies"
+          onAddItem={handleAddPolicy}
+          addButtonText="Add Policy"
+          isAddingItem={addMutation.isPending}
+          viewMode={viewMode}
+          onViewModeChange={handleViewModeChange}
+          additionalControls={
             <div className="relative">
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-neutral-400" size={16} />
               <input
@@ -41,18 +87,8 @@ export default function Assurance() {
                 className="w-80 pl-10 pr-4 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary outline-none"
               />
             </div>
-          </div>
-
-          {/* View Mode Toggle */}
-          <div className="flex items-center gap-2">
-            <span className="text-sm font-medium text-neutral-700">View:</span>
-            <GraphTableSwitcher
-              value={viewMode === "table" ? "table" : "graph"}
-              onChange={(value) => handleViewModeChange(value === "table" ? "table" : "hybrid")}
-              size="md"
-            />
-          </div>
-        </div>
+          }
+        />
 
         {/* Summary Section */}
         <div className="mb-8">
