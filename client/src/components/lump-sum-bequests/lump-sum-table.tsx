@@ -7,20 +7,23 @@ import { Trash2, Plus } from "lucide-react";
 
 // Currency formatting utility
 const formatCurrencyValue = (value: string, fieldType: string): string => {
-  if (!value?.trim()) return 'R 0';
-  
-  // Remove existing formatting
-  const cleanValue = value.replace(/[^\d.-]/g, '');
-  if (!cleanValue) return 'R 0';
-  if (isNaN(parseFloat(cleanValue))) return 'R 0';
-  
-  const numValue = parseFloat(cleanValue);
-  
+  // Handle percentage fields first
   if (fieldType.includes('percentage') || fieldType.includes('Percentage') || fieldType === 'increasePercentage') {
+    if (!value?.trim()) return '0%';
+    const cleanValue = value.replace(/[^\d.-]/g, '');
+    if (!cleanValue) return '0%';
+    if (isNaN(parseFloat(cleanValue))) return '0%';
+    const numValue = parseFloat(cleanValue);
     return `${numValue}%`;
   }
   
   // Currency fields
+  if (!value?.trim()) return 'R 0';
+  const cleanValue = value.replace(/[^\d.-]/g, '');
+  if (!cleanValue) return 'R 0';
+  if (isNaN(parseFloat(cleanValue))) return 'R 0';
+  const numValue = parseFloat(cleanValue);
+  
   if (fieldType.includes('amount') || fieldType.includes('Amount') || fieldType.includes('value') || fieldType.includes('Value') || fieldType.includes('start') || fieldType.includes('Start')) {
     return `R ${numValue.toLocaleString()}`;
   }
@@ -198,7 +201,7 @@ export function LumpSumTable({ searchTerm }: LumpSumTableProps) {
                     <div className="flex items-center gap-1">
                       <input
                         type="text"
-                        defaultValue={bequest.increasePercentage?.includes('%') ? bequest.increasePercentage : `${bequest.increasePercentage || "6"}%`}
+                        defaultValue={bequest.increasePercentage || "6%"}
                         onBlur={(e) => {
                           const formattedValue = formatCurrencyValue(e.target.value, "increasePercentage");
                           if (formattedValue !== e.target.value) {
