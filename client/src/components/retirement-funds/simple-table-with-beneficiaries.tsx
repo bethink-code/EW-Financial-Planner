@@ -224,6 +224,11 @@ export function SimpleTableWithBeneficiaries({
               </td>
               <td className="px-3 py-2 border-r border-neutral-200">
                 <div className="flex items-center gap-1">
+                  <AddButton
+                    onClick={() => handleAddOwner(fund.id)}
+                    disabled={isUpdating}
+                    size="sm"
+                  />
                   <Select
                     value={fundOwners[0]}
                     onValueChange={(value) => handleOwnerChange(fund.id, 0, value)}
@@ -241,16 +246,6 @@ export function SimpleTableWithBeneficiaries({
                       ))}
                     </SelectContent>
                   </Select>
-                  {fundOwners.length > 1 && (
-                    <DeleteButton
-                      onClick={() => handleRemoveOwner(fund.id, 0)}
-                      disabled={isUpdating}
-                    />
-                  )}
-                  <AddButton
-                    onClick={() => handleAddOwner(fund.id)}
-                    disabled={isUpdating}
-                  />
                 </div>
               </td>
               <td className="px-3 py-2 border-r border-neutral-200">
