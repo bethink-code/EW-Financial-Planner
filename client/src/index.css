@@ -398,18 +398,15 @@ th, td {
   /* Default value styling - grey text to distinguish from user-entered values */
   .default-value {
     color: #9ca3af !important; /* grey-400 */
-    font-style: italic;
   }
 
   .default-value:focus {
     color: #374151 !important; /* grey-700 - darker when focused */
-    font-style: normal;
   }
 
   /* Ensure entered values use normal styling */
   .entered-value {
     color: #374151 !important; /* grey-700 */
-    font-style: normal;
   }
 }
 
