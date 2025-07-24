@@ -280,7 +280,7 @@ export function SimpleTableWithBeneficiaries({
                     }
                     handleInputBlur(fund.id, "monthlyIncome", e.target.value, e.target);
                   }}
-                  className={`${getFieldClass('percentage')} table-input text-right`}
+                  className={`${getFieldClass('currency')} table-input text-right`}
                   
                   placeholder="R 0"
                   disabled={isUpdating}
@@ -335,7 +335,7 @@ export function SimpleTableWithBeneficiaries({
                     }
                     handleInputBlur(fund.id, "fundValue", e.target.value, e.target);
                   }}
-                  className={`${getFieldClass('percentage')} table-input text-right`}
+                  className={`${getFieldClass('currency')} table-input text-right`}
                   
                   placeholder="R 0"
                   disabled={isUpdating}
@@ -351,7 +351,7 @@ export function SimpleTableWithBeneficiaries({
                     }
                     handleInputBlur(fund.id, "fundValueAtDeath", e.target.value, e.target);
                   }}
-                  className={`${getFieldClass('percentage')} table-input text-right`}
+                  className={`${getFieldClass('currency')} table-input text-right`}
                   
                   placeholder="R 0"
                   disabled={isUpdating}
@@ -398,7 +398,7 @@ export function SimpleTableWithBeneficiaries({
                     }
                     handleInputBlur(fund.id, "amount", e.target.value, e.target);
                   }}
-                  className={`${getFieldClass('percentage')} table-input text-right`}
+                  className={`${getFieldClass('currency')} table-input text-right`}
                   
                   placeholder="R 0"
                   disabled={isUpdating}
@@ -414,7 +414,7 @@ export function SimpleTableWithBeneficiaries({
                     }
                     handleInputBlur(fund.id, "lumpSumTaken", e.target.value, e.target);
                   }}
-                  className={`${getFieldClass('percentage')} table-input text-right`}
+                  className={`${getFieldClass('currency')} table-input text-right`}
                   
                   placeholder="R 0"
                   disabled={isUpdating}
@@ -430,7 +430,7 @@ export function SimpleTableWithBeneficiaries({
                     }
                     handleInputBlur(fund.id, "nondeductibleContribution", e.target.value, e.target);
                   }}
-                  className={`${getFieldClass('percentage')} table-input text-right`}
+                  className={`${getFieldClass('currency')} table-input text-right`}
                   
                   placeholder="R 0"
                   disabled={isUpdating}
@@ -446,7 +446,7 @@ export function SimpleTableWithBeneficiaries({
                     }
                     handleInputBlur(fund.id, "livingAnnuity", e.target.value, e.target);
                   }}
-                  className={`${getFieldClass('percentage')} table-input text-right`}
+                  className={`${getFieldClass('currency')} table-input text-right`}
                   
                   placeholder="R 0"
                   disabled={isUpdating}
@@ -512,7 +512,7 @@ export function SimpleTableWithBeneficiaries({
                     }
                     handleInputBlur(fund.id, "coverAmount", e.target.value, e.target);
                   }}
-                  className={`${getFieldClass('percentage')} table-input text-right`}
+                  className={`${getFieldClass('currency')} table-input text-right`}
                   
                   placeholder="R 0"
                   disabled={isUpdating}
