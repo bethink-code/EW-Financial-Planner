@@ -84,7 +84,8 @@ export const lumpSumBequests = pgTable("lump_sum_bequests", {
   description: text("description").notNull().default(""),
   entity: text("entity").notNull().default(""), // Donald Edwards, Betty Edwards
   start: text("start").notNull().default("0"),
-  increasePercentage: text("increase_percentage").notNull().default("CPI"),
+  increasePercentage: text("increase_percentage").notNull().default("6%"),
+  cpi: boolean("cpi").notNull().default(false),
   amount: text("amount").notNull().default("0"),
   valueAtDeath: text("value_at_death").notNull().default("0"),
   

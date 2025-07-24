@@ -190,10 +190,9 @@ export function LumpSumTable({ searchTerm }: LumpSumTableProps) {
                       <label className="flex items-center text-xs">
                         <input
                           type="checkbox"
-                          checked={bequest.increasePercentage === "CPI" || bequest.increasePercentage?.includes("CPI")}
+                          checked={bequest.cpi || false}
                           onChange={(e) => {
-                            const value = e.target.checked ? "CPI" : "6%";
-                            handleInputBlur(bequest.id, "increasePercentage", value);
+                            handleInputBlur(bequest.id, "cpi", e.target.checked.toString());
                           }}
                           className="mr-1"
                           disabled={isUpdating}
