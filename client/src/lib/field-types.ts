@@ -49,7 +49,7 @@ export const defaultFieldTypes: Record<string, FieldTypeConfig> = {
     placeholder: 'Enter description',
     defaultValue: '',
     inputProps: {
-      className: 'table-input',
+      className: 'table-input text-left',
       minWidth: '150px',
       maxWidth: '300px'
     }
@@ -64,7 +64,7 @@ export const defaultFieldTypes: Record<string, FieldTypeConfig> = {
       required: true
     },
     inputProps: {
-      className: 'table-input',
+      className: 'table-input text-left',
       minWidth: '150px',
       maxWidth: '300px'
     }
@@ -79,7 +79,7 @@ export const defaultFieldTypes: Record<string, FieldTypeConfig> = {
       required: true
     },
     inputProps: {
-      className: 'table-input',
+      className: 'table-input text-left',
       minWidth: '150px',
       maxWidth: '300px'
     }
@@ -94,7 +94,7 @@ export const defaultFieldTypes: Record<string, FieldTypeConfig> = {
       required: true
     },
     inputProps: {
-      className: 'table-input',
+      className: 'table-input text-left',
       minWidth: '150px',
       maxWidth: '300px'
     }
