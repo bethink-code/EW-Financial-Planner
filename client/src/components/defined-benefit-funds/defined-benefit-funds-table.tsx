@@ -65,7 +65,7 @@ export default function DefinedBenefitFundsTable() {
         deathLumpSum: "0",
         additionalTaxFreeAmount: "0",
         pensionIncomeAmount: "0",
-        pensionIncomeIncrease: "0",
+        pensionIncomeIncrease: "0%",
       };
       
       const response = await fetch('/api/defined-benefit-funds', {
@@ -384,7 +384,7 @@ export default function DefinedBenefitFundsTable() {
                   <input
                     key={`pensionIncomeIncrease-${fund.id}-${fund.pensionIncomeIncrease}`}
                     type="text"
-                    defaultValue={fund.pensionIncomeIncrease}
+                    defaultValue={fund.pensionIncomeIncrease || "0%"}
                     onBlur={(e) => handleInputBlur(fund.id, 'pensionIncomeIncrease', e.target.value)}
                     className={getFieldClass('percentage')}
                     disabled={isUpdating}
