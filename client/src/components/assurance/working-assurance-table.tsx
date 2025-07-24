@@ -262,6 +262,7 @@ export function AssuranceTable({}: AssuranceTableProps) {
         <table className="min-w-full bg-white border border-neutral-200 rounded-lg shadow-sm">
           <thead>
             <tr className="bg-primary/10 border-b border-border">
+              <th className="px-3 py-3 text-center text-xs font-medium text-neutral-600 uppercase tracking-wider w-16">Actions</th>
               <th className="px-3 py-3 text-left text-xs font-medium text-neutral-600 uppercase tracking-wider">Description</th>
               <th className="px-3 py-3 text-left text-xs font-medium text-neutral-600 uppercase tracking-wider">Owner</th>
               <th className="px-3 py-3 text-left text-xs font-medium text-neutral-600 uppercase tracking-wider">Life Assured</th>
@@ -276,7 +277,6 @@ export function AssuranceTable({}: AssuranceTableProps) {
               <th className="px-3 py-3 text-center text-xs font-medium text-neutral-600 uppercase tracking-wider">Excluded Provisions</th>
               <th className="px-3 py-3 text-left text-xs font-medium text-neutral-600 uppercase tracking-wider">Premiums by Others</th>
               <th className="px-3 py-3 text-left text-xs font-medium text-neutral-600 uppercase tracking-wider">Collateral Session</th>
-              <th className="px-3 py-3 text-center text-xs font-medium text-neutral-600 uppercase tracking-wider">Actions</th>
             </tr>
           </thead>
           <tbody className="bg-white divide-y divide-neutral-200">
@@ -320,6 +320,30 @@ export function AssuranceTable({}: AssuranceTableProps) {
                 
                 return (
                 <tr key={`${policy.id}-row-${rowIndex}`} className="hover:bg-neutral-50">
+                  {/* Actions - rowSpan for main policy data - FIRST COLUMN */}
+                  {rowIndex === 0 && (
+                    <td rowSpan={maxRows} className="px-3 py-2 text-center align-top">
+                      <div className="flex items-center justify-center space-x-1">
+                        <button
+                          onClick={() => handleDuplicatePolicy(policy)}
+                          className="h-6 w-6 p-0 bg-white text-primary hover:text-primary hover:bg-blue-50 border border-primary rounded"
+                          title="Duplicate policy"
+                          disabled={isUpdating || duplicateMutation.isPending}
+                        >
+                          <Copy className="h-3 w-3" />
+                        </button>
+                        <button
+                          onClick={() => handleDeletePolicy(policy.id)}
+                          className="h-6 w-6 p-0 bg-white text-[#4F4F4F] hover:text-red-600 hover:bg-red-50 border border-gray-300 rounded"
+                          title="Delete policy"
+                          disabled={isUpdating || deleteMutation.isPending}
+                        >
+                          <Trash2 className="h-3 w-3" />
+                        </button>
+                      </div>
+                    </td>
+                  )}
+                  
                   {/* Description - rowSpan for main policy data */}
                   {rowIndex === 0 && (
                     <td rowSpan={maxRows} className="px-3 py-2 align-top">
@@ -571,26 +595,6 @@ export function AssuranceTable({}: AssuranceTableProps) {
                           disabled={isUpdating}
                         />
                       </td>
-                      <td rowSpan={maxRows} className="px-3 py-2 text-center align-top">
-                        <div className="flex items-center justify-center space-x-1">
-                          <button
-                            onClick={() => handleDuplicatePolicy(policy)}
-                            className="h-6 w-6 p-0 bg-white text-primary hover:text-primary hover:bg-blue-50 border border-primary rounded"
-                            title="Duplicate policy"
-                            disabled={isUpdating || duplicateMutation.isPending}
-                          >
-                            <Copy className="h-3 w-3" />
-                          </button>
-                          <button
-                            onClick={() => handleDeletePolicy(policy.id)}
-                            className="h-6 w-6 p-0 bg-white text-[#4F4F4F] hover:text-red-600 hover:bg-red-50 border border-gray-300 rounded"
-                            title="Delete policy"
-                            disabled={isUpdating || deleteMutation.isPending}
-                          >
-                            <Trash2 className="h-3 w-3" />
-                          </button>
-                        </div>
-                      </td>
                     </>
                   )}
                 </tr>
@@ -601,23 +605,23 @@ export function AssuranceTable({}: AssuranceTableProps) {
             {/* Total Row */}
             {filteredPolicies.length > 0 && (
               <tr className="bg-neutral-100 border-t-2 border-neutral-300 font-bold">
-                <td className="px-3 py-2 text-sm font-bold text-neutral-800">Total</td>
-                <td colSpan={3} className="px-3 py-2"></td>
+                <td className="px-3 py-2"></td> {/* Actions column - empty */}
+                <td className="px-3 py-2 text-sm font-bold text-neutral-800">Total</td> {/* Description */}
+                <td colSpan={3} className="px-3 py-2"></td> {/* Owner, Life Assured, Death Benefit */}
                 <td className="px-3 py-2 text-sm font-bold text-neutral-800 text-right">
                   {formatCurrencyValue(totals.deathBenefit.toString(), 'amount')}
                 </td>
-                <td colSpan={3} className="px-3 py-2"></td>
+                <td colSpan={3} className="px-3 py-2"></td> {/* Beneficiary, Additional Info, Benefit Split */}
                 <td className="px-3 py-2 text-sm font-bold text-neutral-800 text-right">
                   {formatCurrencyValue(totals.amount.toString(), 'amount')}
                 </td>
-                <td colSpan={4} className="px-3 py-2"></td>
+                <td colSpan={4} className="px-3 py-2"></td> {/* Buy/Sell, Key Man, Excluded Estate Duty, Excluded Provisions */}
                 <td className="px-3 py-2 text-sm font-bold text-neutral-800 text-right">
                   {formatCurrencyValue(totals.premiumsByOthers.toString(), 'amount')}
                 </td>
                 <td className="px-3 py-2 text-sm font-bold text-neutral-800 text-right">
                   {formatCurrencyValue(totals.collateralSession.toString(), 'amount')}
                 </td>
-                <td className="px-3 py-2"></td>
               </tr>
             )}
             
