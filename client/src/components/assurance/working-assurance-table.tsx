@@ -268,6 +268,7 @@ export function AssuranceTable({ searchTerm }: AssuranceTableProps) {
         name: `Beneficiary ${index + 2}`
       }));
       
+      console.log('Sending update to server:', { id, updates: { additionalBeneficiaries: JSON.stringify(renumberedBeneficiaries) } });
       setIsUpdating(true);
       updateMutation.mutate({ id, updates: { additionalBeneficiaries: JSON.stringify(renumberedBeneficiaries) } });
     }
