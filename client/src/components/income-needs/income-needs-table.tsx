@@ -316,6 +316,7 @@ export default function IncomeNeedsTable() {
                 </td>
                 <td className="px-3 py-2">
                   <input
+                    key={`start-${need.id}-${need.start}`}
                     type="text"
                     defaultValue={need.start.includes('years') ? need.start : `${need.start} years`}
                     onBlur={(e) => handleInputBlur(need.id, 'start', e.target.value)}
@@ -333,6 +334,7 @@ export default function IncomeNeedsTable() {
                       disabled={isUpdating}
                     />
                     <input
+                      key={`termYears-${need.id}-${need.termYears}`}
                       type="text"
                       defaultValue={need.termYears.includes('years') ? need.termYears : `${need.termYears} years`}
                       onBlur={(e) => handleInputBlur(need.id, 'termYears', e.target.value)}
