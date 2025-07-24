@@ -4,38 +4,8 @@ import { Plus, Trash2, Search } from "lucide-react";
 import { apiRequest } from "@/lib/queryClient";
 import { AddButton } from "@/components/ui/action-buttons";
 import { getFieldClass, getFieldWidth } from "@/lib/design-tokens";
+import { formatCurrencyValue, formatPercentageValue, formatYearsValue } from "@/lib/formatting";
 import type { DefinedBenefitFund, InsertDefinedBenefitFund } from "@shared/schema";
-
-// Utility function for formatting currency values
-const formatCurrencyValue = (value: string, fieldType: string): string => {
-  if (!value || value.trim() === '') return 'R 0';
-  
-  // Remove existing formatting
-  const cleanValue = value.replace(/[^\d.-]/g, '');
-  if (!cleanValue) return 'R 0';
-  if (isNaN(parseFloat(cleanValue))) return 'R 0';
-  
-  const numValue = parseFloat(cleanValue);
-  
-  if (fieldType === 'percentage' || fieldType.includes('increase')) {
-    return `${numValue}%`;
-  }
-  
-  if (fieldType === 'years' || fieldType.includes('years')) {
-    return `${numValue} years`;
-  }
-  
-  // Currency formatting
-  if (numValue === 0) return 'R 0';
-  
-  // Format with thousands separators
-  const formatted = new Intl.NumberFormat('en-ZA', {
-    minimumFractionDigits: 0,
-    maximumFractionDigits: 0,
-  }).format(Math.abs(numValue));
-  
-  return `R ${formatted}`;
-};
 
 export default function DefinedBenefitFundsTable() {
   const [searchTerm, setSearchTerm] = useState("");
@@ -243,25 +213,25 @@ export default function DefinedBenefitFundsTable() {
               <div className="bg-neutral-50 p-3 rounded-lg">
                 <p className="text-xs text-neutral-500 uppercase tracking-wide mb-1">Total Final Monthly Salary</p>
                 <p className="text-lg font-semibold text-neutral-900">
-                  {formatCurrencyValue(totals.finalMonthlySalary.toString(), 'finalMonthlySalary')}
+                  {formatCurrencyValue(totals.finalMonthlySalary.toString())}
                 </p>
               </div>
               <div className="bg-neutral-50 p-3 rounded-lg">
                 <p className="text-xs text-neutral-500 uppercase tracking-wide mb-1">Total Death Lump Sum</p>
                 <p className="text-lg font-semibold text-neutral-900">
-                  {formatCurrencyValue(totals.deathLumpSum.toString(), 'deathLumpSum')}
+                  {formatCurrencyValue(totals.deathLumpSum.toString())}
                 </p>
               </div>
               <div className="bg-neutral-50 p-3 rounded-lg">
                 <p className="text-xs text-neutral-500 uppercase tracking-wide mb-1">Total Additional Tax Free Amount</p>
                 <p className="text-lg font-semibold text-neutral-900">
-                  {formatCurrencyValue(totals.additionalTaxFreeAmount.toString(), 'additionalTaxFreeAmount')}
+                  {formatCurrencyValue(totals.additionalTaxFreeAmount.toString())}
                 </p>
               </div>
               <div className="bg-neutral-50 p-3 rounded-lg">
                 <p className="text-xs text-neutral-500 uppercase tracking-wide mb-1">Pension Income Amount at Death</p>
                 <p className="text-lg font-semibold text-neutral-900">
-                  {formatCurrencyValue(totals.pensionIncomeAmount.toString(), 'pensionIncomeAmount')}
+                  {formatCurrencyValue(totals.pensionIncomeAmount.toString())}
                 </p>
               </div>
             </div>
@@ -344,7 +314,7 @@ export default function DefinedBenefitFundsTable() {
                   <input
                     key={`finalMonthlySalary-${fund.id}-${fund.finalMonthlySalary}`}
                     type="text"
-                    defaultValue={formatCurrencyValue(fund.finalMonthlySalary, 'finalMonthlySalary')}
+                    defaultValue={formatCurrencyValue(fund.finalMonthlySalary)}
                     onBlur={(e) => handleInputBlur(fund.id, 'finalMonthlySalary', e.target.value)}
                     className={getFieldClass('amount')}
                     disabled={isUpdating}
@@ -354,7 +324,7 @@ export default function DefinedBenefitFundsTable() {
                   <input
                     key={`deathLumpSum-${fund.id}-${fund.deathLumpSum}`}
                     type="text"
-                    defaultValue={formatCurrencyValue(fund.deathLumpSum, 'deathLumpSum')}
+                    defaultValue={formatCurrencyValue(fund.deathLumpSum)}
                     onBlur={(e) => handleInputBlur(fund.id, 'deathLumpSum', e.target.value)}
                     className={getFieldClass('amount')}
                     disabled={isUpdating}
@@ -364,7 +334,7 @@ export default function DefinedBenefitFundsTable() {
                   <input
                     key={`additionalTaxFreeAmount-${fund.id}-${fund.additionalTaxFreeAmount}`}
                     type="text"
-                    defaultValue={formatCurrencyValue(fund.additionalTaxFreeAmount, 'additionalTaxFreeAmount')}
+                    defaultValue={formatCurrencyValue(fund.additionalTaxFreeAmount)}
                     onBlur={(e) => handleInputBlur(fund.id, 'additionalTaxFreeAmount', e.target.value)}
                     className={getFieldClass('amount')}
                     disabled={isUpdating}
@@ -374,7 +344,7 @@ export default function DefinedBenefitFundsTable() {
                   <input
                     key={`pensionIncomeAmount-${fund.id}-${fund.pensionIncomeAmount}`}
                     type="text"
-                    defaultValue={formatCurrencyValue(fund.pensionIncomeAmount, 'pensionIncomeAmount')}
+                    defaultValue={formatCurrencyValue(fund.pensionIncomeAmount)}
                     onBlur={(e) => handleInputBlur(fund.id, 'pensionIncomeAmount', e.target.value)}
                     className={getFieldClass('amount')}
                     disabled={isUpdating}
@@ -408,16 +378,16 @@ export default function DefinedBenefitFundsTable() {
                 <td className="px-3 py-2 text-sm font-bold text-neutral-800">Total</td>
                 <td colSpan={3} className="px-3 py-2"></td>
                 <td className="px-3 py-2 text-sm font-bold text-neutral-800 text-right">
-                  {formatCurrencyValue(totals.finalMonthlySalary.toString(), 'finalMonthlySalary')}
+                  {formatCurrencyValue(totals.finalMonthlySalary.toString())}
                 </td>
                 <td className="px-3 py-2 text-sm font-bold text-neutral-800 text-right">
-                  {formatCurrencyValue(totals.deathLumpSum.toString(), 'deathLumpSum')}
+                  {formatCurrencyValue(totals.deathLumpSum.toString())}
                 </td>
                 <td className="px-3 py-2 text-sm font-bold text-neutral-800 text-right">
-                  {formatCurrencyValue(totals.additionalTaxFreeAmount.toString(), 'additionalTaxFreeAmount')}
+                  {formatCurrencyValue(totals.additionalTaxFreeAmount.toString())}
                 </td>
                 <td className="px-3 py-2 text-sm font-bold text-neutral-800 text-right">
-                  {formatCurrencyValue(totals.pensionIncomeAmount.toString(), 'pensionIncomeAmount')}
+                  {formatCurrencyValue(totals.pensionIncomeAmount.toString())}
                 </td>
                 <td colSpan={2} className="px-3 py-2"></td>
               </tr>
