@@ -180,7 +180,17 @@ export default function IncomeNeedsTable() {
   }, [updateMutation]);
 
   const handleInputBlur = useCallback((id: number, field: keyof IncomeNeed, value: string) => {
-    const formattedValue = formatCurrencyValue(value, field);
+    // Map field names to field types for proper formatting
+    const fieldTypeMap: Record<string, string> = {
+      'start': 'years',
+      'termYears': 'years', 
+      'increasePercentage': 'percentage',
+      'amount': 'currency',
+      'capitalisedAmount': 'currency'
+    };
+    
+    const fieldType = fieldTypeMap[field] || field;
+    const formattedValue = formatCurrencyValue(value, fieldType);
     handleUpdateNeed(id, field, formattedValue);
     
     // Update DOM element directly for immediate visual feedback
