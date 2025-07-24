@@ -197,8 +197,8 @@ export function LumpSumTable({ searchTerm }: LumpSumTableProps) {
                   <td className="p-2 text-center">
                     <div className="flex items-center gap-1">
                       <input
-                        type="number"
-                        defaultValue={bequest.increasePercentage?.replace(/[^\d.-]/g, '') || "6"}
+                        type="text"
+                        defaultValue={bequest.increasePercentage?.includes('%') ? bequest.increasePercentage : `${bequest.increasePercentage || "6"}%`}
                         onBlur={(e) => {
                           const formattedValue = formatCurrencyValue(e.target.value, "increasePercentage");
                           if (formattedValue !== e.target.value) {
@@ -206,11 +206,8 @@ export function LumpSumTable({ searchTerm }: LumpSumTableProps) {
                           }
                           handleInputBlur(bequest.id, "increasePercentage", e.target.value);
                         }}
-                        className="table-input h-7 text-sm bg-primary/5 border-gray-200 focus:border-primary px-2 py-1 border rounded-md text-sm w-16"
-                        style={{ textAlign: "right" }}
+                        className={`${getFieldClass('percentage')} table-input text-right`}
                         disabled={isUpdating}
-                        min="0"
-                        max="100"
                       />
                       <label className="flex items-center text-xs">
                         <input
