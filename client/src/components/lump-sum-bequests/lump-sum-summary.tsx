@@ -38,21 +38,21 @@ export function LumpSumSummary({}: LumpSumSummaryProps) {
   return (
     <div className="px-5 pb-5">
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div  className="rounded-lg p-4 text-center">
+        <div  className="bg-white rounded-lg p-4 text-center border border-neutral-200 shadow-sm">
           <div className="text-xs font-medium text-teal-700 mb-1">Total Bequests</div>
           <div className="text-lg font-bold text-neutral-900">
             {summaryData.count}
           </div>
         </div>
         
-        <div  className="rounded-lg p-4 text-center">
+        <div  className="bg-white rounded-lg p-4 text-center border border-neutral-200 shadow-sm">
           <div className="text-xs font-medium text-teal-700 mb-1">Total Amount</div>
           <div className="text-lg font-bold text-neutral-900">
             R {summaryData.totalAmount.toLocaleString()}
           </div>
         </div>
         
-        <div  className="rounded-lg p-4 text-center">
+        <div  className="bg-white rounded-lg p-4 text-center border border-neutral-200 shadow-sm">
           <div className="text-xs font-medium text-teal-700 mb-1">Total Value at Death</div>
           <div className="text-lg font-bold text-neutral-900">
             R {summaryData.totalValueAtDeath.toLocaleString()}
