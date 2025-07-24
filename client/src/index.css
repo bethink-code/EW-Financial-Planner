@@ -233,9 +233,13 @@ th, td {
   html, body {
     margin: 0;
     padding: 0;
-    width: 100%;
+    min-width: 100%;
     background-color: #EFF2F5;
     overflow-x: auto;
+  }
+  
+  #root {
+    min-width: 1400px;
   }
 
   /* Apply background to iframe container */
@@ -258,6 +262,7 @@ th, td {
   /* Force minimum table width for horizontal scrolling */
   table {
     min-width: 1200px !important;
+    width: auto !important;
   }
   
   /* Teal color utilities */

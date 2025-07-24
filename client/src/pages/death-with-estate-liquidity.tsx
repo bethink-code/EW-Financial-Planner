@@ -47,7 +47,7 @@ export default function DeathWithEstateLiquidity() {
   ];
 
   return (
-    <div className="min-h-screen bg-background overflow-x-auto" style={{ minWidth: '1400px' }}>
+    <div className="min-h-screen bg-background" style={{ minWidth: '1400px' }}>
       <div className="w-full px-6 py-8">
         {/* Header */}
         <div className="mb-6">
