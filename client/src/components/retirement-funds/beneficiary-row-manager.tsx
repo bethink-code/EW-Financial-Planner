@@ -2,7 +2,7 @@ import React, { useState, useCallback, useMemo, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Plus, Trash2 } from "lucide-react";
-import { AddButton } from "@/components/ui/action-buttons";
+import { AddButton, DeleteButton } from "@/components/ui/action-buttons";
 import { Beneficiary } from "@shared/schema";
 import { nanoid } from "nanoid";
 import { formatPercentageValue, getValueClass, isDefaultValue, handleDefaultValueFocus } from "@/lib/formatting";
@@ -124,15 +124,10 @@ export function BeneficiaryRowManager({
             {/* Remove Button */}
             <div className="w-8">
               {beneficiaries.length > 1 && (
-                <Button
-                  variant="ghost"
-                  size="sm"
+                <DeleteButton
                   onClick={() => handleRemoveBeneficiary(beneficiary.id)}
                   disabled={isUpdating}
-                  className="h-6 w-6 p-0 bg-blue-50 text-primary hover:bg-blue-100 border-0"
-                >
-                  <Trash2 className="h-3 w-3" />
-                </Button>
+                />
               )}
             </div>
 

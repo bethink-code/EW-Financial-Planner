@@ -2,7 +2,7 @@ import React, { useState, useCallback, useMemo } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { Plus, Trash2 } from "lucide-react";
 import { apiRequest } from "@/lib/queryClient";
-import { AddButton } from "@/components/ui/action-buttons";
+import { AddButton, DeleteButton, DuplicateButton, ActionButtonGroup } from "@/components/ui/action-buttons";
 import { getFieldClass, getFieldWidth } from "@/lib/design-tokens";
 import { formatCurrencyValue, formatPercentageValue, formatYearsValue, getValueClass, isDefaultValue, handleDefaultValueFocus, createEnhancedBlurHandler } from "@/lib/formatting";
 import type { DefinedBenefitFund, InsertDefinedBenefitFund } from "@shared/schema";
@@ -207,13 +207,12 @@ export default function DefinedBenefitFundsTable() {
             {funds.map((fund: DefinedBenefitFund) => (
               <tr key={fund.id} className="hover:bg-neutral-50">
                 <td className="px-3 py-2 text-center">
-                  <button
-                    onClick={() => handleDeleteFund(fund.id)}
-                    className="text-[#4F4F4F] hover:text-red-600 transition-colors"
-                    title="Delete fund"
-                  >
-                    <Trash2 className="h-4 w-4" />
-                  </button>
+                  <ActionButtonGroup>
+                    <DeleteButton
+                      onClick={() => handleDeleteFund(fund.id)}
+                      disabled={isUpdating || deleteMutation.isPending}
+                    />
+                  </ActionButtonGroup>
                 </td>
                 <td className="px-3 py-2">
                   <input

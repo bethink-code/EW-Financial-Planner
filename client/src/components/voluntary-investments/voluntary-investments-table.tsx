@@ -1,6 +1,7 @@
 import React, { useState, useCallback, useMemo } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { Plus, Trash2, UserPlus, UserMinus } from "lucide-react";
+import { AddButton, DeleteButton, DuplicateButton, ActionButtonGroup } from "@/components/ui/action-buttons";
 import { getFieldClass, getFieldWidth } from "@/lib/design-tokens";
 import { formatCurrencyValue, formatPercentageValue, getValueClass, isDefaultValue, handleDefaultValueFocus, createEnhancedBlurHandler } from "@/lib/formatting";
 import type { VoluntaryInvestment, InsertVoluntaryInvestment } from "@shared/schema";
@@ -286,13 +287,12 @@ export default function VoluntaryInvestmentsTable() {
                   {ownerIndex === 0 && (
                     <>
                       <td rowSpan={owners.length} className="px-3 py-2 text-center">
-                        <button
-                          onClick={() => handleDeleteInvestment(investment.id)}
-                          className="text-[#4F4F4F] hover:text-red-600 transition-colors"
-                          title="Delete investment"
-                        >
-                          <Trash2 className="h-4 w-4" />
-                        </button>
+                        <ActionButtonGroup>
+                          <DeleteButton
+                            onClick={() => handleDeleteInvestment(investment.id)}
+                            disabled={isUpdating || deleteMutation.isPending}
+                          />
+                        </ActionButtonGroup>
                       </td>
                       <td rowSpan={owners.length} className="px-3 py-2 border-r border-neutral-200">
                         <input
@@ -318,22 +318,16 @@ export default function VoluntaryInvestmentsTable() {
                         <option value="Betty Edwards">Betty Edwards</option>
                       </select>
                       {owners.length > 1 && (
-                        <button
+                        <DeleteButton
                           onClick={() => handleRemoveOwner(investment.id, ownerIndex)}
-                          className="text-[#4F4F4F] hover:text-red-600 transition-colors"
-                          title="Remove owner"
-                        >
-                          <UserMinus className="h-4 w-4" />
-                        </button>
+                          disabled={isUpdating}
+                        />
                       )}
                       {ownerIndex === owners.length - 1 && (
-                        <button
+                        <AddButton
                           onClick={() => handleAddOwner(investment.id)}
-                          className="text-primary hover:text-blue-700 transition-colors"
-                          title="Add owner"
-                        >
-                          <UserPlus className="h-4 w-4" />
-                        </button>
+                          disabled={isUpdating}
+                        />
                       )}
                     </div>
                   </td>

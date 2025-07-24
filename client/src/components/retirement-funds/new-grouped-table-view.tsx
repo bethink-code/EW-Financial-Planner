@@ -2,6 +2,7 @@ import React, { useRef, useEffect, useMemo, useCallback } from "react";
 import { RetirementFund, UpdateRetirementFund, Beneficiary } from "@shared/schema";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Edit3, Plus, Trash2 } from "lucide-react";
+import { AddButton, DeleteButton, DuplicateButton, ActionButtonGroup } from "@/components/ui/action-buttons";
 import { parseBeneficiaries } from "@/lib/beneficiaries";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -805,15 +806,11 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
                       </td>
                       <td className="p-2 text-center bg-blue-50 text-sm font-semibold text-blue-700" colSpan={3}>
                         Beneficiaries
-                        <Button
-                          variant="ghost"
-                          size="sm"
+                        <AddButton
                           onClick={() => handleAddBeneficiary(fund.id)}
                           disabled={isUpdating || beneficiaries.length >= 10}
-                          className="ml-2 h-6 w-6 p-0 text-blue-600 hover:text-blue-800 hover:bg-blue-100"
-                        >
-                          <Plus className="h-3 w-3" />
-                        </Button>
+                          className="ml-2"
+                        />
                       </td>
                     </>
                   )}
@@ -883,15 +880,10 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
                         {/* Remove Button - Only in the last column */}
                         <td className="p-2 text-center">
                           {beneficiaries.length > 1 && (
-                            <Button
-                              variant="ghost"
-                              size="sm"
+                            <DeleteButton
                               onClick={() => handleRemoveBeneficiary(fund.id, index)}
                               disabled={isUpdating}
-                              className="h-6 w-6 p-0 text-red-500 hover:text-red-700 hover:bg-red-50"
-                            >
-                              <Trash2 className="h-3 w-3" />
-                            </Button>
+                            />
                           )}
                         </td>
                       </>

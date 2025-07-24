@@ -242,27 +242,15 @@ export function SimpleTableWithBeneficiaries({
                     </SelectContent>
                   </Select>
                   {fundOwners.length > 1 && (
-                    <Button
-                      variant="ghost"
-                      size="sm"
+                    <DeleteButton
                       onClick={() => handleRemoveOwner(fund.id, 0)}
                       disabled={isUpdating}
-                      className="h-6 w-6 p-0 bg-white text-[#4F4F4F] hover:text-red-600 hover:bg-red-50 border border-gray-300 flex-shrink-0"
-                      title="Remove owner"
-                    >
-                      <UserMinus className="h-3 w-3" />
-                    </Button>
+                    />
                   )}
-                  <Button
-                    variant="ghost"
-                    size="sm"
+                  <AddButton
                     onClick={() => handleAddOwner(fund.id)}
                     disabled={isUpdating}
-                    className="h-6 w-6 p-0 bg-blue-50 text-primary hover:bg-blue-100 border-0 flex-shrink-0"
-                    title="Add owner"
-                  >
-                    <UserPlus className="h-3 w-3" />
-                  </Button>
+                  />
                 </div>
               </td>
               <td className="px-3 py-2 border-r border-neutral-200">
@@ -491,27 +479,15 @@ export function SimpleTableWithBeneficiaries({
               <td className="px-3 py-2 text-center border-r border-neutral-200" rowSpan={fundOwners.length}>
                 <div className="flex items-center gap-2">
                   {beneficiaries.length > 1 && (
-                    <Button
-                      variant="ghost"
-                      size="sm"
+                    <DeleteButton
                       onClick={() => handleRemoveBeneficiary(fund.id, 0)}
                       disabled={isUpdating}
-                      className="h-6 w-6 p-0 bg-white text-[#4F4F4F] hover:text-red-600 hover:bg-red-50 border border-gray-300"
-                      title="Remove beneficiary"
-                    >
-                      <Trash2 className="h-3 w-3" />
-                    </Button>
+                    />
                   )}
-                  <Button
-                    variant="ghost"
-                    size="sm"
+                  <AddButton
                     onClick={() => handleAddBeneficiary(fund.id)}
                     disabled={isUpdating}
-                    className="h-6 w-6 p-0 bg-blue-50 text-primary hover:bg-blue-100 border-0"
-                    title="Add beneficiary"
-                  >
-                    <Plus className="h-3 w-3" />
-                  </Button>
+                  />
                 </div>
               </td>
             </>
@@ -677,16 +653,10 @@ export function SimpleTableWithBeneficiaries({
                         ))}
                       </SelectContent>
                     </Select>
-                    <Button
-                      variant="ghost"
-                      size="sm"
+                    <DeleteButton
                       onClick={() => handleRemoveOwner(fund.id, actualIndex)}
                       disabled={isUpdating}
-                      className="h-6 w-6 p-0 bg-white text-[#4F4F4F] hover:text-red-600 hover:bg-red-50 border border-gray-300 flex-shrink-0"
-                      title="Remove owner"
-                    >
-                      <UserMinus className="h-3 w-3" />
-                    </Button>
+                    />
                   </div>
                 </td>
               )}
