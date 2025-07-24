@@ -256,8 +256,12 @@ export function AssuranceTable({ searchTerm }: AssuranceTableProps) {
       } catch {
         currentBeneficiaries = [];
       }
+      console.log('Before delete - Current beneficiaries:', currentBeneficiaries);
+      console.log('Deleting beneficiary ID:', beneficiaryId);
+      
       // Filter out the deleted beneficiary
       const filteredBeneficiaries = currentBeneficiaries.filter((beneficiary: any) => beneficiary.id !== beneficiaryId);
+      console.log('After filter:', filteredBeneficiaries);
       
       // Renumber remaining beneficiaries sequentially
       const renumberedBeneficiaries = filteredBeneficiaries.map((beneficiary: any, index: number) => ({
@@ -265,6 +269,7 @@ export function AssuranceTable({ searchTerm }: AssuranceTableProps) {
         id: `B${index + 2}`, // Start from B2 since B1 is main beneficiary
         name: `Beneficiary ${index + 2}`
       }));
+      console.log('After renumbering:', renumberedBeneficiaries);
       
       setIsUpdating(true);
       updateMutation.mutate({ id, updates: { additionalBeneficiaries: JSON.stringify(renumberedBeneficiaries) } });
