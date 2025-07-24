@@ -2,34 +2,8 @@ import React, { useState, useCallback, useMemo } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { Plus, Trash2, Search, UserPlus, UserMinus } from "lucide-react";
 import { getFieldClass, getFieldWidth } from "@/lib/design-tokens";
+import { formatCurrencyValue, formatPercentageValue } from "@/lib/formatting";
 import type { VoluntaryInvestment, InsertVoluntaryInvestment } from "@shared/schema";
-
-// Utility function for formatting currency values
-const formatCurrencyValue = (value: string, fieldType: string): string => {
-  if (!value || value.trim() === '') return 'R 0';
-  
-  // Remove existing formatting
-  const cleanValue = value.replace(/[^\d.-]/g, '');
-  if (!cleanValue) return 'R 0';
-  if (isNaN(parseFloat(cleanValue))) return 'R 0';
-  
-  const numValue = parseFloat(cleanValue);
-  
-  if (fieldType === 'percentage' || fieldType.includes('percentage')) {
-    return `${numValue}%`;
-  }
-  
-  // Currency formatting
-  if (numValue === 0) return 'R 0';
-  
-  // Format with thousands separators
-  const formatted = new Intl.NumberFormat('en-ZA', {
-    minimumFractionDigits: 0,
-    maximumFractionDigits: 0,
-  }).format(Math.abs(numValue));
-  
-  return `R ${formatted}`;
-};
 
 export default function VoluntaryInvestmentsTable() {
   const [searchTerm, setSearchTerm] = useState("");
@@ -54,12 +28,12 @@ export default function VoluntaryInvestmentsTable() {
       const newInvestment: InsertVoluntaryInvestment = {
         description: "",
         owners: '["Donald Edwards"]',
-        ownershipPercentages: '["100"]',
+        ownershipPercentages: '["100%"]',
         baseCost: "0",
         marketValue: "0",
-        liquidationPercentage: "0",
-        spouse: "0",
-        others: "0",
+        liquidationPercentage: "0%",
+        spouse: "0%",
+        others: "0%",
         excludedFromJointEstate: false,
         excludedFromEstateDuty: false,
         excludedFromCGT: false,
@@ -171,7 +145,13 @@ export default function VoluntaryInvestmentsTable() {
   }, [updateMutation]);
 
   const handleInputBlur = useCallback((id: number, field: keyof VoluntaryInvestment, value: string) => {
-    const formattedValue = formatCurrencyValue(value, field);
+    // Determine field type and format accordingly
+    let formattedValue: string;
+    if (field === 'liquidationPercentage' || field === 'spouse' || field === 'others') {
+      formattedValue = formatPercentageValue(value);
+    } else {
+      formattedValue = formatCurrencyValue(value);
+    }
     handleUpdateInvestment(id, field, formattedValue);
     
     // Update DOM element directly for immediate visual feedback
@@ -198,7 +178,7 @@ export default function VoluntaryInvestmentsTable() {
     const percentages = JSON.parse(investment.ownershipPercentages || '[]');
     
     owners.push('Donald Edwards');
-    percentages.push('0');
+    percentages.push('0%');
     
     handleUpdateInvestment(investmentId, 'owners', JSON.stringify(owners));
     handleUpdateInvestment(investmentId, 'ownershipPercentages', JSON.stringify(percentages));
@@ -235,7 +215,8 @@ export default function VoluntaryInvestmentsTable() {
     if (!investment) return;
     
     const percentages = JSON.parse(investment.ownershipPercentages || '[]');
-    percentages[ownerIndex] = newPercentage;
+    const formattedValue = formatPercentageValue(newPercentage);
+    percentages[ownerIndex] = formattedValue;
     
     handleUpdateInvestment(investmentId, 'ownershipPercentages', JSON.stringify(percentages));
   }, [filteredInvestments, handleUpdateInvestment]);
@@ -389,8 +370,14 @@ export default function VoluntaryInvestmentsTable() {
                     <input
                       type="text"
                       key={`percentage-${investment.id}-${ownerIndex}-${percentages[ownerIndex]}`}
-                      defaultValue={percentages[ownerIndex] || '0'}
-                      onBlur={(e) => handlePercentageChange(investment.id, ownerIndex, e.target.value)}
+                      defaultValue={percentages[ownerIndex] || '0%'}
+                      onBlur={(e) => {
+                        const formattedValue = formatPercentageValue(e.target.value);
+                        if (formattedValue !== e.target.value) {
+                          e.target.value = formattedValue;
+                        }
+                        handlePercentageChange(investment.id, ownerIndex, e.target.value);
+                      }}
                       className={getFieldClass('percentage')}
                       disabled={isUpdating}
                     />
@@ -401,7 +388,7 @@ export default function VoluntaryInvestmentsTable() {
                         <input
                           key={`baseCost-${investment.id}-${investment.baseCost}`}
                           type="text"
-                          defaultValue={formatCurrencyValue(investment.baseCost, 'baseCost')}
+                          defaultValue={formatCurrencyValue(investment.baseCost)}
                           onBlur={(e) => handleInputBlur(investment.id, 'baseCost', e.target.value)}
                           className={getFieldClass('amount')}
                           disabled={isUpdating}
@@ -411,7 +398,7 @@ export default function VoluntaryInvestmentsTable() {
                         <input
                           key={`marketValue-${investment.id}-${investment.marketValue}`}
                           type="text"
-                          defaultValue={formatCurrencyValue(investment.marketValue, 'marketValue')}
+                          defaultValue={formatCurrencyValue(investment.marketValue)}
                           onBlur={(e) => handleInputBlur(investment.id, 'marketValue', e.target.value)}
                           className={getFieldClass('amount')}
                           disabled={isUpdating}
@@ -421,7 +408,7 @@ export default function VoluntaryInvestmentsTable() {
                         <input
                           key={`liquidationPercentage-${investment.id}-${investment.liquidationPercentage}`}
                           type="text"
-                          defaultValue={investment.liquidationPercentage}
+                          defaultValue={investment.liquidationPercentage || "0%"}
                           onBlur={(e) => handleInputBlur(investment.id, 'liquidationPercentage', e.target.value)}
                           className={getFieldClass('percentage')}
                           disabled={isUpdating}
@@ -431,8 +418,14 @@ export default function VoluntaryInvestmentsTable() {
                         <input
                           key={`spouse-${investment.id}-${investment.spouse}`}
                           type="text"
-                          defaultValue={investment.spouse}
-                          onBlur={(e) => handleInputBlur(investment.id, 'spouse', e.target.value)}
+                          defaultValue={investment.spouse || "0%"}
+                          onBlur={(e) => {
+                            const formattedValue = formatPercentageValue(e.target.value);
+                            if (formattedValue !== e.target.value) {
+                              e.target.value = formattedValue;
+                            }
+                            handleInputBlur(investment.id, 'spouse', e.target.value);
+                          }}
                           className={getFieldClass('percentage')}
                           disabled={isUpdating}
                         />
@@ -441,8 +434,14 @@ export default function VoluntaryInvestmentsTable() {
                         <input
                           key={`others-${investment.id}-${investment.others}`}
                           type="text"
-                          defaultValue={investment.others}
-                          onBlur={(e) => handleInputBlur(investment.id, 'others', e.target.value)}
+                          defaultValue={investment.others || "0%"}
+                          onBlur={(e) => {
+                            const formattedValue = formatPercentageValue(e.target.value);
+                            if (formattedValue !== e.target.value) {
+                              e.target.value = formattedValue;
+                            }
+                            handleInputBlur(investment.id, 'others', e.target.value);
+                          }}
                           className={getFieldClass('percentage')}
                           disabled={isUpdating}
                         />
@@ -504,10 +503,10 @@ export default function VoluntaryInvestmentsTable() {
                 <td className="px-3 py-2 text-sm font-bold text-neutral-800">Total</td>
                 <td colSpan={2} className="px-3 py-2"></td>
                 <td className="px-3 py-2 text-sm font-bold text-neutral-800 text-right">
-                  {formatCurrencyValue(totals.baseCost.toString(), 'baseCost')}
+                  {formatCurrencyValue(totals.baseCost.toString())}
                 </td>
                 <td className="px-3 py-2 text-sm font-bold text-neutral-800 text-right">
-                  {formatCurrencyValue(totals.marketValue.toString(), 'marketValue')}
+                  {formatCurrencyValue(totals.marketValue.toString())}
                 </td>
                 <td colSpan={8} className="px-3 py-2"></td>
               </tr>
