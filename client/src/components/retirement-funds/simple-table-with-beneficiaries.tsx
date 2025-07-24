@@ -192,6 +192,22 @@ export function SimpleTableWithBeneficiaries({
       // Main fund row - TOP ALIGNED
       rows.push(
         <tr key={`${fund.id}-main`} className="hover:bg-neutral-50" style={{ verticalAlign: "top" }}>
+          {/* Actions Column - FIRST COLUMN */}
+          <td className="px-3 py-2 text-center" rowSpan={Math.max(fundOwners.length, beneficiaries.length || 1)}>
+            <div className="flex items-center justify-center space-x-1">
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => onRemoveFund?.(fund.id)}
+                disabled={isUpdating}
+                className="h-6 w-6 p-0 bg-white text-[#4F4F4F] hover:text-red-600 hover:bg-red-50 border border-gray-300"
+                title="Delete fund"
+              >
+                <Trash2 className="h-3 w-3" />
+              </Button>
+            </div>
+          </td>
+          
           {/* Overview Section */}
           {columnVisibility.overview && (
             <>
@@ -519,21 +535,6 @@ export function SimpleTableWithBeneficiaries({
                   disabled={isUpdating}
                 />
               </td>
-              {/* Fund-level Actions */}
-              <td className="px-3 py-2 text-center border-r border-neutral-200" rowSpan={fundOwners.length}>
-                <div className="flex items-center gap-2">
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => onRemoveFund && onRemoveFund(fund.id)}
-                    disabled={isUpdating}
-                    className="h-6 w-6 p-0 bg-white text-[#4F4F4F] hover:text-red-600 hover:bg-red-50 border border-gray-300"
-                    title="Remove fund"
-                  >
-                    <Trash2 className="h-3 w-3" />
-                  </Button>
-                </div>
-              </td>
             </>
           )}
         </tr>
@@ -547,6 +548,9 @@ export function SimpleTableWithBeneficiaries({
           
           rows.push(
             <tr key={`${fund.id}-beneficiary-${actualIndex}`} className="hover:bg-neutral-50 border-l-2 border-green-200">
+              {/* Actions Column - empty for beneficiary rows */}
+              <td className="px-3 py-2"></td>
+              
               {/* Skip overview columns */}
               {columnVisibility.overview && (
                 <>
@@ -619,28 +623,12 @@ export function SimpleTableWithBeneficiaries({
                   <td className="px-3 py-2 text-right">
                     <span className="table-text-14 text-neutral-900">0 years</span>
                   </td>
-                  {/* Beneficiary Actions */}
-                  <td className="px-3 py-2">
-                    <div className="flex items-center gap-2">
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        onClick={() => handleRemoveBeneficiary(fund.id, actualIndex)}
-                        disabled={isUpdating}
-                        className="h-6 w-6 p-0 bg-white text-[#4F4F4F] hover:text-red-600 hover:bg-red-50 border border-gray-300"
-                        title="Remove beneficiary"
-                      >
-                        <Trash2 className="h-3 w-3" />
-                      </Button>
-                    </div>
-                  </td>
                 </>
               )}
               
               {/* Skip Unapproved Life Cover columns */}
               {columnVisibility.unapprovedLifeCover && (
                 <>
-                  <td></td>
                   <td></td>
                 </>
               )}
@@ -657,6 +645,9 @@ export function SimpleTableWithBeneficiaries({
           
           rows.push(
             <tr key={`${fund.id}-owner-${actualIndex}`} className="hover:bg-neutral-50 border-l-2 border-blue-200">
+              {/* Actions Column - empty for additional owner rows */}
+              <td className="px-3 py-2"></td>
+              
               {/* Fund Description column with nested indicator */}
               {columnVisibility.overview && (
                 <td className="px-3 py-2 border-r border-neutral-200">
@@ -744,13 +735,11 @@ export function SimpleTableWithBeneficiaries({
                   <td></td>
                   <td></td>
                   <td></td>
-                  <td></td>
                 </>
               )}
               
               {columnVisibility.unapprovedLifeCover && (
                 <>
-                  <td></td>
                   <td></td>
                 </>
               )}
@@ -780,6 +769,10 @@ export function SimpleTableWithBeneficiaries({
       <table className="min-w-full bg-white border border-neutral-200 rounded-lg shadow-sm">{/* Removed fixed table layout and colgroup for standardized styling */}
         <thead>
           <tr className="bg-primary/10 border-b border-neutral-200">
+            {/* Actions column - always first */}
+            <th className="px-3 py-2 text-center text-xs font-medium text-neutral-600 uppercase tracking-wider w-16">
+              Actions
+            </th>
             {columnVisibility.overview && (
               <>
                 <th className="px-3 py-2 text-left text-xs font-medium text-neutral-600 uppercase tracking-wider">
@@ -839,18 +832,12 @@ export function SimpleTableWithBeneficiaries({
                 <th className="px-3 py-2 text-center text-xs font-medium text-neutral-600 uppercase tracking-wider">
                   Income Term
                 </th>
-                <th className="px-3 py-2 text-center text-xs font-medium text-neutral-600 uppercase tracking-wider">
-                  Actions
-                </th>
               </>
             )}
             {columnVisibility.unapprovedLifeCover && (
               <>
                 <th className="px-3 py-2 text-center text-xs font-medium text-neutral-600 uppercase tracking-wider border-l border-neutral-200">
                   Cover Amount
-                </th>
-                <th className="px-3 py-2 text-center text-xs font-medium text-neutral-600 uppercase tracking-wider">
-                  Fund Actions
                 </th>
               </>
             )}
