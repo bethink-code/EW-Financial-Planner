@@ -235,6 +235,7 @@ th, td {
     padding: 0;
     width: 100%;
     background-color: #EFF2F5;
+    overflow-x: auto;
   }
 
   /* Apply background to iframe container */
@@ -249,6 +250,11 @@ th, td {
 }
 
 @layer utilities {
+  /* Full width layout utilities */
+  .min-w-max {
+    min-width: max-content;
+  }
+  
   /* Teal color utilities */
   .bg-teal-50 { background-color: var(--teal-50); }
   .bg-teal-100 { background-color: var(--teal-100); }

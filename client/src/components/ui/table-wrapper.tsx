@@ -59,7 +59,7 @@ export function TableWrapper({
         </div>
       )}
       
-      <div className="overflow-x-auto">
+      <div>
         {children}
       </div>
     </div>
