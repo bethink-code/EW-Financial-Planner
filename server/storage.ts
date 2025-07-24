@@ -1,4 +1,7 @@
 import { retirementFunds, lumpSumBequests, assurance, definedBenefitFunds, voluntaryInvestments, assetsAndLiabilities, incomeNeeds, incomeProvisions, residue, additionalEstateDutyItems, type RetirementFund, type InsertRetirementFund, type UpdateRetirementFund, type LumpSumBequest, type InsertLumpSumBequest, type Assurance, type InsertAssurance, type UpdateAssurance, type DefinedBenefitFund, type InsertDefinedBenefitFund, type UpdateDefinedBenefitFund, type VoluntaryInvestment, type InsertVoluntaryInvestment, type UpdateVoluntaryInvestment, type AssetAndLiability, type InsertAssetAndLiability, type UpdateAssetAndLiability, type IncomeNeed, type InsertIncomeNeed, type UpdateIncomeNeed, type IncomeProvision, type InsertIncomeProvision, type UpdateIncomeProvision, type Residue, type InsertResidue, type UpdateResidue, type AdditionalEstateDutyItem, type InsertAdditionalEstateDutyItem, type UpdateAdditionalEstateDutyItem } from "@shared/schema";
+import { drizzle } from "drizzle-orm/node-postgres";
+import { Pool } from "pg";
+import { eq, ilike, or } from "drizzle-orm";
 
 export interface IStorage {
   // Retirement Funds
@@ -926,4 +929,112 @@ export class MemStorage implements IStorage {
   }
 }
 
-export const storage = new MemStorage();
+// Database storage implementation
+class DbStorage implements IStorage {
+  private pool = new Pool({ connectionString: process.env.DATABASE_URL });
+  private db = drizzle(this.pool);
+
+  // Lump Sum Bequests implementation
+  async getLumpSumBequests(): Promise<LumpSumBequest[]> {
+    return await this.db.select().from(lumpSumBequests).orderBy(lumpSumBequests.id);
+  }
+
+  async getLumpSumBequest(id: number): Promise<LumpSumBequest | undefined> {
+    const results = await this.db.select().from(lumpSumBequests).where(eq(lumpSumBequests.id, id)).limit(1);
+    return results[0];
+  }
+
+  async createLumpSumBequest(bequest: InsertLumpSumBequest): Promise<LumpSumBequest> {
+    const results = await this.db.insert(lumpSumBequests).values(bequest).returning();
+    return results[0];
+  }
+
+  async updateLumpSumBequest(id: number, updates: Partial<InsertLumpSumBequest>): Promise<LumpSumBequest | undefined> {
+    const results = await this.db.update(lumpSumBequests).set(updates).where(eq(lumpSumBequests.id, id)).returning();
+    return results[0];
+  }
+
+  async deleteLumpSumBequest(id: number): Promise<boolean> {
+    const results = await this.db.delete(lumpSumBequests).where(eq(lumpSumBequests.id, id)).returning();
+    return results.length > 0;
+  }
+
+  async searchLumpSumBequests(query: string): Promise<LumpSumBequest[]> {
+    if (!query.trim()) return await this.getLumpSumBequests();
+    
+    return await this.db.select().from(lumpSumBequests)
+      .where(or(
+        ilike(lumpSumBequests.description, `%${query}%`),
+        ilike(lumpSumBequests.entity, `%${query}%`)
+      ))
+      .orderBy(lumpSumBequests.id);
+  }
+
+  // Retirement Funds - stub implementations (using MemStorage pattern for now)
+  async getRetirementFunds(): Promise<RetirementFund[]> { return []; }
+  async getRetirementFund(id: number): Promise<RetirementFund | undefined> { return undefined; }
+  async createRetirementFund(fund: InsertRetirementFund): Promise<RetirementFund> { throw new Error("Not implemented"); }
+  async updateRetirementFund(id: number, updates: UpdateRetirementFund): Promise<RetirementFund | undefined> { return undefined; }
+  async deleteRetirementFund(id: number): Promise<boolean> { return false; }
+  async searchRetirementFunds(query: string): Promise<RetirementFund[]> { return []; }
+
+  // Other methods - stub implementations
+  async getAssurance(): Promise<Assurance[]> { return []; }
+  async getAssuranceById(id: number): Promise<Assurance | undefined> { return undefined; }
+  async createAssurance(assurance: InsertAssurance): Promise<Assurance> { throw new Error("Not implemented"); }
+  async updateAssurance(id: number, updates: UpdateAssurance): Promise<Assurance | undefined> { return undefined; }
+  async deleteAssurance(id: number): Promise<boolean> { return false; }
+  async searchAssurance(query: string): Promise<Assurance[]> { return []; }
+
+  async getDefinedBenefitFunds(): Promise<DefinedBenefitFund[]> { return []; }
+  async getDefinedBenefitFund(id: number): Promise<DefinedBenefitFund | undefined> { return undefined; }
+  async createDefinedBenefitFund(fund: InsertDefinedBenefitFund): Promise<DefinedBenefitFund> { throw new Error("Not implemented"); }
+  async updateDefinedBenefitFund(id: number, updates: UpdateDefinedBenefitFund): Promise<DefinedBenefitFund | undefined> { return undefined; }
+  async deleteDefinedBenefitFund(id: number): Promise<boolean> { return false; }
+  async searchDefinedBenefitFunds(query: string): Promise<DefinedBenefitFund[]> { return []; }
+
+  async getVoluntaryInvestments(): Promise<VoluntaryInvestment[]> { return []; }
+  async getVoluntaryInvestment(id: number): Promise<VoluntaryInvestment | undefined> { return undefined; }
+  async createVoluntaryInvestment(investment: InsertVoluntaryInvestment): Promise<VoluntaryInvestment> { throw new Error("Not implemented"); }
+  async updateVoluntaryInvestment(id: number, updates: UpdateVoluntaryInvestment): Promise<VoluntaryInvestment | undefined> { return undefined; }
+  async deleteVoluntaryInvestment(id: number): Promise<boolean> { return false; }
+  async searchVoluntaryInvestments(query: string): Promise<VoluntaryInvestment[]> { return []; }
+
+  async getAssetsAndLiabilities(): Promise<AssetAndLiability[]> { return []; }
+  async getAssetAndLiability(id: number): Promise<AssetAndLiability | undefined> { return undefined; }
+  async createAssetAndLiability(asset: InsertAssetAndLiability): Promise<AssetAndLiability> { throw new Error("Not implemented"); }
+  async updateAssetAndLiability(id: number, updates: UpdateAssetAndLiability): Promise<AssetAndLiability | undefined> { return undefined; }
+  async deleteAssetAndLiability(id: number): Promise<boolean> { return false; }
+  async searchAssetsAndLiabilities(query: string): Promise<AssetAndLiability[]> { return []; }
+
+  async getIncomeNeeds(): Promise<IncomeNeed[]> { return []; }
+  async getIncomeNeed(id: number): Promise<IncomeNeed | undefined> { return undefined; }
+  async createIncomeNeed(need: InsertIncomeNeed): Promise<IncomeNeed> { throw new Error("Not implemented"); }
+  async updateIncomeNeed(id: number, updates: UpdateIncomeNeed): Promise<IncomeNeed | undefined> { return undefined; }
+  async deleteIncomeNeed(id: number): Promise<boolean> { return false; }
+  async searchIncomeNeeds(query: string): Promise<IncomeNeed[]> { return []; }
+
+  async getIncomeProvisions(): Promise<IncomeProvision[]> { return []; }
+  async getIncomeProvision(id: number): Promise<IncomeProvision | undefined> { return undefined; }
+  async createIncomeProvision(provision: InsertIncomeProvision): Promise<IncomeProvision> { throw new Error("Not implemented"); }
+  async updateIncomeProvision(id: number, updates: UpdateIncomeProvision): Promise<IncomeProvision | undefined> { return undefined; }
+  async deleteIncomeProvision(id: number): Promise<boolean> { return false; }
+  async searchIncomeProvisions(query: string): Promise<IncomeProvision[]> { return []; }
+
+  async getResidue(): Promise<Residue[]> { return []; }
+  async getResidueItem(id: number): Promise<Residue | undefined> { return undefined; }
+  async createResidueItem(item: InsertResidue): Promise<Residue> { throw new Error("Not implemented"); }
+  async updateResidueItem(id: number, updates: UpdateResidue): Promise<Residue | undefined> { return undefined; }
+  async deleteResidueItem(id: number): Promise<boolean> { return false; }
+  async searchResidue(query: string): Promise<Residue[]> { return []; }
+
+  async getAdditionalEstateDutyItems(): Promise<AdditionalEstateDutyItem[]> { return []; }
+  async getAdditionalEstateDutyItem(id: number): Promise<AdditionalEstateDutyItem | undefined> { return undefined; }
+  async createAdditionalEstateDutyItem(item: InsertAdditionalEstateDutyItem): Promise<AdditionalEstateDutyItem> { throw new Error("Not implemented"); }
+  async updateAdditionalEstateDutyItem(id: number, updates: UpdateAdditionalEstateDutyItem): Promise<AdditionalEstateDutyItem | undefined> { return undefined; }
+  async deleteAdditionalEstateDutyItem(id: number): Promise<boolean> { return false; }
+  async searchAdditionalEstateDutyItems(query: string): Promise<AdditionalEstateDutyItem[]> { return []; }
+}
+
+// Use database storage if DATABASE_URL is available, otherwise use memory storage
+export const storage = process.env.DATABASE_URL ? new DbStorage() : new MemStorage();
