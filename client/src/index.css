@@ -312,12 +312,17 @@ th, td {
     border: 1px solid hsl(var(--border));
     outline: none;
     font-size: 0.875rem;
-    text-align: right;
+    text-align: left;
     box-sizing: border-box;
     resize: none;
     border-radius: 6px;
     transition: all 0.2s ease;
     color: hsl(var(--foreground));
+  }
+
+  /* Right-aligned for numeric fields */
+  .table-input.text-right {
+    text-align: right;
   }
   
   .table-input:hover {
