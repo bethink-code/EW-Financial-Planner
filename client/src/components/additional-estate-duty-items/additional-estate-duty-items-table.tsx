@@ -149,27 +149,6 @@ export default function AdditionalEstateDutyItemsTable() {
 
   return (
     <div className="space-y-4">
-
-      {/* Summary Section */}
-      {items.length > 0 && (
-        <div className="bg-white border border-neutral-200 rounded-lg shadow-sm overflow-hidden mb-6">
-          <div className="bg-primary/10 px-4 py-3 border-b border-neutral-200">
-            <h3 className="text-sm font-semibold text-neutral-700 uppercase tracking-wide">Summary</h3>
-          </div>
-          <div className="p-4">
-            <div className="grid grid-cols-1 gap-4">
-              <div className="bg-neutral-50 p-3 rounded-lg">
-                <p className="text-xs text-neutral-500 uppercase tracking-wide mb-1">Number of Estate Duty Items</p>
-                <p className="text-lg font-semibold text-neutral-900">
-                  {totals.count}
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
-
-
       {/* Table */}
       <div className="overflow-x-auto">
         <table className="min-w-full bg-white border border-neutral-200 rounded-lg shadow-sm">

@@ -171,44 +171,6 @@ export default function ResidueTable() {
 
   return (
     <div className="space-y-4">
-
-      {/* Summary Section */}
-      {residueItems.length > 0 && (
-        <div className="bg-white border border-neutral-200 rounded-lg shadow-sm overflow-hidden mb-6">
-          <div className="bg-primary/10 px-4 py-3 border-b border-neutral-200">
-            <h3 className="text-sm font-semibold text-neutral-700 uppercase tracking-wide">Summary</h3>
-          </div>
-          <div className="p-4">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div className="bg-neutral-50 p-3 rounded-lg">
-                <p className="text-xs text-neutral-500 uppercase tracking-wide mb-1">Number of Entities</p>
-                <p className="text-lg font-semibold text-neutral-900">
-                  {totals.count}
-                </p>
-              </div>
-              <div className="bg-neutral-50 p-3 rounded-lg">
-                <p className="text-xs text-neutral-500 uppercase tracking-wide mb-1">Residue to Registered Charities</p>
-                <p className="text-lg font-semibold text-neutral-900">
-                  {totals.charityPercentage}%
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
-      
-      {/* Add Entity Button */}
-      <div className="flex justify-start mb-4">
-        <button
-          onClick={handleAddEntity}
-          disabled={addMutation.isPending}
-          className="bg-primary text-white px-4 py-2 rounded-lg hover:bg-[#014d6b] disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2 font-medium"
-        >
-          <Plus className="h-4 w-4" />
-          Add Entity
-        </button>
-      </div>
-
       {/* Table */}
       <div className="overflow-x-auto">
         <table className="min-w-full bg-white border border-neutral-200 rounded-lg shadow-sm">
