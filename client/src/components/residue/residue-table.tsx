@@ -182,18 +182,18 @@ export default function ResidueTable() {
   return (
     <div className="space-y-4">
       {/* Table */}
-      <table className="min-w-full bg-white border border-neutral-200 rounded-lg shadow-sm">
+      <table className="min-w-full  border border-neutral-200 rounded-lg shadow-sm">
           <thead>
-            <tr className="bg-primary/10 border-b border-neutral-200">
+            <tr className="border-b border-neutral-200">
               <th className="px-3 py-2 text-center text-xs font-medium text-neutral-600 uppercase tracking-wider w-16">Actions</th>
               <th className="px-3 py-2 text-left text-xs font-medium text-neutral-600 uppercase tracking-wider">Entity</th>
               <th className="px-3 py-2 text-left text-xs font-medium text-neutral-600 uppercase tracking-wider">Percentage</th>
             </tr>
           </thead>
-          <tbody className="bg-white divide-y divide-neutral-200">
+          <tbody className="divide-y divide-neutral-200">
             {/* Regular Entity Rows */}
             {regularEntities.map((item: Residue) => (
-              <tr key={item.id} className="hover:bg-neutral-50">
+              <tr key={item.id} className="">
                 <td className="table-actions-cell text-center">
                   <ActionButtonGroup>
                     <DuplicateButton
@@ -264,7 +264,7 @@ export default function ResidueTable() {
             
             {/* Total Row */}
             {residueItems.length > 0 && (
-              <tr className="bg-neutral-100 border-t-2 border-neutral-300 font-bold">
+              <tr className="border-t-2 border-neutral-300 font-bold">
                 <td className="px-3 py-2"></td>
                 <td className="px-3 py-2 text-sm font-bold text-neutral-800">Total</td>
                 <td className="px-3 py-2 text-sm font-bold text-neutral-800 text-right">

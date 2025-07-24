@@ -215,9 +215,9 @@ export function AssuranceTable({ searchTerm }: AssuranceTableProps) {
 
       {/* Table */}
       <div className="overflow-x-auto">
-        <table className="min-w-full bg-white border border-neutral-200 rounded-lg shadow-sm">
+        <table className="min-w-full  border border-neutral-200 rounded-lg shadow-sm">
           <thead>
-            <tr className="bg-primary/10 border-b border-neutral-200">
+            <tr className="border-b border-neutral-200">
               <th className="px-3 py-3 text-left text-xs font-medium text-neutral-600 uppercase tracking-wider">Description</th>
               <th className="px-3 py-3 text-left text-xs font-medium text-neutral-600 uppercase tracking-wider">Owner</th>
               <th className="px-3 py-3 text-left text-xs font-medium text-neutral-600 uppercase tracking-wider">Life Assured</th>
@@ -234,9 +234,9 @@ export function AssuranceTable({ searchTerm }: AssuranceTableProps) {
               <th className="px-3 py-3 text-center text-xs font-medium text-neutral-600 uppercase tracking-wider">Actions</th>
             </tr>
           </thead>
-          <tbody className="bg-white divide-y divide-neutral-200">
+          <tbody className="divide-y divide-neutral-200">
             {filteredPolicies.map((policy: Assurance) => (
-              <tr key={policy.id} className="hover:bg-neutral-50">
+              <tr key={policy.id} className="">
                 <td className="px-3 py-2">
                   <input
                     type="text"
@@ -292,7 +292,7 @@ export function AssuranceTable({ searchTerm }: AssuranceTableProps) {
                     />
                   </div>
                 </td>
-                <td className="px-3 py-2 text-sm text-neutral-700 text-right bg-neutral-100">
+                <td className="px-3 py-2 text-sm text-neutral-700 text-right ">
                   {formatCurrencyValue(policy.benefitSplit, 'percentage')}
                 </td>
                 <td className="px-3 py-2">
@@ -327,7 +327,7 @@ export function AssuranceTable({ searchTerm }: AssuranceTableProps) {
                     type="checkbox"
                     checked={policy.excludedFromEstateDuty}
                     onChange={(e) => handleUpdatePolicy(policy.id, 'excludedFromEstateDuty', e.target.checked)}
-                    className="h-4 w-4 text-blue-600 bg-white border-neutral-300 rounded focus:ring-primary focus:ring-2"
+                    className="h-4 w-4 text-blue-600  border-neutral-300 rounded focus:ring-primary focus:ring-2"
                     disabled={isUpdating}
                   />
                 </td>
@@ -336,7 +336,7 @@ export function AssuranceTable({ searchTerm }: AssuranceTableProps) {
                     type="checkbox"
                     checked={policy.excludedFromProvisions}
                     onChange={(e) => handleUpdatePolicy(policy.id, 'excludedFromProvisions', e.target.checked)}
-                    className="h-4 w-4 text-blue-600 bg-white border-neutral-300 rounded focus:ring-primary focus:ring-2"
+                    className="h-4 w-4 text-blue-600  border-neutral-300 rounded focus:ring-primary focus:ring-2"
                     disabled={isUpdating}
                   />
                 </td>
@@ -367,7 +367,7 @@ export function AssuranceTable({ searchTerm }: AssuranceTableProps) {
               
               {/* Additional Owner Rows */}
               {(policy.additionalOwners || []).map((owner, index) => (
-                <tr key={`owner-${policy.id}-${index}`} className="hover:bg-neutral-50 border-b border-neutral-200">
+                <tr key={`owner-${policy.id}-${index}`} className="border-b border-neutral-200">
                   <td className="px-3 py-2 text-sm text-neutral-700"></td>
                   <td className="px-3 py-2">
                     <input
@@ -388,7 +388,7 @@ export function AssuranceTable({ searchTerm }: AssuranceTableProps) {
               
               {/* Additional Beneficiary Rows */}
               {(policy.additionalBeneficiaries || []).map((beneficiary, index) => (
-                <tr key={`beneficiary-${policy.id}-${index}`} className="hover:bg-neutral-50 border-b border-neutral-200">
+                <tr key={`beneficiary-${policy.id}-${index}`} className="border-b border-neutral-200">
                   <td colSpan={4} className="px-3 py-2 text-sm text-neutral-700"></td>
                   <td className="px-3 py-2">
                     <input
@@ -423,7 +423,7 @@ export function AssuranceTable({ searchTerm }: AssuranceTableProps) {
             
             {/* Total Row */}
             {filteredPolicies.length > 0 && (
-              <tr className="bg-neutral-100 border-t-2 border-neutral-300 font-bold">
+              <tr className="border-t-2 border-neutral-300 font-bold">
                 <td className="px-3 py-2 text-sm font-bold text-neutral-800">Total</td>
                 <td colSpan={2} className="px-3 py-2"></td>
                 <td className="px-3 py-2 text-sm font-bold text-neutral-800 text-right">

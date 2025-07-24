@@ -148,11 +148,11 @@ export function AssuranceTable({ searchTerm }: AssuranceTableProps) {
       </div>
 
       {/* Main Table */}
-      <div className="bg-white rounded-lg border border-neutral-200 overflow-hidden">
+      <div className="rounded-lg border border-neutral-200 overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full min-w-full">
             <thead>
-              <tr className="bg-primary/10 border-b border-neutral-300">
+              <tr className="border-b border-neutral-300">
                 <th className="p-3 text-center text-xs font-semibold text-neutral-700 uppercase tracking-wider w-16">Actions</th>
                 <th className="p-3 text-left text-xs font-semibold text-neutral-700 uppercase tracking-wider min-w-[200px]">Description</th>
                 <th className="p-3 text-center text-xs font-semibold text-neutral-700 uppercase tracking-wider min-w-[140px]">Owner</th>
@@ -167,7 +167,7 @@ export function AssuranceTable({ searchTerm }: AssuranceTableProps) {
             </thead>
             <tbody className="divide-y divide-neutral-200">
               {policies.map((policy: Assurance) => (
-                <tr key={policy.id} className="hover:bg-neutral-50">
+                <tr key={policy.id} className="">
                   <td className="p-2 text-center">
                     <DeleteButton
                       onClick={() => deleteMutation.mutate(policy.id)}

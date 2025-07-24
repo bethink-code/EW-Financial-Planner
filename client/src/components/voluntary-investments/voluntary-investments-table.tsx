@@ -270,15 +270,15 @@ export default function VoluntaryInvestmentsTable() {
   return (
     <div className="space-y-4">
       {/* Table */}
-      <table className="min-w-full bg-white border border-neutral-200 rounded-lg shadow-sm">
+      <table className="min-w-full  border border-neutral-200 rounded-lg shadow-sm">
           <thead>
-            <tr className="bg-primary/10 border-b border-neutral-200">
+            <tr className="border-b border-neutral-200">
               <th className="px-3 py-2 text-center text-xs font-medium text-neutral-600 uppercase tracking-wider w-16">Actions</th>
               <th className="px-3 py-2 text-left text-xs font-medium text-neutral-600 uppercase tracking-wider" colSpan={3}>Overview</th>
               <th className="px-3 py-2 text-left text-xs font-medium text-neutral-600 uppercase tracking-wider" colSpan={5}>Bequeath To</th>
               <th className="px-3 py-2 text-left text-xs font-medium text-neutral-600 uppercase tracking-wider" colSpan={4}>Exclusions</th>
             </tr>
-            <tr className="bg-primary/10 border-b border-neutral-200">
+            <tr className="border-b border-neutral-200">
               <th className="px-3 py-2 text-center text-xs font-medium text-neutral-600 uppercase tracking-wider"></th>
               <th className="px-3 py-2 text-left text-xs font-medium text-neutral-600 uppercase tracking-wider">Description</th>
               <th className="px-3 py-2 text-left text-xs font-medium text-neutral-600 uppercase tracking-wider">Owner</th>
@@ -294,7 +294,7 @@ export default function VoluntaryInvestmentsTable() {
               <th className="px-3 py-2 text-center text-xs font-medium text-neutral-600 uppercase tracking-wider">Executor's Fees</th>
             </tr>
           </thead>
-          <tbody className="bg-white divide-y divide-neutral-200">
+          <tbody className="divide-y divide-neutral-200">
             {investments.map((investment: VoluntaryInvestment) => {
               let owners: string[], percentages: string[];
               try {
@@ -307,7 +307,7 @@ export default function VoluntaryInvestmentsTable() {
               }
               
               return owners.map((owner: string, ownerIndex: number) => (
-                <tr key={`${investment.id}-${ownerIndex}`} className="hover:bg-neutral-50">
+                <tr key={`${investment.id}-${ownerIndex}`} className="">
                   {ownerIndex === 0 && (
                     <>
                       <td rowSpan={owners.length} className="table-actions-cell text-center">
@@ -481,7 +481,7 @@ export default function VoluntaryInvestmentsTable() {
             
             {/* Total Row */}
             {investments.length > 0 && (
-              <tr className="bg-neutral-100 border-t-2 border-neutral-300 font-bold">
+              <tr className="border-t-2 border-neutral-300 font-bold">
                 <td className="px-3 py-2"></td>
                 <td className="px-3 py-2 text-sm font-bold text-neutral-800">Total</td>
                 <td colSpan={2} className="px-3 py-2"></td>

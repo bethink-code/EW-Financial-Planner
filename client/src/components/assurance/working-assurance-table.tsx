@@ -258,9 +258,9 @@ export function AssuranceTable({}: AssuranceTableProps) {
       {/* Note: Add Policy Button moved to parent component header */}
 
       {/* Table */}
-      <table className="min-w-full bg-white border border-neutral-200 rounded-lg shadow-sm">
+      <table className="min-w-full  border border-neutral-200 rounded-lg shadow-sm">
           <thead>
-            <tr className="bg-primary/10 border-b border-border">
+            <tr className="border-b border-border">
               <th className="px-3 py-3 text-center text-xs font-medium text-neutral-600 uppercase tracking-wider w-16">Actions</th>
               <th className="px-3 py-3 text-left text-xs font-medium text-neutral-600 uppercase tracking-wider">Description</th>
               <th className="px-3 py-3 text-left text-xs font-medium text-neutral-600 uppercase tracking-wider">Owner</th>
@@ -278,7 +278,7 @@ export function AssuranceTable({}: AssuranceTableProps) {
               <th className="px-3 py-3 text-left text-xs font-medium text-neutral-600 uppercase tracking-wider">Collateral Session</th>
             </tr>
           </thead>
-          <tbody className="bg-white divide-y divide-neutral-200">
+          <tbody className="divide-y divide-neutral-200">
             {filteredPolicies.map((policy: Assurance) => {
               // Parse additional owners with fallback for old format
               let additionalOwners = [];
@@ -318,7 +318,7 @@ export function AssuranceTable({}: AssuranceTableProps) {
                 const currentBeneficiaries = allBeneficiaries;
                 
                 return (
-                <tr key={`${policy.id}-row-${rowIndex}`} className="hover:bg-neutral-50">
+                <tr key={`${policy.id}-row-${rowIndex}`} className="">
                   {/* Actions - rowSpan for main policy data - FIRST COLUMN */}
                   {rowIndex === 0 && (
                     <td rowSpan={maxRows} className="table-actions-cell text-center">
@@ -497,7 +497,7 @@ export function AssuranceTable({}: AssuranceTableProps) {
                   )}
                   
                   {/* Benefit Split */}
-                  <td className="px-3 py-2 text-sm text-neutral-700 text-right bg-neutral-100">
+                  <td className="px-3 py-2 text-sm text-neutral-700 text-right ">
                     {rowIndex < currentBeneficiaries.length ? 
                       formatCurrencyValue(currentBeneficiaries[rowIndex].split, 'percentage') : 
                       '-'
@@ -543,7 +543,7 @@ export function AssuranceTable({}: AssuranceTableProps) {
                           type="checkbox"
                           checked={policy.excludedFromEstateDuty}
                           onChange={(e) => handleUpdatePolicy(policy.id, 'excludedFromEstateDuty', e.target.checked)}
-                          className="h-4 w-4 text-blue-600 bg-white border-neutral-300 rounded focus:ring-primary focus:ring-2"
+                          className="h-4 w-4 text-blue-600  border-neutral-300 rounded focus:ring-primary focus:ring-2"
                           disabled={isUpdating}
                         />
                       </td>
@@ -552,7 +552,7 @@ export function AssuranceTable({}: AssuranceTableProps) {
                           type="checkbox"
                           checked={policy.excludedFromProvisions}
                           onChange={(e) => handleUpdatePolicy(policy.id, 'excludedFromProvisions', e.target.checked)}
-                          className="h-4 w-4 text-blue-600 bg-white border-neutral-300 rounded focus:ring-primary focus:ring-2"
+                          className="h-4 w-4 text-blue-600  border-neutral-300 rounded focus:ring-primary focus:ring-2"
                           disabled={isUpdating}
                         />
                       </td>
@@ -583,7 +583,7 @@ export function AssuranceTable({}: AssuranceTableProps) {
             
             {/* Total Row */}
             {filteredPolicies.length > 0 && (
-              <tr className="bg-neutral-100 border-t-2 border-neutral-300 font-bold">
+              <tr className="border-t-2 border-neutral-300 font-bold">
                 <td className="px-3 py-2"></td> {/* Actions column - empty */}
                 <td className="px-3 py-2 text-sm font-bold text-neutral-800">Total</td> {/* Description */}
                 <td colSpan={3} className="px-3 py-2"></td> {/* Owner, Life Assured, Death Benefit */}

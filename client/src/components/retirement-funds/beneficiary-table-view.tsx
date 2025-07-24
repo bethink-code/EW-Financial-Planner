@@ -125,7 +125,7 @@ export function BeneficiaryTableView({ funds, onFieldUpdate, isUpdating }: Benef
           </thead>
           <tbody>
             {allBeneficiaryData.map((fundData, index) => (
-              <tr key={fundData.fundId} className={index % 2 === 0 ? "bg-white" : "bg-teal-50/30"}>
+              <tr key={fundData.fundId} className={index % 2 === 0 ? "" : "bg-teal-50/30"}>
                 <td className="p-2">{fundData.fundDescription}</td>
                 <td className="p-2 text-right font-medium">{fundData.coverAmount}</td>
                 
@@ -141,7 +141,7 @@ export function BeneficiaryTableView({ funds, onFieldUpdate, isUpdating }: Benef
                             onChange={(e) => handleBeneficiaryUpdate(fundData.fundId, beneficiaryIndex, 'name', e.target.value)}
                             placeholder="Beneficiary name"
                             disabled={isUpdating}
-                            className="h-6 text-xs text-right bg-[#F2F7FB] border-none focus:bg-white focus:border focus:border-primary"
+                            className="h-6 text-xs text-right bg-[#F2F7FB] border-none focus: focus:border focus:border-primary"
                           />
                         ) : (
                           <div className="h-6"></div>
@@ -159,7 +159,7 @@ export function BeneficiaryTableView({ funds, onFieldUpdate, isUpdating }: Benef
                             max="100"
                             step="0.1"
                             disabled={isUpdating}
-                            className="h-6 text-xs text-center bg-[#F2F7FB] border-none focus:bg-white focus:border focus:border-primary"
+                            className="h-6 text-xs text-center bg-[#F2F7FB] border-none focus: focus:border focus:border-primary"
                           />
                         ) : (
                           <div className="h-6"></div>

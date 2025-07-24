@@ -70,7 +70,7 @@ const OwnerRowManager = memo(({ policy, onUpdate, onDelete }: {
   return (
     <>
       {/* Main Owner Row */}
-      <tr className="hover:bg-neutral-50 border-b border-neutral-200">
+      <tr className="border-b border-neutral-200">
         <td className="px-3 py-2">
           <input
             key={`description-${policy.id}`}
@@ -143,7 +143,7 @@ const OwnerRowManager = memo(({ policy, onUpdate, onDelete }: {
             disabled={isUpdating}
           />
         </td>
-        <td className="px-3 py-2 text-sm text-neutral-700 text-right bg-neutral-100">
+        <td className="px-3 py-2 text-sm text-neutral-700 text-right ">
           {formatCurrencyValue(policy.amount, 'amount')}
         </td>
         <td className="px-3 py-2">
@@ -172,7 +172,7 @@ const OwnerRowManager = memo(({ policy, onUpdate, onDelete }: {
             type="checkbox"
             defaultChecked={policy.excludedFromEstateDuty}
             onChange={(e) => onUpdate(policy.id, { excludedFromEstateDuty: e.target.checked })}
-            className="h-4 w-4 text-blue-600 bg-white border-neutral-300 rounded focus:ring-primary focus:ring-2"
+            className="h-4 w-4 text-blue-600  border-neutral-300 rounded focus:ring-primary focus:ring-2"
             disabled={isUpdating}
           />
         </td>
@@ -182,7 +182,7 @@ const OwnerRowManager = memo(({ policy, onUpdate, onDelete }: {
             type="checkbox"
             defaultChecked={policy.excludedFromProvisions}
             onChange={(e) => onUpdate(policy.id, { excludedFromProvisions: e.target.checked })}
-            className="h-4 w-4 text-blue-600 bg-white border-neutral-300 rounded focus:ring-primary focus:ring-2"
+            className="h-4 w-4 text-blue-600  border-neutral-300 rounded focus:ring-primary focus:ring-2"
             disabled={isUpdating}
           />
         </td>
@@ -227,7 +227,7 @@ const OwnerRowManager = memo(({ policy, onUpdate, onDelete }: {
 
       {/* Additional Owner Rows */}
       {additionalOwners.map((owner, index) => (
-        <tr key={`additional-owner-${index}`} className="hover:bg-neutral-50 border-b border-neutral-200">
+        <tr key={`additional-owner-${index}`} className="border-b border-neutral-200">
           <td className="px-3 py-2 text-sm text-neutral-700"></td>
           <td className="px-3 py-2">
             <input
@@ -365,9 +365,9 @@ export function AssuranceTable({ searchTerm }: AssuranceTableProps) {
 
       {/* Table */}
       <div className="overflow-x-auto">
-        <table className="min-w-full bg-white border border-neutral-200 rounded-lg shadow-sm">
+        <table className="min-w-full  border border-neutral-200 rounded-lg shadow-sm">
           <thead>
-            <tr className="bg-primary/10 border-b border-neutral-200">
+            <tr className="border-b border-neutral-200">
               <th className="px-3 py-3 text-left text-xs font-medium text-neutral-600 uppercase tracking-wider">Description</th>
               <th className="px-3 py-3 text-left text-xs font-medium text-neutral-600 uppercase tracking-wider">Owner</th>
               <th className="px-3 py-3 text-left text-xs font-medium text-neutral-600 uppercase tracking-wider">Life Assured</th>
@@ -384,7 +384,7 @@ export function AssuranceTable({ searchTerm }: AssuranceTableProps) {
               <th className="px-3 py-3 text-center text-xs font-medium text-neutral-600 uppercase tracking-wider">Actions</th>
             </tr>
           </thead>
-          <tbody className="bg-white divide-y divide-neutral-200">
+          <tbody className="divide-y divide-neutral-200">
             {filteredPolicies.map((policy) => (
               <OwnerRowManager
                 key={policy.id}

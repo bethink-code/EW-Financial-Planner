@@ -22,8 +22,8 @@ export function OptimizedTableRow({
   return (
     <tr 
       className={cn(
-        "table-row hover:bg-neutral-50 dark:hover:bg-neutral-700 transition-colors",
-        isTotal && "table-total-row bg-neutral-100 dark:bg-neutral-600 font-bold",
+        "table-row  dark:hover:bg-neutral-700 transition-colors",
+        isTotal && "table-total-row  dark:bg-neutral-600 font-bold",
         onClick && "cursor-pointer",
         className
       )}
@@ -78,7 +78,7 @@ interface OptimizedTableProps {
 export function OptimizedTable({ children, className }: OptimizedTableProps) {
   return (
     <table className={cn(
-      "w-full border-collapse bg-white dark:bg-neutral-800 shadow-sm rounded-lg overflow-hidden",
+      "w-full border-collapse  dark:bg-neutral-800 shadow-sm rounded-lg overflow-hidden",
       className
     )}>
       {children}

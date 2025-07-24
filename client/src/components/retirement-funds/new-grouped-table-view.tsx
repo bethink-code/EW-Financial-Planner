@@ -175,7 +175,7 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
           }
           onChange(e.target.value);
         }}
-        className={`p-1 table-text-14 text-right bg-[#F2F7FB] border-none focus:bg-white focus:border focus:border-primary hover:bg-neutral-50 table-input ${className}`}
+        className={`p-1 table-text-14 text-right bg-[#F2F7FB] border-none focus: focus:border focus:border-primary  table-input ${className}`}
         style={{ textAlign: 'right', minWidth: '60px' }}
         disabled={isUpdating}
       />
@@ -186,7 +186,7 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
     // Render flows table only
     return (
       <div>
-        <table className="w-full bg-white table-auto">
+        <table className="w-full  table-auto">
           <thead>
             {/* First level headers - Flows */}
             <tr className="border-b border-neutral-200" style={{ backgroundColor: '#D6ECF5' }}>
@@ -284,10 +284,10 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
               )}
             </tr>
           </thead>
-          <tbody className="bg-white divide-y divide-neutral-200">
+          <tbody className="divide-y divide-neutral-200">
             {/* Flows data rows */}
             {funds.map((fund, index) => (
-              <tr key={fund.id} className={index % 2 === 0 ? "bg-white" : "bg-teal-50/30"}>
+              <tr key={fund.id} className={index % 2 === 0 ? "" : "bg-teal-50/30"}>
                 {columnVisibility.overview && (
                   <td className="p-2 table-text-14 text-neutral-900" style={{ minWidth: '200px', width: '200px' }}>
                     {fund.description}
@@ -611,7 +611,7 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
   // Render inputs table only
   return (
     <div>
-      <table className="min-w-full bg-white table-auto">
+      <table className="min-w-full  table-auto">
         <thead>
           {/* First level headers */}
           <tr className="border-b border-neutral-200" style={{ backgroundColor: '#D6ECF5' }}>
@@ -730,14 +730,14 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
             )}
           </tr>
         </thead>
-        <tbody className="bg-white divide-y divide-neutral-200">
+        <tbody className="divide-y divide-neutral-200">
           {funds.map((fund) => {
             const beneficiaries = parseBeneficiaries(fund.beneficiaries);
             
             return (
               <React.Fragment key={fund.id}>
                 {/* Main fund row */}
-                <tr className="hover:bg-neutral-50">
+                <tr className="">
                   {/* Overview Section */}
                   {columnVisibility.overview && (
                     <>
@@ -746,7 +746,7 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
                         <input
                           defaultValue={fund.description || "Enter here ..."} onFocus={handleDefaultValueFocus}
                           onBlur={(e) => handleInputBlur(fund.id, "description", e.target.value)}
-                          className="border-0 focus:bg-white focus:border focus:border-primary hover:bg-neutral-50 text-left font-medium table-input"
+                          className="border-0 focus: focus:border focus:border-primary  text-left font-medium table-input"
                           placeholder="Fund description"
                           disabled={isUpdating}
                         />
@@ -759,7 +759,7 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
                           onValueChange={(value) => handleInputBlur(fund.id, "owner", value)}
                           disabled={isUpdating}
                         >
-                          <SelectTrigger className="compact-input border-0 focus:bg-white focus:border focus:border-primary hover:bg-neutral-50 transition-colors duration-200 group">
+                          <SelectTrigger className="compact-input border-0 focus: focus:border focus:border-primary  transition-colors duration-200 group">
                             <SelectValue />
                             <Edit3 size={12} className="ml-1 text-teal-400 opacity-0 group-hover:opacity-100 transition-opacity duration-200" />
                           </SelectTrigger>
@@ -834,7 +834,7 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
                 </tr>
                 {/* Beneficiary Rows */}
                 {beneficiaries.map((beneficiary, index) => (
-                  <tr key={`${fund.id}-beneficiary-${beneficiary.id}`} className="hover:bg-neutral-50 border-l-4 border-l-teal-200">
+                  <tr key={`${fund.id}-beneficiary-${beneficiary.id}`} className="border-l-4 border-l-teal-200">
                     {/* Beneficiary details only in unapproved life cover section */}
                     {columnVisibility.unapprovedLifeCover && (
                       <>
@@ -846,7 +846,7 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
                             onBlur={(e) => handleBeneficiaryUpdate(fund.id, index, 'name', e.target.value)}
                             placeholder="Beneficiary name"
                             disabled={isUpdating}
-                            className="h-6 text-xs text-left bg-[#F2F7FB] border-none focus:bg-white focus:border focus:border-primary w-full px-2 py-1 rounded"
+                            className="h-6 text-xs text-left bg-[#F2F7FB] border-none focus: focus:border focus:border-primary w-full px-2 py-1 rounded"
                           />
                         </td>
                         
@@ -865,7 +865,7 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
                               handleBeneficiaryUpdate(fund.id, index, 'percentage', numericValue);
                             }}
                             disabled={isUpdating}
-                            className="h-6 text-xs text-center bg-[#F2F7FB] border-none focus:bg-white focus:border focus:border-primary w-full px-2 py-1 rounded"
+                            className="h-6 text-xs text-center bg-[#F2F7FB] border-none focus: focus:border focus:border-primary w-full px-2 py-1 rounded"
                           />
                         </td>
                         
