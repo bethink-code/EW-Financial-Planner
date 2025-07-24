@@ -611,8 +611,7 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
   // Render inputs table only
   return (
     <div>
-      <div className="overflow-x-auto">
-        <table className="min-w-full bg-white table-auto">
+      <table className="min-w-full bg-white table-auto">
         <thead>
           {/* First level headers */}
           <tr className="border-b border-neutral-200" style={{ backgroundColor: '#D6ECF5' }}>
@@ -1047,8 +1046,7 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
             )}
           </tr>
         </tbody>
-        </table>
-      </div>
+      </table>
     </div>
   );
 }

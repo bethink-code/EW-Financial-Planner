@@ -77,14 +77,12 @@ interface OptimizedTableProps {
  */
 export function OptimizedTable({ children, className }: OptimizedTableProps) {
   return (
-    <div className="overflow-x-auto">
-      <table className={cn(
-        "w-full border-collapse bg-white dark:bg-neutral-800 shadow-sm rounded-lg overflow-hidden",
-        className
-      )}>
-        {children}
-      </table>
-    </div>
+    <table className={cn(
+      "w-full border-collapse bg-white dark:bg-neutral-800 shadow-sm rounded-lg overflow-hidden",
+      className
+    )}>
+      {children}
+    </table>
   );
 }
 

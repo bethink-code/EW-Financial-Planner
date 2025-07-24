@@ -375,14 +375,14 @@ export function SimpleTableWithBeneficiaries({
                 </td>
                 <td className="px-3 py-2 border-r border-neutral-200" rowSpan={maxRows}>
                   <input
-                    defaultValue={fund.fundValueVested || "Enter here ..."} 
+                    defaultValue={fund.fundValue || "Enter here ..."} 
                     onFocus={handleDefaultValueFocus}
                     onBlur={(e) => {
-                      const formattedValue = formatCurrencyValue(e.target.value, "fundValueVested");
+                      const formattedValue = formatCurrencyValue(e.target.value, "fundValue");
                       if (formattedValue !== e.target.value) {
                         e.target.value = formattedValue;
                       }
-                      handleInputBlur(fund.id, "fundValueVested", e.target.value, e.target);
+                      handleInputBlur(fund.id, "fundValue", e.target.value, e.target);
                     }}
                     className={`${getFieldClass('currency')} table-input text-right`}
                     placeholder="R 0"
@@ -502,8 +502,7 @@ export function SimpleTableWithBeneficiaries({
   }
 
   return (
-    <div className="overflow-x-auto">
-      <table className="min-w-full border-collapse">
+    <table className="min-w-full border-collapse">
         <thead className="bg-neutral-50">
           <tr>
             <th className="px-3 py-3 text-center text-xs font-medium text-neutral-600 uppercase tracking-wider">Actions</th>
@@ -581,6 +580,5 @@ export function SimpleTableWithBeneficiaries({
           {renderFundRows}
         </tbody>
       </table>
-    </div>
   );
 }

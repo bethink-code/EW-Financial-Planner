@@ -114,8 +114,7 @@ export function LumpSumTable({}: LumpSumTableProps) {
 
       {/* Main Table */}
       <div className="bg-white rounded-lg border border-neutral-200 overflow-hidden">
-        <div className="overflow-x-auto">
-          <table className="w-full min-w-full">
+        <table className="w-full min-w-full">
             <thead>
               <tr className="bg-primary/10 border-b border-neutral-300">
                 <th className="p-3 text-left text-xs font-semibold text-neutral-700 uppercase tracking-wider w-8"></th>
@@ -318,8 +317,7 @@ export function LumpSumTable({}: LumpSumTableProps) {
                 </td>
               </tr>
             </tbody>
-          </table>
-        </div>
+        </table>
       </div>
     </div>
   );

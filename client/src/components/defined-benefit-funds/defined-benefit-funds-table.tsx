@@ -207,8 +207,7 @@ export default function DefinedBenefitFundsTable() {
   return (
     <div className="space-y-4">
       {/* Table */}
-      <div className="overflow-x-auto">
-        <table className="min-w-full bg-white border border-neutral-200 rounded-lg shadow-sm">
+      <table className="min-w-full bg-white border border-neutral-200 rounded-lg shadow-sm">
           <thead>
             <tr className="bg-primary/10 border-b border-neutral-200">
               <th className="px-3 py-2 text-center text-xs font-medium text-neutral-600 uppercase tracking-wider w-16">Actions</th>
@@ -365,8 +364,7 @@ export default function DefinedBenefitFundsTable() {
               </tr>
             )}
           </tbody>
-        </table>
-      </div>
+      </table>
     </div>
   );
 }
