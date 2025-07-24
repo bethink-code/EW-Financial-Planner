@@ -85,7 +85,7 @@ export function AdditionalDetails({ funds, onFieldUpdate, isUpdating }: Addition
   return (
     <>
       <h2 className="font-bold text-neutral-900 mb-4 text-[16px]">Additional Details</h2>
-      <table className="bg-white table-auto">
+      <table className="table-auto">
             <thead>
               <tr className="border-b border-neutral-200" style={{ backgroundColor: '#D6ECF5' }}>
                 <th className="table-cell text-left table-header-12 text-neutral-600 uppercase tracking-wider" style={{ width: '250px' }}>
@@ -102,7 +102,7 @@ export function AdditionalDetails({ funds, onFieldUpdate, isUpdating }: Addition
                 </th>
               </tr>
             </thead>
-            <tbody className="bg-white divide-y divide-neutral-200">
+            <tbody className="divide-y divide-neutral-200">
               {funds.map((fund, index) => (
                 <tr key={`additional-${fund.id}`} className="hover:bg-neutral-50">
                   <td className="table-cell text-sm font-medium text-neutral-900">
@@ -121,7 +121,7 @@ export function AdditionalDetails({ funds, onFieldUpdate, isUpdating }: Addition
                         handleInputBlur(fund.id, 'lumpSumDeath', e.target.value);
                       }}
                       disabled={isUpdating}
-                      className="table-input h-7 text-sm bg-white border-gray-200 focus:border-primary px-3 py-1 border rounded-md text-sm"
+                      className="table-input h-7 text-sm  border-gray-200 focus:border-primary px-3 py-1 border rounded-md text-sm"
                       style={{ textAlign: 'right', width: '120px' }}
                       placeholder="R 0"
                     />
@@ -139,7 +139,7 @@ export function AdditionalDetails({ funds, onFieldUpdate, isUpdating }: Addition
                         handleInputBlur(fund.id, 'previousLumpSums', e.target.value);
                       }}
                       disabled={isUpdating}
-                      className="table-input h-7 text-sm bg-white border-gray-200 focus:border-primary px-3 py-1 border rounded-md text-sm"
+                      className="table-input h-7 text-sm  border-gray-200 focus:border-primary px-3 py-1 border rounded-md text-sm"
                       style={{ textAlign: 'right', width: '120px' }}
                       placeholder="R 0"
                     />
@@ -157,7 +157,7 @@ export function AdditionalDetails({ funds, onFieldUpdate, isUpdating }: Addition
                         handleInputBlur(fund.id, 'additionalTaxFreeAmount', e.target.value);
                       }}
                       disabled={isUpdating}
-                      className="table-input h-7 text-sm bg-white border-gray-200 focus:border-primary px-3 py-1 border rounded-md text-sm"
+                      className="table-input h-7 text-sm  border-gray-200 focus:border-primary px-3 py-1 border rounded-md text-sm"
                       style={{ textAlign: 'right', width: '160px' }}
                       placeholder="R 0"
                     />

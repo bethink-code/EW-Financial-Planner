@@ -120,7 +120,7 @@ export function BeneficiaryRowManager({
 
         {/* Compact Beneficiary Rows */}
         {beneficiaries.map((beneficiary, index) => (
-          <div key={beneficiary.id} className="flex items-center gap-4 p-3 bg-white border border-gray-200 rounded">
+          <div key={beneficiary.id} className="flex items-center gap-4 p-3  border border-gray-200 rounded">
             {/* Remove Button */}
             <div className="w-8">
               {beneficiaries.length > 1 && (
@@ -222,7 +222,7 @@ export function BeneficiaryRowManager({
 
       {/* Beneficiary Rows */}
       {beneficiaries.map((beneficiary, index) => (
-        <div key={beneficiary.id} className="grid grid-cols-12 gap-2 items-center p-3 bg-white border border-gray-200 rounded">
+        <div key={beneficiary.id} className="grid grid-cols-12 gap-2 items-center p-3  border border-gray-200 rounded">
           {/* Remove Button */}
           <div className="col-span-1">
             {beneficiaries.length > 1 && (

@@ -266,7 +266,7 @@ export default function VoluntaryInvestmentsTable() {
 
       {/* Summary Section */}
       {filteredInvestments.length > 0 && (
-        <div className="bg-white border border-neutral-200 rounded-lg shadow-sm overflow-hidden mb-6">
+        <div className="border border-neutral-200 rounded-lg shadow-sm overflow-hidden mb-6">
           <div className="bg-primary/10 px-4 py-3 border-b border-neutral-200">
             <h3 className="text-sm font-semibold text-neutral-700 uppercase tracking-wide">Summary</h3>
           </div>
@@ -308,7 +308,7 @@ export default function VoluntaryInvestmentsTable() {
 
       {/* Table */}
       <div className="overflow-x-auto">
-        <table className="min-w-full bg-white border border-neutral-200 rounded-lg shadow-sm">
+        <table className="min-w-full  border border-neutral-200 rounded-lg shadow-sm">
           <thead>
             <tr className="bg-primary/10 border-b border-neutral-200">
               <th className="px-3 py-2 text-left text-xs font-medium text-neutral-600 uppercase tracking-wider" colSpan={3}>Overview</th>
@@ -332,7 +332,7 @@ export default function VoluntaryInvestmentsTable() {
               <th className="px-3 py-2 text-center text-xs font-medium text-neutral-600 uppercase tracking-wider"></th>
             </tr>
           </thead>
-          <tbody className="bg-white divide-y divide-neutral-200">
+          <tbody className="divide-y divide-neutral-200">
             {filteredInvestments.map((investment: VoluntaryInvestment) => {
               const owners = JSON.parse(investment.owners || '[]');
               const percentages = JSON.parse(investment.ownershipPercentages || '[]');

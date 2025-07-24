@@ -26,7 +26,7 @@ export function SummarySection({ funds, tableMode = "inputs" }: SummarySectionPr
   return (
     /* Summary Section for Inputs Mode */
     tableMode === "inputs" ? (
-      <div className=" rounded-lg shadow-sm border border-neutral-200 p-6">
+      <div className="rounded-lg shadow-sm border border-neutral-200 p-6">
         <h2 className="text-xl font-bold text-neutral-900 mb-4">Summary</h2>
         <div className="grid grid-cols-2 lg:grid-cols-5 gap-4">
           <div style={{ backgroundColor: '#F9F0E5' }} className="rounded-lg p-4 text-center">

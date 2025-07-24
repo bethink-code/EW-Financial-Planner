@@ -32,10 +32,10 @@ export const DetailedRow = memo(function DetailedRow({ fund, columnVisibility, o
   }, [fund.id, onFieldUpdate]);
 
   const owners = useMemo(() => ["Donald Edwards", "Betty Edwards"], []);
-  const getOwnerBadgeColor = useCallback(() => "bg-white border border-neutral-300", []);
+  const getOwnerBadgeColor = useCallback(() => " border border-neutral-300", []);
 
   return (
-    <div className="border border-neutral-200 rounded-lg bg-white">
+    <div className="border border-neutral-200 rounded-lg ">
       <div 
         className="p-4 cursor-pointer hover:bg-gray-50 flex items-center justify-between"
         onClick={() => setIsExpanded(!isExpanded)}

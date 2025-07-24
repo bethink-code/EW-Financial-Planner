@@ -106,7 +106,7 @@ export function DetailedView({ funds, columnVisibility, onFieldUpdate, isUpdatin
   }, [selectedFund, onFieldUpdate, formatCurrencyValue]);
 
   const owners = useMemo(() => ["Donald Edwards", "Betty Edwards"], []);
-  const getOwnerBadgeColor = useCallback(() => "bg-white border border-neutral-300", []);
+  const getOwnerBadgeColor = useCallback(() => " border border-neutral-300", []);
 
   // Helper function to get primary beneficiary display
   const getPrimaryBeneficiary = useCallback((fund: RetirementFund) => {
@@ -130,10 +130,10 @@ export function DetailedView({ funds, columnVisibility, onFieldUpdate, isUpdatin
   }
 
   return (
-    <div className="flex bg-white rounded-lg border border-neutral-200">
+    <div className="flex  rounded-lg border border-neutral-200">
       {/* Left Sidebar - Fund List */}
       <div className="w-80 border-r border-neutral-200 flex flex-col">
-        <div className="p-4 border-b border-neutral-200 sticky top-0 bg-white z-10 min-h-[73px] flex items-center">
+        <div className="p-4 border-b border-neutral-200 sticky top-0  z-10 min-h-[73px] flex items-center">
           <h3 className="font-semibold text-neutral-900">Funds ({funds.length})</h3>
         </div>
         <div className="flex-1">
@@ -203,7 +203,7 @@ export function DetailedView({ funds, columnVisibility, onFieldUpdate, isUpdatin
                       }
                       handleFieldChange("description", e.target.value);
                     }}
-                    className="h-9 px-3 py-2 text-sm bg-white border border-neutral-200 rounded focus:border-primary focus:outline-none w-[200px]"
+                    className="h-9 px-3 py-2 text-sm  border border-neutral-200 rounded focus:border-primary focus:outline-none w-[200px]"
                     disabled={isUpdating}
                   />
                 </div>
@@ -251,7 +251,7 @@ export function DetailedView({ funds, columnVisibility, onFieldUpdate, isUpdatin
                     }
                     handleFieldChange("coverAmount", e.target.value);
                   }}
-                  className="h-9 px-3 py-2 text-sm text-right bg-white border border-neutral-200 rounded focus:border-primary focus:outline-none w-[140px]"
+                  className="h-9 px-3 py-2 text-sm text-right  border border-neutral-200 rounded focus:border-primary focus:outline-none w-[140px]"
                   disabled={isUpdating}
                   placeholder="R 0"
                 />
@@ -283,7 +283,7 @@ export function DetailedView({ funds, columnVisibility, onFieldUpdate, isUpdatin
                       }
                       handleFieldChange("monthlyIncome", e.target.value);
                     }}
-                    className="h-9 px-3 py-2 text-sm text-right bg-white border border-neutral-200 rounded focus:border-primary focus:outline-none w-[140px]"
+                    className="h-9 px-3 py-2 text-sm text-right  border border-neutral-200 rounded focus:border-primary focus:outline-none w-[140px]"
                     disabled={isUpdating}
                     placeholder="R 0"
                   />
@@ -300,7 +300,7 @@ export function DetailedView({ funds, columnVisibility, onFieldUpdate, isUpdatin
                       }
                       handleFieldChange("termYears", e.target.value);
                     }}
-                    className="h-9 px-3 py-2 text-sm text-right bg-white border border-neutral-200 rounded focus:border-primary focus:outline-none w-[80px]"
+                    className="h-9 px-3 py-2 text-sm text-right  border border-neutral-200 rounded focus:border-primary focus:outline-none w-[80px]"
                     disabled={isUpdating}
                   />
                 </div>
@@ -316,7 +316,7 @@ export function DetailedView({ funds, columnVisibility, onFieldUpdate, isUpdatin
                       }
                       handleFieldChange("increasePercentage", e.target.value);
                     }}
-                    className="h-9 px-3 py-2 text-sm text-right bg-white border border-neutral-200 rounded focus:border-primary focus:outline-none w-[80px]"
+                    className="h-9 px-3 py-2 text-sm text-right  border border-neutral-200 rounded focus:border-primary focus:outline-none w-[80px]"
                     disabled={isUpdating}
                     placeholder="5%"
                   />
@@ -333,7 +333,7 @@ export function DetailedView({ funds, columnVisibility, onFieldUpdate, isUpdatin
                       }
                       handleFieldChange("approvedLifeCover", e.target.value);
                     }}
-                    className="h-9 px-3 py-2 text-sm text-right bg-white border border-neutral-200 rounded focus:border-primary focus:outline-none w-[140px]"
+                    className="h-9 px-3 py-2 text-sm text-right  border border-neutral-200 rounded focus:border-primary focus:outline-none w-[140px]"
                     disabled={isUpdating}
                     placeholder="R 0"
                   />
@@ -359,7 +359,7 @@ export function DetailedView({ funds, columnVisibility, onFieldUpdate, isUpdatin
                       }
                       handleFieldChange("approvedLifeCover", e.target.value);
                     }}
-                    className="h-9 px-3 py-2 text-sm text-right bg-white border border-neutral-200 rounded focus:border-primary focus:outline-none w-[140px]"
+                    className="h-9 px-3 py-2 text-sm text-right  border border-neutral-200 rounded focus:border-primary focus:outline-none w-[140px]"
                     disabled={isUpdating}
                     placeholder="R 0"
                   />
@@ -376,7 +376,7 @@ export function DetailedView({ funds, columnVisibility, onFieldUpdate, isUpdatin
                       }
                       handleFieldChange("fundValue", e.target.value);
                     }}
-                    className="h-9 px-3 py-2 text-sm text-right bg-white border border-neutral-200 rounded focus:border-primary focus:outline-none w-[140px]"
+                    className="h-9 px-3 py-2 text-sm text-right  border border-neutral-200 rounded focus:border-primary focus:outline-none w-[140px]"
                     disabled={isUpdating}
                     placeholder="R 0"
                   />
@@ -427,7 +427,7 @@ export function DetailedView({ funds, columnVisibility, onFieldUpdate, isUpdatin
                       }
                       handleFieldChange("beneficiaryPercentageSplit", e.target.value);
                     }}
-                    className="h-9 px-2 py-2 text-sm text-right bg-white border border-neutral-200 rounded focus:border-primary focus:outline-none w-[70px]"
+                    className="h-9 px-2 py-2 text-sm text-right  border border-neutral-200 rounded focus:border-primary focus:outline-none w-[70px]"
                     disabled={isUpdating}
                     placeholder="0%"
                   />
@@ -450,7 +450,7 @@ export function DetailedView({ funds, columnVisibility, onFieldUpdate, isUpdatin
                       }
                       handleFieldChange("lumpSumTaken", e.target.value);
                     }}
-                    className="h-9 px-3 py-2 text-sm text-right bg-white border border-neutral-200 rounded focus:border-primary focus:outline-none w-[140px]"
+                    className="h-9 px-3 py-2 text-sm text-right  border border-neutral-200 rounded focus:border-primary focus:outline-none w-[140px]"
                     disabled={isUpdating}
                     placeholder="R 0"
                   />
@@ -467,7 +467,7 @@ export function DetailedView({ funds, columnVisibility, onFieldUpdate, isUpdatin
                       }
                       handleFieldChange("nondeductibleContribution", e.target.value);
                     }}
-                    className="h-9 px-3 py-2 text-sm text-right bg-white border border-neutral-200 rounded focus:border-primary focus:outline-none w-[140px]"
+                    className="h-9 px-3 py-2 text-sm text-right  border border-neutral-200 rounded focus:border-primary focus:outline-none w-[140px]"
                     disabled={isUpdating}
                     placeholder="R 0"
                   />
@@ -490,7 +490,7 @@ export function DetailedView({ funds, columnVisibility, onFieldUpdate, isUpdatin
                       }
                       handleFieldChange("incomeTerm", e.target.value);
                     }}
-                    className="h-9 px-3 py-2 text-sm text-right bg-white border border-neutral-200 rounded focus:border-primary focus:outline-none w-[100px]"
+                    className="h-9 px-3 py-2 text-sm text-right  border border-neutral-200 rounded focus:border-primary focus:outline-none w-[100px]"
                     disabled={isUpdating}
                     placeholder="Income term"
                   />
