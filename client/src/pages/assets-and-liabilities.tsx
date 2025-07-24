@@ -1,6 +1,7 @@
 import React, { useState, useCallback } from "react";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import AssetsAndLiabilitiesTable from "../components/assets-and-liabilities/assets-and-liabilities-table";
+import { AssetsAndLiabilitiesSummary } from "@/components/assets-and-liabilities/assets-and-liabilities-summary";
 import { CalculatorHeader } from "@/components/ui/calculator-header";
 import { apiRequest, queryClient } from "@/lib/queryClient";
 import type { InsertAssetAndLiability } from "@shared/schema";
@@ -25,14 +26,10 @@ export default function AssetsAndLiabilities() {
     mutationFn: async () => {
       const newItem: InsertAssetAndLiability = {
         categoryAndDescription: "Enter here ...",
-        currentValue: "0",
-        liquidationValue: "0",
+        marketValue: "0",
         baseCost: "0",
-        taxableLiquidationValue: "0",
-        executorsFees: "0",
         include: true,
-        excludedFromEstateDuty: false,
-        excludedFromExecutorsFees: false
+        excludedFromEstateDuty: false
       };
       return apiRequest("POST", "/api/assets-and-liabilities", newItem);
     },
