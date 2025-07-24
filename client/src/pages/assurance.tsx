@@ -1,6 +1,5 @@
 import { useState, useCallback } from "react";
 import { useQuery, useMutation } from "@tanstack/react-query";
-import { Search } from "lucide-react";
 import { AssuranceTable } from "@/components/assurance/working-assurance-table";
 import { AssuranceSummary } from "@/components/assurance/simple-assurance-summary";
 import { CalculatorHeader } from "@/components/ui/calculator-header";
@@ -10,7 +9,6 @@ import type { InsertAssurance } from "@shared/schema";
 type ViewMode = "table" | "hybrid";
 
 export default function Assurance() {
-  const [searchTerm, setSearchTerm] = useState("");
   const [viewMode, setViewMode] = useState<ViewMode>("table");
 
   // Fetch policies for count
@@ -51,10 +49,6 @@ export default function Assurance() {
     },
   });
 
-  const handleSearch = useCallback((value: string) => {
-    setSearchTerm(value);
-  }, []);
-
   const handleViewModeChange = useCallback((newMode: ViewMode) => {
     setViewMode(newMode);
   }, []);
@@ -76,18 +70,6 @@ export default function Assurance() {
           isAddingItem={addMutation.isPending}
           viewMode={viewMode}
           onViewModeChange={handleViewModeChange}
-          additionalControls={
-            <div className="relative">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-neutral-400" size={16} />
-              <input
-                type="text"
-                value={searchTerm}
-                onChange={(e) => handleSearch(e.target.value)}
-                placeholder="Search policies..."
-                className="w-80 pl-10 pr-4 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary outline-none"
-              />
-            </div>
-          }
         />
 
         {/* Summary Section */}
@@ -96,7 +78,7 @@ export default function Assurance() {
         </div>
 
         {/* Main Table */}
-        <AssuranceTable searchTerm={searchTerm} />
+        <AssuranceTable searchTerm="" />
       </div>
     </div>
   );
