@@ -233,7 +233,6 @@ th, td {
   html, body {
     margin: 0;
     padding: 0;
-    background-color: #EFF2F5;
   }
   
   body {
@@ -247,7 +246,6 @@ th, td {
 
   /* Apply background to iframe container */
   iframe {
-    background-color: #EFF2F5 !important;
   }
 
   body {
