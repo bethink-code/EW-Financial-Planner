@@ -154,16 +154,25 @@ export default function AdditionalEstateDutyItemsTable() {
         <table className="min-w-full bg-white border border-neutral-200 rounded-lg shadow-sm">
           <thead>
             <tr className="bg-primary/10 border-b border-neutral-200">
+              <th className="px-3 py-2 text-center text-xs font-medium text-neutral-600 uppercase tracking-wider w-16">Actions</th>
               <th className="px-3 py-2 text-left text-xs font-medium text-neutral-600 uppercase tracking-wider">Description</th>
               <th className="px-3 py-2 text-left text-xs font-medium text-neutral-600 uppercase tracking-wider">Amount</th>
               <th className="px-3 py-2 text-center text-xs font-medium text-neutral-600 uppercase tracking-wider">Deduction?</th>
               <th className="px-3 py-2 text-center text-xs font-medium text-neutral-600 uppercase tracking-wider">Exclude from joint estate for 'In community'?</th>
-              <th className="px-3 py-2 text-center text-xs font-medium text-neutral-600 uppercase tracking-wider">Actions</th>
             </tr>
           </thead>
           <tbody className="bg-white divide-y divide-neutral-200">
             {items.map((item: AdditionalEstateDutyItem) => (
               <tr key={item.id} className="hover:bg-neutral-50">
+                <td className="px-3 py-2 text-center">
+                  <button
+                    onClick={() => handleDeleteItem(item.id)}
+                    className="text-[#4F4F4F] hover:text-red-600 transition-colors"
+                    title="Delete estate duty item"
+                  >
+                    <Trash2 className="h-4 w-4" />
+                  </button>
+                </td>
                 <td className="px-3 py-2">
                   <input
                     type="text"
@@ -201,15 +210,6 @@ export default function AdditionalEstateDutyItemsTable() {
                     className="h-4 w-4 text-blue-600 focus:ring-primary border-gray-300 rounded"
                     disabled={isUpdating}
                   />
-                </td>
-                <td className="px-3 py-2 text-center">
-                  <button
-                    onClick={() => handleDeleteItem(item.id)}
-                    className="text-[#4F4F4F] hover:text-red-600 transition-colors"
-                    title="Delete estate duty item"
-                  >
-                    <Trash2 className="h-4 w-4" />
-                  </button>
                 </td>
               </tr>
             ))}

@@ -186,6 +186,7 @@ export default function DefinedBenefitFundsTable() {
         <table className="min-w-full bg-white border border-neutral-200 rounded-lg shadow-sm">
           <thead>
             <tr className="bg-primary/10 border-b border-neutral-200">
+              <th className="px-3 py-2 text-center text-xs font-medium text-neutral-600 uppercase tracking-wider w-16">Actions</th>
               <th className="px-3 py-2 text-left text-xs font-medium text-neutral-600 uppercase tracking-wider">Description</th>
               <th className="px-3 py-2 text-left text-xs font-medium text-neutral-600 uppercase tracking-wider">Owner</th>
               <th className="px-3 py-2 text-center text-xs font-medium text-neutral-600 uppercase tracking-wider">Ownership</th>
@@ -194,18 +195,26 @@ export default function DefinedBenefitFundsTable() {
               <th className="px-3 py-2 text-left text-xs font-medium text-neutral-600 uppercase tracking-wider">Death Lump Sum</th>
               <th className="px-3 py-2 text-left text-xs font-medium text-neutral-600 uppercase tracking-wider">Additional Tax Free Amount</th>
               <th className="px-3 py-3 text-left text-xs font-medium text-neutral-600 uppercase tracking-wider" colSpan={2}>Pension Income at Death</th>
-              <th className="px-3 py-2 text-center text-xs font-medium text-neutral-600 uppercase tracking-wider">Actions</th>
             </tr>
             <tr className="bg-primary/10 border-b border-neutral-200">
+              <th></th>
               <th colSpan={7}></th>
               <th className="px-3 py-2 text-left text-xs font-medium text-neutral-600 uppercase tracking-wider">Amount</th>
               <th className="px-3 py-2 text-left text-xs font-medium text-neutral-600 uppercase tracking-wider">Increase</th>
-              <th></th>
             </tr>
           </thead>
           <tbody className="bg-white divide-y divide-neutral-200">
             {funds.map((fund: DefinedBenefitFund) => (
               <tr key={fund.id} className="hover:bg-neutral-50">
+                <td className="px-3 py-2 text-center">
+                  <button
+                    onClick={() => handleDeleteFund(fund.id)}
+                    className="text-[#4F4F4F] hover:text-red-600 transition-colors"
+                    title="Delete fund"
+                  >
+                    <Trash2 className="h-4 w-4" />
+                  </button>
+                </td>
                 <td className="px-3 py-2">
                   <input
                     type="text"
@@ -295,21 +304,13 @@ export default function DefinedBenefitFundsTable() {
                     disabled={isUpdating}
                   />
                 </td>
-                <td className="px-3 py-2 text-center">
-                  <button
-                    onClick={() => handleDeleteFund(fund.id)}
-                    className="text-[#4F4F4F] hover:text-red-600 transition-colors"
-                    title="Delete fund"
-                  >
-                    <Trash2 className="h-4 w-4" />
-                  </button>
-                </td>
               </tr>
             ))}
             
             {/* Total Row */}
             {filteredFunds.length > 0 && (
               <tr className="bg-neutral-100 border-t-2 border-neutral-300 font-bold">
+                <td className="px-3 py-2"></td>
                 <td className="px-3 py-2 text-sm font-bold text-neutral-800">Total</td>
                 <td colSpan={3} className="px-3 py-2"></td>
                 <td className="px-3 py-2 text-sm font-bold text-neutral-800 text-right">
@@ -324,7 +325,7 @@ export default function DefinedBenefitFundsTable() {
                 <td className="px-3 py-2 text-sm font-bold text-neutral-800 text-right">
                   {formatCurrencyValue(totals.pensionIncomeAmount.toString())}
                 </td>
-                <td colSpan={2} className="px-3 py-2"></td>
+                <td className="px-3 py-2"></td>
               </tr>
             )}
             

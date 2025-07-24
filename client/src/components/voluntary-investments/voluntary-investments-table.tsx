@@ -248,12 +248,13 @@ export default function VoluntaryInvestmentsTable() {
         <table className="min-w-full bg-white border border-neutral-200 rounded-lg shadow-sm">
           <thead>
             <tr className="bg-primary/10 border-b border-neutral-200">
+              <th className="px-3 py-2 text-center text-xs font-medium text-neutral-600 uppercase tracking-wider w-16">Actions</th>
               <th className="px-3 py-2 text-left text-xs font-medium text-neutral-600 uppercase tracking-wider" colSpan={3}>Overview</th>
               <th className="px-3 py-2 text-left text-xs font-medium text-neutral-600 uppercase tracking-wider" colSpan={5}>Bequeath To</th>
               <th className="px-3 py-2 text-left text-xs font-medium text-neutral-600 uppercase tracking-wider" colSpan={4}>Exclusions</th>
-              <th className="px-3 py-2 text-center text-xs font-medium text-neutral-600 uppercase tracking-wider">Actions</th>
             </tr>
             <tr className="bg-primary/10 border-b border-neutral-200">
+              <th className="px-3 py-2 text-center text-xs font-medium text-neutral-600 uppercase tracking-wider"></th>
               <th className="px-3 py-2 text-left text-xs font-medium text-neutral-600 uppercase tracking-wider">Description</th>
               <th className="px-3 py-2 text-left text-xs font-medium text-neutral-600 uppercase tracking-wider">Owner</th>
               <th className="px-3 py-2 text-left text-xs font-medium text-neutral-600 uppercase tracking-wider">Percentage</th>
@@ -266,7 +267,6 @@ export default function VoluntaryInvestmentsTable() {
               <th className="px-3 py-2 text-center text-xs font-medium text-neutral-600 uppercase tracking-wider">Estate Duty</th>
               <th className="px-3 py-2 text-center text-xs font-medium text-neutral-600 uppercase tracking-wider">CGT</th>
               <th className="px-3 py-2 text-center text-xs font-medium text-neutral-600 uppercase tracking-wider">Executor's Fees</th>
-              <th className="px-3 py-2 text-center text-xs font-medium text-neutral-600 uppercase tracking-wider"></th>
             </tr>
           </thead>
           <tbody className="bg-white divide-y divide-neutral-200">
@@ -285,6 +285,15 @@ export default function VoluntaryInvestmentsTable() {
                 <tr key={`${investment.id}-${ownerIndex}`} className="hover:bg-neutral-50">
                   {ownerIndex === 0 && (
                     <>
+                      <td rowSpan={owners.length} className="px-3 py-2 text-center">
+                        <button
+                          onClick={() => handleDeleteInvestment(investment.id)}
+                          className="text-[#4F4F4F] hover:text-red-600 transition-colors"
+                          title="Delete investment"
+                        >
+                          <Trash2 className="h-4 w-4" />
+                        </button>
+                      </td>
                       <td rowSpan={owners.length} className="px-3 py-2 border-r border-neutral-200">
                         <input
                           type="text"
@@ -442,15 +451,6 @@ export default function VoluntaryInvestmentsTable() {
                           disabled={isUpdating}
                         />
                       </td>
-                      <td rowSpan={owners.length} className="px-3 py-2 text-center">
-                        <button
-                          onClick={() => handleDeleteInvestment(investment.id)}
-                          className="text-[#4F4F4F] hover:text-red-600 transition-colors"
-                          title="Delete investment"
-                        >
-                          <Trash2 className="h-4 w-4" />
-                        </button>
-                      </td>
                     </>
                   )}
                 </tr>
@@ -460,6 +460,7 @@ export default function VoluntaryInvestmentsTable() {
             {/* Total Row */}
             {investments.length > 0 && (
               <tr className="bg-neutral-100 border-t-2 border-neutral-300 font-bold">
+                <td className="px-3 py-2"></td>
                 <td className="px-3 py-2 text-sm font-bold text-neutral-800">Total</td>
                 <td colSpan={2} className="px-3 py-2"></td>
                 <td className="px-3 py-2 text-sm font-bold text-neutral-800 text-right">
@@ -468,7 +469,7 @@ export default function VoluntaryInvestmentsTable() {
                 <td className="px-3 py-2 text-sm font-bold text-neutral-800 text-right">
                   {formatCurrencyValue(totals.marketValue.toString())}
                 </td>
-                <td colSpan={8} className="px-3 py-2"></td>
+                <td colSpan={7} className="px-3 py-2"></td>
               </tr>
             )}
             

@@ -187,6 +187,7 @@ export default function IncomeNeedsTable() {
         <table className="min-w-full bg-white border border-neutral-200 rounded-lg shadow-sm">
           <thead>
             <tr className="bg-primary/10 border-b border-neutral-200">
+              <th className="px-3 py-2 text-center text-xs font-medium text-neutral-600 uppercase tracking-wider w-16">Actions</th>
               <th className="px-3 py-2 text-left text-xs font-medium text-neutral-600 uppercase tracking-wider">Description</th>
               <th className="px-3 py-2 text-left text-xs font-medium text-neutral-600 uppercase tracking-wider">Entity</th>
               <th className="px-3 py-2 text-left text-xs font-medium text-neutral-600 uppercase tracking-wider">Start</th>
@@ -196,12 +197,20 @@ export default function IncomeNeedsTable() {
               <th className="px-3 py-2 text-left text-xs font-medium text-neutral-600 uppercase tracking-wider">Frequency (Every)</th>
               <th className="px-3 py-2 text-left text-xs font-medium text-neutral-600 uppercase tracking-wider">Amount</th>
               <th className="px-3 py-2 text-left text-xs font-medium text-neutral-600 uppercase tracking-wider">Capitalised Amount</th>
-              <th className="px-3 py-2 text-center text-xs font-medium text-neutral-600 uppercase tracking-wider">Actions</th>
             </tr>
           </thead>
           <tbody className="bg-white divide-y divide-neutral-200">
             {needs.map((need: IncomeNeed) => (
               <tr key={need.id} className="hover:bg-neutral-50">
+                <td className="px-3 py-2 text-center">
+                  <button
+                    onClick={() => handleDeleteNeed(need.id)}
+                    className="text-[#4F4F4F] hover:text-red-600 transition-colors"
+                    title="Delete income need"
+                  >
+                    <Trash2 className="h-4 w-4" />
+                  </button>
+                </td>
                 <td className="px-3 py-2">
                   <input
                     type="text"
@@ -310,27 +319,18 @@ export default function IncomeNeedsTable() {
                     readOnly
                   />
                 </td>
-                <td className="px-3 py-2 text-center">
-                  <button
-                    onClick={() => handleDeleteNeed(need.id)}
-                    className="text-[#4F4F4F] hover:text-red-600 transition-colors"
-                    title="Delete income need"
-                  >
-                    <Trash2 className="h-4 w-4" />
-                  </button>
-                </td>
               </tr>
             ))}
             
             {/* Total Row */}
             {needs.length > 0 && (
               <tr className="bg-neutral-100 border-t-2 border-neutral-300 font-bold">
+                <td className="px-3 py-2"></td>
                 <td className="px-3 py-2 text-sm font-bold text-neutral-800">Total</td>
                 <td colSpan={7} className="px-3 py-2"></td>
                 <td className="px-3 py-2 text-sm font-bold text-neutral-800 text-right">
                   {formatCurrencyValue(totals.capitalisedAmount.toString(), 'capitalisedAmount')}
                 </td>
-                <td className="px-3 py-2"></td>
               </tr>
             )}
             

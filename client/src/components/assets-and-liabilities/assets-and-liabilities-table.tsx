@@ -237,13 +237,14 @@ export default function AssetsAndLiabilitiesTable() {
         <table className="min-w-full bg-white border border-neutral-200 rounded-lg shadow-sm">
           <thead>
             <tr className="bg-primary/10 border-b border-neutral-200">
+              <th className="px-3 py-2 text-center text-xs font-medium text-neutral-600 uppercase tracking-wider w-16">Actions</th>
               <th className="px-3 py-2 text-left text-xs font-medium text-neutral-600 uppercase tracking-wider" colSpan={5}>Overview</th>
               <th className="px-3 py-2 text-left text-xs font-medium text-neutral-600 uppercase tracking-wider" colSpan={2}>Owner(s)</th>
               <th className="px-3 py-2 text-left text-xs font-medium text-neutral-600 uppercase tracking-wider" colSpan={3}>Bequeath To</th>
               <th className="px-3 py-2 text-left text-xs font-medium text-neutral-600 uppercase tracking-wider" colSpan={3}>Exclusions</th>
-              <th className="px-3 py-2 text-center text-xs font-medium text-neutral-600 uppercase tracking-wider">Actions</th>
             </tr>
             <tr className="bg-primary/10 border-b border-neutral-200">
+              <th className="px-3 py-2 text-center text-xs font-medium text-neutral-600 uppercase tracking-wider"></th>
               <th className="px-3 py-2 text-center text-xs font-medium text-neutral-600 uppercase tracking-wider">Include?</th>
               <th className="px-3 py-2 text-left text-xs font-medium text-neutral-600 uppercase tracking-wider">Category and Description</th>
               <th className="px-3 py-2 text-left text-xs font-medium text-neutral-600 uppercase tracking-wider">Currency</th>
@@ -257,7 +258,6 @@ export default function AssetsAndLiabilitiesTable() {
               <th className="px-3 py-2 text-center text-xs font-medium text-neutral-600 uppercase tracking-wider">Joint Estate</th>
               <th className="px-3 py-2 text-center text-xs font-medium text-neutral-600 uppercase tracking-wider">Estate Duty</th>
               <th className="px-3 py-2 text-center text-xs font-medium text-neutral-600 uppercase tracking-wider">CGT</th>
-              <th className="px-3 py-2 text-center text-xs font-medium text-neutral-600 uppercase tracking-wider"></th>
             </tr>
           </thead>
           <tbody className="bg-white divide-y divide-neutral-200">
@@ -285,6 +285,15 @@ export default function AssetsAndLiabilitiesTable() {
                 {/* Category Assets */}
                 {assets.map((asset: AssetAndLiability) => (
                   <tr key={asset.id} className="hover:bg-neutral-50">
+                    <td className="px-3 py-2 text-center">
+                      <button
+                        onClick={() => handleDeleteAsset(asset.id)}
+                        className="text-[#4F4F4F] hover:text-red-600 transition-colors"
+                        title="Delete asset"
+                      >
+                        <Trash2 className="h-4 w-4" />
+                      </button>
+                    </td>
                     <td className="px-3 py-2 text-center">
                       <input
                         type="checkbox"
@@ -436,15 +445,6 @@ export default function AssetsAndLiabilitiesTable() {
                         className="h-4 w-4 text-blue-600 focus:ring-primary border-gray-300 rounded"
                         disabled={isUpdating}
                       />
-                    </td>
-                    <td className="px-3 py-2 text-center">
-                      <button
-                        onClick={() => handleDeleteAsset(asset.id)}
-                        className="text-[#4F4F4F] hover:text-red-600 transition-colors"
-                        title="Delete asset"
-                      >
-                        <Trash2 className="h-4 w-4" />
-                      </button>
                     </td>
                   </tr>
                 ))}

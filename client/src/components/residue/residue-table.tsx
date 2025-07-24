@@ -176,15 +176,24 @@ export default function ResidueTable() {
         <table className="min-w-full bg-white border border-neutral-200 rounded-lg shadow-sm">
           <thead>
             <tr className="bg-primary/10 border-b border-neutral-200">
+              <th className="px-3 py-2 text-center text-xs font-medium text-neutral-600 uppercase tracking-wider w-16">Actions</th>
               <th className="px-3 py-2 text-left text-xs font-medium text-neutral-600 uppercase tracking-wider">Entity</th>
               <th className="px-3 py-2 text-left text-xs font-medium text-neutral-600 uppercase tracking-wider">Percentage</th>
-              <th className="px-3 py-2 text-center text-xs font-medium text-neutral-600 uppercase tracking-wider">Actions</th>
             </tr>
           </thead>
           <tbody className="bg-white divide-y divide-neutral-200">
             {/* Regular Entity Rows */}
             {regularEntities.map((item: Residue) => (
               <tr key={item.id} className="hover:bg-neutral-50">
+                <td className="px-3 py-2 text-center">
+                  <button
+                    onClick={() => handleDeleteEntity(item.id)}
+                    className="text-[#4F4F4F] hover:text-red-600 transition-colors"
+                    title="Delete entity"
+                  >
+                    <Trash2 className="h-4 w-4" />
+                  </button>
+                </td>
                 <td className="px-3 py-2">
                   <select
                     value={item.entity}
@@ -210,21 +219,15 @@ export default function ResidueTable() {
                     disabled={isUpdating}
                   />
                 </td>
-                <td className="px-3 py-2 text-center">
-                  <button
-                    onClick={() => handleDeleteEntity(item.id)}
-                    className="text-[#4F4F4F] hover:text-red-600 transition-colors"
-                    title="Delete entity"
-                  >
-                    <Trash2 className="h-4 w-4" />
-                  </button>
-                </td>
               </tr>
             ))}
             
             {/* Charity Row */}
             {charityRow && (
               <tr className="bg-neutral-50 border-t-2 border-neutral-300">
+                <td className="px-3 py-2 text-center">
+                  {/* No delete button for charity row */}
+                </td>
                 <td className="px-3 py-2">
                   <input
                     type="text"
@@ -245,20 +248,17 @@ export default function ResidueTable() {
                     disabled={isUpdating}
                   />
                 </td>
-                <td className="px-3 py-2 text-center">
-                  {/* No delete button for charity row */}
-                </td>
               </tr>
             )}
             
             {/* Total Row */}
             {residueItems.length > 0 && (
               <tr className="bg-neutral-100 border-t-2 border-neutral-300 font-bold">
+                <td className="px-3 py-2"></td>
                 <td className="px-3 py-2 text-sm font-bold text-neutral-800">Total</td>
                 <td className="px-3 py-2 text-sm font-bold text-neutral-800 text-right">
                   {totals.grandTotal}%
                 </td>
-                <td className="px-3 py-2"></td>
               </tr>
             )}
             
