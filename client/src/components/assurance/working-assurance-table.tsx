@@ -204,7 +204,7 @@ export function AssuranceTable({ searchTerm }: AssuranceTableProps) {
     }
   }, [policies, updateMutation]);
 
-  // Remove specific owner by ID and renumber remaining owners
+  // Remove specific owner by ID - keep original numbering
   const handleRemoveOwner = useCallback((id: number, ownerId: string) => {
     const policy = policies.find((p: Assurance) => p.id === id);
     if (policy) {
@@ -214,18 +214,11 @@ export function AssuranceTable({ searchTerm }: AssuranceTableProps) {
       } catch {
         currentOwners = [];
       }
-      // Filter out the deleted owner
+      // Filter out the deleted owner - keep original numbering for remaining owners
       const filteredOwners = currentOwners.filter((owner: any) => owner.id !== ownerId);
       
-      // Renumber remaining owners sequentially
-      const renumberedOwners = filteredOwners.map((owner: any, index: number) => ({
-        ...owner,
-        id: `O${index + 2}`, // Start from O2 since O1 is main owner
-        name: `Owner ${index + 2}`
-      }));
-      
       setIsUpdating(true);
-      updateMutation.mutate({ id, updates: { additionalOwners: JSON.stringify(renumberedOwners) } });
+      updateMutation.mutate({ id, updates: { additionalOwners: JSON.stringify(filteredOwners) } });
     }
   }, [policies, updateMutation]);
 
@@ -248,7 +241,7 @@ export function AssuranceTable({ searchTerm }: AssuranceTableProps) {
     }
   }, [policies, updateMutation]);
 
-  // Remove specific beneficiary by ID and renumber remaining beneficiaries
+  // Remove specific beneficiary by ID - keep original numbering
   const handleRemoveBeneficiary = useCallback((id: number, beneficiaryId: string) => {
     const policy = policies.find((p: Assurance) => p.id === id);
     if (policy) {
@@ -258,18 +251,11 @@ export function AssuranceTable({ searchTerm }: AssuranceTableProps) {
       } catch {
         currentBeneficiaries = [];
       }
-      // Filter out the deleted beneficiary
+      // Filter out the deleted beneficiary - keep original numbering for remaining beneficiaries
       const filteredBeneficiaries = currentBeneficiaries.filter((beneficiary: any) => beneficiary.id !== beneficiaryId);
       
-      // Renumber remaining beneficiaries sequentially
-      const renumberedBeneficiaries = filteredBeneficiaries.map((beneficiary: any, index: number) => ({
-        ...beneficiary,
-        id: `B${index + 2}`, // Start from B2 since B1 is main beneficiary
-        name: `Beneficiary ${index + 2}`
-      }));
-      
       setIsUpdating(true);
-      updateMutation.mutate({ id, updates: { additionalBeneficiaries: JSON.stringify(renumberedBeneficiaries) } });
+      updateMutation.mutate({ id, updates: { additionalBeneficiaries: JSON.stringify(filteredBeneficiaries) } });
     }
   }, [policies, updateMutation]);
 
