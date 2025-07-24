@@ -970,56 +970,257 @@ class DbStorage implements IStorage {
       .orderBy(lumpSumBequests.id);
   }
 
-  // Retirement Funds - stub implementations (using MemStorage pattern for now)
-  async getRetirementFunds(): Promise<RetirementFund[]> { return []; }
-  async getRetirementFund(id: number): Promise<RetirementFund | undefined> { return undefined; }
-  async createRetirementFund(fund: InsertRetirementFund): Promise<RetirementFund> { throw new Error("Not implemented"); }
-  async updateRetirementFund(id: number, updates: UpdateRetirementFund): Promise<RetirementFund | undefined> { return undefined; }
-  async deleteRetirementFund(id: number): Promise<boolean> { return false; }
-  async searchRetirementFunds(query: string): Promise<RetirementFund[]> { return []; }
+  // Retirement Funds methods - Database implementation
+  async getRetirementFunds(): Promise<RetirementFund[]> {
+    return await this.db.select().from(retirementFunds).orderBy(retirementFunds.id);
+  }
 
-  // Other methods - stub implementations
-  async getAssurance(): Promise<Assurance[]> { return []; }
-  async getAssuranceById(id: number): Promise<Assurance | undefined> { return undefined; }
-  async createAssurance(assurance: InsertAssurance): Promise<Assurance> { throw new Error("Not implemented"); }
-  async updateAssurance(id: number, updates: UpdateAssurance): Promise<Assurance | undefined> { return undefined; }
-  async deleteAssurance(id: number): Promise<boolean> { return false; }
-  async searchAssurance(query: string): Promise<Assurance[]> { return []; }
+  async getRetirementFund(id: number): Promise<RetirementFund | undefined> {
+    const results = await this.db.select().from(retirementFunds).where(eq(retirementFunds.id, id));
+    return results[0];
+  }
 
-  async getDefinedBenefitFunds(): Promise<DefinedBenefitFund[]> { return []; }
-  async getDefinedBenefitFund(id: number): Promise<DefinedBenefitFund | undefined> { return undefined; }
-  async createDefinedBenefitFund(fund: InsertDefinedBenefitFund): Promise<DefinedBenefitFund> { throw new Error("Not implemented"); }
-  async updateDefinedBenefitFund(id: number, updates: UpdateDefinedBenefitFund): Promise<DefinedBenefitFund | undefined> { return undefined; }
-  async deleteDefinedBenefitFund(id: number): Promise<boolean> { return false; }
-  async searchDefinedBenefitFunds(query: string): Promise<DefinedBenefitFund[]> { return []; }
+  async createRetirementFund(fund: InsertRetirementFund): Promise<RetirementFund> {
+    const results = await this.db.insert(retirementFunds).values(fund).returning();
+    return results[0];
+  }
 
-  async getVoluntaryInvestments(): Promise<VoluntaryInvestment[]> { return []; }
-  async getVoluntaryInvestment(id: number): Promise<VoluntaryInvestment | undefined> { return undefined; }
-  async createVoluntaryInvestment(investment: InsertVoluntaryInvestment): Promise<VoluntaryInvestment> { throw new Error("Not implemented"); }
-  async updateVoluntaryInvestment(id: number, updates: UpdateVoluntaryInvestment): Promise<VoluntaryInvestment | undefined> { return undefined; }
-  async deleteVoluntaryInvestment(id: number): Promise<boolean> { return false; }
-  async searchVoluntaryInvestments(query: string): Promise<VoluntaryInvestment[]> { return []; }
+  async updateRetirementFund(id: number, updates: UpdateRetirementFund): Promise<RetirementFund | undefined> {
+    const results = await this.db.update(retirementFunds).set(updates).where(eq(retirementFunds.id, id)).returning();
+    return results[0];
+  }
 
-  async getAssetsAndLiabilities(): Promise<AssetAndLiability[]> { return []; }
-  async getAssetAndLiability(id: number): Promise<AssetAndLiability | undefined> { return undefined; }
-  async createAssetAndLiability(asset: InsertAssetAndLiability): Promise<AssetAndLiability> { throw new Error("Not implemented"); }
-  async updateAssetAndLiability(id: number, updates: UpdateAssetAndLiability): Promise<AssetAndLiability | undefined> { return undefined; }
-  async deleteAssetAndLiability(id: number): Promise<boolean> { return false; }
-  async searchAssetsAndLiabilities(query: string): Promise<AssetAndLiability[]> { return []; }
+  async deleteRetirementFund(id: number): Promise<boolean> {
+    const results = await this.db.delete(retirementFunds).where(eq(retirementFunds.id, id)).returning();
+    return results.length > 0;
+  }
 
-  async getIncomeNeeds(): Promise<IncomeNeed[]> { return []; }
-  async getIncomeNeed(id: number): Promise<IncomeNeed | undefined> { return undefined; }
-  async createIncomeNeed(need: InsertIncomeNeed): Promise<IncomeNeed> { throw new Error("Not implemented"); }
-  async updateIncomeNeed(id: number, updates: UpdateIncomeNeed): Promise<IncomeNeed | undefined> { return undefined; }
-  async deleteIncomeNeed(id: number): Promise<boolean> { return false; }
-  async searchIncomeNeeds(query: string): Promise<IncomeNeed[]> { return []; }
+  async searchRetirementFunds(query: string): Promise<RetirementFund[]> {
+    if (!query.trim()) return await this.getRetirementFunds();
+    
+    return await this.db.select().from(retirementFunds)
+      .where(or(
+        ilike(retirementFunds.description, `%${query}%`),
+        ilike(retirementFunds.owner, `%${query}%`)
+      ))
+      .orderBy(retirementFunds.id);
+  }
 
-  async getIncomeProvisions(): Promise<IncomeProvision[]> { return []; }
-  async getIncomeProvision(id: number): Promise<IncomeProvision | undefined> { return undefined; }
-  async createIncomeProvision(provision: InsertIncomeProvision): Promise<IncomeProvision> { throw new Error("Not implemented"); }
-  async updateIncomeProvision(id: number, updates: UpdateIncomeProvision): Promise<IncomeProvision | undefined> { return undefined; }
-  async deleteIncomeProvision(id: number): Promise<boolean> { return false; }
-  async searchIncomeProvisions(query: string): Promise<IncomeProvision[]> { return []; }
+  // Assurance methods - Database implementation
+  async getAssurance(): Promise<Assurance[]> {
+    return await this.db.select().from(assurance).orderBy(assurance.id);
+  }
+
+  async getAssuranceById(id: number): Promise<Assurance | undefined> {
+    const results = await this.db.select().from(assurance).where(eq(assurance.id, id));
+    return results[0];
+  }
+
+  async createAssurance(assuranceData: InsertAssurance): Promise<Assurance> {
+    const results = await this.db.insert(assurance).values(assuranceData).returning();
+    return results[0];
+  }
+
+  async updateAssurance(id: number, updates: UpdateAssurance): Promise<Assurance | undefined> {
+    const results = await this.db.update(assurance).set(updates).where(eq(assurance.id, id)).returning();
+    return results[0];
+  }
+
+  async deleteAssurance(id: number): Promise<boolean> {
+    const results = await this.db.delete(assurance).where(eq(assurance.id, id)).returning();
+    return results.length > 0;
+  }
+
+  async searchAssurance(query: string): Promise<Assurance[]> {
+    if (!query.trim()) return await this.getAssurance();
+    
+    return await this.db.select().from(assurance)
+      .where(or(
+        ilike(assurance.description, `%${query}%`),
+        ilike(assurance.owner, `%${query}%`)
+      ))
+      .orderBy(assurance.id);
+  }
+
+  // Defined Benefit Funds methods - Database implementation
+  async getDefinedBenefitFunds(): Promise<DefinedBenefitFund[]> {
+    return await this.db.select().from(definedBenefitFunds).orderBy(definedBenefitFunds.id);
+  }
+
+  async getDefinedBenefitFund(id: number): Promise<DefinedBenefitFund | undefined> {
+    const results = await this.db.select().from(definedBenefitFunds).where(eq(definedBenefitFunds.id, id));
+    return results[0];
+  }
+
+  async createDefinedBenefitFund(fund: InsertDefinedBenefitFund): Promise<DefinedBenefitFund> {
+    const results = await this.db.insert(definedBenefitFunds).values(fund).returning();
+    return results[0];
+  }
+
+  async updateDefinedBenefitFund(id: number, updates: UpdateDefinedBenefitFund): Promise<DefinedBenefitFund | undefined> {
+    const results = await this.db.update(definedBenefitFunds).set(updates).where(eq(definedBenefitFunds.id, id)).returning();
+    return results[0];
+  }
+
+  async deleteDefinedBenefitFund(id: number): Promise<boolean> {
+    const results = await this.db.delete(definedBenefitFunds).where(eq(definedBenefitFunds.id, id)).returning();
+    return results.length > 0;
+  }
+
+  async searchDefinedBenefitFunds(query: string): Promise<DefinedBenefitFund[]> {
+    if (!query.trim()) return await this.getDefinedBenefitFunds();
+    
+    return await this.db.select().from(definedBenefitFunds)
+      .where(or(
+        ilike(definedBenefitFunds.description, `%${query}%`),
+        ilike(definedBenefitFunds.owner, `%${query}%`)
+      ))
+      .orderBy(definedBenefitFunds.id);
+  }
+
+  // Voluntary Investments methods - Database implementation  
+  async getVoluntaryInvestments(): Promise<VoluntaryInvestment[]> {
+    return await this.db.select().from(voluntaryInvestments).orderBy(voluntaryInvestments.id);
+  }
+
+  async getVoluntaryInvestment(id: number): Promise<VoluntaryInvestment | undefined> {
+    const results = await this.db.select().from(voluntaryInvestments).where(eq(voluntaryInvestments.id, id));
+    return results[0];
+  }
+
+  async createVoluntaryInvestment(investment: InsertVoluntaryInvestment): Promise<VoluntaryInvestment> {
+    const results = await this.db.insert(voluntaryInvestments).values(investment).returning();
+    return results[0];
+  }
+
+  async updateVoluntaryInvestment(id: number, updates: UpdateVoluntaryInvestment): Promise<VoluntaryInvestment | undefined> {
+    const results = await this.db.update(voluntaryInvestments).set(updates).where(eq(voluntaryInvestments.id, id)).returning();
+    return results[0];
+  }
+
+  async deleteVoluntaryInvestment(id: number): Promise<boolean> {
+    const results = await this.db.delete(voluntaryInvestments).where(eq(voluntaryInvestments.id, id)).returning();
+    return results.length > 0;
+  }
+
+  async searchVoluntaryInvestments(query: string): Promise<VoluntaryInvestment[]> {
+    if (!query.trim()) return await this.getVoluntaryInvestments();
+    
+    return await this.db.select().from(voluntaryInvestments)
+      .where(or(
+        ilike(voluntaryInvestments.description, `%${query}%`),
+        ilike(voluntaryInvestments.owners, `%${query}%`)
+      ))
+      .orderBy(voluntaryInvestments.id);
+  }
+
+  // Assets and Liabilities methods - Database implementation
+  async getAssetsAndLiabilities(): Promise<AssetAndLiability[]> {
+    return await this.db.select().from(assetsAndLiabilities).orderBy(assetsAndLiabilities.id);
+  }
+
+  async getAssetAndLiability(id: number): Promise<AssetAndLiability | undefined> {
+    const results = await this.db.select().from(assetsAndLiabilities).where(eq(assetsAndLiabilities.id, id));
+    return results[0];
+  }
+
+  async createAssetAndLiability(asset: InsertAssetAndLiability): Promise<AssetAndLiability> {
+    const results = await this.db.insert(assetsAndLiabilities).values(asset).returning();
+    return results[0];
+  }
+
+  async updateAssetAndLiability(id: number, updates: UpdateAssetAndLiability): Promise<AssetAndLiability | undefined> {
+    const results = await this.db.update(assetsAndLiabilities).set(updates).where(eq(assetsAndLiabilities.id, id)).returning();
+    return results[0];
+  }
+
+  async deleteAssetAndLiability(id: number): Promise<boolean> {
+    const results = await this.db.delete(assetsAndLiabilities).where(eq(assetsAndLiabilities.id, id)).returning();
+    return results.length > 0;
+  }
+
+  async searchAssetsAndLiabilities(query: string): Promise<AssetAndLiability[]> {
+    if (!query.trim()) return await this.getAssetsAndLiabilities();
+    
+    return await this.db.select().from(assetsAndLiabilities)
+      .where(or(
+        ilike(assetsAndLiabilities.baseCost, `%${query}%`),
+        ilike(assetsAndLiabilities.marketValue, `%${query}%`)
+      ))
+      .orderBy(assetsAndLiabilities.id);
+  }
+
+  // Income Needs methods - Database implementation
+  async getIncomeNeeds(): Promise<IncomeNeed[]> {
+    return await this.db.select().from(incomeNeeds).orderBy(incomeNeeds.id);
+  }
+
+  async getIncomeNeed(id: number): Promise<IncomeNeed | undefined> {
+    const results = await this.db.select().from(incomeNeeds).where(eq(incomeNeeds.id, id));
+    return results[0];
+  }
+
+  async createIncomeNeed(need: InsertIncomeNeed): Promise<IncomeNeed> {
+    const results = await this.db.insert(incomeNeeds).values(need).returning();
+    return results[0];
+  }
+
+  async updateIncomeNeed(id: number, updates: UpdateIncomeNeed): Promise<IncomeNeed | undefined> {
+    const results = await this.db.update(incomeNeeds).set(updates).where(eq(incomeNeeds.id, id)).returning();
+    return results[0];
+  }
+
+  async deleteIncomeNeed(id: number): Promise<boolean> {
+    const results = await this.db.delete(incomeNeeds).where(eq(incomeNeeds.id, id)).returning();
+    return results.length > 0;
+  }
+
+  async searchIncomeNeeds(query: string): Promise<IncomeNeed[]> {
+    if (!query.trim()) return await this.getIncomeNeeds();
+    
+    return await this.db.select().from(incomeNeeds)
+      .where(or(
+        ilike(incomeNeeds.description, `%${query}%`),
+        ilike(incomeNeeds.amount, `%${query}%`)
+      ))
+      .orderBy(incomeNeeds.id);
+  }
+
+  // Income Provisions methods - Database implementation
+  async getIncomeProvisions(): Promise<IncomeProvision[]> {
+    return await this.db.select().from(incomeProvisions).orderBy(incomeProvisions.id);
+  }
+
+  async getIncomeProvision(id: number): Promise<IncomeProvision | undefined> {
+    const results = await this.db.select().from(incomeProvisions).where(eq(incomeProvisions.id, id));
+    return results[0];
+  }
+
+  async createIncomeProvision(provision: InsertIncomeProvision): Promise<IncomeProvision> {
+    const results = await this.db.insert(incomeProvisions).values(provision).returning();
+    return results[0];
+  }
+
+  async updateIncomeProvision(id: number, updates: UpdateIncomeProvision): Promise<IncomeProvision | undefined> {
+    const results = await this.db.update(incomeProvisions).set(updates).where(eq(incomeProvisions.id, id)).returning();
+    return results[0];
+  }
+
+  async deleteIncomeProvision(id: number): Promise<boolean> {
+    const results = await this.db.delete(incomeProvisions).where(eq(incomeProvisions.id, id)).returning();
+    return results.length > 0;
+  }
+
+  async searchIncomeProvisions(query: string): Promise<IncomeProvision[]> {
+    if (!query.trim()) return await this.getIncomeProvisions();
+    
+    return await this.db.select().from(incomeProvisions)
+      .where(or(
+        ilike(incomeProvisions.description, `%${query}%`),
+        ilike(incomeProvisions.entity, `%${query}%`)
+      ))
+      .orderBy(incomeProvisions.id);
+  }
 
   async getResidue(): Promise<Residue[]> { return []; }
   async getResidueItem(id: number): Promise<Residue | undefined> { return undefined; }
