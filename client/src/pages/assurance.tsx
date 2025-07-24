@@ -60,20 +60,20 @@ export default function Assurance() {
   return (
     <div className="min-h-screen bg-neutral-50">
       <div className="max-w-7xl mx-auto px-4 py-6">
-        {/* Calculator Header */}
-        <CalculatorHeader
-          title="Assurance"
-          itemCount={policies.length}
-          itemLabel="policies"
-          onAddItem={handleAddPolicy}
-          addButtonText="Add Policy"
-          isAddingItem={addMutation.isPending}
-          viewMode={viewMode}
-          onViewModeChange={handleViewModeChange}
-        />
-
-        {/* Summary Section */}
-        <AssuranceSummary />
+        {/* Combined Header and Summary */}
+        <div className="mb-6">
+          <CalculatorHeader
+            title="Assurance"
+            itemCount={policies.length}
+            itemLabel="policies"
+            onAddItem={handleAddPolicy}
+            addButtonText="Add Policy"
+            isAddingItem={addMutation.isPending}
+            viewMode={viewMode}
+            onViewModeChange={handleViewModeChange}
+          />
+          <AssuranceSummary />
+        </div>
 
         {/* Main Table */}
         <AssuranceTable />
