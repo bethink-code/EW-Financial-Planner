@@ -107,6 +107,35 @@ export const formatPercentage = (value: string | number): string => {
 };
 
 /**
+ * Check if a value is a default value (used for styling)
+ */
+export const isDefaultValue = (value: string, fieldType: FieldType): boolean => {
+  if (!value || value.trim() === '') return true;
+  
+  switch (fieldType) {
+    case 'currency':
+      return value === 'R 0' || value === '0';
+    case 'percentage': 
+      return value === '0%' || value === '0';
+    case 'years':
+      return value === '0 years' || value === '0';
+    case 'text':
+      return value.trim() === '' || value === 'Donald Edwards';
+    case 'number':
+      return value === '0';
+    default:
+      return value.trim() === '';
+  }
+};
+
+/**
+ * Get CSS class for input field based on whether it has default value
+ */
+export const getValueClass = (value: string, fieldType: FieldType): string => {
+  return isDefaultValue(value, fieldType) ? 'default-value' : 'entered-value';
+};
+
+/**
  * Legacy years formatting for backward compatibility
  */
 export const formatYears = (value: string | number): string => {

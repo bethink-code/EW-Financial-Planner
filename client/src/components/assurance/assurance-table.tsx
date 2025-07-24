@@ -3,6 +3,7 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { Plus, Trash2 } from "lucide-react";
 import { apiRequest } from "@/lib/queryClient";
 import { getFieldClass, getFieldWidth } from "@/lib/design-tokens";
+import { getValueClass, isDefaultValue } from "@/lib/formatting";
 import type { Assurance, InsertAssurance } from "@shared/schema";
 
 interface AssuranceTableProps {

@@ -2,7 +2,7 @@ import React, { useState, useCallback, useMemo } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { Plus, Trash2, Search } from "lucide-react";
 import { getFieldClass, getFieldWidth } from "@/lib/design-tokens";
-import { formatCurrencyValue, formatPercentageValue, formatYearsValue } from "@/lib/formatting";
+import { formatCurrencyValue, formatPercentageValue, formatYearsValue, getValueClass, isDefaultValue } from "@/lib/formatting";
 import type { IncomeProvision, InsertIncomeProvision } from "@shared/schema";
 
 const ENTITY_OPTIONS = [

@@ -5,6 +5,7 @@ import { Edit3, Plus, Trash2, UserPlus, UserMinus } from "lucide-react";
 import { parseBeneficiaries } from "@/lib/beneficiaries";
 import { Button } from "@/components/ui/button";
 import { getFieldClass, getFieldWidth } from "@/lib/design-tokens";
+import { getValueClass, isDefaultValue } from "@/lib/formatting";
 import { nanoid } from "nanoid";
 
 interface ColumnVisibility {

@@ -4,7 +4,7 @@ import { Plus, Trash2, Search } from "lucide-react";
 import { apiRequest } from "@/lib/queryClient";
 import { AddButton } from "@/components/ui/action-buttons";
 import { getFieldClass, getFieldWidth } from "@/lib/design-tokens";
-import { formatCurrencyValue, formatPercentageValue, formatYearsValue } from "@/lib/formatting";
+import { formatCurrencyValue, formatPercentageValue, formatYearsValue, getValueClass, isDefaultValue } from "@/lib/formatting";
 import type { DefinedBenefitFund, InsertDefinedBenefitFund } from "@shared/schema";
 
 export default function DefinedBenefitFundsTable() {
@@ -306,7 +306,7 @@ export default function DefinedBenefitFundsTable() {
                     type="text"
                     defaultValue={fund.yearsOfService.includes('years') ? fund.yearsOfService : `${fund.yearsOfService} years`}
                     onBlur={(e) => handleInputBlur(fund.id, 'yearsOfService', e.target.value)}
-                    className={getFieldClass('years')}
+                    className={`${getFieldClass('years')} ${getValueClass(fund.yearsOfService.includes('years') ? fund.yearsOfService : `${fund.yearsOfService} years`, 'years')}`}
                     disabled={isUpdating}
                   />
                 </td>
@@ -316,7 +316,7 @@ export default function DefinedBenefitFundsTable() {
                     type="text"
                     defaultValue={formatCurrencyValue(fund.finalMonthlySalary)}
                     onBlur={(e) => handleInputBlur(fund.id, 'finalMonthlySalary', e.target.value)}
-                    className={getFieldClass('amount')}
+                    className={`${getFieldClass('amount')} ${getValueClass(formatCurrencyValue(fund.finalMonthlySalary), 'currency')}`}
                     disabled={isUpdating}
                   />
                 </td>
@@ -326,7 +326,7 @@ export default function DefinedBenefitFundsTable() {
                     type="text"
                     defaultValue={formatCurrencyValue(fund.deathLumpSum)}
                     onBlur={(e) => handleInputBlur(fund.id, 'deathLumpSum', e.target.value)}
-                    className={getFieldClass('amount')}
+                    className={`${getFieldClass('amount')} ${getValueClass(formatCurrencyValue(fund.deathLumpSum), 'currency')}`}
                     disabled={isUpdating}
                   />
                 </td>
@@ -336,7 +336,7 @@ export default function DefinedBenefitFundsTable() {
                     type="text"
                     defaultValue={formatCurrencyValue(fund.additionalTaxFreeAmount)}
                     onBlur={(e) => handleInputBlur(fund.id, 'additionalTaxFreeAmount', e.target.value)}
-                    className={getFieldClass('amount')}
+                    className={`${getFieldClass('amount')} ${getValueClass(formatCurrencyValue(fund.additionalTaxFreeAmount), 'currency')}`}
                     disabled={isUpdating}
                   />
                 </td>
@@ -346,7 +346,7 @@ export default function DefinedBenefitFundsTable() {
                     type="text"
                     defaultValue={formatCurrencyValue(fund.pensionIncomeAmount)}
                     onBlur={(e) => handleInputBlur(fund.id, 'pensionIncomeAmount', e.target.value)}
-                    className={getFieldClass('amount')}
+                    className={`${getFieldClass('amount')} ${getValueClass(formatCurrencyValue(fund.pensionIncomeAmount), 'currency')}`}
                     disabled={isUpdating}
                   />
                 </td>
@@ -356,7 +356,7 @@ export default function DefinedBenefitFundsTable() {
                     type="text"
                     defaultValue={fund.pensionIncomeIncrease || "0%"}
                     onBlur={(e) => handleInputBlur(fund.id, 'pensionIncomeIncrease', e.target.value)}
-                    className={getFieldClass('percentage')}
+                    className={`${getFieldClass('percentage')} ${getValueClass(fund.pensionIncomeIncrease || "0%", 'percentage')}`}
                     disabled={isUpdating}
                   />
                 </td>

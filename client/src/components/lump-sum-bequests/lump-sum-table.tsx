@@ -2,7 +2,7 @@ import { useState, useCallback, useMemo } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { apiRequest } from "@/lib/queryClient";
 import { getFieldClass, getFieldWidth } from "@/lib/design-tokens";
-import { formatPercentageValue, formatCurrencyValue } from "@/lib/formatting";
+import { formatPercentageValue, formatCurrencyValue, getValueClass, isDefaultValue } from "@/lib/formatting";
 import { LumpSumBequest, InsertLumpSumBequest } from "@shared/schema";
 import { Trash2, Plus } from "lucide-react";
 

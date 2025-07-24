@@ -2,7 +2,7 @@ import React, { useState, useCallback, useMemo } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { Plus, Trash2, Search, UserPlus, UserMinus } from "lucide-react";
 import { getFieldClass, getFieldWidth } from "@/lib/design-tokens";
-import { formatCurrencyValue, formatPercentageValue } from "@/lib/formatting";
+import { formatCurrencyValue, formatPercentageValue, getValueClass, isDefaultValue } from "@/lib/formatting";
 import type { VoluntaryInvestment, InsertVoluntaryInvestment } from "@shared/schema";
 
 export default function VoluntaryInvestmentsTable() {
