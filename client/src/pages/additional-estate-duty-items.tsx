@@ -46,7 +46,7 @@ export default function AdditionalEstateDutyItems() {
   }, [addMutation]);
 
   return (
-    <div className="bg-neutral-50">
+    <div>
       <div className="w-full px-6 py-6 bg-[#eff2f5]">
         {/* Combined Header and Summary */}
         <div className="mb-6">
