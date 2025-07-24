@@ -52,7 +52,7 @@ export default function DeathWithEstateLiquidity() {
         {/* Header */}
         <div className="mb-6">
           <h1 className="text-3xl font-bold text-foreground mb-2">Death with Estate Liquidity</h1>
-          <p className="text-muted-foreground">Comprehensive estate planning and liquidity management</p>
+          <p className="text-muted-foreground ml-[24px] mr-[24px]">Comprehensive estate planning and liquidity management</p>
         </div>
 
         {/* Tab Navigation */}
