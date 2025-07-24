@@ -5,7 +5,7 @@ import { getFieldClass, getFieldWidth } from "@/lib/design-tokens";
 import { formatPercentageValue, formatCurrencyValue, getValueClass, isDefaultValue, handleDefaultValueFocus } from "@/lib/formatting";
 import { LumpSumBequest, InsertLumpSumBequest } from "@shared/schema";
 import { Trash2, Plus } from "lucide-react";
-import { ActionButtonGroup, DeleteButton } from "@/components/ui/action-buttons";
+import { ActionButtonGroup, DeleteButton, DuplicateButton } from "@/components/ui/action-buttons";
 
 interface LumpSumTableProps {}
 
@@ -52,6 +52,18 @@ export function LumpSumTable({}: LumpSumTableProps) {
       queryClient.invalidateQueries({ queryKey: ['/api/lump-sum-bequests'] });
     }
   });
+
+  // Duplicate handler
+  const handleDuplicateBequest = useCallback((bequest: LumpSumBequest) => {
+    const duplicatedBequest: InsertLumpSumBequest = {
+      description: bequest.description,
+      beneficiary: bequest.beneficiary,
+      amount: bequest.amount,
+      increasePercentage: bequest.increasePercentage,
+      cpi: bequest.cpi,
+    };
+    addMutation.mutate(duplicatedBequest);
+  }, [addMutation]);
 
   const handleInputBlur = useCallback((id: number, field: keyof InsertLumpSumBequest, value: string) => {
     if (value !== undefined) {
@@ -119,10 +131,16 @@ export function LumpSumTable({}: LumpSumTableProps) {
               {bequests.map((bequest: LumpSumBequest) => (
                 <tr key={bequest.id} className="hover:bg-neutral-50">
                   <td className="p-2 text-center">
-                    <DeleteButton
-                      onClick={() => deleteMutation.mutate(bequest.id)}
-                      disabled={deleteMutation.isPending}
-                    />
+                    <ActionButtonGroup>
+                      <DuplicateButton
+                        onClick={() => handleDuplicateBequest(bequest)}
+                        disabled={isUpdating}
+                      />
+                      <DeleteButton
+                        onClick={() => deleteMutation.mutate(bequest.id)}
+                        disabled={deleteMutation.isPending}
+                      />
+                    </ActionButtonGroup>
                   </td>
                   <td className="p-2">
                     <input

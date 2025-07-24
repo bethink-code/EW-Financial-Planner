@@ -3,7 +3,7 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { Plus, Trash2 } from "lucide-react";
 import { getFieldClass, getFieldWidth } from "@/lib/design-tokens";
 import { formatCurrencyValue, formatPercentageValue, formatYearsValue, getValueClass, isDefaultValue, handleDefaultValueFocus } from "@/lib/formatting";
-import { DeleteButton } from "@/components/ui/action-buttons";
+import { DeleteButton, DuplicateButton, ActionButtonGroup } from "@/components/ui/action-buttons";
 import type { IncomeProvision, InsertIncomeProvision } from "@shared/schema";
 
 const ENTITY_OPTIONS = [
@@ -177,6 +177,24 @@ export default function IncomeProvisionsTable() {
     }
   }, [deleteMutation]);
 
+  const handleDuplicateProvision = useCallback((provision: IncomeProvision) => {
+    const duplicatedProvision: InsertIncomeProvision = {
+      description: provision.description,
+      entity: provision.entity,
+      start: provision.start,
+      termYears: provision.termYears,
+      termEditable: provision.termEditable,
+      increasePercentage: provision.increasePercentage,
+      cpi: provision.cpi,
+      frequency: provision.frequency,
+      amount: provision.amount,
+      taxablePercentage: provision.taxablePercentage,
+      taxPercentage: provision.taxPercentage,
+      capitalisedAmount: provision.capitalisedAmount,
+    };
+    addMutation.mutate(duplicatedProvision);
+  }, [addMutation]);
+
   if (isLoading) {
     return <div className="flex justify-center py-8">Loading income provisions...</div>;
   }
@@ -210,9 +228,15 @@ export default function IncomeProvisionsTable() {
             {provisions.map((provision: IncomeProvision) => (
               <tr key={provision.id} className="hover:bg-neutral-50">
                 <td className="px-3 py-2 text-center">
-                  <DeleteButton
-                    onClick={() => handleDeleteProvision(provision.id)}
-                  />
+                  <ActionButtonGroup>
+                    <DuplicateButton
+                      onClick={() => handleDuplicateProvision(provision)}
+                      disabled={isUpdating}
+                    />
+                    <DeleteButton
+                      onClick={() => handleDeleteProvision(provision.id)}
+                    />
+                  </ActionButtonGroup>
                 </td>
                 <td className="px-3 py-2">
                   <input

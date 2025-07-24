@@ -171,6 +171,31 @@ export default function DefinedBenefitFundsTable() {
     }
   }, [deleteMutation]);
 
+  const handleDuplicateFund = useCallback((fund: DefinedBenefitFund) => {
+    const duplicatedFund: InsertDefinedBenefitFund = {
+      description: fund.description,
+      owner: fund.owner,
+      yearsOfService: fund.yearsOfService,
+      finalMonthlySalary: fund.finalMonthlySalary,
+      deathLumpSum: fund.deathLumpSum,
+      additionalTaxFreeAmount: fund.additionalTaxFreeAmount,
+      pensionIncomeAmount: fund.pensionIncomeAmount,
+      pensionIncomeIncrease: fund.pensionIncomeIncrease,
+    };
+    
+    const response = fetch('/api/defined-benefit-funds', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(duplicatedFund),
+    }).then(res => {
+      if (res.ok) {
+        queryClient.invalidateQueries({ queryKey: ['/api/defined-benefit-funds'] });
+      }
+    });
+  }, [queryClient]);
+
   if (isLoading) {
     return <div className="flex justify-center py-8">Loading defined benefit funds...</div>;
   }
@@ -208,6 +233,10 @@ export default function DefinedBenefitFundsTable() {
               <tr key={fund.id} className="hover:bg-neutral-50">
                 <td className="px-3 py-2 text-center">
                   <ActionButtonGroup>
+                    <DuplicateButton
+                      onClick={() => handleDuplicateFund(fund)}
+                      disabled={isUpdating}
+                    />
                     <DeleteButton
                       onClick={() => handleDeleteFund(fund.id)}
                       disabled={isUpdating || deleteMutation.isPending}

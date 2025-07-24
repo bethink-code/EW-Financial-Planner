@@ -3,7 +3,7 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { Plus, Trash2 } from "lucide-react";
 import { getFieldClass, getFieldWidth } from "@/lib/design-tokens";
 import { formatCurrencyValue, getValueClass, isDefaultValue } from "@/lib/formatting";
-import { DeleteButton } from "@/components/ui/action-buttons";
+import { DeleteButton, DuplicateButton, ActionButtonGroup } from "@/components/ui/action-buttons";
 import type { AdditionalEstateDutyItem, InsertAdditionalEstateDutyItem } from "@shared/schema";
 
 
@@ -140,6 +140,16 @@ export default function AdditionalEstateDutyItemsTable() {
     }
   }, [deleteMutation]);
 
+  const handleDuplicateItem = useCallback((item: AdditionalEstateDutyItem) => {
+    const duplicatedItem: InsertAdditionalEstateDutyItem = {
+      description: item.description,
+      amount: item.amount,
+      isDeduction: item.isDeduction,
+      excludeFromJointEstate: item.excludeFromJointEstate,
+    };
+    addMutation.mutate();
+  }, [addMutation]);
+
   if (isLoading) {
     return <div className="flex justify-center py-8">Loading additional estate duty items...</div>;
   }
@@ -166,9 +176,15 @@ export default function AdditionalEstateDutyItemsTable() {
             {items.map((item: AdditionalEstateDutyItem) => (
               <tr key={item.id} className="hover:bg-neutral-50">
                 <td className="px-3 py-2 text-center">
-                  <DeleteButton
-                    onClick={() => handleDeleteItem(item.id)}
-                  />
+                  <ActionButtonGroup>
+                    <DuplicateButton
+                      onClick={() => handleDuplicateItem(item)}
+                      disabled={isUpdating}
+                    />
+                    <DeleteButton
+                      onClick={() => handleDeleteItem(item.id)}
+                    />
+                  </ActionButtonGroup>
                 </td>
                 <td className="px-3 py-2">
                   <input

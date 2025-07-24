@@ -4,7 +4,7 @@ import { Plus, Trash2 } from "lucide-react";
 import { getFieldClass, getFieldWidth } from "@/lib/design-tokens";
 import { formatCurrencyValue, formatPercentageValue, getValueClass, isDefaultValue, handleDefaultValueFocus } from "@/lib/formatting";
 import { SafeFragment } from "@/lib/react-utils";
-import { DeleteButton } from "@/components/ui/action-buttons";
+import { DeleteButton, DuplicateButton, ActionButtonGroup } from "@/components/ui/action-buttons";
 import type { AssetAndLiability, InsertAssetAndLiability } from "@shared/schema";
 
 const CURRENCY_OPTIONS = [
@@ -215,6 +215,39 @@ export default function AssetsAndLiabilitiesTable() {
     }
   }, [deleteMutation]);
 
+  const handleDuplicateAsset = useCallback((asset: AssetAndLiability) => {
+    const duplicatedAsset: InsertAssetAndLiability = {
+      include: asset.include,
+      categoryAndDescription: asset.categoryAndDescription,
+      currency: asset.currency,
+      baseCost: asset.baseCost,
+      marketValue: asset.marketValue,
+      donaldEdwardsPercentage: asset.donaldEdwardsPercentage,
+      bettyEdwardsPercentage: asset.bettyEdwardsPercentage,
+      liquidationPercentage: asset.liquidationPercentage,
+      spouse: asset.spouse,
+      others: asset.others,
+      excludedFromJointEstate: asset.excludedFromJointEstate,
+      excludedFromEstateDuty: asset.excludedFromEstateDuty,
+      excludedFromCGT: asset.excludedFromCGT,
+      category: asset.category,
+      isHeader: false,
+      sortOrder: asset.sortOrder,
+    };
+    
+    fetch('/api/assets-and-liabilities', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(duplicatedAsset),
+    }).then(res => {
+      if (res.ok) {
+        queryClient.invalidateQueries({ queryKey: ['/api/assets-and-liabilities'] });
+      }
+    });
+  }, [queryClient]);
+
   if (isLoading) {
     return <div className="flex justify-center py-8">Loading assets and liabilities...</div>;
   }
@@ -287,9 +320,15 @@ export default function AssetsAndLiabilitiesTable() {
                 {assets.map((asset: AssetAndLiability) => (
                   <tr key={asset.id} className="hover:bg-neutral-50">
                     <td className="px-3 py-2 text-center">
-                      <DeleteButton
-                        onClick={() => handleDeleteAsset(asset.id)}
-                      />
+                      <ActionButtonGroup>
+                        <DuplicateButton
+                          onClick={() => handleDuplicateAsset(asset)}
+                          disabled={isUpdating}
+                        />
+                        <DeleteButton
+                          onClick={() => handleDeleteAsset(asset.id)}
+                        />
+                      </ActionButtonGroup>
                     </td>
                     <td className="px-3 py-2 text-center">
                       <input

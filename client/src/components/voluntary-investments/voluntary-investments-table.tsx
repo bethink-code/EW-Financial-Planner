@@ -160,6 +160,31 @@ export default function VoluntaryInvestmentsTable() {
     }
   }, [deleteMutation]);
 
+  const handleDuplicateInvestment = useCallback((investment: VoluntaryInvestment) => {
+    const duplicatedInvestment: InsertVoluntaryInvestment = {
+      description: investment.description,
+      owners: investment.owners,
+      ownershipPercentages: investment.ownershipPercentages,
+      baseCost: investment.baseCost,
+      marketValue: investment.marketValue,
+      liquidationPercentage: investment.liquidationPercentage,
+      spouse: investment.spouse,
+      others: investment.others,
+      excludedFromJointEstate: investment.excludedFromJointEstate,
+      excludedFromEstateDuty: investment.excludedFromEstateDuty,
+      excludedFromCGT: investment.excludedFromCGT,
+      excludedFromExecutorsFees: investment.excludedFromExecutorsFees,
+    };
+    addMutation.mutate();
+    
+    // Alternative: create with all data immediately
+    // fetch('/api/voluntary-investments', {
+    //   method: 'POST',
+    //   headers: { 'Content-Type': 'application/json' },
+    //   body: JSON.stringify(duplicatedInvestment),
+    // }).then(() => queryClient.invalidateQueries({ queryKey: ['/api/voluntary-investments'] }));
+  }, [addMutation]);
+
   // Owner management functions
   const handleAddOwner = useCallback((investmentId: number) => {
     const investment = filteredInvestments.find(inv => inv.id === investmentId);
@@ -288,6 +313,10 @@ export default function VoluntaryInvestmentsTable() {
                     <>
                       <td rowSpan={owners.length} className="px-3 py-2 text-center">
                         <ActionButtonGroup>
+                          <DuplicateButton
+                            onClick={() => handleDuplicateInvestment(investment)}
+                            disabled={isUpdating}
+                          />
                           <DeleteButton
                             onClick={() => handleDeleteInvestment(investment.id)}
                             disabled={isUpdating || deleteMutation.isPending}

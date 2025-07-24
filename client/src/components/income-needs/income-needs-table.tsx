@@ -3,7 +3,7 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { Plus, Trash2 } from "lucide-react";
 import { getFieldClass, getFieldWidth } from "@/lib/design-tokens";
 import { formatCurrencyValue, formatPercentageValue, formatYearsValue, getValueClass, isDefaultValue } from "@/lib/formatting";
-import { DeleteButton } from "@/components/ui/action-buttons";
+import { DeleteButton, DuplicateButton, ActionButtonGroup } from "@/components/ui/action-buttons";
 import type { IncomeNeed, InsertIncomeNeed } from "@shared/schema";
 
 
@@ -173,6 +173,22 @@ export default function IncomeNeedsTable() {
     }
   }, [deleteMutation]);
 
+  const handleDuplicateNeed = useCallback((need: IncomeNeed) => {
+    const duplicatedNeed: InsertIncomeNeed = {
+      description: need.description,
+      entity: need.entity,
+      start: need.start,
+      termYears: need.termYears,
+      termEditable: need.termEditable,
+      increasePercentage: need.increasePercentage,
+      cpi: need.cpi,
+      frequency: need.frequency,
+      amount: need.amount,
+      capitalisedAmount: need.capitalisedAmount,
+    };
+    addMutation.mutate(duplicatedNeed);
+  }, [addMutation]);
+
   if (isLoading) {
     return <div className="flex justify-center py-8">Loading income needs...</div>;
   }
@@ -204,9 +220,15 @@ export default function IncomeNeedsTable() {
             {needs.map((need: IncomeNeed) => (
               <tr key={need.id} className="hover:bg-neutral-50">
                 <td className="px-3 py-2 text-center">
-                  <DeleteButton
-                    onClick={() => handleDeleteNeed(need.id)}
-                  />
+                  <ActionButtonGroup>
+                    <DuplicateButton
+                      onClick={() => handleDuplicateNeed(need)}
+                      disabled={isUpdating}
+                    />
+                    <DeleteButton
+                      onClick={() => handleDeleteNeed(need.id)}
+                    />
+                  </ActionButtonGroup>
                 </td>
                 <td className="px-3 py-2">
                   <input
