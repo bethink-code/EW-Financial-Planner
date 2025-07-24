@@ -7,11 +7,12 @@ import { Trash2, Plus } from "lucide-react";
 
 // Currency formatting utility
 const formatCurrencyValue = (value: string, fieldType: string): string => {
-  if (!value?.trim()) return value;
+  if (!value?.trim()) return 'R 0';
   
   // Remove existing formatting
   const cleanValue = value.replace(/[^\d.-]/g, '');
-  if (!cleanValue || isNaN(parseFloat(cleanValue))) return value;
+  if (!cleanValue) return 'R 0';
+  if (isNaN(parseFloat(cleanValue))) return 'R 0';
   
   const numValue = parseFloat(cleanValue);
   
@@ -24,7 +25,7 @@ const formatCurrencyValue = (value: string, fieldType: string): string => {
     return `R ${numValue.toLocaleString()}`;
   }
   
-  return value;
+  return 'R 0';
 };
 
 interface LumpSumTableProps {
