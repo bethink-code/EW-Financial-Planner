@@ -427,10 +427,7 @@ export function AssuranceTable({ searchTerm }: AssuranceTableProps) {
                         />
                         {rowIndex > 0 && rowIndex < allOwners.length && allOwners[rowIndex] && (
                           <button
-                            onClick={() => {
-                              console.log('Delete owner clicked:', allOwners[rowIndex].id, 'rowIndex:', rowIndex);
-                              handleRemoveOwner(policy.id, allOwners[rowIndex].id);
-                            }}
+                            onClick={() => handleRemoveOwner(policy.id, allOwners[rowIndex].id)}
                             className="h-6 w-6 p-0 bg-white text-[#4F4F4F] hover:text-red-600 hover:bg-red-50 border border-gray-300 rounded"
                             title="Remove owner"
                           >
@@ -513,10 +510,7 @@ export function AssuranceTable({ searchTerm }: AssuranceTableProps) {
                         />
                         {rowIndex > 0 && rowIndex < allBeneficiaries.length && allBeneficiaries[rowIndex] && (
                           <button
-                            onClick={() => {
-                              console.log('Delete beneficiary clicked:', allBeneficiaries[rowIndex].id, 'rowIndex:', rowIndex);
-                              handleRemoveBeneficiary(policy.id, allBeneficiaries[rowIndex].id);
-                            }}
+                            onClick={() => handleRemoveBeneficiary(policy.id, allBeneficiaries[rowIndex].id)}
                             className="h-6 w-6 p-0 bg-white text-[#4F4F4F] hover:text-red-600 hover:bg-red-50 border border-gray-300 rounded"
                             title="Remove beneficiary"
                           >
