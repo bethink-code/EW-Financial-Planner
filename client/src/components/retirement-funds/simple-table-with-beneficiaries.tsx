@@ -196,7 +196,7 @@ export function SimpleTableWithBeneficiaries({
                   defaultValue={fund.description || ""}
                   onBlur={(e) => onFieldUpdate(fund.id, "description", e.target.value)}
                   className={`${getFieldClass('text')} table-input`}
-                  style={{ width: getFieldWidth('text') }}
+                  
                   placeholder="Fund description"
                   disabled={isUpdating}
                 />
@@ -256,7 +256,7 @@ export function SimpleTableWithBeneficiaries({
                     handlePercentageChange(fund.id, 0, e.target.value.replace('%', ''));
                   }}
                   className={`${getFieldClass('percentage')} table-input text-right`}
-                  style={{ width: getFieldWidth('percentage') }}
+                  
                   disabled={isUpdating}
                 />
               </td>
@@ -278,7 +278,7 @@ export function SimpleTableWithBeneficiaries({
                     handleInputBlur(fund.id, "monthlyIncome", e.target.value);
                   }}
                   className={`${getFieldClass('percentage')} table-input text-right`}
-                  style={{ width: getFieldWidth('percentage') }}
+                  
                   placeholder="R 0"
                   disabled={isUpdating}
                 />
@@ -294,7 +294,7 @@ export function SimpleTableWithBeneficiaries({
                     handleInputBlur(fund.id, "increasePercentage", e.target.value);
                   }}
                   className={`${getFieldClass('percentage')} table-input text-right`}
-                  style={{ width: getFieldWidth('percentage') }}
+                  
                   placeholder="0%"
                   disabled={isUpdating}
                 />
@@ -310,7 +310,7 @@ export function SimpleTableWithBeneficiaries({
                     handleInputBlur(fund.id, "termYears", e.target.value);
                   }}
                   className={`${getFieldClass('years')} table-input text-right`}
-                  style={{ width: getFieldWidth('years') }}
+                  
                   placeholder="0 years"
                   disabled={isUpdating}
                 />
@@ -332,7 +332,7 @@ export function SimpleTableWithBeneficiaries({
                     handleInputBlur(fund.id, "fundValue", e.target.value);
                   }}
                   className={`${getFieldClass('percentage')} table-input text-right`}
-                  style={{ width: getFieldWidth('percentage') }}
+                  
                   placeholder="R 0"
                   disabled={isUpdating}
                 />
@@ -348,7 +348,7 @@ export function SimpleTableWithBeneficiaries({
                     handleInputBlur(fund.id, "fundValueAtDeath", e.target.value);
                   }}
                   className={`${getFieldClass('percentage')} table-input text-right`}
-                  style={{ width: getFieldWidth('percentage') }}
+                  
                   placeholder="R 0"
                   disabled={isUpdating}
                 />
@@ -364,7 +364,7 @@ export function SimpleTableWithBeneficiaries({
                   defaultValue={beneficiaries[0]?.name || ""}
                   onBlur={(e) => handleBeneficiaryUpdate(fund.id, 0, 'name', e.target.value)}
                   className={`${getFieldClass('text')} table-input`}
-                  style={{ width: getFieldWidth('text') }}
+                  
                   placeholder="Beneficiary name"
                   disabled={isUpdating}
                 />
@@ -380,7 +380,7 @@ export function SimpleTableWithBeneficiaries({
                     handleBeneficiaryUpdate(fund.id, 0, 'percentage', parseFloat(e.target.value.replace('%', '')) || 0);
                   }}
                   className={`${getFieldClass('percentage')} table-input text-right`}
-                  style={{ width: getFieldWidth('percentage') }}
+                  
                   disabled={isUpdating}
                 />
               </td>
@@ -395,7 +395,7 @@ export function SimpleTableWithBeneficiaries({
                     handleInputBlur(fund.id, "amount", e.target.value);
                   }}
                   className={`${getFieldClass('percentage')} table-input text-right`}
-                  style={{ width: getFieldWidth('percentage') }}
+                  
                   placeholder="R 0"
                   disabled={isUpdating}
                 />
@@ -411,7 +411,7 @@ export function SimpleTableWithBeneficiaries({
                     handleInputBlur(fund.id, "lumpSumTaken", e.target.value);
                   }}
                   className={`${getFieldClass('percentage')} table-input text-right`}
-                  style={{ width: getFieldWidth('percentage') }}
+                  
                   placeholder="R 0"
                   disabled={isUpdating}
                 />
@@ -427,7 +427,7 @@ export function SimpleTableWithBeneficiaries({
                     handleInputBlur(fund.id, "nondeductibleContribution", e.target.value);
                   }}
                   className={`${getFieldClass('percentage')} table-input text-right`}
-                  style={{ width: getFieldWidth('percentage') }}
+                  
                   placeholder="R 0"
                   disabled={isUpdating}
                 />
@@ -443,7 +443,7 @@ export function SimpleTableWithBeneficiaries({
                     handleInputBlur(fund.id, "livingAnnuity", e.target.value);
                   }}
                   className={`${getFieldClass('percentage')} table-input text-right`}
-                  style={{ width: getFieldWidth('percentage') }}
+                  
                   placeholder="R 0"
                   disabled={isUpdating}
                 />
@@ -459,7 +459,7 @@ export function SimpleTableWithBeneficiaries({
                     handleInputBlur(fund.id, "incomeTerm", e.target.value);
                   }}
                   className={`${getFieldClass('years')} table-input text-right`}
-                  style={{ width: getFieldWidth('years') }}
+                  
                   placeholder="0 years"
                   disabled={isUpdating}
                 />
@@ -508,7 +508,7 @@ export function SimpleTableWithBeneficiaries({
                     handleInputBlur(fund.id, "coverAmount", e.target.value);
                   }}
                   className={`${getFieldClass('percentage')} table-input text-right`}
-                  style={{ width: getFieldWidth('percentage') }}
+                  
                   placeholder="R 0"
                   disabled={isUpdating}
                 />
@@ -577,7 +577,7 @@ export function SimpleTableWithBeneficiaries({
                         defaultValue={beneficiary.name || ""}
                         onBlur={(e) => handleBeneficiaryUpdate(fund.id, actualIndex, 'name', e.target.value)}
                         className={`${getFieldClass('percentage')} table-input text-right`}
-                        style={{ width: getFieldWidth('text') }}
+                        
                         placeholder="Beneficiary name"
                         disabled={isUpdating}
                       />
@@ -594,7 +594,7 @@ export function SimpleTableWithBeneficiaries({
                         handleBeneficiaryUpdate(fund.id, actualIndex, 'percentage', parseFloat(e.target.value.replace('%', '')) || 0);
                       }}
                       className={`${getFieldClass('percentage')} table-input text-right`}
-                      style={{ width: getFieldWidth('percentage') }}
+                      
                       disabled={isUpdating}
                     />
                   </td>
@@ -707,7 +707,7 @@ export function SimpleTableWithBeneficiaries({
                       handlePercentageChange(fund.id, actualIndex, e.target.value.replace('%', ''));
                     }}
                     className={`${getFieldClass('percentage')} table-input text-right`}
-                    style={{ width: getFieldWidth('percentage') }}
+                    
                     disabled={isUpdating}
                   />
                 </td>

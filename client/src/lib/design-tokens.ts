@@ -130,8 +130,25 @@ export const getButtonClass = (variant: keyof typeof designTokens.components.but
 // Field type utility functions for consistent table behavior
 export const getFieldClass = (fieldName: string, additionalClasses = '') => {
   const config = designTokens.fieldTypes[fieldName] || designTokens.fieldTypes.text;
-  const className = config?.inputProps?.className || 'table-input';
-  return `${className} ${additionalClasses}`.trim();
+  const baseClassName = config?.inputProps?.className || 'table-input';
+  
+  // Map field types to CSS classes for consistent sizing
+  const fieldTypeMap: Record<string, string> = {
+    'text': 'field-text',
+    'name': 'field-text', 
+    'owner': 'field-text',
+    'beneficiary': 'field-text',
+    'description': 'field-text',
+    'currency': 'field-currency',
+    'amount': 'field-currency',
+    'deathBenefit': 'field-currency',
+    'percentage': 'field-percentage',
+    'years': 'field-years',
+    'number': 'field-number'
+  };
+  
+  const fieldTypeClass = fieldTypeMap[fieldName] || 'field-text';
+  return `${baseClassName} ${fieldTypeClass} ${additionalClasses}`.trim();
 };
 
 export const getFieldWidth = (fieldName: string) => {
