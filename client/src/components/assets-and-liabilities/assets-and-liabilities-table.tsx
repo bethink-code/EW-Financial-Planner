@@ -1,6 +1,7 @@
 import React, { useState, useCallback, useMemo } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { Plus, Trash2, Search } from "lucide-react";
+import { getFieldClass, getFieldWidth } from "@/lib/design-tokens";
 import type { AssetAndLiability, InsertAssetAndLiability } from "@shared/schema";
 
 // Utility function for formatting currency values
@@ -370,7 +371,8 @@ export default function AssetsAndLiabilitiesTable() {
                         type="text"
                         defaultValue={asset.categoryAndDescription}
                         onBlur={(e) => handleUpdateAsset(asset.id, 'categoryAndDescription', e.target.value)}
-                        className="table-input w-full px-2 py-1 text-sm border border-neutral-300 rounded bg-primary/5 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                        className={getFieldClass('description')}
+                        style={getFieldWidth('description')}
                         disabled={isUpdating}
                       />
                     </td>
@@ -378,7 +380,8 @@ export default function AssetsAndLiabilitiesTable() {
                       <select
                         value={asset.currency}
                         onChange={(e) => handleUpdateAsset(asset.id, 'currency', e.target.value)}
-                        className="table-input w-full px-2 py-1 text-sm border border-neutral-300 rounded bg-primary/5 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                        className={getFieldClass('name')}
+                        style={getFieldWidth('name')}
                         disabled={isUpdating}
                       >
                         {CURRENCY_OPTIONS.map(option => (
@@ -393,7 +396,8 @@ export default function AssetsAndLiabilitiesTable() {
                         type="text"
                         defaultValue={asset.baseCost}
                         onBlur={(e) => handleInputBlur(asset.id, 'baseCost', e.target.value)}
-                        className="table-input w-full px-2 py-1 text-sm text-right border border-neutral-300 rounded bg-primary/5 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                        className={getFieldClass('amount')}
+                        style={getFieldWidth('amount')}
                         disabled={isUpdating}
                       />
                     </td>
@@ -402,7 +406,8 @@ export default function AssetsAndLiabilitiesTable() {
                         type="text"
                         defaultValue={asset.marketValue}
                         onBlur={(e) => handleInputBlur(asset.id, 'marketValue', e.target.value)}
-                        className="table-input w-full px-2 py-1 text-sm text-right border border-neutral-300 rounded bg-primary/5 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                        className={getFieldClass('amount')}
+                        style={getFieldWidth('amount')}
                         disabled={isUpdating}
                       />
                     </td>
@@ -411,7 +416,8 @@ export default function AssetsAndLiabilitiesTable() {
                         type="text"
                         defaultValue={asset.donaldEdwardsPercentage}
                         onBlur={(e) => handleInputBlur(asset.id, 'donaldEdwardsPercentage', e.target.value)}
-                        className="table-input w-full px-2 py-1 text-sm text-right border border-neutral-300 rounded bg-primary/5 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                        className={getFieldClass('percentage')}
+                        style={getFieldWidth('percentage')}
                         disabled={isUpdating}
                       />
                     </td>
@@ -420,7 +426,8 @@ export default function AssetsAndLiabilitiesTable() {
                         type="text"
                         defaultValue={asset.bettyEdwardsPercentage}
                         onBlur={(e) => handleInputBlur(asset.id, 'bettyEdwardsPercentage', e.target.value)}
-                        className="table-input w-full px-2 py-1 text-sm text-right border border-neutral-300 rounded bg-primary/5 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                        className={getFieldClass('percentage')}
+                        style={getFieldWidth('percentage')}
                         disabled={isUpdating}
                       />
                     </td>
@@ -429,7 +436,8 @@ export default function AssetsAndLiabilitiesTable() {
                         type="text"
                         defaultValue={asset.liquidationPercentage}
                         onBlur={(e) => handleInputBlur(asset.id, 'liquidationPercentage', e.target.value)}
-                        className="table-input w-full px-2 py-1 text-sm text-right border border-neutral-300 rounded bg-primary/5 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                        className={getFieldClass('percentage')}
+                        style={getFieldWidth('percentage')}
                         disabled={isUpdating}
                       />
                     </td>
@@ -438,7 +446,8 @@ export default function AssetsAndLiabilitiesTable() {
                         type="text"
                         defaultValue={asset.spouse}
                         onBlur={(e) => handleInputBlur(asset.id, 'spouse', e.target.value)}
-                        className="table-input w-full px-2 py-1 text-sm text-right border border-neutral-300 rounded bg-primary/5 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                        className={getFieldClass('percentage')}
+                        style={getFieldWidth('percentage')}
                         disabled={isUpdating}
                       />
                     </td>
@@ -447,7 +456,8 @@ export default function AssetsAndLiabilitiesTable() {
                         type="text"
                         defaultValue={asset.others}
                         onBlur={(e) => handleInputBlur(asset.id, 'others', e.target.value)}
-                        className="table-input w-full px-2 py-1 text-sm text-right border border-neutral-300 rounded bg-primary/5 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                        className={getFieldClass('percentage')}
+                        style={getFieldWidth('percentage')}
                         disabled={isUpdating}
                       />
                     </td>

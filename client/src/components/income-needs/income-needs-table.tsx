@@ -1,6 +1,7 @@
 import React, { useState, useCallback, useMemo } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { Plus, Trash2, Search } from "lucide-react";
+import { getFieldClass, getFieldWidth } from "@/lib/design-tokens";
 import type { IncomeNeed, InsertIncomeNeed } from "@shared/schema";
 
 // Utility function for formatting currency values
@@ -283,7 +284,8 @@ export default function IncomeNeedsTable() {
                     type="text"
                     defaultValue={need.description}
                     onBlur={(e) => handleUpdateNeed(need.id, 'description', e.target.value)}
-                    className="table-input w-full px-2 py-1 text-sm border border-neutral-300 rounded bg-primary/5 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                    className={getFieldClass('description')}
+                    style={getFieldWidth('description')}
                     disabled={isUpdating}
                   />
                 </td>
@@ -291,7 +293,8 @@ export default function IncomeNeedsTable() {
                   <select
                     value={need.entity}
                     onChange={(e) => handleUpdateNeed(need.id, 'entity', e.target.value)}
-                    className="table-input w-full px-2 py-1 text-sm border border-neutral-300 rounded bg-primary/5 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                    className={getFieldClass('name')}
+                    style={getFieldWidth('name')}
                     disabled={isUpdating}
                   >
                     {ENTITY_OPTIONS.map(option => (
@@ -306,7 +309,8 @@ export default function IncomeNeedsTable() {
                     type="text"
                     defaultValue={need.start}
                     onBlur={(e) => handleInputBlur(need.id, 'start', e.target.value)}
-                    className="table-input w-full px-2 py-1 text-sm text-right border border-neutral-300 rounded bg-primary/5 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                    className={getFieldClass('years')}
+                    style={getFieldWidth('years')}
                     disabled={isUpdating}
                   />
                 </td>
@@ -323,9 +327,9 @@ export default function IncomeNeedsTable() {
                       type="text"
                       defaultValue={need.termYears}
                       onBlur={(e) => handleInputBlur(need.id, 'termYears', e.target.value)}
-                      className="table-input flex-1 px-2 py-1 text-sm text-right border border-neutral-300 rounded bg-primary/5 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                      className={getFieldClass('years')}
+                      style={{...getFieldWidth('years'), backgroundColor: need.termEditable ? 'hsl(var(--primary) / 0.05)' : '#F5F5F5'}}
                       disabled={isUpdating || !need.termEditable}
-                      style={{ backgroundColor: need.termEditable ? 'hsl(var(--primary) / 0.05)' : '#F5F5F5' }}
                     />
                   </div>
                 </td>
@@ -334,7 +338,8 @@ export default function IncomeNeedsTable() {
                     type="text"
                     defaultValue={need.increasePercentage}
                     onBlur={(e) => handleInputBlur(need.id, 'increasePercentage', e.target.value)}
-                    className="table-input w-full px-2 py-1 text-sm text-right border border-neutral-300 rounded bg-primary/5 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                    className={getFieldClass('percentage')}
+                    style={getFieldWidth('percentage')}
                     disabled={isUpdating}
                   />
                 </td>
@@ -351,7 +356,8 @@ export default function IncomeNeedsTable() {
                   <select
                     value={need.frequency}
                     onChange={(e) => handleUpdateNeed(need.id, 'frequency', e.target.value)}
-                    className="table-input w-full px-2 py-1 text-sm border border-neutral-300 rounded bg-primary/5 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                    className={getFieldClass('name')}
+                    style={getFieldWidth('name')}
                     disabled={isUpdating}
                   >
                     {FREQUENCY_OPTIONS.map(option => (
@@ -366,7 +372,8 @@ export default function IncomeNeedsTable() {
                     type="text"
                     defaultValue={need.amount}
                     onBlur={(e) => handleInputBlur(need.id, 'amount', e.target.value)}
-                    className="table-input w-full px-2 py-1 text-sm text-right border border-neutral-300 rounded bg-primary/5 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                    className={getFieldClass('amount')}
+                    style={getFieldWidth('amount')}
                     disabled={isUpdating}
                   />
                 </td>
@@ -374,7 +381,8 @@ export default function IncomeNeedsTable() {
                   <input
                     type="text"
                     value={need.capitalisedAmount}
-                    className="table-input w-full px-2 py-1 text-sm text-right border border-neutral-300 rounded bg-neutral-100 cursor-not-allowed"
+                    className={getFieldClass('amount')}
+                    style={getFieldWidth('amount')}
                     disabled
                     readOnly
                   />

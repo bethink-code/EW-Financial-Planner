@@ -1,6 +1,7 @@
 import React, { useState, useCallback, useMemo } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { Plus, Trash2, Search } from "lucide-react";
+import { getFieldClass, getFieldWidth } from "@/lib/design-tokens";
 import type { AdditionalEstateDutyItem, InsertAdditionalEstateDutyItem } from "@shared/schema";
 
 // Utility function for formatting currency values
@@ -240,7 +241,8 @@ export default function AdditionalEstateDutyItemsTable() {
                     type="text"
                     defaultValue={item.description}
                     onBlur={(e) => handleUpdateItem(item.id, 'description', e.target.value)}
-                    className="table-input w-full px-2 py-1 text-sm border border-neutral-300 rounded bg-primary/5 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                    className={getFieldClass('description')}
+                    style={getFieldWidth('description')}
                     disabled={isUpdating}
                   />
                 </td>
@@ -249,7 +251,8 @@ export default function AdditionalEstateDutyItemsTable() {
                     type="text"
                     defaultValue={item.amount}
                     onBlur={(e) => handleInputBlur(item.id, 'amount', e.target.value)}
-                    className="table-input w-full px-2 py-1 text-sm text-right border border-neutral-300 rounded bg-primary/5 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                    className={getFieldClass('amount')}
+                    style={getFieldWidth('amount')}
                     disabled={isUpdating}
                   />
                 </td>

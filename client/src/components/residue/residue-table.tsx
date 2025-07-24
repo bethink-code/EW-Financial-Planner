@@ -1,6 +1,7 @@
 import React, { useState, useCallback, useMemo } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { Plus, Trash2, Search } from "lucide-react";
+import { getFieldClass, getFieldWidth } from "@/lib/design-tokens";
 import type { Residue, InsertResidue } from "@shared/schema";
 
 // Utility function for formatting percentage values
@@ -256,7 +257,8 @@ export default function ResidueTable() {
                   <select
                     value={item.entity}
                     onChange={(e) => handleUpdateEntity(item.id, 'entity', e.target.value)}
-                    className="table-input w-full px-2 py-1 text-sm border border-neutral-300 rounded bg-primary/5 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                    className={getFieldClass('name')}
+                    style={getFieldWidth('name')}
                     disabled={isUpdating}
                   >
                     {ENTITY_OPTIONS.map(option => (
@@ -271,7 +273,8 @@ export default function ResidueTable() {
                     type="text"
                     defaultValue={item.percentage}
                     onBlur={(e) => handleInputBlur(item.id, 'percentage', e.target.value)}
-                    className="table-input w-full px-2 py-1 text-sm text-right border border-neutral-300 rounded bg-primary/5 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                    className={getFieldClass('percentage')}
+                    style={getFieldWidth('percentage')}
                     disabled={isUpdating}
                   />
                 </td>
@@ -294,7 +297,8 @@ export default function ResidueTable() {
                   <input
                     type="text"
                     value="Residue to registered charities"
-                    className="table-input w-full px-2 py-1 text-sm border border-neutral-300 rounded bg-neutral-100 cursor-not-allowed font-medium"
+                    className={getFieldClass('name')}
+                    style={{...getFieldWidth('name'), backgroundColor: '#F5F5F5', cursor: 'not-allowed'}}
                     disabled
                     readOnly
                   />
@@ -304,7 +308,8 @@ export default function ResidueTable() {
                     type="text"
                     defaultValue={charityRow.percentage}
                     onBlur={(e) => handleInputBlur(charityRow.id, 'percentage', e.target.value)}
-                    className="table-input w-full px-2 py-1 text-sm text-right border border-neutral-300 rounded bg-primary/5 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                    className={getFieldClass('percentage')}
+                    style={getFieldWidth('percentage')}
                     disabled={isUpdating}
                   />
                 </td>
