@@ -250,7 +250,7 @@ export default function AdditionalEstateDutyItemsTable() {
                   <input
                     key={`amount-${item.id}-${item.amount}`}
                     type="text"
-                    defaultValue={item.amount}
+                    defaultValue={formatCurrencyValue(item.amount)}
                     onBlur={(e) => handleInputBlur(item.id, 'amount', e.target.value)}
                     className={getFieldClass('amount')}
                     disabled={isUpdating}

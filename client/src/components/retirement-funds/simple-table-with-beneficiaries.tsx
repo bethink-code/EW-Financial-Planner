@@ -324,7 +324,7 @@ export function SimpleTableWithBeneficiaries({
             <>
               <td className="px-3 py-2 border-l border-neutral-200 border-r border-neutral-200" rowSpan={fundOwners.length}>
                 <input
-                  defaultValue={fund.fundValue || ""}
+                  defaultValue={formatCurrencyValue(fund.fundValue || "", "fundValue")}
                   onBlur={(e) => {
                     const formattedValue = formatCurrencyValue(e.target.value, "fundValue");
                     if (formattedValue !== e.target.value) {
@@ -340,7 +340,7 @@ export function SimpleTableWithBeneficiaries({
               </td>
               <td className="px-3 py-2 border-r border-neutral-200" rowSpan={fundOwners.length}>
                 <input
-                  defaultValue={fund.fundValueAtDeath || ""}
+                  defaultValue={formatCurrencyValue(fund.fundValueAtDeath || "", "fundValueAtDeath")}
                   onBlur={(e) => {
                     const formattedValue = formatCurrencyValue(e.target.value, "fundValueAtDeath");
                     if (formattedValue !== e.target.value) {

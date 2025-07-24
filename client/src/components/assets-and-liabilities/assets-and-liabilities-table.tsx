@@ -395,7 +395,7 @@ export default function AssetsAndLiabilitiesTable() {
                       <input
                         key={`baseCost-${asset.id}-${asset.baseCost}`}
                         type="text"
-                        defaultValue={asset.baseCost}
+                        defaultValue={formatCurrencyValue(asset.baseCost, 'baseCost')}
                         onBlur={(e) => handleInputBlur(asset.id, 'baseCost', e.target.value)}
                         className={getFieldClass('amount')}
                         disabled={isUpdating}
@@ -405,7 +405,7 @@ export default function AssetsAndLiabilitiesTable() {
                       <input
                         key={`marketValue-${asset.id}-${asset.marketValue}`}
                         type="text"
-                        defaultValue={asset.marketValue}
+                        defaultValue={formatCurrencyValue(asset.marketValue, 'marketValue')}
                         onBlur={(e) => handleInputBlur(asset.id, 'marketValue', e.target.value)}
                         className={getFieldClass('amount')}
                         disabled={isUpdating}

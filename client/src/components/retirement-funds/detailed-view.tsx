@@ -367,7 +367,7 @@ export function DetailedView({ funds, columnVisibility, onFieldUpdate, isUpdatin
                   <Label className="text-xs text-neutral-600 mb-1 block h-8 flex items-end">Fund Value</Label>
                   <input
                     key={`fundValue-${selectedFund.id}`}
-                    defaultValue={selectedFund.fundValue || ""}
+                    defaultValue={formatCurrencyValue(selectedFund.fundValue || "", "fundValue")}
                     onBlur={(e) => {
                       const formattedValue = formatCurrencyValue(e.target.value, "fundValue");
                       if (formattedValue !== e.target.value) {

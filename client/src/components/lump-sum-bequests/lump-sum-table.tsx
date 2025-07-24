@@ -228,7 +228,7 @@ export function LumpSumTable({ searchTerm }: LumpSumTableProps) {
                   </td>
                   <td className="p-2 text-right">
                     <input
-                      defaultValue={bequest.amount || ""}
+                      defaultValue={formatCurrencyValue(bequest.amount || "", 'amount')}
                       onBlur={(e) => {
                         const formattedValue = formatCurrencyValue(e.target.value, "amount");
                         if (formattedValue !== e.target.value) {

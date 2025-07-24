@@ -398,7 +398,7 @@ export default function IncomeProvisionsTable() {
                   <input
                     key={`amount-${provision.id}-${provision.amount}`}
                     type="text"
-                    defaultValue={provision.amount}
+                    defaultValue={formatCurrencyValue(provision.amount, 'amount')}
                     onBlur={(e) => handleInputBlur(provision.id, 'amount', e.target.value)}
                     className={getFieldClass('amount')}
                     disabled={isUpdating}

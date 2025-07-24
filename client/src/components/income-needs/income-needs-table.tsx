@@ -382,7 +382,7 @@ export default function IncomeNeedsTable() {
                   <input
                     key={`amount-${need.id}-${need.amount}`}
                     type="text"
-                    defaultValue={need.amount}
+                    defaultValue={formatCurrencyValue(need.amount, 'amount')}
                     onBlur={(e) => handleInputBlur(need.id, 'amount', e.target.value)}
                     className={getFieldClass('amount')}
                     disabled={isUpdating}

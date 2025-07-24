@@ -447,7 +447,7 @@ export function AssuranceTable({ searchTerm }: AssuranceTableProps) {
                     <td rowSpan={maxRows} className="px-3 py-2 align-top">
                       <input
                         type="text"
-                        defaultValue={policy.deathBenefit}
+                        defaultValue={formatCurrencyValue(policy.deathBenefit, 'deathBenefit')}
                         onBlur={(e) => handleInputBlur(policy.id, 'deathBenefit', e.target.value)}
                         className={getFieldClass("amount")} 
                         disabled={isUpdating}
@@ -534,7 +534,7 @@ export function AssuranceTable({ searchTerm }: AssuranceTableProps) {
                     <td rowSpan={maxRows} className="px-3 py-2 align-top">
                       <input
                         type="text"
-                        defaultValue={policy.amount}
+                        defaultValue={formatCurrencyValue(policy.amount, 'amount')}
                         onBlur={(e) => handleInputBlur(policy.id, 'amount', e.target.value)}
                         className={getFieldClass("amount")} 
                         disabled={isUpdating}
@@ -584,7 +584,7 @@ export function AssuranceTable({ searchTerm }: AssuranceTableProps) {
                       <td rowSpan={maxRows} className="px-3 py-2 align-top">
                         <input
                           type="text"
-                          defaultValue={policy.premiumsByOthers}
+                          defaultValue={formatCurrencyValue(policy.premiumsByOthers, 'premiumsByOthers')}
                           onBlur={(e) => handleInputBlur(policy.id, 'premiumsByOthers', e.target.value)}
                           className={getFieldClass("amount")} 
                           disabled={isUpdating}
@@ -593,7 +593,7 @@ export function AssuranceTable({ searchTerm }: AssuranceTableProps) {
                       <td rowSpan={maxRows} className="px-3 py-2 align-top">
                         <input
                           type="text"
-                          defaultValue={policy.collateralSession}
+                          defaultValue={formatCurrencyValue(policy.collateralSession, 'collateralSession')}
                           onBlur={(e) => handleInputBlur(policy.id, 'collateralSession', e.target.value)}
                           className={getFieldClass("amount")} 
                           disabled={isUpdating}

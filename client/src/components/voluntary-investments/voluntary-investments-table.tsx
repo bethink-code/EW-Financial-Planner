@@ -400,7 +400,7 @@ export default function VoluntaryInvestmentsTable() {
                         <input
                           key={`baseCost-${investment.id}-${investment.baseCost}`}
                           type="text"
-                          defaultValue={investment.baseCost}
+                          defaultValue={formatCurrencyValue(investment.baseCost, 'baseCost')}
                           onBlur={(e) => handleInputBlur(investment.id, 'baseCost', e.target.value)}
                           className={getFieldClass('amount')}
                           disabled={isUpdating}
@@ -410,7 +410,7 @@ export default function VoluntaryInvestmentsTable() {
                         <input
                           key={`marketValue-${investment.id}-${investment.marketValue}`}
                           type="text"
-                          defaultValue={investment.marketValue}
+                          defaultValue={formatCurrencyValue(investment.marketValue, 'marketValue')}
                           onBlur={(e) => handleInputBlur(investment.id, 'marketValue', e.target.value)}
                           className={getFieldClass('amount')}
                           disabled={isUpdating}

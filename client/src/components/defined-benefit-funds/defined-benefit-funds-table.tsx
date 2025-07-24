@@ -343,7 +343,7 @@ export default function DefinedBenefitFundsTable() {
                   <input
                     key={`finalMonthlySalary-${fund.id}-${fund.finalMonthlySalary}`}
                     type="text"
-                    defaultValue={fund.finalMonthlySalary}
+                    defaultValue={formatCurrencyValue(fund.finalMonthlySalary, 'finalMonthlySalary')}
                     onBlur={(e) => handleInputBlur(fund.id, 'finalMonthlySalary', e.target.value)}
                     className={getFieldClass('amount')}
                     disabled={isUpdating}
@@ -353,7 +353,7 @@ export default function DefinedBenefitFundsTable() {
                   <input
                     key={`deathLumpSum-${fund.id}-${fund.deathLumpSum}`}
                     type="text"
-                    defaultValue={fund.deathLumpSum}
+                    defaultValue={formatCurrencyValue(fund.deathLumpSum, 'deathLumpSum')}
                     onBlur={(e) => handleInputBlur(fund.id, 'deathLumpSum', e.target.value)}
                     className={getFieldClass('amount')}
                     disabled={isUpdating}
@@ -363,7 +363,7 @@ export default function DefinedBenefitFundsTable() {
                   <input
                     key={`additionalTaxFreeAmount-${fund.id}-${fund.additionalTaxFreeAmount}`}
                     type="text"
-                    defaultValue={fund.additionalTaxFreeAmount}
+                    defaultValue={formatCurrencyValue(fund.additionalTaxFreeAmount, 'additionalTaxFreeAmount')}
                     onBlur={(e) => handleInputBlur(fund.id, 'additionalTaxFreeAmount', e.target.value)}
                     className={getFieldClass('amount')}
                     disabled={isUpdating}
@@ -373,7 +373,7 @@ export default function DefinedBenefitFundsTable() {
                   <input
                     key={`pensionIncomeAmount-${fund.id}-${fund.pensionIncomeAmount}`}
                     type="text"
-                    defaultValue={fund.pensionIncomeAmount}
+                    defaultValue={formatCurrencyValue(fund.pensionIncomeAmount, 'pensionIncomeAmount')}
                     onBlur={(e) => handleInputBlur(fund.id, 'pensionIncomeAmount', e.target.value)}
                     className={getFieldClass('amount')}
                     disabled={isUpdating}
