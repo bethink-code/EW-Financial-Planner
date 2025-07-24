@@ -29,10 +29,10 @@ export function AddButton({
       onClick={onClick}
       disabled={disabled}
       size={size}
-      variant="ghost"
+      variant={variant}
       className={cn(
-        "flex items-center gap-1 bg-white text-primary hover:text-primary hover:bg-blue-50 border border-primary",
-        isTableSize && "h-6 w-6 p-0",
+        "flex items-center gap-2 bg-primary hover:bg-primary/90 text-primary-foreground",
+        isTableSize && children === undefined && "h-6 w-6 p-0 gap-0",
         className
       )}
     >
