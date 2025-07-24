@@ -274,11 +274,11 @@ th, td {
 
   /* Centralized summary card styling */
   .summary-card {
-    background-color: #eff6ff !important; /* bg-blue-50 */
+    background-color: #EDF4F9 !important;
     border-radius: 0.5rem !important;
     padding: 1rem !important;
     text-align: center !important;
-    border: 1px solid #bfdbfe !important; /* border-blue-200 */
+    border: 1px solid #D1E7F0 !important;
     box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1) !important;
   }
   
