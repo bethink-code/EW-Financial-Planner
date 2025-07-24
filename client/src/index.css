@@ -233,6 +233,7 @@ th, td {
   html, body {
     margin: 0;
     padding: 0;
+    background-color: #f8f9fa;
   }
   
   body {
@@ -291,6 +292,7 @@ th, td {
   
   /* Neutral color utilities */
   .bg-neutral-50 { background-color: var(--neutral-50); }
+  .bg-gray-50 { background-color: #f8f9fa; }
   .bg-neutral-100 { background-color: var(--neutral-100); }
   .bg-neutral-200 { background-color: var(--neutral-200); }
   

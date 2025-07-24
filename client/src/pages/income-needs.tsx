@@ -52,7 +52,7 @@ export default function IncomeNeeds() {
   }, [addMutation]);
 
   return (
-    <div>
+    <div className="bg-gray-50 min-h-screen">
       <div className="w-full px-6 py-6">
         {/* Combined Header and Summary */}
         <div className="mb-6 max-w-6xl">
