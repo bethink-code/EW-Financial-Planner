@@ -2,38 +2,8 @@ import React, { useState, useCallback, useMemo } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { Plus, Trash2, Search } from "lucide-react";
 import { getFieldClass, getFieldWidth } from "@/lib/design-tokens";
+import { formatCurrencyValue, formatPercentageValue, formatYearsValue } from "@/lib/formatting";
 import type { IncomeProvision, InsertIncomeProvision } from "@shared/schema";
-
-// Utility function for formatting currency values
-const formatCurrencyValue = (value: string, fieldType: string): string => {
-  if (!value || value.trim() === '') return 'R 0';
-  
-  // Remove existing formatting
-  const cleanValue = value.replace(/[^\d.-]/g, '');
-  if (!cleanValue) return 'R 0';
-  if (isNaN(parseFloat(cleanValue))) return 'R 0';
-  
-  const numValue = parseFloat(cleanValue);
-  
-  if (fieldType === 'percentage' || fieldType.includes('percentage')) {
-    return `${numValue}%`;
-  }
-  
-  if (fieldType === 'years' || fieldType.includes('years')) {
-    return `${numValue} years`;
-  }
-  
-  // Currency formatting
-  if (numValue === 0) return 'R 0';
-  
-  // Format with thousands separators
-  const formatted = new Intl.NumberFormat('en-ZA', {
-    minimumFractionDigits: 0,
-    maximumFractionDigits: 0,
-  }).format(Math.abs(numValue));
-  
-  return `R ${formatted}`;
-};
 
 const ENTITY_OPTIONS = [
   { value: "Donald Edwards", label: "Donald Edwards" },
@@ -74,12 +44,12 @@ export default function IncomeProvisionsTable() {
         start: "0 years",
         termYears: "0 years",
         termEditable: false,
-        increasePercentage: "0",
+        increasePercentage: "0%",
         cpi: false,
         frequency: "Monthly",
         amount: "0",
-        taxablePercentage: "0",
-        taxPercentage: "0",
+        taxablePercentage: "0%",
+        taxPercentage: "0%",
         capitalisedAmount: "0",
       };
       
@@ -189,17 +159,15 @@ export default function IncomeProvisionsTable() {
   }, [updateMutation]);
 
   const handleInputBlur = useCallback((id: number, field: keyof IncomeProvision, value: string) => {
-    // Map field names to field types for proper formatting
-    const fieldTypeMap: Record<string, string> = {
-      'start': 'years',
-      'termYears': 'years', 
-      'increasePercentage': 'percentage',
-      'amount': 'currency',
-      'capitalisedAmount': 'currency'
-    };
-    
-    const fieldType = fieldTypeMap[field] || field;
-    const formattedValue = formatCurrencyValue(value, fieldType);
+    // Determine field type and format accordingly
+    let formattedValue: string;
+    if (field === 'start' || field === 'termYears') {
+      formattedValue = formatYearsValue(value);
+    } else if (field === 'increasePercentage' || field === 'taxablePercentage' || field === 'taxPercentage') {
+      formattedValue = formatPercentageValue(value);
+    } else {
+      formattedValue = formatCurrencyValue(value);
+    }
     handleUpdateProvision(id, field, formattedValue);
     
     // Update DOM element directly for immediate visual feedback
@@ -258,13 +226,13 @@ export default function IncomeProvisionsTable() {
               <div className="bg-neutral-50 p-3 rounded-lg">
                 <p className="text-xs text-neutral-500 uppercase tracking-wide mb-1">Total Capitalised Amount</p>
                 <p className="text-lg font-semibold text-neutral-900">
-                  {formatCurrencyValue(totals.capitalisedAmount.toString(), 'capitalisedAmount')}
+                  {formatCurrencyValue(totals.capitalisedAmount.toString())}
                 </p>
               </div>
               <div className="bg-neutral-50 p-3 rounded-lg">
                 <p className="text-xs text-neutral-500 uppercase tracking-wide mb-1">Total Capital Required for Shortfall</p>
                 <p className="text-lg font-semibold text-neutral-900">
-                  {formatCurrencyValue(totals.capitalShortfall.toString(), 'capitalShortfall')}
+                  {formatCurrencyValue(totals.capitalShortfall.toString())}
                 </p>
               </div>
             </div>
@@ -364,7 +332,7 @@ export default function IncomeProvisionsTable() {
                 <td className="px-3 py-2">
                   <input
                     type="text"
-                    defaultValue={provision.increasePercentage}
+                    defaultValue={provision.increasePercentage || "0%"}
                     onBlur={(e) => handleInputBlur(provision.id, 'increasePercentage', e.target.value)}
                     className={getFieldClass('percentage')}
                     style={getFieldWidth('percentage')}
@@ -399,7 +367,7 @@ export default function IncomeProvisionsTable() {
                   <input
                     key={`amount-${provision.id}-${provision.amount}`}
                     type="text"
-                    defaultValue={formatCurrencyValue(provision.amount, 'amount')}
+                    defaultValue={formatCurrencyValue(provision.amount)}
                     onBlur={(e) => handleInputBlur(provision.id, 'amount', e.target.value)}
                     className={getFieldClass('amount')}
                     disabled={isUpdating}
@@ -408,7 +376,7 @@ export default function IncomeProvisionsTable() {
                 <td className="px-3 py-2">
                   <input
                     type="text"
-                    defaultValue={provision.taxablePercentage}
+                    defaultValue={provision.taxablePercentage || "0%"}
                     onBlur={(e) => handleInputBlur(provision.id, 'taxablePercentage', e.target.value)}
                     className={getFieldClass('percentage')}
                     style={getFieldWidth('percentage')}
@@ -453,7 +421,7 @@ export default function IncomeProvisionsTable() {
                 <td className="px-3 py-2 text-sm font-bold text-neutral-800">Total</td>
                 <td colSpan={9} className="px-3 py-2"></td>
                 <td className="px-3 py-2 text-sm font-bold text-neutral-800 text-right">
-                  {formatCurrencyValue(totals.capitalisedAmount.toString(), 'capitalisedAmount')}
+                  {formatCurrencyValue(totals.capitalisedAmount.toString())}
                 </td>
                 <td className="px-3 py-2"></td>
               </tr>
@@ -465,7 +433,7 @@ export default function IncomeProvisionsTable() {
                 <td className="px-3 py-2 text-sm font-bold text-neutral-800">Capital required to provide for income shortfall</td>
                 <td colSpan={9} className="px-3 py-2"></td>
                 <td className="px-3 py-2 text-sm font-bold text-neutral-800 text-right">
-                  {formatCurrencyValue(totals.capitalShortfall.toString(), 'capitalShortfall')}
+                  {formatCurrencyValue(totals.capitalShortfall.toString())}
                 </td>
                 <td className="px-3 py-2"></td>
               </tr>

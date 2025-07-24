@@ -2,34 +2,9 @@ import React, { useState, useCallback, useMemo } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { Plus, Trash2, Search } from "lucide-react";
 import { getFieldClass, getFieldWidth } from "@/lib/design-tokens";
+import { formatCurrencyValue, formatPercentageValue } from "@/lib/formatting";
+import { SafeFragment } from "@/lib/react-utils";
 import type { AssetAndLiability, InsertAssetAndLiability } from "@shared/schema";
-
-// Utility function for formatting currency values
-const formatCurrencyValue = (value: string, fieldType: string): string => {
-  if (!value || value.trim() === '') return 'R 0';
-  
-  // Remove existing formatting
-  const cleanValue = value.replace(/[^\d.-]/g, '');
-  if (!cleanValue) return 'R 0';
-  if (isNaN(parseFloat(cleanValue))) return 'R 0';
-  
-  const numValue = parseFloat(cleanValue);
-  
-  if (fieldType === 'percentage' || fieldType.includes('percentage')) {
-    return `${numValue}%`;
-  }
-  
-  // Currency formatting
-  if (numValue === 0) return 'R 0';
-  
-  // Format with thousands separators
-  const formatted = new Intl.NumberFormat('en-ZA', {
-    minimumFractionDigits: 0,
-    maximumFractionDigits: 0,
-  }).format(Math.abs(numValue));
-  
-  return `R ${formatted}`;
-};
 
 const CURRENCY_OPTIONS = [
   { value: "ZAR", label: "ZAR" },
@@ -80,11 +55,11 @@ export default function AssetsAndLiabilitiesTable() {
         currency: "ZAR",
         baseCost: "0",
         marketValue: "0",
-        donaldEdwardsPercentage: "0",
-        bettyEdwardsPercentage: "0",
-        liquidationPercentage: "0",
-        spouse: "0",
-        others: "0",
+        donaldEdwardsPercentage: "0%",
+        bettyEdwardsPercentage: "0%",
+        liquidationPercentage: "0%",
+        spouse: "0%",
+        others: "0%",
         excludedFromJointEstate: false,
         excludedFromEstateDuty: false,
         excludedFromCGT: false,
@@ -224,7 +199,13 @@ export default function AssetsAndLiabilitiesTable() {
   }, [updateMutation]);
 
   const handleInputBlur = useCallback((id: number, field: keyof AssetAndLiability, value: string) => {
-    const formattedValue = formatCurrencyValue(value, field);
+    // Determine field type and format accordingly
+    let formattedValue: string;
+    if (field === 'donaldEdwardsPercentage' || field === 'bettyEdwardsPercentage' || field === 'liquidationPercentage' || field === 'spouse' || field === 'others') {
+      formattedValue = formatPercentageValue(value);
+    } else {
+      formattedValue = formatCurrencyValue(value);
+    }
     handleUpdateAsset(id, field, formattedValue);
     
     // Update DOM element directly for immediate visual feedback
@@ -285,19 +266,19 @@ export default function AssetsAndLiabilitiesTable() {
               <div className="bg-neutral-50 p-3 rounded-lg">
                 <p className="text-xs text-neutral-500 uppercase tracking-wide mb-1">Total Market Value</p>
                 <p className="text-lg font-semibold text-neutral-900">
-                  {formatCurrencyValue(totals.overallTotals.marketValue.toString(), 'marketValue')}
+                  {formatCurrencyValue(totals.overallTotals.marketValue.toString())}
                 </p>
               </div>
               <div className="bg-neutral-50 p-3 rounded-lg">
                 <p className="text-xs text-neutral-500 uppercase tracking-wide mb-1">Total for Donald Edwards</p>
                 <p className="text-lg font-semibold text-neutral-900">
-                  {formatCurrencyValue(totals.overallTotals.donaldEdwards.toString(), 'donaldEdwards')}
+                  {formatCurrencyValue(totals.overallTotals.donaldEdwards.toString())}
                 </p>
               </div>
               <div className="bg-neutral-50 p-3 rounded-lg">
                 <p className="text-xs text-neutral-500 uppercase tracking-wide mb-1">Total for Betty Edwards</p>
                 <p className="text-lg font-semibold text-neutral-900">
-                  {formatCurrencyValue(totals.overallTotals.bettyEdwards.toString(), 'bettyEdwards')}
+                  {formatCurrencyValue(totals.overallTotals.bettyEdwards.toString())}
                 </p>
               </div>
             </div>
@@ -335,7 +316,7 @@ export default function AssetsAndLiabilitiesTable() {
           </thead>
           <tbody className="bg-white divide-y divide-neutral-200">
             {assetsByCategory.map(({ category, assets, totals: categoryTotals }) => (
-              <React.Fragment key={category}>
+              <SafeFragment key={category}>
                 {/* Category Header Row */}
                 <tr className="bg-[#F0F9FF] border-t-2 border-[#0891B2]">
                   <td colSpan={14} className="px-3 py-3">
@@ -396,7 +377,7 @@ export default function AssetsAndLiabilitiesTable() {
                       <input
                         key={`baseCost-${asset.id}-${asset.baseCost}`}
                         type="text"
-                        defaultValue={formatCurrencyValue(asset.baseCost, 'baseCost')}
+                        defaultValue={formatCurrencyValue(asset.baseCost)}
                         onBlur={(e) => handleInputBlur(asset.id, 'baseCost', e.target.value)}
                         className={getFieldClass('amount')}
                         disabled={isUpdating}
@@ -406,7 +387,7 @@ export default function AssetsAndLiabilitiesTable() {
                       <input
                         key={`marketValue-${asset.id}-${asset.marketValue}`}
                         type="text"
-                        defaultValue={formatCurrencyValue(asset.marketValue, 'marketValue')}
+                        defaultValue={formatCurrencyValue(asset.marketValue)}
                         onBlur={(e) => handleInputBlur(asset.id, 'marketValue', e.target.value)}
                         className={getFieldClass('amount')}
                         disabled={isUpdating}
@@ -415,7 +396,7 @@ export default function AssetsAndLiabilitiesTable() {
                     <td className="px-3 py-2">
                       <input
                         type="text"
-                        defaultValue={asset.donaldEdwardsPercentage}
+                        defaultValue={asset.donaldEdwardsPercentage || "0%"}
                         onBlur={(e) => handleInputBlur(asset.id, 'donaldEdwardsPercentage', e.target.value)}
                         className={getFieldClass('percentage')}
                         
@@ -425,7 +406,7 @@ export default function AssetsAndLiabilitiesTable() {
                     <td className="px-3 py-2">
                       <input
                         type="text"
-                        defaultValue={asset.bettyEdwardsPercentage}
+                        defaultValue={asset.bettyEdwardsPercentage || "0%"}
                         onBlur={(e) => handleInputBlur(asset.id, 'bettyEdwardsPercentage', e.target.value)}
                         className={getFieldClass('percentage')}
                         
@@ -435,7 +416,7 @@ export default function AssetsAndLiabilitiesTable() {
                     <td className="px-3 py-2">
                       <input
                         type="text"
-                        defaultValue={asset.liquidationPercentage}
+                        defaultValue={asset.liquidationPercentage || "0%"}
                         onBlur={(e) => handleInputBlur(asset.id, 'liquidationPercentage', e.target.value)}
                         className={getFieldClass('percentage')}
                         
@@ -445,7 +426,7 @@ export default function AssetsAndLiabilitiesTable() {
                     <td className="px-3 py-2">
                       <input
                         type="text"
-                        defaultValue={asset.spouse}
+                        defaultValue={asset.spouse || "0%"}
                         onBlur={(e) => handleInputBlur(asset.id, 'spouse', e.target.value)}
                         className={getFieldClass('percentage')}
                         
@@ -455,7 +436,7 @@ export default function AssetsAndLiabilitiesTable() {
                     <td className="px-3 py-2">
                       <input
                         type="text"
-                        defaultValue={asset.others}
+                        defaultValue={asset.others || "0%"}
                         onBlur={(e) => handleInputBlur(asset.id, 'others', e.target.value)}
                         className={getFieldClass('percentage')}
                         
@@ -508,18 +489,18 @@ export default function AssetsAndLiabilitiesTable() {
                       {category} Total
                     </td>
                     <td className="px-3 py-2 text-sm font-bold text-neutral-800 text-right">
-                      {formatCurrencyValue(categoryTotals.marketValue.toString(), 'marketValue')}
+                      {formatCurrencyValue(categoryTotals.marketValue.toString())}
                     </td>
                     <td className="px-3 py-2 text-sm font-bold text-neutral-800 text-right">
-                      {formatCurrencyValue(categoryTotals.donaldEdwards.toString(), 'donaldEdwards')}
+                      {formatCurrencyValue(categoryTotals.donaldEdwards.toString())}
                     </td>
                     <td className="px-3 py-2 text-sm font-bold text-neutral-800 text-right">
-                      {formatCurrencyValue(categoryTotals.bettyEdwards.toString(), 'bettyEdwards')}
+                      {formatCurrencyValue(categoryTotals.bettyEdwards.toString())}
                     </td>
                     <td colSpan={7} className="px-3 py-2"></td>
                   </tr>
                 )}
-              </React.Fragment>
+              </SafeFragment>
             ))}
 
             {/* Overall Total Row */}
@@ -529,13 +510,13 @@ export default function AssetsAndLiabilitiesTable() {
                   OVERALL TOTAL
                 </td>
                 <td className="px-3 py-2 text-sm font-bold text-neutral-900 text-right">
-                  {formatCurrencyValue(totals.overallTotals.marketValue.toString(), 'marketValue')}
+                  {formatCurrencyValue(totals.overallTotals.marketValue.toString())}
                 </td>
                 <td className="px-3 py-2 text-sm font-bold text-neutral-900 text-right">
-                  {formatCurrencyValue(totals.overallTotals.donaldEdwards.toString(), 'donaldEdwards')}
+                  {formatCurrencyValue(totals.overallTotals.donaldEdwards.toString())}
                 </td>
                 <td className="px-3 py-2 text-sm font-bold text-neutral-900 text-right">
-                  {formatCurrencyValue(totals.overallTotals.bettyEdwards.toString(), 'bettyEdwards')}
+                  {formatCurrencyValue(totals.overallTotals.bettyEdwards.toString())}
                 </td>
                 <td colSpan={7} className="px-3 py-2"></td>
               </tr>
