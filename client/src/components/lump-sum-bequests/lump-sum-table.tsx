@@ -177,6 +177,7 @@ export function LumpSumTable({ searchTerm }: LumpSumTableProps) {
                   <td className="p-2 text-center">
                     <div className="flex items-center gap-1">
                       <input
+                        key={`increasePercentage-${bequest.id}-${bequest.increasePercentage}`}
                         type="text"
                         defaultValue={bequest.increasePercentage || "6%"}
                         onFocus={handleDefaultValueFocus}
@@ -192,7 +193,11 @@ export function LumpSumTable({ searchTerm }: LumpSumTableProps) {
                           type="checkbox"
                           checked={bequest.cpi || false}
                           onChange={(e) => {
-                            handleInputBlur(bequest.id, "cpi", e.target.checked.toString());
+                            updateMutation.mutate({
+                              id: bequest.id,
+                              field: 'cpi',
+                              value: e.target.checked.toString()
+                            });
                           }}
                           className="mr-1"
                           disabled={isUpdating}
@@ -248,7 +253,7 @@ export function LumpSumTable({ searchTerm }: LumpSumTableProps) {
                       onFocus={handleDefaultValueFocus}
                       onBlur={createEnhancedBlurHandler(
                         (e) => {
-                          // Charity row - no specific handling needed
+                          // Charity row - no specific handling needed for charity row
                         },
                         'percentage'
                       )}
