@@ -26,13 +26,12 @@ export default function DefinedBenefitFunds() {
       const newFund: InsertDefinedBenefitFund = {
         description: "Enter here ...",
         owner: "Donald Edwards",
-        additionalOwners: "[]",
-        currentValue: "0",
+        yearsOfService: "0",
+        finalMonthlySalary: "0",
+        deathLumpSum: "0",
+        additionalTaxFreeAmount: "0",
         pensionIncomeAmount: "0",
-        pensionIncomeIncrease: "0%",
-        beneficiary: "Enter here ...",
-        beneficiaryPercentage: "0%",
-        additionalBeneficiaries: "[]"
+        pensionIncomeIncrease: "0%"
       };
       return apiRequest("POST", "/api/defined-benefit-funds", newFund);
     },
@@ -51,8 +50,8 @@ export default function DefinedBenefitFunds() {
 
   return (
     <div className="min-h-screen bg-neutral-50">
-      <div className="max-w-7xl mx-auto px-4 py-8">
-        {/* Standardized Calculator Header */}
+      <div className="max-w-7xl mx-auto px-4 py-6">
+        {/* Calculator Header */}
         <CalculatorHeader
           title="Defined Benefit Funds"
           itemCount={funds.length}

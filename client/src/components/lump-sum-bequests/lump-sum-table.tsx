@@ -6,22 +6,17 @@ import { formatPercentageValue, formatCurrencyValue, getValueClass, isDefaultVal
 import { LumpSumBequest, InsertLumpSumBequest } from "@shared/schema";
 import { Trash2, Plus } from "lucide-react";
 
-interface LumpSumTableProps {
-  searchTerm: string;
-}
+interface LumpSumTableProps {}
 
-export function LumpSumTable({ searchTerm }: LumpSumTableProps) {
+export function LumpSumTable({}: LumpSumTableProps) {
   const queryClient = useQueryClient();
   const [isUpdating, setIsUpdating] = useState(false);
 
-  // Fetch lump sum bequests with search
+  // Fetch lump sum bequests
   const { data: bequests = [], isLoading } = useQuery<LumpSumBequest[]>({
-    queryKey: ['/api/lump-sum-bequests', searchTerm],
+    queryKey: ['/api/lump-sum-bequests'],
     queryFn: async () => {
-      const url = searchTerm 
-        ? `/api/lump-sum-bequests?search=${encodeURIComponent(searchTerm)}`
-        : '/api/lump-sum-bequests';
-      const response = await fetch(url);
+      const response = await fetch('/api/lump-sum-bequests');
       return await response.json();
     }
   });

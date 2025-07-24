@@ -3,19 +3,14 @@ import { useQuery } from "@tanstack/react-query";
 import { apiRequest } from "@/lib/queryClient";
 import { LumpSumBequest } from "@shared/schema";
 
-interface LumpSumSummaryProps {
-  searchTerm?: string;
-}
+interface LumpSumSummaryProps {}
 
-export function LumpSumSummary({ searchTerm = "" }: LumpSumSummaryProps) {
+export function LumpSumSummary({}: LumpSumSummaryProps) {
   // Fetch lump sum bequests
   const { data: bequests = [] } = useQuery<LumpSumBequest[]>({
-    queryKey: ['/api/lump-sum-bequests', searchTerm],
+    queryKey: ['/api/lump-sum-bequests'],
     queryFn: async () => {
-      const url = searchTerm 
-        ? `/api/lump-sum-bequests?search=${encodeURIComponent(searchTerm)}`
-        : '/api/lump-sum-bequests';
-      const response = await fetch(url);
+      const response = await fetch('/api/lump-sum-bequests');
       return await response.json();
     }
   });

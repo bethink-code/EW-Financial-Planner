@@ -25,13 +25,15 @@ export default function VoluntaryInvestments() {
     mutationFn: async () => {
       const newInvestment: InsertVoluntaryInvestment = {
         description: "Enter here ...",
-        owner: "Donald Edwards",
-        additionalOwners: "[]",
-        currentValue: "0",
-        growthRate: "0%",
-        beneficiary: "Enter here ...",
-        beneficiaryPercentage: "0%",
-        additionalBeneficiaries: "[]"
+        owners: "Donald Edwards",
+        excludedFromEstateDuty: false,
+        baseCost: "0",
+        marketValue: "0",
+        liquidationPercentage: "0%",
+        liquidationValue: "0",
+        taxableLiquidationValue: "0",
+        executorsFees: "0",
+        excludedFromExecutorsFees: false
       };
       return apiRequest("POST", "/api/voluntary-investments", newInvestment);
     },
@@ -50,8 +52,8 @@ export default function VoluntaryInvestments() {
 
   return (
     <div className="min-h-screen bg-neutral-50">
-      <div className="max-w-7xl mx-auto px-4 py-8">
-        {/* Standardized Calculator Header */}
+      <div className="max-w-7xl mx-auto px-4 py-6">
+        {/* Calculator Header */}
         <CalculatorHeader
           title="Voluntary Investments"
           itemCount={investments.length}

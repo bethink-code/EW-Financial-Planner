@@ -26,8 +26,8 @@ export default function AdditionalEstateDutyItems() {
       const newItem: InsertAdditionalEstateDutyItem = {
         description: "Enter here ...",
         amount: "0",
-        deduction: false,
-        jointEstate: false
+        isDeduction: false,
+        excludeFromJointEstate: false
       };
       return apiRequest("POST", "/api/additional-estate-duty-items", newItem);
     },
@@ -46,8 +46,8 @@ export default function AdditionalEstateDutyItems() {
 
   return (
     <div className="min-h-screen bg-neutral-50">
-      <div className="max-w-7xl mx-auto px-4 py-8">
-        {/* Standardized Calculator Header */}
+      <div className="max-w-7xl mx-auto px-4 py-6">
+        {/* Calculator Header */}
         <CalculatorHeader
           title="Additional Estate Duty Items"
           itemCount={items.length}

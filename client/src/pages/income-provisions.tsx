@@ -24,17 +24,17 @@ export default function IncomeProvisions() {
   const addMutation = useMutation({
     mutationFn: async () => {
       const newProvision: InsertIncomeProvision = {
-        description: "Enter here ...",
         entity: "Donald Edwards",
-        additionalEntities: "[]",
-        monthlyAmount: "0",
-        yearsRequired: "0",
-        inflationRate: "0%",
-        discountRate: "0%",
-        taxRate: "0%",
-        capitalisedValue: "0",
-        taxOnCapital: "0",
-        capitalShortfall: "0"
+        description: "Enter here ...",
+        amount: "0",
+        start: "0",
+        termYears: "0",
+        termEditable: true,
+        increasePercentage: "0%",
+        cpi: false,
+        frequency: "monthly",
+        capitalisedAmount: "0",
+        taxPercentage: "0%"
       };
       return apiRequest("POST", "/api/income-provisions", newProvision);
     },
@@ -53,8 +53,8 @@ export default function IncomeProvisions() {
 
   return (
     <div className="min-h-screen bg-neutral-50">
-      <div className="max-w-7xl mx-auto px-4 py-8">
-        {/* Standardized Calculator Header */}
+      <div className="max-w-7xl mx-auto px-4 py-6">
+        {/* Calculator Header */}
         <CalculatorHeader
           title="Income Provisions"
           itemCount={provisions.length}

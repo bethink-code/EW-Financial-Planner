@@ -24,12 +24,9 @@ export default function Residue() {
   const addMutation = useMutation({
     mutationFn: async () => {
       const newResidue: InsertResidue = {
-        description: "Enter here ...",
         entity: "Donald Edwards",
-        additionalEntities: "[]",
         percentage: "0%",
-        amount: "0",
-        isCharity: false
+        isCharityRow: false
       };
       return apiRequest("POST", "/api/residue", newResidue);
     },
@@ -48,8 +45,8 @@ export default function Residue() {
 
   return (
     <div className="min-h-screen bg-neutral-50">
-      <div className="max-w-7xl mx-auto px-4 py-8">
-        {/* Standardized Calculator Header */}
+      <div className="max-w-7xl mx-auto px-4 py-6">
+        {/* Calculator Header */}
         <CalculatorHeader
           title="Residue"
           itemCount={residues.length}

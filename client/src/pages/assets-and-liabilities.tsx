@@ -24,15 +24,15 @@ export default function AssetsAndLiabilities() {
   const addMutation = useMutation({
     mutationFn: async () => {
       const newItem: InsertAssetAndLiability = {
-        description: "Enter here ...",
-        category: "Enter here ...",
-        owner: "Donald Edwards",
-        additionalOwners: "[]",
+        categoryAndDescription: "Enter here ...",
         currentValue: "0",
-        growthRate: "0%",
-        beneficiary: "Enter here ...",
-        beneficiaryPercentage: "0%",
-        additionalBeneficiaries: "[]"
+        liquidationValue: "0",
+        baseCost: "0",
+        taxableLiquidationValue: "0",
+        executorsFees: "0",
+        include: true,
+        excludedFromEstateDuty: false,
+        excludedFromExecutorsFees: false
       };
       return apiRequest("POST", "/api/assets-and-liabilities", newItem);
     },
@@ -51,8 +51,8 @@ export default function AssetsAndLiabilities() {
 
   return (
     <div className="min-h-screen bg-neutral-50">
-      <div className="max-w-7xl mx-auto px-4 py-8">
-        {/* Standardized Calculator Header */}
+      <div className="max-w-7xl mx-auto px-4 py-6">
+        {/* Calculator Header */}
         <CalculatorHeader
           title="Assets and Liabilities"
           itemCount={items.length}

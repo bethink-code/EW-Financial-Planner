@@ -50,8 +50,8 @@ export default function LumpSumBequests() {
 
   return (
     <div className="min-h-screen bg-neutral-50">
-      <div className="max-w-7xl mx-auto px-4 py-8">
-        {/* Standardized Calculator Header */}
+      <div className="max-w-7xl mx-auto px-4 py-6">
+        {/* Calculator Header */}
         <CalculatorHeader
           title="Lump Sum Needs and Cash Bequests"
           itemCount={bequests.length}
@@ -64,10 +64,10 @@ export default function LumpSumBequests() {
         />
 
         {/* Summary Section */}
-        <LumpSumSummary searchTerm="" />
+        <LumpSumSummary />
 
         {/* Main Table */}
-        <LumpSumTable searchTerm="" />
+        <LumpSumTable />
       </div>
     </div>
   );
