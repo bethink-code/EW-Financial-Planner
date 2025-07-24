@@ -2,16 +2,15 @@ import { useState, useMemo, useCallback, useRef } from "react";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { RetirementFund, UpdateRetirementFund } from "@shared/schema";
 import { queryClient, apiRequest } from "@/lib/queryClient";
-import { NewTableControls } from "@/components/retirement-funds/new-table-controls";
+import { CalculatorHeader } from "@/components/ui/calculator-header";
+import { RetirementFundsSummary } from "@/components/retirement-funds/retirement-funds-summary";
 import { NewGroupedTableView } from "@/components/retirement-funds/new-grouped-table-view";
 import { SimpleTableWithBeneficiaries } from "@/components/retirement-funds/simple-table-with-beneficiaries";
 import { DetailedView } from "@/components/retirement-funds/detailed-view";
-import { SummarySection } from "@/components/retirement-funds/summary-section";
-
 import { AdditionalDetails } from "@/components/retirement-funds/additional-details";
 
 
-type ViewMode = "grouped" | "detailed";
+type ViewMode = "table" | "hybrid";
 
 interface ColumnVisibility {
   overview: boolean;
@@ -22,9 +21,8 @@ interface ColumnVisibility {
 }
 
 export default function NewRetirementFunds() {
-  const [viewMode, setViewMode] = useState<ViewMode>("grouped");
+  const [viewMode, setViewMode] = useState<ViewMode>("table");
   const [tableMode, setTableMode] = useState<"inputs" | "flows">("inputs");
-
 
   // Enhanced view mode change with transitions
   const handleViewModeChange = useCallback((newMode: ViewMode) => {
@@ -164,260 +162,62 @@ export default function NewRetirementFunds() {
   }
 
   return (
-    <div className="min-h-screen bg-[#eff2f5]">
-      <div className="py-4">
-        <div className="px-4">
-          <NewTableControls
+    <div className="min-h-screen bg-neutral-50">
+      <div className="max-w-7xl mx-auto px-4 py-6">
+        {/* Combined Header and Summary */}
+        <div className="mb-6">
+          <CalculatorHeader
+            title="Retirement Funds"
+            itemCount={funds.length}
+            itemLabel="funds"
+            onAddItem={handleAddFund}
+            addButtonText="Add Fund"
+            isAddingItem={addMutation.isPending}
             viewMode={viewMode}
             onViewModeChange={handleViewModeChange}
+            showTableFlowsSwitcher={viewMode === "table"}
             tableMode={tableMode}
             onTableModeChange={setTableMode}
-            columnVisibility={columnVisibility}
-            onToggleColumnGroup={handleToggleColumnGroup}
-            fundsCount={funds.length}
-            onAddFund={handleAddFund}
-            isAddingFund={addMutation.isPending}
-          />
+          >
+            <RetirementFundsSummary />
+          </CalculatorHeader>
         </div>
 
-        {viewMode === "grouped" && (
-          <>
-            {/* Summary Section for Table View - Inputs */}
-            {tableMode === "inputs" && (
-              <div className="mx-4 bg-white rounded-lg shadow-sm border border-neutral-200 p-6 mb-4">
-                <h2 className="text-xl font-bold text-neutral-900 mb-4">Summary</h2>
-                <div className="grid grid-cols-2 lg:grid-cols-5 gap-4">
-                  <div style={{ backgroundColor: '#F9F0E5' }} className="rounded-lg p-4 text-center">
-                    <div className="text-xs font-medium text-neutral-600 mb-1">Cover Amount</div>
-                    <div className="text-lg font-bold text-neutral-900">
-                      R {funds.reduce((sum, fund) => {
-                        const value = fund.coverAmount as string;
-                        const amount = parseFloat(value.replace(/[^\d.-]/g, '')) || 0;
-                        return sum + amount;
-                      }, 0).toLocaleString()}
-                    </div>
-                  </div>
-                  <div style={{ backgroundColor: '#F9F0E5' }} className="rounded-lg p-4 text-center">
-                    <div className="text-xs font-medium text-neutral-600 mb-1">Monthly Income</div>
-                    <div className="text-lg font-bold text-neutral-900">
-                      R {funds.reduce((sum, fund) => {
-                        const value = fund.monthlyIncome as string;
-                        const amount = parseFloat(value.replace(/[^\d.-]/g, '')) || 0;
-                        return sum + amount;
-                      }, 0).toLocaleString()}
-                    </div>
-                  </div>
-                  <div style={{ backgroundColor: '#F9F0E5' }} className="rounded-lg p-4 text-center">
-                    <div className="text-xs font-medium text-neutral-600 mb-1">Approved Life Cover</div>
-                    <div className="text-lg font-bold text-neutral-900">
-                      R {funds.reduce((sum, fund) => {
-                        const value = fund.approvedLifeCover as string;
-                        const amount = parseFloat(value.replace(/[^\d.-]/g, '')) || 0;
-                        return sum + amount;
-                      }, 0).toLocaleString()}
-                    </div>
-                  </div>
-                  <div style={{ backgroundColor: '#F9F0E5' }} className="rounded-lg p-4 text-center">
-                    <div className="text-xs font-medium text-neutral-600 mb-1">Fund Value</div>
-                    <div className="text-lg font-bold text-neutral-900">
-                      R {funds.reduce((sum, fund) => {
-                        const value = fund.fundValue as string;
-                        const amount = parseFloat(value.replace(/[^\d.-]/g, '')) || 0;
-                        return sum + amount;
-                      }, 0).toLocaleString()}
-                    </div>
-                  </div>
-                  <div style={{ backgroundColor: '#F9F0E5' }} className="rounded-lg p-4 text-center">
-                    <div className="text-xs font-medium text-neutral-600 mb-1">Fund Value at Death</div>
-                    <div className="text-lg font-bold text-neutral-900">
-                      R {funds.reduce((sum, fund) => {
-                        const value = fund.fundValueAtDeath as string;
-                        const amount = parseFloat(value.replace(/[^\d.-]/g, '')) || 0;
-                        return sum + amount;
-                      }, 0).toLocaleString()}
-                    </div>
-                  </div>
-                </div>
-              </div>
-            )}
-
-            {/* Summary Section for Table View - Flows */}
-            {tableMode === "flows" && (
-              <div className="mx-4 bg-white rounded-lg shadow-sm border border-neutral-200 p-6 mb-4">
-                <h2 className="text-xl font-bold text-neutral-900 mb-4">Flows Summary</h2>
-                <div className="grid grid-cols-2 lg:grid-cols-5 gap-4">
-                  <div style={{ backgroundColor: 'hsl(var(--primary) / 0.1)' }} className="rounded-lg p-4 text-center">
-                    <div className="text-xs font-medium text-teal-700 mb-1">Estate Provisions</div>
-                    <div className="text-lg font-bold text-neutral-900">
-                      R {funds.reduce((sum, fund) => {
-                        const value = fund.lumpSumProvisionEstate as string;
-                        const amount = parseFloat(value?.replace(/[^\d.-]/g, '') || '0') || 0;
-                        return sum + amount;
-                      }, 0).toLocaleString()}
-                    </div>
-                  </div>
-                  <div style={{ backgroundColor: 'hsl(var(--primary) / 0.1)' }} className="rounded-lg p-4 text-center">
-                    <div className="text-xs font-medium text-teal-700 mb-1">Term (Years)</div>
-                    <div className="text-lg font-bold text-neutral-900">
-                      {funds.reduce((sum, fund) => {
-                        const value = fund.incomeTerm as string;
-                        const amount = parseFloat(value?.replace(/[^\d.-]/g, '') || '0') || 0;
-                        return sum + amount;
-                      }, 0).toLocaleString()}
-                    </div>
-                  </div>
-                  <div style={{ backgroundColor: 'hsl(var(--primary) / 0.1)' }} className="rounded-lg p-4 text-center">
-                    <div className="text-xs font-medium text-teal-700 mb-1">Monthly Payments</div>
-                    <div className="text-lg font-bold text-neutral-900">
-                      R {funds.reduce((sum, fund) => {
-                        const value = fund.monthlyProvisionOffered as string;
-                        const amount = parseFloat(value?.replace(/[^\d.-]/g, '') || '0') || 0;
-                        return sum + amount;
-                      }, 0).toLocaleString()}
-                    </div>
-                  </div>
-                  <div style={{ backgroundColor: 'hsl(var(--primary) / 0.1)' }} className="rounded-lg p-4 text-center">
-                    <div className="text-xs font-medium text-teal-700 mb-1">Estate Duties</div>
-                    <div className="text-lg font-bold text-neutral-900">
-                      R {funds.reduce((sum, fund) => {
-                        const value = fund.estateDeploymentDeceased as string;
-                        const amount = parseFloat(value?.replace(/[^\d.-]/g, '') || '0') || 0;
-                        return sum + amount;
-                      }, 0).toLocaleString()}
-                    </div>
-                  </div>
-                  <div style={{ backgroundColor: 'hsl(var(--primary) / 0.1)' }} className="rounded-lg p-4 text-center">
-                    <div className="text-xs font-medium text-teal-700 mb-1">Total Percentages</div>
-                    <div className="text-lg font-bold text-neutral-900">
-                      100%
-                    </div>
-                  </div>
-                </div>
-              </div>
-            )}
-
-            <div className="mx-4 mb-4">
-              <h2 className="font-bold text-neutral-900 mb-4 text-[16px]">Details</h2>
-            </div>
-            <div className="mx-4 bg-white rounded-lg shadow-sm border border-neutral-200" style={{ viewTransitionName: 'table-view' }}>
-              {tableMode === "inputs" ? (
-                <SimpleTableWithBeneficiaries
-                  funds={funds}
-                  columnVisibility={columnVisibility}
-                  tableMode={tableMode}
-                  onFieldUpdate={handleFieldUpdate}
-                  isUpdating={updateMutation.isPending}
-                />
-              ) : (
-                <NewGroupedTableView
-                  funds={funds}
-                  columnVisibility={columnVisibility}
-                  tableMode={tableMode}
-                  onFieldUpdate={handleFieldUpdate}
-                  isUpdating={updateMutation.isPending}
-                />
-              )}
-            </div>
-            
-            {/* Additional Details Component - separated from main table */}
-            <div className="mx-4 mt-6">
-              <AdditionalDetails
-                funds={funds}
-                onFieldUpdate={handleFieldUpdate}
-                isUpdating={updateMutation.isPending}
-              />
-            </div>
-
-
-
-
-          </>
-        )}
-
-        {viewMode === "detailed" && (
-          <>
-            {/* Summary Section for Hybrid View */}
-            {tableMode === "inputs" && (
-              <div className="mx-4 bg-white rounded-lg shadow-sm border border-neutral-200 p-6 mb-4">
-                <h2 className="text-xl font-bold text-neutral-900 mb-4">Summary</h2>
-                <div className="grid grid-cols-2 lg:grid-cols-5 gap-4">
-                  <div style={{ backgroundColor: '#F9F0E5' }} className="rounded-lg p-4 text-center">
-                    <div className="text-xs font-medium text-neutral-600 mb-1">Cover Amount</div>
-                    <div className="text-lg font-bold text-neutral-900">
-                      R {funds.reduce((sum, fund) => {
-                        const value = fund.coverAmount as string;
-                        const amount = parseFloat(value.replace(/[^\d.-]/g, '')) || 0;
-                        return sum + amount;
-                      }, 0).toLocaleString()}
-                    </div>
-                  </div>
-                  <div style={{ backgroundColor: '#F9F0E5' }} className="rounded-lg p-4 text-center">
-                    <div className="text-xs font-medium text-neutral-600 mb-1">Monthly Income</div>
-                    <div className="text-lg font-bold text-neutral-900">
-                      R {funds.reduce((sum, fund) => {
-                        const value = fund.monthlyIncome as string;
-                        const amount = parseFloat(value.replace(/[^\d.-]/g, '')) || 0;
-                        return sum + amount;
-                      }, 0).toLocaleString()}
-                    </div>
-                  </div>
-                  <div style={{ backgroundColor: '#F9F0E5' }} className="rounded-lg p-4 text-center">
-                    <div className="text-xs font-medium text-neutral-600 mb-1">Approved Life Cover</div>
-                    <div className="text-lg font-bold text-neutral-900">
-                      R {funds.reduce((sum, fund) => {
-                        const value = fund.approvedLifeCover as string;
-                        const amount = parseFloat(value.replace(/[^\d.-]/g, '')) || 0;
-                        return sum + amount;
-                      }, 0).toLocaleString()}
-                    </div>
-                  </div>
-                  <div style={{ backgroundColor: '#F9F0E5' }} className="rounded-lg p-4 text-center">
-                    <div className="text-xs font-medium text-neutral-600 mb-1">Fund Value</div>
-                    <div className="text-lg font-bold text-neutral-900">
-                      R {funds.reduce((sum, fund) => {
-                        const value = fund.fundValue as string;
-                        const amount = parseFloat(value.replace(/[^\d.-]/g, '')) || 0;
-                        return sum + amount;
-                      }, 0).toLocaleString()}
-                    </div>
-                  </div>
-                  <div style={{ backgroundColor: '#F9F0E5' }} className="rounded-lg p-4 text-center">
-                    <div className="text-xs font-medium text-neutral-600 mb-1">Fund Value at Death</div>
-                    <div className="text-lg font-bold text-neutral-900">
-                      R {funds.reduce((sum, fund) => {
-                        const value = fund.fundValueAtDeath as string;
-                        const amount = parseFloat(value.replace(/[^\d.-]/g, '')) || 0;
-                        return sum + amount;
-                      }, 0).toLocaleString()}
-                    </div>
-                  </div>
-                </div>
-              </div>
-            )}
-
-            <div className="mx-4 mb-4">
-              <h2 className="font-bold text-neutral-900 mb-4 text-[16px]">Details</h2>
-            </div>
-            <div className="mx-4 bg-white rounded-lg shadow-sm border border-neutral-200" style={{ viewTransitionName: 'detailed-view' }}>
-              <DetailedView
+        {/* Table View */}
+        {viewMode === "table" && (
+          <div className="bg-white rounded-lg shadow-sm border border-neutral-200">
+            {tableMode === "inputs" ? (
+              <SimpleTableWithBeneficiaries
                 funds={funds}
                 columnVisibility={columnVisibility}
-                onFieldUpdate={handleFieldUpdate}
-                isUpdating={updateMutation.isPending}
                 tableMode={tableMode}
-                onAddFund={handleAddFund}
-              />
-            </div>
-            
-            {/* Additional Details Component - separated from detailed view */}
-            <div className="mx-4 mt-6">
-              <AdditionalDetails
-                funds={funds}
                 onFieldUpdate={handleFieldUpdate}
                 isUpdating={updateMutation.isPending}
               />
-            </div>
-          </>
+            ) : (
+              <NewGroupedTableView
+                funds={funds}
+                columnVisibility={columnVisibility}
+                tableMode={tableMode}
+                onFieldUpdate={handleFieldUpdate}
+                isUpdating={updateMutation.isPending}
+              />
+            )}
+          </div>
+        )}
+
+        {/* Hybrid View */}
+        {viewMode === "hybrid" && (
+          <div className="bg-white rounded-lg shadow-sm border border-neutral-200">
+            <DetailedView
+              funds={funds}
+              columnVisibility={columnVisibility}
+              onFieldUpdate={handleFieldUpdate}
+              isUpdating={updateMutation.isPending}
+              tableMode={tableMode}
+              onAddFund={handleAddFund}
+            />
+          </div>
         )}
 
         {/* Remove Add Fund Dialog - now handled directly */}

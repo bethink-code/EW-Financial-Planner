@@ -10,6 +10,9 @@ interface CalculatorHeaderProps {
   isAddingItem?: boolean;
   viewMode?: "table" | "hybrid";
   onViewModeChange?: (mode: "table" | "hybrid") => void;
+  showTableFlowsSwitcher?: boolean;
+  tableMode?: "inputs" | "flows";
+  onTableModeChange?: (mode: "inputs" | "flows") => void;
   additionalControls?: React.ReactNode;
   className?: string;
   children?: React.ReactNode;
@@ -24,6 +27,9 @@ export function CalculatorHeader({
   isAddingItem = false,
   viewMode = "table",
   onViewModeChange,
+  showTableFlowsSwitcher = false,
+  tableMode = "inputs",
+  onTableModeChange,
   additionalControls,
   className = "",
   children
@@ -90,7 +96,29 @@ export function CalculatorHeader({
               </div>
             )}
 
-            {/* Additional controls (like Inputs/Flows switcher for retirement funds) */}
+            {/* Table/Flows Switcher for retirement funds */}
+            {showTableFlowsSwitcher && onTableModeChange && (
+              <div className="flex border border-neutral-200 rounded-lg overflow-hidden">
+                <Button
+                  variant={tableMode === "inputs" ? "default" : "ghost"}
+                  size="sm"
+                  onClick={() => onTableModeChange("inputs")}
+                  className="rounded-none border-0 h-9 px-4"
+                >
+                  Table
+                </Button>
+                <Button
+                  variant={tableMode === "flows" ? "default" : "ghost"}
+                  size="sm"
+                  onClick={() => onTableModeChange("flows")}
+                  className="rounded-none border-0 border-l border-neutral-200 h-9 px-4"
+                >
+                  Flows
+                </Button>
+              </div>
+            )}
+
+            {/* Additional controls */}
             {additionalControls}
           </div>
         </div>
