@@ -387,7 +387,7 @@ th, td {
 
   .field-years {
     min-width: 80px;
-    max-width: 100px;
+    max-width: 80px;
   }
 
   .field-number {
