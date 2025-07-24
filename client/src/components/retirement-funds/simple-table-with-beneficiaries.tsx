@@ -201,14 +201,10 @@ export function SimpleTableWithBeneficiaries({
               <DuplicateButton
                 onClick={() => onDuplicateFund?.(fund)}
                 disabled={isUpdating}
-                className="h-6 w-6 p-0"
-                size="sm"
               />
               <DeleteButton
                 onClick={() => onRemoveFund?.(fund.id)}
                 disabled={isUpdating}
-                className="h-6 w-6 p-0"
-                size="sm"
               />
             </ActionButtonGroup>
           </td>

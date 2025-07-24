@@ -4,7 +4,7 @@ import { Plus, Trash2, Copy } from "lucide-react";
 import { getFieldClass, getFieldWidth } from "@/lib/design-tokens";
 import { getValueClass, isDefaultValue, handleDefaultValueFocus, createEnhancedBlurHandler } from "@/lib/formatting";
 import { apiRequest } from "@/lib/queryClient";
-import { AddButton } from "@/components/ui/action-buttons";
+import { AddButton, DuplicateButton, DeleteButton, ActionButtonGroup } from "@/components/ui/action-buttons";
 import type { Assurance, InsertAssurance } from "@shared/schema";
 
 interface AssuranceTableProps {}
@@ -369,13 +369,10 @@ export function AssuranceTable({}: AssuranceTableProps) {
                           <span className="text-blue-500 mr-1">↳</span>
                         )}
                         {rowIndex === 0 && (
-                          <button
+                          <AddButton
                             onClick={() => handleAddOwner(policy.id)}
-                            className="h-6 w-6 p-0 bg-blue-50 text-primary hover:bg-blue-100 border-0 rounded"
-                            title="Add owner"
-                          >
-                            <Plus className="h-3 w-3" />
-                          </button>
+                            className="mr-1"
+                          />
                         )}
                         <input
                           type="text"
@@ -402,13 +399,9 @@ export function AssuranceTable({}: AssuranceTableProps) {
                           disabled={isUpdating}
                         />
                         {rowIndex > 0 && rowIndex < currentOwners.length && currentOwners[rowIndex] && (
-                          <button
+                          <DeleteButton
                             onClick={() => handleRemoveOwner(policy.id, currentOwners[rowIndex].id)}
-                            className="h-6 w-6 p-0 bg-white text-[#4F4F4F] hover:text-red-600 hover:bg-red-50 border border-gray-300 rounded"
-                            title="Remove owner"
-                          >
-                            <Trash2 className="h-3 w-3" />
-                          </button>
+                          />
                         )}
                       </div>
                     ) : (
@@ -453,13 +446,10 @@ export function AssuranceTable({}: AssuranceTableProps) {
                           <span className="text-green-500 mr-1">↳</span>
                         )}
                         {rowIndex === 0 && (
-                          <button
+                          <AddButton
                             onClick={() => handleAddBeneficiary(policy.id)}
-                            className="h-6 w-6 p-0 bg-blue-50 text-primary hover:bg-blue-100 border-0 rounded"
-                            title="Add beneficiary"
-                          >
-                            <Plus className="h-3 w-3" />
-                          </button>
+                            className="mr-1"
+                          />
                         )}
                         <input
                           type="text"
@@ -486,13 +476,9 @@ export function AssuranceTable({}: AssuranceTableProps) {
                           disabled={isUpdating}
                         />
                         {rowIndex > 0 && rowIndex < currentBeneficiaries.length && currentBeneficiaries[rowIndex] && (
-                          <button
+                          <DeleteButton
                             onClick={() => handleRemoveBeneficiary(policy.id, currentBeneficiaries[rowIndex].id)}
-                            className="h-6 w-6 p-0 bg-white text-[#4F4F4F] hover:text-red-600 hover:bg-red-50 border border-gray-300 rounded"
-                            title="Remove beneficiary"
-                          >
-                            <Trash2 className="h-3 w-3" />
-                          </button>
+                          />
                         )}
                       </div>
                     ) : (

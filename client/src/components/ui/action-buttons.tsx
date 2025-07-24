@@ -23,6 +23,7 @@ export function AddButton({
   variant = "default",
   children
 }: ActionButtonProps) {
+  const isTableSize = size === "sm";
   return (
     <Button
       onClick={onClick}
@@ -31,11 +32,12 @@ export function AddButton({
       variant={variant}
       className={cn(
         "flex items-center gap-2 bg-primary hover:bg-primary/90 text-primary-foreground",
+        isTableSize && children === undefined && "h-6 w-6 p-0 gap-0",
         className
       )}
     >
-      <Plus className="h-4 w-4" />
-      {children || "Add"}
+      <Plus className={isTableSize && children === undefined ? "h-3 w-3" : "h-4 w-4"} />
+      {children || (isTableSize ? "" : "Add")}
     </Button>
   );
 }
@@ -49,6 +51,7 @@ export function DeleteButton({
   className,
   size = "sm" 
 }: Omit<ActionButtonProps, 'variant'>) {
+  const isTableSize = size === "sm";
   return (
     <Button
       onClick={onClick}
@@ -57,10 +60,11 @@ export function DeleteButton({
       variant="destructive"
       className={cn(
         "flex items-center gap-1",
+        isTableSize && "h-6 w-6 p-0",
         className
       )}
     >
-      <Trash2 className="h-4 w-4" />
+      <Trash2 className={isTableSize ? "h-3 w-3" : "h-4 w-4"} />
     </Button>
   );
 }
@@ -74,6 +78,7 @@ export function DuplicateButton({
   className,
   size = "sm" 
 }: Omit<ActionButtonProps, 'variant'>) {
+  const isTableSize = size === "sm";
   return (
     <Button
       onClick={onClick}
@@ -82,10 +87,11 @@ export function DuplicateButton({
       variant="ghost"
       className={cn(
         "flex items-center gap-1 bg-white text-primary hover:text-primary hover:bg-blue-50 border border-primary",
+        isTableSize && "h-6 w-6 p-0",
         className
       )}
     >
-      <Copy className="h-4 w-4" />
+      <Copy className={isTableSize ? "h-3 w-3" : "h-4 w-4"} />
     </Button>
   );
 }
@@ -99,6 +105,7 @@ export function EditButton({
   className,
   size = "sm" 
 }: Omit<ActionButtonProps, 'variant'>) {
+  const isTableSize = size === "sm";
   return (
     <Button
       onClick={onClick}
@@ -107,10 +114,11 @@ export function EditButton({
       variant="ghost"
       className={cn(
         "flex items-center gap-1 text-neutral-600 hover:text-neutral-900",
+        isTableSize && "h-6 w-6 p-0",
         className
       )}
     >
-      <Edit3 className="h-4 w-4" />
+      <Edit3 className={isTableSize ? "h-3 w-3" : "h-4 w-4"} />
     </Button>
   );
 }
@@ -124,6 +132,7 @@ export function SaveButton({
   className,
   size = "sm" 
 }: Omit<ActionButtonProps, 'variant'>) {
+  const isTableSize = size === "sm";
   return (
     <Button
       onClick={onClick}
@@ -132,11 +141,12 @@ export function SaveButton({
       variant="default"
       className={cn(
         "flex items-center gap-1 bg-primary hover:bg-primary/90 text-primary-foreground",
+        isTableSize && "h-6 w-6 p-0",
         className
       )}
     >
-      <Save className="h-4 w-4" />
-      Save
+      <Save className={isTableSize ? "h-3 w-3" : "h-4 w-4"} />
+      {!isTableSize && "Save"}
     </Button>
   );
 }
@@ -150,6 +160,7 @@ export function CancelButton({
   className,
   size = "sm" 
 }: Omit<ActionButtonProps, 'variant'>) {
+  const isTableSize = size === "sm";
   return (
     <Button
       onClick={onClick}
@@ -158,11 +169,12 @@ export function CancelButton({
       variant="ghost"
       className={cn(
         "flex items-center gap-1",
+        isTableSize && "h-6 w-6 p-0",
         className
       )}
     >
-      <X className="h-4 w-4" />
-      Cancel
+      <X className={isTableSize ? "h-3 w-3" : "h-4 w-4"} />
+      {!isTableSize && "Cancel"}
     </Button>
   );
 }
