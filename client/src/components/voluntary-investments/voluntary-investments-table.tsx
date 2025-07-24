@@ -311,7 +311,7 @@ export default function VoluntaryInvestmentsTable() {
                 <tr key={`${investment.id}-${ownerIndex}`} className="hover:bg-neutral-50">
                   {ownerIndex === 0 && (
                     <>
-                      <td rowSpan={owners.length} className="px-3 py-2 text-center">
+                      <td rowSpan={owners.length} className="table-actions-cell text-center">
                         <ActionButtonGroup>
                           <DuplicateButton
                             onClick={() => handleDuplicateInvestment(investment)}

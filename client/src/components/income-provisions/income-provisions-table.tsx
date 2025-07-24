@@ -227,7 +227,7 @@ export default function IncomeProvisionsTable() {
           <tbody className="bg-white divide-y divide-neutral-200">
             {provisions.map((provision: IncomeProvision) => (
               <tr key={provision.id} className="hover:bg-neutral-50">
-                <td className="px-3 py-2 text-center">
+                <td className="table-actions-cell text-center">
                   <ActionButtonGroup>
                     <DuplicateButton
                       onClick={() => handleDuplicateProvision(provision)}

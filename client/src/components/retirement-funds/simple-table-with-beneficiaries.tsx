@@ -196,7 +196,7 @@ export function SimpleTableWithBeneficiaries({
       rows.push(
         <tr key={`${fund.id}-main`} className="hover:bg-neutral-50" style={{ verticalAlign: "top" }}>
           {/* Actions Column - FIRST COLUMN */}
-          <td className="px-3 py-2 text-center" rowSpan={Math.max(fundOwners.length, beneficiaries.length || 1)}>
+          <td className="table-actions-cell text-center" rowSpan={Math.max(fundOwners.length, beneficiaries.length || 1)}>
             <ActionButtonGroup className="justify-center">
               <DuplicateButton
                 onClick={() => onDuplicateFund?.(fund)}

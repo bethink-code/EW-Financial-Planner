@@ -175,7 +175,7 @@ export default function AdditionalEstateDutyItemsTable() {
           <tbody className="bg-white divide-y divide-neutral-200">
             {items.map((item: AdditionalEstateDutyItem) => (
               <tr key={item.id} className="hover:bg-neutral-50">
-                <td className="px-3 py-2 text-center">
+                <td className="table-actions-cell text-center">
                   <ActionButtonGroup>
                     <DuplicateButton
                       onClick={() => handleDuplicateItem(item)}

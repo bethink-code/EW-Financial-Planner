@@ -878,7 +878,7 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
                         </td>
                         
                         {/* Remove Button - Only in the last column */}
-                        <td className="p-2 text-center">
+                        <td className="table-actions-cell text-center">
                           {beneficiaries.length > 1 && (
                             <DeleteButton
                               onClick={() => handleRemoveBeneficiary(fund.id, index)}

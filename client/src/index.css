@@ -295,6 +295,19 @@ th, td {
     box-sizing: border-box;
   }
   
+  /* Action buttons vertical alignment in table cells */
+  .table-actions-cell {
+    vertical-align: middle !important;
+    padding: 0.375rem 0.75rem;
+  }
+  
+  .table-actions-cell > div {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+  }
+  
   /* Standard table row - enforces consistent height */
   .table-row {
     height: 2rem;

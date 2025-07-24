@@ -219,7 +219,7 @@ export default function IncomeNeedsTable() {
           <tbody className="bg-white divide-y divide-neutral-200">
             {needs.map((need: IncomeNeed) => (
               <tr key={need.id} className="hover:bg-neutral-50">
-                <td className="px-3 py-2 text-center">
+                <td className="table-actions-cell text-center">
                   <ActionButtonGroup>
                     <DuplicateButton
                       onClick={() => handleDuplicateNeed(need)}

@@ -130,7 +130,7 @@ export function LumpSumTable({}: LumpSumTableProps) {
             <tbody className="divide-y divide-neutral-200">
               {bequests.map((bequest: LumpSumBequest) => (
                 <tr key={bequest.id} className="hover:bg-neutral-50">
-                  <td className="p-2 text-center">
+                  <td className="table-actions-cell text-center">
                     <ActionButtonGroup>
                       <DuplicateButton
                         onClick={() => handleDuplicateBequest(bequest)}

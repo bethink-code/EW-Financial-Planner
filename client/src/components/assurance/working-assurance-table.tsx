@@ -322,7 +322,7 @@ export function AssuranceTable({}: AssuranceTableProps) {
                 <tr key={`${policy.id}-row-${rowIndex}`} className="hover:bg-neutral-50">
                   {/* Actions - rowSpan for main policy data - FIRST COLUMN */}
                   {rowIndex === 0 && (
-                    <td rowSpan={maxRows} className="px-3 py-2 text-center align-top">
+                    <td rowSpan={maxRows} className="table-actions-cell text-center align-top">
                       <ActionButtonGroup>
                         <DuplicateButton
                           onClick={() => handleDuplicatePolicy(policy)}
