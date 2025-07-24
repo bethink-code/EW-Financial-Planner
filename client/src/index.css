@@ -271,6 +271,16 @@ th, td {
     box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1) !important;
     border: 1px solid #e5e7eb !important;
   }
+
+  /* Centralized summary card styling */
+  .summary-card {
+    background-color: #eff6ff !important; /* bg-blue-50 */
+    border-radius: 0.5rem !important;
+    padding: 1rem !important;
+    text-align: center !important;
+    border: 1px solid #bfdbfe !important; /* border-blue-200 */
+    box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1) !important;
+  }
   
   /* Teal color utilities */
   .bg-teal-50 { background-color: var(--teal-50); }

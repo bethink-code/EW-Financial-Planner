@@ -28,17 +28,17 @@ export function RetirementFundsSummary() {
   return (
     <div className="px-5 pb-5">
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div className="bg-blue-50 rounded-lg p-4 text-center border border-blue-200 shadow-sm">
+        <div className="summary-card">
           <div className="text-xs font-medium text-teal-700 mb-1">Total Funds</div>
           <div className="text-lg font-bold text-neutral-900">{totalFunds}</div>
         </div>
         
-        <div className="bg-blue-50 rounded-lg p-4 text-center border border-blue-200 shadow-sm">
+        <div className="summary-card">
           <div className="text-xs font-medium text-teal-700 mb-1">Total Cover Amount</div>
           <div className="text-lg font-bold text-neutral-900">R {totalCoverAmount.toLocaleString()}</div>
         </div>
         
-        <div className="bg-blue-50 rounded-lg p-4 text-center border border-blue-200 shadow-sm">
+        <div className="summary-card">
           <div className="text-xs font-medium text-teal-700 mb-1">Total Fund Value</div>
           <div className="text-lg font-bold text-neutral-900">R {totalFundValue.toLocaleString()}</div>
         </div>
