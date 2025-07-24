@@ -364,6 +364,7 @@ export function AssuranceTable({}: AssuranceTableProps) {
                           <AddButton
                             onClick={() => handleAddOwner(policy.id)}
                             className="mr-1"
+                            size="sm"
                           />
                         )}
                         <input
@@ -441,6 +442,7 @@ export function AssuranceTable({}: AssuranceTableProps) {
                           <AddButton
                             onClick={() => handleAddBeneficiary(policy.id)}
                             className="mr-1"
+                            size="sm"
                           />
                         )}
                         <input
