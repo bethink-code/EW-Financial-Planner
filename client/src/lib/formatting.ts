@@ -142,7 +142,14 @@ export const getValueClass = (value: string, fieldType: FieldType): string => {
  */
 export const handleDefaultValueFocus = (e: React.FocusEvent<HTMLInputElement>) => {
   const value = e.target.value;
-  if (value === "Enter here ..." || value === "R 0" || value === "0%" || value === "0 years") {
+  // Check for all default value patterns
+  if (value === "Enter here ..." || 
+      value === "R 0" || 
+      value === "0%" || 
+      value === "0 years" ||
+      /^R \d{1,3}(,\d{3})*$/.test(value) || // Currency with formatting like "R 1,000"
+      /^\d+%$/.test(value) || // Any percentage like "3%", "10%"
+      /^\d+ years$/.test(value)) { // Any years like "5 years"
     e.target.select();
   }
 };

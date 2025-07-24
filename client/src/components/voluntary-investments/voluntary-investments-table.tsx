@@ -2,7 +2,7 @@ import React, { useState, useCallback, useMemo } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { Plus, Trash2, Search, UserPlus, UserMinus } from "lucide-react";
 import { getFieldClass, getFieldWidth } from "@/lib/design-tokens";
-import { formatCurrencyValue, formatPercentageValue, getValueClass, isDefaultValue } from "@/lib/formatting";
+import { formatCurrencyValue, formatPercentageValue, getValueClass, isDefaultValue, handleDefaultValueFocus, createEnhancedBlurHandler } from "@/lib/formatting";
 import type { VoluntaryInvestment, InsertVoluntaryInvestment } from "@shared/schema";
 
 export default function VoluntaryInvestmentsTable() {
@@ -262,13 +262,13 @@ export default function VoluntaryInvestmentsTable() {
               <div className="bg-neutral-50 p-3 rounded-lg">
                 <p className="text-xs text-neutral-500 uppercase tracking-wide mb-1">Total Base Cost</p>
                 <p className="text-lg font-semibold text-neutral-900">
-                  {formatCurrencyValue(totals.baseCost.toString(), 'baseCost')}
+                  {formatCurrencyValue(totals.baseCost.toString())}
                 </p>
               </div>
               <div className="bg-neutral-50 p-3 rounded-lg">
                 <p className="text-xs text-neutral-500 uppercase tracking-wide mb-1">Total Market Value</p>
                 <p className="text-lg font-semibold text-neutral-900">
-                  {formatCurrencyValue(totals.marketValue.toString(), 'marketValue')}
+                  {formatCurrencyValue(totals.marketValue.toString())}
                 </p>
               </div>
             </div>
