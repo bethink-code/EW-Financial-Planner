@@ -2,7 +2,7 @@ import { useState, useCallback, useMemo } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { apiRequest } from "@/lib/queryClient";
 import { getFieldClass, getFieldWidth } from "@/lib/design-tokens";
-import { formatPercentageValue, formatCurrencyValue, getValueClass, isDefaultValue, handleDefaultValueFocus, createEnhancedBlurHandler } from "@/lib/formatting";
+import { formatPercentageValue, formatCurrencyValue, getValueClass, isDefaultValue, handleDefaultValueFocus } from "@/lib/formatting";
 import { LumpSumBequest, InsertLumpSumBequest } from "@shared/schema";
 import { Trash2, Plus } from "lucide-react";
 
@@ -135,10 +135,9 @@ export function LumpSumTable({ searchTerm }: LumpSumTableProps) {
                     <input
                       defaultValue={bequest.description || "Enter here ..."}
                       onFocus={handleDefaultValueFocus}
-                      onBlur={createEnhancedBlurHandler(
-                        (e) => handleInputBlur(bequest.id, "description", e.target.value),
-                        'text'
-                      )}
+                      onBlur={(e) => {
+                        handleInputBlur(bequest.id, "description", e.target.value);
+                      }}
                       className={`table-input h-7 text-sm bg-primary/5 border-gray-200 focus:border-primary w-full px-3 py-1 border rounded-md text-sm ${getValueClass(bequest.description || "Enter here ...", 'text')}`}
                       style={{ textAlign: "left" }}
                       disabled={isUpdating}
@@ -160,7 +159,9 @@ export function LumpSumTable({ searchTerm }: LumpSumTableProps) {
                   </td>
                   <td className="p-2 text-right">
                     <input
+                      key={`start-${bequest.id}-${bequest.start}`}
                       defaultValue={formatCurrencyValue(bequest.start || "0")}
+                      onFocus={handleDefaultValueFocus}
                       onBlur={(e) => {
                         const formattedValue = formatCurrencyValue(e.target.value);
                         if (formattedValue !== e.target.value) {
@@ -211,7 +212,9 @@ export function LumpSumTable({ searchTerm }: LumpSumTableProps) {
                   </td>
                   <td className="p-2 text-right">
                     <input
+                      key={`amount-${bequest.id}-${bequest.amount}`}
                       defaultValue={formatCurrencyValue(bequest.amount || "0")}
+                      onFocus={handleDefaultValueFocus}
                       onBlur={(e) => {
                         const formattedValue = formatCurrencyValue(e.target.value);
                         if (formattedValue !== e.target.value) {
@@ -254,12 +257,13 @@ export function LumpSumTable({ searchTerm }: LumpSumTableProps) {
                       type="text"
                       defaultValue="6%"
                       onFocus={handleDefaultValueFocus}
-                      onBlur={createEnhancedBlurHandler(
-                        (e) => {
-                          // Charity row - no specific handling needed for charity row
-                        },
-                        'percentage'
-                      )}
+                      onBlur={(e) => {
+                        const formattedValue = formatPercentageValue(e.target.value);
+                        if (formattedValue !== e.target.value) {
+                          e.target.value = formattedValue;
+                        }
+                        // Charity row - no specific handling needed for charity row
+                      }}
                       className={`${getFieldClass('percentage')} table-input text-right ${getValueClass("6%", 'percentage')}`}
                       disabled={isUpdating}
                     />
