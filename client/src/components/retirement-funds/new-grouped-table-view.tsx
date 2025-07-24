@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { FundActions } from "./fund-actions";
 import { nanoid } from "nanoid";
+import { getFieldClass } from "@/lib/design-tokens";
 interface ColumnVisibility {
   overview: boolean;
   unapprovedLifeCover: boolean;
@@ -379,7 +380,7 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
                           }
                           handleInputBlur(fund.id, "increasePercentage", e.target.value);
                         }}
-                        className="table-input" style={{ textAlign: "right" }}
+                        className={`${getFieldClass('percentage')} table-input text-right`}
                         disabled={isUpdating}
                       />
                     </td>
