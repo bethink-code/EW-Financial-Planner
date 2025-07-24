@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { FundActions } from "./fund-actions";
 import { nanoid } from "nanoid";
 import { getFieldClass } from "@/lib/design-tokens";
+import { getValueClass, isDefaultValue, handleDefaultValueFocus } from "@/lib/formatting";
 interface ColumnVisibility {
   overview: boolean;
   unapprovedLifeCover: boolean;
@@ -742,7 +743,7 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
                       {/* Description */}
                       <td className="table-cell whitespace-nowrap table-text-14 text-neutral-900" rowSpan={beneficiaries.length + 1}>
                         <input
-                          defaultValue={fund.description || "Enter here ..."}
+                          defaultValue={fund.description || "Enter here ..."} onFocus={handleDefaultValueFocus}
                           onBlur={(e) => handleInputBlur(fund.id, "description", e.target.value)}
                           className="border-0 focus:bg-white focus:border focus:border-primary hover:bg-neutral-50 text-left font-medium table-input"
                           placeholder="Fund description"
@@ -777,7 +778,7 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
                     <>
                       <td className="p-2 text-right border-l border-neutral-300 bg-teal-50" rowSpan={beneficiaries.length + 1}>
                         <input
-                          defaultValue={fund.coverAmount || "Enter here ..."}
+                          defaultValue={fund.coverAmount || "Enter here ..."} onFocus={handleDefaultValueFocus}
                           onBlur={(e) => {
                             const formattedValue = formatCurrencyValue(e.target.value, "coverAmount");
                             if (formattedValue !== e.target.value) {

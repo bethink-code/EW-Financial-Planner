@@ -136,6 +136,18 @@ export const getValueClass = (value: string, fieldType: FieldType): string => {
 };
 
 /**
+ * Handle focus event for input fields with default values
+ * Automatically selects the text if it's a default value for easy overwriting
+ * @param e - The focus event
+ */
+export const handleDefaultValueFocus = (e: React.FocusEvent<HTMLInputElement>) => {
+  const value = e.target.value;
+  if (value === "Enter here ..." || value === "R 0" || value === "0%" || value === "0 years") {
+    e.target.select();
+  }
+};
+
+/**
  * Legacy years formatting for backward compatibility
  */
 export const formatYears = (value: string | number): string => {

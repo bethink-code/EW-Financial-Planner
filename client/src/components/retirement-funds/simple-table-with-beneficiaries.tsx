@@ -5,7 +5,7 @@ import { Edit3, Plus, Trash2, UserPlus, UserMinus } from "lucide-react";
 import { parseBeneficiaries } from "@/lib/beneficiaries";
 import { Button } from "@/components/ui/button";
 import { getFieldClass, getFieldWidth } from "@/lib/design-tokens";
-import { getValueClass, isDefaultValue } from "@/lib/formatting";
+import { getValueClass, isDefaultValue, handleDefaultValueFocus } from "@/lib/formatting";
 import { nanoid } from "nanoid";
 
 interface ColumnVisibility {
@@ -197,7 +197,7 @@ export function SimpleTableWithBeneficiaries({
             <>
               <td className="px-3 py-2 border-r border-neutral-200" rowSpan={fundOwners.length}>
                 <input
-                  defaultValue={fund.description || "Enter here ..."}
+                  defaultValue={fund.description || "Enter here ..."} onFocus={handleDefaultValueFocus}
                   onBlur={(e) => onFieldUpdate(fund.id, "description", e.target.value)}
                   className={`${getFieldClass('text')} table-input`}
                   
@@ -273,7 +273,7 @@ export function SimpleTableWithBeneficiaries({
             <>
               <td className="px-3 py-2 border-l border-neutral-200 border-r border-neutral-200" rowSpan={fundOwners.length}>
                 <input
-                  defaultValue={fund.monthlyIncome || "Enter here ..."}
+                  defaultValue={fund.monthlyIncome || "Enter here ..."} onFocus={handleDefaultValueFocus}
                   onBlur={(e) => {
                     const formattedValue = formatCurrencyValue(e.target.value, "monthlyIncome");
                     if (formattedValue !== e.target.value) {
@@ -366,7 +366,7 @@ export function SimpleTableWithBeneficiaries({
             <>
               <td className="px-3 py-2 border-l border-neutral-200 border-r border-neutral-200" rowSpan={fundOwners.length}>
                 <input
-                  defaultValue={beneficiaries[0]?.name || "Enter here ..."}
+                  defaultValue={beneficiaries[0]?.name || "Enter here ..."} onFocus={handleDefaultValueFocus}
                   onBlur={(e) => handleBeneficiaryUpdate(fund.id, 0, 'name', e.target.value)}
                   className={`${getFieldClass('text')} table-input`}
                   
@@ -391,7 +391,7 @@ export function SimpleTableWithBeneficiaries({
               </td>
               <td className="px-3 py-2 border-r border-neutral-200" rowSpan={fundOwners.length}>
                 <input
-                  defaultValue={fund.amount || "Enter here ..."}
+                  defaultValue={fund.amount || "Enter here ..."} onFocus={handleDefaultValueFocus}
                   onBlur={(e) => {
                     const formattedValue = formatCurrencyValue(e.target.value, "amount");
                     if (formattedValue !== e.target.value) {
@@ -407,7 +407,7 @@ export function SimpleTableWithBeneficiaries({
               </td>
               <td className="px-3 py-2 border-r border-neutral-200" rowSpan={fundOwners.length}>
                 <input
-                  defaultValue={fund.lumpSumTaken || "Enter here ..."}
+                  defaultValue={fund.lumpSumTaken || "Enter here ..."} onFocus={handleDefaultValueFocus}
                   onBlur={(e) => {
                     const formattedValue = formatCurrencyValue(e.target.value, "lumpSumTaken");
                     if (formattedValue !== e.target.value) {
@@ -423,7 +423,7 @@ export function SimpleTableWithBeneficiaries({
               </td>
               <td className="px-3 py-2 border-r border-neutral-200" rowSpan={fundOwners.length}>
                 <input
-                  defaultValue={fund.nondeductibleContribution || "Enter here ..."}
+                  defaultValue={fund.nondeductibleContribution || "Enter here ..."} onFocus={handleDefaultValueFocus}
                   onBlur={(e) => {
                     const formattedValue = formatCurrencyValue(e.target.value, "nondeductibleContribution");
                     if (formattedValue !== e.target.value) {
@@ -439,7 +439,7 @@ export function SimpleTableWithBeneficiaries({
               </td>
               <td className="px-3 py-2 border-r border-neutral-200" rowSpan={fundOwners.length}>
                 <input
-                  defaultValue={fund.livingAnnuity || "Enter here ..."}
+                  defaultValue={fund.livingAnnuity || "Enter here ..."} onFocus={handleDefaultValueFocus}
                   onBlur={(e) => {
                     const formattedValue = formatCurrencyValue(e.target.value, "livingAnnuity");
                     if (formattedValue !== e.target.value) {
@@ -505,7 +505,7 @@ export function SimpleTableWithBeneficiaries({
             <>
               <td className="px-3 py-2 border-l border-neutral-200 border-r border-neutral-200" rowSpan={fundOwners.length}>
                 <input
-                  defaultValue={fund.coverAmount || "Enter here ..."}
+                  defaultValue={fund.coverAmount || "Enter here ..."} onFocus={handleDefaultValueFocus}
                   onBlur={(e) => {
                     const formattedValue = formatCurrencyValue(e.target.value, "coverAmount");
                     if (formattedValue !== e.target.value) {
@@ -580,7 +580,7 @@ export function SimpleTableWithBeneficiaries({
                     <div className="flex items-center gap-2">
                       <span className="text-green-500 mr-1">↳</span>
                       <input
-                        defaultValue={beneficiary.name || "Enter here ..."}
+                        defaultValue={beneficiary.name || "Enter here ..."} onFocus={handleDefaultValueFocus}
                         onBlur={(e) => handleBeneficiaryUpdate(fund.id, actualIndex, 'name', e.target.value)}
                         className={`${getFieldClass('text')} table-input`}
                         
