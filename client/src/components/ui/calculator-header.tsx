@@ -27,13 +27,13 @@ export function CalculatorHeader({
   className = ""
 }: CalculatorHeaderProps) {
   return (
-    <div className={`bg-white rounded-lg shadow-sm border border-neutral-200 p-4 mb-4 ${className}`}>
-      <div className="flex flex-col lg:flex-row gap-3 items-start lg:items-center justify-between">
+    <div className={`bg-white rounded-lg shadow-sm border border-neutral-200 p-5 mb-6 ${className}`}>
+      <div className="flex flex-col lg:flex-row gap-4 items-start lg:items-center justify-between">
         {/* Left section: Title, count, and Add button */}
-        <div className="flex items-center gap-3">
-          <h1 className="text-xl font-semibold text-neutral-900">{title}</h1>
+        <div className="flex items-center gap-4">
+          <h1 className="text-2xl font-semibold text-neutral-900">{title}</h1>
           {itemCount !== undefined && (
-            <span className="px-2 py-1 bg-primary/10 text-primary text-xs font-medium rounded">
+            <span className="px-3 py-1 bg-primary/10 text-primary text-sm font-medium rounded-full">
               {itemCount} {itemLabel}
             </span>
           )}
@@ -42,7 +42,7 @@ export function CalculatorHeader({
               onClick={onAddItem}
               disabled={isAddingItem}
               size="sm"
-              className="h-8 px-3 text-white"
+              className="h-9 px-4 text-white font-medium"
               style={{ 
                 backgroundColor: '#016991', 
                 borderColor: '#016991'
@@ -54,24 +54,24 @@ export function CalculatorHeader({
                 e.currentTarget.style.backgroundColor = '#016991'; 
               }}
             >
-              <Plus className="h-4 w-4 mr-1" />
+              <Plus className="h-4 w-4 mr-2" />
               {isAddingItem ? "Adding..." : addButtonText}
             </Button>
           )}
         </div>
 
         {/* Right section: View mode switcher and additional controls */}
-        <div className="flex flex-wrap gap-2 items-center">
+        <div className="flex flex-wrap gap-3 items-center">
           {/* View Mode Buttons */}
           {onViewModeChange && (
-            <div className="flex border border-neutral-200 rounded overflow-hidden">
+            <div className="flex border border-neutral-200 rounded-lg overflow-hidden">
               <Button
                 variant={viewMode === "table" ? "default" : "ghost"}
                 size="sm"
                 onClick={() => onViewModeChange("table")}
-                className="rounded-none border-0 h-8 px-3"
+                className="rounded-none border-0 h-9 px-4"
               >
-                <Table size={14} className="mr-1" />
+                <Table size={16} className="mr-2" />
                 Table
               </Button>
 
@@ -79,9 +79,9 @@ export function CalculatorHeader({
                 variant={viewMode === "hybrid" ? "default" : "ghost"}
                 size="sm"
                 onClick={() => onViewModeChange("hybrid")}
-                className="rounded-none border-0 border-l border-neutral-200 h-8 px-3"
+                className="rounded-none border-0 border-l border-neutral-200 h-9 px-4"
               >
-                <List size={14} className="mr-1" />
+                <List size={16} className="mr-2" />
                 Hybrid
               </Button>
             </div>

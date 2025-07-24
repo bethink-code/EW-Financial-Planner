@@ -7,9 +7,7 @@ import { apiRequest } from "@/lib/queryClient";
 import { AddButton } from "@/components/ui/action-buttons";
 import type { Assurance, InsertAssurance } from "@shared/schema";
 
-interface AssuranceTableProps {
-  searchTerm: string;
-}
+interface AssuranceTableProps {}
 
 // Format currency value with R prefix and proper formatting
 const formatCurrencyValue = (value: string, fieldType: string): string => {
@@ -34,15 +32,15 @@ const formatCurrencyValue = (value: string, fieldType: string): string => {
   return "R 0";
 };
 
-export function AssuranceTable({ searchTerm }: AssuranceTableProps) {
+export function AssuranceTable({}: AssuranceTableProps) {
   const queryClient = useQueryClient();
   const [isUpdating, setIsUpdating] = useState(false);
 
   // Fetch assurance policies
   const { data: policies = [], isLoading } = useQuery({
-    queryKey: ["/api/assurance", { search: searchTerm }],
+    queryKey: ["/api/assurance"],
     queryFn: async () => {
-      const response = await fetch("/api/assurance" + (searchTerm ? `?search=${encodeURIComponent(searchTerm)}` : ""));
+      const response = await fetch("/api/assurance");
       if (!response.ok) throw new Error('Failed to fetch assurance policies');
       return response.json();
     }
@@ -222,18 +220,8 @@ export function AssuranceTable({ searchTerm }: AssuranceTableProps) {
     }
   }, [policies, updateMutation]);
 
-  // Filter policies based on search term
-  const filteredPolicies = useMemo(() => {
-    if (!searchTerm.trim()) return policies;
-    
-    const lowerQuery = searchTerm.toLowerCase();
-    return policies.filter((policy: Assurance) =>
-      policy.description.toLowerCase().includes(lowerQuery) ||
-      policy.owner.toLowerCase().includes(lowerQuery) ||
-      policy.lifeAssured.toLowerCase().includes(lowerQuery) ||
-      policy.beneficiary.toLowerCase().includes(lowerQuery)
-    );
-  }, [policies, searchTerm]);
+  // Use policies directly without filtering
+  const filteredPolicies = policies;
 
   // Calculate totals
   const totals = useMemo(() => {
@@ -636,7 +624,7 @@ export function AssuranceTable({ searchTerm }: AssuranceTableProps) {
             {filteredPolicies.length === 0 && (
               <tr>
                 <td colSpan={15} className="px-3 py-8 text-center text-neutral-500">
-                  {searchTerm ? "No assurance policies found matching your search." : "No assurance policies found. Click 'Add Policy' to get started."}
+                  No assurance policies found. Add new policies using the header button.
                 </td>
               </tr>
             )}

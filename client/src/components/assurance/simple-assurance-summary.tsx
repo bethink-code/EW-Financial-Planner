@@ -52,9 +52,9 @@ export function AssuranceSummary() {
   }
 
   return (
-    <div className="bg-white border border-neutral-200 rounded-lg shadow-sm p-6 mt-6">
+    <div className="bg-white border border-neutral-200 rounded-lg shadow-sm p-6 mb-6">
       <div className="bg-primary/10 px-4 py-3 -mx-6 -mt-6 mb-6 rounded-t-lg">
-        <h2 className="text-lg font-semibold text-neutral-800">Assurance Summary</h2>
+        <h2 className="text-lg font-semibold text-neutral-800">Summary</h2>
       </div>
       
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6">
