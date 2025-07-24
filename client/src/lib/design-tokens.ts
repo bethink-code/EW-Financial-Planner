@@ -172,7 +172,7 @@ export const tableColumnWidths = {
   beneficiary: '150px',
   amount: '100px',
   currency: '100px',
-  percentage: '70px',
+  percentage: '50px',
   years: '90px',
   checkbox: '60px',
   actions: '100px',

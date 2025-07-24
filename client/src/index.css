@@ -381,8 +381,8 @@ th, td {
   }
 
   .field-percentage {
-    min-width: 60px;
-    max-width: 80px;
+    min-width: 40px;
+    max-width: 60px;
   }
 
   .field-years {
