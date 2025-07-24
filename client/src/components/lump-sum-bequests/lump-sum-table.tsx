@@ -2,34 +2,9 @@ import { useState, useCallback, useMemo } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { apiRequest } from "@/lib/queryClient";
 import { getFieldClass, getFieldWidth } from "@/lib/design-tokens";
+import { formatPercentageValue, formatCurrencyValue } from "@/lib/formatting";
 import { LumpSumBequest, InsertLumpSumBequest } from "@shared/schema";
 import { Trash2, Plus } from "lucide-react";
-
-// Currency formatting utility
-const formatCurrencyValue = (value: string, fieldType: string): string => {
-  // Handle percentage fields first
-  if (fieldType.includes('percentage') || fieldType.includes('Percentage') || fieldType === 'increasePercentage') {
-    if (!value?.trim()) return '0%';
-    const cleanValue = value.replace(/[^\d.-]/g, '');
-    if (!cleanValue) return '0%';
-    if (isNaN(parseFloat(cleanValue))) return '0%';
-    const numValue = parseFloat(cleanValue);
-    return `${numValue}%`;
-  }
-  
-  // Currency fields
-  if (!value?.trim()) return 'R 0';
-  const cleanValue = value.replace(/[^\d.-]/g, '');
-  if (!cleanValue) return 'R 0';
-  if (isNaN(parseFloat(cleanValue))) return 'R 0';
-  const numValue = parseFloat(cleanValue);
-  
-  if (fieldType.includes('amount') || fieldType.includes('Amount') || fieldType.includes('value') || fieldType.includes('Value') || fieldType.includes('start') || fieldType.includes('Start')) {
-    return `R ${numValue.toLocaleString()}`;
-  }
-  
-  return 'R 0';
-};
 
 interface LumpSumTableProps {
   searchTerm: string;
@@ -185,7 +160,7 @@ export function LumpSumTable({ searchTerm }: LumpSumTableProps) {
                     <input
                       defaultValue={bequest.start || ""}
                       onBlur={(e) => {
-                        const formattedValue = formatCurrencyValue(e.target.value, "start");
+                        const formattedValue = formatCurrencyValue(e.target.value);
                         if (formattedValue !== e.target.value) {
                           e.target.value = formattedValue;
                         }
@@ -203,7 +178,7 @@ export function LumpSumTable({ searchTerm }: LumpSumTableProps) {
                         type="text"
                         defaultValue={bequest.increasePercentage || "6%"}
                         onBlur={(e) => {
-                          const formattedValue = formatCurrencyValue(e.target.value, "increasePercentage");
+                          const formattedValue = formatPercentageValue(e.target.value);
                           if (formattedValue !== e.target.value) {
                             e.target.value = formattedValue;
                           }
@@ -229,9 +204,9 @@ export function LumpSumTable({ searchTerm }: LumpSumTableProps) {
                   </td>
                   <td className="p-2 text-right">
                     <input
-                      defaultValue={formatCurrencyValue(bequest.amount || "", 'amount')}
+                      defaultValue={formatCurrencyValue(bequest.amount || "")}
                       onBlur={(e) => {
-                        const formattedValue = formatCurrencyValue(e.target.value, "amount");
+                        const formattedValue = formatCurrencyValue(e.target.value);
                         if (formattedValue !== e.target.value) {
                           e.target.value = formattedValue;
                         }
@@ -246,7 +221,7 @@ export function LumpSumTable({ searchTerm }: LumpSumTableProps) {
                   <td className="p-2 text-right">
                     <div className="table-input h-7 text-sm bg-gray-100 border-gray-200 w-full px-3 py-1 border rounded-md text-sm text-gray-700"
                          style={{ textAlign: "right", minWidth: "120px" }}>
-                      {formatCurrencyValue(bequest.valueAtDeath || "0", "valueAtDeath")}
+                      {formatCurrencyValue(bequest.valueAtDeath || "0")}
                     </div>
                   </td>
                 </tr>
@@ -269,13 +244,16 @@ export function LumpSumTable({ searchTerm }: LumpSumTableProps) {
                 <td className="p-2 text-center">
                   <div className="flex items-center gap-1 justify-center">
                     <input
-                      type="number"
-                      defaultValue="6"
-                      className="table-input h-7 text-sm bg-primary/5 border-gray-200 focus:border-primary px-2 py-1 border rounded-md text-sm w-16"
-                      style={{ textAlign: "right" }}
+                      type="text"
+                      defaultValue="6%"
+                      onBlur={(e) => {
+                        const formattedValue = formatPercentageValue(e.target.value);
+                        if (formattedValue !== e.target.value) {
+                          e.target.value = formattedValue;
+                        }
+                      }}
+                      className={`${getFieldClass('percentage')} table-input text-right`}
                       disabled={isUpdating}
-                      min="0"
-                      max="100"
                     />
                     <label className="flex items-center text-xs">
                       <input

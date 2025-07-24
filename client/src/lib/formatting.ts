@@ -1,45 +1,29 @@
 // Centralized formatting utilities for consistent data formatting across the application
 
+export type FieldType = 'currency' | 'percentage' | 'years' | 'text' | 'number';
+
 /**
  * Format currency value with R prefix and proper formatting
- * @param value - The value to format
- * @param fieldType - The type of field for context-aware formatting
- * @returns Formatted string
  */
-export const formatCurrencyValue = (value: string, fieldType: string = ''): string => {
-  if (!value?.trim()) return value;
-  
-  // Remove existing formatting
+export const formatCurrencyValue = (value: string): string => {
+  if (!value?.trim()) return 'R 0';
   const cleanValue = value.replace(/[^\d.-]/g, '');
-  if (!cleanValue || isNaN(parseFloat(cleanValue))) return value;
-  
+  if (!cleanValue) return 'R 0';
+  if (isNaN(parseFloat(cleanValue))) return 'R 0';
   const numValue = parseFloat(cleanValue);
-  
-  // Percentage fields
-  if (fieldType.toLowerCase().includes('percentage') || 
-      fieldType.toLowerCase().includes('split') ||
-      fieldType.toLowerCase().includes('percent')) {
-    return `${numValue}%`;
-  }
-  
-  // Years fields
-  if (fieldType.toLowerCase().includes('year') || 
-      fieldType.toLowerCase().includes('term')) {
-    return `${numValue} years`;
-  }
-  
-  // Currency fields - always format as currency unless specifically numeric
-  const numericOnlyFields = [
-    'lumpSumLeftOverProvisions', 'currentAnnualIncome', 'annualIncomeAtDeath', 
-    'estateDeploymentDeceased', 'lumpSumDeath', 'previousLumpSums', 'additionalTaxFreeAmount'
-  ];
-  
-  if (numericOnlyFields.some(field => fieldType.includes(field))) {
-    return Math.round(numValue).toLocaleString();
-  }
-  
-  // Default to currency formatting
-  return `R ${Math.round(numValue).toLocaleString()}`;
+  return `R ${numValue.toLocaleString()}`;
+};
+
+/**
+ * Format percentage value with % suffix
+ */
+export const formatPercentageValue = (value: string): string => {
+  if (!value?.trim()) return '0%';
+  const cleanValue = value.replace(/[^\d.-]/g, '');
+  if (!cleanValue) return '0%';
+  if (isNaN(parseFloat(cleanValue))) return '0%';
+  const numValue = parseFloat(cleanValue);
+  return `${numValue}%`;
 };
 
 /**
@@ -53,27 +37,81 @@ export const parseCurrencyValue = (value: string): number => {
 };
 
 /**
- * Format percentage with proper validation
- * @param value - The percentage value
- * @returns Formatted percentage string
+ * Format years with years suffix
+ */
+export const formatYearsValue = (value: string): string => {
+  if (!value?.trim()) return '0 years';
+  const cleanValue = value.replace(/[^\d.-]/g, '');
+  if (!cleanValue) return '0 years';
+  if (isNaN(parseFloat(cleanValue))) return '0 years';
+  const numValue = parseFloat(cleanValue);
+  return `${numValue} years`;
+};
+
+/**
+ * Format text value with trimming
+ */
+export const formatTextValue = (value: string): string => {
+  return value?.trim() || '';
+};
+
+/**
+ * Format numeric value
+ */
+export const formatNumberValue = (value: string): string => {
+  if (!value?.trim()) return '0';
+  const cleanValue = value.replace(/[^\d.-]/g, '');
+  if (!cleanValue) return '0';
+  if (isNaN(parseFloat(cleanValue))) return '0';
+  const numValue = parseFloat(cleanValue);
+  return numValue.toString();
+};
+
+/**
+ * Universal formatting function that detects field type and applies appropriate formatting
+ */
+export const formatFieldValue = (value: string, fieldType: FieldType): string => {
+  switch (fieldType) {
+    case 'currency':
+      return formatCurrencyValue(value);
+    case 'percentage':
+      return formatPercentageValue(value);
+    case 'years':
+      return formatYearsValue(value);
+    case 'text':
+      return formatTextValue(value);
+    case 'number':
+      return formatNumberValue(value);
+    default:
+      return formatTextValue(value);
+  }
+};
+
+/**
+ * Legacy formatting function for backward compatibility
+ */
+export const formatCurrency = (value: string | number): string => {
+  const numValue = typeof value === 'string' ? parseFloat(value.replace(/[^\d.-]/g, '')) : value;
+  if (isNaN(numValue)) return 'R 0';
+  return `R ${Math.round(numValue).toLocaleString()}`;
+};
+
+/**
+ * Legacy percentage formatting for backward compatibility
  */
 export const formatPercentage = (value: string | number): string => {
   const numValue = typeof value === 'string' ? parseFloat(value.replace(/[^\d.-]/g, '')) : value;
   if (isNaN(numValue)) return '0%';
-  
   const clampedValue = Math.max(0, Math.min(100, numValue));
   return `${clampedValue}%`;
 };
 
 /**
- * Format years with proper validation
- * @param value - The years value
- * @returns Formatted years string
+ * Legacy years formatting for backward compatibility
  */
 export const formatYears = (value: string | number): string => {
   const numValue = typeof value === 'string' ? parseFloat(value.replace(/[^\d.-]/g, '')) : value;
   if (isNaN(numValue)) return '0 years';
-  
   return `${Math.round(numValue)} years`;
 };
 
