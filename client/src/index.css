@@ -139,13 +139,13 @@ th, td {
 }
 
 :root {
-  --background: hsl(0, 0%, 100%);
+  --background: #f8f9fa;
   --foreground: hsl(220, 13%, 18%);
   --muted: hsl(210, 40%, 98%);
   --muted-foreground: hsl(215, 16%, 47%);
-  --popover: hsl(0, 0%, 100%);
+  --popover: #f8f9fa;
   --popover-foreground: hsl(220, 13%, 18%);
-  --card: hsl(0, 0%, 100%);
+  --card: #f8f9fa;
   --card-foreground: hsl(220, 13%, 18%);
   --border: hsl(214, 32%, 91%);
   --input: hsl(214, 32%, 91%);
@@ -250,8 +250,9 @@ th, td {
   }
 
   body {
-    @apply font-sans antialiased bg-background text-foreground;
+    @apply font-sans antialiased text-foreground;
     font-family: 'Inter', sans-serif;
+    background-color: #f8f9fa !important;
   }
 }
 
