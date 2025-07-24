@@ -218,15 +218,15 @@ export function AssuranceTable({ searchTerm }: AssuranceTableProps) {
                   <td className="p-2 text-right">
                     <input
                       key={`deathBenefit-${policy.id}-${policy.deathBenefit}`}
-                      defaultValue={formatCurrencyValue(policy.deathBenefit)}
+                      defaultValue={formatCurrencyValue(policy.deathBenefit, 'deathBenefit')}
                       onBlur={(e) => {
-                        const formattedValue = formatCurrencyValue(e.target.value);
+                        const formattedValue = formatCurrencyValue(e.target.value, 'deathBenefit');
                         if (formattedValue !== e.target.value) {
                           e.target.value = formattedValue;
                         }
                         handleInputBlur(policy.id, "deathBenefit", e.target.value);
                       }}
-                      className={`table-input h-7 text-sm bg-primary/5 border-gray-200 focus:border-primary w-full px-3 py-1 border rounded-md text-sm ${getValueClass(formatCurrencyValue(policy.deathBenefit), 'currency')}`}
+                      className={`table-input h-7 text-sm bg-primary/5 border-gray-200 focus:border-primary w-full px-3 py-1 border rounded-md text-sm ${getValueClass(formatCurrencyValue(policy.deathBenefit, 'deathBenefit'), 'currency')}`}
                       style={{ textAlign: "right", minWidth: "100px" }}
                       placeholder="R 0"
                       disabled={isUpdating}
