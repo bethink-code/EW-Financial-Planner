@@ -323,24 +323,16 @@ export function AssuranceTable({}: AssuranceTableProps) {
                   {/* Actions - rowSpan for main policy data - FIRST COLUMN */}
                   {rowIndex === 0 && (
                     <td rowSpan={maxRows} className="px-3 py-2 text-center align-top">
-                      <div className="flex items-center justify-center space-x-1">
-                        <button
+                      <ActionButtonGroup>
+                        <DuplicateButton
                           onClick={() => handleDuplicatePolicy(policy)}
-                          className="h-6 w-6 p-0 bg-white text-primary hover:text-primary hover:bg-blue-50 border border-primary rounded"
-                          title="Duplicate policy"
                           disabled={isUpdating || duplicateMutation.isPending}
-                        >
-                          <Copy className="h-3 w-3" />
-                        </button>
-                        <button
+                        />
+                        <DeleteButton
                           onClick={() => handleDeletePolicy(policy.id)}
-                          className="h-6 w-6 p-0 bg-white text-[#4F4F4F] hover:text-red-600 hover:bg-red-50 border border-gray-300 rounded"
-                          title="Delete policy"
                           disabled={isUpdating || deleteMutation.isPending}
-                        >
-                          <Trash2 className="h-3 w-3" />
-                        </button>
-                      </div>
+                        />
+                      </ActionButtonGroup>
                     </td>
                   )}
                   
