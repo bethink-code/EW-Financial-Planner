@@ -43,7 +43,7 @@ export function NewTableControls({
   isAddingFund = false,
 }: NewTableControlsProps) {
   return (
-    <div className="rounded-lg shadow-sm border border-neutral-200 p-4 mb-4">
+    <div className=" border border-neutral-200 p-4 mb-4">
       <div className="flex flex-col lg:flex-row gap-3 items-start lg:items-center justify-between">
         {/* Left section: Title, count, and Add Fund button */}
         <div className="flex items-center gap-3">

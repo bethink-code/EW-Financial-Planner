@@ -377,7 +377,6 @@ th, td {
   .table-total-row {
     height: 2rem;
     font-weight: 700;
-    background-color: #f3f4f6;
   }
   
   .table-total-row td {
@@ -398,7 +397,6 @@ th, td {
     width: auto;
     min-width: 60px;
     max-width: 250px;
-    background-color: #F2F7FB;
   }
 
   /* Field type-specific widths for consistent table behavior */
@@ -449,7 +447,7 @@ th, td {
 }
 
 .inline-edit-input:focus {
-  @apply bg-white shadow-sm;
+  @apply shadow-sm;
 }
 
 /* Auto-save feedback */
