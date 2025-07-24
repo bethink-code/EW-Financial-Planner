@@ -190,8 +190,8 @@ export const defaultFieldTypes: Record<string, FieldTypeConfig> = {
   percentage: {
     type: 'percentage',
     label: 'Percentage',
-    placeholder: '0',
-    defaultValue: '0',
+    placeholder: '0%',
+    defaultValue: '0%',
     formatting: {
       suffix: '%',
       decimals: 1
@@ -210,8 +210,8 @@ export const defaultFieldTypes: Record<string, FieldTypeConfig> = {
   benefitSplit: {
     type: 'percentage',
     label: 'Benefit Split',
-    placeholder: '0',
-    defaultValue: '0',
+    placeholder: '0%',
+    defaultValue: '0%',
     formatting: {
       suffix: '%',
       decimals: 1
