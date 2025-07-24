@@ -1,6 +1,6 @@
 import { useState, useCallback, memo } from "react";
 import { Plus, Trash2 } from "lucide-react";
-import { DeleteButton } from "@/components/ui/action-buttons";
+import { DeleteButton, AddButton } from "@/components/ui/action-buttons";
 import { getFieldClass, getFieldWidth } from "@/lib/design-tokens";
 import { Assurance } from "@shared/schema";
 
@@ -154,13 +154,9 @@ export const BeneficiaryRowManagerAssurance = memo(({ policy, onUpdate }: Benefi
         <td className="px-3 py-2 text-sm text-neutral-700"></td>
         <td className="px-3 py-2 text-sm text-neutral-700"></td>
         <td className="px-3 py-2">
-          <button
+          <AddButton
             onClick={handleAddBeneficiary}
-            className="text-primary hover:text-primary/80 transition-colors"
-            title="Add beneficiary"
-          >
-            <Plus className="h-4 w-4" />
-          </button>
+          />
         </td>
       </tr>
 

@@ -1,7 +1,7 @@
 import React, { useState, useCallback, useMemo } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { Plus, Trash2, Search, UserPlus, UserMinus } from "lucide-react";
-import { DeleteButton } from "@/components/ui/action-buttons";
+import { DeleteButton, AddButton } from "@/components/ui/action-buttons";
 import { getFieldClass, getFieldWidth } from "@/lib/design-tokens";
 import type { VoluntaryInvestment, InsertVoluntaryInvestment } from "@shared/schema";
 
@@ -297,14 +297,13 @@ export default function VoluntaryInvestmentsTable() {
       
       {/* Add Investment Button */}
       <div className="flex justify-start mb-4">
-        <button
+        <AddButton
           onClick={handleAddInvestment}
           disabled={addMutation.isPending}
-          className="bg-primary text-white px-4 py-2 rounded-lg hover:bg-[#014d6b] disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2 font-medium"
+          size="default"
         >
-          <Plus className="h-4 w-4" />
           Add Investment
-        </button>
+        </AddButton>
       </div>
 
       {/* Table */}
@@ -370,13 +369,9 @@ export default function VoluntaryInvestmentsTable() {
                         />
                       )}
                       {ownerIndex === owners.length - 1 && (
-                        <button
+                        <AddButton
                           onClick={() => handleAddOwner(investment.id)}
-                          className="text-primary hover:text-blue-700 transition-colors"
-                          title="Add owner"
-                        >
-                          <UserPlus className="h-4 w-4" />
-                        </button>
+                        />
                       )}
                     </div>
                   </td>

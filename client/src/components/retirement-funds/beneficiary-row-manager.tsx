@@ -275,16 +275,13 @@ export function BeneficiaryRowManager({
 
       {/* Add Beneficiary Button */}
       <div className="flex justify-between items-center pt-2">
-        <Button
-          variant="ghost"
-          size="sm"
+        <AddButton
           onClick={handleAddBeneficiary}
           disabled={isUpdating || beneficiaries.length >= 10}
-          className="flex items-center gap-2 bg-blue-50 text-primary hover:bg-blue-100 border-0"
+          size="sm"
         >
-          <Plus className="h-4 w-4" />
           Add Beneficiary
-        </Button>
+        </AddButton>
 
         {/* Percentage Validation */}
         <div className="flex items-center gap-2">

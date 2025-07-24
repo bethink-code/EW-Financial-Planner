@@ -1,7 +1,7 @@
 import { useState, useCallback, useMemo } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { Plus, Trash2 } from "lucide-react";
-import { DeleteButton } from "@/components/ui/action-buttons";
+import { DeleteButton, AddButton } from "@/components/ui/action-buttons";
 import { getFieldClass, getFieldWidth } from "@/lib/design-tokens";
 import { apiRequest } from "@/lib/queryClient";
 import type { Assurance, InsertAssurance } from "@shared/schema";
@@ -204,14 +204,13 @@ export function AssuranceTable({ searchTerm }: AssuranceTableProps) {
     <div className="space-y-6">
       {/* Add Policy Button */}
       <div className="flex justify-start">
-        <button
+        <AddButton
           onClick={handleAddPolicy}
           disabled={addMutation.isPending}
-          className="inline-flex items-center px-4 py-2 bg-primary text-white text-sm font-medium rounded-lg hover:hover:bg-primary/90 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+          size="default"
         >
-          <Plus className="h-4 w-4 mr-2" />
           {addMutation.isPending ? "Adding Policy..." : "Add Policy"}
-        </button>
+        </AddButton>
       </div>
 
       {/* Table */}
@@ -256,13 +255,9 @@ export function AssuranceTable({ searchTerm }: AssuranceTableProps) {
                       className={getFieldClass("text")} 
                       disabled={isUpdating}
                     />
-                    <button
+                    <AddButton
                       onClick={() => handleAddOwner(policy.id)}
-                      className="text-primary hover:text-primary/80 transition-colors"
-                      title="Add owner"
-                    >
-                      <Plus className="h-4 w-4" />
-                    </button>
+                    />
                   </div>
                 </td>
                 <td className="px-3 py-2">
@@ -292,13 +287,9 @@ export function AssuranceTable({ searchTerm }: AssuranceTableProps) {
                       className={getFieldClass("text")} 
                       disabled={isUpdating}
                     />
-                    <button
+                    <AddButton
                       onClick={() => handleAddBeneficiary(policy.id)}
-                      className="text-primary hover:text-primary/80 transition-colors"
-                      title="Add beneficiary"
-                    >
-                      <Plus className="h-4 w-4" />
-                    </button>
+                    />
                   </div>
                 </td>
                 <td className="px-3 py-2 text-sm text-neutral-700 text-right bg-neutral-100">
