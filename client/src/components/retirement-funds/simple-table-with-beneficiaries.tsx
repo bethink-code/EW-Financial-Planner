@@ -301,7 +301,8 @@ export function SimpleTableWithBeneficiaries({
               </td>
               <td className="px-3 py-2 border-r border-neutral-200" rowSpan={fundOwners.length}>
                 <input
-                  defaultValue={fund.termYears || ""}
+                  key={`termYears-${fund.id}-${fund.termYears}`}
+                  defaultValue={fund.termYears.includes('years') ? fund.termYears : `${fund.termYears} years`}
                   onBlur={(e) => {
                     const formattedValue = formatCurrencyValue(e.target.value, "termYears");
                     if (formattedValue !== e.target.value) {
@@ -450,7 +451,8 @@ export function SimpleTableWithBeneficiaries({
               </td>
               <td className="px-3 py-2 border-r border-neutral-200" rowSpan={fundOwners.length}>
                 <input
-                  defaultValue={fund.incomeTerm || ""}
+                  key={`incomeTerm-${fund.id}-${fund.incomeTerm}`}
+                  defaultValue={fund.incomeTerm.includes('years') ? fund.incomeTerm : `${fund.incomeTerm} years`}
                   onBlur={(e) => {
                     const formattedValue = formatCurrencyValue(e.target.value, "incomeTerm");
                     if (formattedValue !== e.target.value) {

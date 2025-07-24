@@ -70,8 +70,8 @@ export default function IncomeProvisionsTable() {
       const newProvision: InsertIncomeProvision = {
         description: "",
         entity: "Donald Edwards",
-        start: "0",
-        termYears: "0",
+        start: "0 years",
+        termYears: "0 years",
         termEditable: false,
         increasePercentage: "0",
         cpi: false,
@@ -188,7 +188,17 @@ export default function IncomeProvisionsTable() {
   }, [updateMutation]);
 
   const handleInputBlur = useCallback((id: number, field: keyof IncomeProvision, value: string) => {
-    const formattedValue = formatCurrencyValue(value, field);
+    // Map field names to field types for proper formatting
+    const fieldTypeMap: Record<string, string> = {
+      'start': 'years',
+      'termYears': 'years', 
+      'increasePercentage': 'percentage',
+      'amount': 'currency',
+      'capitalisedAmount': 'currency'
+    };
+    
+    const fieldType = fieldTypeMap[field] || field;
+    const formattedValue = formatCurrencyValue(value, fieldType);
     handleUpdateProvision(id, field, formattedValue);
     
     // Update DOM element directly for immediate visual feedback
@@ -322,11 +332,11 @@ export default function IncomeProvisionsTable() {
                 </td>
                 <td className="px-3 py-2">
                   <input
+                    key={`start-${provision.id}-${provision.start}`}
                     type="text"
-                    defaultValue={provision.start}
+                    defaultValue={provision.start.includes('years') ? provision.start : `${provision.start} years`}
                     onBlur={(e) => handleInputBlur(provision.id, 'start', e.target.value)}
                     className={getFieldClass('years')}
-                    style={getFieldWidth('years')}
                     disabled={isUpdating}
                   />
                 </td>
@@ -340,11 +350,12 @@ export default function IncomeProvisionsTable() {
                       disabled={isUpdating}
                     />
                     <input
+                      key={`termYears-${provision.id}-${provision.termYears}`}
                       type="text"
-                      defaultValue={provision.termYears}
+                      defaultValue={provision.termYears.includes('years') ? provision.termYears : `${provision.termYears} years`}
                       onBlur={(e) => handleInputBlur(provision.id, 'termYears', e.target.value)}
                       className={getFieldClass('years')}
-                      style={{...getFieldWidth('years'), backgroundColor: provision.termEditable ? 'hsl(var(--primary) / 0.05)' : '#F5F5F5'}}
+                      style={{backgroundColor: provision.termEditable ? 'hsl(var(--primary) / 0.05)' : '#F5F5F5'}}
                       disabled={isUpdating || !provision.termEditable}
                     />
                   </div>

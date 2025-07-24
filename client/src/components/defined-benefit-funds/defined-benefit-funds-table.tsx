@@ -20,6 +20,10 @@ const formatCurrencyValue = (value: string, fieldType: string): string => {
     return `${numValue}%`;
   }
   
+  if (fieldType === 'years' || fieldType.includes('years')) {
+    return `${numValue} years`;
+  }
+  
   // Currency formatting
   if (numValue === 0) return 'R 0';
   
@@ -55,7 +59,7 @@ export default function DefinedBenefitFundsTable() {
       const newFund: InsertDefinedBenefitFund = {
         description: "",
         owner: "Donald Edwards",
-        yearsOfService: "0",
+        yearsOfService: "0 years",
         finalMonthlySalary: "0",
         deathLumpSum: "0",
         additionalTaxFreeAmount: "0",
@@ -174,7 +178,18 @@ export default function DefinedBenefitFundsTable() {
   }, [updateMutation]);
 
   const handleInputBlur = useCallback((id: number, field: keyof DefinedBenefitFund, value: string) => {
-    const formattedValue = formatCurrencyValue(value, field);
+    // Map field names to field types for proper formatting
+    const fieldTypeMap: Record<string, string> = {
+      'yearsOfService': 'years',
+      'pensionIncomeIncrease': 'percentage',
+      'finalMonthlySalary': 'currency',
+      'deathLumpSum': 'currency',
+      'additionalTaxFreeAmount': 'currency',
+      'pensionIncomeAmount': 'currency'
+    };
+    
+    const fieldType = fieldTypeMap[field] || field;
+    const formattedValue = formatCurrencyValue(value, fieldType);
     handleUpdateFund(id, field, formattedValue);
     
     // Update DOM element directly for immediate visual feedback
@@ -316,11 +331,11 @@ export default function DefinedBenefitFundsTable() {
                 </td>
                 <td className="px-3 py-2">
                   <input
+                    key={`yearsOfService-${fund.id}-${fund.yearsOfService}`}
                     type="text"
-                    defaultValue={fund.yearsOfService}
-                    onBlur={(e) => handleUpdateFund(fund.id, 'yearsOfService', e.target.value)}
+                    defaultValue={fund.yearsOfService.includes('years') ? fund.yearsOfService : `${fund.yearsOfService} years`}
+                    onBlur={(e) => handleInputBlur(fund.id, 'yearsOfService', e.target.value)}
                     className={getFieldClass('years')}
-                    style={getFieldWidth('years')}
                     disabled={isUpdating}
                   />
                 </td>
