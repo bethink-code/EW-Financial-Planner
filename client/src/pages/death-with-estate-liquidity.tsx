@@ -47,7 +47,7 @@ export default function DeathWithEstateLiquidity() {
   ];
 
   return (
-    <div className="bg-background">
+    <div className="">
       <div className="w-full px-6 py-8 pl-[0px] pr-[0px] pt-[0px] pb-[0px]">
         {/* Header */}
         <div className="mb-6">
