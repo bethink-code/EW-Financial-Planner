@@ -244,6 +244,18 @@ export default function VoluntaryInvestmentsTable() {
           />
         </div>
       </div>
+      
+      {/* Add Investment Button */}
+      <div className="flex justify-start mb-4">
+        <button
+          onClick={() => addMutation.mutate()}
+          disabled={addMutation.isPending}
+          className="bg-primary text-white px-4 py-2 rounded-lg hover:bg-[#014d6b] disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2 font-medium"
+        >
+          <Plus className="h-4 w-4" />
+          Add Investment
+        </button>
+      </div>
 
       {/* Summary Section */}
       {filteredInvestments.length > 0 && (

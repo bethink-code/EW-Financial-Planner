@@ -1222,19 +1222,73 @@ class DbStorage implements IStorage {
       .orderBy(incomeProvisions.id);
   }
 
-  async getResidue(): Promise<Residue[]> { return []; }
-  async getResidueItem(id: number): Promise<Residue | undefined> { return undefined; }
-  async createResidueItem(item: InsertResidue): Promise<Residue> { throw new Error("Not implemented"); }
-  async updateResidueItem(id: number, updates: UpdateResidue): Promise<Residue | undefined> { return undefined; }
-  async deleteResidueItem(id: number): Promise<boolean> { return false; }
-  async searchResidue(query: string): Promise<Residue[]> { return []; }
+  async getResidue(): Promise<Residue[]> {
+    return await this.db.select().from(residue).orderBy(residue.id);
+  }
 
-  async getAdditionalEstateDutyItems(): Promise<AdditionalEstateDutyItem[]> { return []; }
-  async getAdditionalEstateDutyItem(id: number): Promise<AdditionalEstateDutyItem | undefined> { return undefined; }
-  async createAdditionalEstateDutyItem(item: InsertAdditionalEstateDutyItem): Promise<AdditionalEstateDutyItem> { throw new Error("Not implemented"); }
-  async updateAdditionalEstateDutyItem(id: number, updates: UpdateAdditionalEstateDutyItem): Promise<AdditionalEstateDutyItem | undefined> { return undefined; }
-  async deleteAdditionalEstateDutyItem(id: number): Promise<boolean> { return false; }
-  async searchAdditionalEstateDutyItems(query: string): Promise<AdditionalEstateDutyItem[]> { return []; }
+  async getResidueItem(id: number): Promise<Residue | undefined> {
+    const results = await this.db.select().from(residue).where(eq(residue.id, id));
+    return results[0];
+  }
+
+  async createResidueItem(item: InsertResidue): Promise<Residue> {
+    const results = await this.db.insert(residue).values(item).returning();
+    return results[0];
+  }
+
+  async updateResidueItem(id: number, updates: UpdateResidue): Promise<Residue | undefined> {
+    const results = await this.db.update(residue).set(updates).where(eq(residue.id, id)).returning();
+    return results[0];
+  }
+
+  async deleteResidueItem(id: number): Promise<boolean> {
+    const results = await this.db.delete(residue).where(eq(residue.id, id)).returning();
+    return results.length > 0;
+  }
+
+  async searchResidue(query: string): Promise<Residue[]> {
+    if (!query.trim()) return await this.getResidue();
+    
+    return await this.db.select().from(residue)
+      .where(or(
+        ilike(residue.entity, `%${query}%`)
+      ))
+      .orderBy(residue.id);
+  }
+
+  async getAdditionalEstateDutyItems(): Promise<AdditionalEstateDutyItem[]> {
+    return await this.db.select().from(additionalEstateDutyItems).orderBy(additionalEstateDutyItems.id);
+  }
+
+  async getAdditionalEstateDutyItem(id: number): Promise<AdditionalEstateDutyItem | undefined> {
+    const results = await this.db.select().from(additionalEstateDutyItems).where(eq(additionalEstateDutyItems.id, id));
+    return results[0];
+  }
+
+  async createAdditionalEstateDutyItem(item: InsertAdditionalEstateDutyItem): Promise<AdditionalEstateDutyItem> {
+    const results = await this.db.insert(additionalEstateDutyItems).values(item).returning();
+    return results[0];
+  }
+
+  async updateAdditionalEstateDutyItem(id: number, updates: UpdateAdditionalEstateDutyItem): Promise<AdditionalEstateDutyItem | undefined> {
+    const results = await this.db.update(additionalEstateDutyItems).set(updates).where(eq(additionalEstateDutyItems.id, id)).returning();
+    return results[0];
+  }
+
+  async deleteAdditionalEstateDutyItem(id: number): Promise<boolean> {
+    const results = await this.db.delete(additionalEstateDutyItems).where(eq(additionalEstateDutyItems.id, id)).returning();
+    return results.length > 0;
+  }
+
+  async searchAdditionalEstateDutyItems(query: string): Promise<AdditionalEstateDutyItem[]> {
+    if (!query.trim()) return await this.getAdditionalEstateDutyItems();
+    
+    return await this.db.select().from(additionalEstateDutyItems)
+      .where(or(
+        ilike(additionalEstateDutyItems.description, `%${query}%`)
+      ))
+      .orderBy(additionalEstateDutyItems.id);
+  }
 }
 
 // Use database storage if DATABASE_URL is available, otherwise use memory storage
