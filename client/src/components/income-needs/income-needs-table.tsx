@@ -356,6 +356,32 @@ export default function IncomeNeedsTable({ viewMode, searchTerm }: IncomeNeedsTa
             </tr>
           ))}
         </tbody>
+        
+        {/* Totals Footer */}
+        <tfoot className="bg-neutral-50 border-t border-neutral-300">
+          <tr>
+            <td className="p-1 text-right text-neutral-700" colSpan={9} style={{ fontSize: '0.875rem' }}>Totals</td>
+            <td className="text-right" style={{ padding: '0.6rem 0.8rem' }}>
+              <span style={{ fontFamily: 'inherit', fontWeight: '600', color: '#374151', fontSize: '0.875rem' }}>
+                R {filteredNeeds.reduce((sum, need) => {
+                  const capitalisedAmount = parseFloat(calculateCapitalisedAmount(need).replace(/[^\d.-]/g, '')) || 0;
+                  return sum + capitalisedAmount;
+                }, 0).toLocaleString()}
+              </span>
+            </td>
+          </tr>
+          <tr>
+            <td className="p-1 text-right text-neutral-700" colSpan={9} style={{ fontSize: '0.875rem' }}>Capital Required for Income Shortfall</td>
+            <td className="text-right" style={{ padding: '0.6rem 0.8rem' }}>
+              <span style={{ fontFamily: 'inherit', fontWeight: '600', color: '#374151', fontSize: '0.875rem' }}>
+                R {filteredNeeds.reduce((sum, need) => {
+                  const capitalisedAmount = parseFloat(calculateCapitalisedAmount(need).replace(/[^\d.-]/g, '')) || 0;
+                  return sum + capitalisedAmount;
+                }, 0).toLocaleString()}
+              </span>
+            </td>
+          </tr>
+        </tfoot>
       </table>
     </div>
   );
