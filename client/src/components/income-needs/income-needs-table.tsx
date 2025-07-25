@@ -301,16 +301,16 @@ export default function IncomeNeedsTable({ viewMode, searchTerm }: IncomeNeedsTa
               </td>
               
               {/* Frequency Dropdown */}
-              <td className="p-0">
+              <td className="p-1">
                 <select
                   value={need.frequency || "monthly"}
                   onChange={(e) => handleSelectChange(need.id, 'frequency', e.target.value)}
-                  className="w-full h-8 px-2 py-1 text-sm border border-gray-300 rounded bg-white focus:border-blue-500 focus:outline-none text-black font-normal"
+                  className={`table-input ${getFieldClass('text')} text-black`}
                   disabled={isUpdating}
                   style={{ color: '#000000' }}
                 >
-                  <option value="monthly" style={{ color: '#000000' }}>Monthly</option>
-                  <option value="yearly" style={{ color: '#000000' }}>Yearly</option>
+                  <option value="monthly">Monthly</option>
+                  <option value="yearly">Yearly</option>
                 </select>
               </td>
               
