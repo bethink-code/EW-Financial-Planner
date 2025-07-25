@@ -504,8 +504,37 @@ export function SimpleTableWithBeneficiaries({
   return (
     <table className="min-w-full border-collapse">
         <thead className="bg-neutral-50">
+          {/* First header row - Section groupings */}
           <tr>
-            <th className="px-3 py-3 text-center text-xs font-medium text-neutral-600 uppercase tracking-wider">Actions</th>
+            <th rowSpan={2} className="px-3 py-3 text-center text-xs font-medium text-neutral-600 uppercase tracking-wider border-b">Actions</th>
+            {columnVisibility.overview && (
+              <th colSpan={3} className="px-3 py-2 text-center text-xs font-medium text-neutral-600 uppercase tracking-wider border-b border-r border-neutral-200">
+                Overview
+              </th>
+            )}
+            {columnVisibility.monthlyDeathBenefit && (
+              <th colSpan={3} className="px-3 py-2 text-center text-xs font-medium text-neutral-600 uppercase tracking-wider border-b border-r border-neutral-200">
+                Monthly Death Benefit
+              </th>
+            )}
+            {columnVisibility.fundValue && (
+              <th colSpan={2} className="px-3 py-2 text-center text-xs font-medium text-neutral-600 uppercase tracking-wider border-b border-r border-neutral-200">
+                Fund Value
+              </th>
+            )}
+            {columnVisibility.fundValueBeneficiaries && (
+              <th colSpan={7} className="px-3 py-2 text-center text-xs font-medium text-neutral-600 uppercase tracking-wider border-b border-r border-neutral-200">
+                Fund Value Beneficiaries
+              </th>
+            )}
+            {columnVisibility.unapprovedLifeCover && (
+              <th rowSpan={2} className="px-3 py-2 text-center text-xs font-medium text-neutral-600 uppercase tracking-wider border-b border-l border-neutral-200">
+                Unapproved Life Cover
+              </th>
+            )}
+          </tr>
+          {/* Second header row - Individual columns */}
+          <tr>
             {columnVisibility.overview && (
               <>
                 <th className="px-3 py-2 text-left text-xs font-medium text-neutral-600 uppercase tracking-wider">
@@ -521,7 +550,7 @@ export function SimpleTableWithBeneficiaries({
             )}
             {columnVisibility.monthlyDeathBenefit && (
               <>
-                <th className="px-3 py-2 text-center text-xs font-medium text-neutral-600 uppercase tracking-wider border-l border-neutral-200">
+                <th className="px-3 py-2 text-center text-xs font-medium text-neutral-600 uppercase tracking-wider">
                   Monthly Income
                 </th>
                 <th className="px-3 py-2 text-center text-xs font-medium text-neutral-600 uppercase tracking-wider">
@@ -534,7 +563,7 @@ export function SimpleTableWithBeneficiaries({
             )}
             {columnVisibility.fundValue && (
               <>
-                <th className="px-3 py-2 text-center text-xs font-medium text-neutral-600 uppercase tracking-wider border-l border-neutral-200">
+                <th className="px-3 py-2 text-center text-xs font-medium text-neutral-600 uppercase tracking-wider">
                   Fund Value
                 </th>
                 <th className="px-3 py-2 text-center text-xs font-medium text-neutral-600 uppercase tracking-wider">
@@ -544,7 +573,7 @@ export function SimpleTableWithBeneficiaries({
             )}
             {columnVisibility.fundValueBeneficiaries && (
               <>
-                <th className="px-3 py-2 text-left text-xs font-medium text-neutral-600 uppercase tracking-wider border-l border-neutral-200">
+                <th className="px-3 py-2 text-left text-xs font-medium text-neutral-600 uppercase tracking-wider">
                   Beneficiary Name
                 </th>
                 <th className="px-3 py-2 text-center text-xs font-medium text-neutral-600 uppercase tracking-wider">
@@ -564,13 +593,6 @@ export function SimpleTableWithBeneficiaries({
                 </th>
                 <th className="px-3 py-2 text-center text-xs font-medium text-neutral-600 uppercase tracking-wider">
                   Income Term
-                </th>
-              </>
-            )}
-            {columnVisibility.unapprovedLifeCover && (
-              <>
-                <th className="px-3 py-2 text-center text-xs font-medium text-neutral-600 uppercase tracking-wider border-l border-neutral-200">
-                  Cover Amount
                 </th>
               </>
             )}
