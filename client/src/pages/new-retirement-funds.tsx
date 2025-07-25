@@ -150,7 +150,7 @@ export default function NewRetirementFunds() {
     <div className="">
       <div className="w-full px-6 py-6">
         {/* Combined Header and Summary */}
-        <div className="mb-6">
+        <div className="mb-6 max-w-6xl">
           <CalculatorHeader
             title="Retirement Funds"
             itemCount={funds.length}
