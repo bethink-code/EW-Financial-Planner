@@ -49,10 +49,10 @@ export const formatYearsValue = (value: string): string => {
 };
 
 /**
- * Format text value with trimming - uses "Enter here ..." as default for empty values
+ * Format text value with trimming - uses "Enter details ..." as default for empty values
  */
 export const formatTextValue = (value: string): string => {
-  return value?.trim() || 'Enter here ...';
+  return value?.trim() || 'Enter details ...';
 };
 
 /**
@@ -120,7 +120,7 @@ export const isDefaultValue = (value: string, fieldType: FieldType): boolean => 
     case 'years':
       return value === '0 years' || value === '0';
     case 'text':
-      return value.trim() === '' || value === 'Enter here ...' || value === 'Donald Edwards';
+      return value.trim() === '' || value === 'Enter details ...' || value === 'Donald Edwards';
     case 'number':
       return value === '0';
     default:
@@ -143,7 +143,7 @@ export const getValueClass = (value: string, fieldType: FieldType): string => {
 export const handleDefaultValueFocus = (e: React.FocusEvent<HTMLInputElement>) => {
   const value = e.target.value;
   // Check for all default value patterns
-  if (value === "Enter here ..." || 
+  if (value === "Enter details ..." || 
       value === "R 0" || 
       value === "0%" || 
       value === "0 years" ||
@@ -176,7 +176,7 @@ export const handleDefaultValueBlur = (e: React.FocusEvent<HTMLInputElement>, fi
         break;
       case 'text':
       default:
-        defaultValue = "Enter here ...";
+        defaultValue = "Enter details ...";
         break;
     }
     e.target.value = defaultValue;
