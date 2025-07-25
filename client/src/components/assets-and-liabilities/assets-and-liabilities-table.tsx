@@ -303,14 +303,13 @@ export default function AssetsAndLiabilitiesTable() {
                       <h4 className="text-sm font-bold text-[#0891B2] uppercase tracking-wide">
                         {category}
                       </h4>
-                      <button
+                      <AddButton
                         onClick={() => handleAddAsset(category)}
                         disabled={addMutation.isPending}
-                        className="bg-primary text-white px-3 py-1 rounded-lg hover:bg-[#014d6b] disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-1 text-xs font-medium"
+                        size="default"
                       >
-                        <Plus className="h-3 w-3" />
                         Add Asset
-                      </button>
+                      </AddButton>
                     </div>
                   </td>
                 </tr>

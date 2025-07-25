@@ -1,7 +1,7 @@
 import React, { useCallback, useMemo } from "react";
 import { RetirementFund, UpdateRetirementFund } from "@shared/schema";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { UserPlus, UserMinus } from "lucide-react";
+
 import { DuplicateButton, DeleteButton, AddButton } from "@/components/ui/action-buttons";
 import { getFieldClass } from "@/lib/design-tokens";
 
@@ -247,41 +247,33 @@ export function ExactMatchTable({
                   )}
                   {isAdditionalOwner && (
                     <div className="flex gap-1">
-                      <button
+                      <DeleteButton
                         onClick={() => handleRemoveOwner(fund.id, ownerIndex!)}
-                        className="h-6 w-6 rounded text-red-600 hover:bg-red-50 flex items-center justify-center"
                         disabled={isUpdating}
-                      >
-                        <UserMinus className="h-3 w-3" />
-                      </button>
+                        size="sm"
+                      />
                       {isLast && (
-                        <button
+                        <AddButton
                           onClick={() => handleAddOwner(fund.id)}
-                          className="h-6 w-6 rounded text-green-600 hover:bg-green-50 flex items-center justify-center"
                           disabled={isUpdating}
-                        >
-                          <UserPlus className="h-3 w-3" />
-                        </button>
+                          size="sm"
+                        />
                       )}
                     </div>
                   )}
                   {isAdditionalBeneficiary && (
                     <div className="flex gap-1">
-                      <button
+                      <DeleteButton
                         onClick={() => handleRemoveBeneficiary(fund.id, beneficiaryIndex!)}
-                        className="h-6 w-6 rounded text-red-600 hover:bg-red-50 flex items-center justify-center"
                         disabled={isUpdating}
-                      >
-                        <UserMinus className="h-3 w-3" />
-                      </button>
+                        size="sm"
+                      />
                       {isLast && (
-                        <button
+                        <AddButton
                           onClick={() => handleAddBeneficiary(fund.id)}
-                          className="h-6 w-6 rounded text-green-600 hover:bg-green-50 flex items-center justify-center"
                           disabled={isUpdating}
-                        >
-                          <UserPlus className="h-3 w-3" />
-                        </button>
+                          size="sm"
+                        />
                       )}
                     </div>
                   )}

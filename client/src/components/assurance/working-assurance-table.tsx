@@ -311,31 +311,23 @@ export function AssuranceTable({}: AssuranceTableProps) {
                           onBlur={(e) => handleOwnerChange(policy.id, rowIndex, e.target.value)}
                         />
                         {rowIndex === 0 ? (
-                          <button
-                            type="button"
+                          <AddButton
                             onClick={(e) => {
                               e.preventDefault();
                               e.stopPropagation();
                               handleAddOwner(policy.id);
                             }}
-                            className="p-0.5 text-blue-600 hover:bg-blue-50 rounded"
-                            title="Add Owner"
-                          >
-                            <Plus className="h-3 w-3" />
-                          </button>
+                            size="sm"
+                          />
                         ) : (
-                          <button
-                            type="button"
+                          <DeleteButton
                             onClick={(e) => {
                               e.preventDefault();
                               e.stopPropagation();
                               handleRemoveOwner(policy.id, rowIndex);
                             }}
-                            className="p-0.5 text-red-600 hover:bg-red-50 rounded"
-                            title="Remove Owner"
-                          >
-                            <Trash2 className="h-3 w-3" />
-                          </button>
+                            size="sm"
+                          />
                         )}
                       </div>
                     )}
@@ -378,31 +370,23 @@ export function AssuranceTable({}: AssuranceTableProps) {
                           onBlur={(e) => handleBeneficiaryChange(policy.id, rowIndex, e.target.value)}
                         />
                         {rowIndex === 0 ? (
-                          <button
-                            type="button"
+                          <AddButton
                             onClick={(e) => {
                               e.preventDefault();
                               e.stopPropagation();
                               handleAddBeneficiary(policy.id);
                             }}
-                            className="p-0.5 text-blue-600 hover:bg-blue-50 rounded"
-                            title="Add Beneficiary"
-                          >
-                            <Plus className="h-3 w-3" />
-                          </button>
+                            size="sm"
+                          />
                         ) : (
-                          <button
-                            type="button"
+                          <DeleteButton
                             onClick={(e) => {
                               e.preventDefault();
                               e.stopPropagation();
                               handleRemoveBeneficiary(policy.id, rowIndex);
                             }}
-                            className="p-0.5 text-red-600 hover:bg-red-50 rounded"
-                            title="Remove Beneficiary"
-                          >
-                            <Trash2 className="h-3 w-3" />
-                          </button>
+                            size="sm"
+                          />
                         )}
                       </div>
                     )}

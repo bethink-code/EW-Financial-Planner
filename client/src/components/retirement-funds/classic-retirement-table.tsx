@@ -1,7 +1,7 @@
 import React, { useCallback, useMemo } from "react";
 import { RetirementFund, UpdateRetirementFund } from "@shared/schema";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { UserPlus, UserMinus } from "lucide-react";
+
 import { DuplicateButton, DeleteButton, AddButton } from "@/components/ui/action-buttons";
 import { getFieldClass, getFieldWidth } from "@/lib/design-tokens";
 import { formatCurrencyValue, formatPercentageValue, formatTextValue, formatYearsValue, getValueClass, isDefaultValue, handleDefaultValueFocus, createEnhancedBlurHandler } from "@/lib/formatting";
@@ -278,9 +278,7 @@ export function ClassicRetirementTable({
                           ))}
                         </SelectContent>
                       </Select>
-                      <AddButton onClick={() => handleAddOwner(fund.id)}>
-                        <UserPlus className="h-3 w-3" />
-                      </AddButton>
+                      <AddButton onClick={() => handleAddOwner(fund.id)} />
                     </div>
                   )}
                   {type === 'additional-owner' && ownerIndex !== undefined && (
@@ -300,9 +298,7 @@ export function ClassicRetirementTable({
                           ))}
                         </SelectContent>
                       </Select>
-                      <DeleteButton onClick={() => handleRemoveOwner(fund.id, ownerIndex)}>
-                        <UserMinus className="h-3 w-3" />
-                      </DeleteButton>
+                      <DeleteButton onClick={() => handleRemoveOwner(fund.id, ownerIndex)} />
                     </div>
                   )}
                 </td>
