@@ -1,56 +1,32 @@
-import React, { useState, useCallback, useMemo } from "react";
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { Plus, Trash2 } from "lucide-react";
-import { getFieldClass, getFieldWidth } from "@/lib/design-tokens";
-import { formatCurrencyValue, formatPercentageValue, formatYearsValue, getValueClass, isDefaultValue, handleDefaultValueFocus } from "@/lib/formatting";
-import { DeleteButton, DuplicateButton, ActionButtonGroup } from "@/components/ui/action-buttons";
-import type { IncomeProvision, InsertIncomeProvision } from "@shared/schema";
+import { useState, useCallback, useMemo } from 'react';
+import { useQuery, useMutation } from '@tanstack/react-query';
+import { queryClient } from '@/lib/queryClient';
+import { IncomeProvisions, InsertIncomeProvisions } from '@shared/schema';
+import { ActionButtonGroup, DuplicateButton, DeleteButton } from '@/components/ui/action-buttons';
+import { getFieldClass, getFieldWidth } from '@/lib/field-types';
+import { formatCurrencyValue, formatPercentageValue, isDefaultValue, getValueClass } from '@/lib/formatting';
+import { handleDefaultValueFocus, createEnhancedBlurHandler } from '@/lib/formatting';
 
-const ENTITY_OPTIONS = [
-  { value: "Donald Edwards", label: "Donald Edwards" },
-  { value: "Betty Edwards", label: "Betty Edwards" },
-  { value: "Both", label: "Both" },
-];
+interface IncomeProvisionsTableProps {
+  viewMode: 'table' | 'hybrid';
+  searchTerm?: string;
+}
 
-const FREQUENCY_OPTIONS = [
-  { value: "Monthly", label: "Monthly" },
-  { value: "Quarterly", label: "Quarterly" },
-  { value: "Semi-annually", label: "Semi-annually" },
-  { value: "Annually", label: "Annually" },
-];
-
-export default function IncomeProvisionsTable() {
+export default function IncomeProvisionsTable({ viewMode, searchTerm }: IncomeProvisionsTableProps) {
   const [isUpdating, setIsUpdating] = useState(false);
-  const queryClient = useQueryClient();
 
-  // Fetch income provisions
-  const { data: provisions = [], isLoading, error } = useQuery<IncomeProvision[]>({
+  // Query for income provisions
+  const { data: provisions = [], isLoading, error } = useQuery<IncomeProvisions[]>({
     queryKey: ['/api/income-provisions'],
-    queryFn: async () => {
-      const response = await fetch('/api/income-provisions');
-      if (!response.ok) {
-        throw new Error('Failed to fetch income provisions');
-      }
-      return response.json();
-    }
   });
 
-  // Add new provision mutation
+  // Add provision mutation
   const addMutation = useMutation({
-    mutationFn: async (): Promise<IncomeProvision> => {
-      const newProvision: InsertIncomeProvision = {
-        description: "",
-        entity: "Donald Edwards",
-        start: "0 years",
-        termYears: "0 years",
-        termEditable: false,
+    mutationFn: async (): Promise<IncomeProvisions> => {
+      const newProvision: InsertIncomeProvisions = {
+        description: "Enter details ...",
+        amount: "R 0",
         increasePercentage: "0%",
-        cpi: false,
-        frequency: "Monthly",
-        amount: "0",
-        taxablePercentage: "0%",
-        taxPercentage: "0%",
-        capitalisedAmount: "0",
       };
       
       const response = await fetch('/api/income-provisions', {
@@ -62,7 +38,7 @@ export default function IncomeProvisionsTable() {
       });
       
       if (!response.ok) {
-        throw new Error('Failed to create income provision');
+        throw new Error('Failed to add income provision');
       }
       
       return response.json();
@@ -79,7 +55,7 @@ export default function IncomeProvisionsTable() {
 
   // Update provision mutation
   const updateMutation = useMutation({
-    mutationFn: async ({ id, updates }: { id: number; updates: Partial<IncomeProvision> }) => {
+    mutationFn: async ({ id, updates }: { id: number; updates: Partial<IncomeProvisions> }) => {
       const response = await fetch(`/api/income-provisions/${id}`, {
         method: 'PATCH',
         headers: {
@@ -120,23 +96,14 @@ export default function IncomeProvisionsTable() {
     }
   });
 
-  // No filtering needed - show all provisions
-  const filteredProvisions = provisions;
-
   // Calculate totals
   const totals = useMemo(() => {
-    const capitalisedAmount = provisions.reduce((sum: number, provision: IncomeProvision) => {
-      const value = parseFloat(provision.capitalisedAmount.replace(/[^\d.-]/g, '')) || 0;
-      return sum + value;
-    }, 0);
-
-    // Calculate capital shortfall (same as capitalised amount for this example)
-    const capitalShortfall = capitalisedAmount;
-
     return {
       count: provisions.length,
-      capitalisedAmount,
-      capitalShortfall,
+      amount: provisions.reduce((sum: number, provision: IncomeProvisions) => {
+        const value = parseFloat(provision.amount.replace(/[^\d.-]/g, '')) || 0;
+        return sum + value;
+      }, 0),
     };
   }, [provisions]);
 
@@ -144,25 +111,24 @@ export default function IncomeProvisionsTable() {
     addMutation.mutate();
   }, [addMutation]);
 
-  const handleUpdateProvision = useCallback((id: number, field: keyof IncomeProvision, value: string | boolean) => {
+  const handleUpdateProvision = useCallback((id: number, field: keyof IncomeProvisions, value: string | string[]) => {
     setIsUpdating(true);
     const updates = { [field]: value };
     updateMutation.mutate({ id, updates });
   }, [updateMutation]);
 
-  const handleInputBlur = useCallback((id: number, field: keyof IncomeProvision, value: string) => {
-    // Determine field type and format accordingly
+  const handleInputBlur = useCallback((id: number, field: keyof IncomeProvisions, value: string) => {
     let formattedValue: string;
-    if (field === 'start' || field === 'termYears') {
-      formattedValue = formatYearsValue(value);
-    } else if (field === 'increasePercentage' || field === 'taxablePercentage' || field === 'taxPercentage') {
+    if (field === 'increasePercentage') {
       formattedValue = formatPercentageValue(value);
-    } else {
+    } else if (field === 'amount') {
       formattedValue = formatCurrencyValue(value);
+    } else {
+      formattedValue = value;
     }
     handleUpdateProvision(id, field, formattedValue);
     
-    // Update DOM element directly for immediate visual feedback
+    // Update DOM element for immediate visual feedback
     const target = document.activeElement as HTMLInputElement;
     if (target && formattedValue !== value) {
       setTimeout(() => {
@@ -177,24 +143,6 @@ export default function IncomeProvisionsTable() {
     }
   }, [deleteMutation]);
 
-  const handleDuplicateProvision = useCallback((provision: IncomeProvision) => {
-    const duplicatedProvision: InsertIncomeProvision = {
-      description: provision.description,
-      entity: provision.entity,
-      start: provision.start,
-      termYears: provision.termYears,
-      termEditable: provision.termEditable,
-      increasePercentage: provision.increasePercentage,
-      cpi: provision.cpi,
-      frequency: provision.frequency,
-      amount: provision.amount,
-      taxablePercentage: provision.taxablePercentage,
-      taxPercentage: provision.taxPercentage,
-      capitalisedAmount: provision.capitalisedAmount,
-    };
-    addMutation.mutate(duplicatedProvision);
-  }, [addMutation]);
-
   if (isLoading) {
     return <div className="flex justify-center py-8">Loading income provisions...</div>;
   }
@@ -204,217 +152,81 @@ export default function IncomeProvisionsTable() {
   }
 
   return (
-    <div >
-      {/* Table */}
-      <table >
-          <thead>
-            <tr className="border-b border-neutral-200">
-              <th className="px-3 py-2 text-center text-xs font-medium text-neutral-600 uppercase tracking-wider w-16">Actions</th>
-              <th className="px-3 py-2 text-left text-xs font-medium text-neutral-600 uppercase tracking-wider">Description</th>
-              <th className="px-3 py-2 text-left text-xs font-medium text-neutral-600 uppercase tracking-wider">Entity</th>
-              <th className="px-3 py-2 text-left text-xs font-medium text-neutral-600 uppercase tracking-wider">Start</th>
-              <th className="px-3 py-2 text-left text-xs font-medium text-neutral-600 uppercase tracking-wider">Term (Years)</th>
-              <th className="px-3 py-2 text-left text-xs font-medium text-neutral-600 uppercase tracking-wider">Increase %</th>
-              <th className="px-3 py-2 text-center text-xs font-medium text-neutral-600 uppercase tracking-wider">CPI</th>
-              <th className="px-3 py-2 text-left text-xs font-medium text-neutral-600 uppercase tracking-wider">Frequency (Every)</th>
-              <th className="px-3 py-2 text-left text-xs font-medium text-neutral-600 uppercase tracking-wider">Amount</th>
-              <th className="px-3 py-2 text-left text-xs font-medium text-neutral-600 uppercase tracking-wider">Taxable %</th>
-              <th className="px-3 py-2 text-left text-xs font-medium text-neutral-600 uppercase tracking-wider">Tax %</th>
-              <th className="px-3 py-2 text-left text-xs font-medium text-neutral-600 uppercase tracking-wider">Capitalised Amount</th>
+    <div className="space-y-6">
+      <table>
+        <thead>
+          <tr className="border-b border-border">
+            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start section-end" rowSpan={2}>Actions</th>
+            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start" colSpan={1}>Overview</th>
+            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start section-end" colSpan={2}>Financial Details</th>
+          </tr>
+          <tr className="border-b border-border">
+            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start border-b border-neutral-200">Description</th>
+            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start border-b border-neutral-200">Amount</th>
+            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-end border-b border-neutral-200">Increase %</th>
+          </tr>
+        </thead>
+        <tbody className="divide-y divide-neutral-200">
+          {provisions.map((provision: IncomeProvisions, provisionIndex) => (
+            <tr key={provision.id} className="hover:bg-neutral-50">
+              <td className="table-actions-cell p-1 text-center section-start section-end">
+                <ActionButtonGroup>
+                  <DuplicateButton
+                    onClick={() => addMutation.mutate()}
+                    disabled={isUpdating}
+                  />
+                  <DeleteButton
+                    onClick={() => handleDeleteProvision(provision.id)}
+                    disabled={isUpdating}
+                  />
+                </ActionButtonGroup>
+              </td>
+              
+              <td className="p-1 section-start">
+                <input
+                  type="text"
+                  defaultValue={provision.description}
+                  className={`table-input ${getFieldClass('text')} ${getValueClass(provision.description, 'text')}`}
+                  onFocus={handleDefaultValueFocus}
+                  onBlur={(e) => handleInputBlur(provision.id, 'description', e.target.value)}
+                  disabled={isUpdating}
+                />
+              </td>
+              
+              <td className="p-1 section-start">
+                <input
+                  key={`amount-${provision.id}-${provision.amount}`}
+                  type="text"
+                  defaultValue={provision.amount}
+                  className={`table-input ${getFieldClass('currency')} ${getValueClass(provision.amount, 'currency')}`}
+                  onFocus={handleDefaultValueFocus}
+                  onBlur={(e) => handleInputBlur(provision.id, 'amount', e.target.value)}
+                  disabled={isUpdating}
+                />
+              </td>
+              
+              <td className="p-1 section-end">
+                <input
+                  key={`increasePercentage-${provision.id}-${provision.increasePercentage}`}
+                  type="text"
+                  defaultValue={provision.increasePercentage}
+                  className={`table-input ${getFieldClass('percentage')} ${getValueClass(provision.increasePercentage, 'percentage')}`}
+                  onFocus={handleDefaultValueFocus}
+                  onBlur={(e) => handleInputBlur(provision.id, 'increasePercentage', e.target.value)}
+                  disabled={isUpdating}
+                />
+              </td>
             </tr>
-          </thead>
-          <tbody className="divide-y divide-neutral-200">
-            {provisions.map((provision: IncomeProvision) => (
-              <tr key={provision.id} >
-                <td className="table-actions-cell text-center">
-                  <ActionButtonGroup>
-                    <DuplicateButton
-                      onClick={() => handleDuplicateProvision(provision)}
-                      disabled={isUpdating}
-                    />
-                    <DeleteButton
-                      onClick={() => handleDeleteProvision(provision.id)}
-                    />
-                  </ActionButtonGroup>
-                </td>
-                <td className="px-3 py-2">
-                  <input
-                    type="text"
-                    defaultValue={provision.description}
-                    onBlur={(e) => handleUpdateProvision(provision.id, 'description', e.target.value)}
-                    className={getFieldClass('description')}
-                    style={getFieldWidth('description')}
-                    disabled={isUpdating}
-                  />
-                </td>
-                <td className="px-3 py-2">
-                  <select
-                    value={provision.entity}
-                    onChange={(e) => handleUpdateProvision(provision.id, 'entity', e.target.value)}
-                    className={getFieldClass('name')}
-                    style={getFieldWidth('name')}
-                    disabled={isUpdating}
-                  >
-                    {ENTITY_OPTIONS.map(option => (
-                      <option key={option.value} value={option.value}>
-                        {option.label}
-                      </option>
-                    ))}
-                  </select>
-                </td>
-                <td className="px-3 py-2">
-                  <input
-                    key={`start-${provision.id}-${provision.start}`}
-                    type="text"
-                    defaultValue={provision.start.includes('years') ? provision.start : `${provision.start} years`}
-                    onBlur={(e) => handleInputBlur(provision.id, 'start', e.target.value)}
-                    className={getFieldClass('years')}
-                    disabled={isUpdating}
-                  />
-                </td>
-                <td className="px-3 py-2">
-                  <div className="flex items-center gap-2">
-                    <input
-                      type="checkbox"
-                      checked={provision.termEditable}
-                      onChange={(e) => handleUpdateProvision(provision.id, 'termEditable', e.target.checked)}
-                      className="h-4 w-4 text-blue-600 focus:ring-primary border-gray-300 rounded"
-                      disabled={isUpdating}
-                    />
-                    <input
-                      key={`termYears-${provision.id}-${provision.termYears}`}
-                      type="text"
-                      defaultValue={provision.termYears.includes('years') ? provision.termYears : `${provision.termYears} years`}
-                      onBlur={(e) => handleInputBlur(provision.id, 'termYears', e.target.value)}
-                      className={getFieldClass('years')}
-                      style={{backgroundColor: provision.termEditable ? 'hsl(var(--primary) / 0.05)' : '#F5F5F5'}}
-                      disabled={isUpdating || !provision.termEditable}
-                    />
-                  </div>
-                </td>
-                <td className="px-3 py-2">
-                  <input
-                    type="text"
-                    defaultValue={provision.increasePercentage || "0%"}
-                    onFocus={handleDefaultValueFocus}
-                    onBlur={(e) => {
-                      const formattedValue = formatPercentageValue(e.target.value);
-                      if (formattedValue !== e.target.value) {
-                        e.target.value = formattedValue;
-                      }
-                      handleInputBlur(provision.id, 'increasePercentage', e.target.value);
-                    }}
-                    className={`${getFieldClass('percentage')} ${getValueClass(provision.increasePercentage || "0%", 'percentage')}`}
-                    style={getFieldWidth('percentage')}
-                    disabled={isUpdating}
-                  />
-                </td>
-                <td className="px-3 py-2 text-center">
-                  <input
-                    type="checkbox"
-                    checked={provision.cpi}
-                    onChange={(e) => handleUpdateProvision(provision.id, 'cpi', e.target.checked)}
-                    className="h-4 w-4 text-blue-600 focus:ring-primary border-gray-300 rounded"
-                    disabled={isUpdating}
-                  />
-                </td>
-                <td className="px-3 py-2">
-                  <select
-                    value={provision.frequency}
-                    onChange={(e) => handleUpdateProvision(provision.id, 'frequency', e.target.value)}
-                    className={getFieldClass('name')}
-                    style={getFieldWidth('name')}
-                    disabled={isUpdating}
-                  >
-                    {FREQUENCY_OPTIONS.map(option => (
-                      <option key={option.value} value={option.value}>
-                        {option.label}
-                      </option>
-                    ))}
-                  </select>
-                </td>
-                <td className="px-3 py-2">
-                  <input
-                    key={`amount-${provision.id}-${provision.amount}`}
-                    type="text"
-                    defaultValue={formatCurrencyValue(provision.amount)}
-                    onBlur={(e) => handleInputBlur(provision.id, 'amount', e.target.value)}
-                    className={getFieldClass('amount')}
-                    disabled={isUpdating}
-                  />
-                </td>
-                <td className="px-3 py-2">
-                  <input
-                    type="text"
-                    defaultValue={provision.taxablePercentage || "0%"}
-                    onFocus={handleDefaultValueFocus}
-                    onBlur={(e) => {
-                      const formattedValue = formatPercentageValue(e.target.value);
-                      if (formattedValue !== e.target.value) {
-                        e.target.value = formattedValue;
-                      }
-                      handleInputBlur(provision.id, 'taxablePercentage', e.target.value);
-                    }}
-                    className={`${getFieldClass('percentage')} ${getValueClass(provision.taxablePercentage || "0%", 'percentage')}`}
-                    style={getFieldWidth('percentage')}
-                    disabled={isUpdating}
-                  />
-                </td>
-                <td className="px-3 py-2">
-                  <input
-                    type="text"
-                    value={provision.taxPercentage}
-                    className={getFieldClass('percentage')}
-                    style={{backgroundColor: '#F5F5F5', cursor: 'not-allowed'}}
-                    disabled
-                    readOnly
-                  />
-                </td>
-                <td className="px-3 py-2">
-                  <input
-                    type="text"
-                    value={provision.capitalisedAmount}
-                    className={getFieldClass('amount')}
-                    style={{backgroundColor: '#F5F5F5', cursor: 'not-allowed'}}
-                    disabled
-                    readOnly
-                  />
-                </td>
-              </tr>
-            ))}
-            
-            {/* Total Row */}
-            {provisions.length > 0 && (
-              <tr className="border-t-2 border-neutral-300 font-bold">
-                <td className="px-3 py-2"></td>
-                <td className="px-3 py-2 text-sm font-bold text-neutral-800">Total</td>
-                <td colSpan={9} className="px-3 py-2"></td>
-                <td className="px-3 py-2 text-sm font-bold text-neutral-800 text-right">
-                  {formatCurrencyValue(totals.capitalisedAmount.toString())}
-                </td>
-              </tr>
-            )}
-            
-            {/* Capital Shortfall Row */}
-            {provisions.length > 0 && (
-              <tr className="border-t border-neutral-300 font-bold">
-                <td className="px-3 py-2 text-sm font-bold text-neutral-800">Capital required to provide for income shortfall</td>
-                <td colSpan={9} className="px-3 py-2"></td>
-                <td className="px-3 py-2 text-sm font-bold text-neutral-800 text-right">
-                  {formatCurrencyValue(totals.capitalShortfall.toString())}
-                </td>
-                <td className="px-3 py-2"></td>
-              </tr>
-            )}
-            
-            {provisions.length === 0 && (
-              <tr>
-                <td colSpan={12} className="px-3 py-8 text-center text-neutral-500">
-                  No income provisions found. Add new provisions using the header button.
-                </td>
-              </tr>
-            )}
-          </tbody>
+          ))}
+          
+          {/* Totals Row */}
+          <tr className="table-total-row bg-neutral-100 font-bold">
+            <td className="section-start section-end p-1 text-center font-bold">TOTALS</td>
+            <td className="section-start p-1 font-bold">-</td>
+            <td className="section-start p-1 font-bold">R {totals.amount.toLocaleString()}</td>
+            <td className="section-end p-1 font-bold">-</td>
+          </tr>
+        </tbody>
       </table>
     </div>
   );

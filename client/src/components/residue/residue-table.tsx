@@ -1,42 +1,32 @@
-import React, { useState, useCallback, useMemo } from "react";
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { Plus, Trash2 } from "lucide-react";
-import { getFieldClass, getFieldWidth } from "@/lib/design-tokens";
-import { formatPercentageValue, getValueClass, isDefaultValue } from "@/lib/formatting";
-import { DeleteButton, DuplicateButton, ActionButtonGroup } from "@/components/ui/action-buttons";
-import type { Residue, InsertResidue } from "@shared/schema";
+import { useState, useCallback, useMemo } from 'react';
+import { useQuery, useMutation } from '@tanstack/react-query';
+import { queryClient } from '@/lib/queryClient';
+import { Residue, InsertResidue } from '@shared/schema';
+import { ActionButtonGroup, DuplicateButton, DeleteButton } from '@/components/ui/action-buttons';
+import { getFieldClass } from '@/lib/field-types';
+import { formatCurrencyValue, formatPercentageValue, isDefaultValue, getValueClass } from '@/lib/formatting';
+import { handleDefaultValueFocus } from '@/lib/formatting';
 
+interface ResidueTableProps {
+  viewMode: 'table' | 'hybrid';
+  searchTerm?: string;
+}
 
-
-const ENTITY_OPTIONS = [
-  { value: "Donald Edwards", label: "Donald Edwards" },
-  { value: "Betty Edwards", label: "Betty Edwards" },
-  { value: "Both", label: "Both" },
-];
-
-export default function ResidueTable() {
+export default function ResidueTable({ viewMode, searchTerm }: ResidueTableProps) {
   const [isUpdating, setIsUpdating] = useState(false);
-  const queryClient = useQueryClient();
 
-  // Fetch residue items
-  const { data: residueItems = [], isLoading, error } = useQuery<Residue[]>({
+  // Query for residue
+  const { data: residues = [], isLoading, error } = useQuery<Residue[]>({
     queryKey: ['/api/residue'],
-    queryFn: async () => {
-      const response = await fetch('/api/residue');
-      if (!response.ok) {
-        throw new Error('Failed to fetch residue');
-      }
-      return response.json();
-    }
   });
 
-  // Add new entity mutation
+  // Add residue mutation
   const addMutation = useMutation({
     mutationFn: async (): Promise<Residue> => {
-      const newEntity: InsertResidue = {
-        entity: "Donald Edwards",
-        percentage: "0%",
-        isCharityRow: false,
+      const newResidue: InsertResidue = {
+        description: "Enter details ...",
+        amount: "R 0",
+        increasePercentage: "0%",
       };
       
       const response = await fetch('/api/residue', {
@@ -44,11 +34,11 @@ export default function ResidueTable() {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(newEntity),
+        body: JSON.stringify(newResidue),
       });
       
       if (!response.ok) {
-        throw new Error('Failed to create residue entity');
+        throw new Error('Failed to add residue');
       }
       
       return response.json();
@@ -58,12 +48,12 @@ export default function ResidueTable() {
       setIsUpdating(false);
     },
     onError: (error) => {
-      console.error('Failed to add residue entity:', error);
+      console.error('Failed to add residue:', error);
       setIsUpdating(false);
     }
   });
 
-  // Update entity mutation
+  // Update residue mutation
   const updateMutation = useMutation({
     mutationFn: async ({ id, updates }: { id: number; updates: Partial<Residue> }) => {
       const response = await fetch(`/api/residue/${id}`, {
@@ -75,7 +65,7 @@ export default function ResidueTable() {
       });
       
       if (!response.ok) {
-        throw new Error('Failed to update residue entity');
+        throw new Error('Failed to update residue');
       }
       
       return response.json();
@@ -85,12 +75,12 @@ export default function ResidueTable() {
       setIsUpdating(false);
     },
     onError: (error) => {
-      console.error('Failed to update residue entity:', error);
+      console.error('Failed to update residue:', error);
       setIsUpdating(false);
     }
   });
 
-  // Delete entity mutation
+  // Delete residue mutation
   const deleteMutation = useMutation({
     mutationFn: async (id: number) => {
       const response = await fetch(`/api/residue/${id}`, {
@@ -98,7 +88,7 @@ export default function ResidueTable() {
       });
       
       if (!response.ok) {
-        throw new Error('Failed to delete residue entity');
+        throw new Error('Failed to delete residue');
       }
     },
     onSuccess: () => {
@@ -106,70 +96,52 @@ export default function ResidueTable() {
     }
   });
 
-  // No filtering needed - show all items
-  const filteredItems = residueItems;
-
-  // Separate regular entities from charity row
-  const { regularEntities, charityRow } = useMemo(() => {
-    const regular = residueItems.filter(item => !item.isCharityRow);
-    const charity = residueItems.find(item => item.isCharityRow);
-    return { regularEntities: regular, charityRow: charity };
-  }, [residueItems]);
-
   // Calculate totals
   const totals = useMemo(() => {
-    const entityTotal = regularEntities.reduce((sum: number, item: Residue) => {
-      const value = parseFloat(item.percentage.replace(/[^\d.-]/g, '')) || 0;
-      return sum + value;
-    }, 0);
-
-    const charityPercentage = charityRow ? parseFloat(charityRow.percentage.replace(/[^\d.-]/g, '')) || 0 : 0;
-
     return {
-      count: regularEntities.length,
-      entityTotal,
-      charityPercentage,
-      grandTotal: entityTotal + charityPercentage,
+      count: residues.length,
+      amount: residues.reduce((sum: number, residue: Residue) => {
+        const value = parseFloat(residue.amount.replace(/[^\d.-]/g, '')) || 0;
+        return sum + value;
+      }, 0),
     };
-  }, [regularEntities, charityRow]);
+  }, [residues]);
 
-  const handleAddEntity = useCallback(() => {
+  const handleAddResidue = useCallback(() => {
     addMutation.mutate();
   }, [addMutation]);
 
-  const handleUpdateEntity = useCallback((id: number, field: keyof Residue, value: string | boolean) => {
+  const handleUpdateResidue = useCallback((id: number, field: keyof Residue, value: string | string[]) => {
     setIsUpdating(true);
     const updates = { [field]: value };
     updateMutation.mutate({ id, updates });
   }, [updateMutation]);
 
   const handleInputBlur = useCallback((id: number, field: keyof Residue, value: string) => {
-    const formattedValue = field === 'percentage' ? formatPercentageValue(value) : value;
-    handleUpdateEntity(id, field, formattedValue);
+    let formattedValue: string;
+    if (field === 'increasePercentage') {
+      formattedValue = formatPercentageValue(value);
+    } else if (field === 'amount') {
+      formattedValue = formatCurrencyValue(value);
+    } else {
+      formattedValue = value;
+    }
+    handleUpdateResidue(id, field, formattedValue);
     
-    // Update DOM element directly for immediate visual feedback
+    // Update DOM element for immediate visual feedback
     const target = document.activeElement as HTMLInputElement;
     if (target && formattedValue !== value) {
       setTimeout(() => {
         target.value = formattedValue;
       }, 0);
     }
-  }, [handleUpdateEntity]);
+  }, [handleUpdateResidue]);
 
-  const handleDeleteEntity = useCallback((id: number) => {
-    if (window.confirm('Are you sure you want to delete this entity?')) {
+  const handleDeleteResidue = useCallback((id: number) => {
+    if (window.confirm('Are you sure you want to delete this residue entry?')) {
       deleteMutation.mutate(id);
     }
   }, [deleteMutation]);
-
-  const handleDuplicateEntity = useCallback((entity: Residue) => {
-    const duplicatedEntity: InsertResidue = {
-      entity: entity.entity,
-      percentage: entity.percentage,
-      isCharityRow: entity.isCharityRow,
-    };
-    addMutation.mutate();
-  }, [addMutation]);
 
   if (isLoading) {
     return <div className="flex justify-center py-8">Loading residue...</div>;
@@ -180,107 +152,81 @@ export default function ResidueTable() {
   }
 
   return (
-    <div >
-      {/* Table */}
-      <table className="min-w-full  border border-neutral-200 ">
-          <thead>
-            <tr className="border-b border-neutral-200">
-              <th className="px-3 py-2 text-center text-xs font-medium text-neutral-600 uppercase tracking-wider w-16">Actions</th>
-              <th className="px-3 py-2 text-left text-xs font-medium text-neutral-600 uppercase tracking-wider">Entity</th>
-              <th className="px-3 py-2 text-left text-xs font-medium text-neutral-600 uppercase tracking-wider">Percentage</th>
+    <div className="space-y-6">
+      <table>
+        <thead>
+          <tr className="border-b border-border">
+            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start section-end" rowSpan={2}>Actions</th>
+            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start" colSpan={1}>Overview</th>
+            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start section-end" colSpan={2}>Financial Details</th>
+          </tr>
+          <tr className="border-b border-border">
+            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start border-b border-neutral-200">Description</th>
+            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start border-b border-neutral-200">Amount</th>
+            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-end border-b border-neutral-200">Increase %</th>
+          </tr>
+        </thead>
+        <tbody className="divide-y divide-neutral-200">
+          {residues.map((residue: Residue, residueIndex) => (
+            <tr key={residue.id} className="hover:bg-neutral-50">
+              <td className="table-actions-cell p-1 text-center section-start section-end">
+                <ActionButtonGroup>
+                  <DuplicateButton
+                    onClick={() => addMutation.mutate()}
+                    disabled={isUpdating}
+                  />
+                  <DeleteButton
+                    onClick={() => handleDeleteResidue(residue.id)}
+                    disabled={isUpdating}
+                  />
+                </ActionButtonGroup>
+              </td>
+              
+              <td className="p-1 section-start">
+                <input
+                  type="text"
+                  defaultValue={residue.description}
+                  className={`table-input ${getFieldClass('text')} ${getValueClass(residue.description, 'text')}`}
+                  onFocus={handleDefaultValueFocus}
+                  onBlur={(e) => handleInputBlur(residue.id, 'description', e.target.value)}
+                  disabled={isUpdating}
+                />
+              </td>
+              
+              <td className="p-1 section-start">
+                <input
+                  key={`amount-${residue.id}-${residue.amount}`}
+                  type="text"
+                  defaultValue={residue.amount}
+                  className={`table-input ${getFieldClass('currency')} ${getValueClass(residue.amount, 'currency')}`}
+                  onFocus={handleDefaultValueFocus}
+                  onBlur={(e) => handleInputBlur(residue.id, 'amount', e.target.value)}
+                  disabled={isUpdating}
+                />
+              </td>
+              
+              <td className="p-1 section-end">
+                <input
+                  key={`increasePercentage-${residue.id}-${residue.increasePercentage}`}
+                  type="text"
+                  defaultValue={residue.increasePercentage}
+                  className={`table-input ${getFieldClass('percentage')} ${getValueClass(residue.increasePercentage, 'percentage')}`}
+                  onFocus={handleDefaultValueFocus}
+                  onBlur={(e) => handleInputBlur(residue.id, 'increasePercentage', e.target.value)}
+                  disabled={isUpdating}
+                />
+              </td>
             </tr>
-          </thead>
-          <tbody className="divide-y divide-neutral-200">
-            {/* Regular Entity Rows */}
-            {regularEntities.map((item: Residue) => (
-              <tr key={item.id} >
-                <td className="table-actions-cell text-center">
-                  <ActionButtonGroup>
-                    <DuplicateButton
-                      onClick={() => handleDuplicateEntity(item)}
-                      disabled={isUpdating}
-                    />
-                    <DeleteButton
-                      onClick={() => handleDeleteEntity(item.id)}
-                    />
-                  </ActionButtonGroup>
-                </td>
-                <td className="px-3 py-2">
-                  <select
-                    value={item.entity}
-                    onChange={(e) => handleUpdateEntity(item.id, 'entity', e.target.value)}
-                    className={getFieldClass('name')}
-                    style={getFieldWidth('name')}
-                    disabled={isUpdating}
-                  >
-                    {ENTITY_OPTIONS.map(option => (
-                      <option key={option.value} value={option.value}>
-                        {option.label}
-                      </option>
-                    ))}
-                  </select>
-                </td>
-                <td className="px-3 py-2">
-                  <input
-                    type="text"
-                    defaultValue={item.percentage}
-                    onBlur={(e) => handleInputBlur(item.id, 'percentage', e.target.value)}
-                    className={getFieldClass('percentage')}
-                    style={getFieldWidth('percentage')}
-                    disabled={isUpdating}
-                  />
-                </td>
-              </tr>
-            ))}
-            
-            {/* Charity Row */}
-            {charityRow && (
-              <tr className="bg-neutral-50 border-t-2 border-neutral-300">
-                <td className="px-3 py-2 text-center">
-                  {/* No delete button for charity row */}
-                </td>
-                <td className="px-3 py-2">
-                  <input
-                    type="text"
-                    value="Residue to registered charities"
-                    className={getFieldClass('name')}
-                    style={{...getFieldWidth('name'), backgroundColor: '#F5F5F5', cursor: 'not-allowed'}}
-                    disabled
-                    readOnly
-                  />
-                </td>
-                <td className="px-3 py-2">
-                  <input
-                    type="text"
-                    defaultValue={charityRow.percentage}
-                    onBlur={(e) => handleInputBlur(charityRow.id, 'percentage', e.target.value)}
-                    className={getFieldClass('percentage')}
-                    style={getFieldWidth('percentage')}
-                    disabled={isUpdating}
-                  />
-                </td>
-              </tr>
-            )}
-            
-            {/* Total Row */}
-            {residueItems.length > 0 && (
-              <tr className="border-t-2 border-neutral-300 font-bold">
-                <td className="px-3 py-2"></td>
-                <td className="px-3 py-2 text-sm font-bold text-neutral-800">Total</td>
-                <td className="px-3 py-2 text-sm font-bold text-neutral-800 text-right">
-                  {totals.grandTotal}%
-                </td>
-              </tr>
-            )}
-            
-            {residueItems.length === 0 && (
-              <tr>
-                <td colSpan={3} className="px-3 py-8 text-center text-neutral-500">
-                  No entities found. Add new entities using the header button.
-                </td>
-              </tr>
-            )}
-          </tbody>
+          ))}
+          
+          {/* Totals Row */}
+          <tr className="table-total-row bg-neutral-100 font-bold">
+            <td className="section-start section-end p-1 text-center font-bold">TOTALS</td>
+            <td className="section-start p-1 font-bold">-</td>
+            <td className="section-start p-1 font-bold">R {totals.amount.toLocaleString()}</td>
+            <td className="section-end p-1 font-bold">-</td>
+          </tr>
+        </tbody>
       </table>
     </div>
   );
