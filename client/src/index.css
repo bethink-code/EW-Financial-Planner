@@ -395,6 +395,14 @@ th, td {
     overflow: visible !important;
     white-space: nowrap !important;
   }
+
+  /* Fix for native select dropdowns within table-input */
+  .table-input select {
+    height: auto !important;
+    padding: 0.25rem 0.5rem !important;
+    min-height: 2rem !important;
+    line-height: normal !important;
+  }
   
   /* Total rows - bold styling */
   .table-total-row {
