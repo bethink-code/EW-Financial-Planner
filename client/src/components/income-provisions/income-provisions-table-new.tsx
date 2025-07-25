@@ -388,7 +388,7 @@ export default function IncomeProvisionsTable({ viewMode, searchTerm }: IncomePr
               </span>
             </td>
           </tr>
-          <tr className="border-t border-neutral-200">
+          <tr>
             <td className="p-1 text-right text-neutral-700" colSpan={11} style={{ fontSize: '0.875rem' }}>Capital Required for Income Shortfall</td>
             <td className="text-right" style={{ padding: '0.6rem 0.8rem' }}>
               <span style={{ fontFamily: 'inherit', fontWeight: '600', color: '#374151', fontSize: '0.875rem' }}>
