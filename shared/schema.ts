@@ -113,18 +113,19 @@ export type UpdateAssurance = z.infer<typeof updateAssuranceSchema>;
 export const definedBenefitFunds = pgTable("defined_benefit_funds", {
   id: serial("id").primaryKey(),
   
-  // Basic information
+  // Overview Section
   description: text("description").notNull().default("Enter details ..."),
   owner: text("owner").notNull().default("Donald Edwards"),
   
-  // Financial details
-  pensionIncome: text("pension_income").notNull().default("R 0"),
-  pensionIncomeIncrease: text("pension_income_increase").notNull().default("0%"),
-  spouseIncome: text("spouse_income").notNull().default("R 0"),
-  spouseIncomeIncrease: text("spouse_income_increase").notNull().default("0%"),
+  // Fund Details Section
+  yearsOfService: text("years_of_service").notNull().default("0 years"),
+  finalMonthlySalary: text("final_monthly_salary").notNull().default("R 0"),
+  deathLumpSum: text("death_lump_sum").notNull().default("R 0"),
+  additionalTaxFreeAmount: text("additional_tax_free_amount").notNull().default("R 0"),
   
-  // Multiple owners support
-  additionalOwners: text("additional_owners").array().notNull().default([]),
+  // Pension Income at Death Section
+  pensionIncomeAmount: text("pension_income_amount").notNull().default("R 0"),
+  pensionIncomeIncrease: text("pension_income_increase").notNull().default("0%"),
 });
 
 export const insertDefinedBenefitFundSchema = createInsertSchema(definedBenefitFunds).omit({

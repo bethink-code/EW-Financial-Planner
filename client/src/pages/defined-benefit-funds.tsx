@@ -1,6 +1,6 @@
 import React, { useState, useCallback } from "react";
 import { useQuery, useMutation } from "@tanstack/react-query";
-import DefinedBenefitFundsTable from "../components/defined-benefit-funds/defined-benefit-funds-table-fixed";
+import DefinedBenefitFundsTable from "../components/defined-benefit-funds/defined-benefit-funds-table-correct";
 import { DefinedBenefitFundsSummary } from "@/components/defined-benefit-funds/defined-benefit-funds-summary";
 import { CalculatorHeader } from "@/components/ui/calculator-header";
 import { apiRequest, queryClient } from "@/lib/queryClient";
@@ -27,11 +27,12 @@ export default function DefinedBenefitFunds() {
       const newFund: InsertDefinedBenefitFund = {
         description: "Enter details ...",
         owner: "Donald Edwards",
-        pensionIncome: "R 0",
-        pensionIncomeIncrease: "0%",
-        spouseIncome: "R 0",
-        spouseIncomeIncrease: "0%",
-        additionalOwners: []
+        yearsOfService: "0 years",
+        finalMonthlySalary: "R 0",
+        deathLumpSum: "R 0",
+        additionalTaxFreeAmount: "R 0",
+        pensionIncomeAmount: "R 0",
+        pensionIncomeIncrease: "0%"
       };
       return apiRequest("POST", "/api/defined-benefit-funds", newFund);
     },

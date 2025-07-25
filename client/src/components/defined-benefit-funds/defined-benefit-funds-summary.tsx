@@ -16,12 +16,12 @@ export function DefinedBenefitFundsSummary() {
 
   const totalFunds = funds.length;
   const totalPensionIncome = funds.reduce((sum, fund) => {
-    const amount = parseFloat((fund.pensionIncome || '0').replace(/[^\d.-]/g, '')) || 0;
+    const amount = parseFloat((fund.pensionIncomeAmount || '0').replace(/[^\d.-]/g, '')) || 0;
     return sum + amount;
   }, 0);
 
-  const totalSpouseIncome = funds.reduce((sum, fund) => {
-    const amount = parseFloat((fund.spouseIncome || '0').replace(/[^\d.-]/g, '')) || 0;
+  const totalDeathLumpSum = funds.reduce((sum, fund) => {
+    const amount = parseFloat((fund.deathLumpSum || '0').replace(/[^\d.-]/g, '')) || 0;
     return sum + amount;
   }, 0);
 
@@ -39,8 +39,8 @@ export function DefinedBenefitFundsSummary() {
         </div>
         
         <div className="summary-card">
-          <div className="text-xs font-medium text-teal-700 mb-1">Total Spouse Income</div>
-          <div className="text-lg font-bold text-neutral-900">R {totalSpouseIncome.toLocaleString()}</div>
+          <div className="text-xs font-medium text-teal-700 mb-1">Total Death Lump Sum</div>
+          <div className="text-lg font-bold text-neutral-900">R {totalDeathLumpSum.toLocaleString()}</div>
         </div>
       </div>
     </div>

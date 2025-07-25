@@ -1,0 +1,354 @@
+import React, { useState, useCallback, useMemo } from "react";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { AddButton, DeleteButton, DuplicateButton, ActionButtonGroup } from "@/components/ui/action-buttons";
+import { getFieldClass } from "@/lib/design-tokens";
+import { formatCurrencyValue, formatPercentageValue, formatYearsValue, getValueClass, isDefaultValue, handleDefaultValueFocus, createEnhancedBlurHandler } from "@/lib/formatting";
+import type { DefinedBenefitFund, InsertDefinedBenefitFund } from "@shared/schema";
+
+export default function DefinedBenefitFundsTable() {
+  const [isUpdating, setIsUpdating] = useState(false);
+  const queryClient = useQueryClient();
+
+  // Fetch defined benefit funds
+  const { data: funds = [], isLoading, error } = useQuery<DefinedBenefitFund[]>({
+    queryKey: ['/api/defined-benefit-funds'],
+    queryFn: async () => {
+      const response = await fetch('/api/defined-benefit-funds');
+      if (!response.ok) {
+        throw new Error('Failed to fetch defined benefit funds');
+      }
+      return response.json();
+    }
+  });
+
+  // Add new fund mutation
+  const addMutation = useMutation({
+    mutationFn: async (): Promise<DefinedBenefitFund> => {
+      const newFund: InsertDefinedBenefitFund = {
+        description: "Enter details ...",
+        owner: "Donald Edwards",
+        yearsOfService: "0 years",
+        finalMonthlySalary: "R 0",
+        deathLumpSum: "R 0",
+        additionalTaxFreeAmount: "R 0",
+        pensionIncomeAmount: "R 0",
+        pensionIncomeIncrease: "0%",
+      };
+      
+      const response = await fetch('/api/defined-benefit-funds', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(newFund),
+      });
+      
+      if (!response.ok) {
+        throw new Error('Failed to create fund');
+      }
+      
+      return response.json();
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['/api/defined-benefit-funds'] });
+      setIsUpdating(false);
+    },
+    onError: (error) => {
+      console.error('Failed to add fund:', error);
+      setIsUpdating(false);
+    }
+  });
+
+  // Update fund mutation
+  const updateMutation = useMutation({
+    mutationFn: async ({ id, updates }: { id: number; updates: Partial<DefinedBenefitFund> }) => {
+      const response = await fetch(`/api/defined-benefit-funds/${id}`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(updates),
+      });
+      
+      if (!response.ok) {
+        throw new Error('Failed to update fund');
+      }
+      
+      return response.json();
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['/api/defined-benefit-funds'] });
+      setIsUpdating(false);
+    },
+    onError: (error) => {
+      console.error('Failed to update fund:', error);
+      setIsUpdating(false);
+    }
+  });
+
+  // Delete fund mutation
+  const deleteMutation = useMutation({
+    mutationFn: async (id: number) => {
+      const response = await fetch(`/api/defined-benefit-funds/${id}`, {
+        method: 'DELETE',
+      });
+      
+      if (!response.ok) {
+        throw new Error('Failed to delete fund');
+      }
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['/api/defined-benefit-funds'] });
+    }
+  });
+
+  // Calculate totals
+  const totals = useMemo(() => {
+    return {
+      finalMonthlySalary: funds.reduce((sum: number, fund: DefinedBenefitFund) => {
+        const value = parseFloat((fund.finalMonthlySalary || '0').replace(/[^\d.-]/g, '')) || 0;
+        return sum + value;
+      }, 0),
+      deathLumpSum: funds.reduce((sum: number, fund: DefinedBenefitFund) => {
+        const value = parseFloat((fund.deathLumpSum || '0').replace(/[^\d.-]/g, '')) || 0;
+        return sum + value;
+      }, 0),
+      additionalTaxFreeAmount: funds.reduce((sum: number, fund: DefinedBenefitFund) => {
+        const value = parseFloat((fund.additionalTaxFreeAmount || '0').replace(/[^\d.-]/g, '')) || 0;
+        return sum + value;
+      }, 0),
+      pensionIncomeAmount: funds.reduce((sum: number, fund: DefinedBenefitFund) => {
+        const value = parseFloat((fund.pensionIncomeAmount || '0').replace(/[^\d.-]/g, '')) || 0;
+        return sum + value;
+      }, 0)
+    };
+  }, [funds]);
+
+  const handleUpdateFund = useCallback((id: number, field: keyof DefinedBenefitFund, value: string) => {
+    setIsUpdating(true);
+    const updates = { [field]: value };
+    updateMutation.mutate({ id, updates });
+  }, [updateMutation]);
+
+  const handleInputBlur = useCallback((id: number, field: keyof DefinedBenefitFund, value: string, target?: HTMLInputElement) => {
+    // Map field names to field types for proper formatting
+    const fieldTypeMap: Record<string, string> = {
+      'yearsOfService': 'years',
+      'pensionIncomeIncrease': 'percentage',
+      'finalMonthlySalary': 'currency',
+      'deathLumpSum': 'currency',
+      'additionalTaxFreeAmount': 'currency',
+      'pensionIncomeAmount': 'currency'
+    };
+    
+    const fieldType = fieldTypeMap[field] || field;
+    const formattedValue = fieldType === 'percentage' ? formatPercentageValue(value) : 
+                         fieldType === 'years' ? formatYearsValue(value) : 
+                         fieldType === 'currency' ? formatCurrencyValue(value) : 
+                         value;
+
+    handleUpdateFund(id, field, formattedValue);
+
+    // Update the input field with formatted value if it changed
+    if (target && formattedValue !== value) {
+      setTimeout(() => {
+        target.value = formattedValue;
+      }, 0);
+    }
+  }, [handleUpdateFund]);
+
+  const handleDeleteFund = useCallback((id: number) => {
+    if (window.confirm('Are you sure you want to delete this fund?')) {
+      deleteMutation.mutate(id);
+    }
+  }, [deleteMutation]);
+
+  const handleDuplicateFund = useCallback((fund: DefinedBenefitFund) => {
+    const duplicatedFund: InsertDefinedBenefitFund = {
+      description: fund.description,
+      owner: fund.owner,
+      yearsOfService: fund.yearsOfService,
+      finalMonthlySalary: fund.finalMonthlySalary,
+      deathLumpSum: fund.deathLumpSum,
+      additionalTaxFreeAmount: fund.additionalTaxFreeAmount,
+      pensionIncomeAmount: fund.pensionIncomeAmount,
+      pensionIncomeIncrease: fund.pensionIncomeIncrease,
+    };
+    
+    fetch('/api/defined-benefit-funds', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(duplicatedFund),
+    }).then(res => {
+      if (res.ok) {
+        queryClient.invalidateQueries({ queryKey: ['/api/defined-benefit-funds'] });
+      }
+    });
+  }, [queryClient]);
+
+  if (isLoading) {
+    return <div className="flex justify-center py-8">Loading defined benefit funds...</div>;
+  }
+
+  if (error) {
+    return <div className="text-red-600 py-8">Error loading defined benefit funds. Please try again.</div>;
+  }
+
+  return (
+    <div>
+      {/* Table */}
+      <table className="min-w-full border border-neutral-200">
+        <thead>
+          {/* First Header Row - Section Groups */}
+          <tr className="border-b border-neutral-200">
+            <th className="section-start px-3 py-2 text-center text-xs font-medium text-neutral-600 uppercase tracking-wider w-16">Actions</th>
+            <th className="section-start px-3 py-2 text-left text-xs font-medium text-neutral-600 uppercase tracking-wider" colSpan={2}>Overview</th>
+            <th className="section-start px-3 py-2 text-left text-xs font-medium text-neutral-600 uppercase tracking-wider" colSpan={4}>Fund Details</th>
+            <th className="section-start px-3 py-2 text-left text-xs font-medium text-neutral-600 uppercase tracking-wider" colSpan={2}>Pension Income at Death</th>
+          </tr>
+          {/* Second Header Row - Individual Fields */}
+          <tr className="border-b border-neutral-200">
+            <th className="px-3 py-2 text-center text-xs font-medium text-neutral-600 uppercase tracking-wider">Duplicate / Delete</th>
+            <th className="px-3 py-2 text-left text-xs font-medium text-neutral-600 uppercase tracking-wider">Description</th>
+            <th className="px-3 py-2 text-left text-xs font-medium text-neutral-600 uppercase tracking-wider">Owner</th>
+            <th className="px-3 py-2 text-left text-xs font-medium text-neutral-600 uppercase tracking-wider">Years of Service</th>
+            <th className="px-3 py-2 text-left text-xs font-medium text-neutral-600 uppercase tracking-wider">Final Monthly Salary</th>
+            <th className="px-3 py-2 text-left text-xs font-medium text-neutral-600 uppercase tracking-wider">Death Lump Sum</th>
+            <th className="px-3 py-2 text-left text-xs font-medium text-neutral-600 uppercase tracking-wider">Additional Tax Free Amount</th>
+            <th className="px-3 py-2 text-left text-xs font-medium text-neutral-600 uppercase tracking-wider">Amount</th>
+            <th className="section-end px-3 py-2 text-left text-xs font-medium text-neutral-600 uppercase tracking-wider">Increase</th>
+          </tr>
+        </thead>
+        <tbody className="divide-y divide-neutral-200">
+          {funds.map((fund: DefinedBenefitFund) => (
+            <tr key={fund.id} className="hover:bg-neutral-50">
+              {/* Actions Section */}
+              <td className="section-start table-actions-cell text-center">
+                <ActionButtonGroup>
+                  <DuplicateButton
+                    onClick={() => handleDuplicateFund(fund)}
+                    disabled={isUpdating}
+                  />
+                  <DeleteButton
+                    onClick={() => handleDeleteFund(fund.id)}
+                    disabled={isUpdating}
+                  />
+                </ActionButtonGroup>
+              </td>
+              
+              {/* Overview Section */}
+              <td className="section-start px-3 py-2">
+                <input
+                  type="text"
+                  defaultValue={fund.description}
+                  className={`table-input ${getFieldClass('text')} ${getValueClass(fund.description, 'text')}`}
+                  onFocus={handleDefaultValueFocus}
+                  onBlur={(e) => handleUpdateFund(fund.id, 'description', e.target.value)}
+                  disabled={isUpdating}
+                />
+              </td>
+              <td className="px-3 py-2">
+                <input
+                  type="text"
+                  defaultValue={fund.owner}
+                  className={`table-input ${getFieldClass('text')} ${getValueClass(fund.owner, 'text')}`}
+                  onFocus={handleDefaultValueFocus}
+                  onBlur={(e) => handleUpdateFund(fund.id, 'owner', e.target.value)}
+                  disabled={isUpdating}
+                />
+              </td>
+              
+              {/* Fund Details Section */}
+              <td className="section-start px-3 py-2">
+                <input
+                  key={`yearsOfService-${fund.id}-${fund.yearsOfService}`}
+                  type="text"
+                  defaultValue={fund.yearsOfService}
+                  className={`table-input ${getFieldClass('years')} ${getValueClass(fund.yearsOfService, 'years')}`}
+                  onFocus={handleDefaultValueFocus}
+                  onBlur={(e) => handleInputBlur(fund.id, 'yearsOfService', e.target.value, e.target)}
+                  disabled={isUpdating}
+                />
+              </td>
+              <td className="px-3 py-2">
+                <input
+                  key={`finalMonthlySalary-${fund.id}-${fund.finalMonthlySalary}`}
+                  type="text"
+                  defaultValue={fund.finalMonthlySalary}
+                  className={`table-input ${getFieldClass('currency')} ${getValueClass(fund.finalMonthlySalary, 'currency')}`}
+                  onFocus={handleDefaultValueFocus}
+                  onBlur={(e) => handleInputBlur(fund.id, 'finalMonthlySalary', e.target.value, e.target)}
+                  disabled={isUpdating}
+                />
+              </td>
+              <td className="px-3 py-2">
+                <input
+                  key={`deathLumpSum-${fund.id}-${fund.deathLumpSum}`}
+                  type="text"
+                  defaultValue={fund.deathLumpSum}
+                  className={`table-input ${getFieldClass('currency')} ${getValueClass(fund.deathLumpSum, 'currency')}`}
+                  onFocus={handleDefaultValueFocus}
+                  onBlur={(e) => handleInputBlur(fund.id, 'deathLumpSum', e.target.value, e.target)}
+                  disabled={isUpdating}
+                />
+              </td>
+              <td className="px-3 py-2">
+                <input
+                  key={`additionalTaxFreeAmount-${fund.id}-${fund.additionalTaxFreeAmount}`}
+                  type="text"
+                  defaultValue={fund.additionalTaxFreeAmount}
+                  className={`table-input ${getFieldClass('currency')} ${getValueClass(fund.additionalTaxFreeAmount, 'currency')}`}
+                  onFocus={handleDefaultValueFocus}
+                  onBlur={(e) => handleInputBlur(fund.id, 'additionalTaxFreeAmount', e.target.value, e.target)}
+                  disabled={isUpdating}
+                />
+              </td>
+              
+              {/* Pension Income at Death Section */}
+              <td className="section-start px-3 py-2">
+                <input
+                  key={`pensionIncomeAmount-${fund.id}-${fund.pensionIncomeAmount}`}
+                  type="text"
+                  defaultValue={fund.pensionIncomeAmount}
+                  className={`table-input ${getFieldClass('currency')} ${getValueClass(fund.pensionIncomeAmount, 'currency')}`}
+                  onFocus={handleDefaultValueFocus}
+                  onBlur={(e) => handleInputBlur(fund.id, 'pensionIncomeAmount', e.target.value, e.target)}
+                  disabled={isUpdating}
+                />
+              </td>
+              <td className="section-end px-3 py-2">
+                <input
+                  key={`pensionIncomeIncrease-${fund.id}-${fund.pensionIncomeIncrease}`}
+                  type="text"
+                  defaultValue={fund.pensionIncomeIncrease || "0%"}
+                  onFocus={handleDefaultValueFocus}
+                  onBlur={createEnhancedBlurHandler(
+                    (e) => handleInputBlur(fund.id, 'pensionIncomeIncrease', e.target.value, e.target),
+                    'percentage'
+                  )}
+                  className={`table-input ${getFieldClass('percentage')} ${getValueClass(fund.pensionIncomeIncrease || "0%", 'percentage')}`}
+                  disabled={isUpdating}
+                />
+              </td>
+            </tr>
+          ))}
+          
+          {/* Totals Row */}
+          <tr className="table-total-row bg-neutral-100 font-bold">
+            <td className="section-start px-3 py-2 text-center font-bold">TOTALS</td>
+            <td className="section-start px-3 py-2 font-bold">-</td>
+            <td className="px-3 py-2 font-bold">-</td>
+            <td className="section-start px-3 py-2 font-bold">-</td>
+            <td className="px-3 py-2 font-bold">R {totals.finalMonthlySalary.toLocaleString()}</td>
+            <td className="px-3 py-2 font-bold">R {totals.deathLumpSum.toLocaleString()}</td>
+            <td className="px-3 py-2 font-bold">R {totals.additionalTaxFreeAmount.toLocaleString()}</td>
+            <td className="section-start px-3 py-2 font-bold">R {totals.pensionIncomeAmount.toLocaleString()}</td>
+            <td className="section-end px-3 py-2 font-bold">-</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  );
+}
