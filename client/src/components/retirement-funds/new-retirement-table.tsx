@@ -86,10 +86,17 @@ export function NewRetirementTable({
     const fund = funds.find(f => f.id === fundId);
     if (!fund || fund.unapprovedBeneficiaries.length <= 1 || beneficiaryIndex === 0) return; // Protect first beneficiary
     
-    const newBeneficiaries = fund.unapprovedBeneficiaries.filter((_, i) => i !== beneficiaryIndex);
-    const newSplits = fund.unapprovedPercentageSplits.filter((_, i) => i !== beneficiaryIndex);
-    const newCoverSplits = fund.unapprovedCoverSplits.filter((_, i) => i !== beneficiaryIndex);
+    // Create copies and remove from all arrays simultaneously
+    const newBeneficiaries = [...fund.unapprovedBeneficiaries];
+    const newSplits = [...fund.unapprovedPercentageSplits];
+    const newCoverSplits = [...fund.unapprovedCoverSplits];
     
+    // Remove at the same index from all arrays
+    newBeneficiaries.splice(beneficiaryIndex, 1);
+    newSplits.splice(beneficiaryIndex, 1);
+    newCoverSplits.splice(beneficiaryIndex, 1);
+    
+    // Update all arrays in sequence
     onFieldUpdate(fundId, 'unapprovedBeneficiaries', newBeneficiaries);
     onFieldUpdate(fundId, 'unapprovedPercentageSplits', newSplits);
     onFieldUpdate(fundId, 'unapprovedCoverSplits', newCoverSplits);
@@ -111,10 +118,17 @@ export function NewRetirementTable({
     const fund = funds.find(f => f.id === fundId);
     if (!fund || fund.fundValueBeneficiaries.length <= 1 || beneficiaryIndex === 0) return; // Protect first beneficiary
     
-    const newBeneficiaries = fund.fundValueBeneficiaries.filter((_, i) => i !== beneficiaryIndex);
-    const newSplits = fund.fundValuePercentageSplits.filter((_, i) => i !== beneficiaryIndex);
-    const newCoverSplits = fund.fundValueCoverSplits.filter((_, i) => i !== beneficiaryIndex);
+    // Create copies and remove from all arrays simultaneously
+    const newBeneficiaries = [...fund.fundValueBeneficiaries];
+    const newSplits = [...fund.fundValuePercentageSplits];
+    const newCoverSplits = [...fund.fundValueCoverSplits];
     
+    // Remove at the same index from all arrays
+    newBeneficiaries.splice(beneficiaryIndex, 1);
+    newSplits.splice(beneficiaryIndex, 1);
+    newCoverSplits.splice(beneficiaryIndex, 1);
+    
+    // Update all arrays in sequence
     onFieldUpdate(fundId, 'fundValueBeneficiaries', newBeneficiaries);
     onFieldUpdate(fundId, 'fundValuePercentageSplits', newSplits);
     onFieldUpdate(fundId, 'fundValueCoverSplits', newCoverSplits);
