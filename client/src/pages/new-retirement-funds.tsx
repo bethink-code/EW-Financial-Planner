@@ -5,6 +5,7 @@ import { queryClient, apiRequest } from "@/lib/queryClient";
 import { CalculatorHeader } from "@/components/ui/calculator-header";
 import { RetirementFundsSummary } from "@/components/retirement-funds/retirement-funds-summary";
 import { ClassicRetirementTable } from "@/components/retirement-funds/classic-retirement-table";
+import RoughTableDemo from "@/components/retirement-funds/rough-table-demo";
 import { DetailedView } from "@/components/retirement-funds/detailed-view";
 import { AdditionalDetails } from "@/components/retirement-funds/additional-details";
 
@@ -190,16 +191,10 @@ export default function NewRetirementFunds() {
           </CalculatorHeader>
         </div>
 
-        {/* Table View */}
+        {/* Rough Table Demo */}
         {viewMode === "table" && (
           <div className="bg-white rounded-lg shadow-sm border border-neutral-200">
-            <ClassicRetirementTable
-              funds={funds}
-              onFieldUpdate={handleFieldUpdate}
-              onRemoveFund={handleRemoveFund}
-              onDuplicateFund={handleDuplicateFund}
-              isUpdating={updateMutation.isPending}
-            />
+            <RoughTableDemo />
           </div>
         )}
 
