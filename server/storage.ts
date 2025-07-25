@@ -1,4 +1,4 @@
-import { retirementFunds, lumpSumBequests, assurance, definedBenefitFunds, voluntaryInvestments, assetsAndLiabilities, incomeNeeds, incomeProvisions, residue, additionalEstateDutyItems, liabilities, type RetirementFund, type InsertRetirementFund, type UpdateRetirementFund, type LumpSumBequest, type InsertLumpSumBequest, type Assurance, type InsertAssurance, type UpdateAssurance, type DefinedBenefitFund, type InsertDefinedBenefitFund, type UpdateDefinedBenefitFund, type VoluntaryInvestment, type InsertVoluntaryInvestment, type UpdateVoluntaryInvestment, type AssetAndLiability, type InsertAssetAndLiability, type UpdateAssetAndLiability, type IncomeNeed, type InsertIncomeNeed, type UpdateIncomeNeed, type IncomeProvision, type InsertIncomeProvision, type UpdateIncomeProvision, type Residue, type InsertResidue, type UpdateResidue, type AdditionalEstateDutyItem, type InsertAdditionalEstateDutyItem, type UpdateAdditionalEstateDutyItem, type Liabilities, type InsertLiabilities, type UpdateLiabilities } from "@shared/schema";
+import { retirementFunds, lumpSumBequests, assurance, definedBenefitFunds, voluntaryInvestments, assetsAndLiabilities, incomeNeeds, incomeProvisions, residue, additionalEstateDutyItems, liabilities, assets, type RetirementFund, type InsertRetirementFund, type UpdateRetirementFund, type LumpSumBequest, type InsertLumpSumBequest, type Assurance, type InsertAssurance, type UpdateAssurance, type DefinedBenefitFund, type InsertDefinedBenefitFund, type UpdateDefinedBenefitFund, type VoluntaryInvestment, type InsertVoluntaryInvestment, type UpdateVoluntaryInvestment, type AssetAndLiability, type InsertAssetAndLiability, type UpdateAssetAndLiability, type IncomeNeed, type InsertIncomeNeed, type UpdateIncomeNeed, type IncomeProvision, type InsertIncomeProvision, type UpdateIncomeProvision, type Residue, type InsertResidue, type UpdateResidue, type AdditionalEstateDutyItem, type InsertAdditionalEstateDutyItem, type UpdateAdditionalEstateDutyItem, type Liabilities, type InsertLiabilities, type UpdateLiabilities, type Assets, type InsertAssets } from "@shared/schema";
 import { drizzle } from "drizzle-orm/node-postgres";
 import { Pool } from "pg";
 import { eq, ilike, or } from "drizzle-orm";
@@ -91,6 +91,14 @@ export interface IStorage {
   updateLiability(id: number, updates: UpdateLiabilities): Promise<Liabilities | undefined>;
   deleteLiability(id: number): Promise<boolean>;
   searchLiabilities(query: string): Promise<Liabilities[]>;
+  
+  // Assets
+  getAssets(): Promise<Assets[]>;
+  getAsset(id: number): Promise<Assets | undefined>;
+  createAsset(asset: InsertAssets): Promise<Assets>;
+  updateAsset(id: number, updates: Partial<InsertAssets>): Promise<Assets | undefined>;
+  deleteAsset(id: number): Promise<boolean>;
+  searchAssets(query: string): Promise<Assets[]>;
 }
 
 export class MemStorage implements IStorage {
@@ -1280,6 +1288,42 @@ class DbStorage implements IStorage {
         ilike(liabilities.description, `%${query}%`)
       ))
       .orderBy(liabilities.id);
+  }
+
+  // Assets methods - Database implementation
+  async getAssets(): Promise<Assets[]> {
+    return await this.db.select().from(assets).orderBy(assets.id);
+  }
+
+  async getAsset(id: number): Promise<Assets | undefined> {
+    const results = await this.db.select().from(assets).where(eq(assets.id, id));
+    return results[0];
+  }
+
+  async createAsset(asset: InsertAssets): Promise<Assets> {
+    const results = await this.db.insert(assets).values(asset).returning();
+    return results[0];
+  }
+
+  async updateAsset(id: number, updates: Partial<InsertAssets>): Promise<Assets | undefined> {
+    const results = await this.db.update(assets).set(updates).where(eq(assets.id, id)).returning();
+    return results[0];
+  }
+
+  async deleteAsset(id: number): Promise<boolean> {
+    const results = await this.db.delete(assets).where(eq(assets.id, id)).returning();
+    return results.length > 0;
+  }
+
+  async searchAssets(query: string): Promise<Assets[]> {
+    if (!query.trim()) return await this.getAssets();
+    
+    return await this.db.select().from(assets)
+      .where(or(
+        ilike(assets.category, `%${query}%`),
+        ilike(assets.description, `%${query}%`)
+      ))
+      .orderBy(assets.id);
   }
 }
 

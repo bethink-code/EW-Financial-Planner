@@ -9,6 +9,7 @@ import LumpSumBequests from "@/pages/lump-sum-bequests";
 import IncomeNeeds from "@/pages/income-needs";
 import IncomeProvisions from "@/pages/income-provisions";
 import Liabilities from "@/pages/liabilities";
+import { AssetsPage } from "@/pages/assets";
 import DeathWithEstateLiquidity from "./pages/death-with-estate-liquidity";
 
 function Router() {
@@ -21,6 +22,7 @@ function Router() {
       <Route path="/income-needs" component={IncomeNeeds} />
       <Route path="/income-provisions" component={IncomeProvisions} />
       <Route path="/liabilities" component={Liabilities} />
+      <Route path="/assets" component={AssetsPage} />
       <Route component={NotFound} />
     </Switch>
   );

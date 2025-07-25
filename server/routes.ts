@@ -1,7 +1,7 @@
 import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
-import { insertRetirementFundSchema, updateRetirementFundSchema, insertLumpSumBequestSchema, updateLumpSumBequestSchema, insertAssuranceSchema, updateAssuranceSchema, insertDefinedBenefitFundSchema, updateDefinedBenefitFundSchema, insertVoluntaryInvestmentSchema, updateVoluntaryInvestmentSchema, insertAssetsAndLiabilitiesSchema, updateAssetsAndLiabilitiesSchema, insertIncomeNeedsSchema, updateIncomeNeedsSchema, insertIncomeProvisionsSchema, updateIncomeProvisionsSchema, insertResidueSchema, updateResidueSchema, insertAdditionalEstateDutyItemsSchema, updateAdditionalEstateDutyItemsSchema, insertLiabilitiesSchema, updateLiabilitiesSchema } from "@shared/schema";
+import { insertRetirementFundSchema, updateRetirementFundSchema, insertLumpSumBequestSchema, updateLumpSumBequestSchema, insertAssuranceSchema, updateAssuranceSchema, insertDefinedBenefitFundSchema, updateDefinedBenefitFundSchema, insertVoluntaryInvestmentSchema, updateVoluntaryInvestmentSchema, insertAssetsAndLiabilitiesSchema, updateAssetsAndLiabilitiesSchema, insertIncomeNeedsSchema, updateIncomeNeedsSchema, insertIncomeProvisionsSchema, updateIncomeProvisionsSchema, insertResidueSchema, updateResidueSchema, insertAdditionalEstateDutyItemsSchema, updateAdditionalEstateDutyItemsSchema, insertLiabilitiesSchema, updateLiabilitiesSchema, insertAssetsSchema } from "@shared/schema";
 
 export async function registerRoutes(app: Express): Promise<Server> {
   // Get all retirement funds
@@ -1048,6 +1048,101 @@ export async function registerRoutes(app: Express): Promise<Server> {
     } catch (error) {
       console.error("Error deleting liability:", error);
       res.status(500).json({ message: "Failed to delete liability" });
+    }
+  });
+
+  // Assets Routes
+  
+  // Get all assets
+  app.get("/api/assets", async (req, res) => {
+    try {
+      const { search } = req.query;
+      let assets;
+      
+      if (search && typeof search === "string") {
+        assets = await storage.searchAssets(search);
+      } else {
+        assets = await storage.getAssets();
+      }
+      
+      res.json(assets);
+    } catch (error) {
+      console.error("Error fetching assets:", error);
+      res.status(500).json({ message: "Failed to fetch assets" });
+    }
+  });
+
+  // Get single asset
+  app.get("/api/assets/:id", async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      if (isNaN(id)) {
+        return res.status(400).json({ message: "Invalid asset ID" });
+      }
+
+      const asset = await storage.getAsset(id);
+      if (!asset) {
+        return res.status(404).json({ message: "Asset not found" });
+      }
+
+      res.json(asset);
+    } catch (error) {
+      console.error("Error fetching asset:", error);
+      res.status(500).json({ message: "Failed to fetch asset" });
+    }
+  });
+
+  // Create new asset
+  app.post("/api/assets", async (req, res) => {
+    try {
+      const validatedData = insertAssetsSchema.parse(req.body);
+      const asset = await storage.createAsset(validatedData);
+      res.status(201).json(asset);
+    } catch (error) {
+      console.error("Error creating asset:", error);
+      res.status(400).json({ message: "Invalid asset data" });
+    }
+  });
+
+  // Update asset
+  app.patch("/api/assets/:id", async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      if (isNaN(id)) {
+        return res.status(400).json({ message: "Invalid asset ID" });
+      }
+
+      const validatedData = insertAssetsSchema.partial().parse(req.body);
+      const asset = await storage.updateAsset(id, validatedData);
+      
+      if (!asset) {
+        return res.status(404).json({ message: "Asset not found" });
+      }
+
+      res.json(asset);
+    } catch (error) {
+      console.error("Error updating asset:", error);
+      res.status(400).json({ message: "Invalid asset data" });
+    }
+  });
+
+  // Delete asset
+  app.delete("/api/assets/:id", async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      if (isNaN(id)) {
+        return res.status(400).json({ message: "Invalid asset ID" });
+      }
+
+      const success = await storage.deleteAsset(id);
+      if (!success) {
+        return res.status(404).json({ message: "Asset not found" });
+      }
+
+      res.status(204).send();
+    } catch (error) {
+      console.error("Error deleting asset:", error);
+      res.status(500).json({ message: "Failed to delete asset" });
     }
   });
 

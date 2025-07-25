@@ -365,3 +365,5 @@ export const updateLiabilitiesSchema = createInsertSchema(liabilities).omit({
 export type Liabilities = typeof liabilities.$inferSelect;
 export type InsertLiabilities = z.infer<typeof insertLiabilitiesSchema>;
 export type UpdateLiabilities = z.infer<typeof updateLiabilitiesSchema>;
+
+export * from './assets-schema';
