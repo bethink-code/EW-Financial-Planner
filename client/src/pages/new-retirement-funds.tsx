@@ -58,30 +58,10 @@ export default function NewRetirementFunds() {
     mutationFn: async ({ id, updates }: { id: number; updates: UpdateRetirementFund }) => {
       return apiRequest("PATCH", `/api/retirement-funds/${id}`, updates);
     },
-    onMutate: async ({ id, updates }) => {
-      // Cancel any outgoing refetches
-      await queryClient.cancelQueries({ queryKey: ["/api/retirement-funds"] });
-      
-      // Snapshot the previous value
-      const previousFunds = queryClient.getQueryData<RetirementFund[]>(["/api/retirement-funds"]);
-      
-      // Optimistically update the cache
-      queryClient.setQueryData<RetirementFund[]>(["/api/retirement-funds"], (old) => {
-        if (!old) return old;
-        return old.map((fund) => 
-          fund.id === id ? { ...fund, ...updates } : fund
-        );
-      });
-      
-      return { previousFunds };
+    onSuccess: () => {
+      // Force fresh data reload after every update to ensure synchronization
+      queryClient.invalidateQueries({ queryKey: ["/api/retirement-funds"] });
     },
-    onError: (err, variables, context) => {
-      // Rollback on error
-      if (context?.previousFunds) {
-        queryClient.setQueryData(["/api/retirement-funds"], context.previousFunds);
-      }
-    },
-    // Removed onSettled to prevent invalidation from overriding optimistic updates
   });
 
   // Immediate field update without debouncing to fix input issues
