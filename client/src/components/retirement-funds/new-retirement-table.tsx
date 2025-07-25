@@ -267,33 +267,17 @@ export function NewRetirementTable({
                         onBlur={(e) => handleOwnerChange(fund.id, rowIndex, e.target.value)}
                       />
                       {rowIndex === 0 ? (
-                        <button
-                          type="button"
-                          onClick={(e) => {
-                            e.preventDefault();
-                            e.stopPropagation();
-                            handleAddOwner(fund.id);
-                          }}
-                          className="h-6 w-6 rounded text-blue-600 hover:bg-blue-50 flex items-center justify-center"
-                          title="Add Owner"
+                        <AddButton
+                          onClick={() => handleAddOwner(fund.id)}
                           disabled={isUpdating}
-                        >
-                          <UserPlus className="h-3 w-3" />
-                        </button>
+                          size="sm"
+                        />
                       ) : (
-                        <button
-                          type="button"
-                          onClick={(e) => {
-                            e.preventDefault();
-                            e.stopPropagation();
-                            handleRemoveOwner(fund.id, rowIndex);
-                          }}
-                          className="h-6 w-6 rounded text-red-600 hover:bg-red-50 flex items-center justify-center"
-                          title="Remove Owner"
+                        <DeleteButton
+                          onClick={() => handleRemoveOwner(fund.id, rowIndex)}
                           disabled={isUpdating}
-                        >
-                          <UserMinus className="h-3 w-3" />
-                        </button>
+                          size="sm"
+                        />
                       )}
                     </div>
                   )}
@@ -330,33 +314,17 @@ export function NewRetirementTable({
                         }}
                       />
                       {rowIndex === 0 ? (
-                        <button
-                          type="button"
-                          onClick={(e) => {
-                            e.preventDefault();
-                            e.stopPropagation();
-                            handleAddUnapprovedBeneficiary(fund.id);
-                          }}
-                          className="h-6 w-6 rounded text-blue-600 hover:bg-blue-50 flex items-center justify-center"
-                          title="Add Beneficiary"
+                        <AddButton
+                          onClick={() => handleAddUnapprovedBeneficiary(fund.id)}
                           disabled={isUpdating}
-                        >
-                          <Plus className="h-3 w-3" />
-                        </button>
+                          size="sm"
+                        />
                       ) : (
-                        <button
-                          type="button"
-                          onClick={(e) => {
-                            e.preventDefault();
-                            e.stopPropagation();
-                            handleRemoveUnapprovedBeneficiary(fund.id, rowIndex);
-                          }}
-                          className="h-6 w-6 rounded text-red-600 hover:bg-red-50 flex items-center justify-center"
-                          title="Remove Beneficiary"
+                        <DeleteButton
+                          onClick={() => handleRemoveUnapprovedBeneficiary(fund.id, rowIndex)}
                           disabled={isUpdating}
-                        >
-                          <UserMinus className="h-3 w-3" />
-                        </button>
+                          size="sm"
+                        />
                       )}
                     </div>
                   )}
@@ -511,33 +479,17 @@ export function NewRetirementTable({
                         }}
                       />
                       {rowIndex === 0 ? (
-                        <button
-                          type="button"
-                          onClick={(e) => {
-                            e.preventDefault();
-                            e.stopPropagation();
-                            handleAddFundValueBeneficiary(fund.id);
-                          }}
-                          className="h-6 w-6 rounded text-blue-600 hover:bg-blue-50 flex items-center justify-center"
-                          title="Add Beneficiary"
+                        <AddButton
+                          onClick={() => handleAddFundValueBeneficiary(fund.id)}
                           disabled={isUpdating}
-                        >
-                          <Plus className="h-3 w-3" />
-                        </button>
+                          size="sm"
+                        />
                       ) : (
-                        <button
-                          type="button"
-                          onClick={(e) => {
-                            e.preventDefault();
-                            e.stopPropagation();
-                            handleRemoveFundValueBeneficiary(fund.id, rowIndex);
-                          }}
-                          className="h-6 w-6 rounded text-red-600 hover:bg-red-50 flex items-center justify-center"
-                          title="Remove Beneficiary"
+                        <DeleteButton
+                          onClick={() => handleRemoveFundValueBeneficiary(fund.id, rowIndex)}
                           disabled={isUpdating}
-                        >
-                          <UserMinus className="h-3 w-3" />
-                        </button>
+                          size="sm"
+                        />
                       )}
                     </div>
                   )}
