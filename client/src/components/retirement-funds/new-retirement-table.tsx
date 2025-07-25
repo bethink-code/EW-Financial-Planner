@@ -57,8 +57,9 @@ export function NewRetirementTable({
   const handleRemoveOwner = useCallback((fundId: number, ownerIndex: number) => {
     const fund = funds.find(f => f.id === fundId);
     if (!fund || fund.owners.length <= 1 || ownerIndex === 0) return; // Protect first owner
-    const updatedOwners = [...fund.owners];
-    updatedOwners.splice(ownerIndex, 1); // Remove specific index
+    
+    // Create new array by filtering out the target index
+    const updatedOwners = fund.owners.filter((_, index) => index !== ownerIndex);
     onFieldUpdate(fundId, 'owners', updatedOwners);
   }, [funds, onFieldUpdate]);
 
@@ -85,17 +86,26 @@ export function NewRetirementTable({
   const handleRemoveUnapprovedBeneficiary = useCallback((fundId: number, beneficiaryIndex: number) => {
     const fund = funds.find(f => f.id === fundId);
     if (!fund || fund.unapprovedBeneficiaries.length <= 1 || beneficiaryIndex === 0) return; // Protect first beneficiary
-    const updatedBeneficiaries = [...fund.unapprovedBeneficiaries];
-    const updatedSplits = [...fund.unapprovedPercentageSplits];
-    const updatedCoverSplits = [...fund.unapprovedCoverSplits];
     
-    updatedBeneficiaries.splice(beneficiaryIndex, 1); // Remove specific index
-    updatedSplits.splice(beneficiaryIndex, 1);
-    updatedCoverSplits.splice(beneficiaryIndex, 1);
+    // Create new arrays by filtering out the target index
+    const updatedBeneficiaries = fund.unapprovedBeneficiaries.filter((_, index) => index !== beneficiaryIndex);
+    const updatedSplits = fund.unapprovedPercentageSplits.filter((_, index) => index !== beneficiaryIndex);
+    const updatedCoverSplits = fund.unapprovedCoverSplits.filter((_, index) => index !== beneficiaryIndex);
     
-    onFieldUpdate(fundId, 'unapprovedBeneficiaries', updatedBeneficiaries);
-    onFieldUpdate(fundId, 'unapprovedPercentageSplits', updatedSplits);
-    onFieldUpdate(fundId, 'unapprovedCoverSplits', updatedCoverSplits);
+    // Update all arrays at once
+    const updatedFund = {
+      ...fund,
+      unapprovedBeneficiaries: updatedBeneficiaries,
+      unapprovedPercentageSplits: updatedSplits,
+      unapprovedCoverSplits: updatedCoverSplits
+    };
+    
+    // Send single update with all changes
+    Object.keys(updatedFund).forEach(key => {
+      if (key !== 'id' && updatedFund[key] !== fund[key]) {
+        onFieldUpdate(fundId, key, updatedFund[key]);
+      }
+    });
   }, [funds, onFieldUpdate]);
 
   // Fund value beneficiary management
@@ -113,17 +123,26 @@ export function NewRetirementTable({
   const handleRemoveFundValueBeneficiary = useCallback((fundId: number, beneficiaryIndex: number) => {
     const fund = funds.find(f => f.id === fundId);
     if (!fund || fund.fundValueBeneficiaries.length <= 1 || beneficiaryIndex === 0) return; // Protect first beneficiary
-    const updatedBeneficiaries = [...fund.fundValueBeneficiaries];
-    const updatedSplits = [...fund.fundValuePercentageSplits];
-    const updatedCoverSplits = [...fund.fundValueCoverSplits];
     
-    updatedBeneficiaries.splice(beneficiaryIndex, 1); // Remove specific index
-    updatedSplits.splice(beneficiaryIndex, 1);
-    updatedCoverSplits.splice(beneficiaryIndex, 1);
+    // Create new arrays by filtering out the target index
+    const updatedBeneficiaries = fund.fundValueBeneficiaries.filter((_, index) => index !== beneficiaryIndex);
+    const updatedSplits = fund.fundValuePercentageSplits.filter((_, index) => index !== beneficiaryIndex);
+    const updatedCoverSplits = fund.fundValueCoverSplits.filter((_, index) => index !== beneficiaryIndex);
     
-    onFieldUpdate(fundId, 'fundValueBeneficiaries', updatedBeneficiaries);
-    onFieldUpdate(fundId, 'fundValuePercentageSplits', updatedSplits);
-    onFieldUpdate(fundId, 'fundValueCoverSplits', updatedCoverSplits);
+    // Update all arrays at once
+    const updatedFund = {
+      ...fund,
+      fundValueBeneficiaries: updatedBeneficiaries,
+      fundValuePercentageSplits: updatedSplits,
+      fundValueCoverSplits: updatedCoverSplits
+    };
+    
+    // Send single update with all changes
+    Object.keys(updatedFund).forEach(key => {
+      if (key !== 'id' && updatedFund[key] !== fund[key]) {
+        onFieldUpdate(fundId, key, updatedFund[key]);
+      }
+    });
   }, [funds, onFieldUpdate]);
 
   // Calculate totals for summary display
