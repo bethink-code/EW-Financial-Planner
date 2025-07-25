@@ -304,11 +304,12 @@ export default function IncomeNeedsTable({ viewMode, searchTerm }: IncomeNeedsTa
               <td className="p-1">
                 <select
                   key={`frequency-${need.id}-${need.frequency}`}
-                  value={need.frequency || "monthly"}
+                  defaultValue={need.frequency || "monthly"}
                   onChange={(e) => handleSelectChange(need.id, 'frequency', e.target.value)}
                   className={`table-input ${getFieldClass('text')} entered-value`}
                   disabled={isUpdating}
                 >
+                  <option value="">Select frequency...</option>
                   <option value="monthly">Monthly</option>
                   <option value="yearly">Yearly</option>
                 </select>
