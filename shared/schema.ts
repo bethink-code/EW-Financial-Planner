@@ -141,14 +141,14 @@ export type DefinedBenefitFund = typeof definedBenefitFunds.$inferSelect;
 export type InsertDefinedBenefitFund = z.infer<typeof insertDefinedBenefitFundSchema>;
 export type UpdateDefinedBenefitFund = z.infer<typeof updateDefinedBenefitFundSchema>;
 
-// Voluntary Investments table schema - New 5-section structure
+// Voluntary Investments table schema - New 5-section structure with multiple owners
 export const voluntaryInvestments = pgTable("voluntary_investments", {
   id: serial("id").primaryKey(),
   
   // Overview Section
   description: text("description").notNull().default("Enter details ..."),
-  owner: text("owner").notNull().default("Donald Edwards"),
-  ownershipPercentage: text("ownership_percentage").notNull().default("100%"),
+  owners: text("owners").array().notNull().default(["Donald Edwards"]),
+  ownershipPercentages: text("ownership_percentages").array().notNull().default(["100%"]),
   
   // Investment Details Section
   baseCost: text("base_cost").notNull().default("R 0"),
