@@ -37,7 +37,7 @@ export function RetirementFundsSummary() {
 
   return (
     <div className="px-5 pb-5">
-      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 max-w-4xl">
+      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
         <div className="summary-card">
           <div className="text-xs font-medium text-teal-700 mb-1">Total Funds</div>
           <div className="text-lg font-bold text-neutral-900">{totalFunds}</div>
