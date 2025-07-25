@@ -240,16 +240,26 @@ export type IncomeNeeds = typeof incomeNeeds.$inferSelect;
 export type InsertIncomeNeeds = z.infer<typeof insertIncomeNeedsSchema>;
 export type UpdateIncomeNeeds = z.infer<typeof updateIncomeNeedsSchema>;
 
-// Income Provisions table schema
+// Income Provisions table schema - Extended from Income Needs with additional columns
 export const incomeProvisions = pgTable("income_provisions", {
   id: serial("id").primaryKey(),
   
-  // Basic information
+  // Overview Section (same as Income Needs)
   description: text("description").notNull().default("Enter details ..."),
+  personName: text("person_name").notNull().default("Enter details ..."),
   
-  // Financial details
-  amount: text("amount").notNull().default("R 0"),
+  // Income Provision Details Section (extended from Income Needs)
+  startDate: text("start_date").notNull().default("Enter details ..."),
+  termYears: text("term_years").notNull().default("0 years"),
   increasePercentage: text("increase_percentage").notNull().default("0%"),
+  cpi: boolean("cpi").notNull().default(false),
+  frequency: text("frequency").notNull().default("monthly"),
+  amount: text("amount").notNull().default("R 0"),
+  capitalisedAmount: text("capitalised_amount").notNull().default("R 0"),
+  
+  // Additional Income Provisions specific fields
+  taxPercentage: text("tax_percentage").notNull().default("0%"),
+  netAmount: text("net_amount").notNull().default("R 0"),
 });
 
 export const insertIncomeProvisionsSchema = createInsertSchema(incomeProvisions).omit({

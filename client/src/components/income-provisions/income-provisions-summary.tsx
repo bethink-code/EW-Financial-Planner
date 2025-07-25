@@ -16,7 +16,7 @@ export function IncomeProvisionsSummary() {
 
   const totalProvisions = provisions.length;
   const totalAmount = provisions.reduce((sum, provision) => {
-    const amount = parseFloat(provision.amount.replace(/[^\d.-]/g, '')) || 0;
+    const amount = parseFloat(provision.amount?.replace(/[^\d.-]/g, '') || '0') || 0;
     return sum + amount;
   }, 0);
 
@@ -32,8 +32,6 @@ export function IncomeProvisionsSummary() {
           <div className="text-xs font-medium text-teal-700 mb-1">Total Amount</div>
           <div className="text-lg font-bold text-neutral-900">R {totalAmount.toLocaleString()}</div>
         </div>
-        
-
       </div>
     </div>
   );

@@ -1,10 +1,10 @@
 import React, { useState, useCallback } from "react";
 import { useQuery, useMutation } from "@tanstack/react-query";
-import IncomeProvisionsTable from "../components/income-provisions/income-provisions-table";
+import IncomeProvisionsTable from "../components/income-provisions/income-provisions-table-new";
 import { IncomeProvisionsSummary } from "@/components/income-provisions/income-provisions-summary";
 import { CalculatorHeader } from "@/components/ui/calculator-header";
 import { apiRequest, queryClient } from "@/lib/queryClient";
-import type { InsertIncomeProvision } from "@shared/schema";
+import type { InsertIncomeProvisions } from "@shared/schema";
 
 type ViewMode = "table" | "hybrid";
 
@@ -24,18 +24,18 @@ export default function IncomeProvisions() {
   // Add new provision mutation
   const addMutation = useMutation({
     mutationFn: async () => {
-      const newProvision: InsertIncomeProvision = {
-        entity: "Donald Edwards",
-        description: "Enter here ...",
-        amount: "0",
-        start: "0",
-        termYears: "0",
-        termEditable: true,
+      const newProvision: InsertIncomeProvisions = {
+        description: "Enter details ...",
+        personName: "Enter details ...",
+        startDate: "Enter details ...",
+        termYears: "0 years",
         increasePercentage: "0%",
         cpi: false,
         frequency: "monthly",
-        capitalisedAmount: "0",
-        taxPercentage: "0%"
+        amount: "R 0",
+        capitalisedAmount: "R 0",
+        taxPercentage: "0%",
+        netAmount: "R 0",
       };
       return apiRequest("POST", "/api/income-provisions", newProvision);
     },
@@ -71,7 +71,7 @@ export default function IncomeProvisions() {
           </CalculatorHeader>
         </div>
         
-        <IncomeProvisionsTable />
+        <IncomeProvisionsTable viewMode={viewMode} />
       </div>
     </div>
   );
