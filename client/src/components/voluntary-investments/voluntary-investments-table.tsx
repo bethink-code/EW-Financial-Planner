@@ -426,7 +426,7 @@ export default function VoluntaryInvestmentsTable({ viewMode, searchTerm }: Volu
                       type="checkbox"
                       checked={investment.excludedFromJointEstate}
                       onChange={(e) => handleCheckboxChange(investment.id, 'excludedFromJointEstate', e.target.checked)}
-                      className="w-4 h-4"
+                      className="w-4 h-4 mt-2"
                       disabled={isUpdating}
                     />
                   </td>
@@ -438,7 +438,7 @@ export default function VoluntaryInvestmentsTable({ viewMode, searchTerm }: Volu
                       type="checkbox"
                       checked={investment.excludedFromEstateDuty}
                       onChange={(e) => handleCheckboxChange(investment.id, 'excludedFromEstateDuty', e.target.checked)}
-                      className="w-4 h-4"
+                      className="w-4 h-4 mt-2"
                       disabled={isUpdating}
                     />
                   </td>
@@ -450,7 +450,7 @@ export default function VoluntaryInvestmentsTable({ viewMode, searchTerm }: Volu
                       type="checkbox"
                       checked={investment.excludedFromCGT}
                       onChange={(e) => handleCheckboxChange(investment.id, 'excludedFromCGT', e.target.checked)}
-                      className="w-4 h-4"
+                      className="w-4 h-4 mt-2"
                       disabled={isUpdating}
                     />
                   </td>
@@ -462,7 +462,7 @@ export default function VoluntaryInvestmentsTable({ viewMode, searchTerm }: Volu
                       type="checkbox"
                       checked={investment.excludedFromExecutorsFees}
                       onChange={(e) => handleCheckboxChange(investment.id, 'excludedFromExecutorsFees', e.target.checked)}
-                      className="w-4 h-4"
+                      className="w-4 h-4 mt-2"
                       disabled={isUpdating}
                     />
                   </td>
