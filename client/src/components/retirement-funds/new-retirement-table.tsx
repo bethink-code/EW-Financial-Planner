@@ -48,6 +48,7 @@ export function NewRetirementTable({
 
   // Owner management
   const handleAddOwner = useCallback((fundId: number) => {
+    console.log('handleAddOwner called for fund', fundId);
     const fund = funds.find(f => f.id === fundId);
     if (!fund) return;
     const updatedOwners = [...fund.owners, "Donald Edwards"];
@@ -58,7 +59,9 @@ export function NewRetirementTable({
     const fund = funds.find(f => f.id === fundId);
     if (!fund || fund.owners.length <= 1 || ownerIndex === 0) return; // Protect first owner
     
-    const newOwners = fund.owners.filter((_, i) => i !== ownerIndex);
+    // Create copy and remove using splice for consistent array handling
+    const newOwners = [...fund.owners];
+    newOwners.splice(ownerIndex, 1);
     onFieldUpdate(fundId, 'owners', newOwners);
   }, [funds, onFieldUpdate]);
 
@@ -273,7 +276,12 @@ export function NewRetirementTable({
                       />
                       {rowIndex === 0 ? (
                         <button
-                          onClick={() => handleAddOwner(fund.id)}
+                          type="button"
+                          onClick={(e) => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            handleAddOwner(fund.id);
+                          }}
                           className="p-0.5 text-blue-600 hover:bg-blue-50 rounded"
                           title="Add Owner"
                         >
@@ -281,7 +289,12 @@ export function NewRetirementTable({
                         </button>
                       ) : (
                         <button
-                          onClick={() => handleRemoveOwner(fund.id, rowIndex)}
+                          type="button"
+                          onClick={(e) => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            handleRemoveOwner(fund.id, rowIndex);
+                          }}
                           className="p-0.5 text-red-600 hover:bg-red-50 rounded"
                           title="Remove Owner"
                         >
