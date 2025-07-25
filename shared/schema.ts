@@ -115,7 +115,8 @@ export const definedBenefitFunds = pgTable("defined_benefit_funds", {
   
   // Overview Section
   description: text("description").notNull().default("Enter details ..."),
-  owner: text("owner").notNull().default("Donald Edwards"),
+  owners: text("owners").array().notNull().default(["Donald Edwards"]),
+  ownershipPercentages: text("ownership_percentages").array().notNull().default(["100%"]),
   
   // Fund Details Section
   yearsOfService: text("years_of_service").notNull().default("0 years"),

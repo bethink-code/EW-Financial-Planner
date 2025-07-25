@@ -26,7 +26,8 @@ export default function DefinedBenefitFunds() {
     mutationFn: async () => {
       const newFund: InsertDefinedBenefitFund = {
         description: "Enter details ...",
-        owner: "Donald Edwards",
+        owners: ["Donald Edwards"],
+        ownershipPercentages: ["100%"],
         yearsOfService: "0 years",
         finalMonthlySalary: "R 0",
         deathLumpSum: "R 0",
