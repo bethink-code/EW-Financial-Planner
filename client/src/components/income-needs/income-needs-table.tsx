@@ -318,7 +318,7 @@ export default function IncomeNeedsTable({ viewMode, searchTerm }: IncomeNeedsTa
                 <input
                   type="text"
                   value={need.capitalisedAmount || 'R 0'}
-                  className={`table-input ${getFieldClass('currency')} ${getValueClass(need.capitalisedAmount || 'R 0', 'currency')}`}
+                  className={`table-input ${getFieldClass('currency')} entered-value`}
                   readOnly
                   disabled={isUpdating}
                 />
