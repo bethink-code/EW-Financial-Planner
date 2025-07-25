@@ -401,7 +401,7 @@ th, td {
     width: auto;
     height: auto !important;
     min-height: 1.25rem !important;
-    padding: 0.3rem 0.4rem !important;
+    padding: 0.125rem 0.4rem !important;
     background-color: hsl(var(--primary) / 0.05);
     border: 1px solid hsl(var(--border));
     outline: none;
