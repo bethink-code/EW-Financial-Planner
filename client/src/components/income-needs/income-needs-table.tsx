@@ -306,9 +306,8 @@ export default function IncomeNeedsTable({ viewMode, searchTerm }: IncomeNeedsTa
                   key={`frequency-${need.id}-${need.frequency}-${Date.now()}`}
                   defaultValue={need.frequency || "monthly"}
                   onChange={(e) => handleSelectChange(need.id, 'frequency', e.target.value)}
-                  className="table-input bg-white border border-gray-300 rounded-md px-2 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent entered-value"
+                  className={`table-input ${getFieldClass('text')} entered-value`}
                   disabled={isUpdating}
-                  style={{ minWidth: '100px' }}
                 >
                   <option value="monthly">Monthly</option>
                   <option value="yearly">Yearly</option>
