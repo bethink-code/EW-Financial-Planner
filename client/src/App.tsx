@@ -6,6 +6,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import NotFound from "@/pages/not-found";
 import NewRetirementFunds from "@/pages/new-retirement-funds";
 import LumpSumBequests from "@/pages/lump-sum-bequests";
+import IncomeNeeds from "@/pages/income-needs";
 import DeathWithEstateLiquidity from "./pages/death-with-estate-liquidity";
 
 function Router() {
@@ -15,6 +16,7 @@ function Router() {
       <Route path="/death-with-estate-liquidity" component={DeathWithEstateLiquidity} />
       <Route path="/retirement-funds" component={NewRetirementFunds} />
       <Route path="/lump-sum-bequests" component={LumpSumBequests} />
+      <Route path="/income-needs" component={IncomeNeeds} />
       <Route component={NotFound} />
     </Switch>
   );
