@@ -6,7 +6,7 @@ import { ActionButtonGroup, DuplicateButton, DeleteButton } from '@/components/u
 import { getFieldClass, getCellClass } from '@/lib/field-types';
 import { formatCurrencyValue, formatPercentageValue, formatTextValue, isDefaultValue, getValueClass } from '@/lib/formatting';
 import { handleDefaultValueFocus, createEnhancedBlurHandler } from '@/lib/formatting';
-import { SafeFragment } from '@/lib/safe-fragment';
+
 
 interface LiabilitiesTableProps {
   viewMode?: 'table' | 'hybrid';
@@ -22,7 +22,7 @@ export function LiabilitiesTable({ viewMode = 'table' }: LiabilitiesTableProps) 
 
   // Add mutation
   const addMutation = useMutation({
-    mutationFn: () => apiRequest('/api/liabilities', 'POST', {}),
+    mutationFn: () => apiRequest('POST', '/api/liabilities', {}),
     onSettled: () => {
       setIsUpdating(false);
       queryClient.invalidateQueries({ queryKey: ['/api/liabilities'] });
@@ -32,7 +32,7 @@ export function LiabilitiesTable({ viewMode = 'table' }: LiabilitiesTableProps) 
   // Update mutation
   const updateMutation = useMutation({
     mutationFn: ({ id, field, value }: { id: number; field: string; value: any }) =>
-      apiRequest(`/api/liabilities/${id}`, 'PATCH', { [field]: value }),
+      apiRequest('PATCH', `/api/liabilities/${id}`, { [field]: value }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['/api/liabilities'] });
     },
@@ -43,7 +43,7 @@ export function LiabilitiesTable({ viewMode = 'table' }: LiabilitiesTableProps) 
 
   // Delete mutation
   const deleteMutation = useMutation({
-    mutationFn: (id: number) => apiRequest(`/api/liabilities/${id}`, 'DELETE'),
+    mutationFn: (id: number) => apiRequest('DELETE', `/api/liabilities/${id}`),
     onSettled: () => {
       setIsUpdating(false);
       queryClient.invalidateQueries({ queryKey: ['/api/liabilities'] });
@@ -176,7 +176,7 @@ export function LiabilitiesTable({ viewMode = 'table' }: LiabilitiesTableProps) 
         <tbody className="divide-y divide-neutral-200">
           {/* Render each section */}
           {Object.entries(sectionTitles).map(([sectionKey, sectionTitle]) => (
-            <SafeFragment key={sectionKey}>
+            <React.Fragment key={sectionKey}>
               {/* Section Header */}
               <tr className="bg-neutral-50">
                 <td colSpan={11} className="px-3 py-2 text-xs font-medium text-neutral-600 uppercase tracking-wider">
@@ -342,7 +342,7 @@ export function LiabilitiesTable({ viewMode = 'table' }: LiabilitiesTableProps) 
                   </td>
                 </tr>
               )}
-            </SafeFragment>
+            </React.Fragment>
           ))}
         </tbody>
         

@@ -16,7 +16,7 @@ export default function LiabilitiesPage() {
 
   // Add mutation with category selection
   const addMutation = useMutation({
-    mutationFn: (category: string) => apiRequest('/api/liabilities', 'POST', { section: category }),
+    mutationFn: (category: string) => apiRequest('POST', '/api/liabilities', { section: category }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['/api/liabilities'] });
     },
