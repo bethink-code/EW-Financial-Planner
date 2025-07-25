@@ -222,7 +222,7 @@ export function NewRetirementTable({
             );
 
             return Array.from({ length: maxRows }, (_, rowIndex) => (
-              <tr key={`${fund.id}-${rowIndex}-${fund.unapprovedBeneficiaries.length}-${fund.fundValueBeneficiaries.length}`} className="hover:bg-gray-50">
+              <tr key={`${fund.id}-${rowIndex}-${fund.owners.length}-${fund.unapprovedBeneficiaries.length}-${fund.fundValueBeneficiaries.length}`} className="hover:bg-gray-50">
                 {/* Actions */}
                 <td className="border border-neutral-300 p-1">
                   {rowIndex === 0 && (
