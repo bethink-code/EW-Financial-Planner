@@ -10,6 +10,7 @@ type ViewMode = "table" | "hybrid";
 
 export default function IncomeProvisions() {
   const [viewMode, setViewMode] = useState<ViewMode>("table");
+  const [searchTerm, setSearchTerm] = useState("");
 
   // Fetch provisions for count
   const { data: provisions = [] } = useQuery({
@@ -67,11 +68,11 @@ export default function IncomeProvisions() {
             viewMode={viewMode}
             onViewModeChange={handleViewModeChange}
           >
-            <IncomeProvisionsSummary />
+            <IncomeProvisionsSummary searchTerm={searchTerm} />
           </CalculatorHeader>
         </div>
         
-        <IncomeProvisionsTable viewMode={viewMode} />
+        <IncomeProvisionsTable viewMode={viewMode} searchTerm={searchTerm} />
       </div>
     </div>
   );

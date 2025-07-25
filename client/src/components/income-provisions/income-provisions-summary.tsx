@@ -1,7 +1,13 @@
+import { useMemo, useCallback } from 'react';
 import { useQuery } from "@tanstack/react-query";
 import type { IncomeProvisions } from "@shared/schema";
+import { formatCurrencyValue, parseCurrencyValue } from '@/lib/formatting';
 
-export function IncomeProvisionsSummary() {
+interface IncomeProvisionsSummaryProps {
+  searchTerm?: string;
+}
+
+export function IncomeProvisionsSummary({ searchTerm }: IncomeProvisionsSummaryProps) {
   const { data: provisions = [], isLoading } = useQuery<IncomeProvisions[]>({
     queryKey: ["/api/income-provisions"],
   });
@@ -14,46 +20,58 @@ export function IncomeProvisionsSummary() {
     );
   }
 
-  // Calculate capitalised amount for each provision using the same logic as the table
-  const calculateCapitalisedAmount = (provision: IncomeProvisions): string => {
-    const amount = parseFloat(provision.amount?.replace(/[^\d.-]/g, '') || '0') || 0;
-    const startDate = parseInt(provision.startDate?.replace(/[^\d]/g, '') || '0') || 0;
-    const termYears = parseFloat(provision.termYears?.replace(/[^\d.-]/g, '') || '0') || 0;
-    const increasePercentage = parseFloat(provision.increasePercentage?.replace(/[^\d.-]/g, '') || '0') || 0;
-    const isCpi = provision.cpi === true;
-
-    if (amount === 0 || termYears === 0) return 'R 0';
-
-    const discountRate = isCpi ? 0.06 : 0.08; // 6% for CPI-linked, 8% for non-CPI
-    const realGrowthRate = isCpi ? 0 : (increasePercentage / 100) - 0.06; // Real growth above CPI
-
+  // Calculate capitalised amount using the exact same logic as the table
+  const calculateCapitalisedAmount = useCallback((provision: IncomeProvisions): string => {
+    const amount = parseCurrencyValue(provision.amount || '0');
+    const termYears = parseFloat(provision.termYears?.replace(/[^\d.-]/g, '') || '0');
+    const increaseRate = parseFloat(provision.increasePercentage?.replace(/[^\d.-]/g, '') || '0') / 100;
+    const taxPercentage = parseFloat(provision.taxPercentage?.replace(/[^\d.-]/g, '') || '0') / 100;
+    const taxRate = parseFloat(provision.taxRate?.replace(/[^\d.-]/g, '') || '0') / 100;
+    
+    if (amount <= 0 || termYears <= 0) {
+      return 'R 0';
+    }
+    
+    // Use standard financial planning assumptions
+    const discountRate = provision.cpi ? 0.06 : 0.08; // 6% if CPI-linked, 8% otherwise
+    const frequency = provision.frequency === 'monthly' ? 12 : provision.frequency === 'quarterly' ? 4 : 1;
+    const periodsPerYear = frequency;
+    const totalPeriods = termYears * periodsPerYear;
+    const periodicDiscountRate = discountRate / periodsPerYear;
+    const periodicIncreaseRate = increaseRate / periodsPerYear;
+    
     let presentValue: number;
     
-    if (Math.abs(realGrowthRate) < 0.0001) {
-      // No real growth case - standard annuity
-      presentValue = amount * ((1 - Math.pow(1 + discountRate, -termYears)) / discountRate);
+    if (Math.abs(periodicDiscountRate - periodicIncreaseRate) < 0.0001) {
+      // When discount rate equals increase rate, use simplified formula
+      presentValue = amount * totalPeriods;
     } else {
-      // Growing annuity case
-      const numerator = 1 - Math.pow((1 + realGrowthRate) / (1 + discountRate), termYears);
-      const denominator = discountRate - realGrowthRate;
-      presentValue = amount * (numerator / denominator);
+      // Present value of growing annuity formula
+      const netRate = periodicDiscountRate - periodicIncreaseRate;
+      const pvFactor = (1 - Math.pow((1 + periodicIncreaseRate) / (1 + periodicDiscountRate), totalPeriods)) / netRate;
+      presentValue = amount * pvFactor;
     }
+    
+    // Return the gross present value before taxes - taxes are separate considerations
+    return formatCurrencyValue(Math.round(presentValue).toString());
+  }, []);
 
-    // Discount to present value if starting in the future
-    if (startDate > 0) {
-      presentValue = presentValue / Math.pow(1 + discountRate, startDate);
-    }
+  // Filter provisions based on search term (same logic as the table)
+  const filteredProvisions = useMemo(() => {
+    if (!searchTerm) return provisions;
+    return provisions.filter(provision => 
+      provision.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      provision.personName.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+  }, [provisions, searchTerm]);
 
-    return `R ${Math.round(presentValue).toLocaleString()}`;
-  };
-
-  const totalProvisions = provisions.length;
-  const totalAmount = provisions.reduce((sum, provision) => {
-    const amount = parseFloat(provision.amount?.replace(/[^\d.-]/g, '') || '0') || 0;
+  const totalProvisions = filteredProvisions.length;
+  const totalAmount = filteredProvisions.reduce((sum, provision) => {
+    const amount = parseCurrencyValue(provision.amount || '0');
     return sum + amount;
   }, 0);
 
-  const totalCapitalisedAmount = provisions.reduce((sum, provision) => {
+  const totalCapitalisedAmount = filteredProvisions.reduce((sum, provision) => {
     const capitalisedAmount = parseFloat(calculateCapitalisedAmount(provision).replace(/[^\d.-]/g, '')) || 0;
     return sum + capitalisedAmount;
   }, 0);
