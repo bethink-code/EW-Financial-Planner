@@ -7,6 +7,7 @@ import NotFound from "@/pages/not-found";
 import NewRetirementFunds from "@/pages/new-retirement-funds";
 import LumpSumBequests from "@/pages/lump-sum-bequests";
 import IncomeNeeds from "@/pages/income-needs";
+import IncomeProvisions from "@/pages/income-provisions";
 import DeathWithEstateLiquidity from "./pages/death-with-estate-liquidity";
 
 function Router() {
@@ -17,6 +18,7 @@ function Router() {
       <Route path="/retirement-funds" component={NewRetirementFunds} />
       <Route path="/lump-sum-bequests" component={LumpSumBequests} />
       <Route path="/income-needs" component={IncomeNeeds} />
+      <Route path="/income-provisions" component={IncomeProvisions} />
       <Route component={NotFound} />
     </Switch>
   );
