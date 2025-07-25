@@ -287,7 +287,7 @@ export default function VoluntaryInvestmentsTable({ viewMode, searchTerm }: Volu
                 )}
                 
                 {rowIndex === 0 && (
-                  <td rowSpan={maxRows} className="p-1 section-start">
+                  <td rowSpan={maxRows} className="p-1 section-start align-top">
                     <input
                       type="text"
                       defaultValue={investment.description}
@@ -351,7 +351,7 @@ export default function VoluntaryInvestmentsTable({ viewMode, searchTerm }: Volu
                 </td>
                 
                 {rowIndex === 0 && (
-                  <td rowSpan={maxRows} className="p-1 section-start">
+                  <td rowSpan={maxRows} className="p-1 section-start align-top">
                     <input
                       key={`baseCost-${investment.id}-${investment.baseCost}`}
                       type="text"
@@ -365,7 +365,7 @@ export default function VoluntaryInvestmentsTable({ viewMode, searchTerm }: Volu
                 )}
                 
                 {rowIndex === 0 && (
-                  <td rowSpan={maxRows} className="p-1">
+                  <td rowSpan={maxRows} className="p-1 align-top">
                     <input
                       key={`marketValue-${investment.id}-${investment.marketValue}`}
                       type="text"
@@ -379,7 +379,7 @@ export default function VoluntaryInvestmentsTable({ viewMode, searchTerm }: Volu
                 )}
                 
                 {rowIndex === 0 && (
-                  <td rowSpan={maxRows} className="p-1">
+                  <td rowSpan={maxRows} className="p-1 align-top">
                     <input
                       key={`liquidationPercentage-${investment.id}-${investment.liquidationPercentage}`}
                       type="text"
@@ -393,7 +393,7 @@ export default function VoluntaryInvestmentsTable({ viewMode, searchTerm }: Volu
                 )}
                 
                 {rowIndex === 0 && (
-                  <td rowSpan={maxRows} className="p-1 section-start">
+                  <td rowSpan={maxRows} className="p-1 section-start align-top">
                     <input
                       key={`spouse-${investment.id}-${investment.spouse}`}
                       type="text"
@@ -407,7 +407,7 @@ export default function VoluntaryInvestmentsTable({ viewMode, searchTerm }: Volu
                 )}
                 
                 {rowIndex === 0 && (
-                  <td rowSpan={maxRows} className="p-1">
+                  <td rowSpan={maxRows} className="p-1 align-top">
                     <input
                       key={`others-${investment.id}-${investment.others}`}
                       type="text"
@@ -421,7 +421,7 @@ export default function VoluntaryInvestmentsTable({ viewMode, searchTerm }: Volu
                 )}
                 
                 {rowIndex === 0 && (
-                  <td rowSpan={maxRows} className="p-1 text-center section-start">
+                  <td rowSpan={maxRows} className="p-1 text-center section-start align-top">
                     <input
                       type="checkbox"
                       checked={investment.excludedFromJointEstate}
@@ -433,7 +433,7 @@ export default function VoluntaryInvestmentsTable({ viewMode, searchTerm }: Volu
                 )}
                 
                 {rowIndex === 0 && (
-                  <td rowSpan={maxRows} className="p-1 text-center">
+                  <td rowSpan={maxRows} className="p-1 text-center align-top">
                     <input
                       type="checkbox"
                       checked={investment.excludedFromEstateDuty}
@@ -445,7 +445,7 @@ export default function VoluntaryInvestmentsTable({ viewMode, searchTerm }: Volu
                 )}
                 
                 {rowIndex === 0 && (
-                  <td rowSpan={maxRows} className="p-1 text-center">
+                  <td rowSpan={maxRows} className="p-1 text-center align-top">
                     <input
                       type="checkbox"
                       checked={investment.excludedFromCGT}
@@ -457,7 +457,7 @@ export default function VoluntaryInvestmentsTable({ viewMode, searchTerm }: Volu
                 )}
                 
                 {rowIndex === 0 && (
-                  <td rowSpan={maxRows} className="p-1 text-center section-end">
+                  <td rowSpan={maxRows} className="p-1 text-center section-end align-top">
                     <input
                       type="checkbox"
                       checked={investment.excludedFromExecutorsFees}
