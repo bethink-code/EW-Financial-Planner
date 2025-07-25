@@ -173,61 +173,48 @@ export function LumpSumTable({ viewMode, searchTerm }: LumpSumTableProps) {
   }
 
   return (
-    <div className="w-full">
-      <table className="w-full border-collapse">
+    <div>
+      {/* Table */}
+      <table className="min-w-full border border-neutral-200">
         <thead>
-          {/* First header row - Section groups */}
-          <tr className="bg-gray-50">
-            <th className="border border-gray-300 px-2 py-1 text-xs font-medium text-gray-700 text-center" colSpan={2}>
-              ACTIONS
-            </th>
-            <th className="border border-gray-300 px-2 py-1 text-xs font-medium text-gray-700 text-center" colSpan={2}>
-              OVERVIEW
-            </th>
-            <th className="border border-gray-300 px-2 py-1 text-xs font-medium text-gray-700 text-center" colSpan={5}>
-              NEED DETAILS
-            </th>
+          <tr className="border-b border-border">
+            <th className="px-3 py-3 text-center text-xs font-medium text-neutral-600 uppercase tracking-wider w-16">Actions</th>
+            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start" colSpan={2}>Overview</th>
+            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start section-end" colSpan={5}>Need Details</th>
           </tr>
-          
-          {/* Second header row - Individual columns */}
-          <tr className="bg-gray-50">
-            <th className="border border-gray-300 border-b border-neutral-200 px-2 py-1 text-xs font-medium text-gray-700">DUPLICATE</th>
-            <th className="border border-gray-300 border-b border-neutral-200 px-2 py-1 text-xs font-medium text-gray-700">DELETE</th>
-            <th className="border border-gray-300 border-b border-neutral-200 px-2 py-1 text-xs font-medium text-gray-700">DESCRIPTION</th>
-            <th className="border border-gray-300 border-b border-neutral-200 px-2 py-1 text-xs font-medium text-gray-700">ENTITY</th>
-            <th className="border border-gray-300 border-b border-neutral-200 px-2 py-1 text-xs font-medium text-gray-700">START</th>
-            <th className="border border-gray-300 border-b border-neutral-200 px-2 py-1 text-xs font-medium text-gray-700">AMOUNT</th>
-            <th className="border border-gray-300 border-b border-neutral-200 px-2 py-1 text-xs font-medium text-gray-700">INCREASE %</th>
-            <th className="border border-gray-300 border-b border-neutral-200 px-2 py-1 text-xs font-medium text-gray-700">CPI</th>
-            <th className="border border-gray-300 border-b border-neutral-200 px-2 py-1 text-xs font-medium text-gray-700">VALUE AT DEATH</th>
+          <tr className="border-b border-border">
+            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center border-b border-neutral-200"></th>
+            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start border-b border-neutral-200">Description</th>
+            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center border-b border-neutral-200">Entity</th>
+            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start border-b border-neutral-200">Start</th>
+            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center border-b border-neutral-200">Amount</th>
+            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center border-b border-neutral-200">Increase %</th>
+            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center border-b border-neutral-200">CPI</th>
+            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-end border-b border-neutral-200">Value at Death</th>
           </tr>
         </thead>
         
-        <tbody>
+        <tbody className="divide-y divide-neutral-200">
           {bequests.map((bequest, index) => (
-            <tr key={bequest.id} className="hover:bg-gray-50">
-              {/* Actions - Duplicate */}
-              <td className="border border-gray-300 p-1 table-actions-cell">
+            <tr key={bequest.id} className="hover:bg-neutral-50">
+              {/* Actions */}
+              <td className="table-actions-cell text-center">
                 <div>
-                  <DuplicateButton 
-                    onClick={() => handleDuplicate(bequest)}
-                    disabled={isUpdating}
-                  />
-                </div>
-              </td>
-              
-              {/* Actions - Delete */}
-              <td className="border border-gray-300 p-1 table-actions-cell">
-                <div>
-                  <DeleteButton 
-                    onClick={() => handleDelete(bequest.id)}
-                    disabled={isUpdating}
-                  />
+                  <ActionButtonGroup>
+                    <DuplicateButton
+                      onClick={() => handleDuplicate(bequest)}
+                      disabled={isUpdating}
+                    />
+                    <DeleteButton
+                      onClick={() => handleDelete(bequest.id)}
+                      disabled={isUpdating}
+                    />
+                  </ActionButtonGroup>
                 </div>
               </td>
               
               {/* Overview - Description */}
-              <td className="border border-gray-300 p-1">
+              <td className="px-3 py-2 section-start">
                 <input
                   type="text"
                   defaultValue={bequest.description}
@@ -240,7 +227,7 @@ export function LumpSumTable({ viewMode, searchTerm }: LumpSumTableProps) {
               </td>
               
               {/* Overview - Entity */}
-              <td className="border border-gray-300 p-1">
+              <td className="px-3 py-2">
                 <input
                   type="text"
                   defaultValue={bequest.entity}
@@ -253,7 +240,7 @@ export function LumpSumTable({ viewMode, searchTerm }: LumpSumTableProps) {
               </td>
               
               {/* Need Details - Start Date */}
-              <td className="border border-gray-300 p-1">
+              <td className="px-3 py-2 section-start">
                 <input
                   type="text"
                   defaultValue={bequest.start}
@@ -266,7 +253,7 @@ export function LumpSumTable({ viewMode, searchTerm }: LumpSumTableProps) {
               </td>
               
               {/* Need Details - Amount */}
-              <td className="border border-gray-300 p-1">
+              <td className="px-3 py-2">
                 <input
                   type="text"
                   defaultValue={bequest.amount}
@@ -279,7 +266,7 @@ export function LumpSumTable({ viewMode, searchTerm }: LumpSumTableProps) {
               </td>
               
               {/* Need Details - Increase % */}
-              <td className="border border-gray-300 p-1">
+              <td className="px-3 py-2">
                 <input
                   type="text"
                   defaultValue={bequest.increasePercentage}
@@ -292,7 +279,7 @@ export function LumpSumTable({ viewMode, searchTerm }: LumpSumTableProps) {
               </td>
               
               {/* Need Details - CPI Checkbox */}
-              <td className="border border-gray-300 p-1 text-center">
+              <td className="px-3 py-2 text-center">
                 <div className="flex justify-center">
                   <input
                     type="checkbox"
@@ -305,7 +292,7 @@ export function LumpSumTable({ viewMode, searchTerm }: LumpSumTableProps) {
               </td>
               
               {/* Need Details - Value at Death (Calculated) */}
-              <td className="border border-gray-300 p-1">
+              <td className="px-3 py-2 section-end">
                 <input
                   type="text"
                   defaultValue={bequest.valueAtDeath}
@@ -319,16 +306,15 @@ export function LumpSumTable({ viewMode, searchTerm }: LumpSumTableProps) {
           ))}
           
           {/* Totals Row */}
-          <tr className="bg-gray-100 font-bold table-total-row">
-            <td className="border border-gray-300 p-1 text-center font-bold">-</td>
-            <td className="border border-gray-300 p-1 text-center font-bold">-</td>
-            <td className="border border-gray-300 p-1 font-bold">TOTALS</td>
-            <td className="border border-gray-300 p-1 font-bold">-</td>
-            <td className="border border-gray-300 p-1 font-bold">-</td>
-            <td className="border border-gray-300 p-1 text-right font-bold">{totals.amount}</td>
-            <td className="border border-gray-300 p-1 font-bold">-</td>
-            <td className="border border-gray-300 p-1 font-bold">-</td>
-            <td className="border border-gray-300 p-1 text-right font-bold">{totals.valueAtDeath}</td>
+          <tr className="bg-neutral-100 font-bold table-total-row">
+            <td className="px-3 py-2 text-center font-bold">-</td>
+            <td className="px-3 py-2 font-bold section-start">TOTALS</td>
+            <td className="px-3 py-2 font-bold">-</td>
+            <td className="px-3 py-2 font-bold section-start">-</td>
+            <td className="px-3 py-2 text-right font-bold">{totals.amount}</td>
+            <td className="px-3 py-2 font-bold">-</td>
+            <td className="px-3 py-2 font-bold">-</td>
+            <td className="px-3 py-2 text-right font-bold section-end">{totals.valueAtDeath}</td>
           </tr>
         </tbody>
       </table>
