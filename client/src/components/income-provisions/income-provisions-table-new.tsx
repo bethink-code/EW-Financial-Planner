@@ -387,6 +387,8 @@ export default function IncomeProvisionsTable({ viewMode, searchTerm }: IncomePr
             <td className="p-1"></td>
             <td className="p-1"></td>
             <td className="p-1"></td>
+            <td className="p-1"></td>
+            <td className="p-1"></td>
             <td className="p-1 text-center">
               <span className="text-xs font-bold text-neutral-900">
                 R {filteredProvisions.reduce((sum, provision) => {
@@ -399,6 +401,8 @@ export default function IncomeProvisionsTable({ viewMode, searchTerm }: IncomePr
           <tr className="font-bold border-t border-neutral-200">
             <td className="p-1"></td>
             <td className="p-1 text-left text-xs font-bold text-neutral-700">Capital Required for Income Shortfall</td>
+            <td className="p-1"></td>
+            <td className="p-1"></td>
             <td className="p-1"></td>
             <td className="p-1"></td>
             <td className="p-1"></td>
