@@ -27,7 +27,7 @@ export default function IncomeNeedsTable({ viewMode, searchTerm }: IncomeNeedsTa
         description: "Enter details ...",
         personName: "Enter details ...",
         startDate: "Enter details ...",
-        termYears: "0",
+        termYears: "0 years",
         increasePercentage: "0%",
         cpi: false,
         frequency: "monthly",
@@ -263,12 +263,12 @@ export default function IncomeNeedsTable({ viewMode, searchTerm }: IncomeNeedsTa
               {/* Term Years */}
               <td className="p-1">
                 <input
-                  key={`termYears-${need.id}-${need.termYears}`}
                   type="text"
                   defaultValue={need.termYears}
-                  className={`table-input ${getFieldClass('years')} ${getValueClass(need.termYears, 'years')}`}
+                  onBlur={createEnhancedBlurHandler((value) => handleInputBlur(need.id, 'termYears', value))}
                   onFocus={handleDefaultValueFocus}
-                  onBlur={(e) => handleInputBlur(need.id, 'termYears', e.target.value, e.target)}
+                  className={`table-input ${getFieldClass('years')} ${getValueClass(need.termYears, 'years')}`}
+                  data-field={`termYears-${need.id}`}
                   disabled={isUpdating}
                 />
               </td>
