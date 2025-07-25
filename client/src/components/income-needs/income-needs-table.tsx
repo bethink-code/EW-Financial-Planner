@@ -178,7 +178,7 @@ export default function IncomeNeedsTable({ viewMode, searchTerm }: IncomeNeedsTa
           <tr className="border-b border-border">
             <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center border-b border-neutral-200"></th>
             <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start border-b border-neutral-200">Description</th>
-            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center border-b border-neutral-200">Person Name</th>
+            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center border-b border-neutral-200">Entity</th>
             <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start border-b border-neutral-200">Amount</th>
             <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center border-b border-neutral-200">Start</th>
             <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center border-b border-neutral-200">Term (years)</th>
@@ -221,7 +221,7 @@ export default function IncomeNeedsTable({ viewMode, searchTerm }: IncomeNeedsTa
                 />
               </td>
               
-              {/* Person Name */}
+              {/* Entity */}
               <td className="p-1">
                 <input
                   key={`personName-${need.id}-${need.personName}`}
