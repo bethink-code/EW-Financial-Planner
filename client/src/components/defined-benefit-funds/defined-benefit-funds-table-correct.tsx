@@ -303,27 +303,28 @@ export default function DefinedBenefitFundsTable() {
                 
                 {/* Owner Name and Percentage - One per row */}
                 <td className="p-1">
-                  <div className="flex items-center gap-2">
+                  <div className="flex items-center gap-1">
                     {rowIndex > 0 && <span className="text-blue-600">↳</span>}
                     <input
                       key={`owner-${fund.id}-${rowIndex}-${fund.owners[rowIndex]}`}
                       type="text"
                       defaultValue={fund.owners[rowIndex] || "Donald Edwards"}
-                      className={`table-input ${getFieldClass('text')} ${getValueClass(fund.owners[rowIndex] || "Donald Edwards", 'text')}`}
+                      className={`table-input ${getFieldClass('text')} ${getValueClass(fund.owners[rowIndex] || "Donald Edwards", 'text')} flex-1`}
                       onFocus={handleDefaultValueFocus}
                       onBlur={(e) => handleOwnerUpdate(fund.id, rowIndex, 'name', e.target.value)}
                       disabled={isUpdating}
                     />
-                    {rowIndex === 0 && (
+                    {rowIndex === 0 ? (
                       <AddButton
                         onClick={() => handleAddOwner(fund.id)}
                         disabled={isUpdating}
+                        size="sm"
                       />
-                    )}
-                    {rowIndex > 0 && (
+                    ) : (
                       <DeleteButton
                         onClick={() => handleRemoveOwner(fund.id, rowIndex)}
                         disabled={isUpdating}
+                        size="sm"
                       />
                     )}
                   </div>
