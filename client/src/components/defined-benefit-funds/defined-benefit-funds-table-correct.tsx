@@ -242,29 +242,27 @@ export default function DefinedBenefitFundsTable() {
   }
 
   return (
-    <div>
-      {/* Table */}
-      <table className="min-w-full border border-neutral-200">
+    <div className="space-y-6">
+      <table>
         <thead>
           {/* First Header Row - Section Groups */}
-          <tr className="border-b border-neutral-200">
-            <th className="section-start px-3 py-2 text-center text-xs font-medium text-neutral-600 uppercase tracking-wider w-16">Actions</th>
-            <th className="section-start px-3 py-2 text-left text-xs font-medium text-neutral-600 uppercase tracking-wider" colSpan={3}>Overview</th>
-            <th className="section-start px-3 py-2 text-left text-xs font-medium text-neutral-600 uppercase tracking-wider" colSpan={4}>Fund Details</th>
-            <th className="section-start px-3 py-2 text-left text-xs font-medium text-neutral-600 uppercase tracking-wider" colSpan={2}>Pension Income at Death</th>
+          <tr className="border-b border-border">
+            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start section-end" rowSpan={2}>Actions</th>
+            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start" colSpan={3}>Overview</th>
+            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start" colSpan={4}>Fund Details</th>
+            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start section-end" colSpan={2}>Pension Income at Death</th>
           </tr>
           {/* Second Header Row - Individual Fields */}
-          <tr className="border-b border-neutral-200">
-            <th className="px-3 py-2 text-center text-xs font-medium text-neutral-600 uppercase tracking-wider">Duplicate / Delete</th>
-            <th className="px-3 py-2 text-left text-xs font-medium text-neutral-600 uppercase tracking-wider">Description</th>
-            <th className="px-3 py-2 text-left text-xs font-medium text-neutral-600 uppercase tracking-wider">Owner Name</th>
-            <th className="px-3 py-2 text-left text-xs font-medium text-neutral-600 uppercase tracking-wider">Ownership %</th>
-            <th className="px-3 py-2 text-left text-xs font-medium text-neutral-600 uppercase tracking-wider">Years of Service</th>
-            <th className="px-3 py-2 text-left text-xs font-medium text-neutral-600 uppercase tracking-wider">Final Monthly Salary</th>
-            <th className="px-3 py-2 text-left text-xs font-medium text-neutral-600 uppercase tracking-wider">Death Lump Sum</th>
-            <th className="px-3 py-2 text-left text-xs font-medium text-neutral-600 uppercase tracking-wider">Additional Tax Free Amount</th>
-            <th className="px-3 py-2 text-left text-xs font-medium text-neutral-600 uppercase tracking-wider">Amount</th>
-            <th className="section-end px-3 py-2 text-left text-xs font-medium text-neutral-600 uppercase tracking-wider">Increase</th>
+          <tr className="border-b border-border">
+            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start">Description</th>
+            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center">Owner Name</th>
+            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center">Ownership %</th>
+            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start">Years of Service</th>
+            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center">Final Monthly Salary</th>
+            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center">Death Lump Sum</th>
+            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center">Additional Tax Free Amount</th>
+            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start">Amount</th>
+            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-end">Increase</th>
           </tr>
         </thead>
         <tbody className="divide-y divide-neutral-200">
@@ -272,10 +270,10 @@ export default function DefinedBenefitFundsTable() {
             const maxRows = fund.owners.length;
             
             return Array.from({ length: maxRows }, (_, rowIndex) => (
-              <tr key={`${fund.id}-${rowIndex}`} className="hover:bg-neutral-50">
+              <tr key={`${fund.id}-${rowIndex}-${fund.owners.length}`} className="hover:bg-neutral-50">
                 {/* Actions Section - Only show on first row */}
-                {rowIndex === 0 && (
-                  <td className="section-start table-actions-cell text-center" rowSpan={maxRows}>
+                <td className="table-actions-cell p-1 text-center section-start section-end">
+                  {rowIndex === 0 && (
                     <ActionButtonGroup>
                       <DuplicateButton
                         onClick={() => handleDuplicateFund(fund)}
@@ -286,12 +284,12 @@ export default function DefinedBenefitFundsTable() {
                         disabled={isUpdating}
                       />
                     </ActionButtonGroup>
-                  </td>
-                )}
+                  )}
+                </td>
                 
                 {/* Overview Section */}
-                {rowIndex === 0 && (
-                  <td className="section-start px-3 py-2" rowSpan={maxRows}>
+                <td className="p-1 section-start">
+                  {rowIndex === 0 && (
                     <input
                       type="text"
                       defaultValue={fund.description}
@@ -300,11 +298,11 @@ export default function DefinedBenefitFundsTable() {
                       onBlur={(e) => handleUpdateFund(fund.id, 'description', e.target.value)}
                       disabled={isUpdating}
                     />
-                  </td>
-                )}
+                  )}
+                </td>
                 
                 {/* Owner Name and Percentage - One per row */}
-                <td className="px-3 py-2">
+                <td className="p-1">
                   <div className="flex items-center gap-2">
                     {rowIndex > 0 && <span className="text-blue-600">↳</span>}
                     <input
@@ -330,7 +328,7 @@ export default function DefinedBenefitFundsTable() {
                     )}
                   </div>
                 </td>
-                <td className="px-3 py-2">
+                <td className="p-1">
                   <input
                     key={`percentage-${fund.id}-${rowIndex}-${fund.ownershipPercentages[rowIndex]}`}
                     type="text"
@@ -346,97 +344,105 @@ export default function DefinedBenefitFundsTable() {
                 </td>
                 
                 {/* Fund Details Section - Only show on first row */}
-                {rowIndex === 0 && (
-                  <>
-                    <td className="section-start px-3 py-2" rowSpan={maxRows}>
-                      <input
-                        key={`yearsOfService-${fund.id}-${fund.yearsOfService}`}
-                        type="text"
-                        defaultValue={fund.yearsOfService}
-                        className={`table-input ${getFieldClass('years')} ${getValueClass(fund.yearsOfService, 'years')}`}
-                        onFocus={handleDefaultValueFocus}
-                        onBlur={(e) => handleInputBlur(fund.id, 'yearsOfService', e.target.value, e.target)}
-                        disabled={isUpdating}
-                      />
-                    </td>
-                    <td className="px-3 py-2" rowSpan={maxRows}>
-                      <input
-                        key={`finalMonthlySalary-${fund.id}-${fund.finalMonthlySalary}`}
-                        type="text"
-                        defaultValue={fund.finalMonthlySalary}
-                        className={`table-input ${getFieldClass('currency')} ${getValueClass(fund.finalMonthlySalary, 'currency')}`}
-                        onFocus={handleDefaultValueFocus}
-                        onBlur={(e) => handleInputBlur(fund.id, 'finalMonthlySalary', e.target.value, e.target)}
-                        disabled={isUpdating}
-                      />
-                    </td>
-                    <td className="px-3 py-2" rowSpan={maxRows}>
-                      <input
-                        key={`deathLumpSum-${fund.id}-${fund.deathLumpSum}`}
-                        type="text"
-                        defaultValue={fund.deathLumpSum}
-                        className={`table-input ${getFieldClass('currency')} ${getValueClass(fund.deathLumpSum, 'currency')}`}
-                        onFocus={handleDefaultValueFocus}
-                        onBlur={(e) => handleInputBlur(fund.id, 'deathLumpSum', e.target.value, e.target)}
-                        disabled={isUpdating}
-                      />
-                    </td>
-                    <td className="px-3 py-2" rowSpan={maxRows}>
-                      <input
-                        key={`additionalTaxFreeAmount-${fund.id}-${fund.additionalTaxFreeAmount}`}
-                        type="text"
-                        defaultValue={fund.additionalTaxFreeAmount}
-                        className={`table-input ${getFieldClass('currency')} ${getValueClass(fund.additionalTaxFreeAmount, 'currency')}`}
-                        onFocus={handleDefaultValueFocus}
-                        onBlur={(e) => handleInputBlur(fund.id, 'additionalTaxFreeAmount', e.target.value, e.target)}
-                        disabled={isUpdating}
-                      />
-                    </td>
-                    
-                    {/* Pension Income at Death Section */}
-                    <td className="section-start px-3 py-2" rowSpan={maxRows}>
-                      <input
-                        key={`pensionIncomeAmount-${fund.id}-${fund.pensionIncomeAmount}`}
-                        type="text"
-                        defaultValue={fund.pensionIncomeAmount}
-                        className={`table-input ${getFieldClass('currency')} ${getValueClass(fund.pensionIncomeAmount, 'currency')}`}
-                        onFocus={handleDefaultValueFocus}
-                        onBlur={(e) => handleInputBlur(fund.id, 'pensionIncomeAmount', e.target.value, e.target)}
-                        disabled={isUpdating}
-                      />
-                    </td>
-                    <td className="section-end px-3 py-2" rowSpan={maxRows}>
-                      <input
-                        key={`pensionIncomeIncrease-${fund.id}-${fund.pensionIncomeIncrease}`}
-                        type="text"
-                        defaultValue={fund.pensionIncomeIncrease || "0%"}
-                        onFocus={handleDefaultValueFocus}
-                        onBlur={createEnhancedBlurHandler(
-                          (e) => handleInputBlur(fund.id, 'pensionIncomeIncrease', e.target.value, e.target),
-                          'percentage'
-                        )}
-                        className={`table-input ${getFieldClass('percentage')} ${getValueClass(fund.pensionIncomeIncrease || "0%", 'percentage')}`}
-                        disabled={isUpdating}
-                      />
-                    </td>
-                  </>
-                )}
+                <td className="p-1 section-start">
+                  {rowIndex === 0 && (
+                    <input
+                      key={`yearsOfService-${fund.id}-${fund.yearsOfService}`}
+                      type="text"
+                      defaultValue={fund.yearsOfService}
+                      className={`table-input ${getFieldClass('years')} ${getValueClass(fund.yearsOfService, 'years')}`}
+                      onFocus={handleDefaultValueFocus}
+                      onBlur={(e) => handleInputBlur(fund.id, 'yearsOfService', e.target.value, e.target)}
+                      disabled={isUpdating}
+                    />
+                  )}
+                </td>
+                <td className="p-1">
+                  {rowIndex === 0 && (
+                    <input
+                      key={`finalMonthlySalary-${fund.id}-${fund.finalMonthlySalary}`}
+                      type="text"
+                      defaultValue={fund.finalMonthlySalary}
+                      className={`table-input ${getFieldClass('currency')} ${getValueClass(fund.finalMonthlySalary, 'currency')}`}
+                      onFocus={handleDefaultValueFocus}
+                      onBlur={(e) => handleInputBlur(fund.id, 'finalMonthlySalary', e.target.value, e.target)}
+                      disabled={isUpdating}
+                    />
+                  )}
+                </td>
+                <td className="p-1">
+                  {rowIndex === 0 && (
+                    <input
+                      key={`deathLumpSum-${fund.id}-${fund.deathLumpSum}`}
+                      type="text"
+                      defaultValue={fund.deathLumpSum}
+                      className={`table-input ${getFieldClass('currency')} ${getValueClass(fund.deathLumpSum, 'currency')}`}
+                      onFocus={handleDefaultValueFocus}
+                      onBlur={(e) => handleInputBlur(fund.id, 'deathLumpSum', e.target.value, e.target)}
+                      disabled={isUpdating}
+                    />
+                  )}
+                </td>
+                <td className="p-1">
+                  {rowIndex === 0 && (
+                    <input
+                      key={`additionalTaxFreeAmount-${fund.id}-${fund.additionalTaxFreeAmount}`}
+                      type="text"
+                      defaultValue={fund.additionalTaxFreeAmount}
+                      className={`table-input ${getFieldClass('currency')} ${getValueClass(fund.additionalTaxFreeAmount, 'currency')}`}
+                      onFocus={handleDefaultValueFocus}
+                      onBlur={(e) => handleInputBlur(fund.id, 'additionalTaxFreeAmount', e.target.value, e.target)}
+                      disabled={isUpdating}
+                    />
+                  )}
+                </td>
+                
+                {/* Pension Income at Death Section */}
+                <td className="p-1 section-start">
+                  {rowIndex === 0 && (
+                    <input
+                      key={`pensionIncomeAmount-${fund.id}-${fund.pensionIncomeAmount}`}
+                      type="text"
+                      defaultValue={fund.pensionIncomeAmount}
+                      className={`table-input ${getFieldClass('currency')} ${getValueClass(fund.pensionIncomeAmount, 'currency')}`}
+                      onFocus={handleDefaultValueFocus}
+                      onBlur={(e) => handleInputBlur(fund.id, 'pensionIncomeAmount', e.target.value, e.target)}
+                      disabled={isUpdating}
+                    />
+                  )}
+                </td>
+                <td className="p-1 section-end">
+                  {rowIndex === 0 && (
+                    <input
+                      key={`pensionIncomeIncrease-${fund.id}-${fund.pensionIncomeIncrease}`}
+                      type="text"
+                      defaultValue={fund.pensionIncomeIncrease || "0%"}
+                      onFocus={handleDefaultValueFocus}
+                      onBlur={createEnhancedBlurHandler(
+                        (e) => handleInputBlur(fund.id, 'pensionIncomeIncrease', e.target.value, e.target),
+                        'percentage'
+                      )}
+                      className={`table-input ${getFieldClass('percentage')} ${getValueClass(fund.pensionIncomeIncrease || "0%", 'percentage')}`}
+                      disabled={isUpdating}
+                    />
+                  )}
+                </td>
               </tr>
             ));
           }).flat()}
           
           {/* Totals Row */}
           <tr className="table-total-row bg-neutral-100 font-bold">
-            <td className="section-start px-3 py-2 text-center font-bold">TOTALS</td>
-            <td className="section-start px-3 py-2 font-bold">-</td>
-            <td className="px-3 py-2 font-bold">-</td>
-            <td className="px-3 py-2 font-bold">-</td>
-            <td className="section-start px-3 py-2 font-bold">-</td>
-            <td className="px-3 py-2 font-bold">R {totals.finalMonthlySalary.toLocaleString()}</td>
-            <td className="px-3 py-2 font-bold">R {totals.deathLumpSum.toLocaleString()}</td>
-            <td className="px-3 py-2 font-bold">R {totals.additionalTaxFreeAmount.toLocaleString()}</td>
-            <td className="section-start px-3 py-2 font-bold">R {totals.pensionIncomeAmount.toLocaleString()}</td>
-            <td className="section-end px-3 py-2 font-bold">-</td>
+            <td className="section-start section-end p-1 text-center font-bold">TOTALS</td>
+            <td className="section-start p-1 font-bold">-</td>
+            <td className="p-1 font-bold">-</td>
+            <td className="p-1 font-bold">-</td>
+            <td className="section-start p-1 font-bold">-</td>
+            <td className="p-1 font-bold">R {totals.finalMonthlySalary.toLocaleString()}</td>
+            <td className="p-1 font-bold">R {totals.deathLumpSum.toLocaleString()}</td>
+            <td className="p-1 font-bold">R {totals.additionalTaxFreeAmount.toLocaleString()}</td>
+            <td className="section-start p-1 font-bold">R {totals.pensionIncomeAmount.toLocaleString()}</td>
+            <td className="section-end p-1 font-bold">-</td>
           </tr>
         </tbody>
       </table>
