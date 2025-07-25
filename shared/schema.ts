@@ -5,37 +5,36 @@ import { z } from "zod";
 export const retirementFunds = pgTable("retirement_funds", {
   id: serial("id").primaryKey(),
   
-  // Overview section (2 columns)
+  // Overview Section
   description: text("description").notNull().default("Enter details ..."),
-  owner: text("owner").notNull().default("Donald Edwards"),
-  additionalOwners: text("additional_owners").array().notNull().default([]),
+  owners: text("owners").array().notNull().default(["Donald Edwards"]),
   
-  // Unapproved Life Cover section (4 columns)
+  // Unapproved Life Cover Section
   coverAmount: text("cover_amount").notNull().default("R 0"),
+  unapprovedBeneficiaries: text("unapproved_beneficiaries").array().notNull().default([""]),
+  unapprovedPercentageSplits: text("unapproved_percentage_splits").array().notNull().default(["0%"]),
+  unapprovedCoverSplits: text("unapproved_cover_splits").array().notNull().default(["R 0"]), // Calculated
+  
+  // Monthly Death Benefit Section
+  monthlyIncome: text("monthly_income").notNull().default("R 0"),
+  monthlyIncomeCheckbox: boolean("monthly_income_checkbox").notNull().default(false),
   termYears: text("term_years").notNull().default("0 years"),
   increasePercentage: text("increase_percentage").notNull().default("0%"),
+  
+  // Approved Life Cover Section  
   approvedLifeCover: text("approved_life_cover").notNull().default("R 0"),
-  
-  // Monthly Death Benefit section (3 columns)
   fundValue: text("fund_value").notNull().default("R 0"),
-  fundValueAtDeath: text("fund_value_at_death").notNull().default("R 0"),
-  beneficiaryName: text("beneficiary_name").notNull().default("Enter details ..."),
+  fundValueAtDeath: text("fund_value_at_death").notNull().default("R 0"), // Calculated
   
-  // Fund Value section (2 columns)
-  name: text("name").notNull().default("Enter details ..."),
-  amount: text("amount").notNull().default("R 0"),
-  
-  // Fund Value Beneficiaries section (6 columns)
+  // Fund Value Beneficiaries Section
+  fundValueBeneficiaries: text("fund_value_beneficiaries").array().notNull().default([""]),
+  fundValuePercentageSplits: text("fund_value_percentage_splits").array().notNull().default(["0%"]),
+  fundValueCoverSplits: text("fund_value_cover_splits").array().notNull().default(["R 0"]), // Calculated
   lumpSumTaken: text("lump_sum_taken").notNull().default("R 0"),
-  fundValueBeneficiaries: text("fund_value_beneficiaries").notNull().default("R 0"),
   nonDeductibleContribution: text("non_deductible_contribution").notNull().default("R 0"),
-  livingAnnuity: text("living_annuity").notNull().default("R 0"),
-  monthlyIncome: text("monthly_income").notNull().default("R 0"),
-  incomeTerm: text("income_term").notNull().default("0 years"),
-  
-  // Multiple beneficiaries support
-  additionalBeneficiaries: text("additional_beneficiaries").array().notNull().default([]),
-  additionalBenefitSplits: text("additional_benefit_splits").array().notNull().default([]),
+  livingAnnuity: text("living_annuity").notNull().default("R 0"), // Calculated
+  livingAnnuityCheckbox: boolean("living_annuity_checkbox").notNull().default(false),
+  incomeTerm: text("income_term").notNull().default("0 years")
 });
 
 export const insertRetirementFundSchema = createInsertSchema(retirementFunds).omit({
