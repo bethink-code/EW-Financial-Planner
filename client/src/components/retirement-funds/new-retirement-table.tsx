@@ -259,7 +259,7 @@ export function NewRetirementTable({
                       >
                         <UserPlus className="h-3 w-3" />
                       </button>
-                      {fund.owners.length > 1 && (
+                      {rowIndex > 0 && (
                         <button
                           onClick={() => handleRemoveOwner(fund.id, rowIndex)}
                           className="p-0.5 text-red-600 hover:bg-red-50 rounded"
@@ -309,7 +309,7 @@ export function NewRetirementTable({
                       >
                         <Plus className="h-3 w-3" />
                       </button>
-                      {fund.unapprovedBeneficiaries.length > 1 && (
+                      {rowIndex > 0 && (
                         <button
                           onClick={() => handleRemoveUnapprovedBeneficiary(fund.id, rowIndex)}
                           className="p-0.5 text-red-600 hover:bg-red-50 rounded"
@@ -477,7 +477,7 @@ export function NewRetirementTable({
                       >
                         <Plus className="h-3 w-3" />
                       </button>
-                      {fund.fundValueBeneficiaries.length > 1 && (
+                      {rowIndex > 0 && (
                         <button
                           onClick={() => handleRemoveFundValueBeneficiary(fund.id, rowIndex)}
                           className="p-0.5 text-red-600 hover:bg-red-50 rounded"
