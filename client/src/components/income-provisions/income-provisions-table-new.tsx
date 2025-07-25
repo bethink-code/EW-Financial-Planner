@@ -378,17 +378,7 @@ export default function IncomeProvisionsTable({ viewMode, searchTerm }: IncomePr
         {/* Totals Footer */}
         <tfoot className="bg-neutral-50 border-t-2 border-neutral-300">
           <tr>
-            <td className="p-1"></td>
-            <td className="p-1 text-left text-neutral-700" style={{ fontSize: '0.875rem' }}>Totals</td>
-            <td className="p-1"></td>
-            <td className="p-1"></td>
-            <td className="p-1"></td>
-            <td className="p-1"></td>
-            <td className="p-1"></td>
-            <td className="p-1"></td>
-            <td className="p-1"></td>
-            <td className="p-1"></td>
-            <td className="p-1"></td>
+            <td className="p-1 text-right text-neutral-700" colSpan={11} style={{ fontSize: '0.875rem' }}>Totals</td>
             <td className="text-right" style={{ padding: '0.6rem 0.8rem' }}>
               <span style={{ fontFamily: 'inherit', fontWeight: '600', color: '#374151', fontSize: '0.875rem' }}>
                 R {filteredProvisions.reduce((sum, provision) => {
@@ -399,17 +389,7 @@ export default function IncomeProvisionsTable({ viewMode, searchTerm }: IncomePr
             </td>
           </tr>
           <tr className="border-t border-neutral-200">
-            <td className="p-1"></td>
-            <td className="p-1 text-left text-neutral-700" style={{ fontSize: '0.875rem' }}>Capital Required for Income Shortfall</td>
-            <td className="p-1"></td>
-            <td className="p-1"></td>
-            <td className="p-1"></td>
-            <td className="p-1"></td>
-            <td className="p-1"></td>
-            <td className="p-1"></td>
-            <td className="p-1"></td>
-            <td className="p-1"></td>
-            <td className="p-1"></td>
+            <td className="p-1 text-right text-neutral-700" colSpan={11} style={{ fontSize: '0.875rem' }}>Capital Required for Income Shortfall</td>
             <td className="text-right" style={{ padding: '0.6rem 0.8rem' }}>
               <span style={{ fontFamily: 'inherit', fontWeight: '600', color: '#374151', fontSize: '0.875rem' }}>
                 R {filteredProvisions.reduce((sum, provision) => {
