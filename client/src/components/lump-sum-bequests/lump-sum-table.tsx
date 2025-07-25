@@ -259,7 +259,7 @@ export function LumpSumTable({ viewMode, searchTerm }: LumpSumTableProps) {
                   defaultValue={bequest.amount}
                   onBlur={createEnhancedBlurHandler((value) => handleInputBlur(bequest.id, 'amount', value), 'currency')}
                   onFocus={handleDefaultValueFocus}
-                  className={`table-input ${getFieldClass('currency')} ${getValueClass(bequest.amount)} text-right`}
+                  className={`table-input ${getFieldClass('currency')} ${getValueClass(bequest.amount, 'currency')} text-right`}
                   data-field={`amount-${bequest.id}`}
                   disabled={isUpdating}
                 />
@@ -272,7 +272,7 @@ export function LumpSumTable({ viewMode, searchTerm }: LumpSumTableProps) {
                   defaultValue={bequest.increasePercentage}
                   onBlur={createEnhancedBlurHandler((value) => handleInputBlur(bequest.id, 'increasePercentage', value), 'percentage')}
                   onFocus={handleDefaultValueFocus}
-                  className={`table-input ${getFieldClass('percentage')} ${getValueClass(bequest.increasePercentage)} text-right`}
+                  className={`table-input ${getFieldClass('percentage')} ${getValueClass(bequest.increasePercentage, 'percentage')} text-right`}
                   data-field={`increasePercentage-${bequest.id}`}
                   disabled={isUpdating}
                 />

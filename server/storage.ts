@@ -1,4 +1,4 @@
-import { retirementFunds, lumpSumBequests, assurance, definedBenefitFunds, voluntaryInvestments, assetsAndLiabilities, incomeNeeds, incomeProvisions, residue, additionalEstateDutyItems, type RetirementFund, type InsertRetirementFund, type UpdateRetirementFund, type LumpSumBequest, type InsertLumpSumBequest, type Assurance, type InsertAssurance, type UpdateAssurance, type DefinedBenefitFund, type InsertDefinedBenefitFund, type UpdateDefinedBenefitFund, type VoluntaryInvestment, type InsertVoluntaryInvestment, type UpdateVoluntaryInvestment, type AssetAndLiability, type InsertAssetAndLiability, type UpdateAssetAndLiability, type IncomeNeed, type InsertIncomeNeed, type UpdateIncomeNeed, type IncomeProvision, type InsertIncomeProvision, type UpdateIncomeProvision, type Residue, type InsertResidue, type UpdateResidue, type AdditionalEstateDutyItem, type InsertAdditionalEstateDutyItem, type UpdateAdditionalEstateDutyItem } from "@shared/schema";
+import { retirementFunds, lumpSumBequests, assurance, definedBenefitFunds, voluntaryInvestments, assetsAndLiabilities, incomeNeeds, incomeProvisions, residue, additionalEstateDutyItems, liabilities, type RetirementFund, type InsertRetirementFund, type UpdateRetirementFund, type LumpSumBequest, type InsertLumpSumBequest, type Assurance, type InsertAssurance, type UpdateAssurance, type DefinedBenefitFund, type InsertDefinedBenefitFund, type UpdateDefinedBenefitFund, type VoluntaryInvestment, type InsertVoluntaryInvestment, type UpdateVoluntaryInvestment, type AssetAndLiability, type InsertAssetAndLiability, type UpdateAssetAndLiability, type IncomeNeed, type InsertIncomeNeed, type UpdateIncomeNeed, type IncomeProvision, type InsertIncomeProvision, type UpdateIncomeProvision, type Residue, type InsertResidue, type UpdateResidue, type AdditionalEstateDutyItem, type InsertAdditionalEstateDutyItem, type UpdateAdditionalEstateDutyItem, type Liabilities, type InsertLiabilities, type UpdateLiabilities } from "@shared/schema";
 import { drizzle } from "drizzle-orm/node-postgres";
 import { Pool } from "pg";
 import { eq, ilike, or } from "drizzle-orm";
@@ -83,6 +83,14 @@ export interface IStorage {
   updateAdditionalEstateDutyItem(id: number, updates: UpdateAdditionalEstateDutyItem): Promise<AdditionalEstateDutyItem | undefined>;
   deleteAdditionalEstateDutyItem(id: number): Promise<boolean>;
   searchAdditionalEstateDutyItems(query: string): Promise<AdditionalEstateDutyItem[]>;
+  
+  // Liabilities
+  getLiabilities(): Promise<Liabilities[]>;
+  getLiability(id: number): Promise<Liabilities | undefined>;
+  createLiability(liability: InsertLiabilities): Promise<Liabilities>;
+  updateLiability(id: number, updates: UpdateLiabilities): Promise<Liabilities | undefined>;
+  deleteLiability(id: number): Promise<boolean>;
+  searchLiabilities(query: string): Promise<Liabilities[]>;
 }
 
 export class MemStorage implements IStorage {
@@ -1236,6 +1244,42 @@ class DbStorage implements IStorage {
         ilike(additionalEstateDutyItems.description, `%${query}%`)
       ))
       .orderBy(additionalEstateDutyItems.id);
+  }
+
+  // Liabilities methods - Database implementation
+  async getLiabilities(): Promise<Liabilities[]> {
+    return await this.db.select().from(liabilities).orderBy(liabilities.id);
+  }
+
+  async getLiability(id: number): Promise<Liabilities | undefined> {
+    const results = await this.db.select().from(liabilities).where(eq(liabilities.id, id));
+    return results[0];
+  }
+
+  async createLiability(liability: InsertLiabilities): Promise<Liabilities> {
+    const results = await this.db.insert(liabilities).values(liability).returning();
+    return results[0];
+  }
+
+  async updateLiability(id: number, updates: UpdateLiabilities): Promise<Liabilities | undefined> {
+    const results = await this.db.update(liabilities).set(updates).where(eq(liabilities.id, id)).returning();
+    return results[0];
+  }
+
+  async deleteLiability(id: number): Promise<boolean> {
+    const results = await this.db.delete(liabilities).where(eq(liabilities.id, id)).returning();
+    return results.length > 0;
+  }
+
+  async searchLiabilities(query: string): Promise<Liabilities[]> {
+    if (!query.trim()) return await this.getLiabilities();
+    
+    return await this.db.select().from(liabilities)
+      .where(or(
+        ilike(liabilities.category, `%${query}%`),
+        ilike(liabilities.description, `%${query}%`)
+      ))
+      .orderBy(liabilities.id);
   }
 }
 
