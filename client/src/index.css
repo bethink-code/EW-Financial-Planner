@@ -347,7 +347,7 @@ th, td {
     display: flex;
     align-items: center;
     justify-content: center;
-    margin-top: 0.625rem; /* 10px offset to align with input field centers */
+    margin-top: 0.25rem; /* 4px offset to align with input field centers */
   }
   
   /* Standard table row - enforces consistent height */
