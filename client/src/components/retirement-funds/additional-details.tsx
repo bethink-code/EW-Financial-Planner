@@ -166,22 +166,28 @@ export function AdditionalDetails({ funds, onFieldUpdate, isUpdating }: Addition
               ))}
             </tbody>
             {/* Totals Row */}
-            <tfoot>
-              <tr className="border-t border-neutral-300 bg-gray-100 table-total-row">
-                <td className="table-cell text-sm text-neutral-900" style={{ fontWeight: 700 }}>
-                  Total
-                </td>
-                <td className="table-cell text-right text-sm text-neutral-900" style={{ fontWeight: 700 }}>
+            <tfoot className="bg-neutral-50 border-t border-neutral-300">
+              <tr>
+              <td className="text-right text-neutral-700" style={{ fontSize: '0.875rem', padding: '0.6rem 0.8rem' }}>
+                Total
+              </td>
+              <td className="text-right" style={{ padding: '0.6rem 0.8rem' }}>
+                <span style={{ fontFamily: 'inherit', fontWeight: '600', color: '#374151', fontSize: '0.875rem' }}>
                   {totals.lumpSumDeathFormatted}
-                </td>
-                <td className="table-cell text-right text-sm text-neutral-900" style={{ fontWeight: 700 }}>
+                </span>
+              </td>
+              <td className="text-right" style={{ padding: '0.6rem 0.8rem' }}>
+                <span style={{ fontFamily: 'inherit', fontWeight: '600', color: '#374151', fontSize: '0.875rem' }}>
                   {totals.previousLumpSumsFormatted}
-                </td>
-                <td className="table-cell text-right text-sm text-neutral-900" style={{ fontWeight: 700 }}>
+                </span>
+              </td>
+              <td className="text-right" style={{ padding: '0.6rem 0.8rem' }}>
+                <span style={{ fontFamily: 'inherit', fontWeight: '600', color: '#374151', fontSize: '0.875rem' }}>
                   {totals.additionalTaxFreeAmountFormatted}
-                </td>
-              </tr>
-            </tfoot>
+                </span>
+              </td>
+            </tr>
+          </tfoot>
         </table>
     </>
   );

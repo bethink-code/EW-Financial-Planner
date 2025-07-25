@@ -304,18 +304,26 @@ export function LumpSumTable({ viewMode, searchTerm }: LumpSumTableProps) {
             </tr>
           ))}
           
-          {/* Totals Row */}
-          <tr className="bg-neutral-100 font-bold table-total-row">
-            <td className="px-3 py-2 text-center font-bold">-</td>
-            <td className="px-3 py-2 font-bold section-start">TOTALS</td>
-            <td className="px-3 py-2 font-bold">-</td>
-            <td className="px-3 py-2 font-bold section-start">-</td>
-            <td className="px-3 py-2 text-right font-bold">{totals.amount}</td>
-            <td className="px-3 py-2 font-bold">-</td>
-            <td className="px-3 py-2 font-bold">-</td>
-            <td className="px-3 py-2 text-right font-bold section-end">{totals.valueAtDeath}</td>
-          </tr>
         </tbody>
+        
+        {/* Totals Footer */}
+        <tfoot className="bg-neutral-50 border-t border-neutral-300">
+          <tr>
+            <td className="p-1 text-right text-neutral-700" colSpan={4} style={{ fontSize: '0.875rem' }}>Totals</td>
+            <td className="text-right" style={{ padding: '0.6rem 0.8rem' }}>
+              <span style={{ fontFamily: 'inherit', fontWeight: '600', color: '#374151', fontSize: '0.875rem' }}>
+                {totals.amount}
+              </span>
+            </td>
+            <td className="p-1"></td>
+            <td className="p-1"></td>
+            <td className="text-right" style={{ padding: '0.6rem 0.8rem' }}>
+              <span style={{ fontFamily: 'inherit', fontWeight: '600', color: '#374151', fontSize: '0.875rem' }}>
+                {totals.valueAtDeath}
+              </span>
+            </td>
+          </tr>
+        </tfoot>
       </table>
     </div>
   );

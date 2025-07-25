@@ -473,23 +473,39 @@ export default function VoluntaryInvestmentsTable({ viewMode, searchTerm }: Volu
             ));
           }).flat()}
           
-          {/* Totals Row */}
-          <tr className="table-total-row bg-neutral-100 font-bold">
-            <td className="section-start section-end p-1 text-center font-bold">TOTALS</td>
-            <td className="section-start p-1 font-bold">-</td>
-            <td className="p-1 font-bold">-</td>
-            <td className="p-1 font-bold">-</td>
-            <td className="section-start p-1 font-bold">R {totals.baseCost.toLocaleString()}</td>
-            <td className="p-1 font-bold">R {totals.marketValue.toLocaleString()}</td>
-            <td className="p-1 font-bold">-</td>
-            <td className="section-start p-1 font-bold">R {totals.spouse.toLocaleString()}</td>
-            <td className="p-1 font-bold">R {totals.others.toLocaleString()}</td>
-            <td className="section-start p-1 font-bold">-</td>
-            <td className="p-1 font-bold">-</td>
-            <td className="p-1 font-bold">-</td>
-            <td className="section-end p-1 font-bold">-</td>
-          </tr>
         </tbody>
+        
+        {/* Totals Footer */}
+        <tfoot className="bg-neutral-50 border-t border-neutral-300">
+          <tr>
+            <td className="p-1 text-right text-neutral-700" colSpan={4} style={{ fontSize: '0.875rem' }}>Totals</td>
+            <td className="text-right" style={{ padding: '0.6rem 0.8rem' }}>
+              <span style={{ fontFamily: 'inherit', fontWeight: '600', color: '#374151', fontSize: '0.875rem' }}>
+                R {totals.baseCost.toLocaleString()}
+              </span>
+            </td>
+            <td className="text-right" style={{ padding: '0.6rem 0.8rem' }}>
+              <span style={{ fontFamily: 'inherit', fontWeight: '600', color: '#374151', fontSize: '0.875rem' }}>
+                R {totals.marketValue.toLocaleString()}
+              </span>
+            </td>
+            <td className="p-1"></td>
+            <td className="text-right" style={{ padding: '0.6rem 0.8rem' }}>
+              <span style={{ fontFamily: 'inherit', fontWeight: '600', color: '#374151', fontSize: '0.875rem' }}>
+                R {totals.spouse.toLocaleString()}
+              </span>
+            </td>
+            <td className="text-right" style={{ padding: '0.6rem 0.8rem' }}>
+              <span style={{ fontFamily: 'inherit', fontWeight: '600', color: '#374151', fontSize: '0.875rem' }}>
+                R {totals.others.toLocaleString()}
+              </span>
+            </td>
+            <td className="p-1"></td>
+            <td className="p-1"></td>
+            <td className="p-1"></td>
+            <td className="p-1"></td>
+          </tr>
+        </tfoot>
       </table>
     </div>
   );

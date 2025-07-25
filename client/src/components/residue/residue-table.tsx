@@ -219,14 +219,20 @@ export default function ResidueTable({ viewMode, searchTerm }: ResidueTableProps
             </tr>
           ))}
           
-          {/* Totals Row */}
-          <tr className="table-total-row bg-neutral-100 font-bold">
-            <td className="section-start section-end p-1 text-center font-bold">TOTALS</td>
-            <td className="section-start p-1 font-bold">-</td>
-            <td className="section-start p-1 font-bold">R {totals.amount.toLocaleString()}</td>
-            <td className="section-end p-1 font-bold">-</td>
-          </tr>
         </tbody>
+        
+        {/* Totals Footer */}
+        <tfoot className="bg-neutral-50 border-t border-neutral-300">
+          <tr>
+            <td className="p-1 text-right text-neutral-700" colSpan={2} style={{ fontSize: '0.875rem' }}>Totals</td>
+            <td className="text-right" style={{ padding: '0.6rem 0.8rem' }}>
+              <span style={{ fontFamily: 'inherit', fontWeight: '600', color: '#374151', fontSize: '0.875rem' }}>
+                R {totals.amount.toLocaleString()}
+              </span>
+            </td>
+            <td className="p-1"></td>
+          </tr>
+        </tfoot>
       </table>
     </div>
   );
