@@ -537,61 +537,61 @@ export function SimpleTableWithBeneficiaries({
           <tr>
             {columnVisibility.overview && (
               <>
-                <th className="px-3 py-2 text-left text-xs font-medium text-neutral-600 uppercase tracking-wider">
+                <th className="px-3 py-2 text-left text-xs font-medium text-neutral-600 uppercase tracking-wider border-b border-neutral-200">
                   Fund Description
                 </th>
-                <th className="px-3 py-2 text-center text-xs font-medium text-neutral-600 uppercase tracking-wider">
+                <th className="px-3 py-2 text-center text-xs font-medium text-neutral-600 uppercase tracking-wider border-b border-neutral-200">
                   Owner
                 </th>
-                <th className="px-3 py-2 text-center text-xs font-medium text-neutral-600 uppercase tracking-wider">
+                <th className="px-3 py-2 text-center text-xs font-medium text-neutral-600 uppercase tracking-wider border-b border-neutral-200">
                   %
                 </th>
               </>
             )}
             {columnVisibility.monthlyDeathBenefit && (
               <>
-                <th className="px-3 py-2 text-center text-xs font-medium text-neutral-600 uppercase tracking-wider">
+                <th className="px-3 py-2 text-center text-xs font-medium text-neutral-600 uppercase tracking-wider border-b border-neutral-200">
                   Monthly Income
                 </th>
-                <th className="px-3 py-2 text-center text-xs font-medium text-neutral-600 uppercase tracking-wider">
+                <th className="px-3 py-2 text-center text-xs font-medium text-neutral-600 uppercase tracking-wider border-b border-neutral-200">
                   Increase %
                 </th>
-                <th className="px-3 py-2 text-center text-xs font-medium text-neutral-600 uppercase tracking-wider">
+                <th className="px-3 py-2 text-center text-xs font-medium text-neutral-600 uppercase tracking-wider border-b border-neutral-200">
                   Term (Years)
                 </th>
               </>
             )}
             {columnVisibility.fundValue && (
               <>
-                <th className="px-3 py-2 text-center text-xs font-medium text-neutral-600 uppercase tracking-wider">
+                <th className="px-3 py-2 text-center text-xs font-medium text-neutral-600 uppercase tracking-wider border-b border-neutral-200">
                   Fund Value
                 </th>
-                <th className="px-3 py-2 text-center text-xs font-medium text-neutral-600 uppercase tracking-wider">
+                <th className="px-3 py-2 text-center text-xs font-medium text-neutral-600 uppercase tracking-wider border-b border-neutral-200">
                   Fund Value at Death
                 </th>
               </>
             )}
             {columnVisibility.fundValueBeneficiaries && (
               <>
-                <th className="px-3 py-2 text-left text-xs font-medium text-neutral-600 uppercase tracking-wider">
+                <th className="px-3 py-2 text-left text-xs font-medium text-neutral-600 uppercase tracking-wider border-b border-neutral-200">
                   Beneficiary Name
                 </th>
-                <th className="px-3 py-2 text-center text-xs font-medium text-neutral-600 uppercase tracking-wider">
+                <th className="px-3 py-2 text-center text-xs font-medium text-neutral-600 uppercase tracking-wider border-b border-neutral-200">
                   %
                 </th>
-                <th className="px-3 py-2 text-center text-xs font-medium text-neutral-600 uppercase tracking-wider">
+                <th className="px-3 py-2 text-center text-xs font-medium text-neutral-600 uppercase tracking-wider border-b border-neutral-200">
                   Amount
                 </th>
-                <th className="px-3 py-2 text-center text-xs font-medium text-neutral-600 uppercase tracking-wider">
+                <th className="px-3 py-2 text-center text-xs font-medium text-neutral-600 uppercase tracking-wider border-b border-neutral-200">
                   Lump Sum Taken
                 </th>
-                <th className="px-3 py-2 text-center text-xs font-medium text-neutral-600 uppercase tracking-wider">
+                <th className="px-3 py-2 text-center text-xs font-medium text-neutral-600 uppercase tracking-wider border-b border-neutral-200">
                   Non-deductible Contribution
                 </th>
-                <th className="px-3 py-2 text-center text-xs font-medium text-neutral-600 uppercase tracking-wider">
+                <th className="px-3 py-2 text-center text-xs font-medium text-neutral-600 uppercase tracking-wider border-b border-neutral-200">
                   Living Annuity
                 </th>
-                <th className="px-3 py-2 text-center text-xs font-medium text-neutral-600 uppercase tracking-wider">
+                <th className="px-3 py-2 text-center text-xs font-medium text-neutral-600 uppercase tracking-wider border-b border-neutral-200">
                   Income Term
                 </th>
               </>
