@@ -299,21 +299,7 @@ export default function VoluntaryInvestmentsTable({ viewMode, searchTerm }: Volu
                   </td>
                 )}
                 
-                <td className="p-1 relative">
-                  {rowIndex === 0 && (
-                    <button
-                      type="button"
-                      onClick={(e) => {
-                        e.preventDefault();
-                        e.stopPropagation();
-                        handleAddOwner(investment.id, investment);
-                      }}
-                      className="absolute top-1 right-1 w-4 h-4 flex items-center justify-center bg-primary text-primary-foreground rounded text-xs hover:opacity-90"
-                      disabled={isUpdating}
-                    >
-                      <UserPlus className="h-2 w-2" />
-                    </button>
-                  )}
+                <td className="p-1">
                   <div className="flex items-center gap-1">
                     {rowIndex > 0 && <span className="text-blue-600 text-sm">↳</span>}
                     <select
@@ -329,6 +315,23 @@ export default function VoluntaryInvestmentsTable({ viewMode, searchTerm }: Volu
                         </option>
                       ))}
                     </select>
+                    
+                    {/* Owner Management Buttons */}
+                    {rowIndex === 0 && (
+                      <button
+                        type="button"
+                        onClick={(e) => {
+                          e.preventDefault();
+                          e.stopPropagation();
+                          handleAddOwner(investment.id, investment);
+                        }}
+                        className="h-6 w-6 flex items-center justify-center bg-white text-primary border border-primary rounded text-xs hover:opacity-90"
+                        disabled={isUpdating}
+                      >
+                        <UserPlus className="h-3 w-3" />
+                      </button>
+                    )}
+                    
                     {investment.owners.length > 1 && (
                       <button
                         type="button"
@@ -337,10 +340,10 @@ export default function VoluntaryInvestmentsTable({ viewMode, searchTerm }: Volu
                           e.stopPropagation();
                           handleDeleteOwner(investment.id, rowIndex, investment);
                         }}
-                        className="w-4 h-4 flex items-center justify-center bg-white text-neutral-400 border border-neutral-300 rounded text-xs hover:text-neutral-600"
+                        className="h-6 w-6 flex items-center justify-center bg-white text-neutral-400 border border-neutral-300 rounded text-xs hover:text-neutral-600"
                         disabled={isUpdating}
                       >
-                        <UserMinus className="h-2 w-2" />
+                        <UserMinus className="h-3 w-3" />
                       </button>
                     )}
                   </div>
