@@ -20,6 +20,8 @@ export default function IncomeProvisionsTable({ viewMode, searchTerm }: IncomePr
     const amount = parseCurrencyValue(provision.amount || '0');
     const termYears = parseFloat(provision.termYears?.replace(/[^\d.-]/g, '') || '0');
     const increaseRate = parseFloat(provision.increasePercentage?.replace(/[^\d.-]/g, '') || '0') / 100;
+    const taxPercentage = parseFloat(provision.taxPercentage?.replace(/[^\d.-]/g, '') || '0') / 100;
+    const taxRate = parseFloat(provision.taxRate?.replace(/[^\d.-]/g, '') || '0') / 100;
     
     if (amount <= 0 || termYears <= 0) return 'R 0';
     
@@ -43,7 +45,11 @@ export default function IncomeProvisionsTable({ viewMode, searchTerm }: IncomePr
       presentValue = amount * pvFactor;
     }
     
-    return formatCurrencyValue(Math.round(presentValue).toString());
+    // Apply tax effects: both tax percentage and tax rate reduce the final amount
+    const combinedTaxRate = taxPercentage + taxRate - (taxPercentage * taxRate); // Combined tax effect
+    const netPresentValue = presentValue * (1 - combinedTaxRate);
+    
+    return formatCurrencyValue(Math.round(netPresentValue).toString());
   }, []);
 
   // Query for income provisions
