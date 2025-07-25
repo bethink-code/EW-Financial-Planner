@@ -65,7 +65,7 @@ export default function IncomeProvisionsTable({ viewMode, searchTerm }: IncomePr
         amount: "R 0",
         capitalisedAmount: "R 0",
         taxPercentage: "0%",
-        netAmount: "R 0",
+        taxRate: "0%",
       };
       
       const response = await fetch('/api/income-provisions', {
@@ -184,7 +184,7 @@ export default function IncomeProvisionsTable({ viewMode, searchTerm }: IncomePr
           <tr className="border-b border-border">
             <th className="px-3 py-3 text-center text-xs font-medium text-neutral-600 uppercase tracking-wider w-16">Actions</th>
             <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start" colSpan={2}>Overview</th>
-            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start section-end" colSpan={8}>Income Provision Details</th>
+            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start section-end" colSpan={9}>Income Provision Details</th>
           </tr>
           <tr className="border-b border-border">
             <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center border-b border-neutral-200"></th>
@@ -197,6 +197,7 @@ export default function IncomeProvisionsTable({ viewMode, searchTerm }: IncomePr
             <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center border-b border-neutral-200">CPI</th>
             <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center border-b border-neutral-200">Frequency</th>
             <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center border-b border-neutral-200">Tax %</th>
+            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center border-b border-neutral-200">Tax Rate</th>
             <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-end border-b border-neutral-200">Capitalised Amount</th>
           </tr>
         </thead>
@@ -336,6 +337,19 @@ export default function IncomeProvisionsTable({ viewMode, searchTerm }: IncomePr
                     className={`table-input ${getFieldClass('percentage')} ${getValueClass(provision.taxPercentage, 'percentage')}`}
                     onFocus={handleDefaultValueFocus}
                     onBlur={createEnhancedBlurHandler((value) => handleInputBlur(provision.id, 'taxPercentage', value), 'percentage')}
+                    disabled={isUpdating}
+                  />
+                </td>
+                
+                {/* Tax Rate */}
+                <td className="p-1">
+                  <input
+                    key={`taxRate-${provision.id}-${provision.taxRate}`}
+                    type="text"
+                    defaultValue={provision.taxRate}
+                    className={`table-input ${getFieldClass('percentage')} ${getValueClass(provision.taxRate, 'percentage')}`}
+                    onFocus={handleDefaultValueFocus}
+                    onBlur={createEnhancedBlurHandler((value) => handleInputBlur(provision.id, 'taxRate', value), 'percentage')}
                     disabled={isUpdating}
                   />
                 </td>
