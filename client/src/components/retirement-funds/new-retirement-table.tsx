@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useMemo } from 'react';
 import { RetirementFund } from '@shared/schema';
 import { Plus, UserPlus, UserMinus, Trash2, Copy } from 'lucide-react';
 import { formatCurrencyValue, formatPercentageValue, formatTextValue, formatYearsValue, getValueClass, isDefaultValue, handleDefaultValueFocus, createEnhancedBlurHandler } from "@/lib/formatting";
@@ -114,6 +114,37 @@ export function NewRetirementTable({
     onFieldUpdate(fundId, 'fundValuePercentageSplits', updatedSplits);
     onFieldUpdate(fundId, 'fundValueCoverSplits', updatedCoverSplits);
   }, [funds, onFieldUpdate]);
+
+  // Calculate totals for summary display
+  const totals = useMemo(() => {
+    if (!funds || funds.length === 0) return {
+      coverAmount: 0,
+      monthlyIncome: 0,
+      approvedLifeCover: 0,
+      fundValue: 0,
+      fundValueAtDeath: 0
+    };
+
+    return funds.reduce((acc, fund) => {
+      const parseCurrency = (value: string) => parseFloat(value.replace(/[^\d.]/g, '')) || 0;
+      
+      return {
+        coverAmount: acc.coverAmount + parseCurrency(fund.coverAmount),
+        monthlyIncome: acc.monthlyIncome + parseCurrency(fund.monthlyIncome),
+        approvedLifeCover: acc.approvedLifeCover + parseCurrency(fund.approvedLifeCover),
+        fundValue: acc.fundValue + parseCurrency(fund.fundValue),
+        fundValueAtDeath: acc.fundValueAtDeath + parseCurrency(fund.fundValueAtDeath)
+      };
+    }, {
+      coverAmount: 0,
+      monthlyIncome: 0,
+      approvedLifeCover: 0,
+      fundValue: 0,
+      fundValueAtDeath: 0
+    });
+  }, [funds]);
+
+  const formatTotal = useCallback((amount: number) => `R ${amount.toLocaleString()}`, []);
 
   if (!funds || funds.length === 0) {
     return (
@@ -532,6 +563,42 @@ export function NewRetirementTable({
               </tr>
             ));
           })}
+          
+          {/* Totals Row */}
+          <tr className="bg-blue-50 border-t-2 border-blue-200 font-bold">
+            <td className="border border-neutral-300 p-2 text-center text-xs font-semibold">TOTALS</td>
+            <td className="border border-neutral-300 p-1"></td>
+            <td className="border border-neutral-300 p-1"></td>
+            <td className="border border-neutral-300 p-1 text-center text-xs font-bold">
+              {formatTotal(totals.coverAmount)}
+            </td>
+            <td className="border border-neutral-300 p-1"></td>
+            <td className="border border-neutral-300 p-1"></td>
+            <td className="border border-neutral-300 p-1"></td>
+            <td className="border border-neutral-300 p-1 text-center text-xs font-bold">
+              {formatTotal(totals.monthlyIncome)}
+            </td>
+            <td className="border border-neutral-300 p-1"></td>
+            <td className="border border-neutral-300 p-1"></td>
+            <td className="border border-neutral-300 p-1"></td>
+            <td className="border border-neutral-300 p-1 text-center text-xs font-bold">
+              {formatTotal(totals.approvedLifeCover)}
+            </td>
+            <td className="border border-neutral-300 p-1 text-center text-xs font-bold">
+              {formatTotal(totals.fundValue)}
+            </td>
+            <td className="border border-neutral-300 p-1 text-center text-xs font-bold">
+              {formatTotal(totals.fundValueAtDeath)}
+            </td>
+            <td className="border border-neutral-300 p-1"></td>
+            <td className="border border-neutral-300 p-1"></td>
+            <td className="border border-neutral-300 p-1"></td>
+            <td className="border border-neutral-300 p-1"></td>
+            <td className="border border-neutral-300 p-1"></td>
+            <td className="border border-neutral-300 p-1"></td>
+            <td className="border border-neutral-300 p-1"></td>
+            <td className="border border-neutral-300 p-1"></td>
+          </tr>
         </tbody>
       </table>
     </div>
