@@ -376,7 +376,7 @@ export default function IncomeProvisionsTable({ viewMode, searchTerm }: IncomePr
         </tbody>
         
         {/* Totals Footer */}
-        <tfoot className="bg-neutral-50">
+        <tfoot className="bg-neutral-50 border-t border-neutral-300">
           <tr>
             <td className="p-1 text-right text-neutral-700" colSpan={11} style={{ fontSize: '0.875rem' }}>Totals</td>
             <td className="text-right" style={{ padding: '0.6rem 0.8rem' }}>
