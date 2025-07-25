@@ -377,9 +377,9 @@ export default function IncomeProvisionsTable({ viewMode, searchTerm }: IncomePr
         
         {/* Totals Footer */}
         <tfoot className="bg-neutral-50 border-t-2 border-neutral-300">
-          <tr className="font-bold">
+          <tr>
             <td className="p-1"></td>
-            <td className="p-1 text-left text-xs font-bold text-neutral-700">Totals</td>
+            <td className="p-1 text-left text-neutral-700" style={{ fontSize: '0.875rem' }}>Totals</td>
             <td className="p-1"></td>
             <td className="p-1"></td>
             <td className="p-1"></td>
@@ -390,7 +390,7 @@ export default function IncomeProvisionsTable({ viewMode, searchTerm }: IncomePr
             <td className="p-1"></td>
             <td className="p-1"></td>
             <td className="text-right" style={{ padding: '0.6rem 0.8rem' }}>
-              <span className="text-sm" style={{ fontFamily: 'inherit', fontWeight: 'normal', color: '#374151' }}>
+              <span style={{ fontFamily: 'inherit', fontWeight: '600', color: '#374151', fontSize: '0.875rem' }}>
                 R {filteredProvisions.reduce((sum, provision) => {
                   const capitalisedAmount = parseFloat(calculateCapitalisedAmount(provision).replace(/[^\d.-]/g, '')) || 0;
                   return sum + capitalisedAmount;
@@ -398,9 +398,9 @@ export default function IncomeProvisionsTable({ viewMode, searchTerm }: IncomePr
               </span>
             </td>
           </tr>
-          <tr className="font-bold border-t border-neutral-200">
+          <tr className="border-t border-neutral-200">
             <td className="p-1"></td>
-            <td className="p-1 text-left text-xs font-bold text-neutral-700">Capital Required for Income Shortfall</td>
+            <td className="p-1 text-left text-neutral-700" style={{ fontSize: '0.875rem' }}>Capital Required for Income Shortfall</td>
             <td className="p-1"></td>
             <td className="p-1"></td>
             <td className="p-1"></td>
@@ -411,7 +411,7 @@ export default function IncomeProvisionsTable({ viewMode, searchTerm }: IncomePr
             <td className="p-1"></td>
             <td className="p-1"></td>
             <td className="text-right" style={{ padding: '0.6rem 0.8rem' }}>
-              <span className="text-sm" style={{ fontFamily: 'inherit', fontWeight: 'normal', color: '#374151' }}>
+              <span style={{ fontFamily: 'inherit', fontWeight: '600', color: '#374151', fontSize: '0.875rem' }}>
                 R {filteredProvisions.reduce((sum, provision) => {
                   const capitalisedAmount = parseFloat(calculateCapitalisedAmount(provision).replace(/[^\d.-]/g, '')) || 0;
                   return sum + capitalisedAmount;
