@@ -1,7 +1,8 @@
-import React, { useCallback } from "react";
+import React, { useCallback, useMemo } from "react";
 import { RetirementFund, UpdateRetirementFund } from "@shared/schema";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { DuplicateButton, DeleteButton } from "@/components/ui/action-buttons";
+import { UserPlus, UserMinus } from "lucide-react";
+import { DuplicateButton, DeleteButton, AddButton } from "@/components/ui/action-buttons";
 import { getFieldClass, getFieldWidth } from "@/lib/design-tokens";
 import { formatPercentageValue, getValueClass, isDefaultValue, handleDefaultValueFocus } from "@/lib/formatting";
 
@@ -26,6 +27,109 @@ export function ClassicRetirementTable({
   const handleCellUpdate = useCallback((id: number, field: keyof UpdateRetirementFund, value: string) => {
     onFieldUpdate(id, field, value);
   }, [onFieldUpdate]);
+
+  // Helper functions for managing additional owners
+  const handleAddOwner = useCallback((fundId: number) => {
+    const fund = funds.find(f => f.id === fundId);
+    if (!fund) return;
+    
+    const updatedAdditionalOwners = [...fund.additionalOwners, "Donald Edwards"];
+    onFieldUpdate(fundId, 'additionalOwners', updatedAdditionalOwners);
+  }, [funds, onFieldUpdate]);
+
+  const handleRemoveOwner = useCallback((fundId: number, ownerIndex: number) => {
+    const fund = funds.find(f => f.id === fundId);
+    if (!fund) return;
+    
+    const updatedAdditionalOwners = fund.additionalOwners.filter((_, index) => index !== ownerIndex);
+    onFieldUpdate(fundId, 'additionalOwners', updatedAdditionalOwners);
+  }, [funds, onFieldUpdate]);
+
+  const handleOwnerChange = useCallback((fundId: number, ownerIndex: number, newOwner: string) => {
+    const fund = funds.find(f => f.id === fundId);
+    if (!fund) return;
+    
+    const updatedAdditionalOwners = [...fund.additionalOwners];
+    updatedAdditionalOwners[ownerIndex] = newOwner;
+    onFieldUpdate(fundId, 'additionalOwners', updatedAdditionalOwners);
+  }, [funds, onFieldUpdate]);
+
+  // Helper functions for managing additional beneficiaries
+  const handleAddBeneficiary = useCallback((fundId: number) => {
+    const fund = funds.find(f => f.id === fundId);
+    if (!fund) return;
+    
+    const updatedBeneficiaries = [...fund.additionalBeneficiaries, ""];
+    const updatedSplits = [...fund.additionalBenefitSplits, "0%"];
+    onFieldUpdate(fundId, 'additionalBeneficiaries', updatedBeneficiaries);
+    onFieldUpdate(fundId, 'additionalBenefitSplits', updatedSplits);
+  }, [funds, onFieldUpdate]);
+
+  const handleRemoveBeneficiary = useCallback((fundId: number, beneficiaryIndex: number) => {
+    const fund = funds.find(f => f.id === fundId);
+    if (!fund) return;
+    
+    const updatedBeneficiaries = fund.additionalBeneficiaries.filter((_, index) => index !== beneficiaryIndex);
+    const updatedSplits = fund.additionalBenefitSplits.filter((_, index) => index !== beneficiaryIndex);
+    onFieldUpdate(fundId, 'additionalBeneficiaries', updatedBeneficiaries);
+    onFieldUpdate(fundId, 'additionalBenefitSplits', updatedSplits);
+  }, [funds, onFieldUpdate]);
+
+  const handleBeneficiaryChange = useCallback((fundId: number, beneficiaryIndex: number, newBeneficiary: string) => {
+    const fund = funds.find(f => f.id === fundId);
+    if (!fund) return;
+    
+    const updatedBeneficiaries = [...fund.additionalBeneficiaries];
+    updatedBeneficiaries[beneficiaryIndex] = newBeneficiary;
+    onFieldUpdate(fundId, 'additionalBeneficiaries', updatedBeneficiaries);
+  }, [funds, onFieldUpdate]);
+
+  const handleBenefitSplitChange = useCallback((fundId: number, beneficiaryIndex: number, newSplit: string) => {
+    const fund = funds.find(f => f.id === fundId);
+    if (!fund) return;
+    
+    const updatedSplits = [...fund.additionalBenefitSplits];
+    updatedSplits[beneficiaryIndex] = newSplit;
+    onFieldUpdate(fundId, 'additionalBenefitSplits', updatedSplits);
+  }, [funds, onFieldUpdate]);
+
+  // Create expanded rows data that includes funds + additional owners + additional beneficiaries
+  const expandedRowsData = useMemo(() => {
+    const rows: Array<{
+      type: 'fund' | 'additional-owner' | 'additional-beneficiary';
+      fund: RetirementFund;
+      ownerIndex?: number;
+      beneficiaryIndex?: number;
+      isLast?: boolean;
+    }> = [];
+
+    funds.forEach(fund => {
+      // Main fund row
+      rows.push({ type: 'fund', fund });
+
+      // Additional owner rows
+      fund.additionalOwners.forEach((_, ownerIndex) => {
+        rows.push({ 
+          type: 'additional-owner', 
+          fund, 
+          ownerIndex,
+          isLast: ownerIndex === fund.additionalOwners.length - 1 && fund.additionalBeneficiaries.length === 0
+        });
+      });
+
+      // Additional beneficiary rows
+      fund.additionalBeneficiaries.forEach((_, beneficiaryIndex) => {
+        rows.push({ 
+          type: 'additional-beneficiary', 
+          fund, 
+          beneficiaryIndex,
+          isLast: beneficiaryIndex === fund.additionalBeneficiaries.length - 1
+        });
+      });
+    });
+
+    return rows;
+  }, [funds]);
 
   return (
     <div className="overflow-x-auto">

@@ -133,6 +133,7 @@ export class MemStorage implements IStorage {
     this.createRetirementFund({
       description: "Total Pension Fund",
       owner: "John Doe",
+      additionalOwners: [],
       coverAmount: "R 500,000",
       termYears: "10",
       increasePercentage: "5%",
@@ -141,17 +142,22 @@ export class MemStorage implements IStorage {
       fundValueAtDeath: "R 200,000",
       name: "Sarah Doe",
       amount: "R 150,000",
+      beneficiary: "Sarah Doe",
+      benefitSplit: "60%",
+      additionalBeneficiaries: [],
+      additionalBenefitSplits: [],
       lumpSumTaken: "R 25,000",
       fundValueAfterLumpSum: "R 125,000",
       nondeductibleContribution: "R 10,000",
       livingAnnuity: "R 120,000",
-      monthlyIncome: "R 5,000",
+      monthlyIncomeTerm: "R 5,000",
       incomeTerm: "20"
     });
     
     this.createRetirementFund({
       description: "Provident Fund",
       owner: "Jane Smith",
+      additionalOwners: ["Tom Smith"],
       coverAmount: "R 700,000",
       termYears: "15",
       increasePercentage: "4%", 
@@ -160,11 +166,15 @@ export class MemStorage implements IStorage {
       fundValueAtDeath: "R 140,000",
       name: "Tom Smith",
       amount: "R 100,000",
+      beneficiary: "Tom Smith",
+      benefitSplit: "50%",
+      additionalBeneficiaries: ["Anna Smith"],
+      additionalBenefitSplits: ["50%"],
       lumpSumTaken: "R 15,000",
       fundValueAfterLumpSum: "R 85,000",
       nondeductibleContribution: "R 8,000",
       livingAnnuity: "R 85,000",
-      monthlyIncome: "R 3,500",
+      monthlyIncomeTerm: "R 3,500",
       incomeTerm: "25"
     });
 

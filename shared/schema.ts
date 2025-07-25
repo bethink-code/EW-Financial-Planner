@@ -8,6 +8,7 @@ export const retirementFunds = pgTable("retirement_funds", {
   // Overview section
   description: text("description").notNull(),
   owner: text("owner").notNull(),
+  additionalOwners: text("additional_owners").array().notNull().default([]),
   coverAmount: text("cover_amount").notNull().default("0"),
   
   // Unapproved life cover section
@@ -28,8 +29,14 @@ export const retirementFunds = pgTable("retirement_funds", {
   fundValueAfterLumpSum: text("fund_value_after_lump_sum").notNull().default("0"),
   nondeductibleContribution: text("nondeductible_contribution").notNull().default("0"),
   livingAnnuity: text("living_annuity").notNull().default("0"),
-  monthlyIncome: text("monthly_income").notNull().default("0"),
+  monthlyIncomeTerm: text("monthly_income_term").notNull().default("0"),
   incomeTerm: text("income_term").notNull().default("0"),
+  
+  // For multiple beneficiaries functionality
+  beneficiary: text("beneficiary").notNull().default(""),
+  benefitSplit: text("benefit_split").notNull().default("0"),
+  additionalBeneficiaries: text("additional_beneficiaries").array().notNull().default([]),
+  additionalBenefitSplits: text("additional_benefit_splits").array().notNull().default([]),
 });
 
 export const insertRetirementFundSchema = createInsertSchema(retirementFunds).omit({

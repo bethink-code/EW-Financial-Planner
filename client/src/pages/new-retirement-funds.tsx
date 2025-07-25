@@ -4,8 +4,7 @@ import { RetirementFund, UpdateRetirementFund } from "@shared/schema";
 import { queryClient, apiRequest } from "@/lib/queryClient";
 import { CalculatorHeader } from "@/components/ui/calculator-header";
 import { RetirementFundsSummary } from "@/components/retirement-funds/retirement-funds-summary";
-import { NewGroupedTableView } from "@/components/retirement-funds/new-grouped-table-view";
-import { SimpleTableWithBeneficiaries } from "@/components/retirement-funds/simple-table-with-beneficiaries";
+import { ClassicRetirementTable } from "@/components/retirement-funds/classic-retirement-table";
 import { DetailedView } from "@/components/retirement-funds/detailed-view";
 import { AdditionalDetails } from "@/components/retirement-funds/additional-details";
 
@@ -95,40 +94,25 @@ export default function NewRetirementFunds() {
     const newFund: Omit<RetirementFund, 'id'> = {
       description: "New Fund",
       owner: "Donald Edwards",
-      owners: '["Donald Edwards"]',
-      ownershipPercentages: '["100"]',
+      additionalOwners: [],
       coverAmount: "R 0",
-      beneficiaries: "[]",
-      monthlyIncome: "R 0",
       termYears: "0",
       increasePercentage: "0%",
       approvedLifeCover: "R 0",
       fundValue: "R 0",
-      beneficiaryName: "",
-      beneficiaryPercentageSplit: "0%",
       fundValueAtDeath: "R 0",
+      name: "",
+      amount: "R 0",
+      beneficiary: "",
+      benefitSplit: "0%",
+      additionalBeneficiaries: [],
+      additionalBenefitSplits: [],
       lumpSumTaken: "R 0",
+      fundValueAfterLumpSum: "R 0",
       nondeductibleContribution: "R 0",
       livingAnnuity: "R 0",
-      incomeTerm: "0 years",
-      lumpSumProvisionEstate: "R 0",
-      lumpSumProvisionSpouse: "R 0",
-      lumpSumProvisionOther: "R 0",
-      monthlyProvisionOffered: "R 0",
-      estateDeploymentDeceased: "R 0",
-      estateDutyPoliciesOnLife: "0%",
-      estateDutyToSpouse: "0%",
-      estateDutyToOthers: "0%",
-      executorsFee: "0%",
-      mastersFee: "0%",
-      incomeEscalation: "0%",
-      lumpSumDeath: "R 0",
-      previousLumpSums: "R 0",
-      additionalTaxFreeAmount: "R 0",
-      amount: "R 0",
-      incomeProvisionOption: "",
-      currentAnnualIncome: "R 0",
-      annualIncomeAtDeath: "R 0"
+      monthlyIncome: "R 0",
+      incomeTerm: "0"
     };
     addMutation.mutate(newFund);
   }, [addMutation]);
@@ -208,25 +192,13 @@ export default function NewRetirementFunds() {
         {/* Table View */}
         {viewMode === "table" && (
           <div className="bg-white rounded-lg shadow-sm border border-neutral-200">
-            {tableMode === "inputs" ? (
-              <SimpleTableWithBeneficiaries
-                funds={funds}
-                columnVisibility={columnVisibility}
-                tableMode={tableMode}
-                onFieldUpdate={handleFieldUpdate}
-                onRemoveFund={handleRemoveFund}
-                onDuplicateFund={handleDuplicateFund}
-                isUpdating={updateMutation.isPending}
-              />
-            ) : (
-              <NewGroupedTableView
-                funds={funds}
-                columnVisibility={columnVisibility}
-                tableMode={tableMode}
-                onFieldUpdate={handleFieldUpdate}
-                isUpdating={updateMutation.isPending}
-              />
-            )}
+            <ClassicRetirementTable
+              funds={funds}
+              onFieldUpdate={handleFieldUpdate}
+              onRemoveFund={handleRemoveFund}
+              onDuplicateFund={handleDuplicateFund}
+              isUpdating={updateMutation.isPending}
+            />
           </div>
         )}
 
