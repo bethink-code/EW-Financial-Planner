@@ -221,9 +221,9 @@ export function SimpleTableWithBeneficiaries({
               <>
                 {/* Fund Description - rowSpan for main fund data */}
                 {rowIndex === 0 && (
-                  <td rowSpan={maxRows} className="px-3 py-2 border-r border-neutral-200 align-top">
+                  <td rowSpan={maxRows} className="px-3 py-2 align-top">
                     <input
-                      defaultValue={fund.description || "Enter here ..."} 
+                      defaultValue={fund.description || "Enter details ..."} 
                       onFocus={handleDefaultValueFocus}
                       onBlur={(e) => onFieldUpdate(fund.id, "description", e.target.value)}
                       className={`${getFieldClass('text')} table-input`}
@@ -234,7 +234,7 @@ export function SimpleTableWithBeneficiaries({
                 )}
                 
                 {/* Owner Column - inline pattern like assurance */}
-                <td className="px-3 py-2 border-r border-neutral-200">
+                <td className="px-3 py-2">
                   {currentOwner ? (
                     <div className="flex items-center gap-1">
                       {rowIndex > 0 && (
@@ -303,9 +303,9 @@ export function SimpleTableWithBeneficiaries({
             {/* Monthly Death Benefit Section - rowSpant for main fund data */}
             {columnVisibility.monthlyDeathBenefit && rowIndex === 0 && (
               <>
-                <td className="px-3 py-2 border-l border-neutral-200 border-r border-neutral-200" rowSpan={maxRows}>
+                <td className="px-3 py-2 border-l border-neutral-200" rowSpan={maxRows}>
                   <input
-                    defaultValue={fund.monthlyIncome || "Enter here ..."} 
+                    defaultValue={fund.monthlyIncome || "Enter details ..."} 
                     onFocus={handleDefaultValueFocus}
                     onBlur={(e) => {
                       const formattedValue = formatCurrencyValue(e.target.value, "monthlyIncome");
