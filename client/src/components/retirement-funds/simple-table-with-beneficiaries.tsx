@@ -221,7 +221,7 @@ export function SimpleTableWithBeneficiaries({
               <>
                 {/* Fund Description - rowSpan for main fund data */}
                 {rowIndex === 0 && (
-                  <td rowSpan={maxRows} className="px-3 py-2 align-top">
+                  <td rowSpan={maxRows} className="px-3 py-2 align-top section-start">
                     <input
                       defaultValue={fund.description || "Enter details ..."} 
                       onFocus={handleDefaultValueFocus}
@@ -508,7 +508,7 @@ export function SimpleTableWithBeneficiaries({
           <tr>
             <th rowSpan={2} className="px-3 py-3 text-center text-xs font-medium text-neutral-600 uppercase tracking-wider border-b">Actions</th>
             {columnVisibility.overview && (
-              <th colSpan={3} className="px-3 py-2 text-center text-xs font-medium text-neutral-600 uppercase tracking-wider border-b section-end">
+              <th colSpan={3} className="px-3 py-2 text-center text-xs font-medium text-neutral-600 uppercase tracking-wider border-b section-start section-end">
                 Overview
               </th>
             )}
@@ -537,7 +537,7 @@ export function SimpleTableWithBeneficiaries({
           <tr>
             {columnVisibility.overview && (
               <>
-                <th className="px-3 py-2 text-left text-xs font-medium text-neutral-600 uppercase tracking-wider border-b border-neutral-200">
+                <th className="px-3 py-2 text-left text-xs font-medium text-neutral-600 uppercase tracking-wider border-b border-neutral-200 section-start">
                   Fund Description
                 </th>
                 <th className="px-3 py-2 text-center text-xs font-medium text-neutral-600 uppercase tracking-wider border-b border-neutral-200">
