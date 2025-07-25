@@ -178,43 +178,43 @@ export function NewRetirementTable({
 
   return (
     <div className="space-y-6">
-      <table className="min-w-full border-collapse border border-neutral-300">
+      <table>
         <thead>
           {/* Main section headers */}
-          <tr className="bg-neutral-50">
-            <th className="border border-neutral-300 px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center" rowSpan={2}>Actions</th>
-            <th className="border border-neutral-300 px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center" colSpan={2}>Overview</th>
-            <th className="border border-neutral-300 px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center" colSpan={4}>Unapproved Life Cover</th>
-            <th className="border border-neutral-300 px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center" colSpan={4}>Monthly Death Benefit</th>
-            <th className="border border-neutral-300 px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center" colSpan={3}>Approved Life Cover</th>
-            <th className="border border-neutral-300 px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center" colSpan={7}>Fund Value Beneficiaries</th>
+          <tr className="border-b border-border">
+            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center" rowSpan={2}>Actions</th>
+            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center" colSpan={2}>Overview</th>
+            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center" colSpan={4}>Unapproved Life Cover</th>
+            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center" colSpan={4}>Monthly Death Benefit</th>
+            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center" colSpan={3}>Approved Life Cover</th>
+            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center" colSpan={7}>Fund Value Beneficiaries</th>
           </tr>
           
           {/* Individual column headers */}
-          <tr className="bg-neutral-50">
-            <th className="border border-neutral-300 px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center border-b border-neutral-200">Description</th>
-            <th className="border border-neutral-300 px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center border-b border-neutral-200">Owners</th>
-            <th className="border border-neutral-300 px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center border-b border-neutral-200">Cover Amount</th>
-            <th className="border border-neutral-300 px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center border-b border-neutral-200">Beneficiaries</th>
-            <th className="border border-neutral-300 px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center border-b border-neutral-200">Percentage Split</th>
-            <th className="border border-neutral-300 px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center border-b border-neutral-200">Cover Split</th>
-            <th className="border border-neutral-300 px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center border-b border-neutral-200">Monthly Income</th>
-            <th className="border border-neutral-300 px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center border-b border-neutral-200">Checkbox</th>
-            <th className="border border-neutral-300 px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center border-b border-neutral-200">Term Years</th>
-            <th className="border border-neutral-300 px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center border-b border-neutral-200">Increase %</th>
-            <th className="border border-neutral-300 px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center border-b border-neutral-200">Cover</th>
-            <th className="border border-neutral-300 px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center border-b border-neutral-200">Fund Value</th>
-            <th className="border border-neutral-300 px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center border-b border-neutral-200">Fund Value at Death</th>
-            <th className="border border-neutral-300 px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center border-b border-neutral-200">Beneficiary Name</th>
-            <th className="border border-neutral-300 px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center border-b border-neutral-200">Percentage</th>
-            <th className="border border-neutral-300 px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center border-b border-neutral-200">Amount</th>
-            <th className="border border-neutral-300 px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center border-b border-neutral-200">Lump Sum Taken</th>
-            <th className="border border-neutral-300 px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center border-b border-neutral-200">Non-deductible Contribution</th>
-            <th className="border border-neutral-300 px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center border-b border-neutral-200">Living Annuity</th>
-            <th className="border border-neutral-300 px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center border-b border-neutral-200">Income Term</th>
+          <tr className="border-b border-border">
+            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center">Description</th>
+            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center">Owners</th>
+            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center">Cover Amount</th>
+            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center">Beneficiaries</th>
+            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center">Percentage Split</th>
+            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center">Cover Split</th>
+            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center">Monthly Income</th>
+            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center">Checkbox</th>
+            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center">Term Years</th>
+            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center">Increase %</th>
+            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center">Cover</th>
+            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center">Fund Value</th>
+            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center">Fund Value at Death</th>
+            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center">Beneficiary Name</th>
+            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center">Percentage</th>
+            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center">Amount</th>
+            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center">Lump Sum Taken</th>
+            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center">Non-deductible Contribution</th>
+            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center">Living Annuity</th>
+            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center">Income Term</th>
           </tr>
         </thead>
-        <tbody>
+        <tbody className="divide-y divide-neutral-200">
           {funds.map((fund, fundIndex) => {
             const maxRows = Math.max(
               fund.owners.length,
@@ -225,7 +225,7 @@ export function NewRetirementTable({
             return Array.from({ length: maxRows }, (_, rowIndex) => (
               <tr key={`${fund.id}-${rowIndex}-${fund.owners.length}-${fund.unapprovedBeneficiaries.length}-${fund.fundValueBeneficiaries.length}`} className="hover:bg-neutral-50">
                 {/* Actions */}
-                <td className="table-actions-cell border border-neutral-300 p-1 text-center">
+                <td className="table-actions-cell p-1 text-center">
                   {rowIndex === 0 && (
                     <ActionButtonGroup>
                       <DuplicateButton 
@@ -241,7 +241,7 @@ export function NewRetirementTable({
                 </td>
 
                 {/* Overview - Description */}
-                <td className="border border-neutral-300 p-1">
+                <td className="p-1">
                   {rowIndex === 0 && (
                     <input
                       type="text"
@@ -257,7 +257,7 @@ export function NewRetirementTable({
                 </td>
 
                 {/* Overview - Owner */}
-                <td className="border border-neutral-300 p-1">
+                <td className="p-1">
                   {rowIndex < fund.owners.length && (
                     <div className="flex items-center gap-1">
                       <input
@@ -267,32 +267,38 @@ export function NewRetirementTable({
                         onBlur={(e) => handleOwnerChange(fund.id, rowIndex, e.target.value)}
                       />
                       {rowIndex === 0 ? (
-                        <AddButton
+                        <button
+                          type="button"
                           onClick={(e) => {
                             e.preventDefault();
                             e.stopPropagation();
                             handleAddOwner(fund.id);
                           }}
-                          icon={UserPlus}
+                          className="p-0.5 text-blue-600 hover:bg-blue-50 rounded"
                           title="Add Owner"
-                          variant="secondary"
-                        />
+                        >
+                          <UserPlus className="h-3 w-3" />
+                        </button>
                       ) : (
-                        <DeleteButton
+                        <button
+                          type="button"
                           onClick={(e) => {
                             e.preventDefault();
                             e.stopPropagation();
                             handleRemoveOwner(fund.id, rowIndex);
                           }}
+                          className="p-0.5 text-red-600 hover:bg-red-50 rounded"
                           title="Remove Owner"
-                        />
+                        >
+                          <UserMinus className="h-3 w-3" />
+                        </button>
                       )}
                     </div>
                   )}
                 </td>
 
                 {/* Unapproved Life Cover - Cover Amount */}
-                <td className="border border-neutral-300 p-1">
+                <td className="p-1">
                   {rowIndex === 0 && (
                     <input
                       type="text"
@@ -308,7 +314,7 @@ export function NewRetirementTable({
                 </td>
 
                 {/* Unapproved Life Cover - Beneficiary */}
-                <td className="border border-neutral-300 p-1">
+                <td className="p-1">
                   {rowIndex < fund.unapprovedBeneficiaries.length && (
                     <div className="flex items-center gap-1">
                       <input
@@ -322,24 +328,28 @@ export function NewRetirementTable({
                         }}
                       />
                       {rowIndex === 0 ? (
-                        <AddButton
+                        <button
                           onClick={() => handleAddUnapprovedBeneficiary(fund.id)}
-                          icon={Plus}
+                          className="p-0.5 text-blue-600 hover:bg-blue-50 rounded"
                           title="Add Beneficiary"
-                          variant="secondary"
-                        />
+                        >
+                          <Plus className="h-3 w-3" />
+                        </button>
                       ) : (
-                        <DeleteButton
+                        <button
                           onClick={() => handleRemoveUnapprovedBeneficiary(fund.id, rowIndex)}
+                          className="p-0.5 text-red-600 hover:bg-red-50 rounded"
                           title="Remove Beneficiary"
-                        />
+                        >
+                          <UserMinus className="h-3 w-3" />
+                        </button>
                       )}
                     </div>
                   )}
                 </td>
 
                 {/* Unapproved Life Cover - Percentage Split */}
-                <td className="border border-neutral-300 p-1">
+                <td className="p-1">
                   {rowIndex < fund.unapprovedPercentageSplits.length && (
                     <input
                       type="text"
@@ -360,7 +370,7 @@ export function NewRetirementTable({
                 </td>
 
                 {/* Unapproved Life Cover - Cover Split (Calculated) */}
-                <td className="border border-neutral-300 p-1 bg-neutral-100">
+                <td className="p-1 bg-neutral-100">
                   {rowIndex < fund.unapprovedCoverSplits.length && (
                     <span className="text-xs text-neutral-600">
                       {fund.unapprovedCoverSplits[rowIndex]}
@@ -369,7 +379,7 @@ export function NewRetirementTable({
                 </td>
 
                 {/* Monthly Death Benefit - Monthly Income */}
-                <td className="border border-neutral-300 p-1">
+                <td className="p-1">
                   {rowIndex === 0 && (
                     <input
                       type="text"
@@ -385,7 +395,7 @@ export function NewRetirementTable({
                 </td>
 
                 {/* Monthly Death Benefit - Checkbox */}
-                <td className="border border-neutral-300 p-1 text-center">
+                <td className="p-1 text-center">
                   {rowIndex === 0 && (
                     <input
                       type="checkbox"
@@ -397,7 +407,7 @@ export function NewRetirementTable({
                 </td>
 
                 {/* Monthly Death Benefit - Term Years */}
-                <td className="border border-neutral-300 p-1">
+                <td className="p-1">
                   {rowIndex === 0 && (
                     <input
                       type="text"
@@ -413,7 +423,7 @@ export function NewRetirementTable({
                 </td>
 
                 {/* Monthly Death Benefit - Increase % */}
-                <td className="border border-neutral-300 p-1">
+                <td className="p-1">
                   {rowIndex === 0 && (
                     <input
                       type="text"
@@ -429,7 +439,7 @@ export function NewRetirementTable({
                 </td>
 
                 {/* Approved Life Cover - Cover */}
-                <td className="border border-neutral-300 p-1">
+                <td className="p-1">
                   {rowIndex === 0 && (
                     <input
                       type="text"
@@ -445,7 +455,7 @@ export function NewRetirementTable({
                 </td>
 
                 {/* Approved Life Cover - Fund Value */}
-                <td className="border border-neutral-300 p-1">
+                <td className="p-1">
                   {rowIndex === 0 && (
                     <input
                       type="text"
@@ -464,7 +474,7 @@ export function NewRetirementTable({
                 </td>
 
                 {/* Approved Life Cover - Fund Value at Death (Calculated) */}
-                <td className="border border-neutral-300 p-1 bg-neutral-100">
+                <td className="p-1 bg-neutral-100">
                   {rowIndex === 0 && (
                     <span className="text-xs text-neutral-600">
                       {fund.fundValueAtDeath}
@@ -473,7 +483,7 @@ export function NewRetirementTable({
                 </td>
 
                 {/* Fund Value Beneficiaries - Beneficiary */}
-                <td className="border border-neutral-300 p-1">
+                <td className="p-1">
                   {rowIndex < fund.fundValueBeneficiaries.length && (
                     <div className="flex items-center gap-1">
                       <input
@@ -487,24 +497,28 @@ export function NewRetirementTable({
                         }}
                       />
                       {rowIndex === 0 ? (
-                        <AddButton
+                        <button
                           onClick={() => handleAddFundValueBeneficiary(fund.id)}
-                          icon={Plus}
+                          className="p-0.5 text-blue-600 hover:bg-blue-50 rounded"
                           title="Add Beneficiary"
-                          variant="secondary"
-                        />
+                        >
+                          <Plus className="h-3 w-3" />
+                        </button>
                       ) : (
-                        <DeleteButton
+                        <button
                           onClick={() => handleRemoveFundValueBeneficiary(fund.id, rowIndex)}
+                          className="p-0.5 text-red-600 hover:bg-red-50 rounded"
                           title="Remove Beneficiary"
-                        />
+                        >
+                          <UserMinus className="h-3 w-3" />
+                        </button>
                       )}
                     </div>
                   )}
                 </td>
 
                 {/* Fund Value Beneficiaries - Cover % Split */}
-                <td className="border border-neutral-300 p-1">
+                <td className="p-1">
                   {rowIndex < fund.fundValuePercentageSplits.length && (
                     <input
                       type="text"
@@ -525,7 +539,7 @@ export function NewRetirementTable({
                 </td>
 
                 {/* Fund Value Beneficiaries - Cover (Calculated) */}
-                <td className="border border-neutral-300 p-1 bg-neutral-100">
+                <td className="p-1 bg-neutral-100">
                   {rowIndex < fund.fundValueCoverSplits.length && (
                     <span className="text-xs text-neutral-600">
                       {fund.fundValueCoverSplits[rowIndex]}
@@ -534,7 +548,7 @@ export function NewRetirementTable({
                 </td>
 
                 {/* Fund Value Beneficiaries - Lump Assessed */}
-                <td className="border border-neutral-300 p-1">
+                <td className="p-1">
                   {rowIndex === 0 && (
                     <input
                       type="text"
@@ -550,7 +564,7 @@ export function NewRetirementTable({
                 </td>
 
                 {/* Fund Value Beneficiaries - Non Deductible */}
-                <td className="border border-neutral-300 p-1">
+                <td className="p-1">
                   {rowIndex === 0 && (
                     <input
                       type="text"
@@ -566,7 +580,7 @@ export function NewRetirementTable({
                 </td>
 
                 {/* Fund Value Beneficiaries - Living Annuity (Calculated) */}
-                <td className="border border-neutral-300 p-1 bg-neutral-100">
+                <td className="p-1 bg-neutral-100">
                   {rowIndex === 0 && (
                     <span className="text-xs text-neutral-600">
                       {fund.livingAnnuity}
@@ -575,7 +589,7 @@ export function NewRetirementTable({
                 </td>
 
                 {/* Fund Value Beneficiaries - Checkbox */}
-                <td className="border border-neutral-300 p-1 text-center">
+                <td className="p-1 text-center">
                   {rowIndex === 0 && (
                     <input
                       type="checkbox"
@@ -587,7 +601,7 @@ export function NewRetirementTable({
                 </td>
 
                 {/* Fund Value Beneficiaries - Income Term */}
-                <td className="border border-neutral-300 p-1">
+                <td className="p-1">
                   {rowIndex === 0 && (
                     <input
                       type="text"
@@ -607,37 +621,37 @@ export function NewRetirementTable({
           
           {/* Totals Row */}
           <tr className="border-t-2 border-border font-bold">
-            <td className="px-3 py-3 text-center font-bold text-sm">Totals</td>
-            <td className="px-3 py-3"></td>
-            <td className="px-3 py-3"></td>
-            <td className="px-3 py-3 font-bold text-sm">
+            <td className="p-2 text-center font-bold text-sm">Totals</td>
+            <td className="p-2"></td>
+            <td className="p-2"></td>
+            <td className="p-2 font-bold text-sm">
               {formatTotal(totals.coverAmount)}
             </td>
-            <td className="px-3 py-3"></td>
-            <td className="px-3 py-3"></td>
-            <td className="px-3 py-3"></td>
-            <td className="px-3 py-3 font-bold text-sm">
+            <td className="p-2"></td>
+            <td className="p-2"></td>
+            <td className="p-2"></td>
+            <td className="p-2 font-bold text-sm">
               {formatTotal(totals.monthlyIncome)}
             </td>
-            <td className="px-3 py-3"></td>
-            <td className="px-3 py-3"></td>
-            <td className="px-3 py-3"></td>
-            <td className="px-3 py-3 font-bold text-sm">
+            <td className="p-2"></td>
+            <td className="p-2"></td>
+            <td className="p-2"></td>
+            <td className="p-2 font-bold text-sm">
               {formatTotal(totals.approvedLifeCover)}
             </td>
-            <td className="px-3 py-3 font-bold text-sm">
+            <td className="p-2 font-bold text-sm">
               {formatTotal(totals.fundValue)}
             </td>
-            <td className="px-3 py-3 font-bold text-sm">
+            <td className="p-2 font-bold text-sm">
               {formatTotal(totals.fundValueAtDeath)}
             </td>
-            <td className="px-3 py-3"></td>
-            <td className="px-3 py-3"></td>
-            <td className="px-3 py-3"></td>
-            <td className="px-3 py-3"></td>
-            <td className="px-3 py-3"></td>
-            <td className="px-3 py-3"></td>
-            <td className="px-3 py-3"></td>
+            <td className="p-2"></td>
+            <td className="p-2"></td>
+            <td className="p-2"></td>
+            <td className="p-2"></td>
+            <td className="p-2"></td>
+            <td className="p-2"></td>
+            <td className="p-2"></td>
           </tr>
         </tbody>
       </table>
