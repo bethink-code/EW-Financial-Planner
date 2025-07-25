@@ -35,7 +35,6 @@ export default function IncomeProvisions() {
         amount: "R 0",
         capitalisedAmount: "R 0",
         taxPercentage: "0%",
-        netAmount: "R 0",
       };
       return apiRequest("POST", "/api/income-provisions", newProvision);
     },

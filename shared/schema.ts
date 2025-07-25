@@ -259,7 +259,6 @@ export const incomeProvisions = pgTable("income_provisions", {
   
   // Additional Income Provisions specific fields
   taxPercentage: text("tax_percentage").notNull().default("0%"),
-  netAmount: text("net_amount").notNull().default("R 0"),
 });
 
 export const insertIncomeProvisionsSchema = createInsertSchema(incomeProvisions).omit({

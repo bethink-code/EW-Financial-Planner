@@ -15,14 +15,13 @@ interface IncomeProvisionsTableProps {
 export default function IncomeProvisionsTable({ viewMode, searchTerm }: IncomeProvisionsTableProps) {
   const [isUpdating, setIsUpdating] = useState(false);
 
-  // Calculate capitalised amount and net amount for a single income provision
-  const calculateValues = useCallback((provision: IncomeProvisions): { capitalisedAmount: string; netAmount: string } => {
+  // Calculate capitalised amount for a single income provision
+  const calculateCapitalisedAmount = useCallback((provision: IncomeProvisions): string => {
     const amount = parseCurrencyValue(provision.amount || '0');
     const termYears = parseFloat(provision.termYears?.replace(/[^\d.-]/g, '') || '0');
     const increaseRate = parseFloat(provision.increasePercentage?.replace(/[^\d.-]/g, '') || '0') / 100;
-    const taxRate = parseFloat(provision.taxPercentage?.replace(/[^\d.-]/g, '') || '0') / 100;
     
-    if (amount <= 0 || termYears <= 0) return { capitalisedAmount: 'R 0', netAmount: 'R 0' };
+    if (amount <= 0 || termYears <= 0) return 'R 0';
     
     // Use standard financial planning assumptions
     const discountRate = provision.cpi ? 0.06 : 0.08; // 6% if CPI-linked, 8% otherwise
@@ -44,13 +43,7 @@ export default function IncomeProvisionsTable({ viewMode, searchTerm }: IncomePr
       presentValue = amount * pvFactor;
     }
     
-    // Calculate net amount after tax
-    const netPresentValue = presentValue * (1 - taxRate);
-    
-    return {
-      capitalisedAmount: formatCurrencyValue(Math.round(presentValue).toString()),
-      netAmount: formatCurrencyValue(Math.round(netPresentValue).toString())
-    };
+    return formatCurrencyValue(Math.round(presentValue).toString());
   }, []);
 
   // Query for income provisions
@@ -191,7 +184,7 @@ export default function IncomeProvisionsTable({ viewMode, searchTerm }: IncomePr
           <tr className="border-b border-border">
             <th className="px-3 py-3 text-center text-xs font-medium text-neutral-600 uppercase tracking-wider w-16">Actions</th>
             <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start" colSpan={2}>Overview</th>
-            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start section-end" colSpan={9}>Income Provision Details</th>
+            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start section-end" colSpan={8}>Income Provision Details</th>
           </tr>
           <tr className="border-b border-border">
             <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center border-b border-neutral-200"></th>
@@ -203,14 +196,13 @@ export default function IncomeProvisionsTable({ viewMode, searchTerm }: IncomePr
             <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center border-b border-neutral-200">Increase %</th>
             <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center border-b border-neutral-200">CPI</th>
             <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center border-b border-neutral-200">Frequency</th>
-            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center border-b border-neutral-200">Capitalised Amount</th>
             <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center border-b border-neutral-200">Tax %</th>
-            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-end border-b border-neutral-200">Net Amount</th>
+            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-end border-b border-neutral-200">Capitalised Amount</th>
           </tr>
         </thead>
         <tbody className="divide-y divide-neutral-200">
           {filteredProvisions.map((provision: IncomeProvisions) => {
-            const { capitalisedAmount, netAmount } = calculateValues(provision);
+            const capitalisedAmount = calculateCapitalisedAmount(provision);
             
             return (
               <tr key={provision.id} className="hover:bg-neutral-50">
@@ -335,17 +327,6 @@ export default function IncomeProvisionsTable({ viewMode, searchTerm }: IncomePr
                   </select>
                 </td>
                 
-                {/* Capitalised Amount (Calculated) */}
-                <td className="p-1">
-                  <input
-                    type="text"
-                    value={capitalisedAmount}
-                    className="calculated-field"
-                    readOnly
-                    tabIndex={-1}
-                  />
-                </td>
-                
                 {/* Tax Percentage */}
                 <td className="p-1">
                   <input
@@ -359,11 +340,11 @@ export default function IncomeProvisionsTable({ viewMode, searchTerm }: IncomePr
                   />
                 </td>
                 
-                {/* Net Amount (Calculated) */}
+                {/* Capitalised Amount (Calculated) */}
                 <td className="p-1 section-end">
                   <input
                     type="text"
-                    value={netAmount}
+                    value={capitalisedAmount}
                     className="calculated-field"
                     readOnly
                     tabIndex={-1}
