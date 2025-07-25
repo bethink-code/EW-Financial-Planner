@@ -5,7 +5,7 @@ import { z } from "zod";
 export const retirementFunds = pgTable("retirement_funds", {
   id: serial("id").primaryKey(),
   
-  // Overview section - Description and Owner only
+  // Overview section - Description, Owner
   description: text("description").notNull(),
   owner: text("owner").notNull(),
   additionalOwners: text("additional_owners").array().notNull().default([]),
@@ -20,10 +20,19 @@ export const retirementFunds = pgTable("retirement_funds", {
   fundValue: text("fund_value").notNull().default("0"),
   fundValueAtDeath: text("fund_value_at_death").notNull().default("0"),
   
-  // Fund Value section - Name
+  // Fund Value section - Name, Amount
   name: text("name").notNull().default(""),
+  amount: text("amount").notNull().default("0"),
   
-  // Additional fields for multiple beneficiaries functionality (following your original structure)
+  // Fund Value Beneficiaries section - Lump Sum Taken, Fund Value, Non-Deductible Contribution, Living Annuity, Monthly Income, Income Term
+  lumpSumTaken: text("lump_sum_taken").notNull().default("0"),
+  fundValueBeneficiaries: text("fund_value_beneficiaries").notNull().default("0"),
+  nonDeductibleContribution: text("non_deductible_contribution").notNull().default("0"),
+  livingAnnuity: text("living_annuity").notNull().default("0"),
+  monthlyIncome: text("monthly_income").notNull().default("0"),
+  incomeTerm: text("income_term").notNull().default("0"),
+  
+  // For multiple beneficiaries functionality
   beneficiary: text("beneficiary").notNull().default(""),
   benefitSplit: text("benefit_split").notNull().default("0%"),
   additionalBeneficiaries: text("additional_beneficiaries").array().notNull().default([]),
