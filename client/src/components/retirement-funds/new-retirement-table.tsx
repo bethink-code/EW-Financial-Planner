@@ -182,36 +182,36 @@ export function NewRetirementTable({
         <thead>
           {/* Main section headers */}
           <tr className="border-b border-border">
-            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center" rowSpan={2}>Actions</th>
-            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center" colSpan={2}>Overview</th>
-            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center" colSpan={4}>Unapproved Life Cover</th>
-            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center" colSpan={4}>Monthly Death Benefit</th>
-            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center" colSpan={3}>Approved Life Cover</th>
-            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center" colSpan={7}>Fund Value Beneficiaries</th>
+            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start section-end" rowSpan={2}>Actions</th>
+            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start" colSpan={2}>Overview</th>
+            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start" colSpan={4}>Unapproved Life Cover</th>
+            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start" colSpan={4}>Monthly Death Benefit</th>
+            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start" colSpan={3}>Approved Life Cover</th>
+            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start section-end" colSpan={7}>Fund Value Beneficiaries</th>
           </tr>
           
           {/* Individual column headers */}
           <tr className="border-b border-border">
-            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center">Description</th>
+            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start">Description</th>
             <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center">Owners</th>
-            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center">Cover Amount</th>
+            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start">Cover Amount</th>
             <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center">Beneficiaries</th>
             <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center">Percentage Split</th>
             <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center">Cover Split</th>
-            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center">Monthly Income</th>
+            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start">Monthly Income</th>
             <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center">Checkbox</th>
             <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center">Term Years</th>
             <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center">Increase %</th>
-            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center">Cover</th>
+            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start">Cover</th>
             <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center">Fund Value</th>
             <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center">Fund Value at Death</th>
-            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center">Beneficiary Name</th>
+            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start">Beneficiary Name</th>
             <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center">Percentage</th>
             <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center">Amount</th>
             <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center">Lump Sum Taken</th>
             <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center">Non-deductible Contribution</th>
             <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center">Living Annuity</th>
-            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center">Income Term</th>
+            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-end">Income Term</th>
           </tr>
         </thead>
         <tbody className="divide-y divide-neutral-200">
@@ -225,7 +225,7 @@ export function NewRetirementTable({
             return Array.from({ length: maxRows }, (_, rowIndex) => (
               <tr key={`${fund.id}-${rowIndex}-${fund.owners.length}-${fund.unapprovedBeneficiaries.length}-${fund.fundValueBeneficiaries.length}`} className="hover:bg-neutral-50">
                 {/* Actions */}
-                <td className="table-actions-cell p-1 text-center">
+                <td className="table-actions-cell p-1 text-center section-start section-end">
                   {rowIndex === 0 && (
                     <ActionButtonGroup>
                       <DuplicateButton 
@@ -241,7 +241,7 @@ export function NewRetirementTable({
                 </td>
 
                 {/* Overview - Description */}
-                <td className="p-1">
+                <td className="p-1 section-start">
                   {rowIndex === 0 && (
                     <input
                       type="text"
@@ -298,7 +298,7 @@ export function NewRetirementTable({
                 </td>
 
                 {/* Unapproved Life Cover - Cover Amount */}
-                <td className="p-1">
+                <td className="p-1 section-start">
                   {rowIndex === 0 && (
                     <input
                       type="text"
@@ -379,7 +379,7 @@ export function NewRetirementTable({
                 </td>
 
                 {/* Monthly Death Benefit - Monthly Income */}
-                <td className="p-1">
+                <td className="p-1 section-start">
                   {rowIndex === 0 && (
                     <input
                       type="text"
@@ -439,7 +439,7 @@ export function NewRetirementTable({
                 </td>
 
                 {/* Approved Life Cover - Cover */}
-                <td className="p-1">
+                <td className="p-1 section-start">
                   {rowIndex === 0 && (
                     <input
                       type="text"
@@ -483,7 +483,7 @@ export function NewRetirementTable({
                 </td>
 
                 {/* Fund Value Beneficiaries - Beneficiary */}
-                <td className="p-1">
+                <td className="p-1 section-start">
                   {rowIndex < fund.fundValueBeneficiaries.length && (
                     <div className="flex items-center gap-1">
                       <input
@@ -601,7 +601,7 @@ export function NewRetirementTable({
                 </td>
 
                 {/* Fund Value Beneficiaries - Income Term */}
-                <td className="p-1">
+                <td className="p-1 section-end">
                   {rowIndex === 0 && (
                     <input
                       type="text"
@@ -621,22 +621,22 @@ export function NewRetirementTable({
           
           {/* Totals Row */}
           <tr className="border-t-2 border-border font-bold">
-            <td className="p-2 text-center font-bold text-sm">Totals</td>
+            <td className="p-2 text-center font-bold text-sm section-start section-end">Totals</td>
+            <td className="p-2 section-start"></td>
             <td className="p-2"></td>
-            <td className="p-2"></td>
-            <td className="p-2 font-bold text-sm">
+            <td className="p-2 font-bold text-sm section-start">
               {formatTotal(totals.coverAmount)}
             </td>
             <td className="p-2"></td>
             <td className="p-2"></td>
             <td className="p-2"></td>
-            <td className="p-2 font-bold text-sm">
+            <td className="p-2 font-bold text-sm section-start">
               {formatTotal(totals.monthlyIncome)}
             </td>
             <td className="p-2"></td>
             <td className="p-2"></td>
             <td className="p-2"></td>
-            <td className="p-2 font-bold text-sm">
+            <td className="p-2 font-bold text-sm section-start">
               {formatTotal(totals.approvedLifeCover)}
             </td>
             <td className="p-2 font-bold text-sm">
@@ -645,13 +645,13 @@ export function NewRetirementTable({
             <td className="p-2 font-bold text-sm">
               {formatTotal(totals.fundValueAtDeath)}
             </td>
+            <td className="p-2 section-start"></td>
             <td className="p-2"></td>
             <td className="p-2"></td>
             <td className="p-2"></td>
             <td className="p-2"></td>
             <td className="p-2"></td>
-            <td className="p-2"></td>
-            <td className="p-2"></td>
+            <td className="p-2 section-end"></td>
           </tr>
         </tbody>
       </table>
