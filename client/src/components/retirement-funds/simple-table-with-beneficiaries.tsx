@@ -508,27 +508,27 @@ export function SimpleTableWithBeneficiaries({
           <tr>
             <th rowSpan={2} className="px-3 py-3 text-center text-xs font-medium text-neutral-600 uppercase tracking-wider border-b">Actions</th>
             {columnVisibility.overview && (
-              <th colSpan={3} className="px-3 py-2 text-center text-xs font-medium text-neutral-600 uppercase tracking-wider border-b border-r border-neutral-200">
+              <th colSpan={3} className="px-3 py-2 text-center text-xs font-medium text-neutral-600 uppercase tracking-wider border-b section-end">
                 Overview
               </th>
             )}
             {columnVisibility.monthlyDeathBenefit && (
-              <th colSpan={3} className="px-3 py-2 text-center text-xs font-medium text-neutral-600 uppercase tracking-wider border-b border-r border-neutral-200">
+              <th colSpan={3} className="px-3 py-2 text-center text-xs font-medium text-neutral-600 uppercase tracking-wider border-b section-start section-end">
                 Monthly Death Benefit
               </th>
             )}
             {columnVisibility.fundValue && (
-              <th colSpan={2} className="px-3 py-2 text-center text-xs font-medium text-neutral-600 uppercase tracking-wider border-b border-r border-neutral-200">
+              <th colSpan={2} className="px-3 py-2 text-center text-xs font-medium text-neutral-600 uppercase tracking-wider border-b section-start section-end">
                 Fund Value
               </th>
             )}
             {columnVisibility.fundValueBeneficiaries && (
-              <th colSpan={7} className="px-3 py-2 text-center text-xs font-medium text-neutral-600 uppercase tracking-wider border-b border-r border-neutral-200">
+              <th colSpan={7} className="px-3 py-2 text-center text-xs font-medium text-neutral-600 uppercase tracking-wider border-b section-start section-end">
                 Fund Value Beneficiaries
               </th>
             )}
             {columnVisibility.unapprovedLifeCover && (
-              <th rowSpan={2} className="px-3 py-2 text-center text-xs font-medium text-neutral-600 uppercase tracking-wider border-b border-l border-neutral-200">
+              <th rowSpan={2} className="px-3 py-2 text-center text-xs font-medium text-neutral-600 uppercase tracking-wider border-b section-start">
                 Unapproved Life Cover
               </th>
             )}
@@ -543,37 +543,37 @@ export function SimpleTableWithBeneficiaries({
                 <th className="px-3 py-2 text-center text-xs font-medium text-neutral-600 uppercase tracking-wider border-b border-neutral-200">
                   Owner
                 </th>
-                <th className="px-3 py-2 text-center text-xs font-medium text-neutral-600 uppercase tracking-wider border-b border-neutral-200">
+                <th className="px-3 py-2 text-center text-xs font-medium text-neutral-600 uppercase tracking-wider border-b border-neutral-200 section-end">
                   %
                 </th>
               </>
             )}
             {columnVisibility.monthlyDeathBenefit && (
               <>
-                <th className="px-3 py-2 text-center text-xs font-medium text-neutral-600 uppercase tracking-wider border-b border-neutral-200">
+                <th className="px-3 py-2 text-center text-xs font-medium text-neutral-600 uppercase tracking-wider border-b border-neutral-200 section-start">
                   Monthly Income
                 </th>
                 <th className="px-3 py-2 text-center text-xs font-medium text-neutral-600 uppercase tracking-wider border-b border-neutral-200">
                   Increase %
                 </th>
-                <th className="px-3 py-2 text-center text-xs font-medium text-neutral-600 uppercase tracking-wider border-b border-neutral-200">
+                <th className="px-3 py-2 text-center text-xs font-medium text-neutral-600 uppercase tracking-wider border-b border-neutral-200 section-end">
                   Term (Years)
                 </th>
               </>
             )}
             {columnVisibility.fundValue && (
               <>
-                <th className="px-3 py-2 text-center text-xs font-medium text-neutral-600 uppercase tracking-wider border-b border-neutral-200">
+                <th className="px-3 py-2 text-center text-xs font-medium text-neutral-600 uppercase tracking-wider border-b border-neutral-200 section-start">
                   Fund Value
                 </th>
-                <th className="px-3 py-2 text-center text-xs font-medium text-neutral-600 uppercase tracking-wider border-b border-neutral-200">
+                <th className="px-3 py-2 text-center text-xs font-medium text-neutral-600 uppercase tracking-wider border-b border-neutral-200 section-end">
                   Fund Value at Death
                 </th>
               </>
             )}
             {columnVisibility.fundValueBeneficiaries && (
               <>
-                <th className="px-3 py-2 text-left text-xs font-medium text-neutral-600 uppercase tracking-wider border-b border-neutral-200">
+                <th className="px-3 py-2 text-left text-xs font-medium text-neutral-600 uppercase tracking-wider border-b border-neutral-200 section-start">
                   Beneficiary Name
                 </th>
                 <th className="px-3 py-2 text-center text-xs font-medium text-neutral-600 uppercase tracking-wider border-b border-neutral-200">
@@ -591,7 +591,7 @@ export function SimpleTableWithBeneficiaries({
                 <th className="px-3 py-2 text-center text-xs font-medium text-neutral-600 uppercase tracking-wider border-b border-neutral-200">
                   Living Annuity
                 </th>
-                <th className="px-3 py-2 text-center text-xs font-medium text-neutral-600 uppercase tracking-wider border-b border-neutral-200">
+                <th className="px-3 py-2 text-center text-xs font-medium text-neutral-600 uppercase tracking-wider border-b border-neutral-200 section-end">
                   Income Term
                 </th>
               </>
