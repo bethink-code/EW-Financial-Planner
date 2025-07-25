@@ -141,24 +141,29 @@ export type DefinedBenefitFund = typeof definedBenefitFunds.$inferSelect;
 export type InsertDefinedBenefitFund = z.infer<typeof insertDefinedBenefitFundSchema>;
 export type UpdateDefinedBenefitFund = z.infer<typeof updateDefinedBenefitFundSchema>;
 
-// Voluntary Investments table schema
+// Voluntary Investments table schema - New 5-section structure
 export const voluntaryInvestments = pgTable("voluntary_investments", {
   id: serial("id").primaryKey(),
   
-  // Basic information
+  // Overview Section
   description: text("description").notNull().default("Enter details ..."),
+  owner: text("owner").notNull().default("Donald Edwards"),
+  ownershipPercentage: text("ownership_percentage").notNull().default("100%"),
   
-  // Owner information - multiple owners with percentages
-  owners: text("owners").array().notNull().default(["Donald Edwards"]),
-  ownershipPercentages: text("ownership_percentages").array().notNull().default(["100%"]),
+  // Investment Details Section
+  baseCost: text("base_cost").notNull().default("R 0"),
+  marketValue: text("market_value").notNull().default("R 0"),
+  liquidationPercentage: text("liquidation_percentage").notNull().default("0%"),
   
-  // Financial details
-  amount: text("amount").notNull().default("R 0"),
-  increasePercentage: text("increase_percentage").notNull().default("0%"),
+  // Bequeath To Section
+  spouse: text("spouse").notNull().default("R 0"),
+  others: text("others").notNull().default("R 0"),
   
-  // Beneficiary information - multiple beneficiaries with splits
-  beneficiaries: text("beneficiaries").array().notNull().default(["Enter details ..."]),
-  benefitSplits: text("benefit_splits").array().notNull().default(["0%"]),
+  // Exclusions Section
+  excludedFromJointEstate: boolean("excluded_from_joint_estate").notNull().default(false),
+  excludedFromEstateDuty: boolean("excluded_from_estate_duty").notNull().default(false),
+  excludedFromCGT: boolean("excluded_from_cgt").notNull().default(false),
+  excludedFromExecutorsFees: boolean("excluded_from_executors_fees").notNull().default(false),
 });
 
 export const insertVoluntaryInvestmentSchema = createInsertSchema(voluntaryInvestments).omit({
