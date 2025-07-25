@@ -273,7 +273,7 @@ export default function VoluntaryInvestmentsTable({ viewMode, searchTerm }: Volu
               <tr key={`${investment.id}-${rowIndex}-${investment.owners.length}`} className="hover:bg-neutral-50">
                 {rowIndex === 0 && (
                   <td rowSpan={maxRows} className="table-actions-cell p-1 text-center section-start section-end align-top">
-                    <div className="mt-[5px] mb-[5px]">
+                    <div>
                       <ActionButtonGroup>
                         <DuplicateButton
                           onClick={() => addMutation.mutate()}
