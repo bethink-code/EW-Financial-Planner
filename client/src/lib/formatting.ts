@@ -6,8 +6,10 @@ export type FieldType = 'currency' | 'percentage' | 'years' | 'text' | 'number';
  * Format currency value with R prefix and proper formatting
  */
 export const formatCurrencyValue = (value: string): string => {
-  if (!value?.trim()) return 'R 0';
-  const cleanValue = value.replace(/[^\d.-]/g, '');
+  // Convert to string and handle null/undefined values
+  const stringValue = String(value || '');
+  if (!stringValue.trim()) return 'R 0';
+  const cleanValue = stringValue.replace(/[^\d.-]/g, '');
   if (!cleanValue) return 'R 0';
   if (isNaN(parseFloat(cleanValue))) return 'R 0';
   const numValue = parseFloat(cleanValue);
@@ -18,8 +20,10 @@ export const formatCurrencyValue = (value: string): string => {
  * Format percentage value with % suffix
  */
 export const formatPercentageValue = (value: string): string => {
-  if (!value?.trim()) return '0%';
-  const cleanValue = value.replace(/[^\d.-]/g, '');
+  // Convert to string and handle null/undefined values
+  const stringValue = String(value || '');
+  if (!stringValue.trim()) return '0%';
+  const cleanValue = stringValue.replace(/[^\d.-]/g, '');
   if (!cleanValue) return '0%';
   if (isNaN(parseFloat(cleanValue))) return '0%';
   const numValue = parseFloat(cleanValue);
@@ -40,8 +44,10 @@ export const parseCurrencyValue = (value: string): number => {
  * Format years with years suffix
  */
 export const formatYearsValue = (value: string): string => {
-  if (!value?.trim()) return '0 years';
-  const cleanValue = value.replace(/[^\d.-]/g, '');
+  // Convert to string and handle null/undefined values
+  const stringValue = String(value || '');
+  if (!stringValue.trim()) return '0 years';
+  const cleanValue = stringValue.replace(/[^\d.-]/g, '');
   if (!cleanValue) return '0 years';
   if (isNaN(parseFloat(cleanValue))) return '0 years';
   const numValue = parseFloat(cleanValue);
@@ -52,15 +58,19 @@ export const formatYearsValue = (value: string): string => {
  * Format text value with trimming - uses "Enter details ..." as default for empty values
  */
 export const formatTextValue = (value: string): string => {
-  return value?.trim() || 'Enter details ...';
+  // Convert to string and handle null/undefined values
+  const stringValue = String(value || '');
+  return stringValue.trim() || 'Enter details ...';
 };
 
 /**
  * Format numeric value
  */
 export const formatNumberValue = (value: string): string => {
-  if (!value?.trim()) return '0';
-  const cleanValue = value.replace(/[^\d.-]/g, '');
+  // Convert to string and handle null/undefined values
+  const stringValue = String(value || '');
+  if (!stringValue.trim()) return '0';
+  const cleanValue = stringValue.replace(/[^\d.-]/g, '');
   if (!cleanValue) return '0';
   if (isNaN(parseFloat(cleanValue))) return '0';
   const numValue = parseFloat(cleanValue);
