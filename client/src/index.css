@@ -463,27 +463,32 @@ th, td {
   .field-text {
     min-width: 150px;
     max-width: 300px;
+    text-align: left !important;
   }
 
   .field-currency {
     min-width: 80px;
     max-width: 110px;
+    text-align: right !important;
   }
 
   .field-percentage {
     min-width: 40px !important;
     max-width: 50px !important;
     width: 50px !important;
+    text-align: right !important;
   }
 
   .field-years {
     min-width: 80px;
     max-width: 80px;
+    text-align: right !important;
   }
 
   .field-number {
     min-width: 70px;
     max-width: 120px;
+    text-align: right !important;
   }
 
   /* Default value styling - grey text to distinguish from user-entered values */
@@ -514,7 +519,7 @@ th, td {
     color: #374151 !important; /* grey-700 - same as entered values */
     padding: 1.2rem 0.4rem !important;
     font-size: 0.875rem !important;
-    text-align: left !important;
+    text-align: right !important;
     height: 1.25rem !important;
     width: auto !important;
     box-sizing: border-box !important;
