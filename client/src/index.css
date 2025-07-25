@@ -396,8 +396,11 @@ th, td {
     white-space: nowrap !important;
   }
 
-  /* Fix for native select dropdowns within table-input */
-  select.table-input {
+  /* GLOBAL DROPDOWN STYLING - NEVER TOUCH THIS AGAIN! */
+  /* This is the definitive solution for all table dropdowns */
+  select.table-input,
+  .table-dropdown,
+  select[class*="table"] {
     width: auto;
     height: 2.3rem !important;
     padding: 0 10px !important;
@@ -412,17 +415,23 @@ th, td {
     color: hsl(var(--foreground)) !important;
     line-height: 2.3rem !important;
   }
-  
-  select.table-input:hover {
+
+  /* Hover and focus states for all dropdowns */
+  select.table-input:hover,
+  .table-dropdown:hover,
+  select[class*="table"]:hover {
     background-color: hsl(var(--accent));
     border-color: hsl(var(--primary) / 0.3);
   }
   
-  select.table-input:focus {
+  select.table-input:focus,
+  .table-dropdown:focus,
+  select[class*="table"]:focus {
     background-color: hsl(var(--background));
     border-color: hsl(var(--primary));
     box-shadow: 0 0 0 2px hsl(var(--primary) / 0.2);
   }
+
   
   /* Total rows - bold styling */
   .table-total-row {
