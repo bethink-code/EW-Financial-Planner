@@ -42,7 +42,7 @@ export function NewRetirementTable({
     return `R ${result.toLocaleString()}`;
   }, []);
 
-  const handleCellUpdate = useCallback((fundId: number, field: string, value: string) => {
+  const handleCellUpdate = useCallback((fundId: number, field: string, value: any) => {
     onFieldUpdate(fundId, field, value);
   }, [onFieldUpdate]);
 
@@ -234,7 +234,10 @@ export function NewRetirementTable({
                       defaultValue={formatTextValue(fund.description)}
                       className={`table-input ${getFieldClass('text')} ${getValueClass(fund.description, 'text')}`}
                       onFocus={handleDefaultValueFocus}
-                      onBlur={(e) => createEnhancedBlurHandler((value) => handleCellUpdate(fund.id, 'description', value), 'text')(e)}
+                      onBlur={(e) => {
+                        const value = e.target.value;
+                        handleCellUpdate(fund.id, 'description', value);
+                      }}
                     />
                   )}
                 </td>
@@ -277,7 +280,10 @@ export function NewRetirementTable({
                       defaultValue={formatCurrencyValue(fund.coverAmount)}
                       className={`table-input ${getFieldClass('currency')} ${getValueClass(fund.coverAmount, 'currency')}`}
                       onFocus={handleDefaultValueFocus}
-                      onBlur={(e) => createEnhancedBlurHandler((value) => handleCellUpdate(fund.id, 'coverAmount', value), 'currency')(e)}
+                      onBlur={(e) => {
+                        const value = e.target.value;
+                        handleCellUpdate(fund.id, 'coverAmount', value);
+                      }}
                     />
                   )}
                 </td>
@@ -354,7 +360,10 @@ export function NewRetirementTable({
                       defaultValue={formatCurrencyValue(fund.monthlyIncome)}
                       className={`table-input ${getFieldClass('currency')} ${getValueClass(fund.monthlyIncome, 'currency')}`}
                       onFocus={handleDefaultValueFocus}
-                      onBlur={(e) => createEnhancedBlurHandler((value) => handleCellUpdate(fund.id, 'monthlyIncome', value), 'currency')(e)}
+                      onBlur={(e) => {
+                        const value = e.target.value;
+                        handleCellUpdate(fund.id, 'monthlyIncome', value);
+                      }}
                     />
                   )}
                 </td>
@@ -379,7 +388,10 @@ export function NewRetirementTable({
                       defaultValue={formatYearsValue(fund.termYears)}
                       className={`table-input ${getFieldClass('years')} ${getValueClass(fund.termYears, 'years')}`}
                       onFocus={handleDefaultValueFocus}
-                      onBlur={(e) => createEnhancedBlurHandler((value) => handleCellUpdate(fund.id, 'termYears', value), 'years')(e)}
+                      onBlur={(e) => {
+                        const value = e.target.value;
+                        handleCellUpdate(fund.id, 'termYears', value);
+                      }}
                     />
                   )}
                 </td>
@@ -392,7 +404,10 @@ export function NewRetirementTable({
                       defaultValue={formatPercentageValue(fund.increasePercentage)}
                       className={`table-input ${getFieldClass('percentage')} ${getValueClass(fund.increasePercentage, 'percentage')}`}
                       onFocus={handleDefaultValueFocus}
-                      onBlur={(e) => createEnhancedBlurHandler((value) => handleCellUpdate(fund.id, 'increasePercentage', value), 'percentage')(e)}
+                      onBlur={(e) => {
+                        const value = e.target.value;
+                        handleCellUpdate(fund.id, 'increasePercentage', value);
+                      }}
                     />
                   )}
                 </td>
@@ -405,7 +420,10 @@ export function NewRetirementTable({
                       defaultValue={formatCurrencyValue(fund.approvedLifeCover)}
                       className={`table-input ${getFieldClass('currency')} ${getValueClass(fund.approvedLifeCover, 'currency')}`}
                       onFocus={handleDefaultValueFocus}
-                      onBlur={(e) => createEnhancedBlurHandler((value) => handleCellUpdate(fund.id, 'approvedLifeCover', value), 'currency')(e)}
+                      onBlur={(e) => {
+                        const value = e.target.value;
+                        handleCellUpdate(fund.id, 'approvedLifeCover', value);
+                      }}
                     />
                   )}
                 </td>
@@ -419,9 +437,10 @@ export function NewRetirementTable({
                       className={`table-input ${getFieldClass('currency')} ${getValueClass(fund.fundValue, 'currency')}`}
                       onFocus={handleDefaultValueFocus}
                       onBlur={(e) => {
-                        createEnhancedBlurHandler((value) => handleCellUpdate(fund.id, 'fundValue', value), 'currency')(e);
+                        const value = e.target.value;
+                        handleCellUpdate(fund.id, 'fundValue', value);
                         // Update calculated fund value at death
-                        const calculatedValue = calculateFundValueAtDeath(e.target.value);
+                        const calculatedValue = calculateFundValueAtDeath(value);
                         handleCellUpdate(fund.id, 'fundValueAtDeath', calculatedValue);
                       }}
                     />
@@ -509,7 +528,10 @@ export function NewRetirementTable({
                       defaultValue={formatCurrencyValue(fund.lumpSumTaken)}
                       className={`table-input ${getFieldClass('currency')} ${getValueClass(fund.lumpSumTaken, 'currency')}`}
                       onFocus={handleDefaultValueFocus}
-                      onBlur={(e) => createEnhancedBlurHandler((value) => handleCellUpdate(fund.id, 'lumpSumTaken', value), 'currency')(e)}
+                      onBlur={(e) => {
+                        const value = e.target.value;
+                        handleCellUpdate(fund.id, 'lumpSumTaken', value);
+                      }}
                     />
                   )}
                 </td>
@@ -522,7 +544,10 @@ export function NewRetirementTable({
                       defaultValue={formatCurrencyValue(fund.nonDeductibleContribution)}
                       className={`table-input ${getFieldClass('currency')} ${getValueClass(fund.nonDeductibleContribution, 'currency')}`}
                       onFocus={handleDefaultValueFocus}
-                      onBlur={(e) => createEnhancedBlurHandler((value) => handleCellUpdate(fund.id, 'nonDeductibleContribution', value), 'currency')(e)}
+                      onBlur={(e) => {
+                        const value = e.target.value;
+                        handleCellUpdate(fund.id, 'nonDeductibleContribution', value);
+                      }}
                     />
                   )}
                 </td>
@@ -556,7 +581,10 @@ export function NewRetirementTable({
                       defaultValue={formatYearsValue(fund.incomeTerm)}
                       className={`table-input ${getFieldClass('years')} ${getValueClass(fund.incomeTerm, 'years')}`}
                       onFocus={handleDefaultValueFocus}
-                      onBlur={(e) => createEnhancedBlurHandler((value) => handleCellUpdate(fund.id, 'incomeTerm', value), 'years')(e)}
+                      onBlur={(e) => {
+                        const value = e.target.value;
+                        handleCellUpdate(fund.id, 'incomeTerm', value);
+                      }}
                     />
                   )}
                 </td>
