@@ -313,17 +313,11 @@ export default function IncomeNeedsTable({ viewMode, searchTerm }: IncomeNeedsTa
                 </select>
               </td>
               
-              {/* Capitalised Amount */}
+              {/* Capitalised Amount (Calculated) */}
               <td className="p-1 section-end">
-                <input
-                  key={`capitalisedAmount-${need.id}-${need.capitalisedAmount}`}
-                  type="text"
-                  defaultValue={need.capitalisedAmount}
-                  className={`table-input ${getFieldClass('currency')} ${getValueClass(need.capitalisedAmount, 'currency')}`}
-                  onFocus={handleDefaultValueFocus}
-                  onBlur={(e) => handleInputBlur(need.id, 'capitalisedAmount', e.target.value, e.target)}
-                  disabled={isUpdating}
-                />
+                <div className="table-input bg-gray-100 text-gray-700 font-medium cursor-not-allowed">
+                  {need.capitalisedAmount || 'R 0'}
+                </div>
               </td>
             </tr>
           ))}
