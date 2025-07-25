@@ -265,7 +265,7 @@ export default function IncomeNeedsTable({ viewMode, searchTerm }: IncomeNeedsTa
                 <input
                   type="text"
                   defaultValue={need.termYears}
-                  onBlur={createEnhancedBlurHandler((value) => handleInputBlur(need.id, 'termYears', value))}
+                  onBlur={createEnhancedBlurHandler((value) => handleInputBlur(need.id, 'termYears', value), 'years')}
                   onFocus={handleDefaultValueFocus}
                   className={`table-input ${getFieldClass('years')} ${getValueClass(need.termYears, 'years')}`}
                   data-field={`termYears-${need.id}`}

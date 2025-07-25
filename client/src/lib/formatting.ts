@@ -198,20 +198,49 @@ export const handleDefaultValueBlur = (e: React.FocusEvent<HTMLInputElement>, fi
 
 /**
  * Create a wrapper for onBlur that combines existing functionality with default restoration
- * @param originalBlurHandler - The original onBlur function
+ * @param originalBlurHandler - The original onBlur function that expects a value
  * @param fieldType - The type of field for default restoration
  * @returns Combined blur handler
  */
 export const createEnhancedBlurHandler = (
-  originalBlurHandler: (e: React.FocusEvent<HTMLInputElement>) => void,
-  fieldType: string
+  originalBlurHandler: (value: string) => void,
+  fieldType: string = 'text'
 ) => {
   return (e: React.FocusEvent<HTMLInputElement>) => {
-    // First, handle default restoration if field is empty
-    handleDefaultValueBlur(e, fieldType);
+    const inputElement = e.target;
+    let value = inputElement.value.trim();
     
-    // Then call the original blur handler for data saving
-    originalBlurHandler(e);
+    // Format the value based on field type before saving
+    switch (fieldType) {
+      case 'currency':
+        value = formatCurrencyValue(value);
+        break;
+      case 'percentage':
+        value = formatPercentageValue(value);
+        break;
+      case 'years':
+        value = formatYearsValue(value);
+        break;
+      case 'text':
+        value = formatTextValue(value);
+        break;
+      case 'number':
+        value = formatNumberValue(value);
+        break;
+    }
+    
+    // Update the DOM element immediately for visual feedback
+    inputElement.value = value;
+    
+    // Update CSS classes for styling
+    if (isDefaultValue(value, fieldType as FieldType)) {
+      inputElement.className = inputElement.className.replace('entered-value', 'default-value');
+    } else {
+      inputElement.className = inputElement.className.replace('default-value', 'entered-value');
+    }
+    
+    // Call the original blur handler with the formatted value
+    originalBlurHandler(value);
   };
 };
 
