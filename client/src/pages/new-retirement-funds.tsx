@@ -92,18 +92,18 @@ export default function NewRetirementFunds() {
 
   const handleAddFund = useCallback(() => {
     const newFund: Omit<RetirementFund, 'id'> = {
-      description: "New Fund",
+      description: "Enter details ...",
       owner: "Donald Edwards",
       additionalOwners: [],
       coverAmount: "R 0",
-      termYears: "0",
+      termYears: "0 years",
       increasePercentage: "0%",
       approvedLifeCover: "R 0",
       fundValue: "R 0",
       fundValueAtDeath: "R 0",
-      name: "",
+      name: "Enter details ...",
       amount: "R 0",
-      beneficiary: "",
+      beneficiary: "Enter details ...",
       benefitSplit: "0%",
       additionalBeneficiaries: [],
       additionalBenefitSplits: [],
@@ -112,7 +112,7 @@ export default function NewRetirementFunds() {
       nondeductibleContribution: "R 0",
       livingAnnuity: "R 0",
       monthlyIncome: "R 0",
-      incomeTerm: "0"
+      incomeTerm: "0 years"
     };
     addMutation.mutate(newFund);
   }, [addMutation]);

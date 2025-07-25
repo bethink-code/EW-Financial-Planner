@@ -4,7 +4,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { UserPlus, UserMinus } from "lucide-react";
 import { DuplicateButton, DeleteButton, AddButton } from "@/components/ui/action-buttons";
 import { getFieldClass, getFieldWidth } from "@/lib/design-tokens";
-import { formatPercentageValue, getValueClass, isDefaultValue, handleDefaultValueFocus } from "@/lib/formatting";
+import { formatCurrencyValue, formatPercentageValue, formatTextValue, formatYearsValue, getValueClass, isDefaultValue, handleDefaultValueFocus, createEnhancedBlurHandler } from "@/lib/formatting";
 
 interface ClassicRetirementTableProps {
   funds: RetirementFund[];
@@ -135,296 +135,365 @@ export function ClassicRetirementTable({
     <div className="overflow-x-auto">
       <table className="w-full border-collapse">
         <thead>
+          {/* First header row - Section groupings */}
           <tr>
-            <th className="border border-neutral-300 bg-neutral-50 p-2 text-left text-xs font-medium text-neutral-700 min-w-[120px]">
+            <th className="border border-neutral-300 bg-neutral-50 p-2 text-left text-xs font-medium text-neutral-700 min-w-[80px]" rowSpan={2}>
               Actions
             </th>
-            {/* Overview Section */}
-            <th className="border border-neutral-300 bg-blue-50 p-2 text-left text-xs font-medium text-blue-700 min-w-[120px]">
+            {/* Overview Section - 2 columns */}
+            <th className="border border-neutral-300 bg-blue-50 p-2 text-center text-xs font-medium text-blue-700" colSpan={2}>
               OVERVIEW
             </th>
-            <th className="border border-neutral-300 bg-blue-50 p-2 text-left text-xs font-medium text-blue-700 min-w-[100px]"></th>
-            <th className="border border-neutral-300 bg-blue-50 p-2 text-left text-xs font-medium text-blue-700 min-w-[100px]"></th>
-            {/* Unapproved Life Cover Section */}
-            <th className="border border-neutral-300 bg-green-50 p-2 text-left text-xs font-medium text-green-700 min-w-[120px]">
+            {/* Unapproved Life Cover Section - 4 columns */}
+            <th className="border border-neutral-300 bg-green-50 p-2 text-center text-xs font-medium text-green-700" colSpan={4}>
               UNAPPROVED LIFE COVER
             </th>
-            <th className="border border-neutral-300 bg-green-50 p-2 text-left text-xs font-medium text-green-700 min-w-[100px]"></th>
-            <th className="border border-neutral-300 bg-green-50 p-2 text-left text-xs font-medium text-green-700 min-w-[100px]"></th>
-            {/* Monthly Death Benefit Section */}
-            <th className="border border-neutral-300 bg-purple-50 p-2 text-left text-xs font-medium text-purple-700 min-w-[120px]">
+            {/* Monthly Death Benefit Section - 2 columns */}
+            <th className="border border-neutral-300 bg-purple-50 p-2 text-center text-xs font-medium text-purple-700" colSpan={2}>
               MONTHLY DEATH BENEFIT
             </th>
-            <th className="border border-neutral-300 bg-purple-50 p-2 text-left text-xs font-medium text-purple-700 min-w-[100px]"></th>
-            {/* Fund Value Section */}
-            <th className="border border-neutral-300 bg-orange-50 p-2 text-left text-xs font-medium text-orange-700 min-w-[120px]">
+            {/* Fund Value Section - 2 columns */}
+            <th className="border border-neutral-300 bg-orange-50 p-2 text-center text-xs font-medium text-orange-700" colSpan={2}>
               FUND VALUE
             </th>
-            <th className="border border-neutral-300 bg-orange-50 p-2 text-left text-xs font-medium text-orange-700 min-w-[100px]"></th>
-            {/* Fund Value Beneficiaries Section */}
-            <th className="border border-neutral-300 bg-pink-50 p-2 text-left text-xs font-medium text-pink-700 min-w-[120px]">
+            {/* Fund Value Beneficiaries Section - 6 columns */}
+            <th className="border border-neutral-300 bg-pink-50 p-2 text-center text-xs font-medium text-pink-700" colSpan={6}>
               FUND VALUE BENEFICIARIES
             </th>
-            <th className="border border-neutral-300 bg-pink-50 p-2 text-left text-xs font-medium text-pink-700 min-w-[100px]"></th>
-            <th className="border border-neutral-300 bg-pink-50 p-2 text-left text-xs font-medium text-pink-700 min-w-[100px]"></th>
-            <th className="border border-neutral-300 bg-pink-50 p-2 text-left text-xs font-medium text-pink-700 min-w-[100px]"></th>
-            <th className="border border-neutral-300 bg-pink-50 p-2 text-left text-xs font-medium text-pink-700 min-w-[100px]"></th>
-            <th className="border border-neutral-300 bg-pink-50 p-2 text-left text-xs font-medium text-pink-700 min-w-[100px]"></th>
           </tr>
+          {/* Second header row - Individual column names */}
           <tr>
-            <th className="border border-neutral-300 bg-neutral-50 p-2 text-left text-xs font-medium text-neutral-700">
+            {/* Overview columns */}
+            <th className="border border-neutral-300 bg-blue-50 p-2 text-left text-xs font-medium text-blue-700 min-w-[150px] border-b border-neutral-200">
+              Description
             </th>
-            {/* Overview Headers */}
-            <th className="border border-neutral-300 bg-blue-50 p-2 text-left text-xs font-medium text-blue-700">
-              DESCRIPTION
+            <th className="border border-neutral-300 bg-blue-50 p-2 text-left text-xs font-medium text-blue-700 min-w-[120px] border-b border-neutral-200">
+              Owner
             </th>
-            <th className="border border-neutral-300 bg-blue-50 p-2 text-left text-xs font-medium text-blue-700">
-              OWNER
+            {/* Unapproved Life Cover columns */}
+            <th className="border border-neutral-300 bg-green-50 p-2 text-left text-xs font-medium text-green-700 min-w-[100px] border-b border-neutral-200">
+              Cover Amount
             </th>
-            <th className="border border-neutral-300 bg-blue-50 p-2 text-left text-xs font-medium text-blue-700">
-              COVER AMOUNT
+            <th className="border border-neutral-300 bg-green-50 p-2 text-left text-xs font-medium text-green-700 min-w-[80px] border-b border-neutral-200">
+              Term (Years)
             </th>
-            {/* Unapproved Life Cover Headers */}
-            <th className="border border-neutral-300 bg-green-50 p-2 text-left text-xs font-medium text-green-700">
-              TERM (YEARS)
+            <th className="border border-neutral-300 bg-green-50 p-2 text-left text-xs font-medium text-green-700 min-w-[80px] border-b border-neutral-200">
+              Increase %
             </th>
-            <th className="border border-neutral-300 bg-green-50 p-2 text-left text-xs font-medium text-green-700">
-              INCREASE %
+            <th className="border border-neutral-300 bg-green-50 p-2 text-left text-xs font-medium text-green-700 min-w-[120px] border-b border-neutral-200">
+              Approved Life Cover
             </th>
-            <th className="border border-neutral-300 bg-green-50 p-2 text-left text-xs font-medium text-green-700">
-              APPROVED LIFE COVER
+            {/* Monthly Death Benefit columns */}
+            <th className="border border-neutral-300 bg-purple-50 p-2 text-left text-xs font-medium text-purple-700 min-w-[100px] border-b border-neutral-200">
+              Fund Value
             </th>
-            {/* Monthly Death Benefit Headers */}
-            <th className="border border-neutral-300 bg-purple-50 p-2 text-left text-xs font-medium text-purple-700">
-              FUND VALUE
+            <th className="border border-neutral-300 bg-purple-50 p-2 text-left text-xs font-medium text-purple-700 min-w-[120px] border-b border-neutral-200">
+              Fund Value at Death
             </th>
-            <th className="border border-neutral-300 bg-purple-50 p-2 text-left text-xs font-medium text-purple-700">
-              FUND VALUE AT DEATH
+            {/* Fund Value columns */}
+            <th className="border border-neutral-300 bg-orange-50 p-2 text-left text-xs font-medium text-orange-700 min-w-[120px] border-b border-neutral-200">
+              Name
             </th>
-            {/* Fund Value Headers */}
-            <th className="border border-neutral-300 bg-orange-50 p-2 text-left text-xs font-medium text-orange-700">
-              NAME
+            <th className="border border-neutral-300 bg-orange-50 p-2 text-left text-xs font-medium text-orange-700 min-w-[100px] border-b border-neutral-200">
+              Amount
             </th>
-            <th className="border border-neutral-300 bg-orange-50 p-2 text-left text-xs font-medium text-orange-700">
-              AMOUNT
+            {/* Fund Value Beneficiaries columns */}
+            <th className="border border-neutral-300 bg-pink-50 p-2 text-left text-xs font-medium text-pink-700 min-w-[100px] border-b border-neutral-200">
+              Lump Sum Taken
             </th>
-            {/* Fund Value Beneficiaries Headers */}
-            <th className="border border-neutral-300 bg-pink-50 p-2 text-left text-xs font-medium text-pink-700">
-              LUMP SUM TAKEN
+            <th className="border border-neutral-300 bg-pink-50 p-2 text-left text-xs font-medium text-pink-700 min-w-[100px] border-b border-neutral-200">
+              Fund Value
             </th>
-            <th className="border border-neutral-300 bg-pink-50 p-2 text-left text-xs font-medium text-pink-700">
-              FUND VALUE
+            <th className="border border-neutral-300 bg-pink-50 p-2 text-left text-xs font-medium text-pink-700 min-w-[140px] border-b border-neutral-200">
+              Non-Deductible Contribution
             </th>
-            <th className="border border-neutral-300 bg-pink-50 p-2 text-left text-xs font-medium text-pink-700">
-              NON-DEDUCTIBLE CONTRIBUTION
+            <th className="border border-neutral-300 bg-pink-50 p-2 text-left text-xs font-medium text-pink-700 min-w-[100px] border-b border-neutral-200">
+              Living Annuity
             </th>
-            <th className="border border-neutral-300 bg-pink-50 p-2 text-left text-xs font-medium text-pink-700">
-              LIVING ANNUITY
+            <th className="border border-neutral-300 bg-pink-50 p-2 text-left text-xs font-medium text-pink-700 min-w-[100px] border-b border-neutral-200">
+              Monthly Income
             </th>
-            <th className="border border-neutral-300 bg-pink-50 p-2 text-left text-xs font-medium text-pink-700">
-              MONTHLY INCOME
-            </th>
-            <th className="border border-neutral-300 bg-pink-50 p-2 text-left text-xs font-medium text-pink-700">
-              INCOME TERM
+            <th className="border border-neutral-300 bg-pink-50 p-2 text-left text-xs font-medium text-pink-700 min-w-[80px] border-b border-neutral-200">
+              Income Term
             </th>
           </tr>
         </thead>
         <tbody>
-          {funds.map((fund) => (
-            <tr key={fund.id} className="hover:bg-neutral-50">
-              {/* Actions */}
-              <td className="border border-neutral-300 p-2">
-                <div className="flex gap-1">
-                  {onDuplicateFund && (
-                    <DuplicateButton
-                      onClick={() => onDuplicateFund(fund)}
-                      disabled={isUpdating}
+          {expandedRowsData.map((row, index) => {
+            const { type, fund, ownerIndex, beneficiaryIndex, isLast } = row;
+
+            return (
+              <tr key={`${fund.id}-${type}-${ownerIndex || beneficiaryIndex || 0}`}>
+                {/* Actions Column */}
+                <td className={`border border-neutral-300 p-2 table-actions-cell ${isLast ? 'border-b-2 border-b-neutral-400' : ''}`}>
+                  {type === 'fund' && (
+                    <div className="flex items-center gap-1">
+                      <DuplicateButton onClick={() => onDuplicateFund?.(fund)} />
+                      <DeleteButton onClick={() => onRemoveFund?.(fund.id)} />
+                    </div>
+                  )}
+                </td>
+
+                {/* Overview Section */}
+                <td className={`border border-neutral-300 p-1 ${isLast ? 'border-b-2 border-b-neutral-400' : ''}`}>
+                  {type === 'fund' && (
+                    <input
+                      key={`field-${fund.id}-description`}
+                      type="text"
+                      defaultValue={formatTextValue(fund.description)}
+                      className={`table-input ${getFieldClass('text')} ${getValueClass(fund.description, 'text')}`}
+                      onFocus={handleDefaultValueFocus}
+                      onBlur={createEnhancedBlurHandler((value) => handleCellUpdate(fund.id, 'description', value), 'text')}
                     />
                   )}
-                  {onRemoveFund && (
-                    <DeleteButton
-                      onClick={() => onRemoveFund(fund.id)}
-                      disabled={isUpdating}
+                  {type === 'additional-owner' && ownerIndex !== undefined && (
+                    <div className="flex items-center gap-1 text-blue-600 text-xs">
+                      <span className="text-blue-500">↳</span>
+                      <span className="text-xs text-neutral-500">Additional Owner</span>
+                    </div>
+                  )}
+                  {type === 'additional-beneficiary' && beneficiaryIndex !== undefined && (
+                    <div className="flex items-center gap-1 text-green-600 text-xs">
+                      <span className="text-green-500">↳</span>
+                      <span className="text-xs text-neutral-500">Additional Beneficiary</span>
+                    </div>
+                  )}
+                </td>
+
+                <td className={`border border-neutral-300 p-1 ${isLast ? 'border-b-2 border-b-neutral-400' : ''}`}>
+                  {type === 'fund' && (
+                    <div className="flex items-center gap-1">
+                      <Select value={fund.owner} onValueChange={(value) => handleCellUpdate(fund.id, 'owner', value)}>
+                        <SelectTrigger className="h-7 text-xs min-w-[120px]">
+                          <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {owners.map((owner) => (
+                            <SelectItem key={owner} value={owner} className="text-xs">
+                              {owner}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                      <AddButton onClick={() => handleAddOwner(fund.id)}>
+                        <UserPlus className="h-3 w-3" />
+                      </AddButton>
+                    </div>
+                  )}
+                  {type === 'additional-owner' && ownerIndex !== undefined && (
+                    <div className="flex items-center gap-1">
+                      <Select 
+                        value={fund.additionalOwners[ownerIndex]} 
+                        onValueChange={(value) => handleOwnerChange(fund.id, ownerIndex, value)}
+                      >
+                        <SelectTrigger className="h-7 text-xs min-w-[120px]">
+                          <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {owners.map((owner) => (
+                            <SelectItem key={owner} value={owner} className="text-xs">
+                              {owner}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                      <DeleteButton onClick={() => handleRemoveOwner(fund.id, ownerIndex)}>
+                        <UserMinus className="h-3 w-3" />
+                      </DeleteButton>
+                    </div>
+                  )}
+                </td>
+
+                {/* Unapproved Life Cover Section */}
+                <td className={`border border-neutral-300 p-1 ${isLast ? 'border-b-2 border-b-neutral-400' : ''}`}>
+                  {type === 'fund' && (
+                    <input
+                      key={`field-${fund.id}-coverAmount`}
+                      type="text"
+                      defaultValue={formatCurrencyValue(fund.coverAmount)}
+                      className={`table-input ${getFieldClass('currency')} ${getValueClass(fund.coverAmount, 'currency')}`}
+                      onFocus={handleDefaultValueFocus}
+                      onBlur={createEnhancedBlurHandler((value) => handleCellUpdate(fund.id, 'coverAmount', value), 'currency')}
                     />
                   )}
-                </div>
-              </td>
+                </td>
 
-              {/* Overview Section */}
-              <td className="border border-neutral-300 p-1">
-                <input
-                  type="text"
-                  value={fund.description}
-                  onChange={(e) => handleCellUpdate(fund.id, 'description', e.target.value)}
-                  className={`${getFieldClass()} w-full text-xs`}
-                  placeholder="Description"
-                />
-              </td>
-              <td className="border border-neutral-300 p-1">
-                <Select
-                  value={fund.owner}
-                  onValueChange={(value) => handleCellUpdate(fund.id, 'owner', value)}
-                >
-                  <SelectTrigger className={`${getFieldClass()} w-full h-7 text-xs`}>
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {owners.map((owner) => (
-                      <SelectItem key={owner} value={owner} className="text-xs">
-                        {owner}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </td>
-              <td className="border border-neutral-300 p-1">
-                <input
-                  type="text"
-                  value={fund.coverAmount}
-                  onChange={(e) => handleCellUpdate(fund.id, 'coverAmount', e.target.value)}
-                  className={`${getFieldClass()} w-full text-xs`}
-                  placeholder="R 0"
-                />
-              </td>
+                <td className={`border border-neutral-300 p-1 ${isLast ? 'border-b-2 border-b-neutral-400' : ''}`}>
+                  {type === 'fund' && (
+                    <input
+                      key={`field-${fund.id}-termYears`}
+                      type="text"
+                      defaultValue={formatYearsValue(fund.termYears)}
+                      className={`table-input ${getFieldClass('years')} ${getValueClass(fund.termYears, 'years')}`}
+                      onFocus={handleDefaultValueFocus}
+                      onBlur={createEnhancedBlurHandler((value) => handleCellUpdate(fund.id, 'termYears', value), 'years')}
+                    />
+                  )}
+                </td>
 
-              {/* Unapproved Life Cover Section */}
-              <td className="border border-neutral-300 p-1">
-                <input
-                  type="text"
-                  value={fund.termYears}
-                  onChange={(e) => handleCellUpdate(fund.id, 'termYears', e.target.value)}
-                  className={`${getFieldClass()} w-full text-xs`}
-                  placeholder="0"
-                />
-              </td>
-              <td className="border border-neutral-300 p-1">
-                <input
-                  type="text"
-                  value={fund.increasePercentage}
-                  onChange={(e) => handleCellUpdate(fund.id, 'increasePercentage', e.target.value)}
-                  className={`${getFieldClass()} w-full text-xs`}
-                  placeholder="0%"
-                />
-              </td>
-              <td className="border border-neutral-300 p-1">
-                <input
-                  type="text"
-                  value={fund.approvedLifeCover}
-                  onChange={(e) => handleCellUpdate(fund.id, 'approvedLifeCover', e.target.value)}
-                  className={`${getFieldClass()} w-full text-xs`}
-                  placeholder="R 0"
-                />
-              </td>
+                <td className={`border border-neutral-300 p-1 ${isLast ? 'border-b-2 border-b-neutral-400' : ''}`}>
+                  {type === 'fund' && (
+                    <input
+                      key={`field-${fund.id}-increasePercentage`}
+                      type="text"
+                      defaultValue={formatPercentageValue(fund.increasePercentage)}
+                      className={`table-input ${getFieldClass('percentage')} ${getValueClass(fund.increasePercentage, 'percentage')}`}
+                      onFocus={handleDefaultValueFocus}
+                      onBlur={createEnhancedBlurHandler((value) => handleCellUpdate(fund.id, 'increasePercentage', value), 'percentage')}
+                    />
+                  )}
+                </td>
 
-              {/* Monthly Death Benefit Section */}
-              <td className="border border-neutral-300 p-1">
-                <input
-                  type="text"
-                  value={fund.fundValue}
-                  onChange={(e) => handleCellUpdate(fund.id, 'fundValue', e.target.value)}
-                  className={`${getFieldClass()} w-full text-xs`}
-                  placeholder="R 0"
-                />
-              </td>
-              <td className="border border-neutral-300 p-1">
-                <input
-                  type="text"
-                  value={fund.fundValueAtDeath}
-                  onChange={(e) => handleCellUpdate(fund.id, 'fundValueAtDeath', e.target.value)}
-                  className={`${getFieldClass()} w-full text-xs`}
-                  placeholder="R 0"
-                />
-              </td>
+                <td className={`border border-neutral-300 p-1 ${isLast ? 'border-b-2 border-b-neutral-400' : ''}`}>
+                  {type === 'fund' && (
+                    <input
+                      key={`field-${fund.id}-approvedLifeCover`}
+                      type="text"
+                      defaultValue={formatCurrencyValue(fund.approvedLifeCover)}
+                      className={`table-input ${getFieldClass('currency')} ${getValueClass(fund.approvedLifeCover, 'currency')}`}
+                      onFocus={handleDefaultValueFocus}
+                      onBlur={createEnhancedBlurHandler((value) => handleCellUpdate(fund.id, 'approvedLifeCover', value), 'currency')}
+                    />
+                  )}
+                </td>
 
-              {/* Fund Value Section */}
-              <td className="border border-neutral-300 p-1">
-                <input
-                  type="text"
-                  value={fund.name}
-                  onChange={(e) => handleCellUpdate(fund.id, 'name', e.target.value)}
-                  className={`${getFieldClass()} w-full text-xs`}
-                  placeholder="Name"
-                />
-              </td>
-              <td className="border border-neutral-300 p-1">
-                <input
-                  type="text"
-                  value={fund.amount}
-                  onChange={(e) => handleCellUpdate(fund.id, 'amount', e.target.value)}
-                  className={`${getFieldClass()} w-full text-xs`}
-                  placeholder="R 0"
-                />
-              </td>
+                {/* Monthly Death Benefit Section */}
+                <td className={`border border-neutral-300 p-1 ${isLast ? 'border-b-2 border-b-neutral-400' : ''}`}>
+                  {type === 'fund' && (
+                    <input
+                      key={`field-${fund.id}-fundValue`}
+                      type="text"
+                      defaultValue={formatCurrencyValue(fund.fundValue)}
+                      className={`table-input ${getFieldClass('currency')} ${getValueClass(fund.fundValue, 'currency')}`}
+                      onFocus={handleDefaultValueFocus}
+                      onBlur={createEnhancedBlurHandler((value) => handleCellUpdate(fund.id, 'fundValue', value), 'currency')}
+                    />
+                  )}
+                </td>
 
-              {/* Fund Value Beneficiaries Section */}
-              <td className="border border-neutral-300 p-1">
-                <input
-                  type="text"
-                  value={fund.lumpSumTaken}
-                  onChange={(e) => handleCellUpdate(fund.id, 'lumpSumTaken', e.target.value)}
-                  className={`${getFieldClass()} w-full text-xs`}
-                  placeholder="R 0"
-                />
-              </td>
-              <td className="border border-neutral-300 p-1">
-                <input
-                  type="text"
-                  value={fund.fundValueAfterLumpSum || "R 0"}
-                  onChange={(e) => handleCellUpdate(fund.id, 'fundValueAfterLumpSum', e.target.value)}
-                  className={`${getFieldClass()} w-full text-xs`}
-                  placeholder="R 0"
-                />
-              </td>
-              <td className="border border-neutral-300 p-1">
-                <input
-                  type="text"
-                  value={fund.nondeductibleContribution}
-                  onChange={(e) => handleCellUpdate(fund.id, 'nondeductibleContribution', e.target.value)}
-                  className={`${getFieldClass()} w-full text-xs`}
-                  placeholder="R 0"
-                />
-              </td>
-              <td className="border border-neutral-300 p-1">
-                <input
-                  type="text"
-                  value={fund.livingAnnuity}
-                  onChange={(e) => handleCellUpdate(fund.id, 'livingAnnuity', e.target.value)}
-                  className={`${getFieldClass()} w-full text-xs`}
-                  placeholder="R 0"
-                />
-              </td>
-              <td className="border border-neutral-300 p-1">
-                <input
-                  type="text"
-                  value={fund.monthlyIncome}
-                  onChange={(e) => handleCellUpdate(fund.id, 'monthlyIncome', e.target.value)}
-                  className={`${getFieldClass()} w-full text-xs`}
-                  placeholder="R 0"
-                />
-              </td>
-              <td className="border border-neutral-300 p-1">
-                <input
-                  type="text"
-                  value={fund.incomeTerm}
-                  onChange={(e) => handleCellUpdate(fund.id, 'incomeTerm', e.target.value)}
-                  className={`${getFieldClass()} w-full text-xs`}
-                  placeholder="0"
-                />
-              </td>
-            </tr>
-          ))}
+                <td className={`border border-neutral-300 p-1 ${isLast ? 'border-b-2 border-b-neutral-400' : ''}`}>
+                  {type === 'fund' && (
+                    <input
+                      key={`field-${fund.id}-fundValueAtDeath`}
+                      type="text"
+                      defaultValue={formatCurrencyValue(fund.fundValueAtDeath)}
+                      className={`table-input ${getFieldClass('currency')} ${getValueClass(fund.fundValueAtDeath, 'currency')}`}
+                      onFocus={handleDefaultValueFocus}
+                      onBlur={createEnhancedBlurHandler((value) => handleCellUpdate(fund.id, 'fundValueAtDeath', value), 'currency')}
+                    />
+                  )}
+                </td>
+
+                {/* Fund Value Section */}
+                <td className={`border border-neutral-300 p-1 ${isLast ? 'border-b-2 border-b-neutral-400' : ''}`}>
+                  {type === 'fund' && (
+                    <input
+                      key={`field-${fund.id}-name`}
+                      type="text"
+                      defaultValue={formatTextValue(fund.name)}
+                      className={`table-input ${getFieldClass('text')} ${getValueClass(fund.name, 'text')}`}
+                      onFocus={handleDefaultValueFocus}
+                      onBlur={createEnhancedBlurHandler((value) => handleCellUpdate(fund.id, 'name', value), 'text')}
+                    />
+                  )}
+                </td>
+
+                <td className={`border border-neutral-300 p-1 ${isLast ? 'border-b-2 border-b-neutral-400' : ''}`}>
+                  {type === 'fund' && (
+                    <input
+                      key={`field-${fund.id}-amount`}
+                      type="text"
+                      defaultValue={formatCurrencyValue(fund.amount)}
+                      className={`table-input ${getFieldClass('currency')} ${getValueClass(fund.amount, 'currency')}`}
+                      onFocus={handleDefaultValueFocus}
+                      onBlur={createEnhancedBlurHandler((value) => handleCellUpdate(fund.id, 'amount', value), 'currency')}
+                    />
+                  )}
+                </td>
+
+                {/* Fund Value Beneficiaries Section */}
+                <td className={`border border-neutral-300 p-1 ${isLast ? 'border-b-2 border-b-neutral-400' : ''}`}>
+                  {type === 'fund' && (
+                    <input
+                      key={`field-${fund.id}-lumpSumTaken`}
+                      type="text"
+                      defaultValue={formatCurrencyValue(fund.lumpSumTaken)}
+                      className={`table-input ${getFieldClass('currency')} ${getValueClass(fund.lumpSumTaken, 'currency')}`}
+                      onFocus={handleDefaultValueFocus}
+                      onBlur={createEnhancedBlurHandler((value) => handleCellUpdate(fund.id, 'lumpSumTaken', value), 'currency')}
+                    />
+                  )}
+                </td>
+
+                <td className={`border border-neutral-300 p-1 ${isLast ? 'border-b-2 border-b-neutral-400' : ''}`}>
+                  {type === 'fund' && (
+                    <input
+                      key={`field-${fund.id}-fundValueAfterLumpSum`}
+                      type="text"
+                      defaultValue={formatCurrencyValue(fund.fundValueAfterLumpSum)}
+                      className={`table-input ${getFieldClass('currency')} ${getValueClass(fund.fundValueAfterLumpSum, 'currency')}`}
+                      onFocus={handleDefaultValueFocus}
+                      onBlur={createEnhancedBlurHandler((value) => handleCellUpdate(fund.id, 'fundValueAfterLumpSum', value), 'currency')}
+                    />
+                  )}
+                </td>
+
+                <td className={`border border-neutral-300 p-1 ${isLast ? 'border-b-2 border-b-neutral-400' : ''}`}>
+                  {type === 'fund' && (
+                    <input
+                      key={`field-${fund.id}-nondeductibleContribution`}
+                      type="text"
+                      defaultValue={formatCurrencyValue(fund.nondeductibleContribution)}
+                      className={`table-input ${getFieldClass('currency')} ${getValueClass(fund.nondeductibleContribution, 'currency')}`}
+                      onFocus={handleDefaultValueFocus}
+                      onBlur={createEnhancedBlurHandler((value) => handleCellUpdate(fund.id, 'nondeductibleContribution', value), 'currency')}
+                    />
+                  )}
+                </td>
+
+                <td className={`border border-neutral-300 p-1 ${isLast ? 'border-b-2 border-b-neutral-400' : ''}`}>
+                  {type === 'fund' && (
+                    <input
+                      key={`field-${fund.id}-livingAnnuity`}
+                      type="text"
+                      defaultValue={formatCurrencyValue(fund.livingAnnuity)}
+                      className={`table-input ${getFieldClass('currency')} ${getValueClass(fund.livingAnnuity, 'currency')}`}
+                      onFocus={handleDefaultValueFocus}
+                      onBlur={createEnhancedBlurHandler((value) => handleCellUpdate(fund.id, 'livingAnnuity', value), 'currency')}
+                    />
+                  )}
+                </td>
+
+                <td className={`border border-neutral-300 p-1 ${isLast ? 'border-b-2 border-b-neutral-400' : ''}`}>
+                  {type === 'fund' && (
+                    <input
+                      key={`field-${fund.id}-monthlyIncome`}
+                      type="text"
+                      defaultValue={formatCurrencyValue(fund.monthlyIncome)}
+                      className={`table-input ${getFieldClass('currency')} ${getValueClass(fund.monthlyIncome, 'currency')}`}
+                      onFocus={handleDefaultValueFocus}
+                      onBlur={createEnhancedBlurHandler((value) => handleCellUpdate(fund.id, 'monthlyIncome', value), 'currency')}
+                    />
+                  )}
+                </td>
+
+                <td className={`border border-neutral-300 p-1 ${isLast ? 'border-b-2 border-b-neutral-400' : ''}`}>
+                  {type === 'fund' && (
+                    <input
+                      key={`field-${fund.id}-incomeTerm`}
+                      type="text"
+                      defaultValue={formatYearsValue(fund.incomeTerm)}
+                      className={`table-input ${getFieldClass('years')} ${getValueClass(fund.incomeTerm, 'years')}`}
+                      onFocus={handleDefaultValueFocus}
+                      onBlur={createEnhancedBlurHandler((value) => handleCellUpdate(fund.id, 'incomeTerm', value), 'years')}
+                    />
+                  )}
+                </td>
+              </tr>
+            );
+          })}
         </tbody>
       </table>
-
-      {/* Total Row */}
-      <div className="mt-4 p-4 bg-neutral-50 border border-neutral-200 rounded">
-        <div className="text-sm font-medium text-neutral-700">
-          Total: R {funds.reduce((sum, fund) => {
-            const value = parseFloat(fund.fundValue.replace(/[^\d.-]/g, '')) || 0;
-            return sum + value;
-          }, 0).toLocaleString()}
-        </div>
-      </div>
     </div>
   );
 }
