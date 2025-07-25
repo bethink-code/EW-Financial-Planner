@@ -3,6 +3,7 @@ import { RetirementFund } from '@shared/schema';
 import { Plus, UserPlus, UserMinus, Trash2, Copy } from 'lucide-react';
 import { formatCurrencyValue, formatPercentageValue, formatTextValue, formatYearsValue, getValueClass, isDefaultValue, handleDefaultValueFocus, createEnhancedBlurHandler } from "@/lib/formatting";
 import { getFieldClass } from "@/lib/field-types";
+import { ActionButtonGroup, DuplicateButton, DeleteButton, AddButton } from "@/components/ui/action-buttons";
 
 interface NewRetirementTableProps {
   funds: RetirementFund[];
@@ -176,43 +177,41 @@ export function NewRetirementTable({
   }
 
   return (
-    <div className="overflow-x-auto">
-      <table className="w-full border-collapse">
+    <div className="space-y-6">
+      <table className="min-w-full border-collapse border border-neutral-300">
         <thead>
           {/* Main section headers */}
-          <tr className="bg-gray-100">
-            <th className="border border-neutral-300 p-2 text-xs font-semibold">ACTIONS</th>
-            <th className="border border-neutral-300 p-2 text-xs font-semibold" colSpan={2}>OVERVIEW</th>
-            <th className="border border-neutral-300 p-2 text-xs font-semibold" colSpan={4}>UNAPPROVED LIFE COVER</th>
-            <th className="border border-neutral-300 p-2 text-xs font-semibold" colSpan={4}>MONTHLY DEATH BENEFIT</th>
-            <th className="border border-neutral-300 p-2 text-xs font-semibold" colSpan={3}>APPROVED LIFE COVER</th>
-            <th className="border border-neutral-300 p-2 text-xs font-semibold" colSpan={8}>FUND VALUE BENEFICIARIES</th>
+          <tr className="bg-neutral-50">
+            <th className="border border-neutral-300 px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center" rowSpan={2}>Actions</th>
+            <th className="border border-neutral-300 px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center" colSpan={2}>Overview</th>
+            <th className="border border-neutral-300 px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center" colSpan={4}>Unapproved Life Cover</th>
+            <th className="border border-neutral-300 px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center" colSpan={4}>Monthly Death Benefit</th>
+            <th className="border border-neutral-300 px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center" colSpan={3}>Approved Life Cover</th>
+            <th className="border border-neutral-300 px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center" colSpan={7}>Fund Value Beneficiaries</th>
           </tr>
           
           {/* Individual column headers */}
-          <tr className="bg-gray-50">
-            <th className="border border-neutral-300 p-1 text-xs border-b border-neutral-200">Actions</th>
-            <th className="border border-neutral-300 p-1 text-xs border-b border-neutral-200">Description</th>
-            <th className="border border-neutral-300 p-1 text-xs border-b border-neutral-200">Owner</th>
-            <th className="border border-neutral-300 p-1 text-xs border-b border-neutral-200">Cover Amount</th>
-            <th className="border border-neutral-300 p-1 text-xs border-b border-neutral-200">Beneficiary</th>
-            <th className="border border-neutral-300 p-1 text-xs border-b border-neutral-200">Percentage Split</th>
-            <th className="border border-neutral-300 p-1 text-xs border-b border-neutral-200">Cover Split</th>
-            <th className="border border-neutral-300 p-1 text-xs border-b border-neutral-200">Monthly Income</th>
-            <th className="border border-neutral-300 p-1 text-xs border-b border-neutral-200">Checkbox</th>
-            <th className="border border-neutral-300 p-1 text-xs border-b border-neutral-200">Term Years</th>
-            <th className="border border-neutral-300 p-1 text-xs border-b border-neutral-200">Increase %</th>
-            <th className="border border-neutral-300 p-1 text-xs border-b border-neutral-200">Cover</th>
-            <th className="border border-neutral-300 p-1 text-xs border-b border-neutral-200">Fund Value</th>
-            <th className="border border-neutral-300 p-1 text-xs border-b border-neutral-200">Fund Value at Death</th>
-            <th className="border border-neutral-300 p-1 text-xs border-b border-neutral-200">Beneficiary</th>
-            <th className="border border-neutral-300 p-1 text-xs border-b border-neutral-200">Cover % Split</th>
-            <th className="border border-neutral-300 p-1 text-xs border-b border-neutral-200">Cover</th>
-            <th className="border border-neutral-300 p-1 text-xs border-b border-neutral-200">Lump Assessed</th>
-            <th className="border border-neutral-300 p-1 text-xs border-b border-neutral-200">Non Deductible</th>
-            <th className="border border-neutral-300 p-1 text-xs border-b border-neutral-200">Living Annuity</th>
-            <th className="border border-neutral-300 p-1 text-xs border-b border-neutral-200">Checkbox</th>
-            <th className="border border-neutral-300 p-1 text-xs border-b border-neutral-200">Income Term</th>
+          <tr className="bg-neutral-50">
+            <th className="border border-neutral-300 px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center border-b border-neutral-200">Description</th>
+            <th className="border border-neutral-300 px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center border-b border-neutral-200">Owners</th>
+            <th className="border border-neutral-300 px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center border-b border-neutral-200">Cover Amount</th>
+            <th className="border border-neutral-300 px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center border-b border-neutral-200">Beneficiaries</th>
+            <th className="border border-neutral-300 px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center border-b border-neutral-200">Percentage Split</th>
+            <th className="border border-neutral-300 px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center border-b border-neutral-200">Cover Split</th>
+            <th className="border border-neutral-300 px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center border-b border-neutral-200">Monthly Income</th>
+            <th className="border border-neutral-300 px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center border-b border-neutral-200">Checkbox</th>
+            <th className="border border-neutral-300 px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center border-b border-neutral-200">Term Years</th>
+            <th className="border border-neutral-300 px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center border-b border-neutral-200">Increase %</th>
+            <th className="border border-neutral-300 px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center border-b border-neutral-200">Cover</th>
+            <th className="border border-neutral-300 px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center border-b border-neutral-200">Fund Value</th>
+            <th className="border border-neutral-300 px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center border-b border-neutral-200">Fund Value at Death</th>
+            <th className="border border-neutral-300 px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center border-b border-neutral-200">Beneficiary Name</th>
+            <th className="border border-neutral-300 px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center border-b border-neutral-200">Percentage</th>
+            <th className="border border-neutral-300 px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center border-b border-neutral-200">Amount</th>
+            <th className="border border-neutral-300 px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center border-b border-neutral-200">Lump Sum Taken</th>
+            <th className="border border-neutral-300 px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center border-b border-neutral-200">Non-deductible Contribution</th>
+            <th className="border border-neutral-300 px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center border-b border-neutral-200">Living Annuity</th>
+            <th className="border border-neutral-300 px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center border-b border-neutral-200">Income Term</th>
           </tr>
         </thead>
         <tbody>
@@ -224,26 +223,20 @@ export function NewRetirementTable({
             );
 
             return Array.from({ length: maxRows }, (_, rowIndex) => (
-              <tr key={`${fund.id}-${rowIndex}-${fund.owners.length}-${fund.unapprovedBeneficiaries.length}-${fund.fundValueBeneficiaries.length}`} className="hover:bg-gray-50">
+              <tr key={`${fund.id}-${rowIndex}-${fund.owners.length}-${fund.unapprovedBeneficiaries.length}-${fund.fundValueBeneficiaries.length}`} className="hover:bg-neutral-50">
                 {/* Actions */}
-                <td className="border border-neutral-300 p-1">
+                <td className="table-actions-cell border border-neutral-300 p-1 text-center">
                   {rowIndex === 0 && (
-                    <div className="flex gap-1">
-                      <button
-                        onClick={() => onDuplicateFund(fund)}
-                        className="p-1 text-blue-600 hover:bg-blue-50 rounded"
-                        title="Duplicate"
-                      >
-                        <Copy className="h-3 w-3" />
-                      </button>
-                      <button
-                        onClick={() => onRemoveFund(fund.id)}
-                        className="p-1 text-red-600 hover:bg-red-50 rounded"
-                        title="Delete"
-                      >
-                        <Trash2 className="h-3 w-3" />
-                      </button>
-                    </div>
+                    <ActionButtonGroup>
+                      <DuplicateButton 
+                        onClick={() => onDuplicateFund(fund)} 
+                        disabled={isUpdating}
+                      />
+                      <DeleteButton 
+                        onClick={() => onRemoveFund(fund.id)} 
+                        disabled={isUpdating}
+                      />
+                    </ActionButtonGroup>
                   )}
                 </td>
 
@@ -274,31 +267,25 @@ export function NewRetirementTable({
                         onBlur={(e) => handleOwnerChange(fund.id, rowIndex, e.target.value)}
                       />
                       {rowIndex === 0 ? (
-                        <button
-                          type="button"
+                        <AddButton
                           onClick={(e) => {
                             e.preventDefault();
                             e.stopPropagation();
                             handleAddOwner(fund.id);
                           }}
-                          className="p-0.5 text-blue-600 hover:bg-blue-50 rounded"
+                          icon={UserPlus}
                           title="Add Owner"
-                        >
-                          <UserPlus className="h-3 w-3" />
-                        </button>
+                          variant="secondary"
+                        />
                       ) : (
-                        <button
-                          type="button"
+                        <DeleteButton
                           onClick={(e) => {
                             e.preventDefault();
                             e.stopPropagation();
                             handleRemoveOwner(fund.id, rowIndex);
                           }}
-                          className="p-0.5 text-red-600 hover:bg-red-50 rounded"
                           title="Remove Owner"
-                        >
-                          <UserMinus className="h-3 w-3" />
-                        </button>
+                        />
                       )}
                     </div>
                   )}
@@ -335,21 +322,17 @@ export function NewRetirementTable({
                         }}
                       />
                       {rowIndex === 0 ? (
-                        <button
+                        <AddButton
                           onClick={() => handleAddUnapprovedBeneficiary(fund.id)}
-                          className="p-0.5 text-blue-600 hover:bg-blue-50 rounded"
+                          icon={Plus}
                           title="Add Beneficiary"
-                        >
-                          <Plus className="h-3 w-3" />
-                        </button>
+                          variant="secondary"
+                        />
                       ) : (
-                        <button
+                        <DeleteButton
                           onClick={() => handleRemoveUnapprovedBeneficiary(fund.id, rowIndex)}
-                          className="p-0.5 text-red-600 hover:bg-red-50 rounded"
                           title="Remove Beneficiary"
-                        >
-                          <UserMinus className="h-3 w-3" />
-                        </button>
+                        />
                       )}
                     </div>
                   )}
@@ -377,9 +360,9 @@ export function NewRetirementTable({
                 </td>
 
                 {/* Unapproved Life Cover - Cover Split (Calculated) */}
-                <td className="border border-neutral-300 p-1 bg-gray-100">
+                <td className="border border-neutral-300 p-1 bg-neutral-100">
                   {rowIndex < fund.unapprovedCoverSplits.length && (
-                    <span className="text-xs text-gray-600">
+                    <span className="text-xs text-neutral-600">
                       {fund.unapprovedCoverSplits[rowIndex]}
                     </span>
                   )}
@@ -481,9 +464,9 @@ export function NewRetirementTable({
                 </td>
 
                 {/* Approved Life Cover - Fund Value at Death (Calculated) */}
-                <td className="border border-neutral-300 p-1 bg-gray-100">
+                <td className="border border-neutral-300 p-1 bg-neutral-100">
                   {rowIndex === 0 && (
-                    <span className="text-xs text-gray-600">
+                    <span className="text-xs text-neutral-600">
                       {fund.fundValueAtDeath}
                     </span>
                   )}
@@ -504,21 +487,17 @@ export function NewRetirementTable({
                         }}
                       />
                       {rowIndex === 0 ? (
-                        <button
+                        <AddButton
                           onClick={() => handleAddFundValueBeneficiary(fund.id)}
-                          className="p-0.5 text-blue-600 hover:bg-blue-50 rounded"
+                          icon={Plus}
                           title="Add Beneficiary"
-                        >
-                          <Plus className="h-3 w-3" />
-                        </button>
+                          variant="secondary"
+                        />
                       ) : (
-                        <button
+                        <DeleteButton
                           onClick={() => handleRemoveFundValueBeneficiary(fund.id, rowIndex)}
-                          className="p-0.5 text-red-600 hover:bg-red-50 rounded"
                           title="Remove Beneficiary"
-                        >
-                          <UserMinus className="h-3 w-3" />
-                        </button>
+                        />
                       )}
                     </div>
                   )}
@@ -546,9 +525,9 @@ export function NewRetirementTable({
                 </td>
 
                 {/* Fund Value Beneficiaries - Cover (Calculated) */}
-                <td className="border border-neutral-300 p-1 bg-gray-100">
+                <td className="border border-neutral-300 p-1 bg-neutral-100">
                   {rowIndex < fund.fundValueCoverSplits.length && (
-                    <span className="text-xs text-gray-600">
+                    <span className="text-xs text-neutral-600">
                       {fund.fundValueCoverSplits[rowIndex]}
                     </span>
                   )}
@@ -587,9 +566,9 @@ export function NewRetirementTable({
                 </td>
 
                 {/* Fund Value Beneficiaries - Living Annuity (Calculated) */}
-                <td className="border border-neutral-300 p-1 bg-gray-100">
+                <td className="border border-neutral-300 p-1 bg-neutral-100">
                   {rowIndex === 0 && (
-                    <span className="text-xs text-gray-600">
+                    <span className="text-xs text-neutral-600">
                       {fund.livingAnnuity}
                     </span>
                   )}
@@ -627,39 +606,38 @@ export function NewRetirementTable({
           })}
           
           {/* Totals Row */}
-          <tr className="bg-blue-50 border-t-2 border-blue-200 font-bold">
-            <td className="border border-neutral-300 p-2 text-center text-xs font-semibold">TOTALS</td>
-            <td className="border border-neutral-300 p-1"></td>
-            <td className="border border-neutral-300 p-1"></td>
-            <td className="border border-neutral-300 p-1 text-center text-xs font-bold">
+          <tr className="border-t-2 border-border font-bold">
+            <td className="px-3 py-3 text-center font-bold text-sm">Totals</td>
+            <td className="px-3 py-3"></td>
+            <td className="px-3 py-3"></td>
+            <td className="px-3 py-3 font-bold text-sm">
               {formatTotal(totals.coverAmount)}
             </td>
-            <td className="border border-neutral-300 p-1"></td>
-            <td className="border border-neutral-300 p-1"></td>
-            <td className="border border-neutral-300 p-1"></td>
-            <td className="border border-neutral-300 p-1 text-center text-xs font-bold">
+            <td className="px-3 py-3"></td>
+            <td className="px-3 py-3"></td>
+            <td className="px-3 py-3"></td>
+            <td className="px-3 py-3 font-bold text-sm">
               {formatTotal(totals.monthlyIncome)}
             </td>
-            <td className="border border-neutral-300 p-1"></td>
-            <td className="border border-neutral-300 p-1"></td>
-            <td className="border border-neutral-300 p-1"></td>
-            <td className="border border-neutral-300 p-1 text-center text-xs font-bold">
+            <td className="px-3 py-3"></td>
+            <td className="px-3 py-3"></td>
+            <td className="px-3 py-3"></td>
+            <td className="px-3 py-3 font-bold text-sm">
               {formatTotal(totals.approvedLifeCover)}
             </td>
-            <td className="border border-neutral-300 p-1 text-center text-xs font-bold">
+            <td className="px-3 py-3 font-bold text-sm">
               {formatTotal(totals.fundValue)}
             </td>
-            <td className="border border-neutral-300 p-1 text-center text-xs font-bold">
+            <td className="px-3 py-3 font-bold text-sm">
               {formatTotal(totals.fundValueAtDeath)}
             </td>
-            <td className="border border-neutral-300 p-1"></td>
-            <td className="border border-neutral-300 p-1"></td>
-            <td className="border border-neutral-300 p-1"></td>
-            <td className="border border-neutral-300 p-1"></td>
-            <td className="border border-neutral-300 p-1"></td>
-            <td className="border border-neutral-300 p-1"></td>
-            <td className="border border-neutral-300 p-1"></td>
-            <td className="border border-neutral-300 p-1"></td>
+            <td className="px-3 py-3"></td>
+            <td className="px-3 py-3"></td>
+            <td className="px-3 py-3"></td>
+            <td className="px-3 py-3"></td>
+            <td className="px-3 py-3"></td>
+            <td className="px-3 py-3"></td>
+            <td className="px-3 py-3"></td>
           </tr>
         </tbody>
       </table>
