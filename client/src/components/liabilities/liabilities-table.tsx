@@ -6,6 +6,7 @@ import { ActionButtonGroup, DuplicateButton, DeleteButton } from '@/components/u
 import { getFieldClass, getCellClass } from '@/lib/field-types';
 import { formatCurrencyValue, formatPercentageValue, formatTextValue, isDefaultValue, getValueClass } from '@/lib/formatting';
 import { handleDefaultValueFocus, createEnhancedBlurHandler } from '@/lib/formatting';
+import { SafeFragment } from '@/lib/safe-fragment';
 
 interface LiabilitiesTableProps {
   viewMode?: 'table' | 'hybrid';
@@ -175,7 +176,7 @@ export function LiabilitiesTable({ viewMode = 'table' }: LiabilitiesTableProps) 
         <tbody className="divide-y divide-neutral-200">
           {/* Render each section */}
           {Object.entries(sectionTitles).map(([sectionKey, sectionTitle]) => (
-            <React.Fragment key={sectionKey}>
+            <SafeFragment key={sectionKey}>
               {/* Section Header */}
               <tr className="bg-neutral-50">
                 <td colSpan={11} className="px-3 py-2 text-xs font-medium text-neutral-600 uppercase tracking-wider">
@@ -341,7 +342,7 @@ export function LiabilitiesTable({ viewMode = 'table' }: LiabilitiesTableProps) 
                   </td>
                 </tr>
               )}
-            </React.Fragment>
+            </SafeFragment>
           ))}
         </tbody>
         
