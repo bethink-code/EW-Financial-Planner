@@ -499,6 +499,23 @@ th, td {
   .entered-value {
     color: #374151 !important; /* grey-700 */
   }
+
+  /* Calculated field styling - transparent background */
+  .calculated-field {
+    background-color: transparent !important;
+    border: 1px solid transparent !important;
+  }
+
+  .calculated-field:hover {
+    background-color: transparent !important;
+    border: 1px solid transparent !important;
+  }
+
+  .calculated-field:focus {
+    background-color: transparent !important;
+    border: 1px solid transparent !important;
+    box-shadow: none !important;
+  }
 }
 
 /* Custom input styling for inline editing */

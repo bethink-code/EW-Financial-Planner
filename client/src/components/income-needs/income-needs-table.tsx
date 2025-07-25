@@ -318,11 +318,9 @@ export default function IncomeNeedsTable({ viewMode, searchTerm }: IncomeNeedsTa
                 <input
                   type="text"
                   value={need.capitalisedAmount || 'R 0'}
-                  className={`table-input ${getFieldClass('currency')} entered-value select-none cursor-default bg-transparent`}
-                  style={{ backgroundColor: 'transparent !important' }}
+                  className={`${getFieldClass('currency')} entered-value select-none cursor-default calculated-field`}
                   readOnly
                   tabIndex={-1}
-                  disabled={isUpdating}
                 />
               </td>
             </tr>
