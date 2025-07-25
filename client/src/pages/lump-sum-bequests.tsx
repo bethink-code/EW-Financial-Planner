@@ -25,13 +25,13 @@ export default function LumpSumBequests() {
   const addMutation = useMutation({
     mutationFn: async () => {
       const newBequest: InsertLumpSumBequest = {
-        description: "Enter here ...",
-        entity: "Donald Edwards",
-
-        amount: "0",
+        description: "Enter details ...",
+        entity: "Enter details ...",
+        start: "Enter details ...",
+        amount: "R 0",
         increasePercentage: "0%",
         cpi: false,
-        yearsFromNow: "0"
+        valueAtDeath: "R 0"
       };
       return apiRequest("POST", "/api/lump-sum-bequests", newBequest);
     },
@@ -68,7 +68,7 @@ export default function LumpSumBequests() {
         </div>
 
         {/* Main Table */}
-        <LumpSumTable />
+        <LumpSumTable viewMode={viewMode} />
       </div>
     </div>
   );

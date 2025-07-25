@@ -53,12 +53,16 @@ export type UpdateRetirementFund = z.infer<typeof updateRetirementFundSchema>;
 export const lumpSumBequests = pgTable("lump_sum_bequests", {
   id: serial("id").primaryKey(),
   
-  // Main fields
-  description: text("description").notNull().default(""),
-  entity: text("entity").notNull().default(""), // Donald Edwards, Betty Edwards
+  // Overview Section
+  description: text("description").notNull().default("Enter details ..."),
+  entity: text("entity").notNull().default("Enter details ..."),
+  
+  // Need Details Section
+  start: text("start").notNull().default("Enter details ..."), // Date field
   amount: text("amount").notNull().default("R 0"),
   increasePercentage: text("increase_percentage").notNull().default("0%"),
   cpi: boolean("cpi").notNull().default(false),
+  valueAtDeath: text("value_at_death").notNull().default("R 0"), // Calculated field
 });
 
 export const insertLumpSumBequestSchema = createInsertSchema(lumpSumBequests).omit({
