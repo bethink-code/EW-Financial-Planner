@@ -302,19 +302,15 @@ export default function VoluntaryInvestmentsTable({ viewMode, searchTerm }: Volu
                 <td className="p-1">
                   {rowIndex < investment.owners.length && (
                     <div className="flex items-center gap-1">
-                      <select
+                      <input
                         key={`owner-${investment.id}-${rowIndex}-${investment.owners[rowIndex]}`}
-                        defaultValue={investment.owners[rowIndex] || "Donald Edwards"}
-                        className={`table-input ${getFieldClass('text')} flex-1`}
-                        onChange={(e) => handleOwnerChange(investment.id, rowIndex, e.target.value, investment)}
+                        type="text"
+                        defaultValue={investment.owners[rowIndex] || "Enter details ..."}
+                        className={`table-input ${getFieldClass('text')} ${getValueClass(investment.owners[rowIndex] || "Enter details ...", 'text')} flex-1`}
+                        onFocus={handleDefaultValueFocus}
+                        onBlur={(e) => handleOwnerChange(investment.id, rowIndex, e.target.value, investment)}
                         disabled={isUpdating}
-                      >
-                        {OWNER_OPTIONS.map(option => (
-                          <option key={option.value} value={option.value}>
-                            {option.label}
-                          </option>
-                        ))}
-                      </select>
+                      />
                       {rowIndex === 0 ? (
                         <AddButton
                           onClick={(e) => {

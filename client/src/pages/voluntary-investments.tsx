@@ -26,7 +26,7 @@ export default function VoluntaryInvestments() {
     mutationFn: async () => {
       const newInvestment: InsertVoluntaryInvestment = {
         description: "Enter details ...",
-        owners: ["Donald Edwards"],
+        owners: ["Enter details ..."],
         ownershipPercentages: ["100%"],
         baseCost: "R 0",
         marketValue: "R 0",
