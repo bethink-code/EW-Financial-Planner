@@ -87,21 +87,14 @@ export function AssuranceTable({}: AssuranceTableProps) {
       try {
         const newPolicy: InsertAssurance = {
           description: policy.description + " (Copy)",
-          owner: policy.owner,
-          additionalOwners: policy.additionalOwners,
-          lifeAssured: policy.lifeAssured,
+          owners: [...policy.owners],
+          beneficiaries: [...policy.beneficiaries],
           deathBenefit: policy.deathBenefit,
-          beneficiary: policy.beneficiary,
-          benefitSplit: policy.benefitSplit,
-          additionalBeneficiaries: policy.additionalBeneficiaries,
-          additionalInfo: policy.additionalInfo,
           amount: policy.amount,
-          buySell: policy.buySell,
-          keyMan: policy.keyMan,
           premiumsByOthers: policy.premiumsByOthers,
           collateralSession: policy.collateralSession,
-          excludedFromEstateDuty: policy.excludedFromEstateDuty,
-          excludedFromProvisions: policy.excludedFromProvisions
+          benefitSplit: policy.benefitSplit,
+          additionalInfo: policy.additionalInfo
         };
         const response = await apiRequest("POST", "/api/assurance", newPolicy);
         return await response.json();
@@ -146,79 +139,69 @@ export function AssuranceTable({}: AssuranceTableProps) {
     handleUpdatePolicy(id, field, formattedValue);
   }, [handleUpdatePolicy]);
 
-  // Add owner to policy with sequential numbering
+  // Add owner to policy
   const handleAddOwner = useCallback((id: number) => {
     const policy = policies.find((p: Assurance) => p.id === id);
     if (policy) {
-      let currentOwners = [];
-      try {
-        currentOwners = JSON.parse(policy.additionalOwners || "[]");
-      } catch {
-        currentOwners = [];
-      }
-      // Add new owner with next sequential number (length + 2 since O1 is main owner)
-      const nextId = currentOwners.length + 2;
-      const newOwnerId = `O${nextId}`;
-      const newOwners = [...currentOwners, { id: newOwnerId, name: "Enter here ..." }];
+      const newOwners = [...policy.owners, "Enter here ..."];
       setIsUpdating(true);
-      updateMutation.mutate({ id, updates: { additionalOwners: JSON.stringify(newOwners) } });
+      updateMutation.mutate({ id, updates: { owners: newOwners } });
     }
   }, [policies, updateMutation]);
 
-  // Remove specific owner by ID - keep original numbering
-  const handleRemoveOwner = useCallback((id: number, ownerId: string) => {
+  // Remove specific owner by index using splice method
+  const handleRemoveOwner = useCallback((id: number, ownerIndex: number) => {
     const policy = policies.find((p: Assurance) => p.id === id);
-    if (policy) {
-      let currentOwners = [];
-      try {
-        currentOwners = JSON.parse(policy.additionalOwners || "[]");
-      } catch {
-        currentOwners = [];
-      }
-      // Filter out the deleted owner - keep original numbering for remaining owners
-      const filteredOwners = currentOwners.filter((owner: any) => owner.id !== ownerId);
-      
+    if (policy && policy.owners.length > 1 && ownerIndex > 0) { // Protect first owner
+      const newOwners = [...policy.owners];
+      newOwners.splice(ownerIndex, 1);
       setIsUpdating(true);
-      updateMutation.mutate({ id, updates: { additionalOwners: JSON.stringify(filteredOwners) } });
+      updateMutation.mutate({ id, updates: { owners: newOwners } });
     }
   }, [policies, updateMutation]);
 
-  // Add beneficiary to policy with sequential numbering
+  // Add beneficiary to policy
   const handleAddBeneficiary = useCallback((id: number) => {
     const policy = policies.find((p: Assurance) => p.id === id);
     if (policy) {
-      let currentBeneficiaries = [];
-      try {
-        currentBeneficiaries = JSON.parse(policy.additionalBeneficiaries || "[]");
-      } catch {
-        currentBeneficiaries = [];
-      }
-      // Add new beneficiary with next sequential number (length + 2 since B1 is main beneficiary)
-      const nextId = currentBeneficiaries.length + 2;
-      const newBeneficiaryId = `B${nextId}`;
-      const newBeneficiaries = [...currentBeneficiaries, { id: newBeneficiaryId, name: "Enter here ...", split: "0" }];
+      const newBeneficiaries = [...policy.beneficiaries, "Enter here ..."];
       setIsUpdating(true);
-      updateMutation.mutate({ id, updates: { additionalBeneficiaries: JSON.stringify(newBeneficiaries) } });
+      updateMutation.mutate({ id, updates: { beneficiaries: newBeneficiaries } });
     }
   }, [policies, updateMutation]);
 
-  // Remove specific beneficiary by ID - keep original numbering
-  const handleRemoveBeneficiary = useCallback((id: number, beneficiaryId: string) => {
+  // Remove specific beneficiary by index using splice method
+  const handleRemoveBeneficiary = useCallback((id: number, beneficiaryIndex: number) => {
     const policy = policies.find((p: Assurance) => p.id === id);
-    if (policy) {
-      let currentBeneficiaries = [];
-      try {
-        currentBeneficiaries = JSON.parse(policy.additionalBeneficiaries || "[]");
-      } catch {
-        currentBeneficiaries = [];
-      }
-      // Filter out the deleted beneficiary - keep original numbering for remaining beneficiaries
-      const filteredBeneficiaries = currentBeneficiaries.filter((beneficiary: any) => beneficiary.id !== beneficiaryId);
-      
+    if (policy && policy.beneficiaries.length > 1 && beneficiaryIndex > 0) { // Protect first beneficiary
+      const newBeneficiaries = [...policy.beneficiaries];
+      newBeneficiaries.splice(beneficiaryIndex, 1);
       setIsUpdating(true);
-      updateMutation.mutate({ id, updates: { additionalBeneficiaries: JSON.stringify(filteredBeneficiaries) } });
+      updateMutation.mutate({ id, updates: { beneficiaries: newBeneficiaries } });
     }
   }, [policies, updateMutation]);
+
+  // Update owner name
+  const handleOwnerChange = useCallback((id: number, ownerIndex: number, newOwner: string) => {
+    const policy = policies.find((p: Assurance) => p.id === id);
+    if (policy) {
+      const updatedOwners = [...policy.owners];
+      updatedOwners[ownerIndex] = newOwner;
+      updateMutation.mutate({ id, updates: { owners: updatedOwners } });
+    }
+  }, [policies, updateMutation]);
+
+  // Update beneficiary name
+  const handleBeneficiaryChange = useCallback((id: number, beneficiaryIndex: number, newBeneficiary: string) => {
+    const policy = policies.find((p: Assurance) => p.id === id);
+    if (policy) {
+      const updatedBeneficiaries = [...policy.beneficiaries];
+      updatedBeneficiaries[beneficiaryIndex] = newBeneficiary;
+      updateMutation.mutate({ id, updates: { beneficiaries: updatedBeneficiaries } });
+    }
+  }, [policies, updateMutation]);
+
+
 
   // Use policies directly without filtering
   const filteredPolicies = policies;
@@ -280,341 +263,289 @@ export function AssuranceTable({}: AssuranceTableProps) {
           </thead>
           <tbody className="divide-y divide-neutral-200">
             {filteredPolicies.map((policy: Assurance) => {
-              // Parse additional owners with fallback for old format
-              let additionalOwners = [];
-              try {
-                const parsed = JSON.parse(policy.additionalOwners || "[]");
-                additionalOwners = Array.isArray(parsed) && parsed.every(item => typeof item === 'object' && item.id) 
-                  ? parsed 
-                  : parsed.map((name: string, index: number) => ({ id: `O${index + 2}`, name }));
-              } catch {
-                // Old format: string array, convert to new format
-                additionalOwners = [];
-              }
-              const allOwners = [{ id: "O1", name: policy.owner }, ...additionalOwners];
+              // Calculate max rows needed for this policy
+              const maxRows = Math.max(policy.owners.length, policy.beneficiaries.length);
               
-              // Parse additional beneficiaries with fallback for old format
-              let additionalBeneficiaries = [];
-              try {
-                const parsed = JSON.parse(policy.additionalBeneficiaries || "[]");
-                additionalBeneficiaries = Array.isArray(parsed) && parsed.every(item => typeof item === 'object' && item.id) 
-                  ? parsed 
-                  : parsed.map((name: string, index: number) => ({ id: `B${index + 2}`, name, split: "0" }));
-              } catch {
-                // Old format: string array, convert to new format
-                additionalBeneficiaries = [];
-              }
-              const allBeneficiaries = [
-                { id: "B1", name: policy.beneficiary, split: policy.benefitSplit },
-                ...additionalBeneficiaries
-              ];
-              
-              // Calculate the maximum rows needed for this policy
-              const maxRows = Math.max(allOwners.length, allBeneficiaries.length);
-              
-              return Array.from({ length: maxRows }, (_, rowIndex) => {
-                // Create policy-specific variables to avoid cross-contamination
-                const currentOwners = allOwners;
-                const currentBeneficiaries = allBeneficiaries;
-                
-                return (
-                <tr key={`${policy.id}-row-${rowIndex}`} >
-                  {/* Actions - rowSpan for main policy data - FIRST COLUMN */}
-                  {rowIndex === 0 && (
-                    <td rowSpan={maxRows} className="table-actions-cell text-center">
+              return Array.from({ length: maxRows }, (_, rowIndex) => (
+                <tr 
+                  key={`${policy.id}-${rowIndex}-${policy.owners.length}-${policy.beneficiaries.length}`} 
+                  className="hover:bg-neutral-50"
+                >
+                  {/* Actions - only show on first row */}
+                  <td className="table-actions-cell p-1 text-center">
+                    {rowIndex === 0 && (
                       <ActionButtonGroup>
-                        <DuplicateButton
-                          onClick={() => handleDuplicatePolicy(policy)}
-                          disabled={isUpdating || duplicateMutation.isPending}
+                        <DuplicateButton 
+                          onClick={() => handleDuplicatePolicy(policy)} 
+                          disabled={duplicateMutation.isPending}
                         />
-                        <DeleteButton
-                          onClick={() => handleDeletePolicy(policy.id)}
-                          disabled={isUpdating || deleteMutation.isPending}
+                        <DeleteButton 
+                          onClick={() => handleDeletePolicy(policy.id)} 
+                          disabled={deleteMutation.isPending}
                         />
                       </ActionButtonGroup>
-                    </td>
-                  )}
-                  
-                  {/* Description - rowSpan for main policy data */}
-                  {rowIndex === 0 && (
-                    <td rowSpan={maxRows} className="px-3 py-2 align-top">
-                      <input
-                        type="text"
-                        defaultValue={policy.description || "Enter here ..."}
-                        onFocus={handleDefaultValueFocus}
-                        onBlur={createEnhancedBlurHandler(
-                          (e) => handleUpdatePolicy(policy.id, 'description', e.target.value),
-                          'text'
-                        )}
-                        className={`${getFieldClass("text")} ${getValueClass(policy.description || "Enter here ...", 'text')}`} 
-                        disabled={isUpdating}
-                      />
-                    </td>
-                  )}
-                  
-                  {/* Owner column */}
-                  <td className="px-3 py-2">
-                    {rowIndex < currentOwners.length ? (
-                      <div className="flex items-center space-x-1">
-                        {rowIndex > 0 && (
-                          <span className="text-blue-500 mr-1">↳</span>
-                        )}
-                        {rowIndex === 0 && (
-                          <AddButton
-                            onClick={() => handleAddOwner(policy.id)}
-                            className="mr-1"
-                            size="sm"
-                          />
-                        )}
-                        <input
-                          type="text"
-                          key={`owner-${policy.id}-${rowIndex}-${currentOwners[rowIndex].id}`}
-                          defaultValue={currentOwners[rowIndex].name || "Enter here ..."}
-                          onFocus={handleDefaultValueFocus}
-                          onBlur={createEnhancedBlurHandler((e) => {
-                            if (rowIndex === 0) {
-                              handleUpdatePolicy(policy.id, 'owner', e.target.value);
-                            } else {
-                              let ownersToUpdate = [];
-                              try {
-                                ownersToUpdate = JSON.parse(policy.additionalOwners || "[]");
-                              } catch {
-                                ownersToUpdate = [];
-                              }
-                              const updatedOwners = ownersToUpdate.map((o: any) => 
-                                o.id === currentOwners[rowIndex].id ? { ...o, name: e.target.value } : o
-                              );
-                              updateMutation.mutate({ id: policy.id, updates: { additionalOwners: JSON.stringify(updatedOwners) } });
-                            }
-                          }, 'text')}
-                          className={`${getFieldClass("text")} ${getValueClass(currentOwners[rowIndex].name || "Enter here ...", 'text')}`} 
-                          disabled={isUpdating}
-                        />
-                        {rowIndex > 0 && rowIndex < currentOwners.length && currentOwners[rowIndex] && (
-                          <DeleteButton
-                            onClick={() => handleRemoveOwner(policy.id, currentOwners[rowIndex].id)}
-                          />
-                        )}
-                      </div>
-                    ) : (
-                      <span className="text-neutral-400">-</span>
                     )}
                   </td>
-                  {/* Life Assured - rowSpan for main policy data */}
-                  {rowIndex === 0 && (
-                    <td rowSpan={maxRows} className="px-3 py-2 align-top">
+
+                  {/* Description - only show on first row */}
+                  <td className="border border-neutral-300 p-1">
+                    {rowIndex === 0 && (
                       <input
                         type="text"
-                        defaultValue={policy.lifeAssured || "Enter here ..."}
+                        defaultValue={policy.description}
+                        className={`table-input ${getFieldClass('text')} ${getValueClass(policy.description, 'text')}`}
                         onFocus={handleDefaultValueFocus}
-                        onBlur={createEnhancedBlurHandler(
-                          (e) => handleUpdatePolicy(policy.id, 'lifeAssured', e.target.value),
-                          'text'
-                        )}
-                        className={`${getFieldClass("text")} ${getValueClass(policy.lifeAssured || "Enter here ...", 'text')}`} 
-                        disabled={isUpdating}
+                        onBlur={(e) => handleUpdatePolicy(policy.id, 'description', e.target.value)}
                       />
-                    </td>
-                  )}
-                  
-                  {/* Death Benefit - rowSpan for main policy data */}
-                  {rowIndex === 0 && (
-                    <td rowSpan={maxRows} className="px-3 py-2 align-top">
+                    )}
+                  </td>
+
+                  {/* Owner */}
+                  <td className="border border-neutral-300 p-1">
+                    {rowIndex < policy.owners.length && (
+                      <div className="flex items-center gap-1">
+                        <input
+                          type="text"
+                          defaultValue={policy.owners[rowIndex]}
+                          className={`table-input ${getFieldClass('text')} flex-1`}
+                          onBlur={(e) => handleOwnerChange(policy.id, rowIndex, e.target.value)}
+                        />
+                        {rowIndex === 0 ? (
+                          <button
+                            type="button"
+                            onClick={(e) => {
+                              e.preventDefault();
+                              e.stopPropagation();
+                              handleAddOwner(policy.id);
+                            }}
+                            className="p-0.5 text-blue-600 hover:bg-blue-50 rounded"
+                            title="Add Owner"
+                          >
+                            <Plus className="h-3 w-3" />
+                          </button>
+                        ) : (
+                          <button
+                            type="button"
+                            onClick={(e) => {
+                              e.preventDefault();
+                              e.stopPropagation();
+                              handleRemoveOwner(policy.id, rowIndex);
+                            }}
+                            className="p-0.5 text-red-600 hover:bg-red-50 rounded"
+                            title="Remove Owner"
+                          >
+                            <Trash2 className="h-3 w-3" />
+                          </button>
+                        )}
+                      </div>
+                    )}
+                  </td>
+
+                  {/* Life Assured - only show on first row */}
+                  <td className="border border-neutral-300 p-1">
+                    {rowIndex === 0 && (
                       <input
                         type="text"
-                        defaultValue={formatCurrencyValue(policy.deathBenefit, 'deathBenefit')}
+                        defaultValue="Enter here ..."
+                        className={`table-input ${getFieldClass('text')} ${getValueClass("Enter here ...", 'text')}`}
+                        onFocus={handleDefaultValueFocus}
+                        onBlur={(e) => handleUpdatePolicy(policy.id, 'description', e.target.value)}
+                      />
+                    )}
+                  </td>
+
+                  {/* Death Benefit - only show on first row */}
+                  <td className="border border-neutral-300 p-1">
+                    {rowIndex === 0 && (
+                      <input
+                        type="text"
+                        defaultValue={policy.deathBenefit}
+                        className={`table-input ${getFieldClass('currency')} ${getValueClass(policy.deathBenefit, 'currency')}`}
+                        onFocus={handleDefaultValueFocus}
                         onBlur={(e) => handleInputBlur(policy.id, 'deathBenefit', e.target.value, e.target)}
-                        className={`${getFieldClass("amount")} ${getValueClass(formatCurrencyValue(policy.deathBenefit, 'deathBenefit'), 'currency')}`} 
-                        disabled={isUpdating}
                       />
-                    </td>
-                  )}
-                  
-                  {/* Beneficiary column */}
-                  <td className="px-3 py-2">
-                    {rowIndex < currentBeneficiaries.length ? (
-                      <div className="flex items-center space-x-1">
-                        {rowIndex > 0 && (
-                          <span className="text-green-500 mr-1">↳</span>
-                        )}
-                        {rowIndex === 0 && (
-                          <AddButton
-                            onClick={() => handleAddBeneficiary(policy.id)}
-                            className="mr-1"
-                            size="sm"
-                          />
-                        )}
-                        <input
-                          type="text"
-                          key={`beneficiary-${policy.id}-${rowIndex}-${currentBeneficiaries[rowIndex].id}`}
-                          defaultValue={currentBeneficiaries[rowIndex].name || "Enter here ..."}
-                          onFocus={handleDefaultValueFocus}
-                          onBlur={createEnhancedBlurHandler((e) => {
-                            if (rowIndex === 0) {
-                              handleUpdatePolicy(policy.id, 'beneficiary', e.target.value);
-                            } else {
-                              let beneficiariesToUpdate = [];
-                              try {
-                                beneficiariesToUpdate = JSON.parse(policy.additionalBeneficiaries || "[]");
-                              } catch {
-                                beneficiariesToUpdate = [];
-                              }
-                              const updatedBeneficiaries = beneficiariesToUpdate.map((b: any) => 
-                                b.id === currentBeneficiaries[rowIndex].id ? { ...b, name: e.target.value } : b
-                              );
-                              updateMutation.mutate({ id: policy.id, updates: { additionalBeneficiaries: JSON.stringify(updatedBeneficiaries) } });
-                            }
-                          }, 'text')}
-                          className={`${getFieldClass("text")} ${getValueClass(currentBeneficiaries[rowIndex].name || "Enter here ...", 'text')}`} 
-                          disabled={isUpdating}
-                        />
-                        {rowIndex > 0 && rowIndex < currentBeneficiaries.length && currentBeneficiaries[rowIndex] && (
-                          <DeleteButton
-                            onClick={() => handleRemoveBeneficiary(policy.id, currentBeneficiaries[rowIndex].id)}
-                          />
-                        )}
-                      </div>
-                    ) : (
-                      <span className="text-neutral-400">-</span>
                     )}
                   </td>
-                  
-                  {/* Additional Info - rowSpan for main policy data */}
-                  {rowIndex === 0 && (
-                    <td rowSpan={maxRows} className="px-3 py-2 align-top">
-                      <input
-                        type="text"
-                        defaultValue={policy.additionalInfo || "Enter here ..."}
-                        onFocus={handleDefaultValueFocus}
-                        onBlur={createEnhancedBlurHandler(
-                          (e) => handleUpdatePolicy(policy.id, 'additionalInfo', e.target.value),
-                          'text'
+
+                  {/* Beneficiary */}
+                  <td className="border border-neutral-300 p-1">
+                    {rowIndex < policy.beneficiaries.length && (
+                      <div className="flex items-center gap-1">
+                        <input
+                          type="text"
+                          defaultValue={policy.beneficiaries[rowIndex]}
+                          className={`table-input ${getFieldClass('text')} flex-1`}
+                          onBlur={(e) => handleBeneficiaryChange(policy.id, rowIndex, e.target.value)}
+                        />
+                        {rowIndex === 0 ? (
+                          <button
+                            type="button"
+                            onClick={(e) => {
+                              e.preventDefault();
+                              e.stopPropagation();
+                              handleAddBeneficiary(policy.id);
+                            }}
+                            className="p-0.5 text-blue-600 hover:bg-blue-50 rounded"
+                            title="Add Beneficiary"
+                          >
+                            <Plus className="h-3 w-3" />
+                          </button>
+                        ) : (
+                          <button
+                            type="button"
+                            onClick={(e) => {
+                              e.preventDefault();
+                              e.stopPropagation();
+                              handleRemoveBeneficiary(policy.id, rowIndex);
+                            }}
+                            className="p-0.5 text-red-600 hover:bg-red-50 rounded"
+                            title="Remove Beneficiary"
+                          >
+                            <Trash2 className="h-3 w-3" />
+                          </button>
                         )}
-                        className={`${getFieldClass("text")} ${getValueClass(policy.additionalInfo || "Enter here ...", 'text')}`} 
-                        disabled={isUpdating}
-                      />
-                    </td>
-                  )}
-                  
-                  {/* Benefit Split */}
-                  <td className="px-3 py-2 text-sm text-neutral-700 text-right ">
-                    {rowIndex < currentBeneficiaries.length ? 
-                      formatCurrencyValue(currentBeneficiaries[rowIndex].split, 'percentage') : 
-                      '-'
-                    }
+                      </div>
+                    )}
                   </td>
-                  
-                  {/* Amount - rowSpan for main policy data */}
-                  {rowIndex === 0 && (
-                    <td rowSpan={maxRows} className="px-3 py-2 align-top">
+
+                  {/* Additional Info - only show on first row */}
+                  <td className="border border-neutral-300 p-1">
+                    {rowIndex === 0 && (
                       <input
                         type="text"
-                        defaultValue={formatCurrencyValue(policy.amount, 'amount')}
-                        onBlur={(e) => handleInputBlur(policy.id, 'amount', e.target.value, e.target)}
-                        className={`${getFieldClass("amount")} ${getValueClass(formatCurrencyValue(policy.amount, 'amount'), 'currency')}`} 
-                        disabled={isUpdating}
+                        defaultValue={policy.additionalInfo}
+                        className={`table-input ${getFieldClass('text')} ${getValueClass(policy.additionalInfo, 'text')}`}
+                        onFocus={handleDefaultValueFocus}
+                        onBlur={(e) => handleUpdatePolicy(policy.id, 'additionalInfo', e.target.value)}
                       />
-                    </td>
-                  )}
-                  
-                  {/* Checkboxes - rowSpan for main policy data */}
-                  {rowIndex === 0 && (
-                    <>
-                      <td rowSpan={maxRows} className="px-3 py-2 text-center align-top">
-                        <input
-                          type="checkbox"
-                          checked={policy.buySell}
-                          onChange={(e) => handleUpdatePolicy(policy.id, 'buySell', e.target.checked)}
-                          className="h-4 w-4 text-blue-600 bg-primary/5 border-neutral-300 rounded focus:ring-primary focus:ring-2"
-                          disabled={isUpdating}
-                        />
-                      </td>
-                      <td rowSpan={maxRows} className="px-3 py-2 text-center align-top">
-                        <input
-                          type="checkbox"
-                          checked={policy.keyMan}
-                          onChange={(e) => handleUpdatePolicy(policy.id, 'keyMan', e.target.checked)}
-                          className="h-4 w-4 text-blue-600 bg-primary/5 border-neutral-300 rounded focus:ring-primary focus:ring-2"
-                          disabled={isUpdating}
-                        />
-                      </td>
-                      <td rowSpan={maxRows} className="px-3 py-2 text-center align-top">
-                        <input
-                          type="checkbox"
-                          checked={policy.excludedFromEstateDuty}
-                          onChange={(e) => handleUpdatePolicy(policy.id, 'excludedFromEstateDuty', e.target.checked)}
-                          className="h-4 w-4 text-blue-600  border-neutral-300 rounded focus:ring-primary focus:ring-2"
-                          disabled={isUpdating}
-                        />
-                      </td>
-                      <td rowSpan={maxRows} className="px-3 py-2 text-center align-top">
-                        <input
-                          type="checkbox"
-                          checked={policy.excludedFromProvisions}
-                          onChange={(e) => handleUpdatePolicy(policy.id, 'excludedFromProvisions', e.target.checked)}
-                          className="h-4 w-4 text-blue-600  border-neutral-300 rounded focus:ring-primary focus:ring-2"
-                          disabled={isUpdating}
-                        />
-                      </td>
-                      <td rowSpan={maxRows} className="px-3 py-2 align-top">
-                        <input
-                          type="text"
-                          defaultValue={formatCurrencyValue(policy.premiumsByOthers, 'premiumsByOthers')}
-                          onBlur={(e) => handleInputBlur(policy.id, 'premiumsByOthers', e.target.value, e.target)}
-                          className={`${getFieldClass("amount")} ${getValueClass(formatCurrencyValue(policy.premiumsByOthers, 'premiumsByOthers'), 'currency')}`} 
-                          disabled={isUpdating}
-                        />
-                      </td>
-                      <td rowSpan={maxRows} className="px-3 py-2 align-top">
-                        <input
-                          type="text"
-                          defaultValue={formatCurrencyValue(policy.collateralSession, 'collateralSession')}
-                          onBlur={(e) => handleInputBlur(policy.id, 'collateralSession', e.target.value, e.target)}
-                          className={`${getFieldClass("amount")} ${getValueClass(formatCurrencyValue(policy.collateralSession, 'collateralSession'), 'currency')}`} 
-                          disabled={isUpdating}
-                        />
-                      </td>
-                    </>
-                  )}
+                    )}
+                  </td>
+
+                  {/* Benefit Split - only show on first row */}
+                  <td className="border border-neutral-300 p-1">
+                    {rowIndex === 0 && (
+                      <input
+                        type="text"
+                        defaultValue={policy.benefitSplit}
+                        className={`table-input ${getFieldClass('percentage')} ${getValueClass(policy.benefitSplit, 'percentage')}`}
+                        onFocus={handleDefaultValueFocus}
+                        onBlur={(e) => handleInputBlur(policy.id, 'benefitSplit', e.target.value, e.target)}
+                      />
+                    )}
+                  </td>
+
+                  {/* Amount - only show on first row */}
+                  <td className="border border-neutral-300 p-1">
+                    {rowIndex === 0 && (
+                      <input
+                        type="text"
+                        defaultValue={policy.amount}
+                        className={`table-input ${getFieldClass('currency')} ${getValueClass(policy.amount, 'currency')}`}
+                        onFocus={handleDefaultValueFocus}
+                        onBlur={(e) => handleInputBlur(policy.id, 'amount', e.target.value, e.target)}
+                      />
+                    )}
+                  </td>
+
+                  {/* Buy/Sell - only show on first row */}
+                  <td className="border border-neutral-300 p-1 text-center">
+                    {rowIndex === 0 && (
+                      <input
+                        type="checkbox"
+                        defaultChecked={false}
+                        className="rounded border-neutral-300"
+                        onChange={(e) => handleUpdatePolicy(policy.id, 'description', e.target.checked ? 'checked' : 'unchecked')}
+                      />
+                    )}
+                  </td>
+
+                  {/* Key Man - only show on first row */}
+                  <td className="border border-neutral-300 p-1 text-center">
+                    {rowIndex === 0 && (
+                      <input
+                        type="checkbox"
+                        defaultChecked={false}
+                        className="rounded border-neutral-300"
+                        onChange={(e) => handleUpdatePolicy(policy.id, 'description', e.target.checked ? 'checked' : 'unchecked')}
+                      />
+                    )}
+                  </td>
+
+                  {/* Excluded Estate Duty - only show on first row */}
+                  <td className="border border-neutral-300 p-1 text-center">
+                    {rowIndex === 0 && (
+                      <input
+                        type="checkbox"
+                        defaultChecked={false}
+                        className="rounded border-neutral-300"
+                        onChange={(e) => handleUpdatePolicy(policy.id, 'description', e.target.checked ? 'checked' : 'unchecked')}
+                      />
+                    )}
+                  </td>
+
+                  {/* Excluded Provisions - only show on first row */}
+                  <td className="border border-neutral-300 p-1 text-center">
+                    {rowIndex === 0 && (
+                      <input
+                        type="checkbox"
+                        defaultChecked={false}
+                        className="rounded border-neutral-300"
+                        onChange={(e) => handleUpdatePolicy(policy.id, 'description', e.target.checked ? 'checked' : 'unchecked')}
+                      />
+                    )}
+                  </td>
+
+                  {/* Premiums by Others - only show on first row */}
+                  <td className="border border-neutral-300 p-1">
+                    {rowIndex === 0 && (
+                      <input
+                        type="text"
+                        defaultValue={policy.premiumsByOthers}
+                        className={`table-input ${getFieldClass('currency')} ${getValueClass(policy.premiumsByOthers, 'currency')}`}
+                        onFocus={handleDefaultValueFocus}
+                        onBlur={(e) => handleInputBlur(policy.id, 'premiumsByOthers', e.target.value, e.target)}
+                      />
+                    )}
+                  </td>
+
+                  {/* Collateral Session - only show on first row */}
+                  <td className="border border-neutral-300 p-1">
+                    {rowIndex === 0 && (
+                      <input
+                        type="text"
+                        defaultValue={policy.collateralSession}
+                        className={`table-input ${getFieldClass('currency')} ${getValueClass(policy.collateralSession, 'currency')}`}
+                        onFocus={handleDefaultValueFocus}
+                        onBlur={(e) => handleInputBlur(policy.id, 'collateralSession', e.target.value, e.target)}
+                      />
+                    )}
+                  </td>
                 </tr>
-                );
-              });
-            })}
-            
-            {/* Total Row */}
-            {filteredPolicies.length > 0 && (
-              <tr className="border-t-2 border-neutral-300 font-bold">
-                <td className="px-3 py-2"></td> {/* Actions column - empty */}
-                <td className="px-3 py-2 text-sm font-bold text-neutral-800">Total</td> {/* Description */}
-                <td colSpan={3} className="px-3 py-2"></td> {/* Owner, Life Assured, Death Benefit */}
-                <td className="px-3 py-2 text-sm font-bold text-neutral-800 text-right">
-                  {formatCurrencyValue(totals.deathBenefit.toString(), 'amount')}
-                </td>
-                <td colSpan={3} className="px-3 py-2"></td> {/* Beneficiary, Additional Info, Benefit Split */}
-                <td className="px-3 py-2 text-sm font-bold text-neutral-800 text-right">
-                  {formatCurrencyValue(totals.amount.toString(), 'amount')}
-                </td>
-                <td colSpan={4} className="px-3 py-2"></td> {/* Buy/Sell, Key Man, Excluded Estate Duty, Excluded Provisions */}
-                <td className="px-3 py-2 text-sm font-bold text-neutral-800 text-right">
-                  {formatCurrencyValue(totals.premiumsByOthers.toString(), 'amount')}
-                </td>
-                <td className="px-3 py-2 text-sm font-bold text-neutral-800 text-right">
-                  {formatCurrencyValue(totals.collateralSession.toString(), 'amount')}
-                </td>
-              </tr>
-            )}
-            
-            {filteredPolicies.length === 0 && (
-              <tr>
-                <td colSpan={15} className="px-3 py-8 text-center text-neutral-500">
-                  No assurance policies found. Add new policies using the header button.
-                </td>
-              </tr>
-            )}
+              ));
+            }).flat()}
+
+            {/* Totals Row */}
+            <tr className="border-t-2 border-border font-bold">
+              <td className="px-3 py-3 text-center font-bold text-sm">Totals</td>
+              <td className="px-3 py-3"></td>
+              <td className="px-3 py-3"></td>
+              <td className="px-3 py-3"></td>
+              <td className="px-3 py-3 font-bold text-sm">R {totals.deathBenefit.toLocaleString()}</td>
+              <td className="px-3 py-3"></td>
+              <td className="px-3 py-3"></td>
+              <td className="px-3 py-3"></td>
+              <td className="px-3 py-3 font-bold text-sm">R {totals.amount.toLocaleString()}</td>
+              <td className="px-3 py-3"></td>
+              <td className="px-3 py-3"></td>
+              <td className="px-3 py-3"></td>
+              <td className="px-3 py-3"></td>
+              <td className="px-3 py-3 font-bold text-sm">R {totals.premiumsByOthers.toLocaleString()}</td>
+              <td className="px-3 py-3 font-bold text-sm">R {totals.collateralSession.toLocaleString()}</td>
+            </tr>
           </tbody>
         </table>
-    </div>
-  );
+      </div>
+    );
 }
 
 export default AssuranceTable;
