@@ -101,6 +101,7 @@ export default function NewRetirementFunds() {
       approvedLifeCover: "R 0",
       fundValue: "R 0",
       fundValueAtDeath: "R 0",
+      beneficiaryName: "Enter details ...",
       name: "Enter details ...",
       amount: "R 0",
       beneficiary: "Enter details ...",

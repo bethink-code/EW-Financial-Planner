@@ -5,36 +5,35 @@ import { z } from "zod";
 export const retirementFunds = pgTable("retirement_funds", {
   id: serial("id").primaryKey(),
   
-  // Overview section - Description, Owner
-  description: text("description").notNull(),
-  owner: text("owner").notNull(),
+  // Overview section (2 columns)
+  description: text("description").notNull().default("Enter details ..."),
+  owner: text("owner").notNull().default("Donald Edwards"),
   additionalOwners: text("additional_owners").array().notNull().default([]),
   
-  // Unapproved life cover section - Cover Amount, Term (Years), Increase %, Approved Life Cover
-  coverAmount: text("cover_amount").notNull().default("0"),
-  termYears: text("term_years").notNull().default("0"),
+  // Unapproved Life Cover section (4 columns)
+  coverAmount: text("cover_amount").notNull().default("R 0"),
+  termYears: text("term_years").notNull().default("0 years"),
   increasePercentage: text("increase_percentage").notNull().default("0%"),
-  approvedLifeCover: text("approved_life_cover").notNull().default("0"),
+  approvedLifeCover: text("approved_life_cover").notNull().default("R 0"),
   
-  // Monthly death benefit section - Fund Value, Fund Value at Death
-  fundValue: text("fund_value").notNull().default("0"),
-  fundValueAtDeath: text("fund_value_at_death").notNull().default("0"),
+  // Monthly Death Benefit section (3 columns)
+  fundValue: text("fund_value").notNull().default("R 0"),
+  fundValueAtDeath: text("fund_value_at_death").notNull().default("R 0"),
+  beneficiaryName: text("beneficiary_name").notNull().default("Enter details ..."),
   
-  // Fund Value section - Name, Amount
-  name: text("name").notNull().default(""),
-  amount: text("amount").notNull().default("0"),
+  // Fund Value section (2 columns)
+  name: text("name").notNull().default("Enter details ..."),
+  amount: text("amount").notNull().default("R 0"),
   
-  // Fund Value Beneficiaries section - Lump Sum Taken, Fund Value, Non-Deductible Contribution, Living Annuity, Monthly Income, Income Term
-  lumpSumTaken: text("lump_sum_taken").notNull().default("0"),
-  fundValueBeneficiaries: text("fund_value_beneficiaries").notNull().default("0"),
-  nonDeductibleContribution: text("non_deductible_contribution").notNull().default("0"),
-  livingAnnuity: text("living_annuity").notNull().default("0"),
-  monthlyIncome: text("monthly_income").notNull().default("0"),
-  incomeTerm: text("income_term").notNull().default("0"),
+  // Fund Value Beneficiaries section (6 columns)
+  lumpSumTaken: text("lump_sum_taken").notNull().default("R 0"),
+  fundValueBeneficiaries: text("fund_value_beneficiaries").notNull().default("R 0"),
+  nonDeductibleContribution: text("non_deductible_contribution").notNull().default("R 0"),
+  livingAnnuity: text("living_annuity").notNull().default("R 0"),
+  monthlyIncome: text("monthly_income").notNull().default("R 0"),
+  incomeTerm: text("income_term").notNull().default("0 years"),
   
-  // For multiple beneficiaries functionality
-  beneficiary: text("beneficiary").notNull().default(""),
-  benefitSplit: text("benefit_split").notNull().default("0%"),
+  // Multiple beneficiaries support
   additionalBeneficiaries: text("additional_beneficiaries").array().notNull().default([]),
   additionalBenefitSplits: text("additional_benefit_splits").array().notNull().default([]),
 });
@@ -47,9 +46,9 @@ export const updateRetirementFundSchema = createInsertSchema(retirementFunds).om
   id: true,
 }).partial();
 
-
-
+export type RetirementFund = typeof retirementFunds.$inferSelect;
 export type InsertRetirementFund = z.infer<typeof insertRetirementFundSchema>;
+export type UpdateRetirementFund = z.infer<typeof updateRetirementFundSchema>;
 
 // Lump Sum Bequests table
 export const lumpSumBequests = pgTable("lump_sum_bequests", {
@@ -58,14 +57,9 @@ export const lumpSumBequests = pgTable("lump_sum_bequests", {
   // Main fields
   description: text("description").notNull().default(""),
   entity: text("entity").notNull().default(""), // Donald Edwards, Betty Edwards
-  start: text("start").notNull().default("0"),
-  increasePercentage: text("increase_percentage").notNull().default("6%"),
+  amount: text("amount").notNull().default("R 0"),
+  increasePercentage: text("increase_percentage").notNull().default("0%"),
   cpi: boolean("cpi").notNull().default(false),
-  amount: text("amount").notNull().default("0"),
-  valueAtDeath: text("value_at_death").notNull().default("0"),
-  
-  // Charity bequest note
-  charityNote: text("charity_note").notNull().default(""),
 });
 
 export const insertLumpSumBequestSchema = createInsertSchema(lumpSumBequests).omit({
@@ -76,30 +70,32 @@ export const updateLumpSumBequestSchema = createInsertSchema(lumpSumBequests).om
   id: true,
 }).partial();
 
-export type InsertLumpSumBequest = z.infer<typeof insertLumpSumBequestSchema>;
 export type LumpSumBequest = typeof lumpSumBequests.$inferSelect;
+export type InsertLumpSumBequest = z.infer<typeof insertLumpSumBequestSchema>;
+export type UpdateLumpSumBequest = z.infer<typeof updateLumpSumBequestSchema>;
 
-// Assurance schema
+// Assurance table
 export const assurance = pgTable("assurance", {
   id: serial("id").primaryKey(),
   
-  // Main fields
-  description: text("description").notNull().default(""),
-  owner: text("owner").notNull().default("Donald Edwards"),
-  additionalOwners: text("additional_owners").notNull().default("[]"), // JSON string: [{id: string, name: string}]
-  lifeAssured: text("life_assured").notNull().default(""),
-  deathBenefit: text("death_benefit").notNull().default("0"),
-  beneficiary: text("beneficiary").notNull().default(""),
-  benefitSplit: text("benefit_split").notNull().default("0"),
-  additionalBeneficiaries: text("additional_beneficiaries").notNull().default("[]"), // JSON string: [{id: string, name: string, split: string}]
-  additionalInfo: text("additional_info").notNull().default(""),
-  amount: text("amount").notNull().default("0"),
-  buySell: boolean("buy_sell").notNull().default(false),
-  keyMan: boolean("key_man").notNull().default(false),
-  premiumsByOthers: text("premiums_by_others").notNull().default("0"),
-  collateralSession: text("collateral_session").notNull().default("0"),
-  excludedFromEstateDuty: boolean("excluded_from_estate_duty").notNull().default(false),
-  excludedFromProvisions: boolean("excluded_from_provisions").notNull().default(false),
+  // Basic policy information
+  description: text("description").notNull().default("Enter details ..."),
+  
+  // Owner information
+  owners: text("owners").array().notNull().default(["Donald Edwards"]),
+  
+  // Beneficiary information 
+  beneficiaries: text("beneficiaries").array().notNull().default(["Enter details ..."]),
+  
+  // Financial details
+  deathBenefit: text("death_benefit").notNull().default("R 0"),
+  amount: text("amount").notNull().default("R 0"),
+  premiumsByOthers: text("premiums_by_others").notNull().default("R 0"),
+  collateralSession: text("collateral_session").notNull().default("R 0"),
+  benefitSplit: text("benefit_split").notNull().default("0%"),
+  
+  // Additional info
+  additionalInfo: text("additional_info").notNull().default("Enter details ..."),
 });
 
 export const insertAssuranceSchema = createInsertSchema(assurance).omit({
@@ -110,26 +106,26 @@ export const updateAssuranceSchema = createInsertSchema(assurance).omit({
   id: true,
 }).partial();
 
-export type InsertAssurance = z.infer<typeof insertAssuranceSchema>;
 export type Assurance = typeof assurance.$inferSelect;
+export type InsertAssurance = z.infer<typeof insertAssuranceSchema>;
 export type UpdateAssurance = z.infer<typeof updateAssuranceSchema>;
 
-export type UpdateRetirementFund = z.infer<typeof updateRetirementFundSchema>;
-export type RetirementFund = typeof retirementFunds.$inferSelect;
-
-// Defined Benefit Funds schema
+// Define Benefit Funds table schema
 export const definedBenefitFunds = pgTable("defined_benefit_funds", {
   id: serial("id").primaryKey(),
   
-  // Main fields
-  description: text("description").notNull().default(""),
+  // Basic information
+  description: text("description").notNull().default("Enter details ..."),
   owner: text("owner").notNull().default("Donald Edwards"),
-  yearsOfService: text("years_of_service").notNull().default("0"),
-  finalMonthlySalary: text("final_monthly_salary").notNull().default("0"),
-  deathLumpSum: text("death_lump_sum").notNull().default("0"),
-  additionalTaxFreeAmount: text("additional_tax_free_amount").notNull().default("0"),
-  pensionIncomeAmount: text("pension_income_amount").notNull().default("0"),
-  pensionIncomeIncrease: text("pension_income_increase").notNull().default("0"),
+  
+  // Financial details
+  pensionIncome: text("pension_income").notNull().default("R 0"),
+  pensionIncomeIncrease: text("pension_income_increase").notNull().default("0%"),
+  spouseIncome: text("spouse_income").notNull().default("R 0"),
+  spouseIncomeIncrease: text("spouse_income_increase").notNull().default("0%"),
+  
+  // Multiple owners support
+  additionalOwners: text("additional_owners").array().notNull().default([]),
 });
 
 export const insertDefinedBenefitFundSchema = createInsertSchema(definedBenefitFunds).omit({
@@ -140,31 +136,28 @@ export const updateDefinedBenefitFundSchema = createInsertSchema(definedBenefitF
   id: true,
 }).partial();
 
-export type InsertDefinedBenefitFund = z.infer<typeof insertDefinedBenefitFundSchema>;
 export type DefinedBenefitFund = typeof definedBenefitFunds.$inferSelect;
+export type InsertDefinedBenefitFund = z.infer<typeof insertDefinedBenefitFundSchema>;
 export type UpdateDefinedBenefitFund = z.infer<typeof updateDefinedBenefitFundSchema>;
 
-// Voluntary Investments schema
+// Voluntary Investments table schema
 export const voluntaryInvestments = pgTable("voluntary_investments", {
   id: serial("id").primaryKey(),
   
-  // Overview fields
-  description: text("description").notNull().default(""),
-  owners: text("owners").notNull().default("[]"), // JSON array of owners
-  ownershipPercentages: text("ownership_percentages").notNull().default("[]"), // JSON array of percentages
+  // Basic information
+  description: text("description").notNull().default("Enter details ..."),
   
-  // Bequeath to fields
-  baseCost: text("base_cost").notNull().default("0"),
-  marketValue: text("market_value").notNull().default("0"),
-  liquidationPercentage: text("liquidation_percentage").notNull().default("0"),
-  spouse: text("spouse").notNull().default("0"),
-  others: text("others").notNull().default("0"),
+  // Owner information - multiple owners with percentages
+  owners: text("owners").array().notNull().default(["Donald Edwards"]),
+  ownershipPercentages: text("ownership_percentages").array().notNull().default(["100%"]),
   
-  // Exclusion checkboxes
-  excludedFromJointEstate: boolean("excluded_from_joint_estate").notNull().default(false),
-  excludedFromEstateDuty: boolean("excluded_from_estate_duty").notNull().default(false),
-  excludedFromCGT: boolean("excluded_from_cgt").notNull().default(false),
-  excludedFromExecutorsFees: boolean("excluded_from_executors_fees").notNull().default(false),
+  // Financial details
+  amount: text("amount").notNull().default("R 0"),
+  increasePercentage: text("increase_percentage").notNull().default("0%"),
+  
+  // Beneficiary information - multiple beneficiaries with splits
+  beneficiaries: text("beneficiaries").array().notNull().default(["Enter details ..."]),
+  benefitSplits: text("benefit_splits").array().notNull().default(["0%"]),
 });
 
 export const insertVoluntaryInvestmentSchema = createInsertSchema(voluntaryInvestments).omit({
@@ -175,121 +168,96 @@ export const updateVoluntaryInvestmentSchema = createInsertSchema(voluntaryInves
   id: true,
 }).partial();
 
-export type InsertVoluntaryInvestment = z.infer<typeof insertVoluntaryInvestmentSchema>;
 export type VoluntaryInvestment = typeof voluntaryInvestments.$inferSelect;
+export type InsertVoluntaryInvestment = z.infer<typeof insertVoluntaryInvestmentSchema>;
 export type UpdateVoluntaryInvestment = z.infer<typeof updateVoluntaryInvestmentSchema>;
 
-// Assets and Liabilities schema
+// Assets and Liabilities table schema
 export const assetsAndLiabilities = pgTable("assets_and_liabilities", {
   id: serial("id").primaryKey(),
   
-  // Overview fields
-  include: boolean("include").notNull().default(true),
-  categoryAndDescription: text("category_and_description").notNull().default(""),
-  currency: text("currency").notNull().default("ZAR"),
-  baseCost: text("base_cost").notNull().default("0"),
-  marketValue: text("market_value").notNull().default("0"),
+  // Basic information
+  description: text("description").notNull().default("Enter details ..."),
+  owner: text("owner").notNull().default("Donald Edwards"),
   
-  // Owner fields
-  donaldEdwardsPercentage: text("donald_edwards_percentage").notNull().default("0"),
-  bettyEdwardsPercentage: text("betty_edwards_percentage").notNull().default("0"),
+  // Financial details
+  amount: text("amount").notNull().default("R 0"),
+  increasePercentage: text("increase_percentage").notNull().default("0%"),
   
-  // Bequeath to fields
-  liquidationPercentage: text("liquidation_percentage").notNull().default("0"),
-  spouse: text("spouse").notNull().default("0"),
-  others: text("others").notNull().default("0"),
-  
-  // Exclusion checkboxes
-  excludedFromJointEstate: boolean("excluded_from_joint_estate").notNull().default(false),
-  excludedFromEstateDuty: boolean("excluded_from_estate_duty").notNull().default(false),
-  excludedFromCGT: boolean("excluded_from_cgt").notNull().default(false),
-  
-  // Category for grouping
-  category: text("category").notNull().default(""),
-  isHeader: boolean("is_header").notNull().default(false),
-  sortOrder: integer("sort_order").notNull().default(0),
+  // Multiple owners support
+  additionalOwners: text("additional_owners").array().notNull().default([]),
 });
 
-export const insertAssetAndLiabilitySchema = createInsertSchema(assetsAndLiabilities).omit({
+export const insertAssetsAndLiabilitiesSchema = createInsertSchema(assetsAndLiabilities).omit({
   id: true,
 });
 
-export const updateAssetAndLiabilitySchema = createInsertSchema(assetsAndLiabilities).omit({
+export const updateAssetsAndLiabilitiesSchema = createInsertSchema(assetsAndLiabilities).omit({
   id: true,
 }).partial();
 
-export type InsertAssetAndLiability = z.infer<typeof insertAssetAndLiabilitySchema>;
-export type AssetAndLiability = typeof assetsAndLiabilities.$inferSelect;
-export type UpdateAssetAndLiability = z.infer<typeof updateAssetAndLiabilitySchema>;
+export type AssetsAndLiabilities = typeof assetsAndLiabilities.$inferSelect;
+export type InsertAssetsAndLiabilities = z.infer<typeof insertAssetsAndLiabilitiesSchema>;
+export type UpdateAssetsAndLiabilities = z.infer<typeof updateAssetsAndLiabilitiesSchema>;
 
-// Income Needs schema
+// Income Needs table schema
 export const incomeNeeds = pgTable("income_needs", {
   id: serial("id").primaryKey(),
   
-  // Main fields
-  description: text("description").notNull().default(""),
-  entity: text("entity").notNull().default("Donald Edwards"),
-  start: text("start").notNull().default("0"),
-  termYears: text("term_years").notNull().default("0"),
-  termEditable: boolean("term_editable").notNull().default(false),
-  increasePercentage: text("increase_percentage").notNull().default("0"),
-  cpi: boolean("cpi").notNull().default(false),
-  frequency: text("frequency").notNull().default("Monthly"),
-  amount: text("amount").notNull().default("0"),
-  capitalisedAmount: text("capitalised_amount").notNull().default("0"),
+  // Basic information
+  description: text("description").notNull().default("Enter details ..."),
+  
+  // Financial details
+  amount: text("amount").notNull().default("R 0"),
+  increasePercentage: text("increase_percentage").notNull().default("0%"),
 });
 
-export const insertIncomeNeedSchema = createInsertSchema(incomeNeeds).omit({
+export const insertIncomeNeedsSchema = createInsertSchema(incomeNeeds).omit({
   id: true,
 });
 
-export const updateIncomeNeedSchema = createInsertSchema(incomeNeeds).omit({
+export const updateIncomeNeedsSchema = createInsertSchema(incomeNeeds).omit({
   id: true,
 }).partial();
 
-export type InsertIncomeNeed = z.infer<typeof insertIncomeNeedSchema>;
-export type IncomeNeed = typeof incomeNeeds.$inferSelect;
-export type UpdateIncomeNeed = z.infer<typeof updateIncomeNeedSchema>;
+export type IncomeNeeds = typeof incomeNeeds.$inferSelect;
+export type InsertIncomeNeeds = z.infer<typeof insertIncomeNeedsSchema>;
+export type UpdateIncomeNeeds = z.infer<typeof updateIncomeNeedsSchema>;
 
-// Income Provisions schema
+// Income Provisions table schema
 export const incomeProvisions = pgTable("income_provisions", {
   id: serial("id").primaryKey(),
   
-  // Main fields
-  description: text("description").notNull().default(""),
-  entity: text("entity").notNull().default("Donald Edwards"),
-  start: text("start").notNull().default("0"),
-  termYears: text("term_years").notNull().default("0"),
-  termEditable: boolean("term_editable").notNull().default(false),
-  increasePercentage: text("increase_percentage").notNull().default("0"),
-  cpi: boolean("cpi").notNull().default(false),
-  frequency: text("frequency").notNull().default("Monthly"),
-  amount: text("amount").notNull().default("0"),
-  taxablePercentage: text("taxable_percentage").notNull().default("0"),
-  taxPercentage: text("tax_percentage").notNull().default("0"),
-  capitalisedAmount: text("capitalised_amount").notNull().default("0"),
+  // Basic information
+  description: text("description").notNull().default("Enter details ..."),
+  
+  // Financial details
+  amount: text("amount").notNull().default("R 0"),
+  increasePercentage: text("increase_percentage").notNull().default("0%"),
 });
 
-export const insertIncomeProvisionSchema = createInsertSchema(incomeProvisions).omit({
+export const insertIncomeProvisionsSchema = createInsertSchema(incomeProvisions).omit({
   id: true,
 });
 
-export const updateIncomeProvisionSchema = createInsertSchema(incomeProvisions).omit({
+export const updateIncomeProvisionsSchema = createInsertSchema(incomeProvisions).omit({
   id: true,
 }).partial();
 
-export type InsertIncomeProvision = z.infer<typeof insertIncomeProvisionSchema>;
-export type IncomeProvision = typeof incomeProvisions.$inferSelect;
-export type UpdateIncomeProvision = z.infer<typeof updateIncomeProvisionSchema>;
+export type IncomeProvisions = typeof incomeProvisions.$inferSelect;
+export type InsertIncomeProvisions = z.infer<typeof insertIncomeProvisionsSchema>;
+export type UpdateIncomeProvisions = z.infer<typeof updateIncomeProvisionsSchema>;
 
-// Residue schema
+// Residue table schema
 export const residue = pgTable("residue", {
   id: serial("id").primaryKey(),
   
-  // Main fields
-  entity: text("entity").notNull().default("Donald Edwards"),
-  percentage: text("percentage").notNull().default("0"),
-  isCharityRow: boolean("is_charity_row").notNull().default(false),
+  // Basic information
+  description: text("description").notNull().default("Enter details ..."),
+  
+  // Financial details
+  amount: text("amount").notNull().default("R 0"),
+  increasePercentage: text("increase_percentage").notNull().default("0%"),
 });
 
 export const insertResidueSchema = createInsertSchema(residue).omit({
@@ -300,29 +268,30 @@ export const updateResidueSchema = createInsertSchema(residue).omit({
   id: true,
 }).partial();
 
-export type InsertResidue = z.infer<typeof insertResidueSchema>;
 export type Residue = typeof residue.$inferSelect;
+export type InsertResidue = z.infer<typeof insertResidueSchema>;
 export type UpdateResidue = z.infer<typeof updateResidueSchema>;
 
-// Additional Estate Duty Items schema
+// Additional Estate Duty Items table schema
 export const additionalEstateDutyItems = pgTable("additional_estate_duty_items", {
   id: serial("id").primaryKey(),
   
-  // Main fields
-  description: text("description").notNull().default(""),
-  amount: text("amount").notNull().default("0"),
-  isDeduction: boolean("is_deduction").notNull().default(false),
-  excludeFromJointEstate: boolean("exclude_from_joint_estate").notNull().default(false),
+  // Basic information
+  description: text("description").notNull().default("Enter details ..."),
+  
+  // Financial details
+  amount: text("amount").notNull().default("R 0"),
+  increasePercentage: text("increase_percentage").notNull().default("0%"),
 });
 
-export const insertAdditionalEstateDutyItemSchema = createInsertSchema(additionalEstateDutyItems).omit({
+export const insertAdditionalEstateDutyItemsSchema = createInsertSchema(additionalEstateDutyItems).omit({
   id: true,
 });
 
-export const updateAdditionalEstateDutyItemSchema = createInsertSchema(additionalEstateDutyItems).omit({
+export const updateAdditionalEstateDutyItemsSchema = createInsertSchema(additionalEstateDutyItems).omit({
   id: true,
 }).partial();
 
-export type InsertAdditionalEstateDutyItem = z.infer<typeof insertAdditionalEstateDutyItemSchema>;
-export type AdditionalEstateDutyItem = typeof additionalEstateDutyItems.$inferSelect;
-export type UpdateAdditionalEstateDutyItem = z.infer<typeof updateAdditionalEstateDutyItemSchema>;
+export type AdditionalEstateDutyItems = typeof additionalEstateDutyItems.$inferSelect;
+export type InsertAdditionalEstateDutyItems = z.infer<typeof insertAdditionalEstateDutyItemsSchema>;
+export type UpdateAdditionalEstateDutyItems = z.infer<typeof updateAdditionalEstateDutyItemsSchema>;

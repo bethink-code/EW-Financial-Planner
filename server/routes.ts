@@ -1,7 +1,7 @@
 import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
-import { insertRetirementFundSchema, updateRetirementFundSchema, insertLumpSumBequestSchema, updateLumpSumBequestSchema, insertAssuranceSchema, updateAssuranceSchema, insertDefinedBenefitFundSchema, updateDefinedBenefitFundSchema, insertVoluntaryInvestmentSchema, updateVoluntaryInvestmentSchema, insertAssetAndLiabilitySchema, updateAssetAndLiabilitySchema, insertIncomeNeedSchema, updateIncomeNeedSchema, insertIncomeProvisionSchema, updateIncomeProvisionSchema, insertResidueSchema, updateResidueSchema, insertAdditionalEstateDutyItemSchema, updateAdditionalEstateDutyItemSchema } from "@shared/schema";
+import { insertRetirementFundSchema, updateRetirementFundSchema, insertLumpSumBequestSchema, updateLumpSumBequestSchema, insertAssuranceSchema, updateAssuranceSchema, insertDefinedBenefitFundSchema, updateDefinedBenefitFundSchema, insertVoluntaryInvestmentSchema, updateVoluntaryInvestmentSchema, insertAssetsAndLiabilitiesSchema, updateAssetsAndLiabilitiesSchema, insertIncomeNeedsSchema, updateIncomeNeedsSchema, insertIncomeProvisionsSchema, updateIncomeProvisionsSchema, insertResidueSchema, updateResidueSchema, insertAdditionalEstateDutyItemsSchema, updateAdditionalEstateDutyItemsSchema } from "@shared/schema";
 
 export async function registerRoutes(app: Express): Promise<Server> {
   // Get all retirement funds
@@ -521,7 +521,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Create new asset and liability
   app.post("/api/assets-and-liabilities", async (req, res) => {
     try {
-      const validatedData = insertAssetAndLiabilitySchema.parse(req.body);
+      const validatedData = insertAssetsAndLiabilitiesSchema.parse(req.body);
       const asset = await storage.createAssetAndLiability(validatedData);
       res.status(201).json(asset);
     } catch (error) {
@@ -538,7 +538,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(400).json({ message: "Invalid asset ID" });
       }
 
-      const validatedData = updateAssetAndLiabilitySchema.parse(req.body);
+      const validatedData = updateAssetsAndLiabilitiesSchema.parse(req.body);
       const asset = await storage.updateAssetAndLiability(id, validatedData);
       
       if (!asset) {
@@ -616,7 +616,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Create new income need
   app.post("/api/income-needs", async (req, res) => {
     try {
-      const validatedData = insertIncomeNeedSchema.parse(req.body);
+      const validatedData = insertIncomeNeedsSchema.parse(req.body);
       const need = await storage.createIncomeNeed(validatedData);
       res.status(201).json(need);
     } catch (error) {
@@ -633,7 +633,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(400).json({ message: "Invalid need ID" });
       }
 
-      const validatedData = updateIncomeNeedSchema.parse(req.body);
+      const validatedData = updateIncomeNeedsSchema.parse(req.body);
       const need = await storage.updateIncomeNeed(id, validatedData);
       
       if (!need) {
@@ -711,7 +711,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Create new income provision
   app.post("/api/income-provisions", async (req, res) => {
     try {
-      const validatedData = insertIncomeProvisionSchema.parse(req.body);
+      const validatedData = insertIncomeProvisionsSchema.parse(req.body);
       const provision = await storage.createIncomeProvision(validatedData);
       res.status(201).json(provision);
     } catch (error) {
@@ -728,7 +728,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(400).json({ message: "Invalid provision ID" });
       }
 
-      const validatedData = updateIncomeProvisionSchema.parse(req.body);
+      const validatedData = updateIncomeProvisionsSchema.parse(req.body);
       const provision = await storage.updateIncomeProvision(id, validatedData);
       
       if (!provision) {
@@ -901,7 +901,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Create new additional estate duty item
   app.post("/api/additional-estate-duty-items", async (req, res) => {
     try {
-      const validatedData = insertAdditionalEstateDutyItemSchema.parse(req.body);
+      const validatedData = insertAdditionalEstateDutyItemsSchema.parse(req.body);
       const item = await storage.createAdditionalEstateDutyItem(validatedData);
       res.status(201).json(item);
     } catch (error) {
@@ -918,7 +918,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(400).json({ message: "Invalid estate duty item ID" });
       }
 
-      const validatedData = updateAdditionalEstateDutyItemSchema.parse(req.body);
+      const validatedData = updateAdditionalEstateDutyItemsSchema.parse(req.body);
       const item = await storage.updateAdditionalEstateDutyItem(id, validatedData);
       
       if (!item) {
