@@ -274,8 +274,9 @@ export function NewRetirementTable({
                             e.stopPropagation();
                             handleAddOwner(fund.id);
                           }}
-                          className="p-0.5 text-blue-600 hover:bg-blue-50 rounded"
+                          className="h-6 w-6 rounded text-blue-600 hover:bg-blue-50 flex items-center justify-center"
                           title="Add Owner"
+                          disabled={isUpdating}
                         >
                           <UserPlus className="h-3 w-3" />
                         </button>
@@ -287,8 +288,9 @@ export function NewRetirementTable({
                             e.stopPropagation();
                             handleRemoveOwner(fund.id, rowIndex);
                           }}
-                          className="p-0.5 text-red-600 hover:bg-red-50 rounded"
+                          className="h-6 w-6 rounded text-red-600 hover:bg-red-50 flex items-center justify-center"
                           title="Remove Owner"
+                          disabled={isUpdating}
                         >
                           <UserMinus className="h-3 w-3" />
                         </button>
@@ -329,17 +331,29 @@ export function NewRetirementTable({
                       />
                       {rowIndex === 0 ? (
                         <button
-                          onClick={() => handleAddUnapprovedBeneficiary(fund.id)}
-                          className="p-0.5 text-blue-600 hover:bg-blue-50 rounded"
+                          type="button"
+                          onClick={(e) => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            handleAddUnapprovedBeneficiary(fund.id);
+                          }}
+                          className="h-6 w-6 rounded text-blue-600 hover:bg-blue-50 flex items-center justify-center"
                           title="Add Beneficiary"
+                          disabled={isUpdating}
                         >
                           <Plus className="h-3 w-3" />
                         </button>
                       ) : (
                         <button
-                          onClick={() => handleRemoveUnapprovedBeneficiary(fund.id, rowIndex)}
-                          className="p-0.5 text-red-600 hover:bg-red-50 rounded"
+                          type="button"
+                          onClick={(e) => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            handleRemoveUnapprovedBeneficiary(fund.id, rowIndex);
+                          }}
+                          className="h-6 w-6 rounded text-red-600 hover:bg-red-50 flex items-center justify-center"
                           title="Remove Beneficiary"
+                          disabled={isUpdating}
                         >
                           <UserMinus className="h-3 w-3" />
                         </button>
@@ -498,17 +512,29 @@ export function NewRetirementTable({
                       />
                       {rowIndex === 0 ? (
                         <button
-                          onClick={() => handleAddFundValueBeneficiary(fund.id)}
-                          className="p-0.5 text-blue-600 hover:bg-blue-50 rounded"
+                          type="button"
+                          onClick={(e) => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            handleAddFundValueBeneficiary(fund.id);
+                          }}
+                          className="h-6 w-6 rounded text-blue-600 hover:bg-blue-50 flex items-center justify-center"
                           title="Add Beneficiary"
+                          disabled={isUpdating}
                         >
                           <Plus className="h-3 w-3" />
                         </button>
                       ) : (
                         <button
-                          onClick={() => handleRemoveFundValueBeneficiary(fund.id, rowIndex)}
-                          className="p-0.5 text-red-600 hover:bg-red-50 rounded"
+                          type="button"
+                          onClick={(e) => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            handleRemoveFundValueBeneficiary(fund.id, rowIndex);
+                          }}
+                          className="h-6 w-6 rounded text-red-600 hover:bg-red-50 flex items-center justify-center"
                           title="Remove Beneficiary"
+                          disabled={isUpdating}
                         >
                           <UserMinus className="h-3 w-3" />
                         </button>
