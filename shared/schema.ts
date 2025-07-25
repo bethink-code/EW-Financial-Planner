@@ -206,16 +206,22 @@ export type AssetsAndLiabilities = typeof assetsAndLiabilities.$inferSelect;
 export type InsertAssetsAndLiabilities = z.infer<typeof insertAssetsAndLiabilitiesSchema>;
 export type UpdateAssetsAndLiabilities = z.infer<typeof updateAssetsAndLiabilitiesSchema>;
 
-// Income Needs table schema
+// Income Needs table schema - New 3-section structure
 export const incomeNeeds = pgTable("income_needs", {
   id: serial("id").primaryKey(),
   
-  // Basic information
+  // Overview Section
   description: text("description").notNull().default("Enter details ..."),
+  personName: text("person_name").notNull().default("Enter details ..."),
   
-  // Financial details
-  amount: text("amount").notNull().default("R 0"),
+  // Income Need Details Section
+  startDate: text("start_date").notNull().default("Enter details ..."),
+  termYears: text("term_years").notNull().default("0"),
   increasePercentage: text("increase_percentage").notNull().default("0%"),
+  cpi: boolean("cpi").notNull().default(false),
+  frequency: text("frequency").notNull().default("monthly"),
+  amount: text("amount").notNull().default("R 0"),
+  capitalisedAmount: text("capitalised_amount").notNull().default("R 0"),
 });
 
 export const insertIncomeNeedsSchema = createInsertSchema(incomeNeeds).omit({
