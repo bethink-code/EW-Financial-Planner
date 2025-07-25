@@ -409,7 +409,7 @@ th, td {
     box-sizing: border-box;
     border-radius: 6px;
     transition: all 0.2s ease;
-    color: #000000 !important;
+    color: hsl(var(--foreground)) !important;
     line-height: 2.3rem !important;
   }
   
