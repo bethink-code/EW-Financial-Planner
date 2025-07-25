@@ -234,8 +234,8 @@ export class MemStorage implements IStorage {
     // Initialize sample voluntary investments
     this.createVoluntaryInvestment({
       description: "Unit Trust Portfolio",
-      owners: '["Donald Edwards"]',
-      ownershipPercentages: '["100"]',
+      owners: ["Donald Edwards"],
+      ownershipPercentages: ["100%"],
       baseCost: "R 500,000",
       marketValue: "R 750,000",
       liquidationPercentage: "85%",

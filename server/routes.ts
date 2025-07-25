@@ -426,12 +426,18 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Create new voluntary investment
   app.post("/api/voluntary-investments", async (req, res) => {
     try {
+      console.log("Received request body:", req.body);
       const validatedData = insertVoluntaryInvestmentSchema.parse(req.body);
+      console.log("Validated data:", validatedData);
       const investment = await storage.createVoluntaryInvestment(validatedData);
       res.status(201).json(investment);
     } catch (error) {
       console.error("Error creating voluntary investment:", error);
-      res.status(400).json({ message: "Invalid voluntary investment data" });
+      if (error instanceof Error) {
+        res.status(400).json({ message: error.message });
+      } else {
+        res.status(400).json({ message: "Invalid voluntary investment data" });
+      }
     }
   });
 
