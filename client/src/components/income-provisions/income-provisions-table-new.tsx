@@ -23,10 +23,7 @@ export default function IncomeProvisionsTable({ viewMode, searchTerm }: IncomePr
     const taxPercentage = parseFloat(provision.taxPercentage?.replace(/[^\d.-]/g, '') || '0') / 100;
     const taxRate = parseFloat(provision.taxRate?.replace(/[^\d.-]/g, '') || '0') / 100;
     
-    console.log('Calculation inputs:', { amount, termYears, increaseRate, taxPercentage, taxRate });
-    
     if (amount <= 0 || termYears <= 0) {
-      console.log('Returning R 0 due to invalid inputs');
       return 'R 0';
     }
     
@@ -50,16 +47,9 @@ export default function IncomeProvisionsTable({ viewMode, searchTerm }: IncomePr
       presentValue = amount * pvFactor;
     }
     
-    // Apply tax effects: both tax percentage and tax rate reduce the final amount
-    const combinedTaxRate = taxPercentage + taxRate - (taxPercentage * taxRate); // Combined tax effect
-    const netPresentValue = presentValue * (1 - combinedTaxRate);
-    
-    console.log('Calculation result:', { presentValue, combinedTaxRate, netPresentValue });
-    
-    const result = formatCurrencyValue(Math.round(netPresentValue).toString());
-    console.log('Formatted result:', result);
-    
-    return result;
+    // Return the gross present value before taxes - taxes are separate considerations
+    // In financial planning, the capitalised amount typically shows the gross requirement
+    return formatCurrencyValue(Math.round(presentValue).toString());
   }, []);
 
   // Query for income provisions
