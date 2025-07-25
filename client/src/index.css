@@ -399,7 +399,7 @@ th, td {
   /* Fix for native select dropdowns within table-input */
   select.table-input {
     width: auto;
-    height: 1.25rem !important;
+    height: 2.3rem !important;
     padding: 0 !important;
     background-color: hsl(var(--primary) / 0.05);
     border: 1px solid hsl(var(--border));
@@ -410,7 +410,7 @@ th, td {
     border-radius: 6px;
     transition: all 0.2s ease;
     color: #000000 !important;
-    line-height: 1.25rem !important;
+    line-height: 2.3rem !important;
   }
   
   select.table-input:hover {
