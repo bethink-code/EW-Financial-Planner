@@ -12,14 +12,6 @@ export function IncomeProvisionsSummary({ searchTerm }: IncomeProvisionsSummaryP
     queryKey: ["/api/income-provisions"],
   });
 
-  if (isLoading) {
-    return (
-      <div className="px-5 pb-5">
-        <div className="text-neutral-500">Loading summary...</div>
-      </div>
-    );
-  }
-
   // Calculate capitalised amount using the exact same logic as the table
   const calculateCapitalisedAmount = useCallback((provision: IncomeProvisions): string => {
     const amount = parseCurrencyValue(provision.amount || '0');
@@ -64,6 +56,14 @@ export function IncomeProvisionsSummary({ searchTerm }: IncomeProvisionsSummaryP
       provision.personName.toLowerCase().includes(searchTerm.toLowerCase())
     );
   }, [provisions, searchTerm]);
+
+  if (isLoading) {
+    return (
+      <div className="px-5 pb-5">
+        <div className="text-neutral-500">Loading summary...</div>
+      </div>
+    );
+  }
 
   const totalProvisions = filteredProvisions.length;
   const totalAmount = filteredProvisions.reduce((sum, provision) => {
