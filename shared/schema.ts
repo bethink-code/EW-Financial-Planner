@@ -5,13 +5,13 @@ import { z } from "zod";
 export const retirementFunds = pgTable("retirement_funds", {
   id: serial("id").primaryKey(),
   
-  // Overview section - Description, Owner
+  // Overview section - Description, Owner, Cover Amount
   description: text("description").notNull(),
   owner: text("owner").notNull(),
   additionalOwners: text("additional_owners").array().notNull().default([]),
-  
-  // Unapproved life cover section - Cover Amount, Term (Years), Increase %, Approved Life Cover
   coverAmount: text("cover_amount").notNull().default("0"),
+  
+  // Unapproved life cover section - Term (Years), Increase %, Approved Life Cover
   termYears: text("term_years").notNull().default("0"),
   increasePercentage: text("increase_percentage").notNull().default("0%"),
   approvedLifeCover: text("approved_life_cover").notNull().default("0"),
