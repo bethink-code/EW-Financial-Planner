@@ -399,31 +399,30 @@ th, td {
   /* Fix for native select dropdowns within table-input */
   select.table-input {
     width: auto;
-    height: 1.25rem;
-    padding: 1.2rem 0.4rem;
+    height: auto !important;
+    min-height: 1.25rem !important;
+    padding: 0.3rem 0.4rem !important;
     background-color: hsl(var(--primary) / 0.05);
     border: 1px solid hsl(var(--border));
     outline: none;
     font-size: 0.875rem;
     text-align: left;
     box-sizing: border-box;
-    resize: none;
     border-radius: 6px;
     transition: all 0.2s ease;
     color: #000000 !important;
-    line-height: normal !important;
-    padding-right: 2rem !important;
+    line-height: 1.2 !important;
   }
   
   select.table-input:hover {
-    background-color: hsl(var(--accent)) !important;
-    border-color: hsl(var(--primary) / 0.3) !important;
+    background-color: hsl(var(--accent));
+    border-color: hsl(var(--primary) / 0.3);
   }
   
   select.table-input:focus {
-    background-color: hsl(var(--background)) !important;
-    border-color: hsl(var(--primary)) !important;
-    box-shadow: 0 0 0 2px hsl(var(--primary) / 0.2) !important;
+    background-color: hsl(var(--background));
+    border-color: hsl(var(--primary));
+    box-shadow: 0 0 0 2px hsl(var(--primary) / 0.2);
   }
   
   /* Total rows - bold styling */
