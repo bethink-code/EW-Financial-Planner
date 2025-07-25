@@ -301,12 +301,11 @@ export default function IncomeNeedsTable({ viewMode, searchTerm }: IncomeNeedsTa
               </td>
               
               {/* Frequency Dropdown */}
-              <td className="p-1">
+              <td className="p-0">
                 <select
-                  key={`frequency-${need.id}-${need.frequency}-${Date.now()}`}
-                  defaultValue={need.frequency || "monthly"}
+                  value={need.frequency || "monthly"}
                   onChange={(e) => handleSelectChange(need.id, 'frequency', e.target.value)}
-                  className={`table-input ${getFieldClass('text')} entered-value`}
+                  className="w-full h-8 px-2 py-1 text-sm border border-gray-300 rounded bg-white focus:border-blue-500 focus:outline-none"
                   disabled={isUpdating}
                 >
                   <option value="monthly">Monthly</option>
