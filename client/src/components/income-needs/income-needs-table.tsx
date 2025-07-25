@@ -252,10 +252,9 @@ export default function IncomeNeedsTable({ viewMode, searchTerm }: IncomeNeedsTa
               <td className="p-1">
                 <input
                   key={`startDate-${need.id}-${need.startDate}`}
-                  type="text"
+                  type="date"
                   defaultValue={need.startDate}
                   className={`table-input ${getFieldClass('text')} ${getValueClass(need.startDate, 'text')}`}
-                  onFocus={handleDefaultValueFocus}
                   onBlur={(e) => handleInputBlur(need.id, 'startDate', e.target.value, e.target)}
                   disabled={isUpdating}
                 />
