@@ -278,7 +278,7 @@ export function SimpleTableWithBeneficiaries({
                 </td>
                 
                 {/* Owner Percentage */}
-                <td className="px-3 py-2 border-r border-neutral-200">
+                <td className="px-3 py-2 section-end">
                   {currentOwner ? (
                     <input
                       type="text"
@@ -303,7 +303,7 @@ export function SimpleTableWithBeneficiaries({
             {/* Monthly Death Benefit Section - rowSpant for main fund data */}
             {columnVisibility.monthlyDeathBenefit && rowIndex === 0 && (
               <>
-                <td className="px-3 py-2 border-l border-neutral-200" rowSpan={maxRows}>
+                <td className="px-3 py-2 section-start" rowSpan={maxRows}>
                   <input
                     defaultValue={fund.monthlyIncome || "Enter details ..."} 
                     onFocus={handleDefaultValueFocus}
@@ -319,7 +319,7 @@ export function SimpleTableWithBeneficiaries({
                     disabled={isUpdating}
                   />
                 </td>
-                <td className="px-3 py-2 border-r border-neutral-200" rowSpan={maxRows}>
+                <td className="px-3 py-2" rowSpan={maxRows}>
                   <input
                     defaultValue={fund.increasePercentage || "0%"}
                     onFocus={handleDefaultValueFocus}
@@ -335,7 +335,7 @@ export function SimpleTableWithBeneficiaries({
                     disabled={isUpdating}
                   />
                 </td>
-                <td className="px-3 py-2 border-r border-neutral-200" rowSpan={maxRows}>
+                <td className="px-3 py-2 section-end" rowSpan={maxRows}>
                   <input
                     key={`termYears-${fund.id}-${fund.termYears}`}
                     defaultValue={fund.termYears.includes('years') ? fund.termYears : `${fund.termYears} years`}
@@ -357,9 +357,9 @@ export function SimpleTableWithBeneficiaries({
             {/* Fund Value Section - rowSpan for main fund data */}
             {columnVisibility.fundValue && rowIndex === 0 && (
               <>
-                <td className="px-3 py-2 border-l border-neutral-200 border-r border-neutral-200" rowSpan={maxRows}>
+                <td className="px-3 py-2 section-start" rowSpan={maxRows}>
                   <input
-                    defaultValue={fund.fundValue || "Enter here ..."} 
+                    defaultValue={fund.fundValue || "Enter details ..."} 
                     onFocus={handleDefaultValueFocus}
                     onBlur={(e) => {
                       const formattedValue = formatCurrencyValue(e.target.value, "fundValue");
@@ -373,9 +373,9 @@ export function SimpleTableWithBeneficiaries({
                     disabled={isUpdating}
                   />
                 </td>
-                <td className="px-3 py-2 border-r border-neutral-200" rowSpan={maxRows}>
+                <td className="px-3 py-2 section-end" rowSpan={maxRows}>
                   <input
-                    defaultValue={fund.fundValue || "Enter here ..."} 
+                    defaultValue={fund.fundValue || "Enter details ..."} 
                     onFocus={handleDefaultValueFocus}
                     onBlur={(e) => {
                       const formattedValue = formatCurrencyValue(e.target.value, "fundValue");
@@ -395,7 +395,7 @@ export function SimpleTableWithBeneficiaries({
             {/* Fund Value Beneficiaries Section - inline pattern like assurance */}
             {columnVisibility.fundValueBeneficiaries && (
               <>
-                <td className="px-3 py-2 border-l border-neutral-200 border-r border-neutral-200">
+                <td className="px-3 py-2 section-start">
                   {currentBeneficiary ? (
                     <div className="flex items-center gap-1">
                       {rowIndex > 0 && (
@@ -409,7 +409,7 @@ export function SimpleTableWithBeneficiaries({
                         />
                       )}
                       <input
-                        defaultValue={currentBeneficiary.name || "Enter here ..."} 
+                        defaultValue={currentBeneficiary.name || "Enter details ..."} 
                         onFocus={handleDefaultValueFocus}
                         onBlur={(e) => handleBeneficiaryUpdate(fund.id, rowIndex, 'name', e.target.value)}
                         className={`${getFieldClass('text')} table-input`}
@@ -428,7 +428,7 @@ export function SimpleTableWithBeneficiaries({
                     <span className="text-neutral-400">-</span>
                   )}
                 </td>
-                <td className="px-3 py-2 border-r border-neutral-200">
+                <td className="px-3 py-2">
                   {currentBeneficiary ? (
                     <input
                       defaultValue={`${currentBeneficiary.percentage || 0}%`}
@@ -446,19 +446,19 @@ export function SimpleTableWithBeneficiaries({
                     <span className="text-neutral-400">-</span>
                   )}
                 </td>
-                <td className="px-3 py-2 border-r border-neutral-200">
+                <td className="px-3 py-2">
                   <span className="table-text-14 text-neutral-900">R 0</span>
                 </td>
-                <td className="px-3 py-2 border-r border-neutral-200">
+                <td className="px-3 py-2">
                   <span className="table-text-14 text-neutral-900">R 0</span>
                 </td>
-                <td className="px-3 py-2 border-r border-neutral-200">
+                <td className="px-3 py-2">
                   <span className="table-text-14 text-neutral-900">R 0</span>
                 </td>
-                <td className="px-3 py-2 border-r border-neutral-200">
+                <td className="px-3 py-2">
                   <span className="table-text-14 text-neutral-900">R 0</span>
                 </td>
-                <td className="px-3 py-2 border-r border-neutral-200">
+                <td className="px-3 py-2 section-end">
                   <span className="table-text-14 text-neutral-900">0 years</span>
                 </td>
               </>
@@ -467,9 +467,9 @@ export function SimpleTableWithBeneficiaries({
             {/* Unapproved Life Cover Section - rowSpan for main fund data */}
             {columnVisibility.unapprovedLifeCover && rowIndex === 0 && (
               <>
-                <td className="px-3 py-2 border-l border-neutral-200 border-r border-neutral-200" rowSpan={maxRows}>
+                <td className="px-3 py-2 section-start" rowSpan={maxRows}>
                   <input
-                    defaultValue={fund.coverAmount || "Enter here ..."} 
+                    defaultValue={fund.coverAmount || "Enter details ..."} 
                     onFocus={handleDefaultValueFocus}
                     onBlur={(e) => {
                       const formattedValue = formatCurrencyValue(e.target.value, "coverAmount");

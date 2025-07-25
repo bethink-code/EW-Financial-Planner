@@ -272,6 +272,15 @@ th, td {
     border: 1px solid #e5e7eb !important;
   }
 
+  /* Table section border classes - structural approach */
+  .section-start {
+    border-left: 1px solid #e5e7eb !important;
+  }
+
+  .section-end {
+    border-right: 1px solid #e5e7eb !important;
+  }
+
   /* Centralized summary card styling */
   .summary-card {
     background-color: #EDF4F9 !important;
