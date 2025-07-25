@@ -4,9 +4,7 @@ import { RetirementFund, UpdateRetirementFund } from "@shared/schema";
 import { queryClient, apiRequest } from "@/lib/queryClient";
 import { CalculatorHeader } from "@/components/ui/calculator-header";
 import { RetirementFundsSummary } from "@/components/retirement-funds/retirement-funds-summary";
-import { ClassicRetirementTable } from "@/components/retirement-funds/classic-retirement-table";
-import RoughTableDemo from "@/components/retirement-funds/rough-table-demo";
-import { DetailedView } from "@/components/retirement-funds/detailed-view";
+import { NewRetirementTable } from "@/components/retirement-funds/new-retirement-table";
 import { AdditionalDetails } from "@/components/retirement-funds/additional-details";
 
 
@@ -87,33 +85,32 @@ export default function NewRetirementFunds() {
   });
 
   // Immediate field update without debouncing to fix input issues
-  const handleFieldUpdate = useCallback((id: number, field: keyof UpdateRetirementFund, value: string) => {
+  const handleFieldUpdate = useCallback((id: number, field: string, value: any) => {
     updateMutation.mutate({ id, updates: { [field]: value } });
   }, [updateMutation]);
 
   const handleAddFund = useCallback(() => {
     const newFund: Omit<RetirementFund, 'id'> = {
       description: "Enter details ...",
-      owner: "Donald Edwards",
-      additionalOwners: [],
+      owners: ["Donald Edwards"],
       coverAmount: "R 0",
+      unapprovedBeneficiaries: ["Enter details ..."],
+      unapprovedPercentageSplits: ["0%"],
+      unapprovedCoverSplits: ["R 0"],
+      monthlyIncome: "R 0",
+      monthlyIncomeCheckbox: false,
       termYears: "0 years",
       increasePercentage: "0%",
       approvedLifeCover: "R 0",
       fundValue: "R 0",
       fundValueAtDeath: "R 0",
-      beneficiaryName: "Enter details ...",
-      name: "Enter details ...",
-      amount: "R 0",
-      beneficiary: "Enter details ...",
-      benefitSplit: "0%",
-      additionalBeneficiaries: [],
-      additionalBenefitSplits: [],
+      fundValueBeneficiaries: ["Enter details ..."],
+      fundValuePercentageSplits: ["0%"],
+      fundValueCoverSplits: ["R 0"],
       lumpSumTaken: "R 0",
-      fundValueAfterLumpSum: "R 0",
-      nondeductibleContribution: "R 0",
+      nonDeductibleContribution: "R 0",
       livingAnnuity: "R 0",
-      monthlyIncome: "R 0",
+      livingAnnuityCheckbox: false,
       incomeTerm: "0 years"
     };
     addMutation.mutate(newFund);
@@ -191,23 +188,28 @@ export default function NewRetirementFunds() {
           </CalculatorHeader>
         </div>
 
-        {/* Rough Table Demo */}
+        {/* Table View */}
         {viewMode === "table" && (
           <div className="bg-white rounded-lg shadow-sm border border-neutral-200">
-            <RoughTableDemo />
+            <NewRetirementTable
+              funds={funds}
+              onFieldUpdate={handleFieldUpdate}
+              onRemoveFund={handleRemoveFund}
+              onDuplicateFund={handleDuplicateFund}
+              isUpdating={updateMutation.isPending}
+            />
           </div>
         )}
 
-        {/* Hybrid View */}
+        {/* Hybrid View - Using same table for now */}
         {viewMode === "hybrid" && (
           <div className="bg-white rounded-lg shadow-sm border border-neutral-200">
-            <DetailedView
+            <NewRetirementTable
               funds={funds}
-              columnVisibility={columnVisibility}
               onFieldUpdate={handleFieldUpdate}
+              onRemoveFund={handleRemoveFund}
+              onDuplicateFund={handleDuplicateFund}
               isUpdating={updateMutation.isPending}
-              tableMode={tableMode}
-              onAddFund={handleAddFund}
             />
           </div>
         )}

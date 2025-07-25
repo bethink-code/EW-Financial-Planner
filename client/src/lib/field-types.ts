@@ -368,3 +368,35 @@ export const getInputProps = (fieldName: string, overrides?: Partial<FieldTypeCo
     }
   };
 };
+
+// Utility function to get CSS class for field type
+export const getFieldClass = (fieldType: FieldType): string => {
+  switch (fieldType) {
+    case 'currency':
+      return 'field-currency';
+    case 'percentage':
+      return 'field-percentage';
+    case 'years':
+      return 'field-years';
+    case 'number':
+      return 'field-number';
+    case 'text':
+      return 'field-text';
+    case 'email':
+      return 'field-email';
+    case 'phone':
+      return 'field-phone';
+    case 'textarea':
+      return 'field-textarea';
+    default:
+      return 'table-input';
+  }
+};
+
+// Utility function to get field width CSS
+export const getFieldWidth = (fieldType: FieldType): string => {
+  const config = defaultFieldTypes[fieldType] || defaultFieldTypes.text;
+  const minWidth = config.inputProps?.minWidth || '100px';
+  const maxWidth = config.inputProps?.maxWidth || '200px';
+  return `min-width: ${minWidth}; max-width: ${maxWidth};`;
+};
