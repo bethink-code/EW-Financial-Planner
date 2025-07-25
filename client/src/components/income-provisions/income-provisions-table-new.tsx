@@ -23,7 +23,12 @@ export default function IncomeProvisionsTable({ viewMode, searchTerm }: IncomePr
     const taxPercentage = parseFloat(provision.taxPercentage?.replace(/[^\d.-]/g, '') || '0') / 100;
     const taxRate = parseFloat(provision.taxRate?.replace(/[^\d.-]/g, '') || '0') / 100;
     
-    if (amount <= 0 || termYears <= 0) return 'R 0';
+    console.log('Calculation inputs:', { amount, termYears, increaseRate, taxPercentage, taxRate });
+    
+    if (amount <= 0 || termYears <= 0) {
+      console.log('Returning R 0 due to invalid inputs');
+      return 'R 0';
+    }
     
     // Use standard financial planning assumptions
     const discountRate = provision.cpi ? 0.06 : 0.08; // 6% if CPI-linked, 8% otherwise
@@ -49,7 +54,12 @@ export default function IncomeProvisionsTable({ viewMode, searchTerm }: IncomePr
     const combinedTaxRate = taxPercentage + taxRate - (taxPercentage * taxRate); // Combined tax effect
     const netPresentValue = presentValue * (1 - combinedTaxRate);
     
-    return formatCurrencyValue(Math.round(netPresentValue).toString());
+    console.log('Calculation result:', { presentValue, combinedTaxRate, netPresentValue });
+    
+    const result = formatCurrencyValue(Math.round(netPresentValue).toString());
+    console.log('Formatted result:', result);
+    
+    return result;
   }, []);
 
   // Query for income provisions
