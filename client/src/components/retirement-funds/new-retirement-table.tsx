@@ -252,14 +252,15 @@ export function NewRetirementTable({
                         className={`table-input ${getFieldClass('text')} flex-1`}
                         onBlur={(e) => handleOwnerChange(fund.id, rowIndex, e.target.value)}
                       />
-                      <button
-                        onClick={() => handleAddOwner(fund.id)}
-                        className="p-0.5 text-blue-600 hover:bg-blue-50 rounded"
-                        title="Add Owner"
-                      >
-                        <UserPlus className="h-3 w-3" />
-                      </button>
-                      {rowIndex > 0 && (
+                      {rowIndex === 0 ? (
+                        <button
+                          onClick={() => handleAddOwner(fund.id)}
+                          className="p-0.5 text-blue-600 hover:bg-blue-50 rounded"
+                          title="Add Owner"
+                        >
+                          <UserPlus className="h-3 w-3" />
+                        </button>
+                      ) : (
                         <button
                           onClick={() => handleRemoveOwner(fund.id, rowIndex)}
                           className="p-0.5 text-red-600 hover:bg-red-50 rounded"
@@ -302,14 +303,15 @@ export function NewRetirementTable({
                           onFieldUpdate(fund.id, 'unapprovedBeneficiaries', updatedBeneficiaries);
                         }}
                       />
-                      <button
-                        onClick={() => handleAddUnapprovedBeneficiary(fund.id)}
-                        className="p-0.5 text-blue-600 hover:bg-blue-50 rounded"
-                        title="Add Beneficiary"
-                      >
-                        <Plus className="h-3 w-3" />
-                      </button>
-                      {rowIndex > 0 && (
+                      {rowIndex === 0 ? (
+                        <button
+                          onClick={() => handleAddUnapprovedBeneficiary(fund.id)}
+                          className="p-0.5 text-blue-600 hover:bg-blue-50 rounded"
+                          title="Add Beneficiary"
+                        >
+                          <Plus className="h-3 w-3" />
+                        </button>
+                      ) : (
                         <button
                           onClick={() => handleRemoveUnapprovedBeneficiary(fund.id, rowIndex)}
                           className="p-0.5 text-red-600 hover:bg-red-50 rounded"
@@ -470,14 +472,15 @@ export function NewRetirementTable({
                           onFieldUpdate(fund.id, 'fundValueBeneficiaries', updatedBeneficiaries);
                         }}
                       />
-                      <button
-                        onClick={() => handleAddFundValueBeneficiary(fund.id)}
-                        className="p-0.5 text-blue-600 hover:bg-blue-50 rounded"
-                        title="Add Beneficiary"
-                      >
-                        <Plus className="h-3 w-3" />
-                      </button>
-                      {rowIndex > 0 && (
+                      {rowIndex === 0 ? (
+                        <button
+                          onClick={() => handleAddFundValueBeneficiary(fund.id)}
+                          className="p-0.5 text-blue-600 hover:bg-blue-50 rounded"
+                          title="Add Beneficiary"
+                        >
+                          <Plus className="h-3 w-3" />
+                        </button>
+                      ) : (
                         <button
                           onClick={() => handleRemoveFundValueBeneficiary(fund.id, rowIndex)}
                           className="p-0.5 text-red-600 hover:bg-red-50 rounded"
