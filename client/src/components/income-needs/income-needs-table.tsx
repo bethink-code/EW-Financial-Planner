@@ -305,7 +305,7 @@ export default function IncomeNeedsTable({ viewMode, searchTerm }: IncomeNeedsTa
                 <select
                   value={need.frequency || "monthly"}
                   onChange={(e) => handleSelectChange(need.id, 'frequency', e.target.value)}
-                  className={`table-input ${getFieldClass('text')} text-black`}
+                  className="w-full h-8 px-2 py-1 text-sm border border-gray-300 rounded bg-white"
                   disabled={isUpdating}
                   style={{ color: '#000000' }}
                 >
