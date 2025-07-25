@@ -56,8 +56,9 @@ export function NewRetirementTable({
 
   const handleRemoveOwner = useCallback((fundId: number, ownerIndex: number) => {
     const fund = funds.find(f => f.id === fundId);
-    if (!fund || fund.owners.length <= 1) return;
-    const updatedOwners = fund.owners.filter((_, index) => index !== ownerIndex);
+    if (!fund || fund.owners.length <= 1 || ownerIndex === 0) return; // Protect first owner
+    const updatedOwners = [...fund.owners];
+    updatedOwners.splice(ownerIndex, 1); // Remove specific index
     onFieldUpdate(fundId, 'owners', updatedOwners);
   }, [funds, onFieldUpdate]);
 
@@ -83,10 +84,15 @@ export function NewRetirementTable({
 
   const handleRemoveUnapprovedBeneficiary = useCallback((fundId: number, beneficiaryIndex: number) => {
     const fund = funds.find(f => f.id === fundId);
-    if (!fund || fund.unapprovedBeneficiaries.length <= 1) return;
-    const updatedBeneficiaries = fund.unapprovedBeneficiaries.filter((_, index) => index !== beneficiaryIndex);
-    const updatedSplits = fund.unapprovedPercentageSplits.filter((_, index) => index !== beneficiaryIndex);
-    const updatedCoverSplits = fund.unapprovedCoverSplits.filter((_, index) => index !== beneficiaryIndex);
+    if (!fund || fund.unapprovedBeneficiaries.length <= 1 || beneficiaryIndex === 0) return; // Protect first beneficiary
+    const updatedBeneficiaries = [...fund.unapprovedBeneficiaries];
+    const updatedSplits = [...fund.unapprovedPercentageSplits];
+    const updatedCoverSplits = [...fund.unapprovedCoverSplits];
+    
+    updatedBeneficiaries.splice(beneficiaryIndex, 1); // Remove specific index
+    updatedSplits.splice(beneficiaryIndex, 1);
+    updatedCoverSplits.splice(beneficiaryIndex, 1);
+    
     onFieldUpdate(fundId, 'unapprovedBeneficiaries', updatedBeneficiaries);
     onFieldUpdate(fundId, 'unapprovedPercentageSplits', updatedSplits);
     onFieldUpdate(fundId, 'unapprovedCoverSplits', updatedCoverSplits);
@@ -106,10 +112,15 @@ export function NewRetirementTable({
 
   const handleRemoveFundValueBeneficiary = useCallback((fundId: number, beneficiaryIndex: number) => {
     const fund = funds.find(f => f.id === fundId);
-    if (!fund || fund.fundValueBeneficiaries.length <= 1) return;
-    const updatedBeneficiaries = fund.fundValueBeneficiaries.filter((_, index) => index !== beneficiaryIndex);
-    const updatedSplits = fund.fundValuePercentageSplits.filter((_, index) => index !== beneficiaryIndex);
-    const updatedCoverSplits = fund.fundValueCoverSplits.filter((_, index) => index !== beneficiaryIndex);
+    if (!fund || fund.fundValueBeneficiaries.length <= 1 || beneficiaryIndex === 0) return; // Protect first beneficiary
+    const updatedBeneficiaries = [...fund.fundValueBeneficiaries];
+    const updatedSplits = [...fund.fundValuePercentageSplits];
+    const updatedCoverSplits = [...fund.fundValueCoverSplits];
+    
+    updatedBeneficiaries.splice(beneficiaryIndex, 1); // Remove specific index
+    updatedSplits.splice(beneficiaryIndex, 1);
+    updatedCoverSplits.splice(beneficiaryIndex, 1);
+    
     onFieldUpdate(fundId, 'fundValueBeneficiaries', updatedBeneficiaries);
     onFieldUpdate(fundId, 'fundValuePercentageSplits', updatedSplits);
     onFieldUpdate(fundId, 'fundValueCoverSplits', updatedCoverSplits);
