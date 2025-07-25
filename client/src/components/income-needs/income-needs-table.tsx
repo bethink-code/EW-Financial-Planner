@@ -4,7 +4,7 @@ import { queryClient } from '@/lib/queryClient';
 import { IncomeNeeds, InsertIncomeNeeds } from '@shared/schema';
 import { ActionButtonGroup, DuplicateButton, DeleteButton, AddButton } from '@/components/ui/action-buttons';
 import { getFieldClass } from '@/lib/field-types';
-import { formatCurrencyValue, formatPercentageValue, formatTextValue, formatNumberValue, isDefaultValue, getValueClass } from '@/lib/formatting';
+import { formatCurrencyValue, formatPercentageValue, formatTextValue, formatNumberValue, isDefaultValue, getValueClass, parseCurrencyValue } from '@/lib/formatting';
 import { handleDefaultValueFocus, createEnhancedBlurHandler } from '@/lib/formatting';
 
 interface IncomeNeedsTableProps {
@@ -14,6 +14,37 @@ interface IncomeNeedsTableProps {
 
 export default function IncomeNeedsTable({ viewMode, searchTerm }: IncomeNeedsTableProps) {
   const [isUpdating, setIsUpdating] = useState(false);
+
+  // Calculate capitalised amount for a single income need
+  const calculateCapitalisedAmount = useCallback((need: IncomeNeeds): string => {
+    const amount = parseCurrencyValue(need.amount || '0');
+    const termYears = parseFloat(need.termYears?.replace(/[^\d.-]/g, '') || '0');
+    const increaseRate = parseFloat(need.increasePercentage?.replace(/[^\d.-]/g, '') || '0') / 100;
+    
+    if (amount <= 0 || termYears <= 0) return 'R 0';
+    
+    // Use standard financial planning assumptions
+    const discountRate = need.cpi ? 0.06 : 0.08; // 6% if CPI-linked, 8% otherwise
+    const frequency = need.frequency === 'monthly' ? 12 : need.frequency === 'quarterly' ? 4 : 1;
+    const periodsPerYear = frequency;
+    const totalPeriods = termYears * periodsPerYear;
+    const periodicDiscountRate = discountRate / periodsPerYear;
+    const periodicIncreaseRate = increaseRate / periodsPerYear;
+    
+    let presentValue: number;
+    
+    if (Math.abs(periodicDiscountRate - periodicIncreaseRate) < 0.0001) {
+      // When discount rate equals increase rate, use simplified formula
+      presentValue = amount * totalPeriods;
+    } else {
+      // Present value of growing annuity formula
+      const netRate = periodicDiscountRate - periodicIncreaseRate;
+      const pvFactor = (1 - Math.pow((1 + periodicIncreaseRate) / (1 + periodicDiscountRate), totalPeriods)) / netRate;
+      presentValue = amount * pvFactor;
+    }
+    
+    return formatCurrencyValue(Math.round(presentValue).toString());
+  }, []);
 
   // Query for income needs
   const { data: needs = [], isLoading, error } = useQuery<IncomeNeeds[]>({
@@ -316,7 +347,7 @@ export default function IncomeNeedsTable({ viewMode, searchTerm }: IncomeNeedsTa
               <td className="p-1 section-end">
                 <input
                   type="text"
-                  value={need.capitalisedAmount || 'R 0'}
+                  value={calculateCapitalisedAmount(need)}
                   className="calculated-field"
                   readOnly
                   tabIndex={-1}
