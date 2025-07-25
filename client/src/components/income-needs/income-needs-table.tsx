@@ -315,9 +315,13 @@ export default function IncomeNeedsTable({ viewMode, searchTerm }: IncomeNeedsTa
               
               {/* Capitalised Amount (Calculated) */}
               <td className="p-1 section-end">
-                <div className="table-input bg-gray-100 text-gray-700 font-medium cursor-not-allowed">
-                  {need.capitalisedAmount || 'R 0'}
-                </div>
+                <input
+                  type="text"
+                  value={need.capitalisedAmount || 'R 0'}
+                  className={`table-input ${getFieldClass('currency')} ${getValueClass(need.capitalisedAmount || 'R 0', 'currency')}`}
+                  readOnly
+                  disabled={isUpdating}
+                />
               </td>
             </tr>
           ))}
