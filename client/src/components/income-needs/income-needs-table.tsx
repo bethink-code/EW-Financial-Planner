@@ -179,12 +179,12 @@ export default function IncomeNeedsTable({ viewMode, searchTerm }: IncomeNeedsTa
             <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center border-b border-neutral-200"></th>
             <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start border-b border-neutral-200">Description</th>
             <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center border-b border-neutral-200">Person Name</th>
-            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start border-b border-neutral-200">Start</th>
+            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start border-b border-neutral-200">Amount</th>
+            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center border-b border-neutral-200">Start</th>
             <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center border-b border-neutral-200">Term (years)</th>
             <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center border-b border-neutral-200">Increase %</th>
             <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center border-b border-neutral-200">CPI</th>
             <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center border-b border-neutral-200">Frequency</th>
-            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center border-b border-neutral-200">Amount</th>
             <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-end border-b border-neutral-200">Capitalised Amount</th>
           </tr>
         </thead>
@@ -235,8 +235,21 @@ export default function IncomeNeedsTable({ viewMode, searchTerm }: IncomeNeedsTa
               </td>
               
               {/* Income Need Details Section */}
-              {/* Start Date */}
+              {/* Amount */}
               <td className="p-1 section-start">
+                <input
+                  key={`amount-${need.id}-${need.amount}`}
+                  type="text"
+                  defaultValue={need.amount}
+                  className={`table-input ${getFieldClass('currency')} ${getValueClass(need.amount, 'currency')}`}
+                  onFocus={handleDefaultValueFocus}
+                  onBlur={(e) => handleInputBlur(need.id, 'amount', e.target.value, e.target)}
+                  disabled={isUpdating}
+                />
+              </td>
+              
+              {/* Start Date */}
+              <td className="p-1">
                 <input
                   key={`startDate-${need.id}-${need.startDate}`}
                   type="text"
@@ -298,19 +311,6 @@ export default function IncomeNeedsTable({ viewMode, searchTerm }: IncomeNeedsTa
                   <option value="monthly">Monthly</option>
                   <option value="yearly">Yearly</option>
                 </select>
-              </td>
-              
-              {/* Amount */}
-              <td className="p-1">
-                <input
-                  key={`amount-${need.id}-${need.amount}`}
-                  type="text"
-                  defaultValue={need.amount}
-                  className={`table-input ${getFieldClass('currency')} ${getValueClass(need.amount, 'currency')}`}
-                  onFocus={handleDefaultValueFocus}
-                  onBlur={(e) => handleInputBlur(need.id, 'amount', e.target.value, e.target)}
-                  disabled={isUpdating}
-                />
               </td>
               
               {/* Capitalised Amount */}
