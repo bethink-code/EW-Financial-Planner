@@ -5,36 +5,27 @@ import { z } from "zod";
 export const retirementFunds = pgTable("retirement_funds", {
   id: serial("id").primaryKey(),
   
-  // Overview section
+  // Overview section - Description and Owner only
   description: text("description").notNull(),
   owner: text("owner").notNull(),
   additionalOwners: text("additional_owners").array().notNull().default([]),
-  coverAmount: text("cover_amount").notNull().default("0"),
   
-  // Unapproved life cover section
+  // Unapproved life cover section - Cover Amount, Term (Years), Increase %, Approved Life Cover
+  coverAmount: text("cover_amount").notNull().default("0"),
   termYears: text("term_years").notNull().default("0"),
-  increasePercentage: text("increase_percentage").notNull().default("0"),
+  increasePercentage: text("increase_percentage").notNull().default("0%"),
   approvedLifeCover: text("approved_life_cover").notNull().default("0"),
   
-  // Monthly death benefit section
+  // Monthly death benefit section - Fund Value, Fund Value at Death
   fundValue: text("fund_value").notNull().default("0"),
   fundValueAtDeath: text("fund_value_at_death").notNull().default("0"),
   
-  // Fund value section
+  // Fund Value section - Name
   name: text("name").notNull().default(""),
-  amount: text("amount").notNull().default("0"),
   
-  // Fund value beneficiaries section
-  lumpSumTaken: text("lump_sum_taken").notNull().default("0"),
-  fundValueAfterLumpSum: text("fund_value_after_lump_sum").notNull().default("0"),
-  nondeductibleContribution: text("nondeductible_contribution").notNull().default("0"),
-  livingAnnuity: text("living_annuity").notNull().default("0"),
-  monthlyIncomeTerm: text("monthly_income_term").notNull().default("0"),
-  incomeTerm: text("income_term").notNull().default("0"),
-  
-  // For multiple beneficiaries functionality
+  // Additional fields for multiple beneficiaries functionality (following your original structure)
   beneficiary: text("beneficiary").notNull().default(""),
-  benefitSplit: text("benefit_split").notNull().default("0"),
+  benefitSplit: text("benefit_split").notNull().default("0%"),
   additionalBeneficiaries: text("additional_beneficiaries").array().notNull().default([]),
   additionalBenefitSplits: text("additional_benefit_splits").array().notNull().default([]),
 });
