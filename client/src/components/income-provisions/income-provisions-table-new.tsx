@@ -374,6 +374,48 @@ export default function IncomeProvisionsTable({ viewMode, searchTerm }: IncomePr
             );
           })}
         </tbody>
+        
+        {/* Totals Footer */}
+        <tfoot className="bg-neutral-50 border-t-2 border-neutral-300">
+          <tr className="font-bold">
+            <td className="p-1 text-center text-xs font-bold text-neutral-700"></td>
+            <td className="p-1 text-center text-xs font-bold text-neutral-700">Totals</td>
+            <td className="p-1"></td>
+            <td className="p-1"></td>
+            <td className="p-1"></td>
+            <td className="p-1"></td>
+            <td className="p-1"></td>
+            <td className="p-1"></td>
+            <td className="p-1"></td>
+            <td className="p-1 text-center">
+              <span className="text-xs font-bold text-neutral-900">
+                R {filteredProvisions.reduce((sum, provision) => {
+                  const capitalisedAmount = parseFloat(calculateCapitalisedAmount(provision).replace(/[^\d.-]/g, '')) || 0;
+                  return sum + capitalisedAmount;
+                }, 0).toLocaleString()}
+              </span>
+            </td>
+          </tr>
+          <tr className="font-bold">
+            <td className="p-1"></td>
+            <td className="p-1 text-center text-xs font-bold text-neutral-700">Capital Required for Income Shortfall</td>
+            <td className="p-1"></td>
+            <td className="p-1"></td>
+            <td className="p-1"></td>
+            <td className="p-1"></td>
+            <td className="p-1"></td>
+            <td className="p-1"></td>
+            <td className="p-1"></td>
+            <td className="p-1 text-center">
+              <span className="text-xs font-bold text-neutral-900">
+                R {filteredProvisions.reduce((sum, provision) => {
+                  const capitalisedAmount = parseFloat(calculateCapitalisedAmount(provision).replace(/[^\d.-]/g, '')) || 0;
+                  return sum + capitalisedAmount;
+                }, 0).toLocaleString()}
+              </span>
+            </td>
+          </tr>
+        </tfoot>
       </table>
     </div>
   );
