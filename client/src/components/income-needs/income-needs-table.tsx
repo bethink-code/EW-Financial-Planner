@@ -300,18 +300,17 @@ export default function IncomeNeedsTable({ viewMode, searchTerm }: IncomeNeedsTa
                 </div>
               </td>
               
-              {/* Frequency Dropdown */}
+              {/* Frequency Input */}
               <td className="p-1">
-                <select
-                  key={`frequency-${need.id}-${need.frequency || 'monthly'}`}
+                <input
+                  key={`frequency-${need.id}-${need.frequency}`}
+                  type="text"
                   defaultValue={need.frequency || "monthly"}
                   onBlur={(e) => handleSelectChange(need.id, 'frequency', e.target.value)}
-                  className={`table-input ${getFieldClass('text')} entered-value`}
+                  className={`table-input ${getFieldClass('text')} ${getValueClass(need.frequency || "monthly", 'text')}`}
                   disabled={isUpdating}
-                >
-                  <option value="monthly">Monthly</option>
-                  <option value="yearly">Yearly</option>
-                </select>
+                  placeholder="monthly"
+                />
               </td>
               
               {/* Capitalised Amount */}
