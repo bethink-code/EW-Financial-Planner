@@ -131,103 +131,41 @@ export class MemStorage implements IStorage {
     
     // Initialize with sample data
     this.createRetirementFund({
-      // Overview
       description: "Total Pension Fund",
       owner: "John Doe",
       coverAmount: "R 500,000",
-      
-      // Unapproved life cover - dynamic beneficiaries
-      beneficiaries: JSON.stringify([
-        { id: "1", name: "Spouse", percentage: 100, coverSplit: "R 500,000" }
-      ]),
-      
-      // Monthly death benefit
-      monthlyIncome: "R 5,000",
-      termYears: "10 years",
+      termYears: "10",
       increasePercentage: "5%",
-      approvedLifeCover: "R 250,000",
+      approvedLifeCover: "R 500,000",
       fundValue: "R 180,000",
       fundValueAtDeath: "R 200,000",
-      
-      // Fund value beneficiaries
-      beneficiaryName: "Sarah Doe",
-      beneficiaryPercentageSplit: "60%",
+      name: "Sarah Doe",
       amount: "R 150,000",
       lumpSumTaken: "R 25,000",
+      fundValueAfterLumpSum: "R 125,000",
       nondeductibleContribution: "R 10,000",
       livingAnnuity: "R 120,000",
-      incomeTerm: "20 years",
-
-      // Flows mode fields
-      lumpSumProvisionEstate: "R 300,000",
-      lumpSumProvisionSpouse: "R 200,000", 
-      lumpSumProvisionOther: "R 150,000",
-      incomeProvisionOption: "Income guarantee",
-      monthlyProvisionOffered: "R 4,500",
-      currentAnnualIncome: "R 54,000",
-      annualIncomeAtDeath: "R 60,000",
-      estateDeploymentDeceased: "R 45,000",
-      incomeEscalation: "3%",
-      executorsFee: "3.5%",
-      mastersFee: "1.75%",
-      
-      // Estate duty percentages
-      estateDutyPoliciesOnLife: "20%",
-      estateDutyToSpouse: "0%", 
-      estateDutyToOthers: "20%"
+      monthlyIncome: "R 5,000",
+      incomeTerm: "20"
     });
     
     this.createRetirementFund({
-      // Overview
       description: "Provident Fund",
       owner: "Jane Smith",
-      coverAmount: "R 20,000,000",
-      
-      // Unapproved life cover - dynamic beneficiaries
-      beneficiaries: JSON.stringify([
-        { id: "1", name: "Tom Smith", percentage: 50, coverSplit: "R 175,000" },
-        { id: "2", name: "Anna Smith", percentage: 50, coverSplit: "R 175,000" }
-      ]),
-      
-      // Monthly death benefit
-      monthlyIncome: "R 3,500",
-      termYears: "15 years",
-      increasePercentage: "4%",
+      coverAmount: "R 700,000",
+      termYears: "15",
+      increasePercentage: "4%", 
       approvedLifeCover: "R 175,000",
       fundValue: "R 120,000",
       fundValueAtDeath: "R 140,000",
-      
-      // Fund value beneficiaries
-      beneficiaryName: "Tom Smith",
-      beneficiaryPercentageSplit: "40%",
+      name: "Tom Smith",
       amount: "R 100,000",
       lumpSumTaken: "R 15,000",
+      fundValueAfterLumpSum: "R 85,000",
       nondeductibleContribution: "R 8,000",
       livingAnnuity: "R 85,000",
-      incomeTerm: "25 years",
-
-      // Flows mode fields
-      lumpSumProvisionEstate: "R 250,000",
-      lumpSumProvisionSpouse: "R 180,000",
-      lumpSumProvisionOther: "R 120,000", 
-      incomeProvisionOption: "Fixed income",
-      monthlyProvisionOffered: "R 3,200",
-      currentAnnualIncome: "R 38,400",
-      annualIncomeAtDeath: "R 42,000",
-      estateDeploymentDeceased: "R 35,000",
-      incomeEscalation: "0%",
-      executorsFee: "3.5%",
-      mastersFee: "1.75%",
-      
-      // Estate duty percentages
-      estateDutyPoliciesOnLife: "10%",
-      estateDutyToSpouse: "0%", 
-      estateDutyToOthers: "15%",
-      
-      // Additional fields shown below table in inputs mode
-      lumpSumDeath: "0",
-      previousLumpSums: "0",
-      additionalTaxFreeAmount: "0"
+      monthlyIncome: "R 3,500",
+      incomeTerm: "25"
     });
 
     // Initialize sample lump sum bequests
