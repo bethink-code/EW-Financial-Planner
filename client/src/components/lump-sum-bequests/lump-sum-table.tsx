@@ -218,9 +218,9 @@ export function LumpSumTable({ viewMode, searchTerm }: LumpSumTableProps) {
                 <input
                   type="text"
                   defaultValue={bequest.description}
-                  onBlur={(e) => handleInputBlur(bequest.id, 'description', e.target.value)}
+                  onBlur={createEnhancedBlurHandler((value) => handleInputBlur(bequest.id, 'description', value), 'text')}
                   onFocus={handleDefaultValueFocus}
-                  className={`table-input ${getFieldClass('text')} ${getValueClass(bequest.description)}`}
+                  className={`table-input ${getFieldClass('text')} ${getValueClass(bequest.description, 'text')}`}
                   data-field={`description-${bequest.id}`}
                   disabled={isUpdating}
                 />
@@ -231,9 +231,9 @@ export function LumpSumTable({ viewMode, searchTerm }: LumpSumTableProps) {
                 <input
                   type="text"
                   defaultValue={bequest.entity}
-                  onBlur={(e) => handleInputBlur(bequest.id, 'entity', e.target.value)}
+                  onBlur={createEnhancedBlurHandler((value) => handleInputBlur(bequest.id, 'entity', value), 'text')}
                   onFocus={handleDefaultValueFocus}
-                  className={`table-input ${getFieldClass('text')} ${getValueClass(bequest.entity)}`}
+                  className={`table-input ${getFieldClass('text')} ${getValueClass(bequest.entity, 'text')}`}
                   data-field={`entity-${bequest.id}`}
                   disabled={isUpdating}
                 />
@@ -244,9 +244,9 @@ export function LumpSumTable({ viewMode, searchTerm }: LumpSumTableProps) {
                 <input
                   type="text"
                   defaultValue={bequest.start}
-                  onBlur={(e) => handleInputBlur(bequest.id, 'start', e.target.value)}
+                  onBlur={createEnhancedBlurHandler((value) => handleInputBlur(bequest.id, 'start', value), 'text')}
                   onFocus={handleDefaultValueFocus}
-                  className={`table-input ${getFieldClass('text')} ${getValueClass(bequest.start)}`}
+                  className={`table-input ${getFieldClass('text')} ${getValueClass(bequest.start, 'text')}`}
                   data-field={`start-${bequest.id}`}
                   disabled={isUpdating}
                 />
@@ -257,7 +257,7 @@ export function LumpSumTable({ viewMode, searchTerm }: LumpSumTableProps) {
                 <input
                   type="text"
                   defaultValue={bequest.amount}
-                  onBlur={(e) => handleInputBlur(bequest.id, 'amount', e.target.value)}
+                  onBlur={createEnhancedBlurHandler((value) => handleInputBlur(bequest.id, 'amount', value), 'currency')}
                   onFocus={handleDefaultValueFocus}
                   className={`table-input ${getFieldClass('currency')} ${getValueClass(bequest.amount)} text-right`}
                   data-field={`amount-${bequest.id}`}
@@ -270,7 +270,7 @@ export function LumpSumTable({ viewMode, searchTerm }: LumpSumTableProps) {
                 <input
                   type="text"
                   defaultValue={bequest.increasePercentage}
-                  onBlur={createEnhancedBlurHandler((value) => handleInputBlur(bequest.id, 'increasePercentage', value))}
+                  onBlur={createEnhancedBlurHandler((value) => handleInputBlur(bequest.id, 'increasePercentage', value), 'percentage')}
                   onFocus={handleDefaultValueFocus}
                   className={`table-input ${getFieldClass('percentage')} ${getValueClass(bequest.increasePercentage)} text-right`}
                   data-field={`increasePercentage-${bequest.id}`}

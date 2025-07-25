@@ -1,0 +1,317 @@
+
+image.png
+I am trying to brief replit to create a table in an app the first iamge uplaoded is the able I am trying to recreate.
+
+The second image is the prompt that I ahve been using to ask replit to build the table.
+
+POlease give me the prompt for replitNeed to create th table for Lump sum needs and cash bequests Should be ACTIONS (SECTION)
+* Duplicate
+* Delete
+OVERVIEW (SECTION)
+* Description (Text / Editable)
+* Entity (Text / Editable)
+NEED DETAILS (NEW SECTION)
+* Start (Date / Editable)
+* Amount (Currency) / Editable)
+* Increase % (Percentage/ Editable)
+* CPI (Checkbox)
+* Value at death (Currency) / Calculated)
+Please style as per the other tables Use Income needs as a temaplte
+
+Edit
+Looking at your liabilities table and requirements, here's a comprehensive prompt for Replit to create the "Lump sum needs and cash bequests" table:
+
+Create a new table component for "Lump sum needs and cash bequests" that matches the styling and functionality of the existing Income needs table. The table should have the following structure:
+
+ACTIONS SECTION:
+- Add action buttons for "Duplicate" and "Delete" for each row
+- These should be icon buttons that appear on hover or when the row is selected
+
+OVERVIEW SECTION:
+- Description (Text field, editable inline)
+- Entity (Text field, editable inline) 
+
+NEED DETAILS SECTION:
+- Start (Date picker, editable)
+- Amount (Currency input with ZAR prefix, editable, format with thousand separators)
+- Increase % (Percentage input, editable, show % symbol)
+- CPI (Checkbox, clickable)
+- Value at death (Currency field, calculated/read-only, show ZAR prefix with formatting)
+
+TABLE STYLING:
+- Match the exact styling of the Income needs table including:
+  - Gray section headers with proper padding
+  - White row backgrounds with hover effects
+  - Proper column spacing and alignment
+  - Currency values right-aligned
+  - Checkboxes centered in their columns
+  - Input fields with subtle borders that appear on focus
+  - Consistent font sizes and colors
+
+FUNCTIONALITY:
+- Add new row button at the bottom
+- Inline editing for all editable fields
+- Value at death should be automatically calculated based on Amount, Increase %, and CPI
+- Support for multiple rows
+- Row hover effects to show action buttons
+- Proper input validation for currency and percentage fields
+
+Make sure to use the same component structure, CSS classes, and styling patterns as the existing tables in the application for consistency.
+This prompt provides clear specifications for the table structure, styling requirements, and functionality while referencing the Income needs table as a template for consistency.
+
+
+
+
+image.png
+OK that was an existing table .. the new table I would like REpit to build is
+
+Edit
+Looking at the existing liabilities table structure, here's a prompt for Replit to create the new "Lump sum needs and cash bequests" table:
+
+Create a new table for "Lump sum needs and cash bequests" that follows the exact same design pattern as the Liabilities table shown. The table should have:
+
+HEADER:
+- Title: "LUMP SUM NEEDS AND CASH BEQUESTS" in the same style as "LIABILITIES"
+- Summary totals row showing column totals
+
+TABLE STRUCTURE:
+Three main sections with gray header rows:
+1. "Actions" section
+2. "Overview" section  
+3. "Need details" section
+
+COLUMNS (left to right):
+- Incl? (checkbox with hover icons for delete/duplicate actions)
+- Category and description (text input field)
+- Start (date picker dropdown)
+- Amount (currency input, right-aligned)
+- Increase % (percentage input, right-aligned)
+- CPI (checkbox)
+- Value at death (calculated field, right-aligned, read-only with gray background)
+
+STYLING REQUIREMENTS:
+- Match the exact styling of the Liabilities table:
+  - Same gray section headers (#f5f5f5 background)
+  - White row backgrounds
+  - Right-aligned numeric values
+  - Currency formatting with thousand separators
+  - Same input field styles with borders on focus
+  - Dropdown arrows for date fields
+  - Same checkbox styling
+  - Calculated fields with gray background
+  - Plus button (+) to add new rows
+  - Delete and duplicate icons on row hover
+
+FUNCTIONALITY:
+- Add row button at bottom of each category
+- Inline editing for all fields
+- Value at death calculation based on Amount, Increase %, and CPI
+- Row selection with checkbox
+- Hover actions for delete/duplicate
+- Summary totals update automatically
+
+Use the same CSS classes, component structure, and interaction patterns as the Liabilities table for complete consistency.
+
+
+
+This is for the new Liabilities table
+
+Edit
+I understand now. Here's the prompt for Replit to build the new Liabilities table based on the image you've shown:
+
+Create a Liabilities table with the following exact structure and styling:
+
+HEADER:
+- Title: "LIABILITIES" (left-aligned, uppercase)
+- Summary row showing totals: 1 445 000, 1 380 000, 65 000, 0, 0, 1 380 000, 0, 65 000
+
+TABLE SECTIONS AND ROWS:
+
+1. Main column headers:
+   - Incl? (checkbox column)
+   - Category and description
+   - Currency (dropdown)
+   - Debt amount
+   - Peter Lambie
+   - Victoria Lambie (Spouse)
+   - Junior Lambie
+   - Lambie's family trust
+   - Estate
+   - Others
+   - Client
+
+2. Sub-headers:
+   - "Owner(s)" spanning Peter through family trust columns
+   - "Client's liabilities settled by" spanning Estate and Others
+   - "Others' liabilities settled by" for Client column
+
+3. Data rows:
+   a. BONDS section (gray header):
+      - Bond: ZAR, 580 000, Peter: 100, Victoria: 0, Total: 580 000
+      - Bond on My Home: ZAR, 800 000, Peter: 100, Victoria: 0, Total: 800 000
+   
+   b. HIRE PURCHASES AND LEASES section (gray header):
+      - Empty row with all zeros
+   
+   c. OVERDRAFTS AND CREDIT CARDS section (gray header):
+      - Row with 65 000 debt amount, Victoria: 100, Client: 65 000
+   
+   d. SHORT TERM DEBT section:
+      - Short term debt Victoria: ZAR, 65 000, Victoria: 100, Client: 65 000
+   
+   e. OTHER DEBT section (gray header):
+      - Empty row with all zeros
+
+STYLING:
+- Gray section headers (#f5f5f5)
+- White data rows
+- Right-aligned numbers with thousand separators (space separator)
+- Dropdown arrows for currency fields
+- Checkboxes with hover actions (delete/duplicate icons)
+- Input fields with subtle borders on focus
+- Plus (+) button for adding rows within sections
+- Consistent padding and spacing matching the screenshot
+
+FUNCTIONALITY:
+- All numeric fields are editable inputs
+- Currency dropdowns functional
+- Checkboxes for row selection
+- Automatic calculation of totals
+- Add/delete/duplicate row functionality
+
+
+
+Most importantly - use exu=isting aptterns - do not treat thei s as a new request but an adiditonal table
+
+Edit
+You're right. Here's a more concise prompt that emphasizes using existing patterns:
+
+Add a new "Liabilities" table to the existing application using the EXACT same patterns, components, and styling as the other financial tables already in the codebase.
+
+Copy the existing table structure and modify it for Liabilities with these columns:
+- Incl? (checkbox with hover actions)
+- Category and description
+- Currency (dropdown)
+- Debt amount
+- Peter Lambie
+- Victoria Lambie (Spouse)
+- Junior Lambie
+- Lambie's family trust
+- Estate
+- Others
+- Client
+
+Section headers:
+- Bonds
+- Hire purchases and leases
+- Overdrafts and credit cards
+- Short term debt
+- Other debt
+
+Use the same:
+- Table component structure
+- CSS classes and styling
+- Input components
+- Validation patterns
+- State management approach
+- Add/delete/duplicate functionality
+- Summary calculations
+- Section headers styling
+
+DO NOT create new components or styles - reuse everything that already exists in the codebase. Simply extend the existing table pattern with these specific columns and sections for Liabilities.
+
+
+
+Impleklment using global stlyles in the CSS and minimise inliune stlyes
+
+Edit
+Here's the updated prompt emphasizing global CSS styles:
+
+Add a new "Liabilities" table using the EXISTING table patterns in the codebase.
+
+IMPORTANT: Use only global CSS classes from the stylesheet - NO inline styles. All styling should come from the existing CSS classes already defined for tables in the application.
+
+Table structure:
+- Reuse the existing table component
+- Apply the same global CSS classes used in other financial tables
+- Columns: Incl?, Category and description, Currency, Debt amount, Peter Lambie, Victoria Lambie (Spouse), Junior Lambie, Lambie's family trust, Estate, Others, Client
+
+Sections: Bonds, Hire purchases and leases, Overdrafts and credit cards, Short term debt, Other debt
+
+Required global CSS classes to use:
+- Table wrapper classes
+- Section header classes  
+- Row and cell classes
+- Input field classes
+- Checkbox classes
+- Button classes
+- Number formatting classes
+- Hover state classes
+
+DO NOT:
+- Add any style={} attributes
+- Create new CSS classes
+- Use inline styles
+
+DO:
+- Reference existing global CSS classes
+- Follow the className patterns from other tables
+- Maintain consistency with the design system
+
+The table should look identical to other tables because it uses the same global styles.
+
+
+
+There is a double structure in the heading with groups - please make sure that you brief replit with this, if there is no obvious double header category create one .. for example OVERview
+
+Edit
+Here's the updated prompt with emphasis on the double header structure:
+
+Add a new "Liabilities" table using EXISTING table patterns and global CSS classes only.
+
+CRITICAL: This table has a DOUBLE HEADER STRUCTURE with grouped columns:
+
+HEADER STRUCTURE:
+Row 1 (Main groups):
+- [Empty for first 4 columns]
+- "Owner(s)" (spanning Peter Lambie through Lambie's family trust)
+- [Empty]
+- "Client's liabilities settled by" (spanning Estate and Others)
+- "Others' liabilities settled by" (spanning Client)
+
+Row 2 (Column names):
+- Incl?
+- Category and description
+- Currency
+- Debt amount
+- Peter Lambie
+- Victoria Lambie (Spouse)
+- Junior Lambie
+- Lambie's family trust
+- Estate
+- Others
+- Client
+
+For any table without obvious groupings, CREATE logical group headers like:
+- "OVERVIEW" for basic info columns
+- "DETAILS" for specific data columns
+- Or other appropriate groupings
+
+Sections: Bonds, Hire purchases and leases, Overdrafts and credit cards, Short term debt, Other debt
+
+MUST:
+- Use existing table component with double header support
+- Apply global CSS classes for grouped headers (likely uses colspan)
+- Use existing CSS classes for all styling
+- NO inline styles
+- Maintain the visual hierarchy with proper header groupings
+
+The double header structure is ESSENTIAL for visual organization and must match the pattern shown in the image.
+
+
+
+
+
+
+
+
