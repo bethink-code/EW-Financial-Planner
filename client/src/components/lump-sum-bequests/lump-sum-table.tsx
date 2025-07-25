@@ -295,11 +295,10 @@ export function LumpSumTable({ viewMode, searchTerm }: LumpSumTableProps) {
               <td className="px-3 py-2 section-end">
                 <input
                   type="text"
-                  defaultValue={bequest.valueAtDeath}
-                  onBlur={(e) => handleInputBlur(bequest.id, 'valueAtDeath', e.target.value)}
-                  className={`table-input ${getFieldClass('currency')} text-right`}
-                  data-field={`valueAtDeath-${bequest.id}`}
-                  disabled={isUpdating}
+                  value={bequest.valueAtDeath || 'R 0'}
+                  className="calculated-field"
+                  readOnly
+                  tabIndex={-1}
                 />
               </td>
             </tr>

@@ -318,7 +318,7 @@ export default function IncomeNeedsTable({ viewMode, searchTerm }: IncomeNeedsTa
                 <input
                   type="text"
                   value={need.capitalisedAmount || 'R 0'}
-                  className={`${getFieldClass('currency')} entered-value select-none cursor-default calculated-field`}
+                  className="calculated-field"
                   readOnly
                   tabIndex={-1}
                 />
