@@ -544,6 +544,36 @@ th, td {
     opacity: 1 !important;
     color: #374151 !important;
   }
+
+  /* GLOBAL NUMERIC FIELD CELL ALIGNMENT */
+  /* Ensure all table cells containing numeric fields are right-aligned */
+  td.text-right,
+  th.text-right {
+    text-align: right !important;
+  }
+
+  /* Apply right-alignment to cells containing numeric field classes */
+  td:has(.field-currency),
+  td:has(.field-percentage), 
+  td:has(.field-years),
+  td:has(.field-number) {
+    text-align: right !important;
+  }
+
+  /* Apply right-alignment to cells containing numeric input types */
+  td:has(input[type="number"]),
+  td:has(input.field-currency),
+  td:has(input.field-percentage),
+  td:has(input.field-years),
+  td:has(input.field-number) {
+    text-align: right !important;
+  }
+
+  /* Ensure text fields remain left-aligned */
+  td:has(.field-text),
+  td:has(input[type="text"]:not(.field-currency):not(.field-percentage):not(.field-years):not(.field-number)) {
+    text-align: left !important;
+  }
 }
 
 /* Custom input styling for inline editing */

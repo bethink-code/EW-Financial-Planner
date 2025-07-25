@@ -2,7 +2,7 @@ import React, { useCallback, useMemo } from 'react';
 import { RetirementFund } from '@shared/schema';
 import { Plus, UserPlus, UserMinus, Trash2, Copy } from 'lucide-react';
 import { formatCurrencyValue, formatPercentageValue, formatTextValue, formatYearsValue, getValueClass, isDefaultValue, handleDefaultValueFocus, createEnhancedBlurHandler } from "@/lib/formatting";
-import { getFieldClass } from "@/lib/field-types";
+import { getFieldClass, getCellClass } from "@/lib/field-types";
 import { ActionButtonGroup, DuplicateButton, DeleteButton, AddButton } from "@/components/ui/action-buttons";
 
 interface NewRetirementTableProps {
@@ -597,41 +597,52 @@ export function NewRetirementTable({
             ));
           })}
           
-          {/* Totals Row */}
-          <tr className="border-t-2 border-border font-bold">
-            <td className="p-2 text-center font-bold text-sm section-start section-end">Totals</td>
-            <td className="p-2 section-start"></td>
-            <td className="p-2"></td>
-            <td className="p-2 font-bold text-sm section-start">
-              {formatTotal(totals.coverAmount)}
-            </td>
-            <td className="p-2"></td>
-            <td className="p-2"></td>
-            <td className="p-2"></td>
-            <td className="p-2 font-bold text-sm section-start">
-              {formatTotal(totals.monthlyIncome)}
-            </td>
-            <td className="p-2"></td>
-            <td className="p-2"></td>
-            <td className="p-2"></td>
-            <td className="p-2 font-bold text-sm section-start">
-              {formatTotal(totals.approvedLifeCover)}
-            </td>
-            <td className="p-2 font-bold text-sm">
-              {formatTotal(totals.fundValue)}
-            </td>
-            <td className="p-2 font-bold text-sm">
-              {formatTotal(totals.fundValueAtDeath)}
-            </td>
-            <td className="p-2 section-start"></td>
-            <td className="p-2"></td>
-            <td className="p-2"></td>
-            <td className="p-2"></td>
-            <td className="p-2"></td>
-            <td className="p-2"></td>
-            <td className="p-2 section-end"></td>
-          </tr>
         </tbody>
+        
+        {/* Totals Footer */}
+        <tfoot className="bg-neutral-50 border-t border-neutral-300">
+          <tr>
+            <td className="p-1 text-right text-neutral-700" colSpan={3} style={{ fontSize: '0.875rem' }}>Totals</td>
+            <td className="text-right" style={{ padding: '0.6rem 0.8rem' }}>
+              <span style={{ fontFamily: 'inherit', fontWeight: '600', color: '#374151', fontSize: '0.875rem' }}>
+                {formatTotal(totals.coverAmount)}
+              </span>
+            </td>
+            <td className="p-1"></td>
+            <td className="p-1"></td>
+            <td className="p-1"></td>
+            <td className="text-right" style={{ padding: '0.6rem 0.8rem' }}>
+              <span style={{ fontFamily: 'inherit', fontWeight: '600', color: '#374151', fontSize: '0.875rem' }}>
+                {formatTotal(totals.monthlyIncome)}
+              </span>
+            </td>
+            <td className="p-1"></td>
+            <td className="p-1"></td>
+            <td className="p-1"></td>
+            <td className="text-right" style={{ padding: '0.6rem 0.8rem' }}>
+              <span style={{ fontFamily: 'inherit', fontWeight: '600', color: '#374151', fontSize: '0.875rem' }}>
+                {formatTotal(totals.approvedLifeCover)}
+              </span>
+            </td>
+            <td className="text-right" style={{ padding: '0.6rem 0.8rem' }}>
+              <span style={{ fontFamily: 'inherit', fontWeight: '600', color: '#374151', fontSize: '0.875rem' }}>
+                {formatTotal(totals.fundValue)}
+              </span>
+            </td>
+            <td className="text-right" style={{ padding: '0.6rem 0.8rem' }}>
+              <span style={{ fontFamily: 'inherit', fontWeight: '600', color: '#374151', fontSize: '0.875rem' }}>
+                {formatTotal(totals.fundValueAtDeath)}
+              </span>
+            </td>
+            <td className="p-1"></td>
+            <td className="p-1"></td>
+            <td className="p-1"></td>
+            <td className="p-1"></td>
+            <td className="p-1"></td>
+            <td className="p-1"></td>
+            <td className="p-1"></td>
+          </tr>
+        </tfoot>
       </table>
     </div>
   );

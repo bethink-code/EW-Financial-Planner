@@ -2,6 +2,7 @@ import React, { useState, useCallback, useMemo } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { Plus, Trash2 } from "lucide-react";
 import { getFieldClass, getFieldWidth } from "@/lib/design-tokens";
+import { getCellClass } from "@/lib/field-types";
 import { formatCurrencyValue, getValueClass, isDefaultValue } from "@/lib/formatting";
 import { DeleteButton, DuplicateButton, ActionButtonGroup } from "@/components/ui/action-buttons";
 import type { AdditionalEstateDutyItem, InsertAdditionalEstateDutyItem } from "@shared/schema";

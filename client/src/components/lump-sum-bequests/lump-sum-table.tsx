@@ -3,7 +3,7 @@ import { useQuery, useMutation } from '@tanstack/react-query';
 import { queryClient } from '@/lib/queryClient';
 import { LumpSumBequest, InsertLumpSumBequest } from '@shared/schema';
 import { ActionButtonGroup, DuplicateButton, DeleteButton } from '@/components/ui/action-buttons';
-import { getFieldClass } from '@/lib/field-types';
+import { getFieldClass, getCellClass } from '@/lib/field-types';
 import { formatCurrencyValue, formatPercentageValue, formatTextValue, isDefaultValue, getValueClass } from '@/lib/formatting';
 import { handleDefaultValueFocus, createEnhancedBlurHandler } from '@/lib/formatting';
 

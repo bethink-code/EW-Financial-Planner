@@ -400,3 +400,20 @@ export const getFieldWidth = (fieldType: FieldType): string => {
   const maxWidth = config.inputProps?.maxWidth || '200px';
   return `min-width: ${minWidth}; max-width: ${maxWidth};`;
 };
+
+// Utility function to get cell CSS class for proper alignment
+export const getCellClass = (fieldType: FieldType): string => {
+  switch (fieldType) {
+    case 'currency':
+    case 'percentage':
+    case 'years':
+    case 'number':
+      return 'text-right'; // Right-align numeric fields at cell level
+    case 'text':
+    case 'email':
+    case 'phone':
+    case 'textarea':
+    default:
+      return 'text-left'; // Left-align text fields at cell level
+  }
+};

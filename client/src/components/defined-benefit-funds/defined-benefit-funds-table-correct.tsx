@@ -2,6 +2,7 @@ import React, { useState, useCallback, useMemo } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { AddButton, DeleteButton, DuplicateButton, ActionButtonGroup } from "@/components/ui/action-buttons";
 import { getFieldClass } from "@/lib/design-tokens";
+import { getCellClass } from "@/lib/field-types";
 import { formatCurrencyValue, formatPercentageValue, formatYearsValue, getValueClass, isDefaultValue, handleDefaultValueFocus, createEnhancedBlurHandler } from "@/lib/formatting";
 import type { DefinedBenefitFund, InsertDefinedBenefitFund } from "@shared/schema";
 
@@ -329,7 +330,7 @@ export default function DefinedBenefitFundsTable() {
                     )}
                   </div>
                 </td>
-                <td className="p-1">
+                <td className={`p-1 ${getCellClass('percentage')}`}>
                   <input
                     key={`percentage-${fund.id}-${rowIndex}-${fund.ownershipPercentages[rowIndex]}`}
                     type="text"
@@ -345,7 +346,7 @@ export default function DefinedBenefitFundsTable() {
                 </td>
                 
                 {/* Fund Details Section - Only show on first row */}
-                <td className="p-1 section-start">
+                <td className={`p-1 section-start ${getCellClass('years')}`}>
                   {rowIndex === 0 && (
                     <input
                       key={`yearsOfService-${fund.id}-${fund.yearsOfService}`}
@@ -358,7 +359,7 @@ export default function DefinedBenefitFundsTable() {
                     />
                   )}
                 </td>
-                <td className="p-1">
+                <td className={`p-1 ${getCellClass('currency')}`}>
                   {rowIndex === 0 && (
                     <input
                       key={`finalMonthlySalary-${fund.id}-${fund.finalMonthlySalary}`}
@@ -371,7 +372,7 @@ export default function DefinedBenefitFundsTable() {
                     />
                   )}
                 </td>
-                <td className="p-1">
+                <td className={`p-1 ${getCellClass('currency')}`}>
                   {rowIndex === 0 && (
                     <input
                       key={`deathLumpSum-${fund.id}-${fund.deathLumpSum}`}
@@ -384,7 +385,7 @@ export default function DefinedBenefitFundsTable() {
                     />
                   )}
                 </td>
-                <td className="p-1">
+                <td className={`p-1 ${getCellClass('currency')}`}>
                   {rowIndex === 0 && (
                     <input
                       key={`additionalTaxFreeAmount-${fund.id}-${fund.additionalTaxFreeAmount}`}
@@ -399,7 +400,7 @@ export default function DefinedBenefitFundsTable() {
                 </td>
                 
                 {/* Pension Income at Death Section */}
-                <td className="p-1 section-start">
+                <td className={`p-1 section-start ${getCellClass('currency')}`}>
                   {rowIndex === 0 && (
                     <input
                       key={`pensionIncomeAmount-${fund.id}-${fund.pensionIncomeAmount}`}
@@ -412,7 +413,7 @@ export default function DefinedBenefitFundsTable() {
                     />
                   )}
                 </td>
-                <td className="p-1 section-end">
+                <td className={`p-1 section-end ${getCellClass('percentage')}`}>
                   {rowIndex === 0 && (
                     <input
                       key={`pensionIncomeIncrease-${fund.id}-${fund.pensionIncomeIncrease}`}

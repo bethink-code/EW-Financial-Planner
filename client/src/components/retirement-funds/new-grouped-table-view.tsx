@@ -909,27 +909,25 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
             );
           })}
           
-          {/* Totals row */}
-          <tr className="bg-gray-100 font-bold border-t-2 border-neutral-300">
+        </tbody>
+        
+        {/* Totals Footer */}
+        <tfoot className="bg-neutral-50 border-t border-neutral-300">
+          <tr>
             {/* Overview Section */}
             {columnVisibility.overview && (
               <>
-                {/* Description */}
-                <td className="table-cell whitespace-nowrap table-text-14 font-bold" style={{ color: '#094161', minWidth: '200px', width: '200px' }}>
-                  Total
+                <td className="text-right text-neutral-700" style={{ fontSize: '0.875rem', padding: '0.6rem 0.8rem' }}>
+                  Totals
                 </td>
-                
-                {/* Owner */}
-                <td className="p-2 text-right ">
-                  
-                </td>
+                <td className="p-1"></td>
               </>
             )}
             
             {/* Unapproved Life Cover Section */}
             {columnVisibility.unapprovedLifeCover && (
-              <td className="p-2 text-right border-l border-neutral-300">
-                <span className="font-bold text-right table-text-14" style={{ color: '#094161', fontWeight: '700' }}>
+              <td className="text-right border-l border-neutral-300" style={{ padding: '0.6rem 0.8rem' }}>
+                <span style={{ fontFamily: 'inherit', fontWeight: '600', color: '#374151', fontSize: '0.875rem' }}>
                   R {funds.reduce((sum, fund) => {
                     const amount = parseInt(fund.coverAmount?.replace(/[^0-9]/g, '') || '0');
                     return sum + amount;
@@ -941,56 +939,41 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
             {/* Monthly Death Benefit Section */}
             {columnVisibility.monthlyDeathBenefit && (
               <>
-                {/* Monthly income - TOTAL */}
-                <td className="p-2 text-right border-l border-neutral-300">
-                  <span className="font-bold text-right table-text-14" style={{ color: '#094161', fontWeight: '700' }}>
+                <td className="text-right border-l border-neutral-300" style={{ padding: '0.6rem 0.8rem' }}>
+                  <span style={{ fontFamily: 'inherit', fontWeight: '600', color: '#374151', fontSize: '0.875rem' }}>
                     R {funds.reduce((sum, fund) => {
                       const amount = parseInt(fund.monthlyIncome?.replace(/[^0-9]/g, '') || '0');
                       return sum + amount;
                     }, 0).toLocaleString()}
                   </span>
                 </td>
-                
-                {/* Term (Years) */}
-                <td className="p-2 text-right ">
-                  
-                </td>
-                
-                {/* Increase % */}
-                <td className="p-2 text-right ">
-                  
-                </td>
-                
-                {/* Escalation amount */}
-                <td className="p-2 text-right  ">
-                  
-                </td>
+                <td className="p-1"></td>
+                <td className="p-1"></td>
+                <td className="p-1"></td>
               </>
             )}
             
             {/* Fund Value Section */}
             {columnVisibility.fundValue && (
               <>
-                <td className="p-2 text-right border-l border-neutral-300">
-                  <span className="font-bold text-right table-text-14" style={{ color: '#094161', fontWeight: '700' }}>
+                <td className="text-right border-l border-neutral-300" style={{ padding: '0.6rem 0.8rem' }}>
+                  <span style={{ fontFamily: 'inherit', fontWeight: '600', color: '#374151', fontSize: '0.875rem' }}>
                     R {funds.reduce((sum, fund) => {
                       const amount = parseInt(fund.approvedLifeCover?.replace(/[^0-9]/g, '') || '0');
                       return sum + amount;
                     }, 0).toLocaleString()}
                   </span>
                 </td>
-                
-                <td className="p-2 text-right ">
-                  <span className="font-bold text-right table-text-14" style={{ color: '#094161', fontWeight: '700' }}>
+                <td className="text-right" style={{ padding: '0.6rem 0.8rem' }}>
+                  <span style={{ fontFamily: 'inherit', fontWeight: '600', color: '#374151', fontSize: '0.875rem' }}>
                     R {funds.reduce((sum, fund) => {
                       const amount = parseInt(fund.fundValue?.replace(/[^0-9]/g, '') || '0');
                       return sum + amount;
                     }, 0).toLocaleString()}
                   </span>
                 </td>
-                
-                <td className="p-2 text-right  ">
-                  <span className="font-bold text-right table-text-14" style={{ color: '#094161', fontWeight: '700' }}>
+                <td className="text-right" style={{ padding: '0.6rem 0.8rem' }}>
+                  <span style={{ fontFamily: 'inherit', fontWeight: '600', color: '#374151', fontSize: '0.875rem' }}>
                     R {funds.reduce((sum, fund) => {
                       const amount = parseInt(fund.fundValueAtDeath?.replace(/[^0-9]/g, '') || '0');
                       return sum + amount;
@@ -1003,49 +986,18 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
             {/* Fund Value Beneficiaries Section */}
             {columnVisibility.fundValueBeneficiaries && (
               <>
-                {/* Fund value beneficiaries - Name */}
-                <td className="p-2 text-right border-l border-neutral-300">
-                  
-                </td>
-                
-                {/* Fund value beneficiaries - % */}
-                <td className="p-2 text-right ">
-                  
-                </td>
-                
-                {/* Fund value beneficiaries - Amount */}
-                <td className="p-2 text-right ">
-                  
-                </td>
-                
-                {/* Fund value beneficiaries - Lump sum taken */}
-                <td className="p-2 text-right ">
-                  
-                </td>
-                
-                {/* Fund value beneficiaries - Fund value at death */}
-                <td className="p-2 text-right ">
-                  
-                </td>
-                
-                {/* Fund value beneficiaries - Non deductible contribution amount */}
-                <td className="p-2 text-right ">
-                  
-                </td>
-                
-                {/* Fund value beneficiaries - Living annuity */}
-                <td className="p-2 text-right ">
-                  
-                </td>
-                
-                {/* Fund value beneficiaries - Income term */}
-                <td className="p-2 text-right ">
-                  
-                </td>
+                <td className="p-1 border-l border-neutral-300"></td>
+                <td className="p-1"></td>
+                <td className="p-1"></td>
+                <td className="p-1"></td>
+                <td className="p-1"></td>
+                <td className="p-1"></td>
+                <td className="p-1"></td>
+                <td className="p-1"></td>
               </>
             )}
           </tr>
-        </tbody>
+        </tfoot>
       </table>
     </div>
   );
