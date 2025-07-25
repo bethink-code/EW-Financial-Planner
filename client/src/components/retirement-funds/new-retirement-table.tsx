@@ -48,7 +48,6 @@ export function NewRetirementTable({
 
   // Owner management
   const handleAddOwner = useCallback((fundId: number) => {
-    console.log('handleAddOwner called for fund', fundId);
     const fund = funds.find(f => f.id === fundId);
     if (!fund) return;
     const updatedOwners = [...fund.owners, "Donald Edwards"];
