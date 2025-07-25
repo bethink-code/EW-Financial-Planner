@@ -305,7 +305,7 @@ export default function IncomeNeedsTable({ viewMode, searchTerm }: IncomeNeedsTa
                 <select
                   value={need.frequency || "monthly"}
                   onChange={(e) => handleSelectChange(need.id, 'frequency', e.target.value)}
-                  className={`table-input ${getFieldClass('text')}`}
+                  className="table-input"
                   disabled={isUpdating}
                 >
                   <option value="monthly">Monthly</option>

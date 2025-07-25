@@ -397,11 +397,12 @@ th, td {
   }
 
   /* Fix for native select dropdowns within table-input */
-  .table-input select {
-    height: auto !important;
+  select.table-input {
+    height: 2rem !important;
     padding: 0.25rem 0.5rem !important;
-    min-height: 2rem !important;
-    line-height: normal !important;
+    line-height: 1.5 !important;
+    color: #000000 !important;
+    background-color: white !important;
   }
   
   /* Total rows - bold styling */
