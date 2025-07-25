@@ -272,17 +272,19 @@ export default function VoluntaryInvestmentsTable({ viewMode, searchTerm }: Volu
             return Array.from({ length: maxRows }, (_, rowIndex) => (
               <tr key={`${investment.id}-${rowIndex}-${investment.owners.length}`} className="hover:bg-neutral-50">
                 {rowIndex === 0 && (
-                  <td rowSpan={maxRows} className="table-actions-cell p-1 text-center section-start section-end">
-                    <ActionButtonGroup>
-                      <DuplicateButton
-                        onClick={() => addMutation.mutate()}
-                        disabled={isUpdating}
-                      />
-                      <DeleteButton
-                        onClick={() => handleDeleteInvestment(investment.id)}
-                        disabled={isUpdating}
-                      />
-                    </ActionButtonGroup>
+                  <td rowSpan={maxRows} className="table-actions-cell p-1 text-center section-start section-end align-top">
+                    <div className="mt-2">
+                      <ActionButtonGroup>
+                        <DuplicateButton
+                          onClick={() => addMutation.mutate()}
+                          disabled={isUpdating}
+                        />
+                        <DeleteButton
+                          onClick={() => handleDeleteInvestment(investment.id)}
+                          disabled={isUpdating}
+                        />
+                      </ActionButtonGroup>
+                    </div>
                   </td>
                 )}
                 
