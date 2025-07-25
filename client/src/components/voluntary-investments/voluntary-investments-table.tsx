@@ -300,65 +300,58 @@ export default function VoluntaryInvestmentsTable({ viewMode, searchTerm }: Volu
                 )}
                 
                 <td className="p-1">
-                  <div className="flex items-center gap-1">
-                    {rowIndex > 0 && <span className="text-blue-600 text-sm">↳</span>}
-                    <select
-                      key={`owner-${investment.id}-${rowIndex}-${investment.owners[rowIndex]}`}
-                      defaultValue={investment.owners[rowIndex] || "Donald Edwards"}
-                      className={`table-input ${getFieldClass('text')} ${rowIndex > 0 ? 'pl-6' : ''}`}
-                      onChange={(e) => handleOwnerChange(investment.id, rowIndex, e.target.value, investment)}
-                      disabled={isUpdating}
-                    >
-                      {OWNER_OPTIONS.map(option => (
-                        <option key={option.value} value={option.value}>
-                          {option.label}
-                        </option>
-                      ))}
-                    </select>
-                    
-                    {/* Owner Management Buttons */}
-                    {rowIndex === 0 && (
-                      <button
-                        type="button"
-                        onClick={(e) => {
-                          e.preventDefault();
-                          e.stopPropagation();
-                          handleAddOwner(investment.id, investment);
-                        }}
-                        className="h-6 w-6 flex items-center justify-center bg-white text-primary border border-primary rounded text-xs hover:opacity-90"
+                  {rowIndex < investment.owners.length && (
+                    <div className="flex items-center gap-1">
+                      <select
+                        key={`owner-${investment.id}-${rowIndex}-${investment.owners[rowIndex]}`}
+                        defaultValue={investment.owners[rowIndex] || "Donald Edwards"}
+                        className={`table-input ${getFieldClass('text')} flex-1`}
+                        onChange={(e) => handleOwnerChange(investment.id, rowIndex, e.target.value, investment)}
                         disabled={isUpdating}
                       >
-                        <UserPlus className="h-3 w-3" />
-                      </button>
-                    )}
-                    
-                    {investment.owners.length > 1 && (
-                      <button
-                        type="button"
-                        onClick={(e) => {
-                          e.preventDefault();
-                          e.stopPropagation();
-                          handleDeleteOwner(investment.id, rowIndex, investment);
-                        }}
-                        className="h-6 w-6 flex items-center justify-center bg-white text-neutral-400 border border-neutral-300 rounded text-xs hover:text-neutral-600"
-                        disabled={isUpdating}
-                      >
-                        <UserMinus className="h-3 w-3" />
-                      </button>
-                    )}
-                  </div>
+                        {OWNER_OPTIONS.map(option => (
+                          <option key={option.value} value={option.value}>
+                            {option.label}
+                          </option>
+                        ))}
+                      </select>
+                      {rowIndex === 0 ? (
+                        <AddButton
+                          onClick={(e) => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            handleAddOwner(investment.id, investment);
+                          }}
+                          size="sm"
+                          disabled={isUpdating}
+                        />
+                      ) : (
+                        <DeleteButton
+                          onClick={(e) => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            handleDeleteOwner(investment.id, rowIndex, investment);
+                          }}
+                          size="sm"
+                          disabled={isUpdating}
+                        />
+                      )}
+                    </div>
+                  )}
                 </td>
                 
                 <td className="p-1">
-                  <input
-                    key={`ownershipPercentage-${investment.id}-${rowIndex}-${investment.ownershipPercentages[rowIndex]}`}
-                    type="text"
-                    defaultValue={investment.ownershipPercentages[rowIndex] || "0%"}
-                    className={`table-input ${getFieldClass('percentage')} ${getValueClass(investment.ownershipPercentages[rowIndex] || "0%", 'percentage')}`}
-                    onFocus={handleDefaultValueFocus}
-                    onBlur={(e) => handleOwnerPercentageBlur(investment.id, rowIndex, e.target.value, investment)}
-                    disabled={isUpdating}
-                  />
+                  {rowIndex < investment.ownershipPercentages.length && (
+                    <input
+                      key={`ownershipPercentage-${investment.id}-${rowIndex}-${investment.ownershipPercentages[rowIndex]}`}
+                      type="text"
+                      defaultValue={investment.ownershipPercentages[rowIndex] || "0%"}
+                      className={`table-input ${getFieldClass('percentage')} ${getValueClass(investment.ownershipPercentages[rowIndex] || "0%", 'percentage')}`}
+                      onFocus={handleDefaultValueFocus}
+                      onBlur={(e) => handleOwnerPercentageBlur(investment.id, rowIndex, e.target.value, investment)}
+                      disabled={isUpdating}
+                    />
+                  )}
                 </td>
                 
                 {rowIndex === 0 && (
