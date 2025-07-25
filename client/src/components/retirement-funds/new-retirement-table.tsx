@@ -253,22 +253,22 @@ export function NewRetirementTable({
                         onBlur={(e) => handleOwnerChange(fund.id, rowIndex, e.target.value)}
                       />
                       <button
-                        onClick={() => handleRemoveOwner(fund.id, rowIndex)}
-                        className="p-0.5 text-red-600 hover:bg-red-50 rounded"
-                        disabled={fund.owners.length <= 1}
+                        onClick={() => handleAddOwner(fund.id)}
+                        className="p-0.5 text-blue-600 hover:bg-blue-50 rounded"
+                        title="Add Owner"
                       >
-                        <UserMinus className="h-3 w-3" />
+                        <UserPlus className="h-3 w-3" />
                       </button>
+                      {fund.owners.length > 1 && (
+                        <button
+                          onClick={() => handleRemoveOwner(fund.id, rowIndex)}
+                          className="p-0.5 text-red-600 hover:bg-red-50 rounded"
+                          title="Remove Owner"
+                        >
+                          <UserMinus className="h-3 w-3" />
+                        </button>
+                      )}
                     </div>
-                  )}
-                  {rowIndex === fund.owners.length && (
-                    <button
-                      onClick={() => handleAddOwner(fund.id)}
-                      className="flex items-center gap-1 text-blue-600 text-xs hover:bg-blue-50 p-1 rounded"
-                    >
-                      <UserPlus className="h-3 w-3" />
-                      Add Owner
-                    </button>
                   )}
                 </td>
 
@@ -303,22 +303,22 @@ export function NewRetirementTable({
                         }}
                       />
                       <button
-                        onClick={() => handleRemoveUnapprovedBeneficiary(fund.id, rowIndex)}
-                        className="p-0.5 text-red-600 hover:bg-red-50 rounded"
-                        disabled={fund.unapprovedBeneficiaries.length <= 1}
+                        onClick={() => handleAddUnapprovedBeneficiary(fund.id)}
+                        className="p-0.5 text-blue-600 hover:bg-blue-50 rounded"
+                        title="Add Beneficiary"
                       >
-                        <UserMinus className="h-3 w-3" />
+                        <Plus className="h-3 w-3" />
                       </button>
+                      {fund.unapprovedBeneficiaries.length > 1 && (
+                        <button
+                          onClick={() => handleRemoveUnapprovedBeneficiary(fund.id, rowIndex)}
+                          className="p-0.5 text-red-600 hover:bg-red-50 rounded"
+                          title="Remove Beneficiary"
+                        >
+                          <UserMinus className="h-3 w-3" />
+                        </button>
+                      )}
                     </div>
-                  )}
-                  {rowIndex === fund.unapprovedBeneficiaries.length && (
-                    <button
-                      onClick={() => handleAddUnapprovedBeneficiary(fund.id)}
-                      className="flex items-center gap-1 text-blue-600 text-xs hover:bg-blue-50 p-1 rounded"
-                    >
-                      <Plus className="h-3 w-3" />
-                      Add
-                    </button>
                   )}
                 </td>
 
@@ -471,22 +471,22 @@ export function NewRetirementTable({
                         }}
                       />
                       <button
-                        onClick={() => handleRemoveFundValueBeneficiary(fund.id, rowIndex)}
-                        className="p-0.5 text-red-600 hover:bg-red-50 rounded"
-                        disabled={fund.fundValueBeneficiaries.length <= 1}
+                        onClick={() => handleAddFundValueBeneficiary(fund.id)}
+                        className="p-0.5 text-blue-600 hover:bg-blue-50 rounded"
+                        title="Add Beneficiary"
                       >
-                        <UserMinus className="h-3 w-3" />
+                        <Plus className="h-3 w-3" />
                       </button>
+                      {fund.fundValueBeneficiaries.length > 1 && (
+                        <button
+                          onClick={() => handleRemoveFundValueBeneficiary(fund.id, rowIndex)}
+                          className="p-0.5 text-red-600 hover:bg-red-50 rounded"
+                          title="Remove Beneficiary"
+                        >
+                          <UserMinus className="h-3 w-3" />
+                        </button>
+                      )}
                     </div>
-                  )}
-                  {rowIndex === fund.fundValueBeneficiaries.length && (
-                    <button
-                      onClick={() => handleAddFundValueBeneficiary(fund.id)}
-                      className="flex items-center gap-1 text-blue-600 text-xs hover:bg-blue-50 p-1 rounded"
-                    >
-                      <Plus className="h-3 w-3" />
-                      Add
-                    </button>
                   )}
                 </td>
 
