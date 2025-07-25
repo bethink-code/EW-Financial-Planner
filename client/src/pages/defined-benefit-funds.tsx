@@ -1,6 +1,6 @@
 import React, { useState, useCallback } from "react";
 import { useQuery, useMutation } from "@tanstack/react-query";
-import DefinedBenefitFundsTable from "../components/defined-benefit-funds/defined-benefit-funds-table";
+import DefinedBenefitFundsTable from "../components/defined-benefit-funds/defined-benefit-funds-table-fixed";
 import { DefinedBenefitFundsSummary } from "@/components/defined-benefit-funds/defined-benefit-funds-summary";
 import { CalculatorHeader } from "@/components/ui/calculator-header";
 import { apiRequest, queryClient } from "@/lib/queryClient";
@@ -25,14 +25,13 @@ export default function DefinedBenefitFunds() {
   const addMutation = useMutation({
     mutationFn: async () => {
       const newFund: InsertDefinedBenefitFund = {
-        description: "Enter here ...",
+        description: "Enter details ...",
         owner: "Donald Edwards",
-        yearsOfService: "0",
-        finalMonthlySalary: "0",
-        deathLumpSum: "0",
-        additionalTaxFreeAmount: "0",
-        pensionIncomeAmount: "0",
-        pensionIncomeIncrease: "0%"
+        pensionIncome: "R 0",
+        pensionIncomeIncrease: "0%",
+        spouseIncome: "R 0",
+        spouseIncomeIncrease: "0%",
+        additionalOwners: []
       };
       return apiRequest("POST", "/api/defined-benefit-funds", newFund);
     },

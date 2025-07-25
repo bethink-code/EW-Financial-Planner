@@ -27,14 +27,13 @@ export default function DefinedBenefitFundsTable() {
   const addMutation = useMutation({
     mutationFn: async (): Promise<DefinedBenefitFund> => {
       const newFund: InsertDefinedBenefitFund = {
-        description: "",
+        description: "Enter details ...",
         owner: "Donald Edwards",
-        yearsOfService: "0 years",
-        finalMonthlySalary: "0",
-        deathLumpSum: "0",
-        additionalTaxFreeAmount: "0",
-        pensionIncomeAmount: "0",
+        pensionIncome: "R 0",
         pensionIncomeIncrease: "0%",
+        spouseIncome: "R 0",
+        spouseIncomeIncrease: "0%",
+        additionalOwners: [],
       };
       
       const response = await fetch('/api/defined-benefit-funds', {
@@ -110,20 +109,12 @@ export default function DefinedBenefitFundsTable() {
   // Calculate totals
   const totals = useMemo(() => {
     return {
-      finalMonthlySalary: funds.reduce((sum: number, fund: DefinedBenefitFund) => {
-        const value = parseFloat(fund.finalMonthlySalary.replace(/[^\d.-]/g, '')) || 0;
+      pensionIncome: funds.reduce((sum: number, fund: DefinedBenefitFund) => {
+        const value = parseFloat((fund.pensionIncome || '0').replace(/[^\d.-]/g, '')) || 0;
         return sum + value;
       }, 0),
-      deathLumpSum: funds.reduce((sum: number, fund: DefinedBenefitFund) => {
-        const value = parseFloat(fund.deathLumpSum.replace(/[^\d.-]/g, '')) || 0;
-        return sum + value;
-      }, 0),
-      additionalTaxFreeAmount: funds.reduce((sum: number, fund: DefinedBenefitFund) => {
-        const value = parseFloat(fund.additionalTaxFreeAmount.replace(/[^\d.-]/g, '')) || 0;
-        return sum + value;
-      }, 0),
-      pensionIncomeAmount: funds.reduce((sum: number, fund: DefinedBenefitFund) => {
-        const value = parseFloat(fund.pensionIncomeAmount.replace(/[^\d.-]/g, '')) || 0;
+      spouseIncome: funds.reduce((sum: number, fund: DefinedBenefitFund) => {
+        const value = parseFloat((fund.spouseIncome || '0').replace(/[^\d.-]/g, '')) || 0;
         return sum + value;
       }, 0)
     };
@@ -142,18 +133,16 @@ export default function DefinedBenefitFundsTable() {
   const handleInputBlur = useCallback((id: number, field: keyof DefinedBenefitFund, value: string) => {
     // Map field names to field types for proper formatting
     const fieldTypeMap: Record<string, string> = {
-      'yearsOfService': 'years',
       'pensionIncomeIncrease': 'percentage',
-      'finalMonthlySalary': 'currency',
-      'deathLumpSum': 'currency',
-      'additionalTaxFreeAmount': 'currency',
-      'pensionIncomeAmount': 'currency'
+      'spouseIncomeIncrease': 'percentage',
+      'pensionIncome': 'currency',
+      'spouseIncome': 'currency'
     };
     
     const fieldType = fieldTypeMap[field] || field;
     const formattedValue = fieldType === 'percentage' ? formatPercentageValue(value) : 
-                         fieldType === 'years' ? formatYearsValue(value) : 
-                         formatCurrencyValue(value);
+                         fieldType === 'currency' ? formatCurrencyValue(value) : 
+                         value;
     handleUpdateFund(id, field, formattedValue);
     
     // Update DOM element directly for immediate visual feedback
@@ -175,12 +164,11 @@ export default function DefinedBenefitFundsTable() {
     const duplicatedFund: InsertDefinedBenefitFund = {
       description: fund.description,
       owner: fund.owner,
-      yearsOfService: fund.yearsOfService,
-      finalMonthlySalary: fund.finalMonthlySalary,
-      deathLumpSum: fund.deathLumpSum,
-      additionalTaxFreeAmount: fund.additionalTaxFreeAmount,
-      pensionIncomeAmount: fund.pensionIncomeAmount,
+      pensionIncome: fund.pensionIncome,
       pensionIncomeIncrease: fund.pensionIncomeIncrease,
+      spouseIncome: fund.spouseIncome,
+      spouseIncomeIncrease: fund.spouseIncomeIncrease,
+      additionalOwners: [...fund.additionalOwners],
     };
     
     const response = fetch('/api/defined-benefit-funds', {
