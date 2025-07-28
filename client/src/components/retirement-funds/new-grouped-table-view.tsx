@@ -738,7 +738,7 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
                       {/* Description */}
                       <td className="table-cell whitespace-nowrap table-text-14 text-neutral-900" rowSpan={beneficiaries.length + 1}>
                         <input
-                          defaultValue={fund.description || "Enter here ..."} onFocus={handleDefaultValueFocus}
+                          defaultValue={fund.description || "Enter details ..."} onFocus={handleDefaultValueFocus}
                           onBlur={(e) => handleInputBlur(fund.id, "description", e.target.value)}
                           className="border-0 focus: focus:border focus:border-primary  text-left font-medium table-input"
                           placeholder="Fund description"
@@ -773,7 +773,7 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
                     <>
                       <td className="p-2 text-right border-l border-neutral-300 bg-teal-50" rowSpan={beneficiaries.length + 1}>
                         <input
-                          defaultValue={fund.coverAmount || "Enter here ..."} onFocus={handleDefaultValueFocus}
+                          defaultValue={fund.coverAmount || "Enter details ..."} onFocus={handleDefaultValueFocus}
                           onBlur={(e) => {
                             const formattedValue = formatCurrencyValue(e.target.value, "coverAmount");
                             if (formattedValue !== e.target.value) {
