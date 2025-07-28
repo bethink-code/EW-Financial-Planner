@@ -72,7 +72,7 @@ export default function VoluntaryInvestments() {
           </CalculatorHeader>
         </div>
         
-        <VoluntaryInvestmentsTable viewMode={viewMode} />
+        <VoluntaryInvestmentsTable viewMode={viewMode} onAddInvestment={handleAddInvestment} />
       </div>
     </div>
   );

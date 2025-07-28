@@ -11,6 +11,7 @@ import { UserPlus, UserMinus } from 'lucide-react';
 interface VoluntaryInvestmentsTableProps {
   viewMode: 'table' | 'hybrid';
   searchTerm?: string;
+  onAddInvestment?: () => void;
 }
 
 const OWNER_OPTIONS = [
@@ -19,7 +20,7 @@ const OWNER_OPTIONS = [
   { value: "Both", label: "Both" },
 ];
 
-export default function VoluntaryInvestmentsTable({ viewMode, searchTerm }: VoluntaryInvestmentsTableProps) {
+export default function VoluntaryInvestmentsTable({ viewMode, searchTerm, onAddInvestment }: VoluntaryInvestmentsTableProps) {
   const [isUpdating, setIsUpdating] = useState(false);
 
   // Query for voluntary investments
@@ -245,7 +246,7 @@ export default function VoluntaryInvestmentsTable({ viewMode, searchTerm }: Volu
         <thead>
           <tr className="border-b border-border">
             <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start section-end" rowSpan={2}>
-              <AddButton onClick={handleAddInvestment} disabled={isUpdating} />
+              <AddButton onClick={onAddInvestment} disabled={isUpdating} />
             </th>
             <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start" colSpan={3}>Overview</th>
             <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start" colSpan={3}>Investment Details</th>
@@ -317,21 +318,13 @@ export default function VoluntaryInvestmentsTable({ viewMode, searchTerm }: Volu
                       />
                       {rowIndex === 0 ? (
                         <AddButton
-                          onClick={(e) => {
-                            e.preventDefault();
-                            e.stopPropagation();
-                            handleAddOwner(investment.id, investment);
-                          }}
+                          onClick={() => handleAddOwner(investment.id, investment)}
                           size="sm"
                           disabled={isUpdating}
                         />
                       ) : (
                         <DeleteButton
-                          onClick={(e) => {
-                            e.preventDefault();
-                            e.stopPropagation();
-                            handleDeleteOwner(investment.id, rowIndex, investment);
-                          }}
+                          onClick={() => handleDeleteOwner(investment.id, rowIndex, investment)}
                           size="sm"
                           disabled={isUpdating}
                         />
