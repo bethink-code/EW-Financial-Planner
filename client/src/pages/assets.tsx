@@ -1,7 +1,7 @@
 import React, { useState, useCallback } from 'react';
 import { useQuery, useMutation } from '@tanstack/react-query';
 import { Assets } from '@shared/schema';
-import { AssetsTable } from '@/components/assets/assets-table';
+import AssetsTable from '@/components/assets/assets-table';
 import { AssetsSummary } from '@/components/assets/assets-summary';
 import { CalculatorHeader } from '@/components/ui/calculator-header';
 import { CategorySelectionDialog } from '@/components/ui/category-selection-dialog';

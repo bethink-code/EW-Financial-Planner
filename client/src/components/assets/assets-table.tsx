@@ -1,37 +1,44 @@
 import { useState, useCallback, useMemo } from 'react';
 import { useQuery, useMutation } from '@tanstack/react-query';
 import { queryClient } from '@/lib/queryClient';
-import { AssetsAndLiabilities, InsertAssetsAndLiabilities } from '@shared/schema';
+import { Assets, InsertAssets } from '@shared/assets-schema';
 import { AddButton, ActionButtonGroup, DuplicateButton, DeleteButton } from '@/components/ui/action-buttons';
 import { getFieldClass, getFieldWidth, getCellClass } from '@/lib/field-types';
 import { formatCurrencyValue, formatPercentageValue, isDefaultValue, getValueClass } from '@/lib/formatting';
 import { handleDefaultValueFocus, createEnhancedBlurHandler } from '@/lib/formatting';
 
-interface AssetsAndLiabilitiesTableProps {
+interface AssetsTableProps {
   viewMode: 'table' | 'hybrid';
   searchTerm?: string;
 }
 
-function AssetsAndLiabilitiesTable({ viewMode, searchTerm }: AssetsAndLiabilitiesTableProps) {
+function AssetsTable({ viewMode, searchTerm }: AssetsTableProps) {
   const [isUpdating, setIsUpdating] = useState(false);
 
   // Query for assets
-  const { data: assets = [], isLoading, error } = useQuery<AssetsAndLiabilities[]>({
-    queryKey: ['/api/assets-and-liabilities'],
+  const { data: assets = [], isLoading, error } = useQuery<Assets[]>({
+    queryKey: ['/api/assets'],
   });
 
   // Add asset mutation
   const addMutation = useMutation({
-    mutationFn: async (): Promise<AssetsAndLiabilities> => {
-      const newAsset: InsertAssetsAndLiabilities = {
+    mutationFn: async (): Promise<Assets> => {
+      const newAsset: InsertAssets = {
+        category: "Enter details ...",
         description: "Enter details ...",
-        owner: "Donald Edwards",
-        amount: "R 0",
-        increasePercentage: "0%",
-        additionalOwners: [],
+        marketValue: "R 0",
+        johnDoe: "0%",
+        janetteDoe: "0%",
+        doeJunior: "0%",
+        doeFamilyTrust: "0%",
+        estate: "R 0",
+        others: "R 0",
+        client: "R 0",
+        section: "PROPERTY",
+        included: true,
       };
       
-      const response = await fetch('/api/assets-and-liabilities', {
+      const response = await fetch('/api/assets', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -46,7 +53,7 @@ function AssetsAndLiabilitiesTable({ viewMode, searchTerm }: AssetsAndLiabilitie
       return response.json();
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['/api/assets-and-liabilities'] });
+      queryClient.invalidateQueries({ queryKey: ['/api/assets'] });
       setIsUpdating(false);
     },
     onError: (error) => {
@@ -57,8 +64,8 @@ function AssetsAndLiabilitiesTable({ viewMode, searchTerm }: AssetsAndLiabilitie
 
   // Update asset mutation
   const updateMutation = useMutation({
-    mutationFn: async ({ id, updates }: { id: number; updates: Partial<AssetsAndLiabilities> }) => {
-      const response = await fetch(`/api/assets-and-liabilities/${id}`, {
+    mutationFn: async ({ id, updates }: { id: number; updates: Partial<Assets> }) => {
+      const response = await fetch(`/api/assets/${id}`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
@@ -73,7 +80,7 @@ function AssetsAndLiabilitiesTable({ viewMode, searchTerm }: AssetsAndLiabilitie
       return response.json();
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['/api/assets-and-liabilities'] });
+      queryClient.invalidateQueries({ queryKey: ['/api/assets'] });
       setIsUpdating(false);
     },
     onError: (error) => {
@@ -85,7 +92,7 @@ function AssetsAndLiabilitiesTable({ viewMode, searchTerm }: AssetsAndLiabilitie
   // Delete asset mutation
   const deleteMutation = useMutation({
     mutationFn: async (id: number) => {
-      const response = await fetch(`/api/assets-and-liabilities/${id}`, {
+      const response = await fetch(`/api/assets/${id}`, {
         method: 'DELETE',
       });
       
@@ -94,7 +101,7 @@ function AssetsAndLiabilitiesTable({ viewMode, searchTerm }: AssetsAndLiabilitie
       }
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['/api/assets-and-liabilities'] });
+      queryClient.invalidateQueries({ queryKey: ['/api/assets'] });
     }
   });
 
@@ -102,8 +109,8 @@ function AssetsAndLiabilitiesTable({ viewMode, searchTerm }: AssetsAndLiabilitie
   const totals = useMemo(() => {
     return {
       count: assets.length,
-      amount: assets.reduce((sum: number, asset: AssetsAndLiabilities) => {
-        const value = parseFloat(asset.amount.replace(/[^\d.-]/g, '')) || 0;
+      amount: assets.reduce((sum: number, asset: Assets) => {
+        const value = parseFloat((asset.marketValue || '').replace(/[^\d.-]/g, '')) || 0;
         return sum + value;
       }, 0),
     };
@@ -113,17 +120,17 @@ function AssetsAndLiabilitiesTable({ viewMode, searchTerm }: AssetsAndLiabilitie
     addMutation.mutate();
   }, [addMutation]);
 
-  const handleUpdateAsset = useCallback((id: number, field: keyof AssetsAndLiabilities, value: string | string[]) => {
+  const handleUpdateAsset = useCallback((id: number, field: keyof Assets, value: string | string[]) => {
     setIsUpdating(true);
     const updates = { [field]: value };
     updateMutation.mutate({ id, updates });
   }, [updateMutation]);
 
-  const handleInputBlur = useCallback((id: number, field: keyof AssetsAndLiabilities, value: string) => {
+  const handleInputBlur = useCallback((id: number, field: keyof Assets, value: string) => {
     let formattedValue: string;
-    if (field === 'increasePercentage') {
+    if (field === 'johnDoe' || field === 'janetteDoe' || field === 'doeJunior' || field === 'doeFamilyTrust') {
       formattedValue = formatPercentageValue(value);
-    } else if (field === 'amount') {
+    } else if (field === 'marketValue' || field === 'estate' || field === 'others' || field === 'client') {
       formattedValue = formatCurrencyValue(value);
     } else {
       formattedValue = value;
@@ -158,23 +165,31 @@ function AssetsAndLiabilitiesTable({ viewMode, searchTerm }: AssetsAndLiabilitie
       <table>
         <thead>
           <tr>
-            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start section-end" rowSpan={2}>
+            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center" rowSpan={2}>
               <AddButton onClick={() => addMutation.mutate()} disabled={isUpdating} />
             </th>
-            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start" colSpan={2}>Overview</th>
-            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start section-end" colSpan={2}>Financial Details</th>
+            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center" colSpan={2}>Overview</th>
+            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center" colSpan={1}>Asset Details</th>
+            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center" colSpan={4}>Ownership Split</th>
+            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center" colSpan={3}>Distribution</th>
           </tr>
           <tr>
-            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start">Description</th>
-            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center">Owner</th>
-            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start">Amount</th>
-            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-end">Increase %</th>
+            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center">Category</th>
+            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center">Description</th>
+            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center">Market Value</th>
+            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center">John Doe</th>
+            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center">Janette Doe (Spouse)</th>
+            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center">Doe Junior</th>
+            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center">Doe family trust</th>
+            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center">Estate</th>
+            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center">Others</th>
+            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center">Client</th>
           </tr>
         </thead>
         <tbody className="divide-y divide-neutral-200">
-          {assets.map((asset: AssetsAndLiabilities, assetIndex) => (
+          {assets.map((asset: Assets, assetIndex) => (
             <tr key={asset.id} className="hover:bg-neutral-50">
-              <td className="table-actions-cell p-1 text-center section-start section-end">
+              <td className="table-actions-cell p-2 text-center">
                 <ActionButtonGroup>
                   <DuplicateButton
                     onClick={() => addMutation.mutate()}
@@ -187,7 +202,18 @@ function AssetsAndLiabilitiesTable({ viewMode, searchTerm }: AssetsAndLiabilitie
                 </ActionButtonGroup>
               </td>
               
-              <td className="p-1 section-start">
+              <td className="p-2 text-left">
+                <input
+                  type="text"
+                  defaultValue={asset.category}
+                  className={`table-input ${getFieldClass('text')} ${getValueClass(asset.category, 'text')}`}
+                  onFocus={handleDefaultValueFocus}
+                  onBlur={(e) => handleInputBlur(asset.id, 'category', e.target.value)}
+                  disabled={isUpdating}
+                />
+              </td>
+              
+              <td className="p-2 text-left">
                 <input
                   type="text"
                   defaultValue={asset.description}
@@ -198,51 +224,109 @@ function AssetsAndLiabilitiesTable({ viewMode, searchTerm }: AssetsAndLiabilitie
                 />
               </td>
               
-              <td className="p-1">
+              <td className="p-2 text-right">
                 <input
+                  key={`marketValue-${asset.id}-${asset.marketValue}`}
                   type="text"
-                  defaultValue={asset.owner}
-                  className={`table-input ${getFieldClass('text')} ${getValueClass(asset.owner, 'text')}`}
+                  defaultValue={asset.marketValue}
+                  className={`table-input ${getFieldClass('currency')} ${getValueClass(asset.marketValue, 'currency')}`}
                   onFocus={handleDefaultValueFocus}
-                  onBlur={(e) => handleInputBlur(asset.id, 'owner', e.target.value)}
+                  onBlur={(e) => handleInputBlur(asset.id, 'marketValue', e.target.value)}
                   disabled={isUpdating}
                 />
               </td>
               
-              <td className="p-1 section-start">
+              <td className="p-2 text-right">
                 <input
-                  key={`amount-${asset.id}-${asset.amount}`}
+                  key={`johnDoe-${asset.id}-${asset.johnDoe}`}
                   type="text"
-                  defaultValue={asset.amount}
-                  className={`table-input ${getFieldClass('currency')} ${getValueClass(asset.amount, 'currency')}`}
+                  defaultValue={asset.johnDoe}
+                  className={`table-input ${getFieldClass('percentage')} ${getValueClass(asset.johnDoe, 'percentage')}`}
                   onFocus={handleDefaultValueFocus}
-                  onBlur={(e) => handleInputBlur(asset.id, 'amount', e.target.value)}
+                  onBlur={(e) => handleInputBlur(asset.id, 'johnDoe', e.target.value)}
                   disabled={isUpdating}
                 />
               </td>
               
-              <td className="p-1 section-end">
+              <td className="p-2 text-right">
                 <input
-                  key={`increasePercentage-${asset.id}-${asset.increasePercentage}`}
+                  key={`janetteDoe-${asset.id}-${asset.janetteDoe}`}
                   type="text"
-                  defaultValue={asset.increasePercentage}
-                  className={`table-input ${getFieldClass('percentage')} ${getValueClass(asset.increasePercentage, 'percentage')}`}
+                  defaultValue={asset.janetteDoe}
+                  className={`table-input ${getFieldClass('percentage')} ${getValueClass(asset.janetteDoe, 'percentage')}`}
                   onFocus={handleDefaultValueFocus}
-                  onBlur={(e) => handleInputBlur(asset.id, 'increasePercentage', e.target.value)}
+                  onBlur={(e) => handleInputBlur(asset.id, 'janetteDoe', e.target.value)}
+                  disabled={isUpdating}
+                />
+              </td>
+              
+              <td className="p-2 text-right">
+                <input
+                  key={`doeJunior-${asset.id}-${asset.doeJunior}`}
+                  type="text"
+                  defaultValue={asset.doeJunior}
+                  className={`table-input ${getFieldClass('percentage')} ${getValueClass(asset.doeJunior, 'percentage')}`}
+                  onFocus={handleDefaultValueFocus}
+                  onBlur={(e) => handleInputBlur(asset.id, 'doeJunior', e.target.value)}
+                  disabled={isUpdating}
+                />
+              </td>
+              
+              <td className="p-2 text-right">
+                <input
+                  key={`doeFamilyTrust-${asset.id}-${asset.doeFamilyTrust}`}
+                  type="text"
+                  defaultValue={asset.doeFamilyTrust}
+                  className={`table-input ${getFieldClass('percentage')} ${getValueClass(asset.doeFamilyTrust, 'percentage')}`}
+                  onFocus={handleDefaultValueFocus}
+                  onBlur={(e) => handleInputBlur(asset.id, 'doeFamilyTrust', e.target.value)}
+                  disabled={isUpdating}
+                />
+              </td>
+              
+              <td className="p-2 text-right">
+                <input
+                  key={`estate-${asset.id}-${asset.estate}`}
+                  type="text"
+                  defaultValue={asset.estate}
+                  className={`table-input ${getFieldClass('currency')} ${getValueClass(asset.estate, 'currency')}`}
+                  onFocus={handleDefaultValueFocus}
+                  onBlur={(e) => handleInputBlur(asset.id, 'estate', e.target.value)}
+                  disabled={isUpdating}
+                />
+              </td>
+              
+              <td className="p-2 text-right">
+                <input
+                  key={`others-${asset.id}-${asset.others}`}
+                  type="text"
+                  defaultValue={asset.others}
+                  className={`table-input ${getFieldClass('currency')} ${getValueClass(asset.others, 'currency')}`}
+                  onFocus={handleDefaultValueFocus}
+                  onBlur={(e) => handleInputBlur(asset.id, 'others', e.target.value)}
+                  disabled={isUpdating}
+                />
+              </td>
+              
+              <td className="p-2 text-right">
+                <input
+                  key={`client-${asset.id}-${asset.client}`}
+                  type="text"
+                  defaultValue={asset.client}
+                  className={`table-input ${getFieldClass('currency')} ${getValueClass(asset.client, 'currency')}`}
+                  onFocus={handleDefaultValueFocus}
+                  onBlur={(e) => handleInputBlur(asset.id, 'client', e.target.value)}
                   disabled={isUpdating}
                 />
               </td>
             </tr>
           ))}
-          
         </tbody>
         
-        {/* Totals Footer */}
         <tfoot>
-          <tr>
-            <td className="totals-cell-label text-right" colSpan={3}>Totals</td>
-            <td className="totals-cell-value section-start">R {totals.amount.toLocaleString()}</td>
-            <td className="totals-cell-label section-end"></td>
+          <tr className="bg-neutral-50 border-t border-neutral-300">
+            <td className="totals-cell-label text-right" colSpan={9}>Total Market Value</td>
+            <td className="totals-cell-value text-right">R {totals.amount.toLocaleString()}</td>
           </tr>
         </tfoot>
       </table>
@@ -250,4 +334,4 @@ function AssetsAndLiabilitiesTable({ viewMode, searchTerm }: AssetsAndLiabilitie
   );
 }
 
-export { AssetsAndLiabilitiesTable as AssetsTable };
+export default AssetsTable;

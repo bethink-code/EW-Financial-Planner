@@ -1,7 +1,8 @@
 import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
-import { insertRetirementFundSchema, updateRetirementFundSchema, insertLumpSumBequestSchema, updateLumpSumBequestSchema, insertAssuranceSchema, updateAssuranceSchema, insertDefinedBenefitFundSchema, updateDefinedBenefitFundSchema, insertVoluntaryInvestmentSchema, updateVoluntaryInvestmentSchema, insertAssetsAndLiabilitiesSchema, updateAssetsAndLiabilitiesSchema, insertIncomeNeedsSchema, updateIncomeNeedsSchema, insertIncomeProvisionsSchema, updateIncomeProvisionsSchema, insertResidueSchema, updateResidueSchema, insertAdditionalEstateDutyItemsSchema, updateAdditionalEstateDutyItemsSchema, insertLiabilitiesSchema, updateLiabilitiesSchema, insertAssetsSchema } from "@shared/schema";
+import { insertRetirementFundSchema, updateRetirementFundSchema, insertLumpSumBequestSchema, updateLumpSumBequestSchema, insertAssuranceSchema, updateAssuranceSchema, insertDefinedBenefitFundSchema, updateDefinedBenefitFundSchema, insertVoluntaryInvestmentSchema, updateVoluntaryInvestmentSchema, insertAssetsAndLiabilitiesSchema, updateAssetsAndLiabilitiesSchema, insertIncomeNeedsSchema, updateIncomeNeedsSchema, insertIncomeProvisionsSchema, updateIncomeProvisionsSchema, insertResidueSchema, updateResidueSchema, insertAdditionalEstateDutyItemsSchema, updateAdditionalEstateDutyItemsSchema, insertLiabilitiesSchema, updateLiabilitiesSchema } from "@shared/schema";
+import { insertAssetsSchema } from "@shared/assets-schema";
 
 export async function registerRoutes(app: Express): Promise<Server> {
   // Get all retirement funds
@@ -1143,6 +1144,112 @@ export async function registerRoutes(app: Express): Promise<Server> {
     } catch (error) {
       console.error("Error deleting asset:", error);
       res.status(500).json({ message: "Failed to delete asset" });
+    }
+  });
+
+  // Assets API routes
+  app.get("/api/assets", async (req, res) => {
+    try {
+      const assets = await storage.getAssets();
+      res.json(assets);
+    } catch (error) {
+      console.error("Error fetching assets:", error);
+      res.status(500).json({ message: "Failed to fetch assets" });
+    }
+  });
+
+  app.post("/api/assets", async (req, res) => {
+    try {
+      const validatedData = insertAssetsSchema.parse(req.body);
+      const asset = await storage.createAsset(validatedData);
+      res.status(201).json(asset);
+    } catch (error) {
+      console.error("Error creating asset:", error);
+      res.status(400).json({ message: "Invalid asset data" });
+    }
+  });
+
+  app.patch("/api/assets/:id", async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      if (isNaN(id)) {
+        return res.status(400).json({ message: "Invalid asset ID" });
+      }
+
+      const updates = req.body;
+      const asset = await storage.updateAsset(id, updates);
+      res.json(asset);
+    } catch (error) {
+      console.error("Error updating asset:", error);
+      res.status(400).json({ message: "Invalid asset data" });
+    }
+  });
+
+  app.delete("/api/assets/:id", async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      if (isNaN(id)) {
+        return res.status(400).json({ message: "Invalid asset ID" });
+      }
+
+      await storage.deleteAsset(id);
+      res.status(204).send();
+    } catch (error) {
+      console.error("Error deleting asset:", error);
+      res.status(500).json({ message: "Failed to delete asset" });
+    }
+  });
+
+  // Liabilities API routes
+  app.get("/api/liabilities", async (req, res) => {
+    try {
+      const liabilities = await storage.getLiabilities();
+      res.json(liabilities);
+    } catch (error) {
+      console.error("Error fetching liabilities:", error);
+      res.status(500).json({ message: "Failed to fetch liabilities" });
+    }
+  });
+
+  app.post("/api/liabilities", async (req, res) => {
+    try {
+      const validatedData = insertLiabilitiesSchema.parse(req.body);
+      const liability = await storage.createLiability(validatedData);
+      res.status(201).json(liability);
+    } catch (error) {
+      console.error("Error creating liability:", error);
+      res.status(400).json({ message: "Invalid liability data" });
+    }
+  });
+
+  app.patch("/api/liabilities/:id", async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      if (isNaN(id)) {
+        return res.status(400).json({ message: "Invalid liability ID" });
+      }
+
+      const updates = req.body;
+      const liability = await storage.updateLiability(id, updates);
+      res.json(liability);
+    } catch (error) {
+      console.error("Error updating liability:", error);
+      res.status(400).json({ message: "Invalid liability data" });
+    }
+  });
+
+  app.delete("/api/liabilities/:id", async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      if (isNaN(id)) {
+        return res.status(400).json({ message: "Invalid liability ID" });
+      }
+
+      await storage.deleteLiability(id);
+      res.status(204).send();
+    } catch (error) {
+      console.error("Error deleting liability:", error);
+      res.status(500).json({ message: "Failed to delete liability" });
     }
   });
 
