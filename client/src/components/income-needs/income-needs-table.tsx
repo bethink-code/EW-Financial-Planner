@@ -96,7 +96,7 @@ function IncomeNeedsTable({ viewMode, searchTerm }: IncomeNeedsTableProps) {
     return {
       count: incomeNeeds.length,
       monthlyAmount: incomeNeeds.reduce((sum: number, incomeNeed: IncomeNeeds) => {
-        const value = parseFloat(incomeNeed.monthlyAmount.replace(/[^\d.-]/g, '')) || 0;
+        const value = parseFloat((incomeNeed.monthlyAmount || '').replace(/[^\d.-]/g, '')) || 0;
         return sum + value;
       }, 0),
     };
