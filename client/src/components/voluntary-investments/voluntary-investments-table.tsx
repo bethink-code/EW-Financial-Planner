@@ -1,7 +1,7 @@
 import { useState, useCallback, useMemo } from 'react';
 import { useQuery, useMutation } from '@tanstack/react-query';
 import { queryClient } from '@/lib/queryClient';
-import { VoluntaryInvestments, InsertVoluntaryInvestments } from '@shared/schema';
+import { VoluntaryInvestment, InsertVoluntaryInvestment } from '@shared/schema';
 import { AddButton, ActionButtonGroup, DuplicateButton, DeleteButton } from '@/components/ui/action-buttons';
 import { getFieldClass, getCellClass } from '@/lib/field-types';
 import { formatCurrencyValue, formatPercentageValue, getValueClass, handleDefaultValueFocus } from '@/lib/formatting';
@@ -15,19 +15,20 @@ function VoluntaryInvestmentsTable({ viewMode, searchTerm }: VoluntaryInvestment
   const [isUpdating, setIsUpdating] = useState(false);
 
   // Query for voluntary investments
-  const { data: investments = [], isLoading, error } = useQuery<VoluntaryInvestments[]>({
+  const { data: investments = [], isLoading, error } = useQuery<VoluntaryInvestment[]>({
     queryKey: ['/api/voluntary-investments'],
   });
 
   // Add investment mutation
   const addMutation = useMutation({
-    mutationFn: async (): Promise<VoluntaryInvestments> => {
-      const newInvestment: InsertVoluntaryInvestments = {
+    mutationFn: async (): Promise<VoluntaryInvestment> => {
+      const newInvestment: InsertVoluntaryInvestment = {
         description: "Enter details ...",
-        owner: "Donald Edwards",
-        amount: "R 0",
-        increasePercentage: "0%",
-        additionalOwners: [],
+        owners: ["Donald Edwards"],
+        ownershipPercentages: ["100%"],
+        baseCost: "R 0",
+        marketValue: "R 0",
+        liquidationPercentage: "100%",
       };
       
       const response = await fetch('/api/voluntary-investments', {
@@ -56,7 +57,7 @@ function VoluntaryInvestmentsTable({ viewMode, searchTerm }: VoluntaryInvestment
 
   // Update investment mutation
   const updateMutation = useMutation({
-    mutationFn: async ({ id, updates }: { id: number; updates: Partial<VoluntaryInvestments> }) => {
+    mutationFn: async ({ id, updates }: { id: number; updates: Partial<VoluntaryInvestment> }) => {
       const response = await fetch(`/api/voluntary-investments/${id}`, {
         method: 'PATCH',
         headers: {
@@ -101,24 +102,24 @@ function VoluntaryInvestmentsTable({ viewMode, searchTerm }: VoluntaryInvestment
   const totals = useMemo(() => {
     return {
       count: investments.length,
-      amount: investments.reduce((sum: number, investment: VoluntaryInvestments) => {
-        const value = parseFloat(investment.amount.replace(/[^\d.-]/g, '')) || 0;
+      amount: investments.reduce((sum: number, investment: VoluntaryInvestment) => {
+        const value = parseFloat((investment.marketValue || '0').replace(/[^\d.-]/g, '')) || 0;
         return sum + value;
       }, 0),
     };
   }, [investments]);
 
-  const handleUpdateInvestment = useCallback((id: number, field: keyof VoluntaryInvestments, value: string | string[]) => {
+  const handleUpdateInvestment = useCallback((id: number, field: keyof VoluntaryInvestment, value: string | string[]) => {
     setIsUpdating(true);
     const updates = { [field]: value };
     updateMutation.mutate({ id, updates });
   }, [updateMutation]);
 
-  const handleInputBlur = useCallback((id: number, field: keyof VoluntaryInvestments, value: string) => {
+  const handleInputBlur = useCallback((id: number, field: keyof VoluntaryInvestment, value: string) => {
     let formattedValue: string;
-    if (field === 'increasePercentage') {
+    if (field === 'liquidationPercentage' || field.includes('Percentage')) {
       formattedValue = formatPercentageValue(value);
-    } else if (field === 'amount') {
+    } else if (field === 'baseCost' || field === 'marketValue' || field === 'spouse' || field === 'others') {
       formattedValue = formatCurrencyValue(value);
     } else {
       formattedValue = value;
@@ -167,7 +168,7 @@ function VoluntaryInvestmentsTable({ viewMode, searchTerm }: VoluntaryInvestment
           </tr>
         </thead>
         <tbody className="divide-y divide-neutral-200">
-          {investments.map((investment: VoluntaryInvestments, index) => (
+          {investments.map((investment: VoluntaryInvestment, index) => (
             <tr key={investment.id} className="hover:bg-neutral-50">
               <td className="table-actions-cell p-1 text-center section-start section-end">
                 <ActionButtonGroup>
@@ -196,34 +197,34 @@ function VoluntaryInvestmentsTable({ viewMode, searchTerm }: VoluntaryInvestment
               <td className="p-1">
                 <input
                   type="text"
-                  defaultValue={investment.owner}
-                  className={`table-input ${getFieldClass('text')} ${getValueClass(investment.owner, 'text')}`}
+                  defaultValue={investment.owners?.[0] || "Enter details ..."}
+                  className={`table-input ${getFieldClass('text')} ${getValueClass(investment.owners?.[0] || "Enter details ...", 'text')}`}
                   onFocus={handleDefaultValueFocus}
-                  onBlur={(e) => handleInputBlur(investment.id, 'owner', e.target.value)}
+                  onBlur={(e) => handleUpdateInvestment(investment.id, 'owners', [e.target.value])}
                   disabled={isUpdating}
                 />
               </td>
               
               <td className="p-1 section-start">
                 <input
-                  key={`amount-${investment.id}-${investment.amount}`}
+                  key={`marketValue-${investment.id}-${investment.marketValue}`}
                   type="text"
-                  defaultValue={investment.amount}
-                  className={`table-input ${getFieldClass('currency')} ${getValueClass(investment.amount, 'currency')}`}
+                  defaultValue={investment.marketValue}
+                  className={`table-input ${getFieldClass('currency')} ${getValueClass(investment.marketValue, 'currency')}`}
                   onFocus={handleDefaultValueFocus}
-                  onBlur={(e) => handleInputBlur(investment.id, 'amount', e.target.value)}
+                  onBlur={(e) => handleInputBlur(investment.id, 'marketValue', e.target.value)}
                   disabled={isUpdating}
                 />
               </td>
               
               <td className="p-1 section-end">
                 <input
-                  key={`increasePercentage-${investment.id}-${investment.increasePercentage}`}
+                  key={`liquidationPercentage-${investment.id}-${investment.liquidationPercentage}`}
                   type="text"
-                  defaultValue={investment.increasePercentage}
-                  className={`table-input ${getFieldClass('percentage')} ${getValueClass(investment.increasePercentage, 'percentage')}`}
+                  defaultValue={investment.liquidationPercentage}
+                  className={`table-input ${getFieldClass('percentage')} ${getValueClass(investment.liquidationPercentage, 'percentage')}`}
                   onFocus={handleDefaultValueFocus}
-                  onBlur={(e) => handleInputBlur(investment.id, 'increasePercentage', e.target.value)}
+                  onBlur={(e) => handleInputBlur(investment.id, 'liquidationPercentage', e.target.value)}
                   disabled={isUpdating}
                 />
               </td>
