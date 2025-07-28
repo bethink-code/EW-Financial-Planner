@@ -144,7 +144,7 @@ export function AssuranceTable({}: AssuranceTableProps) {
   const handleAddOwner = useCallback((id: number) => {
     const policy = policies.find((p: Assurance) => p.id === id);
     if (policy) {
-      const newOwners = [...policy.owners, "Enter here ..."];
+      const newOwners = [...policy.owners, ""];
       setIsUpdating(true);
       updateMutation.mutate({ id, updates: { owners: newOwners } });
     }
@@ -165,7 +165,7 @@ export function AssuranceTable({}: AssuranceTableProps) {
   const handleAddBeneficiary = useCallback((id: number) => {
     const policy = policies.find((p: Assurance) => p.id === id);
     if (policy) {
-      const newBeneficiaries = [...policy.beneficiaries, "Enter here ..."];
+      const newBeneficiaries = [...policy.beneficiaries, ""];
       setIsUpdating(true);
       updateMutation.mutate({ id, updates: { beneficiaries: newBeneficiaries } });
     }

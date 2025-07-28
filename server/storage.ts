@@ -269,15 +269,15 @@ export class MemStorage implements IStorage {
     const id = this.currentAssuranceId++;
     const assurance: Assurance = {
       id,
-      description: insertAssurance.description || "Enter details ...",
+      description: insertAssurance.description || "",
       owners: insertAssurance.owners || ["Donald Edwards"],
-      beneficiaries: insertAssurance.beneficiaries || ["Enter details ..."],
+      beneficiaries: insertAssurance.beneficiaries || [""],
       deathBenefit: insertAssurance.deathBenefit || "R 0",
       amount: insertAssurance.amount || "R 0",
       premiumsByOthers: insertAssurance.premiumsByOthers || "R 0",
       collateralSession: insertAssurance.collateralSession || "R 0",
       benefitSplit: insertAssurance.benefitSplit || "0%",
-      additionalInfo: insertAssurance.additionalInfo || "Enter details ..."
+      additionalInfo: insertAssurance.additionalInfo || ""
     };
     this.assurance.set(id, assurance);
     return assurance;

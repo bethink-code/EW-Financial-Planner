@@ -24,24 +24,7 @@ export default function Assurance() {
   // Add new policy mutation
   const addMutation = useMutation({
     mutationFn: async () => {
-      const newPolicy: InsertAssurance = {
-        description: "Enter here ...",
-        owner: "Donald Edwards",
-        additionalOwners: "[]",
-        lifeAssured: "Enter here ...",
-        deathBenefit: "0",
-        beneficiary: "Enter here ...",
-        benefitSplit: "0",
-        additionalBeneficiaries: "[]",
-        additionalInfo: "Enter here ...",
-        amount: "0",
-        buySell: false,
-        keyMan: false,
-        premiumsByOthers: "0",
-        collateralSession: "0",
-        excludedFromEstateDuty: false,
-        excludedFromProvisions: false
-      };
+      const newPolicy = {}; // Send empty object to use database defaults
       return apiRequest("POST", "/api/assurance", newPolicy);
     },
     onSuccess: () => {
