@@ -316,11 +316,14 @@ th, td {
 
   /* Add spacing to table cells for better field separation */
   td {
-    padding: 1rem 0.75rem;
+    padding: 0.5rem 0.75rem;
+    vertical-align: middle;
+    min-height: 2.3rem;
   }
   
   th {
-    padding: 1rem 0.75rem;
+    padding: 0.75rem 0.75rem;
+    vertical-align: middle;
   }
   
   /* More generous checkbox column spacing */
@@ -443,23 +446,31 @@ th, td {
   
   /* Standard table cell - works for both inputs and flows tables */
   .table-cell {
-    padding: 0.375rem 0.75rem;
-    height: 2rem;
+    padding: 0.5rem 0.75rem;
+    height: auto;
     vertical-align: middle;
     box-sizing: border-box;
+    min-height: 2.3rem; /* Consistent minimum height */
   }
   
   /* Action buttons alignment in table cells */
   .table-actions-cell {
-    vertical-align: top !important;
-    padding: 0.375rem 0.75rem;
+    vertical-align: middle !important;
+    padding: 0.5rem 0.75rem;
+    text-align: center;
   }
   
   .table-actions-cell > div {
     display: flex;
     align-items: center;
     justify-content: center;
-    margin-top: 0.25rem; /* 4px offset to align with input field centers */
+    height: 100%;
+    min-height: 2.3rem; /* Match input field height */
+  }
+
+  /* Vertical alignment utility class */
+  .vertical-align-middle {
+    vertical-align: middle !important;
   }
   
   /* Standard table row - enforces consistent height */

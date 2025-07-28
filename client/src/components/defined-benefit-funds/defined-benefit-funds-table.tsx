@@ -169,7 +169,7 @@ function DefinedBenefitFundsTable({ viewMode, searchTerm }: DefinedBenefitFundsT
         <tbody className="divide-y divide-neutral-200">
           {funds.map((fund: DefinedBenefitFunds, index) => (
             <tr key={fund.id} className="hover:bg-neutral-50">
-              <td className="table-actions-cell p-1 text-center section-start section-end">
+              <td className="table-actions-cell p-2 text-center section-start section-end">
                 <ActionButtonGroup>
                   <DuplicateButton
                     onClick={() => addMutation.mutate()}
@@ -182,7 +182,7 @@ function DefinedBenefitFundsTable({ viewMode, searchTerm }: DefinedBenefitFundsT
                 </ActionButtonGroup>
               </td>
               
-              <td className="p-1 section-start">
+              <td className="p-2 section-start">
                 <input
                   type="text"
                   defaultValue={fund.description}
@@ -193,7 +193,7 @@ function DefinedBenefitFundsTable({ viewMode, searchTerm }: DefinedBenefitFundsT
                 />
               </td>
               
-              <td className="p-1">
+              <td className="p-2">
                 <input
                   type="text"
                   defaultValue={fund.owner}
@@ -204,7 +204,7 @@ function DefinedBenefitFundsTable({ viewMode, searchTerm }: DefinedBenefitFundsT
                 />
               </td>
               
-              <td className="p-1 section-start">
+              <td className="p-2 section-start">
                 <input
                   key={`amount-${fund.id}-${fund.amount}`}
                   type="text"
@@ -216,7 +216,7 @@ function DefinedBenefitFundsTable({ viewMode, searchTerm }: DefinedBenefitFundsT
                 />
               </td>
               
-              <td className="p-1 section-end">
+              <td className="p-2 section-end">
                 <input
                   key={`increasePercentage-${fund.id}-${fund.increasePercentage}`}
                   type="text"

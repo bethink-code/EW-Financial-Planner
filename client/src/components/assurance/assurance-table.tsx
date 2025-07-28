@@ -163,14 +163,14 @@ function AssuranceTable({ viewMode, searchTerm }: AssuranceTableProps) {
         <tbody className="divide-y divide-neutral-200">
           {assurances.map((assurance: Assurance, index) => (
             <tr key={assurance.id} className="hover:bg-neutral-50">
-              <td className="table-actions-cell p-1 text-center section-start section-end">
+              <td className="table-actions-cell p-2 text-center section-start section-end">
                 <ActionButtonGroup>
                   <DuplicateButton onClick={() => addMutation.mutate()} disabled={isUpdating} />
                   <DeleteButton onClick={() => handleDeleteAssurance(assurance.id)} disabled={isUpdating} />
                 </ActionButtonGroup>
               </td>
               
-              <td className="p-1 section-start">
+              <td className="p-2 section-start">
                 <input
                   type="text"
                   defaultValue={assurance.description}
@@ -181,7 +181,7 @@ function AssuranceTable({ viewMode, searchTerm }: AssuranceTableProps) {
                 />
               </td>
               
-              <td className="p-1">
+              <td className="p-2">
                 <input
                   type="text"
                   defaultValue={assurance.owner}
@@ -192,7 +192,7 @@ function AssuranceTable({ viewMode, searchTerm }: AssuranceTableProps) {
                 />
               </td>
               
-              <td className="p-1 section-start">
+              <td className="p-2 section-start">
                 <input
                   key={`amount-${assurance.id}-${assurance.amount}`}
                   type="text"
@@ -204,7 +204,7 @@ function AssuranceTable({ viewMode, searchTerm }: AssuranceTableProps) {
                 />
               </td>
               
-              <td className="p-1 section-end">
+              <td className="p-2 section-end">
                 <input
                   key={`increasePercentage-${assurance.id}-${assurance.increasePercentage}`}
                   type="text"
