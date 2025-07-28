@@ -4,7 +4,7 @@ import { queryClient } from '@/lib/queryClient';
 import { LumpSumBequests, InsertLumpSumBequests } from '@shared/schema';
 import { AddButton, ActionButtonGroup, DuplicateButton, DeleteButton } from '@/components/ui/action-buttons';
 import { getFieldClass, getCellClass } from '@/lib/field-types';
-import { formatCurrencyValue, getValueClass, handleDefaultValueFocus } from '@/lib/formatting';
+import { formatCurrencyValue, getValueClass, handleDefaultValueFocus, createEnhancedBlurHandler } from '@/lib/formatting';
 
 interface LumpSumTableProps {
   viewMode: 'table' | 'hybrid';
@@ -24,9 +24,12 @@ function LumpSumTable({ viewMode, searchTerm }: LumpSumTableProps) {
     mutationFn: async (): Promise<LumpSumBequests> => {
       const newBequest: InsertLumpSumBequests = {
         description: "Enter details ...",
-        beneficiary: "Enter beneficiary",
+        entity: "Enter details ...",
+        start: "Enter details ...",
         amount: "R 0",
-        additionalBeneficiaries: [],
+        increasePercentage: "0%",
+        cpi: false,
+        valueAtDeath: "R 0",
       };
       
       const response = await fetch('/api/lump-sum-bequests', {
@@ -101,7 +104,16 @@ function LumpSumTable({ viewMode, searchTerm }: LumpSumTableProps) {
     return {
       count: bequests.length,
       amount: bequests.reduce((sum: number, bequest: LumpSumBequests) => {
-        const value = parseFloat(bequest.amount.replace(/[^\d.-]/g, '')) || 0;
+        const value = parseFloat((bequest.amount || '').replace(/[^\d.-]/g, '')) || 0;
+        return sum + value;
+      }, 0),
+      increasePercentage: bequests.reduce((sum: number, bequest: LumpSumBequests) => {
+        const value = parseFloat((bequest.increasePercentage || '').replace(/[^\d.-]/g, '')) || 0;
+        return sum + value;
+      }, 0),
+      cpiCount: bequests.filter(bequest => bequest.cpi).length,
+      valueAtDeath: bequests.reduce((sum: number, bequest: LumpSumBequests) => {
+        const value = parseFloat((bequest.valueAtDeath || '').replace(/[^\d.-]/g, '')) || 0;
         return sum + value;
       }, 0),
     };
@@ -115,8 +127,10 @@ function LumpSumTable({ viewMode, searchTerm }: LumpSumTableProps) {
 
   const handleInputBlur = useCallback((id: number, field: keyof LumpSumBequests, value: string) => {
     let formattedValue: string;
-    if (field === 'amount') {
+    if (field === 'amount' || field === 'valueAtDeath') {
       formattedValue = formatCurrencyValue(value);
+    } else if (field === 'increasePercentage') {
+      formattedValue = createEnhancedBlurHandler('percentage')(value);
     } else {
       formattedValue = value;
     }
@@ -153,13 +167,18 @@ function LumpSumTable({ viewMode, searchTerm }: LumpSumTableProps) {
             <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start section-end" rowSpan={2}>
               <AddButton onClick={() => addMutation.mutate()} disabled={isUpdating} />
             </th>
-            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start" colSpan={2}>Overview</th>
-            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start section-end">Financial Details</th>
+            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center" colSpan={2}>Overview</th>
+            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center" colSpan={4}>Need Details</th>
+            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center" colSpan={1}>Calculation</th>
           </tr>
           <tr>
-            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start">Description</th>
-            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center">Beneficiary</th>
-            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-end">Amount</th>
+            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center">Description</th>
+            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center">Entity</th>
+            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center">Start</th>
+            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center">Amount</th>
+            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center">Increase %</th>
+            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center">CPI</th>
+            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center">Value at Death</th>
           </tr>
         </thead>
         <tbody className="divide-y divide-neutral-200">
@@ -178,7 +197,7 @@ function LumpSumTable({ viewMode, searchTerm }: LumpSumTableProps) {
                 </ActionButtonGroup>
               </td>
               
-              <td className="p-1 section-start">
+              <td className="p-2 text-left">
                 <input
                   type="text"
                   defaultValue={bequest.description}
@@ -189,18 +208,29 @@ function LumpSumTable({ viewMode, searchTerm }: LumpSumTableProps) {
                 />
               </td>
               
-              <td className="p-1">
+              <td className="p-2 text-left">
                 <input
                   type="text"
-                  defaultValue={bequest.beneficiary}
-                  className={`table-input ${getFieldClass('text')} ${getValueClass(bequest.beneficiary, 'text')}`}
+                  defaultValue={bequest.entity}
+                  className={`table-input ${getFieldClass('text')} ${getValueClass(bequest.entity, 'text')}`}
                   onFocus={handleDefaultValueFocus}
-                  onBlur={(e) => handleInputBlur(bequest.id, 'beneficiary', e.target.value)}
+                  onBlur={(e) => handleInputBlur(bequest.id, 'entity', e.target.value)}
                   disabled={isUpdating}
                 />
               </td>
               
-              <td className="p-1 section-end">
+              <td className="p-2 text-left">
+                <input
+                  type="text"
+                  defaultValue={bequest.start}
+                  className={`table-input ${getFieldClass('text')} ${getValueClass(bequest.start, 'text')}`}
+                  onFocus={handleDefaultValueFocus}
+                  onBlur={(e) => handleInputBlur(bequest.id, 'start', e.target.value)}
+                  disabled={isUpdating}
+                />
+              </td>
+              
+              <td className="p-2 text-right">
                 <input
                   key={`amount-${bequest.id}-${bequest.amount}`}
                   type="text"
@@ -211,6 +241,39 @@ function LumpSumTable({ viewMode, searchTerm }: LumpSumTableProps) {
                   disabled={isUpdating}
                 />
               </td>
+              
+              <td className="p-2 text-center">
+                <input
+                  key={`increasePercentage-${bequest.id}-${bequest.increasePercentage}`}
+                  type="text"
+                  defaultValue={bequest.increasePercentage}
+                  className={`table-input ${getFieldClass('percentage')} ${getValueClass(bequest.increasePercentage, 'percentage')}`}
+                  onFocus={handleDefaultValueFocus}
+                  onBlur={(e) => handleInputBlur(bequest.id, 'increasePercentage', e.target.value)}
+                  disabled={isUpdating}
+                />
+              </td>
+              
+              <td className="p-2 text-center">
+                <input
+                  type="checkbox"
+                  defaultChecked={bequest.cpi}
+                  className="table-checkbox"
+                  onChange={(e) => handleUpdateBequest(bequest.id, 'cpi', e.target.checked)}
+                  disabled={isUpdating}
+                />
+              </td>
+              
+              <td className="p-2 text-right">
+                <input
+                  key={`valueAtDeath-${bequest.id}-${bequest.valueAtDeath}`}
+                  type="text"
+                  defaultValue={bequest.valueAtDeath}
+                  className="calculated-field"
+                  readOnly
+                  disabled
+                />
+              </td>
             </tr>
           ))}
         </tbody>
@@ -218,8 +281,11 @@ function LumpSumTable({ viewMode, searchTerm }: LumpSumTableProps) {
         {/* Totals Footer */}
         <tfoot>
           <tr>
-            <td className="totals-cell-label text-right" colSpan={2}>Totals</td>
-            <td className="totals-cell-value section-end">R {totals.amount.toLocaleString()}</td>
+            <td className="totals-cell-label text-right" colSpan={4}>Totals</td>
+            <td className="totals-cell-value">R {totals.amount.toLocaleString()}</td>
+            <td className="totals-cell-value">{totals.increasePercentage}%</td>
+            <td className="totals-cell-value">{totals.cpiCount} CPI</td>
+            <td className="totals-cell-value">R {totals.valueAtDeath.toLocaleString()}</td>
           </tr>
         </tfoot>
       </table>
