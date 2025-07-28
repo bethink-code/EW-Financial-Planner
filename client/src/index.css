@@ -333,7 +333,7 @@ th, td {
   .summary-card h3,
   .summary-card .text-sm,
   .summary-card .text-xs {
-    font-size: 1.125rem !important; /* Increased to 18px for better visibility */
+    font-size: 0.9rem !important; /* 14.4px - nice balance between readability and size */
     font-weight: 600 !important; /* Slightly bolder for prominence */
     color: #374151 !important;
     margin-bottom: 0.5rem !important;
