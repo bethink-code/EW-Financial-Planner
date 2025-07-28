@@ -559,22 +559,32 @@ th, td {
   }
 
   /* Field type-specific widths for consistent table behavior */
-  .field-text {
-    min-width: 180px;
-    max-width: 350px;
+  .field-text,
+  input.field-text,
+  .table-input.field-text {
+    min-width: 150px !important;
+    max-width: 300px !important;
+    width: auto !important;
     text-align: left !important;
   }
 
-  .field-currency {
-    min-width: 100px;
-    max-width: 140px;
+  .field-currency,
+  input.field-currency,
+  .table-input.field-currency,
+  .field-currency.table-input {
+    min-width: 80px !important;
+    max-width: 110px !important;
+    width: 90px !important;
     text-align: right !important;
   }
 
-  .field-percentage {
-    min-width: 60px !important;
-    max-width: 80px !important;
-    width: 70px !important;
+  .field-percentage,
+  input.field-percentage,
+  .table-input.field-percentage,
+  .field-percentage.table-input {
+    min-width: 40px !important;
+    max-width: 50px !important;
+    width: 50px !important;
     text-align: right !important;
   }
 
