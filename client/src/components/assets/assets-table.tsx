@@ -225,7 +225,8 @@ export function AssetsTable({ viewMode = 'table', onShowCategoryDialog }: Assets
             type="text"
             defaultValue={formatTextValue(asset.description)}
             data-field={`description-${asset.id}`}
-            className={`${getFieldClass('text')} ${getValueClass(asset.description, 'text')}`}
+            className={`table-input h-7 text-sm bg-primary/5 border-gray-200 focus:border-primary w-full px-3 py-1 border rounded-md text-sm ${getValueClass(asset.description, 'text')}`}
+            style={{ textAlign: "left" }}
             onFocus={handleDefaultValueFocus}
             onBlur={(e) => handleInputBlur(asset.id, 'description', e.target.value)}
           />
@@ -237,7 +238,8 @@ export function AssetsTable({ viewMode = 'table', onShowCategoryDialog }: Assets
             type="text"
             defaultValue={formatCurrencyValue(asset.marketValue)}
             data-field={`marketValue-${asset.id}`}
-            className={`${getFieldClass('currency')} ${getValueClass(asset.marketValue, 'currency')}`}
+            className={`table-input h-7 text-sm bg-primary/5 border-gray-200 focus:border-primary w-full px-3 py-1 border rounded-md text-sm ${getValueClass(asset.marketValue, 'currency')}`}
+            style={{ textAlign: "right", minWidth: "100px" }}
             onFocus={handleDefaultValueFocus}
             onBlur={createEnhancedBlurHandler((value) => handleInputBlur(asset.id, 'marketValue', value), 'currency')}
           />
@@ -249,7 +251,8 @@ export function AssetsTable({ viewMode = 'table', onShowCategoryDialog }: Assets
             type="text"
             defaultValue={formatPercentageValue(asset.johnDoe)}
             data-field={`johnDoe-${asset.id}`}
-            className={`${getFieldClass('percentage')} ${getValueClass(asset.johnDoe, 'percentage')}`}
+            className={`table-input h-7 text-sm bg-primary/5 border-gray-200 focus:border-primary w-16 px-2 py-1 border rounded-md text-sm ${getValueClass(asset.johnDoe, 'percentage')}`}
+            style={{ textAlign: "right" }}
             onFocus={handleDefaultValueFocus}
             onBlur={createEnhancedBlurHandler((value) => handleInputBlur(asset.id, 'johnDoe', value), 'percentage')}
           />
@@ -259,7 +262,8 @@ export function AssetsTable({ viewMode = 'table', onShowCategoryDialog }: Assets
             type="text"
             defaultValue={formatPercentageValue(asset.janetteDoe)}
             data-field={`janetteDoe-${asset.id}`}
-            className={`${getFieldClass('percentage')} ${getValueClass(asset.janetteDoe, 'percentage')}`}
+            className={`table-input h-7 text-sm bg-primary/5 border-gray-200 focus:border-primary w-16 px-2 py-1 border rounded-md text-sm ${getValueClass(asset.janetteDoe, 'percentage')}`}
+            style={{ textAlign: "right" }}
             onFocus={handleDefaultValueFocus}
             onBlur={createEnhancedBlurHandler((value) => handleInputBlur(asset.id, 'janetteDoe', value), 'percentage')}
           />
@@ -269,7 +273,8 @@ export function AssetsTable({ viewMode = 'table', onShowCategoryDialog }: Assets
             type="text"
             defaultValue={formatPercentageValue(asset.doeJunior)}
             data-field={`doeJunior-${asset.id}`}
-            className={`${getFieldClass('percentage')} ${getValueClass(asset.doeJunior, 'percentage')}`}
+            className={`table-input h-7 text-sm bg-primary/5 border-gray-200 focus:border-primary w-16 px-2 py-1 border rounded-md text-sm ${getValueClass(asset.doeJunior, 'percentage')}`}
+            style={{ textAlign: "right" }}
             onFocus={handleDefaultValueFocus}
             onBlur={createEnhancedBlurHandler((value) => handleInputBlur(asset.id, 'doeJunior', value), 'percentage')}
           />
@@ -279,7 +284,8 @@ export function AssetsTable({ viewMode = 'table', onShowCategoryDialog }: Assets
             type="text"
             defaultValue={formatPercentageValue(asset.doeFamilyTrust)}
             data-field={`doeFamilyTrust-${asset.id}`}
-            className={`${getFieldClass('percentage')} ${getValueClass(asset.doeFamilyTrust, 'percentage')}`}
+            className={`table-input h-7 text-sm bg-primary/5 border-gray-200 focus:border-primary w-16 px-2 py-1 border rounded-md text-sm ${getValueClass(asset.doeFamilyTrust, 'percentage')}`}
+            style={{ textAlign: "right" }}
             onFocus={handleDefaultValueFocus}
             onBlur={createEnhancedBlurHandler((value) => handleInputBlur(asset.id, 'doeFamilyTrust', value), 'percentage')}
           />

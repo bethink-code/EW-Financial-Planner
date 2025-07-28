@@ -221,7 +221,8 @@ export function LiabilitiesTable({ viewMode = 'table', onShowCategoryDialog }: L
           onFocus={handleDefaultValueFocus}
           onBlur={createEnhancedBlurHandler((value) => handleInputBlur(liability.id, 'description', value), 'text')}
           data-field={`description-${liability.id}`}
-          className={`${getFieldClass('text')} ${getValueClass(liability.description, 'text')}`}
+          className={`table-input h-7 text-sm bg-primary/5 border-gray-200 focus:border-primary w-full px-3 py-1 border rounded-md text-sm ${getValueClass(liability.description, 'text')}`}
+          style={{ textAlign: "left" }}
           disabled={isUpdating}
         />
       </td>
@@ -240,7 +241,8 @@ export function LiabilitiesTable({ viewMode = 'table', onShowCategoryDialog }: L
           onFocus={handleDefaultValueFocus}
           onBlur={createEnhancedBlurHandler((value) => handleInputBlur(liability.id, 'debtAmount', value), 'currency')}
           data-field={`debtAmount-${liability.id}`}
-          className={`${getFieldClass('currency')} ${getValueClass(liability.debtAmount, 'currency')}`}
+          className={`table-input h-7 text-sm bg-primary/5 border-gray-200 focus:border-primary w-full px-3 py-1 border rounded-md text-sm ${getValueClass(liability.debtAmount, 'currency')}`}
+          style={{ textAlign: "right", minWidth: "100px" }}
           disabled={isUpdating}
         />
       </td>
@@ -251,7 +253,8 @@ export function LiabilitiesTable({ viewMode = 'table', onShowCategoryDialog }: L
           onFocus={handleDefaultValueFocus}
           onBlur={createEnhancedBlurHandler((value) => handleInputBlur(liability.id, 'peterLambie', value), 'percentage')}
           data-field={`peterLambie-${liability.id}`}
-          className={`${getFieldClass('percentage')} ${getValueClass(liability.peterLambie, 'percentage')}`}
+          className={`table-input h-7 text-sm bg-primary/5 border-gray-200 focus:border-primary w-16 px-2 py-1 border rounded-md text-sm ${getValueClass(liability.peterLambie, 'percentage')}`}
+          style={{ textAlign: "right" }}
           disabled={isUpdating}
         />
       </td>
@@ -262,7 +265,8 @@ export function LiabilitiesTable({ viewMode = 'table', onShowCategoryDialog }: L
           onFocus={handleDefaultValueFocus}
           onBlur={createEnhancedBlurHandler((value) => handleInputBlur(liability.id, 'victoriaLambie', value), 'percentage')}
           data-field={`victoriaLambie-${liability.id}`}
-          className={`${getFieldClass('percentage')} ${getValueClass(liability.victoriaLambie, 'percentage')}`}
+          className={`table-input h-7 text-sm bg-primary/5 border-gray-200 focus:border-primary w-16 px-2 py-1 border rounded-md text-sm ${getValueClass(liability.victoriaLambie, 'percentage')}`}
+          style={{ textAlign: "right" }}
           disabled={isUpdating}
         />
       </td>
@@ -273,7 +277,8 @@ export function LiabilitiesTable({ viewMode = 'table', onShowCategoryDialog }: L
           onFocus={handleDefaultValueFocus}
           onBlur={createEnhancedBlurHandler((value) => handleInputBlur(liability.id, 'juniorLambie', value), 'percentage')}
           data-field={`juniorLambie-${liability.id}`}
-          className={`${getFieldClass('percentage')} ${getValueClass(liability.juniorLambie, 'percentage')}`}
+          className={`table-input h-7 text-sm bg-primary/5 border-gray-200 focus:border-primary w-16 px-2 py-1 border rounded-md text-sm ${getValueClass(liability.juniorLambie, 'percentage')}`}
+          style={{ textAlign: "right" }}
           disabled={isUpdating}
         />
       </td>
@@ -284,7 +289,8 @@ export function LiabilitiesTable({ viewMode = 'table', onShowCategoryDialog }: L
           onFocus={handleDefaultValueFocus}
           onBlur={createEnhancedBlurHandler((value) => handleInputBlur(liability.id, 'lambiesFamilyTrust', value), 'percentage')}
           data-field={`lambiesFamilyTrust-${liability.id}`}
-          className={`${getFieldClass('percentage')} ${getValueClass(liability.lambiesFamilyTrust, 'percentage')}`}
+          className={`table-input h-7 text-sm bg-primary/5 border-gray-200 focus:border-primary w-16 px-2 py-1 border rounded-md text-sm ${getValueClass(liability.lambiesFamilyTrust, 'percentage')}`}
+          style={{ textAlign: "right" }}
           disabled={isUpdating}
         />
       </td>
@@ -295,7 +301,8 @@ export function LiabilitiesTable({ viewMode = 'table', onShowCategoryDialog }: L
           onFocus={handleDefaultValueFocus}
           onBlur={createEnhancedBlurHandler((value) => handleInputBlur(liability.id, 'estate', value), 'currency')}
           data-field={`estate-${liability.id}`}
-          className={`${getFieldClass('currency')} ${getValueClass(liability.estate, 'currency')}`}
+          className={`table-input h-7 text-sm bg-primary/5 border-gray-200 focus:border-primary w-full px-3 py-1 border rounded-md text-sm ${getValueClass(liability.estate, 'currency')}`}
+          style={{ textAlign: "right", minWidth: "100px" }}
           disabled={isUpdating}
         />
       </td>
@@ -306,7 +313,8 @@ export function LiabilitiesTable({ viewMode = 'table', onShowCategoryDialog }: L
           onFocus={handleDefaultValueFocus}
           onBlur={createEnhancedBlurHandler((value) => handleInputBlur(liability.id, 'others', value), 'currency')}
           data-field={`others-${liability.id}`}
-          className={`${getFieldClass('currency')} ${getValueClass(liability.others, 'currency')}`}
+          className={`table-input h-7 text-sm bg-primary/5 border-gray-200 focus:border-primary w-full px-3 py-1 border rounded-md text-sm ${getValueClass(liability.others, 'currency')}`}
+          style={{ textAlign: "right", minWidth: "100px" }}
           disabled={isUpdating}
         />
       </td>
