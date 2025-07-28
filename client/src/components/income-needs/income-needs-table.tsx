@@ -4,7 +4,7 @@ import { queryClient } from '@/lib/queryClient';
 import { IncomeNeeds, InsertIncomeNeeds } from '@shared/schema';
 import { AddButton, ActionButtonGroup, DuplicateButton, DeleteButton } from '@/components/ui/action-buttons';
 import { getFieldClass, getCellClass } from '@/lib/field-types';
-import { formatCurrencyValue, getValueClass, handleDefaultValueFocus, createEnhancedBlurHandler } from '@/lib/formatting';
+import { formatCurrencyValue, formatPercentageValue, formatYearsValue, formatTextValue, getValueClass, handleDefaultValueFocus } from '@/lib/formatting';
 
 interface IncomeNeedsTableProps {
   viewMode: 'table' | 'hybrid';
@@ -111,28 +111,38 @@ function IncomeNeedsTable({ viewMode, searchTerm }: IncomeNeedsTableProps) {
     };
   }, [incomeNeeds]);
 
-  const handleUpdateIncomeNeed = useCallback((id: number, field: keyof IncomeNeeds, value: string | string[]) => {
+  const handleUpdateIncomeNeed = useCallback((id: number, field: keyof IncomeNeeds, value: string | boolean | string[]) => {
     setIsUpdating(true);
     const updates = { [field]: value };
     updateMutation.mutate({ id, updates });
   }, [updateMutation]);
 
-  const handleInputBlur = useCallback((id: number, field: keyof IncomeNeeds, value: string | boolean) => {
-    if (typeof value === 'boolean') {
-      handleUpdateIncomeNeed(id, field, value);
-      return;
+  const handleInputBlur = useCallback((id: number, field: keyof IncomeNeeds, value: string, target?: HTMLInputElement) => {
+    
+    // Format the value based on field type
+    let formattedValue = value;
+    switch (field) {
+      case 'amount':
+        formattedValue = formatCurrencyValue(value);
+        break;
+      case 'increasePercentage':
+        formattedValue = formatPercentageValue(value);
+        break;
+      case 'termYears':
+        formattedValue = formatYearsValue(value);
+        break;
+      case 'description':
+      case 'personName':
+        formattedValue = formatTextValue(value);
+        break;
     }
     
-    const enhancedBlurHandler = createEnhancedBlurHandler(field);
-    const formattedValue = enhancedBlurHandler(value);
-    handleUpdateIncomeNeed(id, field, formattedValue);
-    
-    const target = document.activeElement as HTMLInputElement;
+    // Update the DOM element immediately for visual feedback
     if (target && formattedValue !== value) {
-      setTimeout(() => {
-        target.value = formattedValue;
-      }, 0);
+      target.value = formattedValue;
     }
+    
+    handleUpdateIncomeNeed(id, field, formattedValue);
   }, [handleUpdateIncomeNeed]);
 
   const handleDeleteIncomeNeed = useCallback((id: number) => {
@@ -211,7 +221,7 @@ function IncomeNeedsTable({ viewMode, searchTerm }: IncomeNeedsTableProps) {
                   defaultValue={incomeNeed.amount}
                   className={`table-input ${getFieldClass('currency')} ${getValueClass(incomeNeed.amount, 'currency')}`}
                   onFocus={handleDefaultValueFocus}
-                  onBlur={(e) => handleInputBlur(incomeNeed.id, 'amount', e.target.value)}
+                  onBlur={(e) => handleInputBlur(incomeNeed.id, 'amount', e.target.value, e.target)}
                   disabled={isUpdating}
                 />
               </td>
