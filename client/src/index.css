@@ -314,15 +314,6 @@ th, td {
   tfoot .section-end {
     border-right: 1px solid #e5e7eb !important;
   }
-  tfoot .section-start {
-    border-left: 1px solid #e5e7eb !important;
-  }
-
-  thead .section-end,
-  tbody .section-end,
-  tfoot .section-end {
-    border-right: 1px solid #e5e7eb !important;
-  }
 
   /* No row borders - completely clean */
   table tbody tr,
