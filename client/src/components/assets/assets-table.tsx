@@ -380,16 +380,16 @@ export function AssetsTable({ viewMode = 'table', onShowCategoryDialog }: Assets
         <tfoot>
           <tr>
             <td className="totals-cell-label">Totals</td>
+            <td className="totals-cell-label section-start"></td>
+            <td className="totals-cell-label"></td>
+            <td className="totals-cell-value section-start">{totals.totalMarketValue}</td>
+            <td className="totals-cell-label section-start"></td>
             <td className="totals-cell-label"></td>
             <td className="totals-cell-label"></td>
-            <td className="totals-cell-value">{totals.totalMarketValue}</td>
             <td className="totals-cell-label"></td>
-            <td className="totals-cell-label"></td>
-            <td className="totals-cell-label"></td>
-            <td className="totals-cell-label"></td>
-            <td className="totals-cell-value">{totals.totalEstate}</td>
+            <td className="totals-cell-value section-start">{totals.totalEstate}</td>
             <td className="totals-cell-value">{totals.totalOthers}</td>
-            <td className="totals-cell-value">{totals.totalClient}</td>
+            <td className="totals-cell-value section-end">{totals.totalClient}</td>
           </tr>
         </tfoot>
       </table>
