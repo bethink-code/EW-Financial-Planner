@@ -23,7 +23,7 @@ function DefinedBenefitFundsTable({ viewMode, searchTerm }: DefinedBenefitFundsT
   const addMutation = useMutation({
     mutationFn: async (): Promise<DefinedBenefitFunds> => {
       const newFund: InsertDefinedBenefitFunds = {
-        description: "Enter details ...",
+        description: """,
         owner: "Donald Edwards",
         amount: "R 0",
         increasePercentage: "0%",
