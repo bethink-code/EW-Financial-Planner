@@ -163,57 +163,59 @@ function VoluntaryInvestmentsTable({ viewMode, searchTerm }: VoluntaryInvestment
 
   const handleAddOwner = useCallback((id: number) => {
     const investment = investments.find((i: VoluntaryInvestment) => i.id === id);
-    if (!investment) return;
-    
-    const owners = [...investment.owners, ""];
-    const percentages = [...investment.ownershipPercentages, "0%"];
-    
-    // Single mutation with both arrays - prevents race conditions
-    const updates = { 
-      owners: owners, 
-      ownershipPercentages: percentages 
-    };
-    setIsUpdating(true);
-    updateMutation.mutate({ id, updates });
+    if (investment) {
+      const newOwners = [...investment.owners, ""];
+      const newPercentages = [...investment.ownershipPercentages, "0%"];
+      
+      // Update owners first, then percentages to keep arrays synchronized
+      setIsUpdating(true);
+      updateMutation.mutate({ 
+        id, 
+        updates: { 
+          owners: newOwners,
+          ownershipPercentages: newPercentages
+        }
+      });
+    }
   }, [investments, updateMutation]);
 
   const handleRemoveOwner = useCallback((id: number, ownerIndex: number) => {
     const investment = investments.find((i: VoluntaryInvestment) => i.id === id);
-    if (!investment || investment.owners.length <= 1 || ownerIndex === 0) return;
-    
-    const owners = [...investment.owners];
-    const percentages = [...investment.ownershipPercentages];
-    
-    owners.splice(ownerIndex, 1);
-    percentages.splice(ownerIndex, 1);
-    
-    // Single mutation with both arrays - prevents race conditions
-    const updates = { 
-      owners: owners, 
-      ownershipPercentages: percentages 
-    };
-    setIsUpdating(true);
-    updateMutation.mutate({ id, updates });
+    if (investment && investment.owners.length > 1 && ownerIndex > 0) { // Protect first owner
+      const newOwners = [...investment.owners];
+      const newPercentages = [...investment.ownershipPercentages];
+      
+      newOwners.splice(ownerIndex, 1);
+      newPercentages.splice(ownerIndex, 1);
+      
+      // Update both arrays simultaneously to keep them synchronized
+      setIsUpdating(true);
+      updateMutation.mutate({ 
+        id, 
+        updates: { 
+          owners: newOwners,
+          ownershipPercentages: newPercentages
+        }
+      });
+    }
   }, [investments, updateMutation]);
 
   const handleOwnerChange = useCallback((id: number, ownerIndex: number, newOwner: string) => {
     const investment = investments.find((i: VoluntaryInvestment) => i.id === id);
-    if (!investment) return;
-    
-    const owners = [...investment.owners];
-    owners[ownerIndex] = newOwner;
-    
-    handleUpdateInvestment(id, 'owners', owners);
+    if (investment) {
+      const updatedOwners = [...investment.owners];
+      updatedOwners[ownerIndex] = newOwner;
+      handleUpdateInvestment(id, 'owners', updatedOwners);
+    }
   }, [investments, handleUpdateInvestment]);
 
   const handleOwnershipPercentageChange = useCallback((id: number, ownerIndex: number, newPercentage: string) => {
     const investment = investments.find((i: VoluntaryInvestment) => i.id === id);
-    if (!investment) return;
-    
-    const percentages = [...investment.ownershipPercentages];
-    percentages[ownerIndex] = newPercentage;
-    
-    handleUpdateInvestment(id, 'ownershipPercentages', percentages);
+    if (investment) {
+      const updatedPercentages = [...investment.ownershipPercentages];
+      updatedPercentages[ownerIndex] = newPercentage;
+      handleUpdateInvestment(id, 'ownershipPercentages', updatedPercentages);
+    }
   }, [investments, handleUpdateInvestment]);
 
   if (isLoading) {
