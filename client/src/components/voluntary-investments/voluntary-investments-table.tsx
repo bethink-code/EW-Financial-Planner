@@ -128,7 +128,7 @@ function VoluntaryInvestmentsTable({ viewMode, searchTerm }: VoluntaryInvestment
     };
   }, [investments]);
 
-  const handleUpdateInvestment = useCallback((id: number, field: keyof VoluntaryInvestment, value: string | string[]) => {
+  const handleUpdateInvestment = useCallback((id: number, field: keyof VoluntaryInvestment, value: string | string[] | boolean) => {
     setIsUpdating(true);
     const updates = { [field]: value };
     updateMutation.mutate({ id, updates });
@@ -189,7 +189,7 @@ function VoluntaryInvestmentsTable({ viewMode, searchTerm }: VoluntaryInvestment
       <table>
         <thead>
           <tr>
-            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start section-end" rowSpan={2}>
+            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center" rowSpan={2}>
               <AddButton onClick={() => addMutation.mutate()} disabled={isUpdating} />
             </th>
             <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start" colSpan={3}>Overview</th>
@@ -221,7 +221,7 @@ function VoluntaryInvestmentsTable({ viewMode, searchTerm }: VoluntaryInvestment
             return owners.map((owner: string, ownerIndex: number) => (
               <tr key={`${investment.id}-${ownerIndex}`} className="hover:bg-neutral-50">
                 {ownerIndex === 0 && (
-                  <td className="table-actions-cell p-2 text-center section-start section-end" rowSpan={maxRows}>
+                  <td className="table-actions-cell p-2 text-center" rowSpan={maxRows}>
                     <ActionButtonGroup>
                       <DuplicateButton
                         onClick={() => addMutation.mutate()}
