@@ -443,7 +443,7 @@ function VoluntaryInvestmentsTable({ viewMode, searchTerm }: VoluntaryInvestment
         {/* Totals Footer */}
         <tfoot>
           <tr>
-            <td className="totals-cell-label text-right" colSpan={4}>Totals</td>
+            <td className="totals-cell-label text-right section-start" colSpan={4}>Totals</td>
             <td className="totals-cell-value section-start">R {totals.baseCost.toLocaleString()}</td>
             <td className="totals-cell-value">R {totals.marketValue.toLocaleString()}</td>
             <td className="totals-cell-label"></td>
