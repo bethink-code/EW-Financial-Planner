@@ -334,7 +334,7 @@ th, td {
   .summary-card .text-sm,
   .summary-card .text-xs {
     font-size: 0.9rem !important; /* 14.4px - nice balance between readability and size */
-    font-weight: 600 !important; /* Semi-bold for prominence */
+    font-weight: 400 !important; /* Normal weight for cleaner appearance */
     color: #0369a1 !important; /* Blue color for visual distinction */
     margin-bottom: 0.5rem !important;
     line-height: 1.25 !important; /* Better line spacing for wrapped text */
