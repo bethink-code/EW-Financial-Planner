@@ -167,12 +167,16 @@ function VoluntaryInvestmentsTable({ viewMode, searchTerm }: VoluntaryInvestment
       const newOwners = [...investment.owners, ""];
       const newPercentages = [...investment.ownershipPercentages, "0%"];
       setIsUpdating(true);
+      
+      // Update owners first, then percentages sequentially to avoid race condition
       updateMutation.mutate({ 
         id, 
-        updates: { 
-          owners: newOwners,
-          ownershipPercentages: newPercentages
-        } 
+        updates: { owners: newOwners } 
+      }, {
+        onSuccess: () => {
+          // Update percentages after owners update completes
+          updateMutation.mutate({ id, updates: { ownershipPercentages: newPercentages } });
+        }
       });
     }
   }, [investments, updateMutation]);
@@ -186,12 +190,16 @@ function VoluntaryInvestmentsTable({ viewMode, searchTerm }: VoluntaryInvestment
       newOwners.splice(ownerIndex, 1);
       newPercentages.splice(ownerIndex, 1);
       setIsUpdating(true);
+      
+      // Update owners first, then percentages sequentially to avoid race condition
       updateMutation.mutate({ 
         id, 
-        updates: { 
-          owners: newOwners,
-          ownershipPercentages: newPercentages
-        } 
+        updates: { owners: newOwners } 
+      }, {
+        onSuccess: () => {
+          // Update percentages after owners update completes
+          updateMutation.mutate({ id, updates: { ownershipPercentages: newPercentages } });
+        }
       });
     }
   }, [investments, updateMutation]);
