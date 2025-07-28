@@ -83,7 +83,11 @@ export function AssetsTable({ viewMode = 'table' }: AssetsTableProps) {
     }, 50);
   }, [updateMutation]);
 
-
+  // Handle add asset
+  const handleAddAsset = useCallback(() => {
+    setIsUpdating(true);
+    addMutation.mutate();
+  }, [addMutation]);
 
   // Handle duplicate
   const handleDuplicate = useCallback((asset: Assets) => {
@@ -302,7 +306,9 @@ export function AssetsTable({ viewMode = 'table' }: AssetsTableProps) {
         {/* Header */}
         <thead>
           <tr>
-            <th rowSpan={2} className="w-20 text-center">Actions</th>
+            <th rowSpan={2} className="w-20 text-center">
+              <AddButton onClick={handleAddAsset} disabled={isUpdating} />
+            </th>
             <th colSpan={2} className="border-b border-neutral-200">Overview</th>
             <th colSpan={1} className="border-b border-neutral-200">Asset Details</th>
             <th colSpan={4} className="border-b border-neutral-200">Ownership Split</th>

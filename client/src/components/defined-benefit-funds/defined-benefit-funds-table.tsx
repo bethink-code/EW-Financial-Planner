@@ -198,7 +198,9 @@ export default function DefinedBenefitFundsTable() {
       <table className="min-w-full  border border-neutral-200 ">
           <thead>
             <tr className="border-b border-neutral-200">
-              <th className="px-3 py-2 text-center text-xs font-medium text-neutral-600 uppercase tracking-wider w-16">Actions</th>
+              <th className="px-3 py-2 text-center text-xs font-medium text-neutral-600 uppercase tracking-wider w-16">
+                <AddButton onClick={handleAddFund} disabled={isUpdating} />
+              </th>
               <th className="px-3 py-2 text-left text-xs font-medium text-neutral-600 uppercase tracking-wider">Description</th>
               <th className="px-3 py-2 text-left text-xs font-medium text-neutral-600 uppercase tracking-wider">Owner</th>
               <th className="px-3 py-2 text-center text-xs font-medium text-neutral-600 uppercase tracking-wider">Ownership</th>

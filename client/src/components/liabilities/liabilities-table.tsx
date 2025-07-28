@@ -95,6 +95,12 @@ export function LiabilitiesTable({ viewMode = 'table' }: LiabilitiesTableProps) 
     updateMutation.mutate({ id, field, value });
   }, [updateMutation]);
 
+  // Handle add liability
+  const handleAddLiability = useCallback(() => {
+    setIsUpdating(true);
+    addMutation.mutate();
+  }, [addMutation]);
+
   // Handle duplicate
   const handleDuplicate = useCallback((liability: Liabilities) => {
     setIsUpdating(true);
@@ -297,7 +303,9 @@ export function LiabilitiesTable({ viewMode = 'table' }: LiabilitiesTableProps) 
         {/* Header */}
         <thead>
           <tr>
-            <th rowSpan={2} className="w-20 text-center">Actions</th>
+            <th rowSpan={2} className="w-20 text-center">
+              <AddButton onClick={handleAddLiability} disabled={isUpdating} />
+            </th>
             <th colSpan={3} className="border-b border-neutral-200">Overview</th>
             <th colSpan={1} className="border-b border-neutral-200">Liability Details</th>
             <th colSpan={4} className="border-b border-neutral-200">Ownership Split</th>

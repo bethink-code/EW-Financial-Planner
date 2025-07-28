@@ -202,7 +202,9 @@ export default function IncomeNeedsTable({ viewMode, searchTerm }: IncomeNeedsTa
       <table className="min-w-full border border-neutral-200">
         <thead>
           <tr className="border-b border-border">
-            <th className="px-3 py-3 text-center text-xs font-medium text-neutral-600 uppercase tracking-wider w-16">Actions</th>
+            <th className="px-3 py-3 text-center text-xs font-medium text-neutral-600 uppercase tracking-wider w-16">
+              <AddButton onClick={handleAddNeed} disabled={isUpdating} />
+            </th>
             <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start" colSpan={2}>Overview</th>
             <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start section-end" colSpan={7}>Income Need Details</th>
           </tr>
