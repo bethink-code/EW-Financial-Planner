@@ -268,13 +268,13 @@ export default function DefinedBenefitFundsTable() {
         </thead>
         <tbody className="divide-y divide-neutral-200">
           {funds.map((fund: DefinedBenefitFund) => {
-            const maxRows = fund.owners.length;
+            const maxRows = Math.max(fund.owners.length, 1);
             
-            return Array.from({ length: maxRows }, (_, rowIndex) => (
-              <tr key={`${fund.id}-${rowIndex}-${fund.owners.length}`} className="hover:bg-neutral-50">
+            return fund.owners.map((owner: string, rowIndex: number) => (
+              <tr key={`${fund.id}-${rowIndex}-${fund.owners.length}-${fund.ownershipPercentages.length}`} className="hover:bg-neutral-50">
                 {/* Actions Section - Only show on first row */}
-                <td className="table-actions-cell p-1 text-center section-start section-end">
-                  {rowIndex === 0 && (
+                {rowIndex === 0 && (
+                  <td className="table-actions-cell p-1 text-center section-start section-end" rowSpan={maxRows}>
                     <ActionButtonGroup>
                       <DuplicateButton
                         onClick={() => handleDuplicateFund(fund)}
@@ -285,12 +285,12 @@ export default function DefinedBenefitFundsTable() {
                         disabled={isUpdating}
                       />
                     </ActionButtonGroup>
-                  )}
-                </td>
+                  </td>
+                )}
                 
-                {/* Overview Section */}
-                <td className="p-1 section-start">
-                  {rowIndex === 0 && (
+                {/* Overview Section - Only show on first row */}
+                {rowIndex === 0 && (
+                  <td className="p-1 section-start" rowSpan={maxRows}>
                     <input
                       type="text"
                       defaultValue={formatTextValue(fund.description)}
@@ -302,8 +302,8 @@ export default function DefinedBenefitFundsTable() {
                       }}
                       disabled={isUpdating}
                     />
-                  )}
-                </td>
+                  </td>
+                )}
                 
                 {/* Owner Name and Percentage - One per row */}
                 <td className="p-1">
@@ -351,8 +351,8 @@ export default function DefinedBenefitFundsTable() {
                 </td>
                 
                 {/* Fund Details Section - Only show on first row */}
-                <td className={`p-1 section-start ${getCellClass('years')}`}>
-                  {rowIndex === 0 && (
+                {rowIndex === 0 && (
+                  <td className={`p-1 section-start ${getCellClass('years')}`} rowSpan={maxRows}>
                     <input
                       key={`yearsOfService-${fund.id}-${fund.yearsOfService}`}
                       type="text"
@@ -362,10 +362,10 @@ export default function DefinedBenefitFundsTable() {
                       onBlur={(e) => handleInputBlur(fund.id, 'yearsOfService', e.target.value, e.target)}
                       disabled={isUpdating}
                     />
-                  )}
-                </td>
-                <td className={`p-1 ${getCellClass('currency')}`}>
-                  {rowIndex === 0 && (
+                  </td>
+                )}
+                {rowIndex === 0 && (
+                  <td className={`p-1 ${getCellClass('currency')}`} rowSpan={maxRows}>
                     <input
                       key={`finalMonthlySalary-${fund.id}-${fund.finalMonthlySalary}`}
                       type="text"
@@ -375,10 +375,10 @@ export default function DefinedBenefitFundsTable() {
                       onBlur={(e) => handleInputBlur(fund.id, 'finalMonthlySalary', e.target.value, e.target)}
                       disabled={isUpdating}
                     />
-                  )}
-                </td>
-                <td className={`p-1 ${getCellClass('currency')}`}>
-                  {rowIndex === 0 && (
+                  </td>
+                )}
+                {rowIndex === 0 && (
+                  <td className={`p-1 ${getCellClass('currency')}`} rowSpan={maxRows}>
                     <input
                       key={`deathLumpSum-${fund.id}-${fund.deathLumpSum}`}
                       type="text"
@@ -388,10 +388,10 @@ export default function DefinedBenefitFundsTable() {
                       onBlur={(e) => handleInputBlur(fund.id, 'deathLumpSum', e.target.value, e.target)}
                       disabled={isUpdating}
                     />
-                  )}
-                </td>
-                <td className={`p-1 ${getCellClass('currency')}`}>
-                  {rowIndex === 0 && (
+                  </td>
+                )}
+                {rowIndex === 0 && (
+                  <td className={`p-1 ${getCellClass('currency')}`} rowSpan={maxRows}>
                     <input
                       key={`additionalTaxFreeAmount-${fund.id}-${fund.additionalTaxFreeAmount}`}
                       type="text"
@@ -401,12 +401,12 @@ export default function DefinedBenefitFundsTable() {
                       onBlur={(e) => handleInputBlur(fund.id, 'additionalTaxFreeAmount', e.target.value, e.target)}
                       disabled={isUpdating}
                     />
-                  )}
-                </td>
+                  </td>
+                )}
                 
                 {/* Pension Income at Death Section */}
-                <td className={`p-1 section-start ${getCellClass('currency')}`}>
-                  {rowIndex === 0 && (
+                {rowIndex === 0 && (
+                  <td className={`p-1 section-start ${getCellClass('currency')}`} rowSpan={maxRows}>
                     <input
                       key={`pensionIncomeAmount-${fund.id}-${fund.pensionIncomeAmount}`}
                       type="text"
@@ -416,10 +416,10 @@ export default function DefinedBenefitFundsTable() {
                       onBlur={(e) => handleInputBlur(fund.id, 'pensionIncomeAmount', e.target.value, e.target)}
                       disabled={isUpdating}
                     />
-                  )}
-                </td>
-                <td className={`p-1 section-end ${getCellClass('percentage')}`}>
-                  {rowIndex === 0 && (
+                  </td>
+                )}
+                {rowIndex === 0 && (
+                  <td className={`p-1 section-end ${getCellClass('percentage')}`} rowSpan={maxRows}>
                     <input
                       key={`pensionIncomeIncrease-${fund.id}-${fund.pensionIncomeIncrease}`}
                       type="text"
@@ -429,8 +429,8 @@ export default function DefinedBenefitFundsTable() {
                       className={`table-input ${getFieldClass('percentage')} ${getValueClass(fund.pensionIncomeIncrease || "0%", 'percentage')}`}
                       disabled={isUpdating}
                     />
-                  )}
-                </td>
+                  </td>
+                )}
               </tr>
             ));
           }).flat()}
