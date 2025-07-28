@@ -5,6 +5,7 @@ import { apiRequest } from '@/lib/queryClient';
 import { queryClient } from '@/lib/queryClient';
 import { SafeFragment } from '@/lib/safe-fragment';
 import { CategorySelector } from './category-selector';
+import { CategorySelectionDialog } from '@/components/ui/category-selection-dialog';
 import { formatCurrencyValue, formatPercentageValue, formatTextValue, isDefaultValue, getValueClass } from '@/lib/formatting';
 import { getFieldClass, getCellClass } from '@/lib/field-types';
 import { createEnhancedBlurHandler, handleDefaultValueFocus } from '@/lib/formatting';
@@ -16,6 +17,7 @@ interface AssetsTableProps {
 
 export function AssetsTable({ viewMode = 'table' }: AssetsTableProps) {
   const [isUpdating, setIsUpdating] = useState(false);
+  const [showCategoryDialog, setShowCategoryDialog] = useState(false);
 
   // Fetch assets
   const { data: assets = [], isLoading, error } = useQuery<Assets[]>({
@@ -24,8 +26,8 @@ export function AssetsTable({ viewMode = 'table' }: AssetsTableProps) {
 
   // Add mutation
   const addMutation = useMutation({
-    mutationFn: () => apiRequest('POST', '/api/assets', {
-      category: 'PROPERTY',
+    mutationFn: (category: string) => apiRequest('POST', '/api/assets', {
+      category,
       description: 'Enter details...',
       marketValue: 'R 0',
       johnDoe: '0%',
@@ -35,7 +37,7 @@ export function AssetsTable({ viewMode = 'table' }: AssetsTableProps) {
       estate: 'R 0',
       others: 'R 0',
       client: 'R 0',
-      section: 'PROPERTY',
+      section: category,
       included: true
     }),
     onSettled: () => {
@@ -65,6 +67,27 @@ export function AssetsTable({ viewMode = 'table' }: AssetsTableProps) {
     },
   });
 
+  // Asset categories
+  const assetCategories = [
+    { value: 'PROPERTY', label: 'Property' },
+    { value: 'VEHICLES', label: 'Vehicles' },
+    { value: 'HOUSEHOLD_GOODS', label: 'Household Goods' },
+    { value: 'INVESTMENTS', label: 'Investments' },
+    { value: 'CASH', label: 'Cash & Bank Accounts' },
+    { value: 'OTHER_ASSETS', label: 'Other Assets' }
+  ];
+
+  // Handle add asset
+  const handleAddAsset = useCallback(() => {
+    setShowCategoryDialog(true);
+  }, []);
+
+  // Handle category selection
+  const handleCategorySelect = useCallback((category: string) => {
+    setIsUpdating(true);
+    addMutation.mutate(category);
+  }, [addMutation]);
+
   // Handle input blur with formatting
   const handleInputBlur = useCallback((id: number, field: string, value: string) => {
     setIsUpdating(true);
@@ -82,12 +105,6 @@ export function AssetsTable({ viewMode = 'table' }: AssetsTableProps) {
       }
     }, 50);
   }, [updateMutation]);
-
-  // Handle add asset
-  const handleAddAsset = useCallback(() => {
-    setIsUpdating(true);
-    addMutation.mutate();
-  }, [addMutation]);
 
   // Handle duplicate
   const handleDuplicate = useCallback((asset: Assets) => {
@@ -365,6 +382,15 @@ export function AssetsTable({ viewMode = 'table' }: AssetsTableProps) {
           </tr>
         </tfoot>
       </table>
+
+      {/* Category Selection Dialog */}
+      <CategorySelectionDialog
+        isOpen={showCategoryDialog}
+        onClose={() => setShowCategoryDialog(false)}
+        onSelectCategory={handleCategorySelect}
+        title="Select Asset Category"
+        categories={assetCategories}
+      />
     </div>
   );
 }

@@ -5,6 +5,7 @@ import { apiRequest } from '@/lib/queryClient';
 import { queryClient } from '@/lib/queryClient';
 import { SafeFragment } from '@/lib/safe-fragment';
 import { SimpleCategorySelector } from './simple-category-selector';
+import { CategorySelectionDialog } from '@/components/ui/category-selection-dialog';
 import { formatCurrencyValue, formatPercentageValue, formatTextValue, isDefaultValue, getValueClass } from '@/lib/formatting';
 import { getFieldClass, getCellClass } from '@/lib/field-types';
 import { createEnhancedBlurHandler, handleDefaultValueFocus } from '@/lib/formatting';
@@ -16,6 +17,7 @@ interface LiabilitiesTableProps {
 
 export function LiabilitiesTable({ viewMode = 'table' }: LiabilitiesTableProps) {
   const [isUpdating, setIsUpdating] = useState(false);
+  const [showCategoryDialog, setShowCategoryDialog] = useState(false);
 
   // Fetch liabilities
   const { data: liabilities = [], isLoading, error } = useQuery<Liabilities[]>({
@@ -24,8 +26,8 @@ export function LiabilitiesTable({ viewMode = 'table' }: LiabilitiesTableProps) 
 
   // Add mutation
   const addMutation = useMutation({
-    mutationFn: () => apiRequest('POST', '/api/liabilities', {
-      category: 'BONDS',
+    mutationFn: (category: string) => apiRequest('POST', '/api/liabilities', {
+      category,
       description: 'Enter details...',
       debtAmount: 'R 0',
       johnDoe: '0%',
@@ -35,7 +37,7 @@ export function LiabilitiesTable({ viewMode = 'table' }: LiabilitiesTableProps) 
       estate: 'R 0',
       others: 'R 0',
       client: 'R 0',
-      section: 'BONDS',
+      section: category,
       included: true
     }),
     onSettled: () => {
@@ -64,6 +66,28 @@ export function LiabilitiesTable({ viewMode = 'table' }: LiabilitiesTableProps) 
       queryClient.invalidateQueries({ queryKey: ['/api/liabilities'] });
     },
   });
+
+  // Liability categories
+  const liabilityCategories = [
+    { value: 'BONDS', label: 'Home Bond' },
+    { value: 'VEHICLE_FINANCE', label: 'Vehicle Finance' },
+    { value: 'CREDIT_CARDS', label: 'Credit Cards' },
+    { value: 'PERSONAL_LOANS', label: 'Personal Loans' },
+    { value: 'BUSINESS_LOANS', label: 'Business Loans' },
+    { value: 'SHORT_TERM_DEBT', label: 'Short Term Debt' },
+    { value: 'OTHER_DEBT', label: 'Other Debt' }
+  ];
+
+  // Handle add liability
+  const handleAddLiability = useCallback(() => {
+    setShowCategoryDialog(true);
+  }, []);
+
+  // Handle category selection
+  const handleCategorySelect = useCallback((category: string) => {
+    setIsUpdating(true);
+    addMutation.mutate(category);
+  }, [addMutation]);
 
   // Handle input blur with formatting
   const handleInputBlur = useCallback((id: number, field: string, value: string) => {
@@ -95,17 +119,15 @@ export function LiabilitiesTable({ viewMode = 'table' }: LiabilitiesTableProps) 
     updateMutation.mutate({ id, field, value });
   }, [updateMutation]);
 
-  // Handle add liability
-  const handleAddLiability = useCallback(() => {
-    setIsUpdating(true);
-    addMutation.mutate();
-  }, [addMutation]);
-
   // Handle duplicate
   const handleDuplicate = useCallback((liability: Liabilities) => {
     setIsUpdating(true);
-    addMutation.mutate();
-  }, [addMutation]);
+    const { id, ...liabilityData } = liability;
+    apiRequest('POST', '/api/liabilities', liabilityData).then(() => {
+      queryClient.invalidateQueries({ queryKey: ['/api/liabilities'] });
+      setIsUpdating(false);
+    });
+  }, []);
 
   // Handle delete
   const handleDelete = useCallback((id: number) => {
@@ -362,6 +384,15 @@ export function LiabilitiesTable({ viewMode = 'table' }: LiabilitiesTableProps) 
           </tr>
         </tfoot>
       </table>
+
+      {/* Category Selection Dialog */}
+      <CategorySelectionDialog
+        isOpen={showCategoryDialog}
+        onClose={() => setShowCategoryDialog(false)}
+        onSelectCategory={handleCategorySelect}
+        title="Select Liability Category"
+        categories={liabilityCategories}
+      />
     </div>
   );
 }
