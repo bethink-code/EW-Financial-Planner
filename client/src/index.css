@@ -321,13 +321,7 @@ th, td {
     border-left: none !important;
   }
 
-  /* Prevent double borders when section-end is immediately followed by section-start */
-  /* This handles the thick border issue by removing left border from section-start when it follows section-end */
-  thead .section-end + .section-start,
-  tbody .section-end + .section-start,
-  tfoot .section-end + .section-start {
-    border-left: none !important;
-  }
+  /* All section borders should display - no double border prevention */
   
   /* Also handle the case where first column after Actions doesn't need section-start border */
   thead th[rowspan]:first-child.section-end + th,
