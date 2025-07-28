@@ -191,18 +191,18 @@ function VoluntaryInvestmentsTable({ viewMode, searchTerm }: VoluntaryInvestment
             <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start section-end" colSpan={4}>Exclusions</th>
           </tr>
           <tr>
-            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start">Description</th>
-            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center">Owner</th>
-            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center">Ownership %</th>
-            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start">Base Cost</th>
-            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center">Market Value</th>
-            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center">Liquidation %</th>
-            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start">Spouse</th>
-            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center">Others</th>
-            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start">Joint Estate</th>
-            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center">Estate Duty</th>
-            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center">CGT</th>
-            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-end">Executor's Fees</th>
+            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start border-b border-neutral-200">Description</th>
+            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center border-b border-neutral-200">Owner</th>
+            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center border-b border-neutral-200">Ownership %</th>
+            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start border-b border-neutral-200">Base Cost</th>
+            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center border-b border-neutral-200">Market Value</th>
+            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center border-b border-neutral-200">Liquidation %</th>
+            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start border-b border-neutral-200">Spouse</th>
+            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center border-b border-neutral-200">Others</th>
+            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start border-b border-neutral-200">Joint Estate</th>
+            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center border-b border-neutral-200">Estate Duty</th>
+            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center border-b border-neutral-200">CGT</th>
+            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-end border-b border-neutral-200">Executor's Fees</th>
           </tr>
         </thead>
         <tbody className="divide-y divide-neutral-200">
