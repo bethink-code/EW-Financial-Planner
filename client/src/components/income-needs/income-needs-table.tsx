@@ -4,7 +4,7 @@ import { queryClient } from '@/lib/queryClient';
 import { IncomeNeeds, InsertIncomeNeeds } from '@shared/schema';
 import { AddButton, ActionButtonGroup, DuplicateButton, DeleteButton } from '@/components/ui/action-buttons';
 import { getFieldClass, getCellClass } from '@/lib/field-types';
-import { formatCurrencyValue, getValueClass, handleDefaultValueFocus } from '@/lib/formatting';
+import { formatCurrencyValue, getValueClass, handleDefaultValueFocus, createEnhancedBlurHandler } from '@/lib/formatting';
 
 interface IncomeNeedsTableProps {
   viewMode: 'table' | 'hybrid';
@@ -22,9 +22,14 @@ function IncomeNeedsTable({ viewMode, searchTerm }: IncomeNeedsTableProps) {
     mutationFn: async (): Promise<IncomeNeeds> => {
       const newIncomeNeed: InsertIncomeNeeds = {
         description: "Enter details ...",
-        personName: "Enter beneficiary",
+        personName: "Enter details ...",
+        startDate: "Enter details ...",
+        termYears: "0",
+        increasePercentage: "0%",
+        cpi: false,
+        frequency: "monthly",
         amount: "R 0",
-        additionalBeneficiaries: [],
+        capitalisedAmount: "R 0",
       };
       
       const response = await fetch('/api/income-needs', {
@@ -95,8 +100,12 @@ function IncomeNeedsTable({ viewMode, searchTerm }: IncomeNeedsTableProps) {
   const totals = useMemo(() => {
     return {
       count: incomeNeeds.length,
-      monthlyAmount: incomeNeeds.reduce((sum: number, incomeNeed: IncomeNeeds) => {
+      amount: incomeNeeds.reduce((sum: number, incomeNeed: IncomeNeeds) => {
         const value = parseFloat((incomeNeed.amount || '').replace(/[^\d.-]/g, '')) || 0;
+        return sum + value;
+      }, 0),
+      capitalisedAmount: incomeNeeds.reduce((sum: number, incomeNeed: IncomeNeeds) => {
+        const value = parseFloat((incomeNeed.capitalisedAmount || '').replace(/[^\d.-]/g, '')) || 0;
         return sum + value;
       }, 0),
     };
@@ -108,13 +117,14 @@ function IncomeNeedsTable({ viewMode, searchTerm }: IncomeNeedsTableProps) {
     updateMutation.mutate({ id, updates });
   }, [updateMutation]);
 
-  const handleInputBlur = useCallback((id: number, field: keyof IncomeNeeds, value: string) => {
-    let formattedValue: string;
-    if (field === 'amount') {
-      formattedValue = formatCurrencyValue(value);
-    } else {
-      formattedValue = value;
+  const handleInputBlur = useCallback((id: number, field: keyof IncomeNeeds, value: string | boolean) => {
+    if (typeof value === 'boolean') {
+      handleUpdateIncomeNeed(id, field, value);
+      return;
     }
+    
+    const enhancedBlurHandler = createEnhancedBlurHandler(field);
+    const formattedValue = enhancedBlurHandler(value);
     handleUpdateIncomeNeed(id, field, formattedValue);
     
     const target = document.activeElement as HTMLInputElement;
@@ -144,29 +154,35 @@ function IncomeNeedsTable({ viewMode, searchTerm }: IncomeNeedsTableProps) {
       <table>
         <thead>
           <tr>
-            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start section-end" rowSpan={2}>
+            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center" rowSpan={2}>
               <AddButton onClick={() => addMutation.mutate()} disabled={isUpdating} />
             </th>
             <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start" colSpan={2}>Overview</th>
-            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start section-end">Financial Details</th>
+            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start" colSpan={7}>Income Need Details</th>
           </tr>
           <tr>
             <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start">Description</th>
-            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center">Beneficiary</th>
-            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-end">Monthly Amount</th>
+            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center">Entity</th>
+            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start">Amount</th>
+            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center">Start Date</th>
+            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center">Term Years</th>
+            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center">Increase %</th>
+            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center">CPI</th>
+            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center">Frequency</th>
+            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-end">Capitalised Amount</th>
           </tr>
         </thead>
         <tbody className="divide-y divide-neutral-200">
           {incomeNeeds.map((incomeNeed: IncomeNeeds, index) => (
             <tr key={incomeNeed.id} className="hover:bg-neutral-50">
-              <td className="table-actions-cell p-1 text-center section-start section-end">
+              <td className="table-actions-cell p-2 text-center">
                 <ActionButtonGroup>
                   <DuplicateButton onClick={() => addMutation.mutate()} disabled={isUpdating} />
                   <DeleteButton onClick={() => handleDeleteIncomeNeed(incomeNeed.id)} disabled={isUpdating} />
                 </ActionButtonGroup>
               </td>
               
-              <td className="p-1 section-start">
+              <td className="p-2 text-left">
                 <input
                   type="text"
                   defaultValue={incomeNeed.description}
@@ -177,7 +193,7 @@ function IncomeNeedsTable({ viewMode, searchTerm }: IncomeNeedsTableProps) {
                 />
               </td>
               
-              <td className="p-1">
+              <td className="p-2 text-left">
                 <input
                   type="text"
                   defaultValue={incomeNeed.personName}
@@ -188,7 +204,7 @@ function IncomeNeedsTable({ viewMode, searchTerm }: IncomeNeedsTableProps) {
                 />
               </td>
               
-              <td className="p-1 section-end">
+              <td className="p-2 text-right">
                 <input
                   key={`amount-${incomeNeed.id}-${incomeNeed.amount}`}
                   type="text"
@@ -199,14 +215,84 @@ function IncomeNeedsTable({ viewMode, searchTerm }: IncomeNeedsTableProps) {
                   disabled={isUpdating}
                 />
               </td>
+              
+              <td className="p-2 text-left">
+                <input
+                  type="text"
+                  defaultValue={incomeNeed.startDate}
+                  className={`table-input ${getFieldClass('text')} ${getValueClass(incomeNeed.startDate, 'text')}`}
+                  onFocus={handleDefaultValueFocus}
+                  onBlur={(e) => handleInputBlur(incomeNeed.id, 'startDate', e.target.value)}
+                  disabled={isUpdating}
+                />
+              </td>
+              
+              <td className="p-2 text-center">
+                <input
+                  key={`termYears-${incomeNeed.id}-${incomeNeed.termYears}`}
+                  type="text"
+                  defaultValue={incomeNeed.termYears}
+                  className={`table-input ${getFieldClass('years')} ${getValueClass(incomeNeed.termYears, 'years')}`}
+                  onFocus={handleDefaultValueFocus}
+                  onBlur={(e) => handleInputBlur(incomeNeed.id, 'termYears', e.target.value)}
+                  disabled={isUpdating}
+                />
+              </td>
+              
+              <td className="p-2 text-center">
+                <input
+                  key={`increasePercentage-${incomeNeed.id}-${incomeNeed.increasePercentage}`}
+                  type="text"
+                  defaultValue={incomeNeed.increasePercentage}
+                  className={`table-input ${getFieldClass('percentage')} ${getValueClass(incomeNeed.increasePercentage, 'percentage')}`}
+                  onFocus={handleDefaultValueFocus}
+                  onBlur={(e) => handleInputBlur(incomeNeed.id, 'increasePercentage', e.target.value)}
+                  disabled={isUpdating}
+                />
+              </td>
+              
+              <td className="p-2 text-center">
+                <input
+                  type="checkbox"
+                  defaultChecked={incomeNeed.cpi}
+                  className="table-input"
+                  onChange={(e) => handleInputBlur(incomeNeed.id, 'cpi', e.target.checked)}
+                  disabled={isUpdating}
+                />
+              </td>
+              
+              <td className="p-2 text-center">
+                <select
+                  defaultValue={incomeNeed.frequency}
+                  className="table-input table-dropdown"
+                  onChange={(e) => handleInputBlur(incomeNeed.id, 'frequency', e.target.value)}
+                  disabled={isUpdating}
+                >
+                  <option value="monthly">Monthly</option>
+                  <option value="annually">Annually</option>
+                  <option value="quarterly">Quarterly</option>
+                </select>
+              </td>
+              
+              <td className="p-2 text-right">
+                <input
+                  key={`capitalisedAmount-${incomeNeed.id}-${incomeNeed.capitalisedAmount}`}
+                  type="text"
+                  defaultValue={incomeNeed.capitalisedAmount}
+                  className="calculated-field"
+                  readOnly
+                />
+              </td>
             </tr>
           ))}
         </tbody>
         
         <tfoot>
           <tr>
-            <td className="totals-cell-label text-right" colSpan={2}>Totals</td>
-            <td className="totals-cell-value section-end">R {totals.monthlyAmount.toLocaleString()}</td>
+            <td className="totals-cell-label text-right" colSpan={3}>Totals</td>
+            <td className="totals-cell-value">R {totals.amount.toLocaleString()}</td>
+            <td className="totals-cell-label" colSpan={5}></td>
+            <td className="totals-cell-value">R {totals.capitalisedAmount.toLocaleString()}</td>
           </tr>
         </tfoot>
       </table>
