@@ -57,11 +57,21 @@ export const formatYearsValue = (value: string): string => {
 /**
  * Format text value for display - shows "Enter details ..." for empty values
  */
-export const formatTextValue = (value: string | null): string => {
+export const formatTextValue = (value: string | null, fieldType?: string): string => {
   // Handle null, undefined, and empty values - show placeholder for display only
-  if (value === null || value === undefined || value === '') return 'Enter details ...';
+  if (value === null || value === undefined || value === '') {
+    if (fieldType === 'owner') {
+      return 'Donald Edwards'; // Show default for owner fields
+    }
+    return 'Enter details ...';
+  }
   const stringValue = String(value).trim();
-  if (!stringValue) return 'Enter details ...';
+  if (!stringValue) {
+    if (fieldType === 'owner') {
+      return 'Donald Edwards';
+    }
+    return 'Enter details ...';
+  }
   return stringValue;
 };
 

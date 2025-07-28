@@ -16,6 +16,14 @@ export const DEFAULT_VALUES = {
   years: '0 years'
 } as const;
 
+// Helper to get default value for array position
+export const getDefaultForPosition = (type: keyof typeof DEFAULT_VALUES, index: number) => {
+  if (type === 'owner' && index === 0) {
+    return DEFAULT_VALUES.owner; // First owner gets default name
+  }
+  return DEFAULT_VALUES[type]; // All others get standard defaults
+};
+
 // Create array management functions
 export const createArrayManager = <T extends Record<string, any>>(
   items: T[],
@@ -26,7 +34,8 @@ export const createArrayManager = <T extends Record<string, any>>(
   const handleAdd = (
     itemId: number, 
     arrayField: string, 
-    relatedFields: { field: string; defaultValue: any }[] = []
+    relatedFields: { field: string; defaultValue: any }[] = [],
+    defaultValue: any = DEFAULT_VALUES.beneficiary
   ) => {
     const item = items.find(i => i.id === itemId);
     if (!item) return;
@@ -34,8 +43,8 @@ export const createArrayManager = <T extends Record<string, any>>(
     // Get current array
     const currentArray = item[arrayField] || [];
     
-    // Add new item to main array
-    const newArray = [...currentArray, DEFAULT_VALUES.beneficiary];
+    // Add new item to main array with appropriate default
+    const newArray = [...currentArray, defaultValue];
     updateFunction(itemId, arrayField, newArray);
     
     // Add corresponding items to related arrays
@@ -116,7 +125,10 @@ export const createOwnerManager = <T extends Record<string, any>>(
   
   return {
     addOwner: (itemId: number) => {
-      handleAdd(itemId, 'owners');
+      const item = items.find(i => i.id === itemId);
+      const currentArray = item?.owners || [];
+      const defaultValue = currentArray.length === 0 ? DEFAULT_VALUES.owner : '';
+      handleAdd(itemId, 'owners', [], defaultValue);
     },
     
     removeOwner: (itemId: number, ownerIndex: number) => {
@@ -140,9 +152,12 @@ export const createBeneficiaryManager = <T extends Record<string, any>>(
   
   return {
     addBeneficiary: (itemId: number) => {
+      const item = items.find(i => i.id === itemId);
+      const currentArray = item?.[beneficiaryField] || [];
+      const defaultValue = currentArray.length === 0 ? '' : ''; // Always empty for beneficiaries
       handleAdd(itemId, beneficiaryField, [
         { field: percentageField, defaultValue: DEFAULT_VALUES.percentage }
-      ]);
+      ], defaultValue);
     },
     
     removeBeneficiary: (itemId: number, beneficiaryIndex: number) => {
@@ -171,10 +186,13 @@ export const createComplexBeneficiaryManager = <T extends Record<string, any>>(
   
   return {
     addBeneficiary: (itemId: number) => {
+      const item = items.find(i => i.id === itemId);
+      const currentArray = item?.[beneficiaryField] || [];
+      const defaultValue = currentArray.length === 0 ? '' : ''; // Always empty for beneficiaries
       handleAdd(itemId, beneficiaryField, [
         { field: percentageField, defaultValue: DEFAULT_VALUES.percentage },
         { field: currencyField, defaultValue: DEFAULT_VALUES.currency }
-      ]);
+      ], defaultValue);
     },
     
     removeBeneficiary: (itemId: number, beneficiaryIndex: number) => {

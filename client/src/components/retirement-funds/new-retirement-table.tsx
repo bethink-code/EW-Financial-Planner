@@ -207,7 +207,7 @@ export function NewRetirementTable({
                     <div className="flex items-center gap-1">
                       <input
                         type="text"
-                        defaultValue={fund.owners[rowIndex]}
+                        defaultValue={formatTextValue(fund.owners[rowIndex], 'owner')}
                         className={`table-input ${getFieldClass('text')} flex-1`}
                         onBlur={(e) => ownerManager.changeOwner(fund.id, rowIndex, e.target.value)}
                       />
