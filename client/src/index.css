@@ -624,9 +624,9 @@ th, td {
   input.field-percentage,
   .table-input.field-percentage,
   .field-percentage.table-input {
-    min-width: 40px !important;
-    max-width: 50px !important;
-    width: 50px !important;
+    min-width: 50px !important;
+    max-width: 65px !important;
+    width: 65px !important;
     text-align: right !important;
     font-size: 0.875rem !important; /* 14px standardized font size */
   }
