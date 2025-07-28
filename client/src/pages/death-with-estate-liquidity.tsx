@@ -1,6 +1,7 @@
 
 import { useState, useCallback } from "react";
 import { Link, useLocation } from "wouter";
+import { TableNavigationDropdown } from "@/components/ui/table-navigation-dropdown";
 import NewRetirementFunds from "./new-retirement-funds";
 import LumpSumBequests from "./lump-sum-bequests";
 import Assurance from "./assurance";
@@ -49,6 +50,11 @@ export default function DeathWithEstateLiquidity() {
   return (
     <div className="">
       <div className="w-full px-6 py-8 pl-[0px] pr-[0px] pt-[0px] pb-[0px]">
+        {/* Navigation Dropdown */}
+        <div className="mb-6 ml-[24px] mr-[24px]">
+          <TableNavigationDropdown />
+        </div>
+        
         {/* Header */}
         <div className="mb-6">
           <h1 className="text-3xl font-bold text-foreground mb-2 ml-[24px] mr-[24px]">Death with Estate Liquidity</h1>

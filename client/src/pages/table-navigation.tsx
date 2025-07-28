@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'wouter';
+import { TableNavigationDropdown } from '@/components/ui/table-navigation-dropdown';
 
 export default function TableNavigation() {
   const tables = [
@@ -36,6 +37,11 @@ export default function TableNavigation() {
   return (
     <div className="min-h-screen bg-gray-50 py-8">
       <div className="max-w-6xl mx-auto px-6">
+        {/* Navigation Dropdown */}
+        <div className="mb-6">
+          <TableNavigationDropdown />
+        </div>
+        
         {/* Header */}
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-gray-900 mb-2">Table Testing Navigation</h1>
