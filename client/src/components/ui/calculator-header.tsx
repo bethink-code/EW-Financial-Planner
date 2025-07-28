@@ -38,7 +38,7 @@ export function CalculatorHeader({
   return (
     <div className={`bg-white rounded-lg shadow-sm border border-neutral-200 ${className}`}>
       <div className="max-w-[1024px] px-5 pt-5 pb-6">
-        <div className="flex flex-col lg:flex-row gap-4 items-start lg:items-center justify-between">
+        <div className="flex flex-col lg:flex-row gap-4 items-start lg:items-center justify-between w-full">
           {/* Left section: Title, count, and Add button */}
           <div className="flex items-center gap-4">
             <h1 className="text-2xl font-semibold text-neutral-900">{title}</h1>
@@ -71,7 +71,7 @@ export function CalculatorHeader({
           </div>
 
           {/* Right section: View mode switcher and additional controls */}
-          <div className="flex flex-wrap gap-3 items-center">
+          <div className="flex flex-wrap gap-3 items-center ml-auto">
             {/* View Mode Buttons */}
             {onViewModeChange && (
               <div className="flex border border-neutral-200 rounded-lg overflow-hidden">
