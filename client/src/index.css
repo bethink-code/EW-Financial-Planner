@@ -382,11 +382,11 @@ th, td {
   .table-input {
     width: auto;
     height: 1.25rem;
-    padding: 1.2rem 0.4rem;
+    padding: 0.6rem 0.4rem; /* Reduced padding for more compact appearance */
     background-color: hsl(var(--primary) / 0.05);
     border: 1px solid hsl(var(--border));
     outline: none;
-    font-size: 0.875rem;
+    font-size: 0.875rem !important; /* 14px standardized font size */
     text-align: left;
     box-sizing: border-box;
     resize: none;
