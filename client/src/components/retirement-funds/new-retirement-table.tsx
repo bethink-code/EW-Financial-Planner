@@ -71,56 +71,16 @@ export function NewRetirementTable({
   }, [unapprovedBeneficiaryManager]);
 
   const handleRemoveUnapprovedBeneficiary = useCallback((fundId: number, beneficiaryIndex: number) => {
-    const fund = funds.find(f => f.id === fundId);
-    if (!fund || fund.unapprovedBeneficiaries.length <= 1 || beneficiaryIndex === 0) return; // Protect first beneficiary
-    
-    // Create copies and remove from all arrays simultaneously
-    const newBeneficiaries = [...fund.unapprovedBeneficiaries];
-    const newSplits = [...fund.unapprovedPercentageSplits];
-    const newCoverSplits = [...fund.unapprovedCoverSplits];
-    
-    // Remove at the same index from all arrays
-    newBeneficiaries.splice(beneficiaryIndex, 1);
-    newSplits.splice(beneficiaryIndex, 1);
-    newCoverSplits.splice(beneficiaryIndex, 1);
-    
-    // Update all arrays in sequence
-    onFieldUpdate(fundId, 'unapprovedBeneficiaries', newBeneficiaries);
-    onFieldUpdate(fundId, 'unapprovedPercentageSplits', newSplits);
-    onFieldUpdate(fundId, 'unapprovedCoverSplits', newCoverSplits);
-  }, [funds, onFieldUpdate]);
+    unapprovedBeneficiaryManager.removeBeneficiary(fundId, beneficiaryIndex);
+  }, [unapprovedBeneficiaryManager]);
 
-  // Fund value beneficiary management
   const handleAddFundValueBeneficiary = useCallback((fundId: number) => {
-    const fund = funds.find(f => f.id === fundId);
-    if (!fund) return;
-    const updatedBeneficiaries = [...fund.fundValueBeneficiaries, ""];
-    const updatedSplits = [...fund.fundValuePercentageSplits, "0%"];
-    const updatedCoverSplits = [...fund.fundValueCoverSplits, "R 0"];
-    onFieldUpdate(fundId, 'fundValueBeneficiaries', updatedBeneficiaries);
-    onFieldUpdate(fundId, 'fundValuePercentageSplits', updatedSplits);
-    onFieldUpdate(fundId, 'fundValueCoverSplits', updatedCoverSplits);
-  }, [funds, onFieldUpdate]);
+    fundValueBeneficiaryManager.addBeneficiary(fundId);
+  }, [fundValueBeneficiaryManager]);
 
   const handleRemoveFundValueBeneficiary = useCallback((fundId: number, beneficiaryIndex: number) => {
-    const fund = funds.find(f => f.id === fundId);
-    if (!fund || fund.fundValueBeneficiaries.length <= 1 || beneficiaryIndex === 0) return; // Protect first beneficiary
-    
-    // Create copies and remove from all arrays simultaneously
-    const newBeneficiaries = [...fund.fundValueBeneficiaries];
-    const newSplits = [...fund.fundValuePercentageSplits];
-    const newCoverSplits = [...fund.fundValueCoverSplits];
-    
-    // Remove at the same index from all arrays
-    newBeneficiaries.splice(beneficiaryIndex, 1);
-    newSplits.splice(beneficiaryIndex, 1);
-    newCoverSplits.splice(beneficiaryIndex, 1);
-    
-    // Update all arrays in sequence
-    onFieldUpdate(fundId, 'fundValueBeneficiaries', newBeneficiaries);
-    onFieldUpdate(fundId, 'fundValuePercentageSplits', newSplits);
-    onFieldUpdate(fundId, 'fundValueCoverSplits', newCoverSplits);
-  }, [funds, onFieldUpdate]);
+    fundValueBeneficiaryManager.removeBeneficiary(fundId, beneficiaryIndex);
+  }, [fundValueBeneficiaryManager]);
 
   // Calculate totals for summary display
   const totals = useMemo(() => {
@@ -249,17 +209,17 @@ export function NewRetirementTable({
                         type="text"
                         defaultValue={fund.owners[rowIndex]}
                         className={`table-input ${getFieldClass('text')} flex-1`}
-                        onBlur={(e) => handleOwnerChange(fund.id, rowIndex, e.target.value)}
+                        onBlur={(e) => ownerManager.changeOwner(fund.id, rowIndex, e.target.value)}
                       />
                       {rowIndex === 0 ? (
                         <AddButton
-                          onClick={() => handleAddOwner(fund.id)}
+                          onClick={() => ownerManager.addOwner(fund.id)}
                           disabled={isUpdating}
                           size="sm"
                         />
                       ) : (
                         <DeleteButton
-                          onClick={() => handleRemoveOwner(fund.id, rowIndex)}
+                          onClick={() => ownerManager.removeOwner(fund.id, rowIndex)}
                           disabled={isUpdating}
                           size="sm"
                         />
@@ -293,9 +253,7 @@ export function NewRetirementTable({
                         defaultValue={formatTextValue(fund.unapprovedBeneficiaries[rowIndex])}
                         className={`table-input ${getFieldClass('text')} flex-1`}
                         onBlur={(e) => {
-                          const updatedBeneficiaries = [...fund.unapprovedBeneficiaries];
-                          updatedBeneficiaries[rowIndex] = cleanTextValue(e.target.value) || "";
-                          onFieldUpdate(fund.id, 'unapprovedBeneficiaries', updatedBeneficiaries);
+                          unapprovedBeneficiaryManager.changeBeneficiary(fund.id, rowIndex, e.target.value);
                         }}
                       />
                       {rowIndex === 0 ? (
@@ -458,9 +416,7 @@ export function NewRetirementTable({
                         defaultValue={formatTextValue(fund.fundValueBeneficiaries[rowIndex])}
                         className={`table-input ${getFieldClass('text')} flex-1`}
                         onBlur={(e) => {
-                          const updatedBeneficiaries = [...fund.fundValueBeneficiaries];
-                          updatedBeneficiaries[rowIndex] = cleanTextValue(e.target.value) || "";
-                          onFieldUpdate(fund.id, 'fundValueBeneficiaries', updatedBeneficiaries);
+                          fundValueBeneficiaryManager.changeBeneficiary(fund.id, rowIndex, e.target.value);
                         }}
                       />
                       {rowIndex === 0 ? (
