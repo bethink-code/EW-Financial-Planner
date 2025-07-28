@@ -158,10 +158,10 @@ export class MemStorage implements IStorage {
     const id = this.currentFundId++;
     const fund: RetirementFund = { 
       id,
-      description: insertFund.description || "",  // Store empty string, not placeholder
+      description: insertFund.description || "",  // Store empty string for empty values
       owners: insertFund.owners || ["Donald Edwards"],
       coverAmount: insertFund.coverAmount || "R 0",
-      unapprovedBeneficiaries: insertFund.unapprovedBeneficiaries || [""],  // Store empty string
+      unapprovedBeneficiaries: insertFund.unapprovedBeneficiaries || [""],  // Store empty string for empty values
       unapprovedPercentageSplits: insertFund.unapprovedPercentageSplits || ["0%"],
       unapprovedCoverSplits: insertFund.unapprovedCoverSplits || ["R 0"],
       monthlyIncome: insertFund.monthlyIncome || "R 0",
@@ -171,7 +171,7 @@ export class MemStorage implements IStorage {
       approvedLifeCover: insertFund.approvedLifeCover || "R 0",
       fundValue: insertFund.fundValue || "R 0",
       fundValueAtDeath: insertFund.fundValueAtDeath || "R 0",
-      fundValueBeneficiaries: insertFund.fundValueBeneficiaries || [""],  // Store empty string
+      fundValueBeneficiaries: insertFund.fundValueBeneficiaries || [""],  // Store empty string for empty values
       fundValuePercentageSplits: insertFund.fundValuePercentageSplits || ["0%"],
       fundValueCoverSplits: insertFund.fundValueCoverSplits || ["R 0"],
       lumpSumTaken: insertFund.lumpSumTaken || "R 0",

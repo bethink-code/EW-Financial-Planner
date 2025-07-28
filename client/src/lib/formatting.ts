@@ -55,13 +55,14 @@ export const formatYearsValue = (value: string): string => {
 };
 
 /**
- * Format text value for display - shows "Enter details ..." for empty values but doesn't modify data
+ * Format text value for display - shows "Enter details ..." for empty values
  */
-export const formatTextValue = (value: string): string => {
-  // Convert to string and handle null/undefined values
-  const stringValue = String(value || '');
-  if (!stringValue.trim() || stringValue.trim() === '') return 'Enter details ...';
-  return stringValue.trim();
+export const formatTextValue = (value: string | null): string => {
+  // Handle null, undefined, and empty values - show placeholder for display only
+  if (value === null || value === undefined || value === '') return 'Enter details ...';
+  const stringValue = String(value).trim();
+  if (!stringValue) return 'Enter details ...';
+  return stringValue;
 };
 
 /**
