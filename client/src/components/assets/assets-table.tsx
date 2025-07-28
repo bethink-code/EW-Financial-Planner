@@ -106,10 +106,25 @@ function AssetsTable({ viewMode, searchTerm }: AssetsTableProps) {
 
   // Calculate totals
   const totals = useMemo(() => {
+    if (!assets || assets.length === 0) {
+      return { count: 0, amount: 0, estate: 0, others: 0, client: 0 };
+    }
     return {
       count: assets.length,
       amount: assets.reduce((sum: number, asset: Assets) => {
         const value = parseFloat((asset.marketValue || '').replace(/[^\d.-]/g, '')) || 0;
+        return sum + value;
+      }, 0),
+      estate: assets.reduce((sum: number, asset: Assets) => {
+        const value = parseFloat((asset.estate || '').replace(/[^\d.-]/g, '')) || 0;
+        return sum + value;
+      }, 0),
+      others: assets.reduce((sum: number, asset: Assets) => {
+        const value = parseFloat((asset.others || '').replace(/[^\d.-]/g, '')) || 0;
+        return sum + value;
+      }, 0),
+      client: assets.reduce((sum: number, asset: Assets) => {
+        const value = parseFloat((asset.client || '').replace(/[^\d.-]/g, '')) || 0;
         return sum + value;
       }, 0),
     };

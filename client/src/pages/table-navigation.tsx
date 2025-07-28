@@ -10,7 +10,7 @@ export default function TableNavigation() {
         { name: "Retirement Funds Table", path: "/new-retirement-funds", description: "Retirement fund management with multiple sections" },
         { name: "Defined Benefit Funds Table", path: "/defined-benefit-funds", description: "Pension fund details and calculations" },
         { name: "Voluntary Investments Table", path: "/voluntary-investments", description: "Investment portfolio management" },
-        { name: "Assets-and-Liabilities Table", path: "/assets-and-liabilities", description: "Combined assets/liabilities view" },
+
         { name: "Income Needs Table", path: "/income-needs", description: "Income requirement calculations" },
         { name: "Income Provisions Table", path: "/income-provisions", description: "Income provision planning" },
         { name: "Residue Table", path: "/residue", description: "Estate residue calculations" },
@@ -33,7 +33,7 @@ export default function TableNavigation() {
         {/* Header */}
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-gray-900 mb-2">Table Testing Navigation</h1>
-          <p className="text-gray-600">Direct access to all 13 distinct tables in the system</p>
+          <p className="text-gray-600">Direct access to all 11 distinct tables in the system</p>
         </div>
 
         {/* Table Categories */}
@@ -68,7 +68,7 @@ export default function TableNavigation() {
           <h3 className="text-lg font-semibold text-gray-800 mb-4">Table Statistics</h3>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
             <div>
-              <div className="text-2xl font-bold text-blue-600">10</div>
+              <div className="text-2xl font-bold text-blue-600">9</div>
               <div className="text-gray-600">Main Calculator Tables</div>
             </div>
             <div>

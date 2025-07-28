@@ -105,10 +105,25 @@ function LiabilitiesTable({ viewMode, searchTerm }: LiabilitiesTableProps) {
 
   // Calculate totals
   const totals = useMemo(() => {
+    if (!liabilities || liabilities.length === 0) {
+      return { count: 0, amount: 0, estate: 0, others: 0, client: 0 };
+    }
     return {
       count: liabilities.length,
       amount: liabilities.reduce((sum: number, liability: Liabilities) => {
         const value = parseFloat((liability.debtAmount || '').replace(/[^\d.-]/g, '')) || 0;
+        return sum + value;
+      }, 0),
+      estate: liabilities.reduce((sum: number, liability: Liabilities) => {
+        const value = parseFloat((liability.estate || '').replace(/[^\d.-]/g, '')) || 0;
+        return sum + value;
+      }, 0),
+      others: liabilities.reduce((sum: number, liability: Liabilities) => {
+        const value = parseFloat((liability.others || '').replace(/[^\d.-]/g, '')) || 0;
+        return sum + value;
+      }, 0),
+      client: liabilities.reduce((sum: number, liability: Liabilities) => {
+        const value = parseFloat((liability.client || '').replace(/[^\d.-]/g, '')) || 0;
         return sum + value;
       }, 0),
     };

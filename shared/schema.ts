@@ -182,33 +182,7 @@ export type VoluntaryInvestment = typeof voluntaryInvestments.$inferSelect;
 export type InsertVoluntaryInvestment = z.infer<typeof insertVoluntaryInvestmentSchema>;
 export type UpdateVoluntaryInvestment = z.infer<typeof updateVoluntaryInvestmentSchema>;
 
-// Assets and Liabilities table schema
-export const assetsAndLiabilities = pgTable("assets_and_liabilities", {
-  id: serial("id").primaryKey(),
-  
-  // Basic information
-  description: text("description").notNull().default("Enter details ..."),
-  owner: text("owner").notNull().default("Donald Edwards"),
-  
-  // Financial details
-  amount: text("amount").notNull().default("R 0"),
-  increasePercentage: text("increase_percentage").notNull().default("0%"),
-  
-  // Multiple owners support
-  additionalOwners: text("additional_owners").array().notNull().default([]),
-});
 
-export const insertAssetsAndLiabilitiesSchema = createInsertSchema(assetsAndLiabilities).omit({
-  id: true,
-});
-
-export const updateAssetsAndLiabilitiesSchema = createInsertSchema(assetsAndLiabilities).omit({
-  id: true,
-}).partial();
-
-export type AssetsAndLiabilities = typeof assetsAndLiabilities.$inferSelect;
-export type InsertAssetsAndLiabilities = z.infer<typeof insertAssetsAndLiabilitiesSchema>;
-export type UpdateAssetsAndLiabilities = z.infer<typeof updateAssetsAndLiabilitiesSchema>;
 
 // Income Needs table schema - New 3-section structure
 export const incomeNeeds = pgTable("income_needs", {

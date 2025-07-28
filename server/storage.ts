@@ -1,4 +1,4 @@
-import { retirementFunds, lumpSumBequests, assurance, definedBenefitFunds, voluntaryInvestments, assetsAndLiabilities, incomeNeeds, incomeProvisions, residue, additionalEstateDutyItems, liabilities, type RetirementFund, type InsertRetirementFund, type UpdateRetirementFund, type LumpSumBequest, type InsertLumpSumBequest, type Assurance, type InsertAssurance, type UpdateAssurance, type DefinedBenefitFund, type InsertDefinedBenefitFund, type UpdateDefinedBenefitFund, type VoluntaryInvestment, type InsertVoluntaryInvestment, type UpdateVoluntaryInvestment, type AssetAndLiability, type InsertAssetAndLiability, type UpdateAssetAndLiability, type IncomeNeed, type InsertIncomeNeed, type UpdateIncomeNeed, type IncomeProvision, type InsertIncomeProvision, type UpdateIncomeProvision, type Residue, type InsertResidue, type UpdateResidue, type AdditionalEstateDutyItem, type InsertAdditionalEstateDutyItem, type UpdateAdditionalEstateDutyItem, type Liabilities, type InsertLiabilities, type UpdateLiabilities } from "@shared/schema";
+import { retirementFunds, lumpSumBequests, assurance, definedBenefitFunds, voluntaryInvestments, incomeNeeds, incomeProvisions, residue, additionalEstateDutyItems, liabilities, type RetirementFund, type InsertRetirementFund, type UpdateRetirementFund, type LumpSumBequest, type InsertLumpSumBequest, type Assurance, type InsertAssurance, type UpdateAssurance, type DefinedBenefitFund, type InsertDefinedBenefitFund, type UpdateDefinedBenefitFund, type VoluntaryInvestment, type InsertVoluntaryInvestment, type UpdateVoluntaryInvestment, type IncomeNeed, type InsertIncomeNeed, type UpdateIncomeNeed, type IncomeProvision, type InsertIncomeProvision, type UpdateIncomeProvision, type Residue, type InsertResidue, type UpdateResidue, type AdditionalEstateDutyItem, type InsertAdditionalEstateDutyItem, type UpdateAdditionalEstateDutyItem, type Liabilities, type InsertLiabilities, type UpdateLiabilities } from "@shared/schema";
 import { assets, type Assets, type InsertAssets } from "@shared/assets-schema";
 import { drizzle } from "drizzle-orm/node-postgres";
 import { Pool } from "pg";
@@ -45,13 +45,7 @@ export interface IStorage {
   deleteVoluntaryInvestment(id: number): Promise<boolean>;
   searchVoluntaryInvestments(query: string): Promise<VoluntaryInvestment[]>;
   
-  // Assets and Liabilities
-  getAssetsAndLiabilities(): Promise<AssetAndLiability[]>;
-  getAssetAndLiability(id: number): Promise<AssetAndLiability | undefined>;
-  createAssetAndLiability(asset: InsertAssetAndLiability): Promise<AssetAndLiability>;
-  updateAssetAndLiability(id: number, updates: UpdateAssetAndLiability): Promise<AssetAndLiability | undefined>;
-  deleteAssetAndLiability(id: number): Promise<boolean>;
-  searchAssetsAndLiabilities(query: string): Promise<AssetAndLiability[]>;
+
   
   // Income Needs
   getIncomeNeeds(): Promise<IncomeNeed[]>;
@@ -108,7 +102,7 @@ export class MemStorage implements IStorage {
   private assurance: Map<number, Assurance>;
   private definedBenefitFunds: Map<number, DefinedBenefitFund>;
   private voluntaryInvestments: Map<number, VoluntaryInvestment>;
-  private assetsAndLiabilities: Map<number, AssetAndLiability>;
+
   private incomeNeeds: Map<number, IncomeNeed>;
   private incomeProvisions: Map<number, IncomeProvision>;
   private residue: Map<number, Residue>;
@@ -118,7 +112,7 @@ export class MemStorage implements IStorage {
   private currentAssuranceId: number;
   private currentDefinedBenefitFundId: number;
   private currentVoluntaryInvestmentId: number;
-  private currentAssetAndLiabilityId: number;
+
   private currentIncomeNeedId: number;
   private currentIncomeProvisionId: number;
   private currentResidueId: number;
@@ -130,7 +124,7 @@ export class MemStorage implements IStorage {
     this.assurance = new Map();
     this.definedBenefitFunds = new Map();
     this.voluntaryInvestments = new Map();
-    this.assetsAndLiabilities = new Map();
+
     this.incomeNeeds = new Map();
     this.incomeProvisions = new Map();
     this.residue = new Map();
@@ -140,7 +134,7 @@ export class MemStorage implements IStorage {
     this.currentAssuranceId = 1;
     this.currentDefinedBenefitFundId = 1;
     this.currentVoluntaryInvestmentId = 1;
-    this.currentAssetAndLiabilityId = 1;
+
     this.currentIncomeNeedId = 1;
     this.currentIncomeProvisionId = 1;
     this.currentResidueId = 1;
@@ -264,57 +258,7 @@ export class MemStorage implements IStorage {
       excludedFromExecutorsFees: false,
     });
     
-    // Initialize sample assets and liabilities with category structure
-    const categories = [
-      "Immovable assets (primary residence)",
-      "Immovable assets (other)", 
-      "Business interests",
-      "Movable property",
-      "Personal effects (personal use assets)",
-      "Other assets"
-    ];
-    
-    // Create header rows for each category
-    categories.forEach((category, index) => {
-      this.createAssetAndLiability({
-        include: true,
-        categoryAndDescription: category,
-        currency: "ZAR",
-        baseCost: "0",
-        marketValue: "0",
-        donaldEdwardsPercentage: "0",
-        bettyEdwardsPercentage: "0",
-        liquidationPercentage: "0",
-        spouse: "0",
-        others: "0",
-        excludedFromJointEstate: false,
-        excludedFromEstateDuty: false,
-        excludedFromCGT: false,
-        category: category,
-        isHeader: true,
-        sortOrder: index * 100,
-      });
-    });
-    
-    // Add sample asset under primary residence
-    this.createAssetAndLiability({
-      include: true,
-      categoryAndDescription: "Family Home - 123 Oak Street",
-      currency: "ZAR",
-      baseCost: "R 800,000",
-      marketValue: "R 1,200,000",
-      donaldEdwardsPercentage: "50%",
-      bettyEdwardsPercentage: "50%",
-      liquidationPercentage: "85%",
-      spouse: "R 510,000",
-      others: "R 510,000",
-      excludedFromJointEstate: false,
-      excludedFromEstateDuty: false,
-      excludedFromCGT: true,
-      category: "Immovable assets (primary residence)",
-      isHeader: false,
-      sortOrder: 1,
-    });
+
     
     // Initialize sample income needs
     this.createIncomeNeed({
@@ -671,57 +615,7 @@ export class MemStorage implements IStorage {
     });
   }
 
-  // Assets and Liabilities methods
-  async getAssetsAndLiabilities(): Promise<AssetAndLiability[]> {
-    const assets = Array.from(this.assetsAndLiabilities.values());
-    return assets.sort((a, b) => {
-      if (a.category !== b.category) {
-        return a.sortOrder - b.sortOrder;
-      }
-      if (a.isHeader !== b.isHeader) {
-        return a.isHeader ? -1 : 1;
-      }
-      return a.sortOrder - b.sortOrder;
-    });
-  }
 
-  async getAssetAndLiability(id: number): Promise<AssetAndLiability | undefined> {
-    return this.assetsAndLiabilities.get(id);
-  }
-
-  async createAssetAndLiability(asset: InsertAssetAndLiability): Promise<AssetAndLiability> {
-    const newAsset: AssetAndLiability = {
-      id: this.currentAssetAndLiabilityId++,
-      ...asset
-    };
-    
-    this.assetsAndLiabilities.set(newAsset.id, newAsset);
-    return newAsset;
-  }
-
-  async updateAssetAndLiability(id: number, updates: UpdateAssetAndLiability): Promise<AssetAndLiability | undefined> {
-    const existing = this.assetsAndLiabilities.get(id);
-    if (!existing) return undefined;
-    
-    const updated: AssetAndLiability = { ...existing, ...updates };
-    this.assetsAndLiabilities.set(id, updated);
-    return updated;
-  }
-
-  async deleteAssetAndLiability(id: number): Promise<boolean> {
-    return this.assetsAndLiabilities.delete(id);
-  }
-
-  async searchAssetsAndLiabilities(query: string): Promise<AssetAndLiability[]> {
-    const allAssets = await this.getAssetsAndLiabilities();
-    if (!query.trim()) return allAssets;
-    
-    const lowerQuery = query.toLowerCase();
-    return allAssets.filter(asset => 
-      asset.categoryAndDescription.toLowerCase().includes(lowerQuery) ||
-      asset.category.toLowerCase().includes(lowerQuery)
-    );
-  }
 
   // Income Needs methods
   async getIncomeNeeds(): Promise<IncomeNeed[]> {
@@ -1079,41 +973,7 @@ class DbStorage implements IStorage {
       .orderBy(voluntaryInvestments.id);
   }
 
-  // Assets and Liabilities methods - Database implementation
-  async getAssetsAndLiabilities(): Promise<AssetAndLiability[]> {
-    return await this.db.select().from(assetsAndLiabilities).orderBy(assetsAndLiabilities.id);
-  }
 
-  async getAssetAndLiability(id: number): Promise<AssetAndLiability | undefined> {
-    const results = await this.db.select().from(assetsAndLiabilities).where(eq(assetsAndLiabilities.id, id));
-    return results[0];
-  }
-
-  async createAssetAndLiability(asset: InsertAssetAndLiability): Promise<AssetAndLiability> {
-    const results = await this.db.insert(assetsAndLiabilities).values(asset).returning();
-    return results[0];
-  }
-
-  async updateAssetAndLiability(id: number, updates: UpdateAssetAndLiability): Promise<AssetAndLiability | undefined> {
-    const results = await this.db.update(assetsAndLiabilities).set(updates).where(eq(assetsAndLiabilities.id, id)).returning();
-    return results[0];
-  }
-
-  async deleteAssetAndLiability(id: number): Promise<boolean> {
-    const results = await this.db.delete(assetsAndLiabilities).where(eq(assetsAndLiabilities.id, id)).returning();
-    return results.length > 0;
-  }
-
-  async searchAssetsAndLiabilities(query: string): Promise<AssetAndLiability[]> {
-    if (!query.trim()) return await this.getAssetsAndLiabilities();
-    
-    return await this.db.select().from(assetsAndLiabilities)
-      .where(or(
-        ilike(assetsAndLiabilities.baseCost, `%${query}%`),
-        ilike(assetsAndLiabilities.marketValue, `%${query}%`)
-      ))
-      .orderBy(assetsAndLiabilities.id);
-  }
 
   // Income Needs methods - Database implementation
   async getIncomeNeeds(): Promise<IncomeNeed[]> {

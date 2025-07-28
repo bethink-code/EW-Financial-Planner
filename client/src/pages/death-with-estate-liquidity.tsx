@@ -6,7 +6,7 @@ import LumpSumBequests from "./lump-sum-bequests";
 import Assurance from "./assurance";
 import DefinedBenefitFunds from "./defined-benefit-funds";
 import VoluntaryInvestments from "./voluntary-investments";
-import AssetsAndLiabilities from "./assets-and-liabilities";
+
 import IncomeNeeds from "./income-needs";
 import IncomeProvisions from "./income-provisions";
 import Residue from "./residue";
@@ -18,7 +18,7 @@ type TabType =
   | "retirement-funds" 
   | "defined-benefit-funds" 
   | "voluntary-investments" 
-  | "assets-and-liabilities" 
+ 
   | "income-needs" 
   | "income-provisions" 
   | "residue" 
@@ -38,7 +38,7 @@ export default function DeathWithEstateLiquidity() {
     { id: "retirement-funds", label: "Retirement Funds" },
     { id: "defined-benefit-funds", label: "Defined Benefit Funds" },
     { id: "voluntary-investments", label: "Voluntary Investments" },
-    { id: "assets-and-liabilities", label: "Assets and Liabilities" },
+
     { id: "income-needs", label: "Income Needs" },
     { id: "income-provisions", label: "Income Provisions" },
     { id: "residue", label: "Residue" },
@@ -79,9 +79,7 @@ export default function DeathWithEstateLiquidity() {
           <VoluntaryInvestments />
         </TabContent>
         
-        <TabContent activeTab={activeTab} tabId="assets-and-liabilities">
-          <AssetsAndLiabilities />
-        </TabContent>
+
         
         <TabContent activeTab={activeTab} tabId="income-needs">
           <IncomeNeeds />
