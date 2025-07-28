@@ -280,12 +280,12 @@ function VoluntaryInvestmentsTable({ viewMode, searchTerm }: VoluntaryInvestment
         </thead>
         <tbody className="divide-y divide-neutral-200">
           {investments.map((investment: VoluntaryInvestment) => {
-            console.log(`Rendering investment ${investment.id} with owners:`, investment.owners);
+            console.log(`Rendering investment ${investment.id} with owners:`, investment.owners, `maxRows: ${Math.max(investment.owners.length, 1)}`);
             const maxRows = Math.max(investment.owners.length, 1);
             
             return Array.from({ length: maxRows }, (_, ownerIndex) => (
               <tr 
-                key={`${investment.id}-${ownerIndex}-${investment.owners.length}`} 
+                key={`investment-${investment.id}-owner-${ownerIndex}-v${investment.owners.length}`} 
                 className="hover:bg-neutral-50"
               >
                 {ownerIndex === 0 && (
@@ -322,14 +322,17 @@ function VoluntaryInvestmentsTable({ viewMode, searchTerm }: VoluntaryInvestment
                       <input
                         type="text"
                         defaultValue={formatTextValue(investment.owners[ownerIndex])}
-                        placeholder="Enter details ..."
+                        placeholder={`Owner ${ownerIndex + 1} for Investment ${investment.id}`}
                         className={`table-input ${getFieldClass('text')} ${getValueClass(investment.owners[ownerIndex], 'text')} flex-1`}
                         onFocus={handleDefaultValueFocus}
                         onBlur={(e) => handleOwnerChange(investment.id, ownerIndex, e.target.value)}
                       />
                       {ownerIndex === 0 ? (
                         <AddButton
-                          onClick={() => handleAddOwner(investment.id)}
+                          onClick={() => {
+                            console.log(`Adding owner to investment ${investment.id}`);
+                            handleAddOwner(investment.id);
+                          }}
                           disabled={isUpdating}
                           size="sm"
                           type="button"
