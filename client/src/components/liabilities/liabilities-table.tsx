@@ -102,7 +102,7 @@ function LiabilitiesTable({ viewMode, searchTerm }: LiabilitiesTableProps) {
     return {
       count: liabilities.length,
       amount: liabilities.reduce((sum: number, liability: AssetsAndLiabilities) => {
-        const value = parseFloat(liability.amount.replace(/[^\d.-]/g, '')) || 0;
+        const value = parseFloat((liability.amount || '').replace(/[^\d.-]/g, '')) || 0;
         return sum + value;
       }, 0),
     };
