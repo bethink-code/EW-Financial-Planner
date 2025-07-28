@@ -36,7 +36,7 @@ export function TableNavigationDropdown() {
   
   // Find current table name
   const currentTable = tables.find(table => table.path === location);
-  const currentTableName = currentTable ? currentTable.name : "Select Table";
+  const currentTableName = currentTable ? currentTable.name : "Navigate Tables";
   
   // Group tables by category
   const groupedTables = tables.reduce((acc, table) => {
@@ -72,14 +72,14 @@ export function TableNavigationDropdown() {
     <div className="relative inline-block" id="table-nav-dropdown">
       <button
         onClick={handleDropdownToggle}
-        className="flex items-center justify-between bg-white border border-gray-300 rounded-lg px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 min-w-[240px]"
+        className="flex items-center justify-between bg-white border border-gray-300 rounded-lg px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 min-w-[300px] shadow-sm"
       >
         <span className="truncate">{currentTableName}</span>
         <ChevronDown className={`ml-2 h-4 w-4 transition-transform ${isOpen ? 'rotate-180' : ''}`} />
       </button>
 
       {isOpen && (
-        <div className="absolute top-full left-0 mt-1 w-80 bg-white border border-gray-200 rounded-lg shadow-lg z-50 max-h-96 overflow-y-auto">
+        <div className="absolute top-full left-0 mt-1 w-80 bg-white border border-gray-200 rounded-lg shadow-lg z-[9999] max-h-96 overflow-y-auto">
           {Object.entries(groupedTables).map(([category, categoryTables]) => (
             <div key={category} className="py-2">
               <div className="px-4 py-2 text-xs font-semibold text-gray-500 uppercase tracking-wider bg-gray-50 border-b border-gray-100">

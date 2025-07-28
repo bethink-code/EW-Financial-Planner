@@ -3,6 +3,7 @@ import { queryClient } from "./lib/queryClient";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
+import { TopNavigation } from "@/components/ui/top-navigation";
 import TableNavigation from "@/pages/table-navigation";
 import NotFound from "@/pages/not-found";
 import NewRetirementFunds from "@/pages/new-retirement-funds";
@@ -22,23 +23,26 @@ import DeathWithEstateLiquidity from "./pages/death-with-estate-liquidity";
 function Router() {
   return (
     <div className="min-h-screen bg-gray-50">
-      <Switch>
-        <Route path="/" component={TableNavigation} />
-        <Route path="/death-with-estate-liquidity" component={DeathWithEstateLiquidity} />
-        <Route path="/assurance" component={Assurance} />
-        <Route path="/new-retirement-funds" component={NewRetirementFunds} />
-        <Route path="/assets-and-liabilities" component={AssetsAndLiabilities} />
-        <Route path="/defined-benefit-funds" component={DefinedBenefitFunds} />
-        <Route path="/voluntary-investments" component={VoluntaryInvestments} />
-        <Route path="/assets" component={AssetsPage} />
-        <Route path="/liabilities" component={Liabilities} />
-        <Route path="/income-needs" component={IncomeNeeds} />
-        <Route path="/income-provisions" component={IncomeProvisions} />
-        <Route path="/residue" component={Residue} />
-        <Route path="/lump-sum-bequests" component={LumpSumBequests} />
-        <Route path="/additional-estate-duty-items" component={AdditionalEstateDutyItems} />
-        <Route component={NotFound} />
-      </Switch>
+      <TopNavigation />
+      <div className="pt-16">
+        <Switch>
+          <Route path="/" component={TableNavigation} />
+          <Route path="/death-with-estate-liquidity" component={DeathWithEstateLiquidity} />
+          <Route path="/assurance" component={Assurance} />
+          <Route path="/new-retirement-funds" component={NewRetirementFunds} />
+          <Route path="/assets-and-liabilities" component={AssetsAndLiabilities} />
+          <Route path="/defined-benefit-funds" component={DefinedBenefitFunds} />
+          <Route path="/voluntary-investments" component={VoluntaryInvestments} />
+          <Route path="/assets" component={AssetsPage} />
+          <Route path="/liabilities" component={Liabilities} />
+          <Route path="/income-needs" component={IncomeNeeds} />
+          <Route path="/income-provisions" component={IncomeProvisions} />
+          <Route path="/residue" component={Residue} />
+          <Route path="/lump-sum-bequests" component={LumpSumBequests} />
+          <Route path="/additional-estate-duty-items" component={AdditionalEstateDutyItems} />
+          <Route component={NotFound} />
+        </Switch>
+      </div>
     </div>
   );
 }
