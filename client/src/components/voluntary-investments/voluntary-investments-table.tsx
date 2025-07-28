@@ -161,25 +161,41 @@ function VoluntaryInvestmentsTable({ viewMode, searchTerm }: VoluntaryInvestment
   }, [deleteMutation]);
 
   const handleAddOwner = useCallback((investmentId: number, currentOwners: string[], currentPercentages: string[]) => {
+    console.log('Adding owner to investment:', investmentId, 'current owners:', currentOwners);
     const newOwners = [...currentOwners, "Enter details ..."];
     const newPercentages = [...currentPercentages, "0%"];
-    handleUpdateInvestment(investmentId, 'owners', newOwners);
-    handleUpdateInvestment(investmentId, 'ownershipPercentages', newPercentages);
-  }, [handleUpdateInvestment]);
+    
+    // Update both arrays in a single mutation to prevent race conditions
+    setIsUpdating(true);
+    updateMutation.mutate({ 
+      id: investmentId, 
+      updates: { 
+        owners: newOwners,
+        ownershipPercentages: newPercentages
+      } 
+    });
+  }, [updateMutation]);
 
   const handleDeleteOwner = useCallback((investmentId: number, ownerIndex: number, currentOwners: string[], currentPercentages: string[]) => {
     if (currentOwners.length <= 1) return; // Don't delete the last owner
     
-    console.log('Deleting owner at index:', ownerIndex, 'from owners:', currentOwners);
+    console.log('Deleting owner at index:', ownerIndex, 'from investment:', investmentId, 'current owners:', currentOwners);
     
     const newOwners = [...currentOwners];
     const newPercentages = [...currentPercentages];
     newOwners.splice(ownerIndex, 1);
     newPercentages.splice(ownerIndex, 1);
     
-    handleUpdateInvestment(investmentId, 'owners', newOwners);
-    handleUpdateInvestment(investmentId, 'ownershipPercentages', newPercentages);
-  }, [handleUpdateInvestment]);
+    // Update both arrays in a single mutation to prevent race conditions
+    setIsUpdating(true);
+    updateMutation.mutate({ 
+      id: investmentId, 
+      updates: { 
+        owners: newOwners,
+        ownershipPercentages: newPercentages
+      } 
+    });
+  }, [updateMutation]);
 
   if (isLoading) {
     return <div className="flex justify-center py-8">Loading voluntary investments...</div>;
