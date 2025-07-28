@@ -296,7 +296,7 @@ function VoluntaryInvestmentsTable({ viewMode, searchTerm }: VoluntaryInvestment
                 
                 {ownerIndex === 0 && (
                   <>
-                    <td className="p-2 section-start vertical-align-middle" rowSpan={maxRows}>
+                    <td className="p-2 section-start align-top" rowSpan={maxRows}>
                       <input
                         type="text"
                         defaultValue={investment.baseCost}
@@ -307,7 +307,7 @@ function VoluntaryInvestmentsTable({ viewMode, searchTerm }: VoluntaryInvestment
                       />
                     </td>
                     
-                    <td className="p-2 vertical-align-middle" rowSpan={maxRows}>
+                    <td className="p-2 align-top" rowSpan={maxRows}>
                       <input
                         type="text"
                         defaultValue={investment.marketValue}
@@ -318,7 +318,7 @@ function VoluntaryInvestmentsTable({ viewMode, searchTerm }: VoluntaryInvestment
                       />
                     </td>
                     
-                    <td className="p-2 vertical-align-middle" rowSpan={maxRows}>
+                    <td className="p-2 align-top" rowSpan={maxRows}>
                       <input
                         type="text"
                         defaultValue={investment.liquidationPercentage}
@@ -329,7 +329,7 @@ function VoluntaryInvestmentsTable({ viewMode, searchTerm }: VoluntaryInvestment
                       />
                     </td>
                     
-                    <td className="p-2 section-start vertical-align-middle" rowSpan={maxRows}>
+                    <td className="p-2 section-start align-top" rowSpan={maxRows}>
                       <input
                         type="text"
                         defaultValue={investment.spouse}
@@ -340,7 +340,7 @@ function VoluntaryInvestmentsTable({ viewMode, searchTerm }: VoluntaryInvestment
                       />
                     </td>
                     
-                    <td className="p-2 vertical-align-middle" rowSpan={maxRows}>
+                    <td className="p-2 align-top" rowSpan={maxRows}>
                       <input
                         type="text"
                         defaultValue={investment.others}
@@ -351,7 +351,7 @@ function VoluntaryInvestmentsTable({ viewMode, searchTerm }: VoluntaryInvestment
                       />
                     </td>
                     
-                    <td className="p-2 text-center section-start vertical-align-middle" rowSpan={maxRows}>
+                    <td className="p-2 text-center section-start align-top" rowSpan={maxRows}>
                       <input
                         type="checkbox"
                         checked={investment.excludedFromJointEstate}
@@ -361,7 +361,7 @@ function VoluntaryInvestmentsTable({ viewMode, searchTerm }: VoluntaryInvestment
                       />
                     </td>
                     
-                    <td className="p-2 text-center vertical-align-middle" rowSpan={maxRows}>
+                    <td className="p-2 text-center align-top" rowSpan={maxRows}>
                       <input
                         type="checkbox"
                         checked={investment.excludedFromEstateDuty}
@@ -371,7 +371,7 @@ function VoluntaryInvestmentsTable({ viewMode, searchTerm }: VoluntaryInvestment
                       />
                     </td>
                     
-                    <td className="p-2 text-center vertical-align-middle" rowSpan={maxRows}>
+                    <td className="p-2 text-center align-top" rowSpan={maxRows}>
                       <input
                         type="checkbox"
                         checked={investment.excludedFromCGT}
@@ -381,7 +381,7 @@ function VoluntaryInvestmentsTable({ viewMode, searchTerm }: VoluntaryInvestment
                       />
                     </td>
                     
-                    <td className="p-2 text-center section-end vertical-align-middle" rowSpan={maxRows}>
+                    <td className="p-2 text-center section-end align-top" rowSpan={maxRows}>
                       <input
                         type="checkbox"
                         checked={investment.excludedFromExecutorsFees}
