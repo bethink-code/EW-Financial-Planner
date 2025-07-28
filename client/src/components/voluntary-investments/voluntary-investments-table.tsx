@@ -244,4 +244,4 @@ function VoluntaryInvestmentsTable({ viewMode, searchTerm }: VoluntaryInvestment
   );
 }
 
-export { VoluntaryInvestmentsTable };
+export default VoluntaryInvestmentsTable;

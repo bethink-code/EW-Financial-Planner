@@ -244,4 +244,4 @@ function DefinedBenefitFundsTable({ viewMode, searchTerm }: DefinedBenefitFundsT
   );
 }
 
-export { DefinedBenefitFundsTable };
+export default DefinedBenefitFundsTable;
