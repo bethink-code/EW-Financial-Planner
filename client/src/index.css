@@ -270,27 +270,26 @@ th, td {
     border-radius: 0.5rem !important;
     box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1) !important;
     border: 1px solid #e5e7eb !important;
-    border-collapse: separate !important;
-    border-spacing: 0 !important;
+    border-collapse: collapse !important;
   }
 
-  /* Remove all internal horizontal borders */
-  table tr {
-    border: none !important;
-  }
-
-  table td {
-    border-top: none !important;
-    border-bottom: none !important;
-  }
-
+  /* Keep header borders for structure */
   table th {
+    border-bottom: 1px solid #e5e7eb !important;
+    border-right: 1px solid #e5e7eb !important;
+  }
+
+  /* Keep vertical borders for column separation but remove horizontal row borders */
+  table td {
+    border-right: 1px solid #e5e7eb !important;
     border-top: none !important;
     border-bottom: none !important;
   }
 
-  tbody tr {
-    border: none !important;
+  /* Remove last column borders */
+  table th:last-child,
+  table td:last-child {
+    border-right: none !important;
   }
 
   /* Table section border classes - structural approach */
@@ -330,6 +329,16 @@ th, td {
   tfoot {
     background-color: #f9fafb !important; /* bg-neutral-50 */
     border-top: 2px solid #d1d5db !important; /* Stronger border for section separation */
+  }
+
+  tfoot td {
+    border-right: 1px solid #e5e7eb !important;
+    border-top: none !important;
+    border-bottom: none !important;
+  }
+
+  tfoot td:last-child {
+    border-right: none !important;
   }
 
   .totals-cell-label {
