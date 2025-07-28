@@ -4,7 +4,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 
 import { DuplicateButton, DeleteButton, AddButton } from "@/components/ui/action-buttons";
 import { getFieldClass, getFieldWidth } from "@/lib/design-tokens";
-import { formatCurrencyValue, formatPercentageValue, formatTextValue, formatYearsValue, getValueClass, isDefaultValue, handleDefaultValueFocus, createEnhancedBlurHandler } from "@/lib/formatting";
+import { formatCurrencyValue, formatPercentageValue, formatTextValue, formatYearsValue, getValueClass, isDefaultValue, handleDefaultValueFocus } from "@/lib/formatting";
 
 interface ClassicRetirementTableProps {
   funds: RetirementFund[];
@@ -246,7 +246,7 @@ export function ClassicRetirementTable({
                       defaultValue={formatTextValue(fund.description)}
                       className={`table-input ${getFieldClass('text')} ${getValueClass(fund.description, 'text')}`}
                       onFocus={handleDefaultValueFocus}
-                      onBlur={(e) => createEnhancedBlurHandler((value) => handleCellUpdate(fund.id, 'description', value), 'text')(e)}
+                      onBlur={(e) => formatPercentageValue => handleCellUpdate(fund.id, 'description', value), 'text')(e)}
                     />
                   )}
                   {type === 'additional-owner' && ownerIndex !== undefined && (
@@ -312,7 +312,7 @@ export function ClassicRetirementTable({
                       defaultValue={formatCurrencyValue(fund.coverAmount)}
                       className={`table-input ${getFieldClass('currency')} ${getValueClass(fund.coverAmount, 'currency')}`}
                       onFocus={handleDefaultValueFocus}
-                      onBlur={(e) => createEnhancedBlurHandler((value) => handleCellUpdate(fund.id, 'coverAmount', value), 'currency')(e)}
+                      onBlur={(e) => formatPercentageValue => handleCellUpdate(fund.id, 'coverAmount', value), 'currency')(e)}
                     />
                   )}
                 </td>
@@ -325,7 +325,7 @@ export function ClassicRetirementTable({
                       defaultValue={formatYearsValue(fund.termYears)}
                       className={`table-input ${getFieldClass('years')} ${getValueClass(fund.termYears, 'years')}`}
                       onFocus={handleDefaultValueFocus}
-                      onBlur={(e) => createEnhancedBlurHandler((value) => handleCellUpdate(fund.id, 'termYears', value), 'years')(e)}
+                      onBlur={(e) => formatPercentageValue => handleCellUpdate(fund.id, 'termYears', value), 'years')(e)}
                     />
                   )}
                 </td>
@@ -338,7 +338,7 @@ export function ClassicRetirementTable({
                       defaultValue={formatPercentageValue(fund.increasePercentage)}
                       className={`table-input ${getFieldClass('percentage')} ${getValueClass(fund.increasePercentage, 'percentage')}`}
                       onFocus={handleDefaultValueFocus}
-                      onBlur={(e) => createEnhancedBlurHandler((value) => handleCellUpdate(fund.id, 'increasePercentage', value), 'percentage')(e)}
+                      onBlur={(e) => formatPercentageValue => handleCellUpdate(fund.id, 'increasePercentage', value), 'percentage')(e)}
                     />
                   )}
                 </td>
@@ -351,7 +351,7 @@ export function ClassicRetirementTable({
                       defaultValue={formatCurrencyValue(fund.approvedLifeCover)}
                       className={`table-input ${getFieldClass('currency')} ${getValueClass(fund.approvedLifeCover, 'currency')}`}
                       onFocus={handleDefaultValueFocus}
-                      onBlur={(e) => createEnhancedBlurHandler((value) => handleCellUpdate(fund.id, 'approvedLifeCover', value), 'currency')(e)}
+                      onBlur={(e) => formatPercentageValue => handleCellUpdate(fund.id, 'approvedLifeCover', value), 'currency')(e)}
                     />
                   )}
                 </td>
@@ -365,7 +365,7 @@ export function ClassicRetirementTable({
                       defaultValue={formatCurrencyValue(fund.fundValue)}
                       className={`table-input ${getFieldClass('currency')} ${getValueClass(fund.fundValue, 'currency')}`}
                       onFocus={handleDefaultValueFocus}
-                      onBlur={(e) => createEnhancedBlurHandler((value) => handleCellUpdate(fund.id, 'fundValue', value), 'currency')(e)}
+                      onBlur={(e) => formatPercentageValue => handleCellUpdate(fund.id, 'fundValue', value), 'currency')(e)}
                     />
                   )}
                 </td>
@@ -378,7 +378,7 @@ export function ClassicRetirementTable({
                       defaultValue={formatCurrencyValue(fund.fundValueAtDeath)}
                       className={`table-input ${getFieldClass('currency')} ${getValueClass(fund.fundValueAtDeath, 'currency')}`}
                       onFocus={handleDefaultValueFocus}
-                      onBlur={(e) => createEnhancedBlurHandler((value) => handleCellUpdate(fund.id, 'fundValueAtDeath', value), 'currency')(e)}
+                      onBlur={(e) => formatPercentageValue => handleCellUpdate(fund.id, 'fundValueAtDeath', value), 'currency')(e)}
                     />
                   )}
                 </td>
@@ -391,7 +391,7 @@ export function ClassicRetirementTable({
                       defaultValue={formatTextValue(fund.beneficiaryName)}
                       className={`table-input ${getFieldClass('text')} ${getValueClass(fund.beneficiaryName, 'text')}`}
                       onFocus={handleDefaultValueFocus}
-                      onBlur={(e) => createEnhancedBlurHandler((value) => handleCellUpdate(fund.id, 'beneficiaryName', value), 'text')(e)}
+                      onBlur={(e) => formatPercentageValue => handleCellUpdate(fund.id, 'beneficiaryName', value), 'text')(e)}
                     />
                   )}
                 </td>
@@ -405,7 +405,7 @@ export function ClassicRetirementTable({
                       defaultValue={formatTextValue(fund.name)}
                       className={`table-input ${getFieldClass('text')} ${getValueClass(fund.name, 'text')}`}
                       onFocus={handleDefaultValueFocus}
-                      onBlur={(e) => createEnhancedBlurHandler((value) => handleCellUpdate(fund.id, 'name', value), 'text')(e)}
+                      onBlur={(e) => formatPercentageValue => handleCellUpdate(fund.id, 'name', value), 'text')(e)}
                     />
                   )}
                 </td>
@@ -418,7 +418,7 @@ export function ClassicRetirementTable({
                       defaultValue={formatCurrencyValue(fund.amount)}
                       className={`table-input ${getFieldClass('currency')} ${getValueClass(fund.amount, 'currency')}`}
                       onFocus={handleDefaultValueFocus}
-                      onBlur={(e) => createEnhancedBlurHandler((value) => handleCellUpdate(fund.id, 'amount', value), 'currency')(e)}
+                      onBlur={(e) => formatPercentageValue => handleCellUpdate(fund.id, 'amount', value), 'currency')(e)}
                     />
                   )}
                 </td>
@@ -432,7 +432,7 @@ export function ClassicRetirementTable({
                       defaultValue={formatCurrencyValue(fund.lumpSumTaken)}
                       className={`table-input ${getFieldClass('currency')} ${getValueClass(fund.lumpSumTaken, 'currency')}`}
                       onFocus={handleDefaultValueFocus}
-                      onBlur={(e) => createEnhancedBlurHandler((value) => handleCellUpdate(fund.id, 'lumpSumTaken', value), 'currency')(e)}
+                      onBlur={(e) => formatPercentageValue => handleCellUpdate(fund.id, 'lumpSumTaken', value), 'currency')(e)}
                     />
                   )}
                 </td>
@@ -445,7 +445,7 @@ export function ClassicRetirementTable({
                       defaultValue={formatCurrencyValue(fund.fundValueBeneficiaries)}
                       className={`table-input ${getFieldClass('currency')} ${getValueClass(fund.fundValueBeneficiaries, 'currency')}`}
                       onFocus={handleDefaultValueFocus}
-                      onBlur={(e) => createEnhancedBlurHandler((value) => handleCellUpdate(fund.id, 'fundValueBeneficiaries', value), 'currency')(e)}
+                      onBlur={(e) => formatPercentageValue => handleCellUpdate(fund.id, 'fundValueBeneficiaries', value), 'currency')(e)}
                     />
                   )}
                 </td>
@@ -458,7 +458,7 @@ export function ClassicRetirementTable({
                       defaultValue={formatCurrencyValue(fund.nonDeductibleContribution)}
                       className={`table-input ${getFieldClass('currency')} ${getValueClass(fund.nonDeductibleContribution, 'currency')}`}
                       onFocus={handleDefaultValueFocus}
-                      onBlur={(e) => createEnhancedBlurHandler((value) => handleCellUpdate(fund.id, 'nonDeductibleContribution', value), 'currency')(e)}
+                      onBlur={(e) => formatPercentageValue => handleCellUpdate(fund.id, 'nonDeductibleContribution', value), 'currency')(e)}
                     />
                   )}
                 </td>
@@ -471,7 +471,7 @@ export function ClassicRetirementTable({
                       defaultValue={formatCurrencyValue(fund.livingAnnuity)}
                       className={`table-input ${getFieldClass('currency')} ${getValueClass(fund.livingAnnuity, 'currency')}`}
                       onFocus={handleDefaultValueFocus}
-                      onBlur={(e) => createEnhancedBlurHandler((value) => handleCellUpdate(fund.id, 'livingAnnuity', value), 'currency')(e)}
+                      onBlur={(e) => formatPercentageValue => handleCellUpdate(fund.id, 'livingAnnuity', value), 'currency')(e)}
                     />
                   )}
                 </td>
@@ -484,7 +484,7 @@ export function ClassicRetirementTable({
                       defaultValue={formatCurrencyValue(fund.monthlyIncome)}
                       className={`table-input ${getFieldClass('currency')} ${getValueClass(fund.monthlyIncome, 'currency')}`}
                       onFocus={handleDefaultValueFocus}
-                      onBlur={(e) => createEnhancedBlurHandler((value) => handleCellUpdate(fund.id, 'monthlyIncome', value), 'currency')(e)}
+                      onBlur={(e) => formatPercentageValue => handleCellUpdate(fund.id, 'monthlyIncome', value), 'currency')(e)}
                     />
                   )}
                 </td>
@@ -497,7 +497,7 @@ export function ClassicRetirementTable({
                       defaultValue={formatYearsValue(fund.incomeTerm)}
                       className={`table-input ${getFieldClass('years')} ${getValueClass(fund.incomeTerm, 'years')}`}
                       onFocus={handleDefaultValueFocus}
-                      onBlur={(e) => createEnhancedBlurHandler((value) => handleCellUpdate(fund.id, 'incomeTerm', value), 'years')(e)}
+                      onBlur={(e) => formatPercentageValue => handleCellUpdate(fund.id, 'incomeTerm', value), 'years')(e)}
                     />
                   )}
                 </td>

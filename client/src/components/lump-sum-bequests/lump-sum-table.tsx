@@ -1,10 +1,10 @@
 import { useState, useCallback, useMemo } from 'react';
 import { useQuery, useMutation } from '@tanstack/react-query';
 import { queryClient } from '@/lib/queryClient';
-import { LumpSumBequests, InsertLumpSumBequests } from '@shared/schema';
+import { LumpSumBequest, InsertLumpSumBequest } from '@shared/schema';
 import { AddButton, ActionButtonGroup, DuplicateButton, DeleteButton } from '@/components/ui/action-buttons';
 import { getFieldClass, getCellClass } from '@/lib/field-types';
-import { formatCurrencyValue, getValueClass, handleDefaultValueFocus, createEnhancedBlurHandler } from '@/lib/formatting';
+import { formatCurrencyValue, formatPercentageValue, formatTextValue, getValueClass, handleDefaultValueFocus } from '@/lib/formatting';
 
 interface LumpSumTableProps {
   viewMode: 'table' | 'hybrid';
@@ -15,14 +15,14 @@ function LumpSumTable({ viewMode, searchTerm }: LumpSumTableProps) {
   const [isUpdating, setIsUpdating] = useState(false);
 
   // Query for lump sum bequests
-  const { data: bequests = [], isLoading, error } = useQuery<LumpSumBequests[]>({
+  const { data: bequests = [], isLoading, error } = useQuery<LumpSumBequest[]>({
     queryKey: ['/api/lump-sum-bequests'],
   });
 
   // Add bequest mutation
   const addMutation = useMutation({
-    mutationFn: async (): Promise<LumpSumBequests> => {
-      const newBequest: InsertLumpSumBequests = {
+    mutationFn: async (): Promise<LumpSumBequest> => {
+      const newBequest: InsertLumpSumBequest = {
         description: "Enter details ...",
         entity: "Enter details ...",
         start: "Enter details ...",
@@ -103,46 +103,54 @@ function LumpSumTable({ viewMode, searchTerm }: LumpSumTableProps) {
   const totals = useMemo(() => {
     return {
       count: bequests.length,
-      amount: bequests.reduce((sum: number, bequest: LumpSumBequests) => {
+      amount: bequests.reduce((sum: number, bequest: LumpSumBequest) => {
         const value = parseFloat((bequest.amount || '').replace(/[^\d.-]/g, '')) || 0;
         return sum + value;
       }, 0),
-      increasePercentage: bequests.reduce((sum: number, bequest: LumpSumBequests) => {
+      increasePercentage: bequests.reduce((sum: number, bequest: LumpSumBequest) => {
         const value = parseFloat((bequest.increasePercentage || '').replace(/[^\d.-]/g, '')) || 0;
         return sum + value;
       }, 0),
       cpiCount: bequests.filter(bequest => bequest.cpi).length,
-      valueAtDeath: bequests.reduce((sum: number, bequest: LumpSumBequests) => {
+      valueAtDeath: bequests.reduce((sum: number, bequest: LumpSumBequest) => {
         const value = parseFloat((bequest.valueAtDeath || '').replace(/[^\d.-]/g, '')) || 0;
         return sum + value;
       }, 0),
     };
   }, [bequests]);
 
-  const handleUpdateBequest = useCallback((id: number, field: keyof LumpSumBequests, value: string | string[]) => {
+  const handleUpdateBequest = useCallback((id: number, field: keyof LumpSumBequest, value: string | string[] | boolean) => {
     setIsUpdating(true);
     const updates = { [field]: value };
     updateMutation.mutate({ id, updates });
   }, [updateMutation]);
 
-  const handleInputBlur = useCallback((id: number, field: keyof LumpSumBequests, value: string) => {
+  const handleInputBlur = useCallback((id: number, field: keyof LumpSumBequest, value: string, target?: HTMLInputElement) => {
     let formattedValue: string;
-    if (field === 'amount' || field === 'valueAtDeath') {
-      formattedValue = formatCurrencyValue(value);
-    } else if (field === 'increasePercentage') {
-      formattedValue = createEnhancedBlurHandler('percentage')(value);
-    } else {
-      formattedValue = value;
+    switch (field) {
+      case 'amount':
+      case 'valueAtDeath':
+        formattedValue = formatCurrencyValue(value);
+        break;
+      case 'increasePercentage':
+        formattedValue = formatPercentageValue(value);
+        break;
+      case 'description':
+      case 'entity':
+      case 'start':
+        formattedValue = formatTextValue(value);
+        break;
+      default:
+        formattedValue = value;
+        break;
     }
-    handleUpdateBequest(id, field, formattedValue);
     
     // Update DOM element for immediate visual feedback
-    const target = document.activeElement as HTMLInputElement;
     if (target && formattedValue !== value) {
-      setTimeout(() => {
-        target.value = formattedValue;
-      }, 0);
+      target.value = formattedValue;
     }
+    
+    handleUpdateBequest(id, field, formattedValue);
   }, [handleUpdateBequest]);
 
   const handleDeleteBequest = useCallback((id: number) => {
@@ -203,7 +211,7 @@ function LumpSumTable({ viewMode, searchTerm }: LumpSumTableProps) {
                   defaultValue={bequest.description}
                   className={`table-input ${getFieldClass('text')} ${getValueClass(bequest.description, 'text')}`}
                   onFocus={handleDefaultValueFocus}
-                  onBlur={(e) => handleInputBlur(bequest.id, 'description', e.target.value)}
+                  onBlur={(e) => handleInputBlur(bequest.id, 'description', e.target.value, e.target)}
                   disabled={isUpdating}
                 />
               </td>
@@ -214,7 +222,7 @@ function LumpSumTable({ viewMode, searchTerm }: LumpSumTableProps) {
                   defaultValue={bequest.entity}
                   className={`table-input ${getFieldClass('text')} ${getValueClass(bequest.entity, 'text')}`}
                   onFocus={handleDefaultValueFocus}
-                  onBlur={(e) => handleInputBlur(bequest.id, 'entity', e.target.value)}
+                  onBlur={(e) => handleInputBlur(bequest.id, 'entity', e.target.value, e.target)}
                   disabled={isUpdating}
                 />
               </td>
@@ -225,7 +233,7 @@ function LumpSumTable({ viewMode, searchTerm }: LumpSumTableProps) {
                   defaultValue={bequest.start}
                   className={`table-input ${getFieldClass('text')} ${getValueClass(bequest.start, 'text')}`}
                   onFocus={handleDefaultValueFocus}
-                  onBlur={(e) => handleInputBlur(bequest.id, 'start', e.target.value)}
+                  onBlur={(e) => handleInputBlur(bequest.id, 'start', e.target.value, e.target)}
                   disabled={isUpdating}
                 />
               </td>
@@ -237,7 +245,7 @@ function LumpSumTable({ viewMode, searchTerm }: LumpSumTableProps) {
                   defaultValue={bequest.amount}
                   className={`table-input ${getFieldClass('currency')} ${getValueClass(bequest.amount, 'currency')}`}
                   onFocus={handleDefaultValueFocus}
-                  onBlur={(e) => handleInputBlur(bequest.id, 'amount', e.target.value)}
+                  onBlur={(e) => handleInputBlur(bequest.id, 'amount', e.target.value, e.target)}
                   disabled={isUpdating}
                 />
               </td>
@@ -249,7 +257,7 @@ function LumpSumTable({ viewMode, searchTerm }: LumpSumTableProps) {
                   defaultValue={bequest.increasePercentage}
                   className={`table-input ${getFieldClass('percentage')} ${getValueClass(bequest.increasePercentage, 'percentage')}`}
                   onFocus={handleDefaultValueFocus}
-                  onBlur={(e) => handleInputBlur(bequest.id, 'increasePercentage', e.target.value)}
+                  onBlur={(e) => handleInputBlur(bequest.id, 'increasePercentage', e.target.value, e.target)}
                   disabled={isUpdating}
                 />
               </td>

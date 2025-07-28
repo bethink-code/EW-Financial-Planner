@@ -5,7 +5,7 @@ import { Assets, InsertAssets } from '@shared/assets-schema';
 import { AddButton, ActionButtonGroup, DuplicateButton, DeleteButton } from '@/components/ui/action-buttons';
 import { getFieldClass, getFieldWidth, getCellClass } from '@/lib/field-types';
 import { formatCurrencyValue, formatPercentageValue, isDefaultValue, getValueClass } from '@/lib/formatting';
-import { handleDefaultValueFocus, createEnhancedBlurHandler } from '@/lib/formatting';
+import { handleDefaultValueFocus } from '@/lib/formatting';
 
 interface AssetsTableProps {
   viewMode: 'table' | 'hybrid';

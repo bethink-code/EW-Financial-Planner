@@ -5,7 +5,7 @@ import { IncomeProvisions, InsertIncomeProvisions } from '@shared/schema';
 import { ActionButtonGroup, DuplicateButton, DeleteButton, AddButton } from '@/components/ui/action-buttons';
 import { getFieldClass, getCellClass } from '@/lib/field-types';
 import { formatCurrencyValue, formatPercentageValue, formatTextValue, formatNumberValue, isDefaultValue, getValueClass, parseCurrencyValue } from '@/lib/formatting';
-import { handleDefaultValueFocus, createEnhancedBlurHandler } from '@/lib/formatting';
+import { handleDefaultValueFocus } from '@/lib/formatting';
 
 interface IncomeProvisionsTableProps {
   viewMode: 'table' | 'hybrid';
@@ -238,7 +238,7 @@ export default function IncomeProvisionsTable({ viewMode, searchTerm }: IncomePr
                     defaultValue={provision.description}
                     className={`table-input ${getFieldClass('text')} ${getValueClass(provision.description, 'text')}`}
                     onFocus={handleDefaultValueFocus}
-                    onBlur={createEnhancedBlurHandler((value) => handleInputBlur(provision.id, 'description', value), 'text')}
+                    onBlur={(e) => handleInputBlur(provision.id, 'description', e.target.value, e.target)}
                     disabled={isUpdating}
                   />
                 </td>
@@ -251,7 +251,7 @@ export default function IncomeProvisionsTable({ viewMode, searchTerm }: IncomePr
                     defaultValue={provision.personName}
                     className={`table-input ${getFieldClass('text')} ${getValueClass(provision.personName, 'text')}`}
                     onFocus={handleDefaultValueFocus}
-                    onBlur={createEnhancedBlurHandler((value) => handleInputBlur(provision.id, 'personName', value), 'text')}
+                    onBlur={(e) => handleInputBlur(provision.id, 'personName', e.target.value, e.target)}
                     disabled={isUpdating}
                   />
                 </td>
@@ -265,7 +265,7 @@ export default function IncomeProvisionsTable({ viewMode, searchTerm }: IncomePr
                     defaultValue={provision.amount}
                     className={`table-input ${getFieldClass('currency')} ${getValueClass(provision.amount, 'currency')}`}
                     onFocus={handleDefaultValueFocus}
-                    onBlur={createEnhancedBlurHandler((value) => handleInputBlur(provision.id, 'amount', value), 'currency')}
+                    onBlur={(e) => handleInputBlur(provision.id, 'amount', e.target.value, e.target)}
                     disabled={isUpdating}
                   />
                 </td>
@@ -277,7 +277,7 @@ export default function IncomeProvisionsTable({ viewMode, searchTerm }: IncomePr
                     type="date"
                     defaultValue={provision.startDate}
                     className={`table-input ${getFieldClass('date')} ${getValueClass(provision.startDate, 'text')}`}
-                    onBlur={createEnhancedBlurHandler((value) => handleInputBlur(provision.id, 'startDate', value), 'text')}
+                    onBlur={(e) => handleInputBlur(provision.id, 'startDate', e.target.value, e.target)}
                     disabled={isUpdating}
                   />
                 </td>
@@ -287,7 +287,7 @@ export default function IncomeProvisionsTable({ viewMode, searchTerm }: IncomePr
                   <input
                     type="text"
                     defaultValue={provision.termYears}
-                    onBlur={createEnhancedBlurHandler((value) => handleInputBlur(provision.id, 'termYears', value), 'years')}
+                    onBlur={(e) => handleInputBlur(provision.id, 'termYears', e.target.value, e.target)}
                     onFocus={handleDefaultValueFocus}
                     className={`table-input ${getFieldClass('years')} ${getValueClass(provision.termYears, 'years')}`}
                     data-field={`termYears-${provision.id}`}
@@ -303,7 +303,7 @@ export default function IncomeProvisionsTable({ viewMode, searchTerm }: IncomePr
                     defaultValue={provision.increasePercentage}
                     className={`table-input ${getFieldClass('percentage')} ${getValueClass(provision.increasePercentage, 'percentage')}`}
                     onFocus={handleDefaultValueFocus}
-                    onBlur={createEnhancedBlurHandler((value) => handleInputBlur(provision.id, 'increasePercentage', value), 'percentage')}
+                    onBlur={(e) => handleInputBlur(provision.id, 'increasePercentage', e.target.value, e.target)}
                     disabled={isUpdating}
                   />
                 </td>
@@ -342,7 +342,7 @@ export default function IncomeProvisionsTable({ viewMode, searchTerm }: IncomePr
                     defaultValue={provision.taxPercentage}
                     className={`table-input ${getFieldClass('percentage')} ${getValueClass(provision.taxPercentage, 'percentage')}`}
                     onFocus={handleDefaultValueFocus}
-                    onBlur={createEnhancedBlurHandler((value) => handleInputBlur(provision.id, 'taxPercentage', value), 'percentage')}
+                    onBlur={(e) => handleInputBlur(provision.id, 'taxPercentage', e.target.value, e.target)}
                     disabled={isUpdating}
                   />
                 </td>
@@ -355,7 +355,7 @@ export default function IncomeProvisionsTable({ viewMode, searchTerm }: IncomePr
                     defaultValue={provision.taxRate}
                     className={`table-input ${getFieldClass('percentage')} ${getValueClass(provision.taxRate, 'percentage')}`}
                     onFocus={handleDefaultValueFocus}
-                    onBlur={createEnhancedBlurHandler((value) => handleInputBlur(provision.id, 'taxRate', value), 'percentage')}
+                    onBlur={(e) => handleInputBlur(provision.id, 'taxRate', e.target.value, e.target)}
                     disabled={isUpdating}
                   />
                 </td>

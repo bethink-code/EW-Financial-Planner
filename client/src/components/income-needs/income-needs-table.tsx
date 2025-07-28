@@ -266,7 +266,7 @@ function IncomeNeedsTable({ viewMode, searchTerm }: IncomeNeedsTableProps) {
                   type="checkbox"
                   defaultChecked={incomeNeed.cpi}
                   className="table-input"
-                  onChange={(e) => handleInputBlur(incomeNeed.id, 'cpi', e.target.checked)}
+                  onChange={(e) => handleUpdateIncomeNeed(incomeNeed.id, 'cpi', e.target.checked)}
                   disabled={isUpdating}
                 />
               </td>

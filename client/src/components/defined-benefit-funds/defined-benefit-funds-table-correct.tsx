@@ -3,7 +3,7 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { AddButton, DeleteButton, DuplicateButton, ActionButtonGroup } from "@/components/ui/action-buttons";
 import { getFieldClass } from "@/lib/design-tokens";
 import { getCellClass } from "@/lib/field-types";
-import { formatCurrencyValue, formatPercentageValue, formatYearsValue, getValueClass, isDefaultValue, handleDefaultValueFocus, createEnhancedBlurHandler } from "@/lib/formatting";
+import { formatCurrencyValue, formatPercentageValue, formatYearsValue, formatTextValue, getValueClass, isDefaultValue, handleDefaultValueFocus } from "@/lib/formatting";
 import type { DefinedBenefitFund, InsertDefinedBenefitFund } from "@shared/schema";
 
 export default function DefinedBenefitFundsTable() {
@@ -425,10 +425,7 @@ export default function DefinedBenefitFundsTable() {
                       type="text"
                       defaultValue={fund.pensionIncomeIncrease || "0%"}
                       onFocus={handleDefaultValueFocus}
-                      onBlur={createEnhancedBlurHandler(
-                        (e) => handleInputBlur(fund.id, 'pensionIncomeIncrease', e.target.value, e.target),
-                        'percentage'
-                      )}
+                      onBlur={(e) => handleInputBlur(fund.id, 'pensionIncomeIncrease', e.target.value, e.target)}
                       className={`table-input ${getFieldClass('percentage')} ${getValueClass(fund.pensionIncomeIncrease || "0%", 'percentage')}`}
                       disabled={isUpdating}
                     />

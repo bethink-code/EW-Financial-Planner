@@ -1,7 +1,7 @@
 import React, { useCallback, useMemo } from 'react';
 import { RetirementFund } from '@shared/schema';
 import { Plus, UserPlus, UserMinus, Trash2, Copy } from 'lucide-react';
-import { formatCurrencyValue, formatPercentageValue, formatTextValue, formatYearsValue, getValueClass, isDefaultValue, handleDefaultValueFocus, createEnhancedBlurHandler } from "@/lib/formatting";
+import { formatCurrencyValue, formatPercentageValue, formatTextValue, formatYearsValue, getValueClass, isDefaultValue, handleDefaultValueFocus } from "@/lib/formatting";
 import { getFieldClass, getCellClass } from "@/lib/field-types";
 import { ActionButtonGroup, DuplicateButton, DeleteButton, AddButton } from "@/components/ui/action-buttons";
 
