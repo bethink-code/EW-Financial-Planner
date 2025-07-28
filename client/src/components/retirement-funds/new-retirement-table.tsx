@@ -2,6 +2,7 @@ import React, { useCallback, useMemo } from 'react';
 import { RetirementFund } from '@shared/schema';
 import { Plus, UserPlus, UserMinus, Trash2, Copy } from 'lucide-react';
 import { formatCurrencyValue, formatPercentageValue, formatTextValue, cleanTextValue, formatYearsValue, getValueClass, isDefaultValue, handleDefaultValueFocus } from "@/lib/formatting";
+import { createOwnerManager, createComplexBeneficiaryManager } from "@/lib/array-management";
 import { getFieldClass, getCellClass } from "@/lib/field-types";
 import { ActionButtonGroup, DuplicateButton, DeleteButton, AddButton } from "@/components/ui/action-buttons";
 
@@ -47,37 +48,28 @@ export function NewRetirementTable({
     onFieldUpdate(fundId, field, value);
   }, [onFieldUpdate]);
 
-  // Owner management
-  const handleAddOwner = useCallback((fundId: number) => {
-    const fund = funds.find(f => f.id === fundId);
-    if (!fund) return;
-    const updatedOwners = [...fund.owners, "Donald Edwards"];
-    onFieldUpdate(fundId, 'owners', updatedOwners);
-  }, [funds, onFieldUpdate]);
-
-  const handleRemoveOwner = useCallback((fundId: number, ownerIndex: number) => {
-    const fund = funds.find(f => f.id === fundId);
-    if (!fund || fund.owners.length <= 1 || ownerIndex === 0) return; // Protect first owner
-    
-    // Create copy and remove using splice for consistent array handling
-    const newOwners = [...fund.owners];
-    newOwners.splice(ownerIndex, 1);
-    onFieldUpdate(fundId, 'owners', newOwners);
-  }, [funds, onFieldUpdate]);
-
-  const handleOwnerChange = useCallback((fundId: number, ownerIndex: number, newOwner: string) => {
-    const fund = funds.find(f => f.id === fundId);
-    if (!fund) return;
-    const updatedOwners = [...fund.owners];
-    updatedOwners[ownerIndex] = newOwner;
-    onFieldUpdate(fundId, 'owners', updatedOwners);
-  }, [funds, onFieldUpdate]);
+  // Create unified array managers
+  const ownerManager = createOwnerManager(funds, onFieldUpdate);
+  const unapprovedBeneficiaryManager = createComplexBeneficiaryManager(
+    funds, 
+    onFieldUpdate, 
+    'unapprovedBeneficiaries',
+    'unapprovedPercentageSplits', 
+    'unapprovedCoverSplits'
+  );
+  const fundValueBeneficiaryManager = createComplexBeneficiaryManager(
+    funds, 
+    onFieldUpdate, 
+    'fundValueBeneficiaries',
+    'fundValuePercentageSplits', 
+    'fundValueCoverSplits'
+  );
 
   // Unapproved beneficiary management
   const handleAddUnapprovedBeneficiary = useCallback((fundId: number) => {
     const fund = funds.find(f => f.id === fundId);
     if (!fund) return;
-    const updatedBeneficiaries = [...fund.unapprovedBeneficiaries, "Enter details ..."];
+    const updatedBeneficiaries = [...fund.unapprovedBeneficiaries, ""];
     const updatedSplits = [...fund.unapprovedPercentageSplits, "0%"];
     const updatedCoverSplits = [...fund.unapprovedCoverSplits, "R 0"];
     onFieldUpdate(fundId, 'unapprovedBeneficiaries', updatedBeneficiaries);
@@ -109,7 +101,7 @@ export function NewRetirementTable({
   const handleAddFundValueBeneficiary = useCallback((fundId: number) => {
     const fund = funds.find(f => f.id === fundId);
     if (!fund) return;
-    const updatedBeneficiaries = [...fund.fundValueBeneficiaries, "Enter details ..."];
+    const updatedBeneficiaries = [...fund.fundValueBeneficiaries, ""];
     const updatedSplits = [...fund.fundValuePercentageSplits, "0%"];
     const updatedCoverSplits = [...fund.fundValueCoverSplits, "R 0"];
     onFieldUpdate(fundId, 'fundValueBeneficiaries', updatedBeneficiaries);
@@ -305,11 +297,11 @@ export function NewRetirementTable({
                     <div className="flex items-center gap-1">
                       <input
                         type="text"
-                        defaultValue={fund.unapprovedBeneficiaries[rowIndex]}
+                        defaultValue={formatTextValue(fund.unapprovedBeneficiaries[rowIndex])}
                         className={`table-input ${getFieldClass('text')} flex-1`}
                         onBlur={(e) => {
                           const updatedBeneficiaries = [...fund.unapprovedBeneficiaries];
-                          updatedBeneficiaries[rowIndex] = e.target.value;
+                          updatedBeneficiaries[rowIndex] = cleanTextValue(e.target.value) || "";
                           onFieldUpdate(fund.id, 'unapprovedBeneficiaries', updatedBeneficiaries);
                         }}
                       />
@@ -470,11 +462,11 @@ export function NewRetirementTable({
                     <div className="flex items-center gap-1">
                       <input
                         type="text"
-                        defaultValue={fund.fundValueBeneficiaries[rowIndex]}
+                        defaultValue={formatTextValue(fund.fundValueBeneficiaries[rowIndex])}
                         className={`table-input ${getFieldClass('text')} flex-1`}
                         onBlur={(e) => {
                           const updatedBeneficiaries = [...fund.fundValueBeneficiaries];
-                          updatedBeneficiaries[rowIndex] = e.target.value;
+                          updatedBeneficiaries[rowIndex] = cleanTextValue(e.target.value) || "";
                           onFieldUpdate(fund.id, 'fundValueBeneficiaries', updatedBeneficiaries);
                         }}
                       />
