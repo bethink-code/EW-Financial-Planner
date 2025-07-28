@@ -3,6 +3,7 @@ import { useQuery, useMutation } from '@tanstack/react-query';
 import { queryClient } from '@/lib/queryClient';
 import { VoluntaryInvestment, InsertVoluntaryInvestment } from '@shared/schema';
 import { AddButton, ActionButtonGroup, DuplicateButton, DeleteButton } from '@/components/ui/action-buttons';
+import { UserPlus, UserMinus } from 'lucide-react';
 import { getFieldClass, getCellClass } from '@/lib/field-types';
 import { formatCurrencyValue, formatPercentageValue, getValueClass, handleDefaultValueFocus } from '@/lib/formatting';
 
@@ -24,11 +25,17 @@ function VoluntaryInvestmentsTable({ viewMode, searchTerm }: VoluntaryInvestment
     mutationFn: async (): Promise<VoluntaryInvestment> => {
       const newInvestment: InsertVoluntaryInvestment = {
         description: "Enter details ...",
-        owners: ["Donald Edwards"],
+        owners: ["Enter details ..."],
         ownershipPercentages: ["100%"],
         baseCost: "R 0",
         marketValue: "R 0",
-        liquidationPercentage: "100%",
+        liquidationPercentage: "0%",
+        spouse: "R 0",
+        others: "R 0",
+        excludedFromJointEstate: false,
+        excludedFromEstateDuty: false,
+        excludedFromCGT: false,
+        excludedFromExecutorsFees: false,
       };
       
       const response = await fetch('/api/voluntary-investments', {
@@ -102,8 +109,20 @@ function VoluntaryInvestmentsTable({ viewMode, searchTerm }: VoluntaryInvestment
   const totals = useMemo(() => {
     return {
       count: investments.length,
-      amount: investments.reduce((sum: number, investment: VoluntaryInvestment) => {
+      baseCost: investments.reduce((sum: number, investment: VoluntaryInvestment) => {
+        const value = parseFloat((investment.baseCost || '0').replace(/[^\d.-]/g, '')) || 0;
+        return sum + value;
+      }, 0),
+      marketValue: investments.reduce((sum: number, investment: VoluntaryInvestment) => {
         const value = parseFloat((investment.marketValue || '0').replace(/[^\d.-]/g, '')) || 0;
+        return sum + value;
+      }, 0),
+      spouse: investments.reduce((sum: number, investment: VoluntaryInvestment) => {
+        const value = parseFloat((investment.spouse || '0').replace(/[^\d.-]/g, '')) || 0;
+        return sum + value;
+      }, 0),
+      others: investments.reduce((sum: number, investment: VoluntaryInvestment) => {
+        const value = parseFloat((investment.others || '0').replace(/[^\d.-]/g, '')) || 0;
         return sum + value;
       }, 0),
     };
@@ -141,6 +160,22 @@ function VoluntaryInvestmentsTable({ viewMode, searchTerm }: VoluntaryInvestment
     }
   }, [deleteMutation]);
 
+  const handleAddOwner = useCallback((investmentId: number, currentOwners: string[], currentPercentages: string[]) => {
+    const newOwners = [...currentOwners, "Enter details ..."];
+    const newPercentages = [...currentPercentages, "0%"];
+    handleUpdateInvestment(investmentId, 'owners', newOwners);
+    handleUpdateInvestment(investmentId, 'ownershipPercentages', newPercentages);
+  }, [handleUpdateInvestment]);
+
+  const handleDeleteOwner = useCallback((investmentId: number, ownerIndex: number, currentOwners: string[], currentPercentages: string[]) => {
+    if (currentOwners.length <= 1) return; // Don't delete the last owner
+    
+    const newOwners = currentOwners.filter((_, index) => index !== ownerIndex);
+    const newPercentages = currentPercentages.filter((_, index) => index !== ownerIndex);
+    handleUpdateInvestment(investmentId, 'owners', newOwners);
+    handleUpdateInvestment(investmentId, 'ownershipPercentages', newPercentages);
+  }, [handleUpdateInvestment]);
+
   if (isLoading) {
     return <div className="flex justify-center py-8">Loading voluntary investments...</div>;
   }
@@ -157,87 +192,235 @@ function VoluntaryInvestmentsTable({ viewMode, searchTerm }: VoluntaryInvestment
             <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start section-end" rowSpan={2}>
               <AddButton onClick={() => addMutation.mutate()} disabled={isUpdating} />
             </th>
-            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start" colSpan={2}>Overview</th>
-            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start section-end" colSpan={2}>Financial Details</th>
+            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start" colSpan={3}>Overview</th>
+            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start" colSpan={3}>Investment Details</th>
+            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start" colSpan={2}>Bequeath To</th>
+            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start section-end" colSpan={4}>Exclusions</th>
           </tr>
           <tr>
             <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start">Description</th>
             <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center">Owner</th>
-            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start">Amount</th>
-            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-end">Increase %</th>
+            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center">Ownership %</th>
+            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start">Base Cost</th>
+            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center">Market Value</th>
+            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center">Liquidation %</th>
+            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start">Spouse</th>
+            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center">Others</th>
+            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start">Joint Estate</th>
+            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center">Estate Duty</th>
+            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center">CGT</th>
+            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-end">Executor's Fees</th>
           </tr>
         </thead>
         <tbody className="divide-y divide-neutral-200">
-          {investments.map((investment: VoluntaryInvestment, index) => (
-            <tr key={investment.id} className="hover:bg-neutral-50">
-              <td className="table-actions-cell p-1 text-center section-start section-end">
-                <ActionButtonGroup>
-                  <DuplicateButton
-                    onClick={() => addMutation.mutate()}
+          {investments.map((investment: VoluntaryInvestment) => {
+            const owners = Array.isArray(investment.owners) ? investment.owners : JSON.parse(investment.owners || '["Enter details ..."]');
+            const percentages = Array.isArray(investment.ownershipPercentages) ? investment.ownershipPercentages : JSON.parse(investment.ownershipPercentages || '["100%"]');
+            const maxRows = Math.max(owners.length, 1);
+            
+            return owners.map((owner: string, ownerIndex: number) => (
+              <tr key={`${investment.id}-${ownerIndex}`} className="hover:bg-neutral-50">
+                {ownerIndex === 0 && (
+                  <td className="table-actions-cell p-2 text-center section-start section-end" rowSpan={maxRows}>
+                    <ActionButtonGroup>
+                      <DuplicateButton
+                        onClick={() => addMutation.mutate()}
+                        disabled={isUpdating}
+                      />
+                      <DeleteButton
+                        onClick={() => handleDeleteInvestment(investment.id)}
+                        disabled={isUpdating}
+                      />
+                    </ActionButtonGroup>
+                  </td>
+                )}
+                
+                {ownerIndex === 0 && (
+                  <td className="p-2 section-start" rowSpan={maxRows}>
+                    <input
+                      type="text"
+                      defaultValue={investment.description}
+                      className={`table-input ${getFieldClass('text')} ${getValueClass(investment.description, 'text')}`}
+                      onFocus={handleDefaultValueFocus}
+                      onBlur={(e) => handleInputBlur(investment.id, 'description', e.target.value)}
+                      disabled={isUpdating}
+                    />
+                  </td>
+                )}
+                
+                <td className="p-2">
+                  <div className="flex items-center gap-2">
+                    <input
+                      type="text"
+                      defaultValue={owner}
+                      className={`table-input ${getFieldClass('text')} ${getValueClass(owner, 'text')} flex-1`}
+                      onFocus={handleDefaultValueFocus}
+                      onBlur={(e) => {
+                        const newOwners = [...owners];
+                        newOwners[ownerIndex] = e.target.value;
+                        handleUpdateInvestment(investment.id, 'owners', newOwners);
+                      }}
+                      disabled={isUpdating}
+                    />
+                    {ownerIndex === owners.length - 1 && (
+                      <button
+                        type="button"
+                        onClick={(e) => {
+                          e.preventDefault();
+                          e.stopPropagation();
+                          handleAddOwner(investment.id, owners, percentages);
+                        }}
+                        disabled={isUpdating}
+                        className="h-6 w-6 flex items-center justify-center text-primary border border-primary bg-white hover:bg-primary/10 rounded"
+                      >
+                        <UserPlus className="h-3 w-3" />
+                      </button>
+                    )}
+                    {owners.length > 1 && (
+                      <button
+                        type="button"
+                        onClick={(e) => {
+                          e.preventDefault();
+                          e.stopPropagation();
+                          handleDeleteOwner(investment.id, ownerIndex, owners, percentages);
+                        }}
+                        disabled={isUpdating}
+                        className="h-6 w-6 flex items-center justify-center text-neutral-500 border border-neutral-300 bg-white hover:bg-neutral-50 rounded"
+                      >
+                        <UserMinus className="h-3 w-3" />
+                      </button>
+                    )}
+                  </div>
+                </td>
+                
+                <td className="p-2">
+                  <input
+                    type="text"
+                    defaultValue={percentages[ownerIndex] || "0%"}
+                    className={`table-input ${getFieldClass('percentage')} ${getValueClass(percentages[ownerIndex] || "0%", 'percentage')}`}
+                    onFocus={handleDefaultValueFocus}
+                    onBlur={(e) => {
+                      const newPercentages = [...percentages];
+                      newPercentages[ownerIndex] = e.target.value;
+                      handleUpdateInvestment(investment.id, 'ownershipPercentages', newPercentages);
+                    }}
                     disabled={isUpdating}
                   />
-                  <DeleteButton
-                    onClick={() => handleDeleteInvestment(investment.id)}
-                    disabled={isUpdating}
-                  />
-                </ActionButtonGroup>
-              </td>
-              
-              <td className="p-1 section-start">
-                <input
-                  type="text"
-                  defaultValue={investment.description}
-                  className={`table-input ${getFieldClass('text')} ${getValueClass(investment.description, 'text')}`}
-                  onFocus={handleDefaultValueFocus}
-                  onBlur={(e) => handleInputBlur(investment.id, 'description', e.target.value)}
-                  disabled={isUpdating}
-                />
-              </td>
-              
-              <td className="p-1">
-                <input
-                  type="text"
-                  defaultValue={investment.owners?.[0] || "Enter details ..."}
-                  className={`table-input ${getFieldClass('text')} ${getValueClass(investment.owners?.[0] || "Enter details ...", 'text')}`}
-                  onFocus={handleDefaultValueFocus}
-                  onBlur={(e) => handleUpdateInvestment(investment.id, 'owners', [e.target.value])}
-                  disabled={isUpdating}
-                />
-              </td>
-              
-              <td className="p-1 section-start">
-                <input
-                  key={`marketValue-${investment.id}-${investment.marketValue}`}
-                  type="text"
-                  defaultValue={investment.marketValue}
-                  className={`table-input ${getFieldClass('currency')} ${getValueClass(investment.marketValue, 'currency')}`}
-                  onFocus={handleDefaultValueFocus}
-                  onBlur={(e) => handleInputBlur(investment.id, 'marketValue', e.target.value)}
-                  disabled={isUpdating}
-                />
-              </td>
-              
-              <td className="p-1 section-end">
-                <input
-                  key={`liquidationPercentage-${investment.id}-${investment.liquidationPercentage}`}
-                  type="text"
-                  defaultValue={investment.liquidationPercentage}
-                  className={`table-input ${getFieldClass('percentage')} ${getValueClass(investment.liquidationPercentage, 'percentage')}`}
-                  onFocus={handleDefaultValueFocus}
-                  onBlur={(e) => handleInputBlur(investment.id, 'liquidationPercentage', e.target.value)}
-                  disabled={isUpdating}
-                />
-              </td>
-            </tr>
-          ))}
+                </td>
+                
+                {ownerIndex === 0 && (
+                  <>
+                    <td className="p-2 section-start" rowSpan={maxRows}>
+                      <input
+                        type="text"
+                        defaultValue={investment.baseCost}
+                        className={`table-input ${getFieldClass('currency')} ${getValueClass(investment.baseCost, 'currency')}`}
+                        onFocus={handleDefaultValueFocus}
+                        onBlur={(e) => handleInputBlur(investment.id, 'baseCost', e.target.value)}
+                        disabled={isUpdating}
+                      />
+                    </td>
+                    
+                    <td className="p-2" rowSpan={maxRows}>
+                      <input
+                        type="text"
+                        defaultValue={investment.marketValue}
+                        className={`table-input ${getFieldClass('currency')} ${getValueClass(investment.marketValue, 'currency')}`}
+                        onFocus={handleDefaultValueFocus}
+                        onBlur={(e) => handleInputBlur(investment.id, 'marketValue', e.target.value)}
+                        disabled={isUpdating}
+                      />
+                    </td>
+                    
+                    <td className="p-2" rowSpan={maxRows}>
+                      <input
+                        type="text"
+                        defaultValue={investment.liquidationPercentage}
+                        className={`table-input ${getFieldClass('percentage')} ${getValueClass(investment.liquidationPercentage, 'percentage')}`}
+                        onFocus={handleDefaultValueFocus}
+                        onBlur={(e) => handleInputBlur(investment.id, 'liquidationPercentage', e.target.value)}
+                        disabled={isUpdating}
+                      />
+                    </td>
+                    
+                    <td className="p-2 section-start" rowSpan={maxRows}>
+                      <input
+                        type="text"
+                        defaultValue={investment.spouse}
+                        className={`table-input ${getFieldClass('currency')} ${getValueClass(investment.spouse, 'currency')}`}
+                        onFocus={handleDefaultValueFocus}
+                        onBlur={(e) => handleInputBlur(investment.id, 'spouse', e.target.value)}
+                        disabled={isUpdating}
+                      />
+                    </td>
+                    
+                    <td className="p-2" rowSpan={maxRows}>
+                      <input
+                        type="text"
+                        defaultValue={investment.others}
+                        className={`table-input ${getFieldClass('currency')} ${getValueClass(investment.others, 'currency')}`}
+                        onFocus={handleDefaultValueFocus}
+                        onBlur={(e) => handleInputBlur(investment.id, 'others', e.target.value)}
+                        disabled={isUpdating}
+                      />
+                    </td>
+                    
+                    <td className="p-2 text-center section-start" rowSpan={maxRows}>
+                      <input
+                        type="checkbox"
+                        checked={investment.excludedFromJointEstate}
+                        onChange={(e) => handleUpdateInvestment(investment.id, 'excludedFromJointEstate', e.target.checked)}
+                        disabled={isUpdating}
+                        className="h-4 w-4 text-primary focus:ring-primary border-neutral-300 rounded"
+                      />
+                    </td>
+                    
+                    <td className="p-2 text-center" rowSpan={maxRows}>
+                      <input
+                        type="checkbox"
+                        checked={investment.excludedFromEstateDuty}
+                        onChange={(e) => handleUpdateInvestment(investment.id, 'excludedFromEstateDuty', e.target.checked)}
+                        disabled={isUpdating}
+                        className="h-4 w-4 text-primary focus:ring-primary border-neutral-300 rounded"
+                      />
+                    </td>
+                    
+                    <td className="p-2 text-center" rowSpan={maxRows}>
+                      <input
+                        type="checkbox"
+                        checked={investment.excludedFromCGT}
+                        onChange={(e) => handleUpdateInvestment(investment.id, 'excludedFromCGT', e.target.checked)}
+                        disabled={isUpdating}
+                        className="h-4 w-4 text-primary focus:ring-primary border-neutral-300 rounded"
+                      />
+                    </td>
+                    
+                    <td className="p-2 text-center section-end" rowSpan={maxRows}>
+                      <input
+                        type="checkbox"
+                        checked={investment.excludedFromExecutorsFees}
+                        onChange={(e) => handleUpdateInvestment(investment.id, 'excludedFromExecutorsFees', e.target.checked)}
+                        disabled={isUpdating}
+                        className="h-4 w-4 text-primary focus:ring-primary border-neutral-300 rounded"
+                      />
+                    </td>
+                  </>
+                )}
+              </tr>
+            ));
+          })}
         </tbody>
         
         {/* Totals Footer */}
         <tfoot>
           <tr>
-            <td className="totals-cell-label text-right" colSpan={3}>Totals</td>
-            <td className="totals-cell-value section-start">R {totals.amount.toLocaleString()}</td>
-            <td className="totals-cell-label section-end"></td>
+            <td className="totals-cell-label text-right" colSpan={4}>Totals</td>
+            <td className="totals-cell-value section-start">R {totals.baseCost.toLocaleString()}</td>
+            <td className="totals-cell-value">R {totals.marketValue.toLocaleString()}</td>
+            <td className="totals-cell-label"></td>
+            <td className="totals-cell-value section-start">R {totals.spouse.toLocaleString()}</td>
+            <td className="totals-cell-value">R {totals.others.toLocaleString()}</td>
+            <td className="totals-cell-label section-start section-end" colSpan={4}></td>
           </tr>
         </tfoot>
       </table>
