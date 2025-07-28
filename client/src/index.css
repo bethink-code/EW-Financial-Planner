@@ -262,7 +262,7 @@ th, td {
     min-width: max-content;
   }
   
-  /* Force minimum table width for horizontal scrolling and standard styling */
+  /* GLOBAL TABLE STYLING - Ultra Clean with Section Borders Only */
   table {
     min-width: 1200px !important;
     width: auto !important;
@@ -270,35 +270,30 @@ th, td {
     border-radius: 0.5rem !important;
     box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1) !important;
     border: 1px solid #e5e7eb !important;
-    border-collapse: collapse !important;
+    border-collapse: separate !important;
+    border-spacing: 0 !important;
   }
 
-  /* Keep header borders for structure */
-  table th {
-    border-bottom: 1px solid #e5e7eb !important;
-    border-right: 1px solid #e5e7eb !important;
-  }
-
-  /* Keep vertical borders for column separation but remove horizontal row borders */
+  /* Remove ALL borders from table cells by default */
+  table th,
   table td {
-    border-right: 1px solid #e5e7eb !important;
-    border-top: none !important;
-    border-bottom: none !important;
+    border: none !important;
+    position: relative;
   }
 
-  /* Remove last column borders */
-  table th:last-child,
-  table td:last-child {
-    border-right: none !important;
-  }
-
-  /* Table section border classes - structural approach */
+  /* ONLY section separators - vertical borders that separate major sections */
   .section-start {
     border-left: 1px solid #e5e7eb !important;
   }
 
   .section-end {
     border-right: 1px solid #e5e7eb !important;
+  }
+
+  /* No row borders - completely clean */
+  table tbody tr,
+  table tbody tr.bg-neutral-50 {
+    border: none !important;
   }
 
   /* Add spacing to table cells for better field separation */
@@ -349,7 +344,7 @@ th, td {
     margin: 0 !important;
   }
 
-  /* Standardized footer/totals styling - keep border for section separation */
+  /* Standardized footer/totals styling - clean appearance */
   tfoot {
     background-color: #f9fafb !important; /* bg-neutral-50 */
   }
@@ -359,18 +354,12 @@ th, td {
   }
 
   tfoot td {
-    border-right: 1px solid #e5e7eb !important;
-    border-top: none !important;
-    border-bottom: none !important;
+    border: none !important;
   }
   
   /* Ensure all currency fields in footer align right */
   tfoot td.totals-cell-value {
     text-align: right !important;
-  }
-
-  tfoot td:last-child {
-    border-right: none !important;
   }
 
   .totals-cell-label {
