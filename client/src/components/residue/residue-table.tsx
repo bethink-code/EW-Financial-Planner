@@ -96,7 +96,7 @@ function ResidueTable({ viewMode, searchTerm }: ResidueTableProps) {
     return {
       count: residues.length,
       percentage: residues.reduce((sum: number, residue: Residue) => {
-        const value = parseFloat(residue.percentage.replace(/[^\d.-]/g, '')) || 0;
+        const value = parseFloat((residue.percentage || '').replace(/[^\d.-]/g, '')) || 0;
         return sum + value;
       }, 0),
     };
