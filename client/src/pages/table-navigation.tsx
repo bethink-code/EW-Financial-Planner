@@ -24,12 +24,6 @@ export default function TableNavigation() {
         { name: "Assets Table (Standalone)", path: "/assets", description: "Standalone assets management" },
         { name: "Liabilities Table (Standalone)", path: "/liabilities", description: "Standalone liabilities management" }
       ]
-    },
-    {
-      category: "Special Views",
-      items: [
-        { name: "Death with Estate Liquidity (All Tabs)", path: "/death-with-estate-liquidity", description: "Original tabbed interface with all 10 calculator modules" }
-      ]
     }
   ];
 
@@ -82,7 +76,7 @@ export default function TableNavigation() {
               <div className="text-gray-600">Standalone Tables</div>
             </div>
             <div>
-              <div className="text-2xl font-bold text-purple-600">13</div>
+              <div className="text-2xl font-bold text-purple-600">12</div>
               <div className="text-gray-600">Total Distinct Tables</div>
             </div>
           </div>

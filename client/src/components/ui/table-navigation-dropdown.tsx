@@ -23,10 +23,7 @@ const tables: TableNavItem[] = [
   
   // Separate Tables
   { name: "Assets (Standalone)", path: "/assets", category: "Standalone" },
-  { name: "Liabilities (Standalone)", path: "/liabilities", category: "Standalone" },
-  
-  // Special Views
-  { name: "Table Navigation Home", path: "/", category: "Special" }
+  { name: "Liabilities (Standalone)", path: "/liabilities", category: "Standalone" }
 ];
 
 export function TableNavigationDropdown() {
@@ -35,7 +32,7 @@ export function TableNavigationDropdown() {
   
   // Find current table name
   const currentTable = tables.find(table => table.path === location);
-  const currentTableName = currentTable ? currentTable.name : "Navigate Tables";
+  const currentTableName = currentTable ? currentTable.name : "Select Calculator Table";
   
   // Group tables by category
   const groupedTables = tables.reduce((acc, table) => {
