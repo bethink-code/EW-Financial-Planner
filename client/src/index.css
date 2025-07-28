@@ -353,7 +353,7 @@ th, td {
     color: #374151 !important; /* text-neutral-700 */
     font-size: 0.875rem !important;
     font-weight: normal !important;
-    padding: 0.6rem 0.8rem !important;
+    padding: 1rem 1.25rem !important; /* Match input field padding for alignment */
   }
 
   .totals-cell-value {
@@ -362,7 +362,7 @@ th, td {
     font-weight: 600 !important;
     color: #374151 !important;
     font-size: 0.875rem !important;
-    padding: 0.6rem 0.8rem !important;
+    padding: 1rem 1.25rem !important; /* Match input field padding for alignment */
   }
   
   /* Teal color utilities */
