@@ -1,7 +1,7 @@
 import { useState, useCallback, useMemo } from 'react';
 import { useQuery, useMutation } from '@tanstack/react-query';
 import { queryClient } from '@/lib/queryClient';
-import { AssetsAndLiabilities, InsertAssetsAndLiabilities } from '@shared/schema';
+import { Liabilities, InsertLiabilities } from '@shared/schema';
 import { AddButton, ActionButtonGroup, DuplicateButton, DeleteButton } from '@/components/ui/action-buttons';
 import { getFieldClass, getCellClass } from '@/lib/field-types';
 import { formatCurrencyValue, formatPercentageValue, getValueClass, handleDefaultValueFocus } from '@/lib/formatting';
@@ -15,19 +15,26 @@ function LiabilitiesTable({ viewMode, searchTerm }: LiabilitiesTableProps) {
   const [isUpdating, setIsUpdating] = useState(false);
 
   // Query for liabilities
-  const { data: liabilities = [], isLoading, error } = useQuery<AssetsAndLiabilities[]>({
+  const { data: liabilities = [], isLoading, error } = useQuery<Liabilities[]>({
     queryKey: ['/api/liabilities'],
   });
 
   // Add liability mutation
   const addMutation = useMutation({
-    mutationFn: async (): Promise<AssetsAndLiabilities> => {
-      const newLiability: InsertAssetsAndLiabilities = {
+    mutationFn: async (): Promise<Liabilities> => {
+      const newLiability: InsertLiabilities = {
+        category: "Enter details ...",
         description: "Enter details ...",
-        owner: "Donald Edwards",
-        amount: "R 0",
-        increasePercentage: "0%",
-        additionalOwners: [],
+        debtAmount: "R 0",
+        peterLambie: "0%",
+        victoriaLambie: "0%",
+        juniorLambie: "0%",
+        lambiesFamilyTrust: "0%",
+        estateDuty: "R 0",
+        others: "R 0",
+        client: "R 0",
+        section: "BONDS",
+        included: true,
       };
       
       const response = await fetch('/api/liabilities', {
@@ -56,7 +63,7 @@ function LiabilitiesTable({ viewMode, searchTerm }: LiabilitiesTableProps) {
 
   // Update liability mutation
   const updateMutation = useMutation({
-    mutationFn: async ({ id, updates }: { id: number; updates: Partial<AssetsAndLiabilities> }) => {
+    mutationFn: async ({ id, updates }: { id: number; updates: Partial<Liabilities> }) => {
       const response = await fetch(`/api/liabilities/${id}`, {
         method: 'PATCH',
         headers: {
@@ -101,24 +108,24 @@ function LiabilitiesTable({ viewMode, searchTerm }: LiabilitiesTableProps) {
   const totals = useMemo(() => {
     return {
       count: liabilities.length,
-      amount: liabilities.reduce((sum: number, liability: AssetsAndLiabilities) => {
-        const value = parseFloat((liability.amount || '').replace(/[^\d.-]/g, '')) || 0;
+      amount: liabilities.reduce((sum: number, liability: Liabilities) => {
+        const value = parseFloat((liability.debtAmount || '').replace(/[^\d.-]/g, '')) || 0;
         return sum + value;
       }, 0),
     };
   }, [liabilities]);
 
-  const handleUpdateLiability = useCallback((id: number, field: keyof AssetsAndLiabilities, value: string | string[]) => {
+  const handleUpdateLiability = useCallback((id: number, field: keyof Liabilities, value: string | string[]) => {
     setIsUpdating(true);
     const updates = { [field]: value };
     updateMutation.mutate({ id, updates });
   }, [updateMutation]);
 
-  const handleInputBlur = useCallback((id: number, field: keyof AssetsAndLiabilities, value: string) => {
+  const handleInputBlur = useCallback((id: number, field: keyof Liabilities, value: string) => {
     let formattedValue: string;
-    if (field === 'increasePercentage') {
+    if (field === 'peterLambie' || field === 'victoriaLambie' || field === 'juniorLambie' || field === 'lambiesFamilyTrust') {
       formattedValue = formatPercentageValue(value);
-    } else if (field === 'amount') {
+    } else if (field === 'debtAmount' || field === 'estateDuty' || field === 'others' || field === 'client') {
       formattedValue = formatCurrencyValue(value);
     } else {
       formattedValue = value;
@@ -153,82 +160,183 @@ function LiabilitiesTable({ viewMode, searchTerm }: LiabilitiesTableProps) {
       <table>
         <thead>
           <tr>
-            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start section-end" rowSpan={2}>
+            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center" rowSpan={2}>
               <AddButton onClick={() => addMutation.mutate()} disabled={isUpdating} />
             </th>
             <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start" colSpan={2}>Overview</th>
-            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start section-end" colSpan={2}>Financial Details</th>
+            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start" colSpan={1}>Liability Details</th>
+            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start" colSpan={4}>Ownership Split</th>
+            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start" colSpan={3}>Settlement</th>
           </tr>
           <tr>
-            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start">Description</th>
-            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center">Owner</th>
-            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start">Amount</th>
-            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-end">Increase %</th>
+            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start">Category</th>
+            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center">Description</th>
+            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start">Debt Amount</th>
+            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start">Peter Lambie</th>
+            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center">Victoria Lambie (Spouse)</th>
+            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center">Junior Lambie</th>
+            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center">Lambies Family Trust</th>
+            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start">Estate Duty</th>
+            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center">Others</th>
+            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-end">Client</th>
           </tr>
         </thead>
         <tbody className="divide-y divide-neutral-200">
-          {liabilities.map((liability: AssetsAndLiabilities, index) => (
-            <tr key={liability.id} className="hover:bg-neutral-50">
-              <td className="table-actions-cell p-1 text-center section-start section-end">
-                <ActionButtonGroup>
-                  <DuplicateButton
-                    onClick={() => addMutation.mutate()}
-                    disabled={isUpdating}
-                  />
-                  <DeleteButton
-                    onClick={() => handleDeleteLiability(liability.id)}
-                    disabled={isUpdating}
-                  />
-                </ActionButtonGroup>
-              </td>
-              
-              <td className="p-1 section-start">
-                <input
-                  type="text"
-                  defaultValue={liability.description}
-                  className={`table-input ${getFieldClass('text')} ${getValueClass(liability.description, 'text')}`}
-                  onFocus={handleDefaultValueFocus}
-                  onBlur={(e) => handleInputBlur(liability.id, 'description', e.target.value)}
-                  disabled={isUpdating}
-                />
-              </td>
-              
-              <td className="p-1">
-                <input
-                  type="text"
-                  defaultValue={liability.owner}
-                  className={`table-input ${getFieldClass('text')} ${getValueClass(liability.owner, 'text')}`}
-                  onFocus={handleDefaultValueFocus}
-                  onBlur={(e) => handleInputBlur(liability.id, 'owner', e.target.value)}
-                  disabled={isUpdating}
-                />
-              </td>
-              
-              <td className="p-1 section-start">
-                <input
-                  key={`amount-${liability.id}-${liability.amount}`}
-                  type="text"
-                  defaultValue={liability.amount}
-                  className={`table-input ${getFieldClass('currency')} ${getValueClass(liability.amount, 'currency')}`}
-                  onFocus={handleDefaultValueFocus}
-                  onBlur={(e) => handleInputBlur(liability.id, 'amount', e.target.value)}
-                  disabled={isUpdating}
-                />
-              </td>
-              
-              <td className="p-1 section-end">
-                <input
-                  key={`increasePercentage-${liability.id}-${liability.increasePercentage}`}
-                  type="text"
-                  defaultValue={liability.increasePercentage}
-                  className={`table-input ${getFieldClass('percentage')} ${getValueClass(liability.increasePercentage, 'percentage')}`}
-                  onFocus={handleDefaultValueFocus}
-                  onBlur={(e) => handleInputBlur(liability.id, 'increasePercentage', e.target.value)}
-                  disabled={isUpdating}
-                />
-              </td>
-            </tr>
-          ))}
+          {(() => {
+            // Group liabilities by section/category
+            const groupedLiabilities = liabilities.reduce((groups, liability) => {
+              const section = liability.section || liability.category || 'Other';
+              if (!groups[section]) {
+                groups[section] = [];
+              }
+              groups[section].push(liability);
+              return groups;
+            }, {} as Record<string, Liabilities[]>);
+
+            return Object.entries(groupedLiabilities).map(([sectionName, sectionLiabilities]) => [
+              // Section Header
+              <tr key={`section-${sectionName}`} className="bg-neutral-50">
+                <td colSpan={11} className="px-4 py-2 text-sm font-medium text-neutral-700 uppercase tracking-wider">
+                  {sectionName.replace('_', ' ')}
+                </td>
+              </tr>,
+              // Section Liabilities
+              ...sectionLiabilities.map((liability: Liabilities) => (
+                <tr key={liability.id} className="hover:bg-neutral-50">
+                  <td className="table-actions-cell p-2 text-center">
+                    <ActionButtonGroup>
+                      <DuplicateButton
+                        onClick={() => addMutation.mutate()}
+                        disabled={isUpdating}
+                      />
+                      <DeleteButton
+                        onClick={() => handleDeleteLiability(liability.id)}
+                        disabled={isUpdating}
+                      />
+                    </ActionButtonGroup>
+                  </td>
+                  
+                  <td className="p-2 text-left">
+                    <input
+                      type="text"
+                      defaultValue={liability.category}
+                      className={`table-input ${getFieldClass('text')} ${getValueClass(liability.category, 'text')}`}
+                      onFocus={handleDefaultValueFocus}
+                      onBlur={(e) => handleInputBlur(liability.id, 'category', e.target.value)}
+                      disabled={isUpdating}
+                    />
+                  </td>
+                  
+                  <td className="p-2 text-left">
+                    <input
+                      type="text"
+                      defaultValue={liability.description}
+                      className={`table-input ${getFieldClass('text')} ${getValueClass(liability.description, 'text')}`}
+                      onFocus={handleDefaultValueFocus}
+                      onBlur={(e) => handleInputBlur(liability.id, 'description', e.target.value)}
+                      disabled={isUpdating}
+                    />
+                  </td>
+                  
+                  <td className="p-2 text-right">
+                    <input
+                      key={`debtAmount-${liability.id}-${liability.debtAmount}`}
+                      type="text"
+                      defaultValue={liability.debtAmount}
+                      className={`table-input ${getFieldClass('currency')} ${getValueClass(liability.debtAmount, 'currency')}`}
+                      onFocus={handleDefaultValueFocus}
+                      onBlur={(e) => handleInputBlur(liability.id, 'debtAmount', e.target.value)}
+                      disabled={isUpdating}
+                    />
+                  </td>
+                  
+                  <td className="p-2 text-center">
+                    <input
+                      key={`peterLambie-${liability.id}-${liability.peterLambie}`}
+                      type="text"
+                      defaultValue={liability.peterLambie}
+                      className={`table-input ${getFieldClass('percentage')} ${getValueClass(liability.peterLambie, 'percentage')}`}
+                      onFocus={handleDefaultValueFocus}
+                      onBlur={(e) => handleInputBlur(liability.id, 'peterLambie', e.target.value)}
+                      disabled={isUpdating}
+                    />
+                  </td>
+                  
+                  <td className="p-2 text-center">
+                    <input
+                      key={`victoriaLambie-${liability.id}-${liability.victoriaLambie}`}
+                      type="text"
+                      defaultValue={liability.victoriaLambie}
+                      className={`table-input ${getFieldClass('percentage')} ${getValueClass(liability.victoriaLambie, 'percentage')}`}
+                      onFocus={handleDefaultValueFocus}
+                      onBlur={(e) => handleInputBlur(liability.id, 'victoriaLambie', e.target.value)}
+                      disabled={isUpdating}
+                    />
+                  </td>
+                  
+                  <td className="p-2 text-center">
+                    <input
+                      key={`juniorLambie-${liability.id}-${liability.juniorLambie}`}
+                      type="text"
+                      defaultValue={liability.juniorLambie}
+                      className={`table-input ${getFieldClass('percentage')} ${getValueClass(liability.juniorLambie, 'percentage')}`}
+                      onFocus={handleDefaultValueFocus}
+                      onBlur={(e) => handleInputBlur(liability.id, 'juniorLambie', e.target.value)}
+                      disabled={isUpdating}
+                    />
+                  </td>
+                  
+                  <td className="p-2 text-center">
+                    <input
+                      key={`lambiesFamilyTrust-${liability.id}-${liability.lambiesFamilyTrust}`}
+                      type="text"
+                      defaultValue={liability.lambiesFamilyTrust}
+                      className={`table-input ${getFieldClass('percentage')} ${getValueClass(liability.lambiesFamilyTrust, 'percentage')}`}
+                      onFocus={handleDefaultValueFocus}
+                      onBlur={(e) => handleInputBlur(liability.id, 'lambiesFamilyTrust', e.target.value)}
+                      disabled={isUpdating}
+                    />
+                  </td>
+                  
+                  <td className="p-2 text-right">
+                    <input
+                      key={`estate-${liability.id}-${liability.estate}`}
+                      type="text"
+                      defaultValue={liability.estate}
+                      className={`table-input ${getFieldClass('currency')} ${getValueClass(liability.estate, 'currency')}`}
+                      onFocus={handleDefaultValueFocus}
+                      onBlur={(e) => handleInputBlur(liability.id, 'estate', e.target.value)}
+                      disabled={isUpdating}
+                    />
+                  </td>
+                  
+                  <td className="p-2 text-right">
+                    <input
+                      key={`others-${liability.id}-${liability.others}`}
+                      type="text"
+                      defaultValue={liability.others}
+                      className={`table-input ${getFieldClass('currency')} ${getValueClass(liability.others, 'currency')}`}
+                      onFocus={handleDefaultValueFocus}
+                      onBlur={(e) => handleInputBlur(liability.id, 'others', e.target.value)}
+                      disabled={isUpdating}
+                    />
+                  </td>
+                  
+                  <td className="p-2 text-right">
+                    <input
+                      key={`client-${liability.id}-${liability.client}`}
+                      type="text"
+                      defaultValue={liability.client}
+                      className={`table-input ${getFieldClass('currency')} ${getValueClass(liability.client, 'currency')}`}
+                      onFocus={handleDefaultValueFocus}
+                      onBlur={(e) => handleInputBlur(liability.id, 'client', e.target.value)}
+                      disabled={isUpdating}
+                    />
+                  </td>
+                </tr>
+              ))
+            ]).flat();
+          })()}
         </tbody>
         
         {/* Totals Footer */}

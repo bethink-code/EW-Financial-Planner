@@ -187,8 +187,27 @@ function AssetsTable({ viewMode, searchTerm }: AssetsTableProps) {
           </tr>
         </thead>
         <tbody className="divide-y divide-neutral-200">
-          {assets.map((asset: Assets, assetIndex) => (
-            <tr key={asset.id} className="hover:bg-neutral-50">
+          {(() => {
+            // Group assets by section/category
+            const groupedAssets = assets.reduce((groups, asset) => {
+              const section = asset.section || asset.category || 'Other';
+              if (!groups[section]) {
+                groups[section] = [];
+              }
+              groups[section].push(asset);
+              return groups;
+            }, {} as Record<string, Assets[]>);
+
+            return Object.entries(groupedAssets).map(([sectionName, sectionAssets]) => [
+              // Section Header
+              <tr key={`section-${sectionName}`} className="bg-neutral-50">
+                <td colSpan={11} className="px-4 py-2 text-sm font-medium text-neutral-700 uppercase tracking-wider">
+                  {sectionName.replace('_', ' ')}
+                </td>
+              </tr>,
+              // Section Assets
+              ...sectionAssets.map((asset: Assets, assetIndex) => (
+                <tr key={asset.id} className="hover:bg-neutral-50">
               <td className="table-actions-cell p-2 text-center">
                 <ActionButtonGroup>
                   <DuplicateButton
@@ -320,7 +339,9 @@ function AssetsTable({ viewMode, searchTerm }: AssetsTableProps) {
                 />
               </td>
             </tr>
-          ))}
+              ))
+            ]).flat();
+          })()}
         </tbody>
         
         <tfoot>
