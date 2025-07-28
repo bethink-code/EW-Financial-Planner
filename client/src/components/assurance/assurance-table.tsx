@@ -153,7 +153,9 @@ export function AssuranceTable({ searchTerm }: AssuranceTableProps) {
           <table className="w-full min-w-full">
             <thead>
               <tr className="border-b border-neutral-300">
-                <th className="p-3 text-center text-xs font-semibold text-neutral-700 uppercase tracking-wider w-16">Actions</th>
+                <th className="p-3 text-center text-xs font-semibold text-neutral-700 uppercase tracking-wider w-16">
+                  <AddButton onClick={handleAddPolicy} disabled={addMutation.isPending} />
+                </th>
                 <th className="p-3 text-left text-xs font-semibold text-neutral-700 uppercase tracking-wider min-w-[200px]">Description</th>
                 <th className="p-3 text-center text-xs font-semibold text-neutral-700 uppercase tracking-wider min-w-[140px]">Owner</th>
                 <th className="p-3 text-center text-xs font-semibold text-neutral-700 uppercase tracking-wider min-w-[140px]">Life Assured</th>

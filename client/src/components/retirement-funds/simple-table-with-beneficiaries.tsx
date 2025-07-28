@@ -506,7 +506,9 @@ export function SimpleTableWithBeneficiaries({
         <thead className="bg-neutral-50">
           {/* First header row - Section groupings */}
           <tr>
-            <th rowSpan={2} className="px-3 py-3 text-center text-xs font-medium text-neutral-600 uppercase tracking-wider border-b">Actions</th>
+            <th rowSpan={2} className="px-3 py-3 text-center text-xs font-medium text-neutral-600 uppercase tracking-wider border-b">
+              <AddButton onClick={onAddFund} disabled={isUpdating} />
+            </th>
             {columnVisibility.overview && (
               <th colSpan={3} className="px-3 py-2 text-center text-xs font-medium text-neutral-600 uppercase tracking-wider border-b section-start section-end">
                 Overview
