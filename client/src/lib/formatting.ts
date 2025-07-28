@@ -66,11 +66,11 @@ export const formatTextValue = (value: string | null): string => {
 };
 
 /**
- * Clean text value for saving - removes placeholder text and returns empty string for storage
+ * Clean text value for saving - removes placeholder text and returns null for storage
  */
-export const cleanTextValue = (value: string): string => {
+export const cleanTextValue = (value: string): string | null => {
   const stringValue = String(value || '').trim();
-  if (stringValue === 'Enter details ...' || stringValue === '') return '';
+  if (stringValue === 'Enter details ...' || stringValue === '') return null;
   return stringValue;
 };
 
