@@ -280,6 +280,7 @@ function VoluntaryInvestmentsTable({ viewMode, searchTerm }: VoluntaryInvestment
         </thead>
         <tbody className="divide-y divide-neutral-200">
           {investments.map((investment: VoluntaryInvestment) => {
+            console.log(`Rendering investment ${investment.id} with owners:`, investment.owners);
             const maxRows = Math.max(investment.owners.length, 1);
             
             return Array.from({ length: maxRows }, (_, ownerIndex) => (
