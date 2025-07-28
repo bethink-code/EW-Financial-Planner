@@ -296,7 +296,10 @@ export default function DefinedBenefitFundsTable() {
                       defaultValue={fund.description}
                       className={`table-input ${getFieldClass('text')} ${getValueClass(fund.description, 'text')}`}
                       onFocus={handleDefaultValueFocus}
-                      onBlur={(e) => handleUpdateFund(fund.id, 'description', e.target.value)}
+                      onBlur={createEnhancedBlurHandler(
+                        (e) => handleUpdateFund(fund.id, 'description', e.target.value),
+                        'text'
+                      )}
                       disabled={isUpdating}
                     />
                   )}
