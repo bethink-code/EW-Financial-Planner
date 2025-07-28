@@ -80,8 +80,8 @@ function VoluntaryInvestmentsTable({ viewMode, searchTerm }: VoluntaryInvestment
       return response.json();
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['/api/voluntary-investments'] });
       setIsUpdating(false);
+      queryClient.invalidateQueries({ queryKey: ['/api/voluntary-investments'] });
     },
     onError: (error) => {
       console.error('Failed to update voluntary investment:', error);
@@ -170,8 +170,13 @@ function VoluntaryInvestmentsTable({ viewMode, searchTerm }: VoluntaryInvestment
   const handleDeleteOwner = useCallback((investmentId: number, ownerIndex: number, currentOwners: string[], currentPercentages: string[]) => {
     if (currentOwners.length <= 1) return; // Don't delete the last owner
     
-    const newOwners = currentOwners.filter((_, index) => index !== ownerIndex);
-    const newPercentages = currentPercentages.filter((_, index) => index !== ownerIndex);
+    console.log('Deleting owner at index:', ownerIndex, 'from owners:', currentOwners);
+    
+    const newOwners = [...currentOwners];
+    const newPercentages = [...currentPercentages];
+    newOwners.splice(ownerIndex, 1);
+    newPercentages.splice(ownerIndex, 1);
+    
     handleUpdateInvestment(investmentId, 'owners', newOwners);
     handleUpdateInvestment(investmentId, 'ownershipPercentages', newPercentages);
   }, [handleUpdateInvestment]);
@@ -219,7 +224,7 @@ function VoluntaryInvestmentsTable({ viewMode, searchTerm }: VoluntaryInvestment
             const maxRows = Math.max(owners.length, 1);
             
             return owners.map((owner: string, ownerIndex: number) => (
-              <tr key={`${investment.id}-${ownerIndex}`} className="hover:bg-neutral-50">
+              <tr key={`${investment.id}-${ownerIndex}-${owners.length}`} className="hover:bg-neutral-50">
                 {ownerIndex === 0 && (
                   <td className="table-actions-cell p-1 text-center section-start section-end align-top" rowSpan={maxRows}>
                     <ActionButtonGroup>
@@ -264,16 +269,26 @@ function VoluntaryInvestmentsTable({ viewMode, searchTerm }: VoluntaryInvestment
                     />
                     {ownerIndex === 0 && (
                       <AddButton
-                        onClick={() => handleAddOwner(investment.id, owners, percentages)}
+                        onClick={(e) => {
+                          e.preventDefault();
+                          e.stopPropagation();
+                          handleAddOwner(investment.id, owners, percentages);
+                        }}
                         disabled={isUpdating}
                         size="sm"
+                        type="button"
                       />
                     )}
                     {ownerIndex > 0 && (
                       <DeleteButton
-                        onClick={() => handleDeleteOwner(investment.id, ownerIndex, owners, percentages)}
+                        onClick={(e) => {
+                          e.preventDefault();
+                          e.stopPropagation();
+                          handleDeleteOwner(investment.id, ownerIndex, owners, percentages);
+                        }}
                         disabled={isUpdating}
                         size="sm"
+                        type="button"
                       />
                     )}
                   </div>
