@@ -1,4 +1,4 @@
-import { retirementFunds, lumpSumBequests, assurance, definedBenefitFunds, voluntaryInvestments, incomeNeeds, incomeProvisions, residue, additionalEstateDutyItems, liabilities, type RetirementFund, type InsertRetirementFund, type UpdateRetirementFund, type LumpSumBequest, type InsertLumpSumBequest, type Assurance, type InsertAssurance, type UpdateAssurance, type DefinedBenefitFund, type InsertDefinedBenefitFund, type UpdateDefinedBenefitFund, type VoluntaryInvestment, type InsertVoluntaryInvestment, type UpdateVoluntaryInvestment, type IncomeNeed, type InsertIncomeNeed, type UpdateIncomeNeed, type IncomeProvision, type InsertIncomeProvision, type UpdateIncomeProvision, type Residue, type InsertResidue, type UpdateResidue, type AdditionalEstateDutyItem, type InsertAdditionalEstateDutyItem, type UpdateAdditionalEstateDutyItem, type Liabilities, type InsertLiabilities, type UpdateLiabilities } from "@shared/schema";
+import { retirementFunds, lumpSumBequests, assurance, definedBenefitFunds, voluntaryInvestments, incomeNeeds, incomeProvisions, residue, additionalEstateDutyItems, liabilities, type RetirementFund, type InsertRetirementFund, type UpdateRetirementFund, type LumpSumBequest, type InsertLumpSumBequest, type Assurance, type InsertAssurance, type UpdateAssurance, type DefinedBenefitFund, type InsertDefinedBenefitFund, type UpdateDefinedBenefitFund, type VoluntaryInvestment, type InsertVoluntaryInvestment, type UpdateVoluntaryInvestment, type IncomeNeeds, type InsertIncomeNeeds, type UpdateIncomeNeeds, type IncomeProvisions, type InsertIncomeProvisions, type UpdateIncomeProvisions, type Residue, type InsertResidue, type UpdateResidue, type AdditionalEstateDutyItems, type InsertAdditionalEstateDutyItems, type UpdateAdditionalEstateDutyItems, type Liabilities, type InsertLiabilities, type UpdateLiabilities } from "@shared/schema";
 import { assets, type Assets, type InsertAssets } from "@shared/assets-schema";
 import { drizzle } from "drizzle-orm/node-postgres";
 import { Pool } from "pg";
@@ -45,23 +45,21 @@ export interface IStorage {
   deleteVoluntaryInvestment(id: number): Promise<boolean>;
   searchVoluntaryInvestments(query: string): Promise<VoluntaryInvestment[]>;
   
-
-  
   // Income Needs
-  getIncomeNeeds(): Promise<IncomeNeed[]>;
-  getIncomeNeed(id: number): Promise<IncomeNeed | undefined>;
-  createIncomeNeed(need: InsertIncomeNeed): Promise<IncomeNeed>;
-  updateIncomeNeed(id: number, updates: UpdateIncomeNeed): Promise<IncomeNeed | undefined>;
+  getIncomeNeeds(): Promise<IncomeNeeds[]>;
+  getIncomeNeed(id: number): Promise<IncomeNeeds | undefined>;
+  createIncomeNeed(need: InsertIncomeNeeds): Promise<IncomeNeeds>;
+  updateIncomeNeed(id: number, updates: UpdateIncomeNeeds): Promise<IncomeNeeds | undefined>;
   deleteIncomeNeed(id: number): Promise<boolean>;
-  searchIncomeNeeds(query: string): Promise<IncomeNeed[]>;
+  searchIncomeNeeds(query: string): Promise<IncomeNeeds[]>;
   
   // Income Provisions
-  getIncomeProvisions(): Promise<IncomeProvision[]>;
-  getIncomeProvision(id: number): Promise<IncomeProvision | undefined>;
-  createIncomeProvision(provision: InsertIncomeProvision): Promise<IncomeProvision>;
-  updateIncomeProvision(id: number, updates: UpdateIncomeProvision): Promise<IncomeProvision | undefined>;
+  getIncomeProvisions(): Promise<IncomeProvisions[]>;
+  getIncomeProvision(id: number): Promise<IncomeProvisions | undefined>;
+  createIncomeProvision(provision: InsertIncomeProvisions): Promise<IncomeProvisions>;
+  updateIncomeProvision(id: number, updates: UpdateIncomeProvisions): Promise<IncomeProvisions | undefined>;
   deleteIncomeProvision(id: number): Promise<boolean>;
-  searchIncomeProvisions(query: string): Promise<IncomeProvision[]>;
+  searchIncomeProvisions(query: string): Promise<IncomeProvisions[]>;
   
   // Residue
   getResidue(): Promise<Residue[]>;
@@ -72,12 +70,12 @@ export interface IStorage {
   searchResidue(query: string): Promise<Residue[]>;
   
   // Additional Estate Duty Items
-  getAdditionalEstateDutyItems(): Promise<AdditionalEstateDutyItem[]>;
-  getAdditionalEstateDutyItem(id: number): Promise<AdditionalEstateDutyItem | undefined>;
-  createAdditionalEstateDutyItem(item: InsertAdditionalEstateDutyItem): Promise<AdditionalEstateDutyItem>;
-  updateAdditionalEstateDutyItem(id: number, updates: UpdateAdditionalEstateDutyItem): Promise<AdditionalEstateDutyItem | undefined>;
+  getAdditionalEstateDutyItems(): Promise<AdditionalEstateDutyItems[]>;
+  getAdditionalEstateDutyItem(id: number): Promise<AdditionalEstateDutyItems | undefined>;
+  createAdditionalEstateDutyItem(item: InsertAdditionalEstateDutyItems): Promise<AdditionalEstateDutyItems>;
+  updateAdditionalEstateDutyItem(id: number, updates: UpdateAdditionalEstateDutyItems): Promise<AdditionalEstateDutyItems | undefined>;
   deleteAdditionalEstateDutyItem(id: number): Promise<boolean>;
-  searchAdditionalEstateDutyItems(query: string): Promise<AdditionalEstateDutyItem[]>;
+  searchAdditionalEstateDutyItems(query: string): Promise<AdditionalEstateDutyItems[]>;
   
   // Liabilities
   getLiabilities(): Promise<Liabilities[]>;
@@ -102,21 +100,24 @@ export class MemStorage implements IStorage {
   private assurance: Map<number, Assurance>;
   private definedBenefitFunds: Map<number, DefinedBenefitFund>;
   private voluntaryInvestments: Map<number, VoluntaryInvestment>;
-
-  private incomeNeeds: Map<number, IncomeNeed>;
-  private incomeProvisions: Map<number, IncomeProvision>;
+  private incomeNeeds: Map<number, IncomeNeeds>;
+  private incomeProvisions: Map<number, IncomeProvisions>;
   private residue: Map<number, Residue>;
-  private additionalEstateDutyItems: Map<number, AdditionalEstateDutyItem>;
+  private additionalEstateDutyItems: Map<number, AdditionalEstateDutyItems>;
+  private liabilities: Map<number, Liabilities>;
+  private assets: Map<number, Assets>;
+  
   private currentFundId: number;
   private currentBequestId: number;
   private currentAssuranceId: number;
   private currentDefinedBenefitFundId: number;
   private currentVoluntaryInvestmentId: number;
-
   private currentIncomeNeedId: number;
   private currentIncomeProvisionId: number;
   private currentResidueId: number;
   private currentAdditionalEstateDutyItemId: number;
+  private currentLiabilityId: number;
+  private currentAssetId: number;
 
   constructor() {
     this.retirementFunds = new Map();
@@ -124,208 +125,27 @@ export class MemStorage implements IStorage {
     this.assurance = new Map();
     this.definedBenefitFunds = new Map();
     this.voluntaryInvestments = new Map();
-
     this.incomeNeeds = new Map();
     this.incomeProvisions = new Map();
     this.residue = new Map();
     this.additionalEstateDutyItems = new Map();
+    this.liabilities = new Map();
+    this.assets = new Map();
+
     this.currentFundId = 1;
     this.currentBequestId = 1;
     this.currentAssuranceId = 1;
     this.currentDefinedBenefitFundId = 1;
     this.currentVoluntaryInvestmentId = 1;
-
     this.currentIncomeNeedId = 1;
     this.currentIncomeProvisionId = 1;
     this.currentResidueId = 1;
     this.currentAdditionalEstateDutyItemId = 1;
-    
-    // Initialize with sample data
-    this.createRetirementFund({
-      description: "Total Pension Fund",
-      owner: "John Doe",
-      additionalOwners: [],
-      coverAmount: "R 500,000",
-      termYears: "10",
-      increasePercentage: "5%",
-      approvedLifeCover: "R 500,000",
-      fundValue: "R 180,000",
-      fundValueAtDeath: "R 200,000",
-      name: "Sarah Doe",
-      amount: "R 150,000",
-      lumpSumTaken: "R 25,000",
-      fundValueBeneficiaries: "R 125,000",
-      nonDeductibleContribution: "R 10,000",
-      livingAnnuity: "R 120,000",
-      monthlyIncome: "R 5,000",
-      incomeTerm: "20",
-      beneficiary: "Sarah Doe",
-      benefitSplit: "60%",
-      additionalBeneficiaries: [],
-      additionalBenefitSplits: []
-    });
-    
-    this.createRetirementFund({
-      description: "Provident Fund",
-      owner: "Jane Smith",
-      additionalOwners: ["Tom Smith"],
-      coverAmount: "R 700,000",
-      termYears: "15",
-      increasePercentage: "4%",
-      approvedLifeCover: "R 175,000",
-      fundValue: "R 120,000",
-      fundValueAtDeath: "R 140,000",
-      name: "Tom Smith",
-      amount: "R 100,000",
-      lumpSumTaken: "R 15,000",
-      fundValueBeneficiaries: "R 85,000",
-      nonDeductibleContribution: "R 8,000",
-      livingAnnuity: "R 85,000",
-      monthlyIncome: "R 3,500",
-      incomeTerm: "25",
-      beneficiary: "Tom Smith",
-      benefitSplit: "50%",
-      additionalBeneficiaries: ["Anna Smith"],
-      additionalBenefitSplits: ["50%"]
-    });
-
-    // Initialize sample lump sum bequests
-    this.createLumpSumBequest({
-      description: "Family Trust Distribution",
-      entity: "Donald Edwards",
-      start: "100000",
-      increasePercentage: "CPI",
-      amount: "100000",
-      valueAtDeath: "150000",
-      charityNote: ""
-    });
-    
-    this.createLumpSumBequest({
-      description: "Charity Donation",
-      entity: "Betty Edwards",
-      start: "50000",
-      increasePercentage: "5%",
-      amount: "50000",
-      valueAtDeath: "75000",
-      charityNote: "Annual donation to local charity"
-    });
-    
-    // Initialize sample assurance policies
-    this.createAssurance({
-      description: "GB Assurance Term Life",
-      owner: "Donald Edwards",
-      additionalOwners: [],
-      lifeAssured: "Donald Edwards",
-      deathBenefit: "1000000",
-      beneficiary: "Betty Edwards",
-      benefitSplit: "100",
-      additionalBeneficiaries: [],
-      additionalBenefitSplits: [],
-      amount: "1000000",
-      buySell: false,
-      keyMan: false,
-      premiumsByOthers: "0",
-      collateralSession: "0",
-      excludedFromEstateDuty: false,
-      excludedFromProvisions: false
-    });
-    
-    // Initialize sample defined benefit funds
-    this.createDefinedBenefitFund({
-      description: "Government Pension Fund",
-      owner: "Donald Edwards",
-      yearsOfService: "25",
-      finalMonthlySalary: "R 15,000",
-      deathLumpSum: "R 450,000",
-      additionalTaxFreeAmount: "R 75,000",
-      pensionIncomeAmount: "R 8,000",
-      pensionIncomeIncrease: "5%",
-    });
-    
-    // Initialize sample voluntary investments
-    this.createVoluntaryInvestment({
-      description: "Unit Trust Portfolio",
-      owners: ["Donald Edwards"],
-      ownershipPercentages: ["100%"],
-      baseCost: "R 500,000",
-      marketValue: "R 750,000",
-      liquidationPercentage: "85%",
-      spouse: "R 637,500",
-      others: "R 0",
-      excludedFromJointEstate: false,
-      excludedFromEstateDuty: false,
-      excludedFromCGT: false,
-      excludedFromExecutorsFees: false,
-    });
-    
-
-    
-    // Initialize sample income needs
-    this.createIncomeNeed({
-      description: "Living Expenses",
-      entity: "Donald Edwards",
-      start: "0",
-      termYears: "20",
-      termEditable: true,
-      increasePercentage: "5%",
-      cpi: false,
-      frequency: "Monthly",
-      amount: "R 25,000",
-      capitalisedAmount: "R 3,750,000",
-    });
-    
-    // Initialize sample income provisions
-    this.createIncomeProvision({
-      description: "Rental Income",
-      entity: "Donald Edwards",
-      start: "0",
-      termYears: "25",
-      termEditable: true,
-      increasePercentage: "3%",
-      cpi: true,
-      frequency: "Monthly",
-      amount: "R 15,000",
-      taxablePercentage: "100%",
-      taxPercentage: "35%",
-      capitalisedAmount: "R 2,250,000",
-    });
-    
-    // Initialize sample residue
-    this.createResidueItem({
-      entity: "Donald Edwards",
-      percentage: "60%",
-      isCharityRow: false,
-    });
-    
-    this.createResidueItem({
-      entity: "Betty Edwards",
-      percentage: "40%",
-      isCharityRow: false,
-    });
-    
-    // Initialize charity row
-    this.createResidueItem({
-      entity: "Residue to registered charities",
-      percentage: "0%",
-      isCharityRow: true,
-    });
-    
-    // Initialize sample estate duty items
-    this.createAdditionalEstateDutyItem({
-      description: "Administration Fees",
-      amount: "R 50,000",
-      isDeduction: true,
-      excludeFromJointEstate: false,
-    });
-    
-    this.createAdditionalEstateDutyItem({
-      description: "Specific Bequest",
-      amount: "R 100,000",
-      isDeduction: false,
-      excludeFromJointEstate: true,
-    });
+    this.currentLiabilityId = 1;
+    this.currentAssetId = 1;
   }
 
+  // Retirement Funds methods
   async getRetirementFunds(): Promise<RetirementFund[]> {
     return Array.from(this.retirementFunds.values());
   }
@@ -338,46 +158,27 @@ export class MemStorage implements IStorage {
     const id = this.currentFundId++;
     const fund: RetirementFund = { 
       id,
-      description: insertFund.description || "",
-      owner: insertFund.owner || "",
-      coverAmount: insertFund.coverAmount || "",
-      beneficiaries: insertFund.beneficiaries || "[]",
-      monthlyIncome: insertFund.monthlyIncome || "",
-      termYears: insertFund.termYears || "",
-      increasePercentage: insertFund.increasePercentage || "",
-      approvedLifeCover: insertFund.approvedLifeCover || "",
-      fundValue: insertFund.fundValue || "",
-      fundValueAtDeath: insertFund.fundValueAtDeath || "",
-      beneficiaryName: insertFund.beneficiaryName || "",
-      beneficiaryPercentageSplit: insertFund.beneficiaryPercentageSplit || "",
-      amount: insertFund.amount || "",
-      lumpSumTaken: insertFund.lumpSumTaken || "",
-      nondeductibleContribution: insertFund.nondeductibleContribution || "",
-      livingAnnuity: insertFund.livingAnnuity || "",
-      incomeTerm: insertFund.incomeTerm || "",
-      incomeEscalation: insertFund.incomeEscalation || "0%",
-      
-      // Flows mode specific fields
-      lumpSumProvisionEstate: insertFund.lumpSumProvisionEstate || "0",
-      lumpSumProvisionSpouse: insertFund.lumpSumProvisionSpouse || "0",
-      lumpSumProvisionOther: insertFund.lumpSumProvisionOther || "0",
-      incomeProvisionOption: insertFund.incomeProvisionOption || "",
-      monthlyProvisionOffered: insertFund.monthlyProvisionOffered || "0",
-      currentAnnualIncome: insertFund.currentAnnualIncome || "0",
-      annualIncomeAtDeath: insertFund.annualIncomeAtDeath || "0",
-      estateDeploymentDeceased: insertFund.estateDeploymentDeceased || "0",
-      executorsFee: insertFund.executorsFee || "0%",
-      mastersFee: insertFund.mastersFee || "0%",
-      
-      // Estate duty percentages
-      estateDutyPoliciesOnLife: insertFund.estateDutyPoliciesOnLife || "0%",
-      estateDutyToSpouse: insertFund.estateDutyToSpouse || "0%",
-      estateDutyToOthers: insertFund.estateDutyToOthers || "0%",
-      
-      // Additional fields shown below table in inputs mode
-      lumpSumDeath: insertFund.lumpSumDeath || "0",
-      previousLumpSums: insertFund.previousLumpSums || "0",
-      additionalTaxFreeAmount: insertFund.additionalTaxFreeAmount || "0"
+      description: insertFund.description || "Enter details ...",
+      owners: insertFund.owners || ["Donald Edwards"],
+      coverAmount: insertFund.coverAmount || "R 0",
+      unapprovedBeneficiaries: insertFund.unapprovedBeneficiaries || ["Enter details ..."],
+      unapprovedPercentageSplits: insertFund.unapprovedPercentageSplits || ["0%"],
+      unapprovedCoverSplits: insertFund.unapprovedCoverSplits || ["R 0"],
+      monthlyIncome: insertFund.monthlyIncome || "R 0",
+      monthlyIncomeCheckbox: insertFund.monthlyIncomeCheckbox || false,
+      termYears: insertFund.termYears || "0 years",
+      increasePercentage: insertFund.increasePercentage || "0%",
+      approvedLifeCover: insertFund.approvedLifeCover || "R 0",
+      fundValue: insertFund.fundValue || "R 0",
+      fundValueAtDeath: insertFund.fundValueAtDeath || "R 0",
+      fundValueBeneficiaries: insertFund.fundValueBeneficiaries || ["Enter details ..."],
+      fundValuePercentageSplits: insertFund.fundValuePercentageSplits || ["0%"],
+      fundValueCoverSplits: insertFund.fundValueCoverSplits || ["R 0"],
+      lumpSumTaken: insertFund.lumpSumTaken || "R 0",
+      nonDeductibleContribution: insertFund.nonDeductibleContribution || "R 0",
+      livingAnnuity: insertFund.livingAnnuity || "R 0",
+      livingAnnuityCheckbox: insertFund.livingAnnuityCheckbox || false,
+      incomeTerm: insertFund.incomeTerm || "0 years"
     };
     this.retirementFunds.set(id, fund);
     return fund;
@@ -401,21 +202,9 @@ export class MemStorage implements IStorage {
     if (!query.trim()) return allFunds;
     
     const lowerQuery = query.toLowerCase();
-    return allFunds.filter(fund => {
-      const beneficiariesMatch = (() => {
-        try {
-          const beneficiaries = JSON.parse(fund.beneficiaries || "[]");
-          return beneficiaries.some((b: any) => b.name?.toLowerCase().includes(lowerQuery));
-        } catch {
-          return false;
-        }
-      })();
-      
-      return fund.description.toLowerCase().includes(lowerQuery) ||
-        fund.owner.toLowerCase().includes(lowerQuery) ||
-        fund.beneficiaryName.toLowerCase().includes(lowerQuery) ||
-        beneficiariesMatch;
-    });
+    return allFunds.filter(fund => 
+      fund.description.toLowerCase().includes(lowerQuery)
+    );
   }
 
   // Lump Sum Bequests methods
@@ -431,13 +220,13 @@ export class MemStorage implements IStorage {
     const id = this.currentBequestId++;
     const bequest: LumpSumBequest = {
       id,
-      description: insertBequest.description || "",
-      entity: insertBequest.entity || "",
-      start: insertBequest.start || "0",
-      increasePercentage: insertBequest.increasePercentage || "CPI",
-      amount: insertBequest.amount || "0",
-      valueAtDeath: insertBequest.valueAtDeath || "0",
-      charityNote: insertBequest.charityNote || "",
+      description: insertBequest.description || "Enter details ...",
+      entity: insertBequest.entity || "Enter details ...",
+      start: insertBequest.start || "Enter details ...",
+      amount: insertBequest.amount || "R 0",
+      increasePercentage: insertBequest.increasePercentage || "0%",
+      cpi: insertBequest.cpi || false,
+      valueAtDeath: insertBequest.valueAtDeath || "R 0"
     };
     this.lumpSumBequests.set(id, bequest);
     return bequest;
@@ -463,8 +252,7 @@ export class MemStorage implements IStorage {
     const lowerQuery = query.toLowerCase();
     return allBequests.filter(bequest => 
       bequest.description.toLowerCase().includes(lowerQuery) ||
-      bequest.entity.toLowerCase().includes(lowerQuery) ||
-      bequest.charityNote.toLowerCase().includes(lowerQuery)
+      bequest.entity.toLowerCase().includes(lowerQuery)
     );
   }
 
@@ -481,22 +269,15 @@ export class MemStorage implements IStorage {
     const id = this.currentAssuranceId++;
     const assurance: Assurance = {
       id,
-      description: insertAssurance.description || "",
-      owner: insertAssurance.owner || "Donald Edwards",
-      additionalOwners: insertAssurance.additionalOwners || [],
-      lifeAssured: insertAssurance.lifeAssured || "",
-      deathBenefit: insertAssurance.deathBenefit || "0",
-      beneficiary: insertAssurance.beneficiary || "",
-      benefitSplit: insertAssurance.benefitSplit || "0",
-      additionalBeneficiaries: insertAssurance.additionalBeneficiaries || [],
-      additionalBenefitSplits: insertAssurance.additionalBenefitSplits || [],
-      amount: insertAssurance.amount || "0",
-      buySell: insertAssurance.buySell || false,
-      keyMan: insertAssurance.keyMan || false,
-      premiumsByOthers: insertAssurance.premiumsByOthers || "0",
-      collateralSession: insertAssurance.collateralSession || "0",
-      excludedFromEstateDuty: insertAssurance.excludedFromEstateDuty || false,
-      excludedFromProvisions: insertAssurance.excludedFromProvisions || false,
+      description: insertAssurance.description || "Enter details ...",
+      owners: insertAssurance.owners || ["Donald Edwards"],
+      beneficiaries: insertAssurance.beneficiaries || ["Enter details ..."],
+      deathBenefit: insertAssurance.deathBenefit || "R 0",
+      amount: insertAssurance.amount || "R 0",
+      premiumsByOthers: insertAssurance.premiumsByOthers || "R 0",
+      collateralSession: insertAssurance.collateralSession || "R 0",
+      benefitSplit: insertAssurance.benefitSplit || "0%",
+      additionalInfo: insertAssurance.additionalInfo || "Enter details ..."
     };
     this.assurance.set(id, assurance);
     return assurance;
@@ -521,10 +302,7 @@ export class MemStorage implements IStorage {
     
     const lowerQuery = query.toLowerCase();
     return allAssurance.filter(assurance => 
-      assurance.description.toLowerCase().includes(lowerQuery) ||
-      assurance.owner.toLowerCase().includes(lowerQuery) ||
-      assurance.lifeAssured.toLowerCase().includes(lowerQuery) ||
-      assurance.beneficiary.toLowerCase().includes(lowerQuery)
+      assurance.description.toLowerCase().includes(lowerQuery)
     );
   }
 
@@ -566,8 +344,7 @@ export class MemStorage implements IStorage {
     
     const lowerQuery = query.toLowerCase();
     return allFunds.filter(fund => 
-      fund.description.toLowerCase().includes(lowerQuery) ||
-      fund.owner.toLowerCase().includes(lowerQuery)
+      fund.description.toLowerCase().includes(lowerQuery)
     );
   }
 
@@ -608,26 +385,22 @@ export class MemStorage implements IStorage {
     if (!query.trim()) return allInvestments;
     
     const lowerQuery = query.toLowerCase();
-    return allInvestments.filter(investment => {
-      const owners = JSON.parse(investment.owners);
-      return investment.description.toLowerCase().includes(lowerQuery) ||
-             owners.some((owner: string) => owner.toLowerCase().includes(lowerQuery));
-    });
+    return allInvestments.filter(investment => 
+      investment.description.toLowerCase().includes(lowerQuery)
+    );
   }
 
-
-
   // Income Needs methods
-  async getIncomeNeeds(): Promise<IncomeNeed[]> {
+  async getIncomeNeeds(): Promise<IncomeNeeds[]> {
     return Array.from(this.incomeNeeds.values());
   }
 
-  async getIncomeNeed(id: number): Promise<IncomeNeed | undefined> {
+  async getIncomeNeed(id: number): Promise<IncomeNeeds | undefined> {
     return this.incomeNeeds.get(id);
   }
 
-  async createIncomeNeed(need: InsertIncomeNeed): Promise<IncomeNeed> {
-    const newNeed: IncomeNeed = {
+  async createIncomeNeed(need: InsertIncomeNeeds): Promise<IncomeNeeds> {
+    const newNeed: IncomeNeeds = {
       id: this.currentIncomeNeedId++,
       ...need
     };
@@ -636,11 +409,11 @@ export class MemStorage implements IStorage {
     return newNeed;
   }
 
-  async updateIncomeNeed(id: number, updates: UpdateIncomeNeed): Promise<IncomeNeed | undefined> {
+  async updateIncomeNeed(id: number, updates: UpdateIncomeNeeds): Promise<IncomeNeeds | undefined> {
     const existing = this.incomeNeeds.get(id);
     if (!existing) return undefined;
     
-    const updated: IncomeNeed = { ...existing, ...updates };
+    const updated: IncomeNeeds = { ...existing, ...updates };
     this.incomeNeeds.set(id, updated);
     return updated;
   }
@@ -649,28 +422,28 @@ export class MemStorage implements IStorage {
     return this.incomeNeeds.delete(id);
   }
 
-  async searchIncomeNeeds(query: string): Promise<IncomeNeed[]> {
+  async searchIncomeNeeds(query: string): Promise<IncomeNeeds[]> {
     const allNeeds = Array.from(this.incomeNeeds.values());
     if (!query.trim()) return allNeeds;
     
     const lowerQuery = query.toLowerCase();
     return allNeeds.filter(need => 
       need.description.toLowerCase().includes(lowerQuery) ||
-      need.entity.toLowerCase().includes(lowerQuery)
+      need.personName.toLowerCase().includes(lowerQuery)
     );
   }
 
   // Income Provisions methods
-  async getIncomeProvisions(): Promise<IncomeProvision[]> {
+  async getIncomeProvisions(): Promise<IncomeProvisions[]> {
     return Array.from(this.incomeProvisions.values());
   }
 
-  async getIncomeProvision(id: number): Promise<IncomeProvision | undefined> {
+  async getIncomeProvision(id: number): Promise<IncomeProvisions | undefined> {
     return this.incomeProvisions.get(id);
   }
 
-  async createIncomeProvision(provision: InsertIncomeProvision): Promise<IncomeProvision> {
-    const newProvision: IncomeProvision = {
+  async createIncomeProvision(provision: InsertIncomeProvisions): Promise<IncomeProvisions> {
+    const newProvision: IncomeProvisions = {
       id: this.currentIncomeProvisionId++,
       ...provision
     };
@@ -679,11 +452,11 @@ export class MemStorage implements IStorage {
     return newProvision;
   }
 
-  async updateIncomeProvision(id: number, updates: UpdateIncomeProvision): Promise<IncomeProvision | undefined> {
+  async updateIncomeProvision(id: number, updates: UpdateIncomeProvisions): Promise<IncomeProvisions | undefined> {
     const existing = this.incomeProvisions.get(id);
     if (!existing) return undefined;
     
-    const updated: IncomeProvision = { ...existing, ...updates };
+    const updated: IncomeProvisions = { ...existing, ...updates };
     this.incomeProvisions.set(id, updated);
     return updated;
   }
@@ -692,14 +465,14 @@ export class MemStorage implements IStorage {
     return this.incomeProvisions.delete(id);
   }
 
-  async searchIncomeProvisions(query: string): Promise<IncomeProvision[]> {
+  async searchIncomeProvisions(query: string): Promise<IncomeProvisions[]> {
     const allProvisions = Array.from(this.incomeProvisions.values());
     if (!query.trim()) return allProvisions;
     
     const lowerQuery = query.toLowerCase();
     return allProvisions.filter(provision => 
       provision.description.toLowerCase().includes(lowerQuery) ||
-      provision.entity.toLowerCase().includes(lowerQuery)
+      provision.personName.toLowerCase().includes(lowerQuery)
     );
   }
 
@@ -736,26 +509,27 @@ export class MemStorage implements IStorage {
   }
 
   async searchResidue(query: string): Promise<Residue[]> {
-    const allItems = Array.from(this.residue.values());
-    if (!query.trim()) return allItems;
+    const allResidue = Array.from(this.residue.values());
+    if (!query.trim()) return allResidue;
     
     const lowerQuery = query.toLowerCase();
-    return allItems.filter(item => 
-      item.entity.toLowerCase().includes(lowerQuery)
+    return allResidue.filter(item => 
+      item.description.toLowerCase().includes(lowerQuery) ||
+      item.category.toLowerCase().includes(lowerQuery)
     );
   }
 
   // Additional Estate Duty Items methods
-  async getAdditionalEstateDutyItems(): Promise<AdditionalEstateDutyItem[]> {
+  async getAdditionalEstateDutyItems(): Promise<AdditionalEstateDutyItems[]> {
     return Array.from(this.additionalEstateDutyItems.values());
   }
 
-  async getAdditionalEstateDutyItem(id: number): Promise<AdditionalEstateDutyItem | undefined> {
+  async getAdditionalEstateDutyItem(id: number): Promise<AdditionalEstateDutyItems | undefined> {
     return this.additionalEstateDutyItems.get(id);
   }
 
-  async createAdditionalEstateDutyItem(item: InsertAdditionalEstateDutyItem): Promise<AdditionalEstateDutyItem> {
-    const newItem: AdditionalEstateDutyItem = {
+  async createAdditionalEstateDutyItem(item: InsertAdditionalEstateDutyItems): Promise<AdditionalEstateDutyItems> {
+    const newItem: AdditionalEstateDutyItems = {
       id: this.currentAdditionalEstateDutyItemId++,
       ...item
     };
@@ -764,11 +538,11 @@ export class MemStorage implements IStorage {
     return newItem;
   }
 
-  async updateAdditionalEstateDutyItem(id: number, updates: UpdateAdditionalEstateDutyItem): Promise<AdditionalEstateDutyItem | undefined> {
+  async updateAdditionalEstateDutyItem(id: number, updates: UpdateAdditionalEstateDutyItems): Promise<AdditionalEstateDutyItems | undefined> {
     const existing = this.additionalEstateDutyItems.get(id);
     if (!existing) return undefined;
     
-    const updated: AdditionalEstateDutyItem = { ...existing, ...updates };
+    const updated: AdditionalEstateDutyItems = { ...existing, ...updates };
     this.additionalEstateDutyItems.set(id, updated);
     return updated;
   }
@@ -777,416 +551,159 @@ export class MemStorage implements IStorage {
     return this.additionalEstateDutyItems.delete(id);
   }
 
-  async searchAdditionalEstateDutyItems(query: string): Promise<AdditionalEstateDutyItem[]> {
+  async searchAdditionalEstateDutyItems(query: string): Promise<AdditionalEstateDutyItems[]> {
     const allItems = Array.from(this.additionalEstateDutyItems.values());
     if (!query.trim()) return allItems;
     
     const lowerQuery = query.toLowerCase();
     return allItems.filter(item => 
-      item.description.toLowerCase().includes(lowerQuery)
+      item.description.toLowerCase().includes(lowerQuery) ||
+      item.category.toLowerCase().includes(lowerQuery)
+    );
+  }
+
+  // Liabilities methods
+  async getLiabilities(): Promise<Liabilities[]> {
+    return Array.from(this.liabilities.values());
+  }
+
+  async getLiability(id: number): Promise<Liabilities | undefined> {
+    return this.liabilities.get(id);
+  }
+
+  async createLiability(liability: InsertLiabilities): Promise<Liabilities> {
+    const newLiability: Liabilities = {
+      id: this.currentLiabilityId++,
+      ...liability
+    };
+    
+    this.liabilities.set(newLiability.id, newLiability);
+    return newLiability;
+  }
+
+  async updateLiability(id: number, updates: UpdateLiabilities): Promise<Liabilities | undefined> {
+    const existing = this.liabilities.get(id);
+    if (!existing) return undefined;
+    
+    const updated: Liabilities = { ...existing, ...updates };
+    this.liabilities.set(id, updated);
+    return updated;
+  }
+
+  async deleteLiability(id: number): Promise<boolean> {
+    return this.liabilities.delete(id);
+  }
+
+  async searchLiabilities(query: string): Promise<Liabilities[]> {
+    const allLiabilities = Array.from(this.liabilities.values());
+    if (!query.trim()) return allLiabilities;
+    
+    const lowerQuery = query.toLowerCase();
+    return allLiabilities.filter(liability => 
+      liability.description.toLowerCase().includes(lowerQuery)
+    );
+  }
+
+  // Assets methods
+  async getAssets(): Promise<Assets[]> {
+    return Array.from(this.assets.values());
+  }
+
+  async getAsset(id: number): Promise<Assets | undefined> {
+    return this.assets.get(id);
+  }
+
+  async createAsset(asset: InsertAssets): Promise<Assets> {
+    const newAsset: Assets = {
+      id: this.currentAssetId++,
+      ...asset
+    };
+    
+    this.assets.set(newAsset.id, newAsset);
+    return newAsset;
+  }
+
+  async updateAsset(id: number, updates: Partial<InsertAssets>): Promise<Assets | undefined> {
+    const existing = this.assets.get(id);
+    if (!existing) return undefined;
+    
+    const updated: Assets = { ...existing, ...updates };
+    this.assets.set(id, updated);
+    return updated;
+  }
+
+  async deleteAsset(id: number): Promise<boolean> {
+    return this.assets.delete(id);
+  }
+
+  async searchAssets(query: string): Promise<Assets[]> {
+    const allAssets = Array.from(this.assets.values());
+    if (!query.trim()) return allAssets;
+    
+    const lowerQuery = query.toLowerCase();
+    return allAssets.filter(asset => 
+      asset.description.toLowerCase().includes(lowerQuery)
     );
   }
 }
 
-// Database storage implementation
-class DbStorage implements IStorage {
-  private pool = new Pool({ connectionString: process.env.DATABASE_URL });
-  private db = drizzle(this.pool);
+// Database storage class
+export class DbStorage {
+  private db: ReturnType<typeof drizzle>;
 
-  // Lump Sum Bequests implementation
-  async getLumpSumBequests(): Promise<LumpSumBequest[]> {
-    return await this.db.select().from(lumpSumBequests).orderBy(lumpSumBequests.id);
+  constructor() {
+    const connectionString = process.env.DATABASE_URL;
+    if (!connectionString) {
+      throw new Error("DATABASE_URL environment variable is not set");
+    }
+
+    const pool = new Pool({
+      connectionString,
+      ssl: {
+        rejectUnauthorized: false
+      }
+    });
+
+    this.db = drizzle(pool);
   }
 
-  async getLumpSumBequest(id: number): Promise<LumpSumBequest | undefined> {
-    const results = await this.db.select().from(lumpSumBequests).where(eq(lumpSumBequests.id, id)).limit(1);
-    return results[0];
-  }
-
-  async createLumpSumBequest(bequest: InsertLumpSumBequest): Promise<LumpSumBequest> {
-    const results = await this.db.insert(lumpSumBequests).values(bequest).returning();
-    return results[0];
-  }
-
-  async updateLumpSumBequest(id: number, updates: Partial<InsertLumpSumBequest>): Promise<LumpSumBequest | undefined> {
-    const results = await this.db.update(lumpSumBequests).set(updates).where(eq(lumpSumBequests.id, id)).returning();
-    return results[0];
-  }
-
-  async deleteLumpSumBequest(id: number): Promise<boolean> {
-    const results = await this.db.delete(lumpSumBequests).where(eq(lumpSumBequests.id, id)).returning();
-    return results.length > 0;
-  }
-
-  async searchLumpSumBequests(query: string): Promise<LumpSumBequest[]> {
-    if (!query.trim()) return await this.getLumpSumBequests();
-    
-    return await this.db.select().from(lumpSumBequests)
-      .where(or(
-        ilike(lumpSumBequests.description, `%${query}%`),
-        ilike(lumpSumBequests.entity, `%${query}%`)
-      ))
-      .orderBy(lumpSumBequests.id);
-  }
-
-  // Retirement Funds methods - Database implementation
+  // Retirement Funds methods
   async getRetirementFunds(): Promise<RetirementFund[]> {
-    return await this.db.select().from(retirementFunds).orderBy(retirementFunds.id);
+    return await this.db.select().from(retirementFunds);
   }
 
   async getRetirementFund(id: number): Promise<RetirementFund | undefined> {
-    const results = await this.db.select().from(retirementFunds).where(eq(retirementFunds.id, id));
-    return results[0];
+    const result = await this.db.select().from(retirementFunds).where(eq(retirementFunds.id, id));
+    return result[0];
   }
 
   async createRetirementFund(fund: InsertRetirementFund): Promise<RetirementFund> {
-    const results = await this.db.insert(retirementFunds).values(fund).returning();
-    return results[0];
+    const result = await this.db.insert(retirementFunds).values(fund).returning();
+    return result[0];
   }
 
   async updateRetirementFund(id: number, updates: UpdateRetirementFund): Promise<RetirementFund | undefined> {
-    const results = await this.db.update(retirementFunds).set(updates).where(eq(retirementFunds.id, id)).returning();
-    return results[0];
+    const result = await this.db.update(retirementFunds)
+      .set(updates)
+      .where(eq(retirementFunds.id, id))
+      .returning();
+    return result[0];
   }
 
   async deleteRetirementFund(id: number): Promise<boolean> {
-    const results = await this.db.delete(retirementFunds).where(eq(retirementFunds.id, id)).returning();
-    return results.length > 0;
+    const result = await this.db.delete(retirementFunds).where(eq(retirementFunds.id, id));
+    return (result.rowCount || 0) > 0;
   }
 
   async searchRetirementFunds(query: string): Promise<RetirementFund[]> {
-    if (!query.trim()) return await this.getRetirementFunds();
-    
     return await this.db.select().from(retirementFunds)
-      .where(or(
-        ilike(retirementFunds.description, `%${query}%`),
-        ilike(retirementFunds.owner, `%${query}%`)
-      ))
-      .orderBy(retirementFunds.id);
+      .where(ilike(retirementFunds.description, `%${query}%`));
   }
 
-  // Assurance methods - Database implementation
-  async getAssurance(): Promise<Assurance[]> {
-    return await this.db.select().from(assurance).orderBy(assurance.id);
-  }
-
-  async getAssuranceById(id: number): Promise<Assurance | undefined> {
-    const results = await this.db.select().from(assurance).where(eq(assurance.id, id));
-    return results[0];
-  }
-
-  async createAssurance(assuranceData: InsertAssurance): Promise<Assurance> {
-    const results = await this.db.insert(assurance).values(assuranceData).returning();
-    return results[0];
-  }
-
-  async updateAssurance(id: number, updates: UpdateAssurance): Promise<Assurance | undefined> {
-    const results = await this.db.update(assurance).set(updates).where(eq(assurance.id, id)).returning();
-    return results[0];
-  }
-
-  async deleteAssurance(id: number): Promise<boolean> {
-    const results = await this.db.delete(assurance).where(eq(assurance.id, id)).returning();
-    return results.length > 0;
-  }
-
-  async searchAssurance(query: string): Promise<Assurance[]> {
-    if (!query.trim()) return await this.getAssurance();
-    
-    return await this.db.select().from(assurance)
-      .where(or(
-        ilike(assurance.description, `%${query}%`),
-        ilike(assurance.owner, `%${query}%`)
-      ))
-      .orderBy(assurance.id);
-  }
-
-  // Defined Benefit Funds methods - Database implementation
-  async getDefinedBenefitFunds(): Promise<DefinedBenefitFund[]> {
-    return await this.db.select().from(definedBenefitFunds).orderBy(definedBenefitFunds.id);
-  }
-
-  async getDefinedBenefitFund(id: number): Promise<DefinedBenefitFund | undefined> {
-    const results = await this.db.select().from(definedBenefitFunds).where(eq(definedBenefitFunds.id, id));
-    return results[0];
-  }
-
-  async createDefinedBenefitFund(fund: InsertDefinedBenefitFund): Promise<DefinedBenefitFund> {
-    const results = await this.db.insert(definedBenefitFunds).values(fund).returning();
-    return results[0];
-  }
-
-  async updateDefinedBenefitFund(id: number, updates: UpdateDefinedBenefitFund): Promise<DefinedBenefitFund | undefined> {
-    const results = await this.db.update(definedBenefitFunds).set(updates).where(eq(definedBenefitFunds.id, id)).returning();
-    return results[0];
-  }
-
-  async deleteDefinedBenefitFund(id: number): Promise<boolean> {
-    const results = await this.db.delete(definedBenefitFunds).where(eq(definedBenefitFunds.id, id)).returning();
-    return results.length > 0;
-  }
-
-  async searchDefinedBenefitFunds(query: string): Promise<DefinedBenefitFund[]> {
-    if (!query.trim()) return await this.getDefinedBenefitFunds();
-    
-    return await this.db.select().from(definedBenefitFunds)
-      .where(or(
-        ilike(definedBenefitFunds.description, `%${query}%`),
-        ilike(definedBenefitFunds.owner, `%${query}%`)
-      ))
-      .orderBy(definedBenefitFunds.id);
-  }
-
-  // Voluntary Investments methods - Database implementation  
-  async getVoluntaryInvestments(): Promise<VoluntaryInvestment[]> {
-    return await this.db.select().from(voluntaryInvestments).orderBy(voluntaryInvestments.id);
-  }
-
-  async getVoluntaryInvestment(id: number): Promise<VoluntaryInvestment | undefined> {
-    const results = await this.db.select().from(voluntaryInvestments).where(eq(voluntaryInvestments.id, id));
-    return results[0];
-  }
-
-  async createVoluntaryInvestment(investment: InsertVoluntaryInvestment): Promise<VoluntaryInvestment> {
-    const results = await this.db.insert(voluntaryInvestments).values(investment).returning();
-    return results[0];
-  }
-
-  async updateVoluntaryInvestment(id: number, updates: UpdateVoluntaryInvestment): Promise<VoluntaryInvestment | undefined> {
-    const results = await this.db.update(voluntaryInvestments).set(updates).where(eq(voluntaryInvestments.id, id)).returning();
-    return results[0];
-  }
-
-  async deleteVoluntaryInvestment(id: number): Promise<boolean> {
-    const results = await this.db.delete(voluntaryInvestments).where(eq(voluntaryInvestments.id, id)).returning();
-    return results.length > 0;
-  }
-
-  async searchVoluntaryInvestments(query: string): Promise<VoluntaryInvestment[]> {
-    if (!query.trim()) return await this.getVoluntaryInvestments();
-    
-    return await this.db.select().from(voluntaryInvestments)
-      .where(or(
-        ilike(voluntaryInvestments.description, `%${query}%`),
-        ilike(voluntaryInvestments.owners, `%${query}%`)
-      ))
-      .orderBy(voluntaryInvestments.id);
-  }
-
-
-
-  // Income Needs methods - Database implementation
-  async getIncomeNeeds(): Promise<IncomeNeed[]> {
-    return await this.db.select().from(incomeNeeds).orderBy(incomeNeeds.id);
-  }
-
-  async getIncomeNeed(id: number): Promise<IncomeNeed | undefined> {
-    const results = await this.db.select().from(incomeNeeds).where(eq(incomeNeeds.id, id));
-    return results[0];
-  }
-
-  async createIncomeNeed(need: InsertIncomeNeed): Promise<IncomeNeed> {
-    const results = await this.db.insert(incomeNeeds).values(need).returning();
-    return results[0];
-  }
-
-  async updateIncomeNeed(id: number, updates: UpdateIncomeNeed): Promise<IncomeNeed | undefined> {
-    const results = await this.db.update(incomeNeeds).set(updates).where(eq(incomeNeeds.id, id)).returning();
-    return results[0];
-  }
-
-  async deleteIncomeNeed(id: number): Promise<boolean> {
-    const results = await this.db.delete(incomeNeeds).where(eq(incomeNeeds.id, id)).returning();
-    return results.length > 0;
-  }
-
-  async searchIncomeNeeds(query: string): Promise<IncomeNeed[]> {
-    if (!query.trim()) return await this.getIncomeNeeds();
-    
-    return await this.db.select().from(incomeNeeds)
-      .where(or(
-        ilike(incomeNeeds.description, `%${query}%`),
-        ilike(incomeNeeds.amount, `%${query}%`)
-      ))
-      .orderBy(incomeNeeds.id);
-  }
-
-  // Income Provisions methods - Database implementation
-  async getIncomeProvisions(): Promise<IncomeProvision[]> {
-    return await this.db.select().from(incomeProvisions).orderBy(incomeProvisions.id);
-  }
-
-  async getIncomeProvision(id: number): Promise<IncomeProvision | undefined> {
-    const results = await this.db.select().from(incomeProvisions).where(eq(incomeProvisions.id, id));
-    return results[0];
-  }
-
-  async createIncomeProvision(provision: InsertIncomeProvision): Promise<IncomeProvision> {
-    const results = await this.db.insert(incomeProvisions).values(provision).returning();
-    return results[0];
-  }
-
-  async updateIncomeProvision(id: number, updates: UpdateIncomeProvision): Promise<IncomeProvision | undefined> {
-    const results = await this.db.update(incomeProvisions).set(updates).where(eq(incomeProvisions.id, id)).returning();
-    return results[0];
-  }
-
-  async deleteIncomeProvision(id: number): Promise<boolean> {
-    const results = await this.db.delete(incomeProvisions).where(eq(incomeProvisions.id, id)).returning();
-    return results.length > 0;
-  }
-
-  async searchIncomeProvisions(query: string): Promise<IncomeProvision[]> {
-    if (!query.trim()) return await this.getIncomeProvisions();
-    
-    return await this.db.select().from(incomeProvisions)
-      .where(or(
-        ilike(incomeProvisions.description, `%${query}%`),
-        ilike(incomeProvisions.entity, `%${query}%`)
-      ))
-      .orderBy(incomeProvisions.id);
-  }
-
-  async getResidue(): Promise<Residue[]> {
-    return await this.db.select().from(residue).orderBy(residue.id);
-  }
-
-  async getResidueItem(id: number): Promise<Residue | undefined> {
-    const results = await this.db.select().from(residue).where(eq(residue.id, id));
-    return results[0];
-  }
-
-  async createResidueItem(item: InsertResidue): Promise<Residue> {
-    const results = await this.db.insert(residue).values(item).returning();
-    return results[0];
-  }
-
-  async updateResidueItem(id: number, updates: UpdateResidue): Promise<Residue | undefined> {
-    const results = await this.db.update(residue).set(updates).where(eq(residue.id, id)).returning();
-    return results[0];
-  }
-
-  async deleteResidueItem(id: number): Promise<boolean> {
-    const results = await this.db.delete(residue).where(eq(residue.id, id)).returning();
-    return results.length > 0;
-  }
-
-  async searchResidue(query: string): Promise<Residue[]> {
-    if (!query.trim()) return await this.getResidue();
-    
-    return await this.db.select().from(residue)
-      .where(or(
-        ilike(residue.entity, `%${query}%`)
-      ))
-      .orderBy(residue.id);
-  }
-
-  async getAdditionalEstateDutyItems(): Promise<AdditionalEstateDutyItem[]> {
-    return await this.db.select().from(additionalEstateDutyItems).orderBy(additionalEstateDutyItems.id);
-  }
-
-  async getAdditionalEstateDutyItem(id: number): Promise<AdditionalEstateDutyItem | undefined> {
-    const results = await this.db.select().from(additionalEstateDutyItems).where(eq(additionalEstateDutyItems.id, id));
-    return results[0];
-  }
-
-  async createAdditionalEstateDutyItem(item: InsertAdditionalEstateDutyItem): Promise<AdditionalEstateDutyItem> {
-    const results = await this.db.insert(additionalEstateDutyItems).values(item).returning();
-    return results[0];
-  }
-
-  async updateAdditionalEstateDutyItem(id: number, updates: UpdateAdditionalEstateDutyItem): Promise<AdditionalEstateDutyItem | undefined> {
-    const results = await this.db.update(additionalEstateDutyItems).set(updates).where(eq(additionalEstateDutyItems.id, id)).returning();
-    return results[0];
-  }
-
-  async deleteAdditionalEstateDutyItem(id: number): Promise<boolean> {
-    const results = await this.db.delete(additionalEstateDutyItems).where(eq(additionalEstateDutyItems.id, id)).returning();
-    return results.length > 0;
-  }
-
-  async searchAdditionalEstateDutyItems(query: string): Promise<AdditionalEstateDutyItem[]> {
-    if (!query.trim()) return await this.getAdditionalEstateDutyItems();
-    
-    return await this.db.select().from(additionalEstateDutyItems)
-      .where(or(
-        ilike(additionalEstateDutyItems.description, `%${query}%`)
-      ))
-      .orderBy(additionalEstateDutyItems.id);
-  }
-
-  // Liabilities methods - Database implementation
-  async getLiabilities(): Promise<Liabilities[]> {
-    return await this.db.select().from(liabilities).orderBy(liabilities.id);
-  }
-
-  async getLiability(id: number): Promise<Liabilities | undefined> {
-    const results = await this.db.select().from(liabilities).where(eq(liabilities.id, id));
-    return results[0];
-  }
-
-  async createLiability(liability: InsertLiabilities): Promise<Liabilities> {
-    const results = await this.db.insert(liabilities).values(liability).returning();
-    return results[0];
-  }
-
-  async updateLiability(id: number, updates: UpdateLiabilities): Promise<Liabilities | undefined> {
-    const results = await this.db.update(liabilities).set(updates).where(eq(liabilities.id, id)).returning();
-    return results[0];
-  }
-
-  async deleteLiability(id: number): Promise<boolean> {
-    const results = await this.db.delete(liabilities).where(eq(liabilities.id, id)).returning();
-    return results.length > 0;
-  }
-
-  async searchLiabilities(query: string): Promise<Liabilities[]> {
-    if (!query.trim()) return await this.getLiabilities();
-    
-    return await this.db.select().from(liabilities)
-      .where(or(
-        ilike(liabilities.category, `%${query}%`),
-        ilike(liabilities.description, `%${query}%`)
-      ))
-      .orderBy(liabilities.id);
-  }
-
-  // Assets methods - Database implementation
-  async getAssets(): Promise<Assets[]> {
-    return await this.db.select().from(assets).orderBy(assets.id);
-  }
-
-  async getAsset(id: number): Promise<Assets | undefined> {
-    const results = await this.db.select().from(assets).where(eq(assets.id, id));
-    return results[0];
-  }
-
-  async createAsset(asset: InsertAssets): Promise<Assets> {
-    const results = await this.db.insert(assets).values(asset).returning();
-    return results[0];
-  }
-
-  async updateAsset(id: number, updates: Partial<InsertAssets>): Promise<Assets | undefined> {
-    const results = await this.db.update(assets).set(updates).where(eq(assets.id, id)).returning();
-    return results[0];
-  }
-
-  async deleteAsset(id: number): Promise<boolean> {
-    const results = await this.db.delete(assets).where(eq(assets.id, id)).returning();
-    return results.length > 0;
-  }
-
-  async searchAssets(query: string): Promise<Assets[]> {
-    if (!query.trim()) return await this.getAssets();
-    
-    return await this.db.select().from(assets)
-      .where(or(
-        ilike(assets.category, `%${query}%`),
-        ilike(assets.description, `%${query}%`)
-      ))
-      .orderBy(assets.id);
-  }
+  // TODO: Implement all other methods for DbStorage
+  // For now, we'll use MemStorage as the default
+  [key: string]: any;
 }
 
-// Use database storage if DATABASE_URL is available, otherwise use memory storage
-export const storage = process.env.DATABASE_URL ? new DbStorage() : new MemStorage();
+// Export storage instance - use MemStorage by default
+export const storage: IStorage = new MemStorage();
