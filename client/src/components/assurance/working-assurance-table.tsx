@@ -145,10 +145,9 @@ export function AssuranceTable({}: AssuranceTableProps) {
     const policy = policies.find((p: Assurance) => p.id === id);
     if (policy) {
       const newOwners = [...policy.owners, ""];
-      setIsUpdating(true);
-      updateMutation.mutate({ id, updates: { owners: newOwners } });
+      handleUpdatePolicy(id, 'owners', newOwners);
     }
-  }, [policies, updateMutation]);
+  }, [policies, handleUpdatePolicy]);
 
   // Remove specific owner by index using splice method
   const handleRemoveOwner = useCallback((id: number, ownerIndex: number) => {
@@ -156,20 +155,18 @@ export function AssuranceTable({}: AssuranceTableProps) {
     if (policy && policy.owners.length > 1 && ownerIndex > 0) { // Protect first owner
       const newOwners = [...policy.owners];
       newOwners.splice(ownerIndex, 1);
-      setIsUpdating(true);
-      updateMutation.mutate({ id, updates: { owners: newOwners } });
+      handleUpdatePolicy(id, 'owners', newOwners);
     }
-  }, [policies, updateMutation]);
+  }, [policies, handleUpdatePolicy]);
 
   // Add beneficiary to policy
   const handleAddBeneficiary = useCallback((id: number) => {
     const policy = policies.find((p: Assurance) => p.id === id);
     if (policy) {
       const newBeneficiaries = [...policy.beneficiaries, ""];
-      setIsUpdating(true);
-      updateMutation.mutate({ id, updates: { beneficiaries: newBeneficiaries } });
+      handleUpdatePolicy(id, 'beneficiaries', newBeneficiaries);
     }
-  }, [policies, updateMutation]);
+  }, [policies, handleUpdatePolicy]);
 
   // Remove specific beneficiary by index using splice method
   const handleRemoveBeneficiary = useCallback((id: number, beneficiaryIndex: number) => {
@@ -177,10 +174,9 @@ export function AssuranceTable({}: AssuranceTableProps) {
     if (policy && policy.beneficiaries.length > 1 && beneficiaryIndex > 0) { // Protect first beneficiary
       const newBeneficiaries = [...policy.beneficiaries];
       newBeneficiaries.splice(beneficiaryIndex, 1);
-      setIsUpdating(true);
-      updateMutation.mutate({ id, updates: { beneficiaries: newBeneficiaries } });
+      handleUpdatePolicy(id, 'beneficiaries', newBeneficiaries);
     }
-  }, [policies, updateMutation]);
+  }, [policies, handleUpdatePolicy]);
 
   // Update owner name
   const handleOwnerChange = useCallback((id: number, ownerIndex: number, newOwner: string) => {
@@ -188,9 +184,9 @@ export function AssuranceTable({}: AssuranceTableProps) {
     if (policy) {
       const updatedOwners = [...policy.owners];
       updatedOwners[ownerIndex] = newOwner;
-      updateMutation.mutate({ id, updates: { owners: updatedOwners } });
+      handleUpdatePolicy(id, 'owners', updatedOwners);
     }
-  }, [policies, updateMutation]);
+  }, [policies, handleUpdatePolicy]);
 
   // Update beneficiary name
   const handleBeneficiaryChange = useCallback((id: number, beneficiaryIndex: number, newBeneficiary: string) => {
@@ -198,9 +194,9 @@ export function AssuranceTable({}: AssuranceTableProps) {
     if (policy) {
       const updatedBeneficiaries = [...policy.beneficiaries];
       updatedBeneficiaries[beneficiaryIndex] = newBeneficiary;
-      updateMutation.mutate({ id, updates: { beneficiaries: updatedBeneficiaries } });
+      handleUpdatePolicy(id, 'beneficiaries', updatedBeneficiaries);
     }
-  }, [policies, updateMutation]);
+  }, [policies, handleUpdatePolicy]);
 
 
 
