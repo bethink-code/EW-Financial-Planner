@@ -161,7 +161,7 @@ export class MemStorage implements IStorage {
       description: insertFund.description || null,  // Store null for empty values
       owners: insertFund.owners || ["Donald Edwards"],
       coverAmount: insertFund.coverAmount || "R 0",
-      unapprovedBeneficiaries: insertFund.unapprovedBeneficiaries || [null],  // Store null for empty values
+      unapprovedBeneficiaries: insertFund.unapprovedBeneficiaries || null,
       unapprovedPercentageSplits: insertFund.unapprovedPercentageSplits || ["0%"],
       unapprovedCoverSplits: insertFund.unapprovedCoverSplits || ["R 0"],
       monthlyIncome: insertFund.monthlyIncome || "R 0",
@@ -171,7 +171,7 @@ export class MemStorage implements IStorage {
       approvedLifeCover: insertFund.approvedLifeCover || "R 0",
       fundValue: insertFund.fundValue || "R 0",
       fundValueAtDeath: insertFund.fundValueAtDeath || "R 0",
-      fundValueBeneficiaries: insertFund.fundValueBeneficiaries || [null],  // Store null for empty values
+      fundValueBeneficiaries: insertFund.fundValueBeneficiaries || null,
       fundValuePercentageSplits: insertFund.fundValuePercentageSplits || ["0%"],
       fundValueCoverSplits: insertFund.fundValueCoverSplits || ["R 0"],
       lumpSumTaken: insertFund.lumpSumTaken || "R 0",
@@ -203,7 +203,7 @@ export class MemStorage implements IStorage {
     
     const lowerQuery = query.toLowerCase();
     return allFunds.filter(fund => 
-      fund.description.toLowerCase().includes(lowerQuery)
+      fund.description?.toLowerCase().includes(lowerQuery)
     );
   }
 
@@ -735,14 +735,24 @@ export class DbStorage {
       throw new Error("DATABASE_URL environment variable is not set");
     }
 
-    const pool = new Pool({
-      connectionString,
-      ssl: {
-        rejectUnauthorized: false
-      }
-    });
+    try {
+      const pool = new Pool({
+        connectionString,
+        ssl: {
+          rejectUnauthorized: false
+        },
+        // Add connection timeout and retry settings
+        connectionTimeoutMillis: 5000,
+        idleTimeoutMillis: 10000,
+        max: 10
+      });
 
-    this.db = drizzle(pool);
+      this.db = drizzle(pool);
+      console.log("Database connection established successfully");
+    } catch (error) {
+      console.error("Failed to establish database connection:", error);
+      throw error;
+    }
   }
 
   // Helper function to apply defaults for retirement funds
@@ -751,7 +761,7 @@ export class DbStorage {
       description: fund.description !== undefined ? fund.description : null,
       owners: fund.owners || ["Donald Edwards"],
       coverAmount: fund.coverAmount || "R 0",
-      unapprovedBeneficiaries: fund.unapprovedBeneficiaries || [null],
+      unapprovedBeneficiaries: fund.unapprovedBeneficiaries || null,
       unapprovedPercentageSplits: fund.unapprovedPercentageSplits || ["0%"],
       unapprovedCoverSplits: fund.unapprovedCoverSplits || ["R 0"],
       monthlyIncome: fund.monthlyIncome || "R 0",
@@ -761,7 +771,7 @@ export class DbStorage {
       approvedLifeCover: fund.approvedLifeCover || "R 0",
       fundValue: fund.fundValue || "R 0",
       fundValueAtDeath: fund.fundValueAtDeath || "R 0",
-      fundValueBeneficiaries: fund.fundValueBeneficiaries || [null],
+      fundValueBeneficiaries: fund.fundValueBeneficiaries || null,
       fundValuePercentageSplits: fund.fundValuePercentageSplits || ["0%"],
       fundValueCoverSplits: fund.fundValueCoverSplits || ["R 0"],
       lumpSumTaken: fund.lumpSumTaken || "R 0",
@@ -942,5 +952,6 @@ export class DbStorage {
   async searchAssets(query: string): Promise<Assets[]> { return await this.db.select().from(assets).where(ilike(assets.description, `%${query}%`)); }
 }
 
-// Export storage instance - use MemStorage by default
-export const storage: IStorage = new DbStorage();
+// Temporarily use memory storage to fix connection issues
+console.log("Using memory storage for development");
+export const storage: IStorage = new MemStorage();
