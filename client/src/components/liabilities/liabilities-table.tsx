@@ -207,14 +207,14 @@ export function LiabilitiesTable({ viewMode = 'table', onShowCategoryDialog }: L
           />
         </div>
       </td>
-      <td className={getCellClass('text')}>
+      <td className="p-2 text-left">
         <SimpleCategorySelector
           value={liability.category}
           onChange={(category) => handleInputBlur(liability.id, 'category', category)}
           disabled={isUpdating}
         />
       </td>
-      <td className={getCellClass('text')}>
+      <td className="p-2">
         <input
           type="text"
           defaultValue={formatTextValue(liability.description)}
@@ -226,7 +226,7 @@ export function LiabilitiesTable({ viewMode = 'table', onShowCategoryDialog }: L
           disabled={isUpdating}
         />
       </td>
-      <td className={getCellClass('checkbox')}>
+      <td className="p-2 text-center">
         <input
           type="checkbox"
           checked={liability.included}
@@ -234,7 +234,7 @@ export function LiabilitiesTable({ viewMode = 'table', onShowCategoryDialog }: L
           disabled={isUpdating}
         />
       </td>
-      <td className={getCellClass('currency')}>
+      <td className="p-2 text-right">
         <input
           type="text"
           defaultValue={formatCurrencyValue(liability.debtAmount)}
@@ -246,7 +246,7 @@ export function LiabilitiesTable({ viewMode = 'table', onShowCategoryDialog }: L
           disabled={isUpdating}
         />
       </td>
-      <td className={getCellClass('percentage')}>
+      <td className="p-2 text-right">
         <input
           type="text"
           defaultValue={formatPercentageValue(liability.peterLambie)}
@@ -258,7 +258,7 @@ export function LiabilitiesTable({ viewMode = 'table', onShowCategoryDialog }: L
           disabled={isUpdating}
         />
       </td>
-      <td className={getCellClass('percentage')}>
+      <td className="p-2 text-right">
         <input
           type="text"
           defaultValue={formatPercentageValue(liability.victoriaLambie)}
@@ -270,7 +270,7 @@ export function LiabilitiesTable({ viewMode = 'table', onShowCategoryDialog }: L
           disabled={isUpdating}
         />
       </td>
-      <td className={getCellClass('percentage')}>
+      <td className="p-2 text-right">
         <input
           type="text"
           defaultValue={formatPercentageValue(liability.juniorLambie)}
@@ -282,7 +282,7 @@ export function LiabilitiesTable({ viewMode = 'table', onShowCategoryDialog }: L
           disabled={isUpdating}
         />
       </td>
-      <td className={getCellClass('percentage')}>
+      <td className="p-2 text-right">
         <input
           type="text"
           defaultValue={formatPercentageValue(liability.lambiesFamilyTrust)}
@@ -294,7 +294,7 @@ export function LiabilitiesTable({ viewMode = 'table', onShowCategoryDialog }: L
           disabled={isUpdating}
         />
       </td>
-      <td className={getCellClass('currency')}>
+      <td className="p-2 text-right">
         <input
           type="text"
           defaultValue={formatCurrencyValue(liability.estate)}
@@ -306,7 +306,7 @@ export function LiabilitiesTable({ viewMode = 'table', onShowCategoryDialog }: L
           disabled={isUpdating}
         />
       </td>
-      <td className={getCellClass('currency')}>
+      <td className="p-2 text-right">
         <input
           type="text"
           defaultValue={formatCurrencyValue(liability.others)}

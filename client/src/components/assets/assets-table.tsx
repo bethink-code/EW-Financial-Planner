@@ -211,7 +211,7 @@ export function AssetsTable({ viewMode = 'table', onShowCategoryDialog }: Assets
         </td>
 
         {/* Overview */}
-        <td className={getCellClass('text')}>
+        <td className="p-2 text-left">
           <CategorySelector
             value={asset.category}
             onChange={(value) => {
@@ -220,7 +220,7 @@ export function AssetsTable({ viewMode = 'table', onShowCategoryDialog }: Assets
             }}
           />
         </td>
-        <td className={getCellClass('text')}>
+        <td className="p-2">
           <input
             type="text"
             defaultValue={formatTextValue(asset.description)}
@@ -233,7 +233,7 @@ export function AssetsTable({ viewMode = 'table', onShowCategoryDialog }: Assets
         </td>
 
         {/* Asset Details */}
-        <td className={getCellClass('currency')}>
+        <td className="p-2 text-right">
           <input
             type="text"
             defaultValue={formatCurrencyValue(asset.marketValue)}
@@ -246,7 +246,7 @@ export function AssetsTable({ viewMode = 'table', onShowCategoryDialog }: Assets
         </td>
 
         {/* Owner(s) - Individual ownership percentages */}
-        <td className={getCellClass('percentage')}>
+        <td className="p-2 text-right">
           <input
             type="text"
             defaultValue={formatPercentageValue(asset.johnDoe)}
@@ -257,7 +257,7 @@ export function AssetsTable({ viewMode = 'table', onShowCategoryDialog }: Assets
             onBlur={createEnhancedBlurHandler((value) => handleInputBlur(asset.id, 'johnDoe', value), 'percentage')}
           />
         </td>
-        <td className={getCellClass('percentage')}>
+        <td className="p-2 text-right">
           <input
             type="text"
             defaultValue={formatPercentageValue(asset.janetteDoe)}
@@ -268,7 +268,7 @@ export function AssetsTable({ viewMode = 'table', onShowCategoryDialog }: Assets
             onBlur={createEnhancedBlurHandler((value) => handleInputBlur(asset.id, 'janetteDoe', value), 'percentage')}
           />
         </td>
-        <td className={getCellClass('percentage')}>
+        <td className="p-2 text-right">
           <input
             type="text"
             defaultValue={formatPercentageValue(asset.doeJunior)}
@@ -279,7 +279,7 @@ export function AssetsTable({ viewMode = 'table', onShowCategoryDialog }: Assets
             onBlur={createEnhancedBlurHandler((value) => handleInputBlur(asset.id, 'doeJunior', value), 'percentage')}
           />
         </td>
-        <td className={getCellClass('percentage')}>
+        <td className="p-2 text-right">
           <input
             type="text"
             defaultValue={formatPercentageValue(asset.doeFamilyTrust)}
@@ -292,39 +292,42 @@ export function AssetsTable({ viewMode = 'table', onShowCategoryDialog }: Assets
         </td>
 
         {/* Asset distribution by */}
-        <td className={getCellClass('currency')}>
+        <td className="p-2 text-right">
           <input
             type="text"
             defaultValue={formatCurrencyValue(asset.estate)}
             data-field={`estate-${asset.id}`}
-            className={`${getFieldClass('currency')} ${getValueClass(asset.estate, 'currency')}`}
+            className={`table-input h-7 text-sm bg-primary/5 border-gray-200 focus:border-primary w-full px-3 py-1 border rounded-md text-sm ${getValueClass(asset.estate, 'currency')}`}
+            style={{ textAlign: "right", minWidth: "100px" }}
             onFocus={handleDefaultValueFocus}
             onBlur={createEnhancedBlurHandler((value) => handleInputBlur(asset.id, 'estate', value), 'currency')}
           />
         </td>
-        <td className={getCellClass('currency')}>
+        <td className="p-2 text-right">
           <input
             type="text"
             defaultValue={formatCurrencyValue(asset.others)}
             data-field={`others-${asset.id}`}
-            className={`${getFieldClass('currency')} ${getValueClass(asset.others, 'currency')}`}
+            className={`table-input h-7 text-sm bg-primary/5 border-gray-200 focus:border-primary w-full px-3 py-1 border rounded-md text-sm ${getValueClass(asset.others, 'currency')}`}
+            style={{ textAlign: "right", minWidth: "100px" }}
             onFocus={handleDefaultValueFocus}
             onBlur={createEnhancedBlurHandler((value) => handleInputBlur(asset.id, 'others', value), 'currency')}
           />
         </td>
-        <td className={getCellClass('currency')}>
+        <td className="p-2 text-right">
           <input
             type="text"
             defaultValue={formatCurrencyValue(asset.client)}
             data-field={`client-${asset.id}`}
-            className={`${getFieldClass('currency')} ${getValueClass(asset.client, 'currency')}`}
+            className={`table-input h-7 text-sm bg-primary/5 border-gray-200 focus:border-primary w-full px-3 py-1 border rounded-md text-sm ${getValueClass(asset.client, 'currency')}`}
+            style={{ textAlign: "right", minWidth: "100px" }}
             onFocus={handleDefaultValueFocus}
             onBlur={createEnhancedBlurHandler((value) => handleInputBlur(asset.id, 'client', value), 'currency')}
           />
         </td>
 
         {/* Included checkbox */}
-        <td className={getCellClass('checkbox')}>
+        <td className="p-2 text-center">
           <input
             type="checkbox"
             checked={asset.included || false}
