@@ -375,13 +375,10 @@ th, td {
     border: none !important;
   }
 
-  /* Extend section borders through footer - match header/body styling */
-  tfoot td.section-start {
-    border-left: 2px solid #9ca3af !important;
-  }
-
-  tfoot td.section-end {
-    border-right: 2px solid #9ca3af !important;
+  /* Remove footer borders too - clean slate */
+  tfoot td {
+    border-left: none !important;
+    border-right: none !important;
   }
   
   /* Ensure all currency fields in footer align right */
