@@ -1,358 +1,230 @@
 import { useState, useCallback, useMemo } from 'react';
 import { useQuery, useMutation } from '@tanstack/react-query';
 import { queryClient } from '@/lib/queryClient';
-import { IncomeNeeds, InsertIncomeNeeds } from '@shared/schema';
-import { ActionButtonGroup, DuplicateButton, DeleteButton, AddButton } from '@/components/ui/action-buttons';
+import { VoluntaryInvestments, InsertVoluntaryInvestments } from '@shared/schema';
+import { AddButton, ActionButtonGroup, DuplicateButton, DeleteButton } from '@/components/ui/action-buttons';
 import { getFieldClass, getCellClass } from '@/lib/field-types';
-import { formatCurrencyValue, formatPercentageValue, formatTextValue, formatNumberValue, isDefaultValue, getValueClass, parseCurrencyValue } from '@/lib/formatting';
-import { handleDefaultValueFocus, createEnhancedBlurHandler } from '@/lib/formatting';
+import { formatCurrencyValue, formatPercentageValue, getValueClass, handleDefaultValueFocus } from '@/lib/formatting';
 
-interface IncomeNeedsTableProps {
+interface VoluntaryInvestmentsTableProps {
   viewMode: 'table' | 'hybrid';
   searchTerm?: string;
 }
 
-export default function IncomeNeedsTable({ viewMode, searchTerm }: IncomeNeedsTableProps) {
+function VoluntaryInvestmentsTable({ viewMode, searchTerm }: VoluntaryInvestmentsTableProps) {
   const [isUpdating, setIsUpdating] = useState(false);
 
-  // Calculate capitalised amount for a single income need
-  const calculateCapitalisedAmount = useCallback((need: IncomeNeeds): string => {
-    const amount = parseCurrencyValue(need.amount || '0');
-    const termYears = parseFloat(need.termYears?.replace(/[^\d.-]/g, '') || '0');
-    const increaseRate = parseFloat(need.increasePercentage?.replace(/[^\d.-]/g, '') || '0') / 100;
-    
-    if (amount <= 0 || termYears <= 0) return 'R 0';
-    
-    // Use standard financial planning assumptions
-    const discountRate = need.cpi ? 0.06 : 0.08; // 6% if CPI-linked, 8% otherwise
-    const frequency = need.frequency === 'monthly' ? 12 : need.frequency === 'quarterly' ? 4 : 1;
-    const periodsPerYear = frequency;
-    const totalPeriods = termYears * periodsPerYear;
-    const periodicDiscountRate = discountRate / periodsPerYear;
-    const periodicIncreaseRate = increaseRate / periodsPerYear;
-    
-    let presentValue: number;
-    
-    if (Math.abs(periodicDiscountRate - periodicIncreaseRate) < 0.0001) {
-      // When discount rate equals increase rate, use simplified formula
-      presentValue = amount * totalPeriods;
-    } else {
-      // Present value of growing annuity formula
-      const netRate = periodicDiscountRate - periodicIncreaseRate;
-      const pvFactor = (1 - Math.pow((1 + periodicIncreaseRate) / (1 + periodicDiscountRate), totalPeriods)) / netRate;
-      presentValue = amount * pvFactor;
-    }
-    
-    return formatCurrencyValue(Math.round(presentValue).toString());
-  }, []);
-
-  // Query for income needs
-  const { data: needs = [], isLoading, error } = useQuery<IncomeNeeds[]>({
-    queryKey: ['/api/income-needs'],
+  // Query for voluntary investments
+  const { data: investments = [], isLoading, error } = useQuery<VoluntaryInvestments[]>({
+    queryKey: ['/api/voluntary-investments'],
   });
 
-  // Add need mutation
+  // Add investment mutation
   const addMutation = useMutation({
-    mutationFn: async (): Promise<IncomeNeeds> => {
-      const newNeed: InsertIncomeNeeds = {
+    mutationFn: async (): Promise<VoluntaryInvestments> => {
+      const newInvestment: InsertVoluntaryInvestments = {
         description: "Enter details ...",
-        personName: "Enter details ...",
-        startDate: "Enter details ...",
-        termYears: "0 years",
-        increasePercentage: "0%",
-        cpi: false,
-        frequency: "monthly",
+        owner: "Donald Edwards",
         amount: "R 0",
-        capitalisedAmount: "R 0",
+        increasePercentage: "0%",
+        additionalOwners: [],
       };
       
-      const response = await fetch('/api/income-needs', {
+      const response = await fetch('/api/voluntary-investments', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(newNeed),
+        body: JSON.stringify(newInvestment),
       });
       
       if (!response.ok) {
-        throw new Error('Failed to add income need');
+        throw new Error('Failed to add voluntary investment');
       }
       
       return response.json();
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['/api/income-needs'] });
+      queryClient.invalidateQueries({ queryKey: ['/api/voluntary-investments'] });
       setIsUpdating(false);
     },
     onError: (error) => {
-      console.error('Failed to add income need:', error);
+      console.error('Failed to add voluntary investment:', error);
       setIsUpdating(false);
     }
   });
 
-  // Delete need mutation
+  // Update investment mutation
+  const updateMutation = useMutation({
+    mutationFn: async ({ id, updates }: { id: number; updates: Partial<VoluntaryInvestments> }) => {
+      const response = await fetch(`/api/voluntary-investments/${id}`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(updates),
+      });
+      
+      if (!response.ok) {
+        throw new Error('Failed to update voluntary investment');
+      }
+      
+      return response.json();
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['/api/voluntary-investments'] });
+      setIsUpdating(false);
+    },
+    onError: (error) => {
+      console.error('Failed to update voluntary investment:', error);
+      setIsUpdating(false);
+    }
+  });
+
+  // Delete investment mutation
   const deleteMutation = useMutation({
     mutationFn: async (id: number) => {
-      const response = await fetch(`/api/income-needs/${id}`, {
+      const response = await fetch(`/api/voluntary-investments/${id}`, {
         method: 'DELETE',
       });
       
       if (!response.ok) {
-        throw new Error('Failed to delete income need');
+        throw new Error('Failed to delete voluntary investment');
       }
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['/api/income-needs'] });
-      setIsUpdating(false);
-    },
-    onError: (error) => {
-      console.error('Failed to delete income need:', error);
-      setIsUpdating(false);
+      queryClient.invalidateQueries({ queryKey: ['/api/voluntary-investments'] });
     }
   });
 
-  // Handle field updates
-  const handleInputBlur = useCallback((id: number, field: keyof IncomeNeeds, value: string, element?: HTMLInputElement) => {
-    let formattedValue = value;
-    
-    // Apply specific formatting based on field type
-    if (field === 'amount' || field === 'capitalisedAmount') {
-      formattedValue = formatCurrencyValue(value);
-    } else if (field === 'increasePercentage') {
+  // Calculate totals
+  const totals = useMemo(() => {
+    return {
+      count: investments.length,
+      amount: investments.reduce((sum: number, investment: VoluntaryInvestments) => {
+        const value = parseFloat(investment.amount.replace(/[^\d.-]/g, '')) || 0;
+        return sum + value;
+      }, 0),
+    };
+  }, [investments]);
+
+  const handleUpdateInvestment = useCallback((id: number, field: keyof VoluntaryInvestments, value: string | string[]) => {
+    setIsUpdating(true);
+    const updates = { [field]: value };
+    updateMutation.mutate({ id, updates });
+  }, [updateMutation]);
+
+  const handleInputBlur = useCallback((id: number, field: keyof VoluntaryInvestments, value: string) => {
+    let formattedValue: string;
+    if (field === 'increasePercentage') {
       formattedValue = formatPercentageValue(value);
-    } else if (field === 'termYears') {
-      formattedValue = formatNumberValue(value);
+    } else if (field === 'amount') {
+      formattedValue = formatCurrencyValue(value);
     } else {
-      formattedValue = formatTextValue(value);
+      formattedValue = value;
     }
+    handleUpdateInvestment(id, field, formattedValue);
     
-    // Update DOM element if formatting changed
-    if (element && formattedValue !== value) {
-      element.value = formattedValue;
+    // Update DOM element for immediate visual feedback
+    const target = document.activeElement as HTMLInputElement;
+    if (target && formattedValue !== value) {
+      setTimeout(() => {
+        target.value = formattedValue;
+      }, 0);
     }
-    
-    // Update database
-    fetch(`/api/income-needs/${id}`, {
-      method: 'PATCH',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ [field]: formattedValue }),
-    }).then(() => {
-      queryClient.invalidateQueries({ queryKey: ['/api/income-needs'] });
-    });
-  }, []);
+  }, [handleUpdateInvestment]);
 
-  // Handle checkbox changes
-  const handleCheckboxChange = useCallback((id: number, field: keyof IncomeNeeds, checked: boolean) => {
-    fetch(`/api/income-needs/${id}`, {
-      method: 'PATCH',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ [field]: checked }),
-    }).then(() => {
-      queryClient.invalidateQueries({ queryKey: ['/api/income-needs'] });
-    });
-  }, []);
-
-  // Handle select changes
-  const handleSelectChange = useCallback((id: number, field: keyof IncomeNeeds, value: string) => {
-    fetch(`/api/income-needs/${id}`, {
-      method: 'PATCH',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ [field]: value }),
-    }).then(() => {
-      queryClient.invalidateQueries({ queryKey: ['/api/income-needs'] });
-    });
-  }, []);
-
-  const handleAddNeed = useCallback(() => {
-    setIsUpdating(true);
-    addMutation.mutate();
-  }, [addMutation]);
-
-  const handleDeleteNeed = useCallback((id: number) => {
-    setIsUpdating(true);
-    deleteMutation.mutate(id);
+  const handleDeleteInvestment = useCallback((id: number) => {
+    if (window.confirm('Are you sure you want to delete this voluntary investment?')) {
+      deleteMutation.mutate(id);
+    }
   }, [deleteMutation]);
 
-  // Filter needs based on search term
-  const filteredNeeds = useMemo(() => {
-    if (!searchTerm) return needs;
-    return needs.filter(need => 
-      need.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      need.personName.toLowerCase().includes(searchTerm.toLowerCase())
-    );
-  }, [needs, searchTerm]);
-
   if (isLoading) {
-    return <div className="flex justify-center py-8">Loading income needs...</div>;
+    return <div className="flex justify-center py-8">Loading voluntary investments...</div>;
   }
 
   if (error) {
-    return <div className="text-red-600 py-8">Error loading income needs. Please try again.</div>;
+    return <div className="text-red-600 py-8">Error loading voluntary investments. Please try again.</div>;
   }
 
   return (
-    <div>
-      {/* Table */}
-      <table className="min-w-full border border-neutral-200">
+    <div className="space-y-6">
+      <table>
         <thead>
-          <tr className="border-b border-border">
-            <th className="px-3 py-3 text-center text-xs font-medium text-neutral-600 uppercase tracking-wider w-16">
-              <AddButton onClick={handleAddNeed} disabled={isUpdating} />
+          <tr>
+            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start section-end" rowSpan={2}>
+              <AddButton onClick={() => addMutation.mutate()} disabled={isUpdating} />
             </th>
             <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start" colSpan={2}>Overview</th>
-            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start section-end" colSpan={7}>Income Need Details</th>
+            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start section-end" colSpan={2}>Financial Details</th>
           </tr>
           <tr>
-            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center"></th>
             <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start">Description</th>
-            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-end">Entity</th>
+            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center">Owner</th>
             <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start">Amount</th>
-            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center">Start</th>
-            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center">Term (years)</th>
-            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center">Increase %</th>
-            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center">CPI</th>
-            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center">Frequency</th>
-            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-end">Capitalised Amount</th>
+            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-end">Increase %</th>
           </tr>
         </thead>
         <tbody className="divide-y divide-neutral-200">
-          {filteredNeeds.map((need: IncomeNeeds) => (
-            <tr key={need.id} className="hover:bg-neutral-50">
-              {/* Actions */}
-              <td className="table-actions-cell text-center">
-                <div>
-                  <ActionButtonGroup>
-                    <DuplicateButton
-                      onClick={() => handleAddNeed()}
-                      disabled={isUpdating}
-                    />
-                    <DeleteButton
-                      onClick={() => handleDeleteNeed(need.id)}
-                      disabled={isUpdating}
-                    />
-                  </ActionButtonGroup>
-                </div>
-              </td>
-              
-              {/* Overview Section */}
-              {/* Description */}
-              <td className="p-1 section-start">
-                <input
-                  key={`description-${need.id}-${need.description}`}
-                  type="text"
-                  defaultValue={need.description}
-                  className={`table-input ${getFieldClass('text')} ${getValueClass(need.description, 'text')}`}
-                  onFocus={handleDefaultValueFocus}
-                  onBlur={(e) => handleInputBlur(need.id, 'description', e.target.value, e.target)}
-                  disabled={isUpdating}
-                />
-              </td>
-              
-              {/* Entity */}
-              <td className="p-1 section-end">
-                <input
-                  key={`personName-${need.id}-${need.personName}`}
-                  type="text"
-                  defaultValue={need.personName}
-                  className={`table-input ${getFieldClass('text')} ${getValueClass(need.personName, 'text')}`}
-                  onFocus={handleDefaultValueFocus}
-                  onBlur={(e) => handleInputBlur(need.id, 'personName', e.target.value, e.target)}
-                  disabled={isUpdating}
-                />
-              </td>
-              
-              {/* Income Need Details Section */}
-              {/* Amount */}
-              <td className="p-1 section-start">
-                <input
-                  key={`amount-${need.id}-${need.amount}`}
-                  type="text"
-                  defaultValue={need.amount}
-                  className={`table-input ${getFieldClass('currency')} ${getValueClass(need.amount, 'currency')}`}
-                  onFocus={handleDefaultValueFocus}
-                  onBlur={(e) => handleInputBlur(need.id, 'amount', e.target.value, e.target)}
-                  disabled={isUpdating}
-                />
-              </td>
-              
-              {/* Start Date */}
-              <td className="p-1">
-                <input
-                  key={`startDate-${need.id}-${need.startDate}`}
-                  type="date"
-                  defaultValue={need.startDate}
-                  className={`table-input ${getFieldClass('text')} ${getValueClass(need.startDate, 'text')}`}
-                  onBlur={(e) => handleInputBlur(need.id, 'startDate', e.target.value, e.target)}
-                  disabled={isUpdating}
-                />
-              </td>
-              
-              {/* Term Years */}
-              <td className="p-1">
-                <input
-                  type="text"
-                  defaultValue={need.termYears}
-                  onBlur={createEnhancedBlurHandler((value) => handleInputBlur(need.id, 'termYears', value), 'years')}
-                  onFocus={handleDefaultValueFocus}
-                  className={`table-input ${getFieldClass('years')} ${getValueClass(need.termYears, 'years')}`}
-                  data-field={`termYears-${need.id}`}
-                  disabled={isUpdating}
-                />
-              </td>
-              
-              {/* Increase Percentage */}
-              <td className="p-1">
-                <input
-                  key={`increasePercentage-${need.id}-${need.increasePercentage}`}
-                  type="text"
-                  defaultValue={need.increasePercentage}
-                  className={`table-input ${getFieldClass('percentage')} ${getValueClass(need.increasePercentage, 'percentage')}`}
-                  onFocus={handleDefaultValueFocus}
-                  onBlur={(e) => handleInputBlur(need.id, 'increasePercentage', e.target.value, e.target)}
-                  disabled={isUpdating}
-                />
-              </td>
-              
-              {/* CPI Checkbox */}
-              <td className="p-1 text-center">
-                <div className="mt-2">
-                  <input
-                    type="checkbox"
-                    checked={need.cpi}
-                    onChange={(e) => handleCheckboxChange(need.id, 'cpi', e.target.checked)}
-                    className="h-4 w-4 text-primary focus:ring-primary border-gray-300 rounded"
+          {investments.map((investment: VoluntaryInvestments, index) => (
+            <tr key={investment.id} className="hover:bg-neutral-50">
+              <td className="table-actions-cell p-1 text-center section-start section-end">
+                <ActionButtonGroup>
+                  <DuplicateButton
+                    onClick={() => addMutation.mutate()}
                     disabled={isUpdating}
                   />
-                </div>
+                  <DeleteButton
+                    onClick={() => handleDeleteInvestment(investment.id)}
+                    disabled={isUpdating}
+                  />
+                </ActionButtonGroup>
               </td>
               
-              {/* Frequency Dropdown */}
-              <td className="p-1">
-                <select
-                  value={need.frequency || "monthly"}
-                  onChange={(e) => handleSelectChange(need.id, 'frequency', e.target.value)}
-                  className="table-input pt-[5px] pb-[5px]"
-                  disabled={isUpdating}
-                >
-                  <option value="monthly">Monthly</option>
-                  <option value="yearly">Yearly</option>
-                </select>
-              </td>
-              
-              {/* Capitalised Amount (Calculated) */}
-              <td className="p-1 section-end">
+              <td className="p-1 section-start">
                 <input
                   type="text"
-                  value={calculateCapitalisedAmount(need)}
-                  className="calculated-field"
-                  readOnly
-                  tabIndex={-1}
+                  defaultValue={investment.description}
+                  className={`table-input ${getFieldClass('text')} ${getValueClass(investment.description, 'text')}`}
+                  onFocus={handleDefaultValueFocus}
+                  onBlur={(e) => handleInputBlur(investment.id, 'description', e.target.value)}
+                  disabled={isUpdating}
+                />
+              </td>
+              
+              <td className="p-1">
+                <input
+                  type="text"
+                  defaultValue={investment.owner}
+                  className={`table-input ${getFieldClass('text')} ${getValueClass(investment.owner, 'text')}`}
+                  onFocus={handleDefaultValueFocus}
+                  onBlur={(e) => handleInputBlur(investment.id, 'owner', e.target.value)}
+                  disabled={isUpdating}
+                />
+              </td>
+              
+              <td className="p-1 section-start">
+                <input
+                  key={`amount-${investment.id}-${investment.amount}`}
+                  type="text"
+                  defaultValue={investment.amount}
+                  className={`table-input ${getFieldClass('currency')} ${getValueClass(investment.amount, 'currency')}`}
+                  onFocus={handleDefaultValueFocus}
+                  onBlur={(e) => handleInputBlur(investment.id, 'amount', e.target.value)}
+                  disabled={isUpdating}
+                />
+              </td>
+              
+              <td className="p-1 section-end">
+                <input
+                  key={`increasePercentage-${investment.id}-${investment.increasePercentage}`}
+                  type="text"
+                  defaultValue={investment.increasePercentage}
+                  className={`table-input ${getFieldClass('percentage')} ${getValueClass(investment.increasePercentage, 'percentage')}`}
+                  onFocus={handleDefaultValueFocus}
+                  onBlur={(e) => handleInputBlur(investment.id, 'increasePercentage', e.target.value)}
+                  disabled={isUpdating}
                 />
               </td>
             </tr>
@@ -362,25 +234,14 @@ export default function IncomeNeedsTable({ viewMode, searchTerm }: IncomeNeedsTa
         {/* Totals Footer */}
         <tfoot>
           <tr>
-            <td className="totals-cell-label text-right section-start" colSpan={9}>Totals</td>
-            <td className="totals-cell-value section-end">
-              R {filteredNeeds.reduce((sum, need) => {
-                const capitalisedAmount = parseFloat(calculateCapitalisedAmount(need).replace(/[^\d.-]/g, '')) || 0;
-                return sum + capitalisedAmount;
-              }, 0).toLocaleString()}
-            </td>
-          </tr>
-          <tr>
-            <td className="totals-cell-label text-right section-start" colSpan={9}>Capital Required for Income Shortfall</td>
-            <td className="totals-cell-value section-end">
-              R {filteredNeeds.reduce((sum, need) => {
-                const capitalisedAmount = parseFloat(calculateCapitalisedAmount(need).replace(/[^\d.-]/g, '')) || 0;
-                return sum + capitalisedAmount;
-              }, 0).toLocaleString()}
-            </td>
+            <td className="totals-cell-label text-right" colSpan={3}>Totals</td>
+            <td className="totals-cell-value section-start">R {totals.amount.toLocaleString()}</td>
+            <td className="totals-cell-label section-end"></td>
           </tr>
         </tfoot>
       </table>
     </div>
   );
 }
+
+export { VoluntaryInvestmentsTable };

@@ -1,316 +1,234 @@
-import { useState, useCallback } from "react";
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { Plus, Trash2 } from "lucide-react";
-import { DeleteButton } from "@/components/ui/action-buttons";
-import { apiRequest } from "@/lib/queryClient";
-import { getFieldClass, getFieldWidth } from "@/lib/design-tokens";
-import { formatCurrencyValue, formatTextValue, getValueClass, isDefaultValue } from "@/lib/formatting";
-import type { Assurance, InsertAssurance } from "@shared/schema";
+import { useState, useCallback, useMemo } from 'react';
+import { useQuery, useMutation } from '@tanstack/react-query';
+import { queryClient } from '@/lib/queryClient';
+import { Assurance, InsertAssurance } from '@shared/schema';
+import { AddButton, ActionButtonGroup, DuplicateButton, DeleteButton } from '@/components/ui/action-buttons';
+import { getFieldClass, getCellClass } from '@/lib/field-types';
+import { formatCurrencyValue, formatPercentageValue, getValueClass, handleDefaultValueFocus } from '@/lib/formatting';
 
 interface AssuranceTableProps {
-  searchTerm: string;
+  viewMode: 'table' | 'hybrid';
+  searchTerm?: string;
 }
 
-export function AssuranceTable({ searchTerm }: AssuranceTableProps) {
-  const queryClient = useQueryClient();
+function AssuranceTable({ viewMode, searchTerm }: AssuranceTableProps) {
   const [isUpdating, setIsUpdating] = useState(false);
 
-  // Fetch assurance policies
-  const { data: policies = [], isLoading } = useQuery({
-    queryKey: ["/api/assurance", { search: searchTerm }],
-    queryFn: async () => {
-      const response = await fetch("/api/assurance" + (searchTerm ? `?search=${encodeURIComponent(searchTerm)}` : ""));
-      if (!response.ok) throw new Error('Failed to fetch assurance policies');
-      return response.json() as Promise<Assurance[]>;
-    }
+  const { data: assurances = [], isLoading, error } = useQuery<Assurance[]>({
+    queryKey: ['/api/assurance'],
   });
 
-  // Add new policy mutation
   const addMutation = useMutation({
-    mutationFn: () => {
-      const newPolicy: InsertAssurance = {
-        description: "New Policy",
+    mutationFn: async (): Promise<Assurance> => {
+      const newAssurance: InsertAssurance = {
+        description: "Enter details ...",
         owner: "Donald Edwards",
-        lifeAssured: "Life Assured",
-        deathBenefit: "1000000",
-        beneficiary: "Beneficiary",
-        benefitSplit: "100",
-        amount: "1000000",
-        excludedFromEstateDuty: false,
-        excludedFromProvisions: false
+        amount: "R 0",
+        increasePercentage: "0%",
+        additionalOwners: [],
       };
-      return apiRequest("/api/assurance", "POST", newPolicy);
+      
+      const response = await fetch('/api/assurance', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(newAssurance),
+      });
+      
+      if (!response.ok) {
+        throw new Error('Failed to add assurance');
+      }
+      
+      return response.json();
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["/api/assurance"] });
-    },
-  });
-
-  // Update policy mutation
-  const updateMutation = useMutation({
-    mutationFn: ({ id, updates }: { id: number; updates: Partial<Assurance> }) => {
-      return apiRequest(`/api/assurance/${id}`, "PATCH", updates);
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["/api/assurance"] });
+      queryClient.invalidateQueries({ queryKey: ['/api/assurance'] });
       setIsUpdating(false);
     },
+    onError: (error) => {
+      console.error('Failed to add assurance:', error);
+      setIsUpdating(false);
+    }
   });
 
-  // Delete policy mutation
-  const deleteMutation = useMutation({
-    mutationFn: (id: number) => {
-      return apiRequest(`/api/assurance/${id}`, "DELETE");
+  const updateMutation = useMutation({
+    mutationFn: async ({ id, updates }: { id: number; updates: Partial<Assurance> }) => {
+      const response = await fetch(`/api/assurance/${id}`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(updates),
+      });
+      
+      if (!response.ok) {
+        throw new Error('Failed to update assurance');
+      }
+      
+      return response.json();
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["/api/assurance"] });
+      queryClient.invalidateQueries({ queryKey: ['/api/assurance'] });
+      setIsUpdating(false);
     },
+    onError: (error) => {
+      console.error('Failed to update assurance:', error);
+      setIsUpdating(false);
+    }
   });
 
-  const handleAddPolicy = useCallback(() => {
-    addMutation.mutate();
-  }, [addMutation]);
-
-  const handleInputBlur = useCallback((id: number, field: keyof Assurance, value: string | boolean) => {
-    setIsUpdating(true);
-    
-    let processedValue = value;
-    
-    // Calculate amount when death benefit or benefit split changes
-    if (field === "deathBenefit" || field === "benefitSplit") {
-      const policy = policies.find(p => p.id === id);
-      if (policy) {
-        const deathBenefit = field === "deathBenefit" ? parseFloat(String(value).replace(/[^0-9.]/g, '')) : parseFloat(policy.deathBenefit.replace(/[^0-9.]/g, ''));
-        const benefitSplit = field === "benefitSplit" ? parseFloat(String(value).replace(/[^0-9.]/g, '')) : parseFloat(policy.benefitSplit.replace(/[^0-9.]/g, ''));
-        
-        if (!isNaN(deathBenefit) && !isNaN(benefitSplit)) {
-          const amount = (deathBenefit * benefitSplit / 100).toString();
-          
-          updateMutation.mutate({
-            id,
-            updates: {
-              [field]: String(processedValue),
-              amount: amount
-            }
-          });
-          return;
-        }
+  const deleteMutation = useMutation({
+    mutationFn: async (id: number) => {
+      const response = await fetch(`/api/assurance/${id}`, {
+        method: 'DELETE',
+      });
+      
+      if (!response.ok) {
+        throw new Error('Failed to delete assurance');
       }
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['/api/assurance'] });
     }
-    
-    updateMutation.mutate({
-      id,
-      updates: { [field]: processedValue }
-    });
-  }, [policies, updateMutation]);
+  });
 
-  // Format currency values
-  const formatCurrencyValue = (value: string, fieldType: string): string => {
-    if (!value || value === "0") return "0";
-    
-    const numericValue = value.replace(/[^0-9.]/g, "");
-    const number = parseFloat(numericValue);
-    
-    if (isNaN(number)) return "0";
-    
-    if (fieldType === "benefitSplit") {
-      return `${number}%`;
+  const totals = useMemo(() => {
+    return {
+      count: assurances.length,
+      amount: assurances.reduce((sum: number, assurance: Assurance) => {
+        const value = parseFloat(assurance.amount.replace(/[^\d.-]/g, '')) || 0;
+        return sum + value;
+      }, 0),
+    };
+  }, [assurances]);
+
+  const handleUpdateAssurance = useCallback((id: number, field: keyof Assurance, value: string | string[]) => {
+    setIsUpdating(true);
+    const updates = { [field]: value };
+    updateMutation.mutate({ id, updates });
+  }, [updateMutation]);
+
+  const handleInputBlur = useCallback((id: number, field: keyof Assurance, value: string) => {
+    let formattedValue: string;
+    if (field === 'increasePercentage') {
+      formattedValue = formatPercentageValue(value);
+    } else if (field === 'amount') {
+      formattedValue = formatCurrencyValue(value);
+    } else {
+      formattedValue = value;
     }
+    handleUpdateAssurance(id, field, formattedValue);
     
-    return `R ${number.toLocaleString()}`;
-  };
+    const target = document.activeElement as HTMLInputElement;
+    if (target && formattedValue !== value) {
+      setTimeout(() => {
+        target.value = formattedValue;
+      }, 0);
+    }
+  }, [handleUpdateAssurance]);
 
-  // Calculate totals
-  const totalDeathBenefits = policies.reduce((sum, policy) => {
-    const amount = parseFloat(policy.amount.replace(/[^0-9.]/g, "")) || 0;
-    return sum + amount;
-  }, 0);
-
-  const totalExcludedFromEstateDuty = policies.filter(policy => policy.excludedFromEstateDuty).length;
+  const handleDeleteAssurance = useCallback((id: number) => {
+    if (window.confirm('Are you sure you want to delete this assurance?')) {
+      deleteMutation.mutate(id);
+    }
+  }, [deleteMutation]);
 
   if (isLoading) {
-    return <div className="text-center py-4">Loading policies...</div>;
+    return <div className="flex justify-center py-8">Loading assurance...</div>;
+  }
+
+  if (error) {
+    return <div className="text-red-600 py-8">Error loading assurance. Please try again.</div>;
   }
 
   return (
-    <div >
-      {/* Header with Add Button */}
-      <div className="flex items-center justify-between">
-        <button
-          onClick={handleAddPolicy}
-          className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-white bg-primary hover:bg-[#014d73] rounded-md transition-colors"
-          disabled={addMutation.isPending}
-        >
-          <Plus size={16} />
-          Add Policy
-        </button>
-        <h3 className="text-lg font-semibold text-neutral-900">Details</h3>
-      </div>
-
-      {/* Main Table */}
-      <div className="rounded-lg border  overflow-hidden">
-        <div className="overflow-x-auto">
-          <table className="w-full min-w-full">
-            <thead>
-              <tr className="border-neutral-300">
-                <th className="p-3 text-center text-xs font-semibold text-neutral-700 uppercase tracking-wider w-16">
-                  <AddButton onClick={handleAddPolicy} disabled={addMutation.isPending} />
-                </th>
-                <th className="p-3 text-left text-xs font-semibold text-neutral-700 uppercase tracking-wider min-w-[200px]">Description</th>
-                <th className="p-3 text-center text-xs font-semibold text-neutral-700 uppercase tracking-wider min-w-[140px]">Owner</th>
-                <th className="p-3 text-center text-xs font-semibold text-neutral-700 uppercase tracking-wider min-w-[140px]">Life Assured</th>
-                <th className="p-3 text-center text-xs font-semibold text-neutral-700 uppercase tracking-wider min-w-[140px]">Death Benefit</th>
-                <th className="p-3 text-center text-xs font-semibold text-neutral-700 uppercase tracking-wider min-w-[120px]">Beneficiary</th>
-                <th className="p-3 text-center text-xs font-semibold text-neutral-700 uppercase tracking-wider min-w-[100px]">Benefit Split</th>
-                <th className="p-3 text-center text-xs font-semibold text-neutral-700 uppercase tracking-wider min-w-[140px]">Amount</th>
-                <th className="p-3 text-center text-xs font-semibold text-neutral-700 uppercase tracking-wider min-w-[120px]">Excluded Estate Duty</th>
-                <th className="p-3 text-center text-xs font-semibold text-neutral-700 uppercase tracking-wider min-w-[120px]">Excluded Provisions</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-neutral-200">
-              {policies.map((policy: Assurance) => (
-                <tr key={policy.id} >
-                  <td className="p-2 text-center">
-                    <DeleteButton
-                      onClick={() => deleteMutation.mutate(policy.id)}
-                      disabled={deleteMutation.isPending}
-                    />
-                  </td>
-                  <td className="p-2">
-                    <input
-                      key={`description-${policy.id}-${policy.description}`}
-                      defaultValue={formatTextValue(policy.description)}
-                      onBlur={(e) => {
-                        handleInputBlur(policy.id, "description", e.target.value);
-                      }}
-                      className={`table-input h-7 text-sm bg-primary/5 border-gray-200 focus:border-primary w-full px-3 py-1 border rounded-md text-sm ${getValueClass(policy.description || "Enter here ...", 'text')}`}
-                      style={{ textAlign: "left" }}
-                      disabled={isUpdating}
-                      placeholder="Policy name"
-                    />
-                  </td>
-                  <td className="p-2 text-center">
-                    <select
-                      defaultValue={policy.owner || "Donald Edwards"}
-                      onChange={(e) => {
-                        handleInputBlur(policy.id, "owner", e.target.value);
-                      }}
-                      className={getFieldClass("description")} style={getFieldWidth("description")}
-                      disabled={isUpdating}
-                    >
-                      <option value="Donald Edwards">Donald Edwards</option>
-                      <option value="Betty Edwards">Betty Edwards</option>
-                    </select>
-                  </td>
-                  <td className="p-2">
-                    <input
-                      key={`lifeAssured-${policy.id}-${policy.lifeAssured}`}
-                      defaultValue={formatTextValue(policy.lifeAssured)}
-                      onBlur={(e) => {
-                        handleInputBlur(policy.id, "lifeAssured", e.target.value);
-                      }}
-                      className={`table-input h-7 text-sm bg-primary/5 border-gray-200 focus:border-primary w-full px-3 py-1 border rounded-md text-sm ${getValueClass(policy.lifeAssured || "Enter here ...", 'text')}`}
-                      style={{ textAlign: "left" }}
-                      disabled={isUpdating}
-                      placeholder="Insured person"
-                    />
-                  </td>
-                  <td className="p-2 text-right">
-                    <input
-                      key={`deathBenefit-${policy.id}-${policy.deathBenefit}`}
-                      defaultValue={formatCurrencyValue(policy.deathBenefit, 'deathBenefit')}
-                      onBlur={(e) => {
-                        const formattedValue = formatCurrencyValue(e.target.value, 'deathBenefit');
-                        if (formattedValue !== e.target.value) {
-                          e.target.value = formattedValue;
-                        }
-                        handleInputBlur(policy.id, "deathBenefit", e.target.value);
-                      }}
-                      className={`table-input h-7 text-sm bg-primary/5 border-gray-200 focus:border-primary w-full px-3 py-1 border rounded-md text-sm ${getValueClass(formatCurrencyValue(policy.deathBenefit, 'deathBenefit'), 'currency')}`}
-                      style={{ textAlign: "right", minWidth: "100px" }}
-                      placeholder="R 0"
-                      disabled={isUpdating}
-                    />
-                  </td>
-                  <td className="p-2">
-                    <input
-                      key={`beneficiary-${policy.id}-${policy.beneficiary}`}
-                      defaultValue={formatTextValue(policy.beneficiary)}
-                      onBlur={(e) => {
-                        handleInputBlur(policy.id, "beneficiary", e.target.value);
-                      }}
-                      className={`table-input h-7 text-sm bg-primary/5 border-gray-200 focus:border-primary w-full px-3 py-1 border rounded-md text-sm ${getValueClass(policy.beneficiary || "Enter here ...", 'text')}`}
-                      style={{ textAlign: "left" }}
-                      disabled={isUpdating}
-                      placeholder="Beneficiary name"
-                    />
-                  </td>
-                  <td className="p-2 text-right">
-                    <input
-                      defaultValue={policy.benefitSplit || ""}
-                      onBlur={(e) => {
-                        const formattedValue = formatCurrencyValue(e.target.value, "benefitSplit");
-                        if (formattedValue !== e.target.value) {
-                          e.target.value = formattedValue;
-                        }
-                        handleInputBlur(policy.id, "benefitSplit", e.target.value);
-                      }}
-                      className="table-input h-7 text-sm bg-primary/5 border-gray-200 focus:border-primary w-16 px-2 py-1 border rounded-md text-sm"
-                      style={{ textAlign: "right" }}
-                      placeholder="0%"
-                      disabled={isUpdating}
-                    />
-                  </td>
-                  <td className="p-2 text-right">
-                    <div className="text-sm text-neutral-700">
-                      {formatCurrencyValue(policy.amount, "amount")}
-                    </div>
-                  </td>
-                  <td className="p-2 text-center">
-                    <input
-                      type="checkbox"
-                      defaultChecked={policy.excludedFromEstateDuty}
-                      onChange={(e) => {
-                        handleInputBlur(policy.id, "excludedFromEstateDuty", e.target.checked);
-                      }}
-                      className="w-4 h-4 text-primary border-gray-300 rounded focus:ring-primary focus:ring-2"
-                      disabled={isUpdating}
-                    />
-                  </td>
-                  <td className="p-2 text-center">
-                    <input
-                      type="checkbox"
-                      defaultChecked={policy.excludedFromProvisions}
-                      onChange={(e) => {
-                        handleInputBlur(policy.id, "excludedFromProvisions", e.target.checked);
-                      }}
-                      className="w-4 h-4 text-primary border-gray-300 rounded focus:ring-primary focus:ring-2"
-                      disabled={isUpdating}
-                    />
-                  </td>
-                </tr>
-              ))}
+    <div className="space-y-6">
+      <table>
+        <thead>
+          <tr>
+            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start section-end" rowSpan={2}>
+              <AddButton onClick={() => addMutation.mutate()} disabled={isUpdating} />
+            </th>
+            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start" colSpan={2}>Overview</th>
+            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start section-end" colSpan={2}>Financial Details</th>
+          </tr>
+          <tr>
+            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start">Description</th>
+            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center">Owner</th>
+            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start">Amount</th>
+            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-end">Increase %</th>
+          </tr>
+        </thead>
+        <tbody className="divide-y divide-neutral-200">
+          {assurances.map((assurance: Assurance, index) => (
+            <tr key={assurance.id} className="hover:bg-neutral-50">
+              <td className="table-actions-cell p-1 text-center section-start section-end">
+                <ActionButtonGroup>
+                  <DuplicateButton onClick={() => addMutation.mutate()} disabled={isUpdating} />
+                  <DeleteButton onClick={() => handleDeleteAssurance(assurance.id)} disabled={isUpdating} />
+                </ActionButtonGroup>
+              </td>
               
-            </tbody>
-            
-            {/* Totals Footer */}
-            <tfoot>
-              <tr>
-                <td className="totals-cell-label"></td>
-                <td className="totals-cell-label">Total</td>
-                <td className="totals-cell-label"></td>
-                <td className="totals-cell-label"></td>
-                <td className="totals-cell-label"></td>
-                <td className="totals-cell-label"></td>
-                <td className="totals-cell-label"></td>
-                <td className="totals-cell-value">R {totalDeathBenefits.toLocaleString()}</td>
-                <td className="totals-cell-value">{totalExcludedFromEstateDuty}</td>
-                <td className="totals-cell-label"></td>
-              </tr>
-            </tfoot>
-          </table>
-        </div>
-      </div>
+              <td className="p-1 section-start">
+                <input
+                  type="text"
+                  defaultValue={assurance.description}
+                  className={`table-input ${getFieldClass('text')} ${getValueClass(assurance.description, 'text')}`}
+                  onFocus={handleDefaultValueFocus}
+                  onBlur={(e) => handleInputBlur(assurance.id, 'description', e.target.value)}
+                  disabled={isUpdating}
+                />
+              </td>
+              
+              <td className="p-1">
+                <input
+                  type="text"
+                  defaultValue={assurance.owner}
+                  className={`table-input ${getFieldClass('text')} ${getValueClass(assurance.owner, 'text')}`}
+                  onFocus={handleDefaultValueFocus}
+                  onBlur={(e) => handleInputBlur(assurance.id, 'owner', e.target.value)}
+                  disabled={isUpdating}
+                />
+              </td>
+              
+              <td className="p-1 section-start">
+                <input
+                  key={`amount-${assurance.id}-${assurance.amount}`}
+                  type="text"
+                  defaultValue={assurance.amount}
+                  className={`table-input ${getFieldClass('currency')} ${getValueClass(assurance.amount, 'currency')}`}
+                  onFocus={handleDefaultValueFocus}
+                  onBlur={(e) => handleInputBlur(assurance.id, 'amount', e.target.value)}
+                  disabled={isUpdating}
+                />
+              </td>
+              
+              <td className="p-1 section-end">
+                <input
+                  key={`increasePercentage-${assurance.id}-${assurance.increasePercentage}`}
+                  type="text"
+                  defaultValue={assurance.increasePercentage}
+                  className={`table-input ${getFieldClass('percentage')} ${getValueClass(assurance.increasePercentage, 'percentage')}`}
+                  onFocus={handleDefaultValueFocus}
+                  onBlur={(e) => handleInputBlur(assurance.id, 'increasePercentage', e.target.value)}
+                  disabled={isUpdating}
+                />
+              </td>
+            </tr>
+          ))}
+        </tbody>
+        
+        <tfoot>
+          <tr>
+            <td className="totals-cell-label text-right" colSpan={3}>Totals</td>
+            <td className="totals-cell-value section-start">R {totals.amount.toLocaleString()}</td>
+            <td className="totals-cell-label section-end"></td>
+          </tr>
+        </tfoot>
+      </table>
     </div>
   );
 }
+
+export default AssuranceTable;

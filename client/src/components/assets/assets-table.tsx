@@ -157,18 +157,18 @@ function AssetsAndLiabilitiesTable({ viewMode, searchTerm }: AssetsAndLiabilitie
     <div className="space-y-6">
       <table>
         <thead>
-          <tr className="border-b border-border">
+          <tr>
             <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start section-end" rowSpan={2}>
               <AddButton onClick={() => addMutation.mutate()} disabled={isUpdating} />
             </th>
             <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start" colSpan={2}>Overview</th>
             <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start section-end" colSpan={2}>Financial Details</th>
           </tr>
-          <tr className="border-b border-border">
-            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start border-b border-neutral-200">Description</th>
-            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center border-b border-neutral-200">Owner</th>
-            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start border-b border-neutral-200">Amount</th>
-            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-end border-b border-neutral-200">Increase %</th>
+          <tr>
+            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start">Description</th>
+            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center">Owner</th>
+            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start">Amount</th>
+            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-end">Increase %</th>
           </tr>
         </thead>
         <tbody className="divide-y divide-neutral-200">
@@ -241,8 +241,8 @@ function AssetsAndLiabilitiesTable({ viewMode, searchTerm }: AssetsAndLiabilitie
         <tfoot>
           <tr>
             <td className="totals-cell-label text-right" colSpan={3}>Totals</td>
-            <td className="totals-cell-value">R {totals.amount.toLocaleString()}</td>
-            <td className="totals-cell-label"></td>
+            <td className="totals-cell-value section-start">R {totals.amount.toLocaleString()}</td>
+            <td className="totals-cell-label section-end"></td>
           </tr>
         </tfoot>
       </table>
@@ -251,4 +251,3 @@ function AssetsAndLiabilitiesTable({ viewMode, searchTerm }: AssetsAndLiabilitie
 }
 
 export { AssetsAndLiabilitiesTable as AssetsTable };
-export default AssetsAndLiabilitiesTable;

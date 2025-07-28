@@ -2,31 +2,29 @@ import { useState, useCallback, useMemo } from 'react';
 import { useQuery, useMutation } from '@tanstack/react-query';
 import { queryClient } from '@/lib/queryClient';
 import { IncomeProvisions, InsertIncomeProvisions } from '@shared/schema';
-import { ActionButtonGroup, DuplicateButton, DeleteButton, AddButton } from '@/components/ui/action-buttons';
-import { getFieldClass, getFieldWidth } from '@/lib/field-types';
-import { formatCurrencyValue, formatPercentageValue, isDefaultValue, getValueClass } from '@/lib/formatting';
-import { handleDefaultValueFocus, createEnhancedBlurHandler } from '@/lib/formatting';
+import { AddButton, ActionButtonGroup, DuplicateButton, DeleteButton } from '@/components/ui/action-buttons';
+import { getFieldClass, getCellClass } from '@/lib/field-types';
+import { formatCurrencyValue, getValueClass, handleDefaultValueFocus } from '@/lib/formatting';
 
 interface IncomeProvisionsTableProps {
   viewMode: 'table' | 'hybrid';
   searchTerm?: string;
 }
 
-export default function IncomeProvisionsTable({ viewMode, searchTerm }: IncomeProvisionsTableProps) {
+function IncomeProvisionsTable({ viewMode, searchTerm }: IncomeProvisionsTableProps) {
   const [isUpdating, setIsUpdating] = useState(false);
 
-  // Query for income provisions
-  const { data: provisions = [], isLoading, error } = useQuery<IncomeProvisions[]>({
+  const { data: incomeProvisions = [], isLoading, error } = useQuery<IncomeProvisions[]>({
     queryKey: ['/api/income-provisions'],
   });
 
-  // Add provision mutation
   const addMutation = useMutation({
     mutationFn: async (): Promise<IncomeProvisions> => {
-      const newProvision: InsertIncomeProvisions = {
+      const newIncomeProvision: InsertIncomeProvisions = {
         description: "Enter details ...",
-        amount: "R 0",
-        increasePercentage: "0%",
+        beneficiary: "Enter beneficiary",
+        monthlyAmount: "R 0",
+        additionalBeneficiaries: [],
       };
       
       const response = await fetch('/api/income-provisions', {
@@ -34,7 +32,7 @@ export default function IncomeProvisionsTable({ viewMode, searchTerm }: IncomePr
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(newProvision),
+        body: JSON.stringify(newIncomeProvision),
       });
       
       if (!response.ok) {
@@ -53,7 +51,6 @@ export default function IncomeProvisionsTable({ viewMode, searchTerm }: IncomePr
     }
   });
 
-  // Update provision mutation
   const updateMutation = useMutation({
     mutationFn: async ({ id, updates }: { id: number; updates: Partial<IncomeProvisions> }) => {
       const response = await fetch(`/api/income-provisions/${id}`, {
@@ -80,7 +77,6 @@ export default function IncomeProvisionsTable({ viewMode, searchTerm }: IncomePr
     }
   });
 
-  // Delete provision mutation
   const deleteMutation = useMutation({
     mutationFn: async (id: number) => {
       const response = await fetch(`/api/income-provisions/${id}`, {
@@ -96,22 +92,17 @@ export default function IncomeProvisionsTable({ viewMode, searchTerm }: IncomePr
     }
   });
 
-  // Calculate totals
   const totals = useMemo(() => {
     return {
-      count: provisions.length,
-      amount: provisions.reduce((sum: number, provision: IncomeProvisions) => {
-        const value = parseFloat(provision.amount.replace(/[^\d.-]/g, '')) || 0;
+      count: incomeProvisions.length,
+      monthlyAmount: incomeProvisions.reduce((sum: number, incomeProvision: IncomeProvisions) => {
+        const value = parseFloat(incomeProvision.monthlyAmount.replace(/[^\d.-]/g, '')) || 0;
         return sum + value;
       }, 0),
     };
-  }, [provisions]);
+  }, [incomeProvisions]);
 
-  const handleAddProvision = useCallback(() => {
-    addMutation.mutate();
-  }, [addMutation]);
-
-  const handleUpdateProvision = useCallback((id: number, field: keyof IncomeProvisions, value: string | string[]) => {
+  const handleUpdateIncomeProvision = useCallback((id: number, field: keyof IncomeProvisions, value: string | string[]) => {
     setIsUpdating(true);
     const updates = { [field]: value };
     updateMutation.mutate({ id, updates });
@@ -119,25 +110,22 @@ export default function IncomeProvisionsTable({ viewMode, searchTerm }: IncomePr
 
   const handleInputBlur = useCallback((id: number, field: keyof IncomeProvisions, value: string) => {
     let formattedValue: string;
-    if (field === 'increasePercentage') {
-      formattedValue = formatPercentageValue(value);
-    } else if (field === 'amount') {
+    if (field === 'monthlyAmount') {
       formattedValue = formatCurrencyValue(value);
     } else {
       formattedValue = value;
     }
-    handleUpdateProvision(id, field, formattedValue);
+    handleUpdateIncomeProvision(id, field, formattedValue);
     
-    // Update DOM element for immediate visual feedback
     const target = document.activeElement as HTMLInputElement;
     if (target && formattedValue !== value) {
       setTimeout(() => {
         target.value = formattedValue;
       }, 0);
     }
-  }, [handleUpdateProvision]);
+  }, [handleUpdateIncomeProvision]);
 
-  const handleDeleteProvision = useCallback((id: number) => {
+  const handleDeleteIncomeProvision = useCallback((id: number) => {
     if (window.confirm('Are you sure you want to delete this income provision?')) {
       deleteMutation.mutate(id);
     }
@@ -157,83 +145,73 @@ export default function IncomeProvisionsTable({ viewMode, searchTerm }: IncomePr
         <thead>
           <tr>
             <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start section-end" rowSpan={2}>
-              <AddButton onClick={handleAddProvision} disabled={isUpdating} />
+              <AddButton onClick={() => addMutation.mutate()} disabled={isUpdating} />
             </th>
-            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start" colSpan={1}>Overview</th>
-            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start section-end" colSpan={2}>Financial Details</th>
+            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start" colSpan={2}>Overview</th>
+            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start section-end">Financial Details</th>
           </tr>
           <tr>
             <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start">Description</th>
-            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start">Amount</th>
-            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-end">Increase %</th>
+            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center">Beneficiary</th>
+            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-end">Monthly Amount</th>
           </tr>
         </thead>
         <tbody className="divide-y divide-neutral-200">
-          {provisions.map((provision: IncomeProvisions, provisionIndex) => (
-            <tr key={provision.id} className="hover:bg-neutral-50">
+          {incomeProvisions.map((incomeProvision: IncomeProvisions, index) => (
+            <tr key={incomeProvision.id} className="hover:bg-neutral-50">
               <td className="table-actions-cell p-1 text-center section-start section-end">
                 <ActionButtonGroup>
-                  <DuplicateButton
-                    onClick={() => addMutation.mutate()}
-                    disabled={isUpdating}
-                  />
-                  <DeleteButton
-                    onClick={() => handleDeleteProvision(provision.id)}
-                    disabled={isUpdating}
-                  />
+                  <DuplicateButton onClick={() => addMutation.mutate()} disabled={isUpdating} />
+                  <DeleteButton onClick={() => handleDeleteIncomeProvision(incomeProvision.id)} disabled={isUpdating} />
                 </ActionButtonGroup>
               </td>
               
               <td className="p-1 section-start">
                 <input
                   type="text"
-                  defaultValue={provision.description}
-                  className={`table-input ${getFieldClass('text')} ${getValueClass(provision.description, 'text')}`}
+                  defaultValue={incomeProvision.description}
+                  className={`table-input ${getFieldClass('text')} ${getValueClass(incomeProvision.description, 'text')}`}
                   onFocus={handleDefaultValueFocus}
-                  onBlur={(e) => handleInputBlur(provision.id, 'description', e.target.value)}
+                  onBlur={(e) => handleInputBlur(incomeProvision.id, 'description', e.target.value)}
                   disabled={isUpdating}
                 />
               </td>
               
-              <td className="p-1 section-start">
+              <td className="p-1">
                 <input
-                  key={`amount-${provision.id}-${provision.amount}`}
                   type="text"
-                  defaultValue={provision.amount}
-                  className={`table-input ${getFieldClass('currency')} ${getValueClass(provision.amount, 'currency')}`}
+                  defaultValue={incomeProvision.beneficiary}
+                  className={`table-input ${getFieldClass('text')} ${getValueClass(incomeProvision.beneficiary, 'text')}`}
                   onFocus={handleDefaultValueFocus}
-                  onBlur={(e) => handleInputBlur(provision.id, 'amount', e.target.value)}
+                  onBlur={(e) => handleInputBlur(incomeProvision.id, 'beneficiary', e.target.value)}
                   disabled={isUpdating}
                 />
               </td>
               
               <td className="p-1 section-end">
                 <input
-                  key={`increasePercentage-${provision.id}-${provision.increasePercentage}`}
+                  key={`monthlyAmount-${incomeProvision.id}-${incomeProvision.monthlyAmount}`}
                   type="text"
-                  defaultValue={provision.increasePercentage}
-                  className={`table-input ${getFieldClass('percentage')} ${getValueClass(provision.increasePercentage, 'percentage')}`}
+                  defaultValue={incomeProvision.monthlyAmount}
+                  className={`table-input ${getFieldClass('currency')} ${getValueClass(incomeProvision.monthlyAmount, 'currency')}`}
                   onFocus={handleDefaultValueFocus}
-                  onBlur={(e) => handleInputBlur(provision.id, 'increasePercentage', e.target.value)}
+                  onBlur={(e) => handleInputBlur(incomeProvision.id, 'monthlyAmount', e.target.value)}
                   disabled={isUpdating}
                 />
               </td>
             </tr>
           ))}
-          
-
         </tbody>
         
-        {/* Totals Footer */}
         <tfoot>
           <tr>
-            <td className="totals-cell-label text-right section-start section-end" colSpan={1}>Totals</td>
-            <td className="totals-cell-label text-right section-start" colSpan={1}>-</td>
-            <td className="totals-cell-value section-start">R {totals.amount.toLocaleString()}</td>
-            <td className="totals-cell-value section-end">-</td>
+            <td className="totals-cell-label text-right" colSpan={2}>Totals</td>
+            <td className="totals-cell-value section-end">R {totals.monthlyAmount.toLocaleString()}</td>
           </tr>
         </tfoot>
       </table>
     </div>
   );
 }
+
+export default IncomeProvisionsTable;

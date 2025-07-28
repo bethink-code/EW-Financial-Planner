@@ -4,31 +4,29 @@ import { queryClient } from '@/lib/queryClient';
 import { Residue, InsertResidue } from '@shared/schema';
 import { AddButton, ActionButtonGroup, DuplicateButton, DeleteButton } from '@/components/ui/action-buttons';
 import { getFieldClass, getCellClass } from '@/lib/field-types';
-import { formatCurrencyValue, formatPercentageValue, isDefaultValue, getValueClass } from '@/lib/formatting';
-import { handleDefaultValueFocus } from '@/lib/formatting';
+import { formatCurrencyValue, formatPercentageValue, getValueClass, handleDefaultValueFocus } from '@/lib/formatting';
 
 interface ResidueTableProps {
   viewMode: 'table' | 'hybrid';
   searchTerm?: string;
 }
 
-export default function ResidueTable({ viewMode, searchTerm }: ResidueTableProps) {
+function ResidueTable({ viewMode, searchTerm }: ResidueTableProps) {
   const [isUpdating, setIsUpdating] = useState(false);
 
-  // Query for residue
   const { data: residues = [], isLoading, error } = useQuery<Residue[]>({
     queryKey: ['/api/residue'],
   });
 
-  // Add residue mutation
   const addMutation = useMutation({
     mutationFn: async (): Promise<Residue> => {
       const newResidue: InsertResidue = {
         description: "Enter details ...",
-        amount: "R 0",
-        increasePercentage: "0%",
+        beneficiary: "Enter beneficiary",
+        percentage: "0%",
+        additionalBeneficiaries: [],
       };
-
+      
       const response = await fetch('/api/residue', {
         method: 'POST',
         headers: {
@@ -36,11 +34,11 @@ export default function ResidueTable({ viewMode, searchTerm }: ResidueTableProps
         },
         body: JSON.stringify(newResidue),
       });
-
+      
       if (!response.ok) {
         throw new Error('Failed to add residue');
       }
-
+      
       return response.json();
     },
     onSuccess: () => {
@@ -53,7 +51,6 @@ export default function ResidueTable({ viewMode, searchTerm }: ResidueTableProps
     }
   });
 
-  // Update residue mutation
   const updateMutation = useMutation({
     mutationFn: async ({ id, updates }: { id: number; updates: Partial<Residue> }) => {
       const response = await fetch(`/api/residue/${id}`, {
@@ -63,11 +60,11 @@ export default function ResidueTable({ viewMode, searchTerm }: ResidueTableProps
         },
         body: JSON.stringify(updates),
       });
-
+      
       if (!response.ok) {
         throw new Error('Failed to update residue');
       }
-
+      
       return response.json();
     },
     onSuccess: () => {
@@ -80,13 +77,12 @@ export default function ResidueTable({ viewMode, searchTerm }: ResidueTableProps
     }
   });
 
-  // Delete residue mutation
   const deleteMutation = useMutation({
     mutationFn: async (id: number) => {
       const response = await fetch(`/api/residue/${id}`, {
         method: 'DELETE',
       });
-
+      
       if (!response.ok) {
         throw new Error('Failed to delete residue');
       }
@@ -96,20 +92,15 @@ export default function ResidueTable({ viewMode, searchTerm }: ResidueTableProps
     }
   });
 
-  // Calculate totals
   const totals = useMemo(() => {
     return {
       count: residues.length,
-      amount: residues.reduce((sum: number, residue: Residue) => {
-        const value = parseFloat(residue.amount.replace(/[^\d.-]/g, '')) || 0;
+      percentage: residues.reduce((sum: number, residue: Residue) => {
+        const value = parseFloat(residue.percentage.replace(/[^\d.-]/g, '')) || 0;
         return sum + value;
       }, 0),
     };
   }, [residues]);
-
-  const handleAddResidue = useCallback(() => {
-    addMutation.mutate();
-  }, [addMutation]);
 
   const handleUpdateResidue = useCallback((id: number, field: keyof Residue, value: string | string[]) => {
     setIsUpdating(true);
@@ -119,17 +110,13 @@ export default function ResidueTable({ viewMode, searchTerm }: ResidueTableProps
 
   const handleInputBlur = useCallback((id: number, field: keyof Residue, value: string) => {
     let formattedValue: string;
-    if (field === 'increasePercentage') {
+    if (field === 'percentage') {
       formattedValue = formatPercentageValue(value);
-    } else if (field === 'amount') {
-      formattedValue = formatCurrencyValue(value);
     } else {
       formattedValue = value;
     }
-
     handleUpdateResidue(id, field, formattedValue);
-
-    // Update DOM element for immediate visual feedback
+    
     const target = document.activeElement as HTMLInputElement;
     if (target && formattedValue !== value) {
       setTimeout(() => {
@@ -139,7 +126,7 @@ export default function ResidueTable({ viewMode, searchTerm }: ResidueTableProps
   }, [handleUpdateResidue]);
 
   const handleDeleteResidue = useCallback((id: number) => {
-    if (window.confirm('Are you sure you want to delete this residue entry?')) {
+    if (window.confirm('Are you sure you want to delete this residue?')) {
       deleteMutation.mutate(id);
     }
   }, [deleteMutation]);
@@ -156,31 +143,21 @@ export default function ResidueTable({ viewMode, searchTerm }: ResidueTableProps
     <div className="space-y-6">
       <table>
         <thead>
-          <tr className="order">
+          <tr>
             <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start section-end" rowSpan={2}>
-              <AddButton onClick={handleAddResidue} disabled={isUpdating} />
+              <AddButton onClick={() => addMutation.mutate()} disabled={isUpdating} />
             </th>
-            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start" colSpan={1}>
-              Overview
-            </th>
-            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start section-end" colSpan={2}>
-              Financial Details
-            </th>
+            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start" colSpan={2}>Overview</th>
+            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start section-end">Distribution</th>
           </tr>
-          <tr className="order">
-            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start">
-              Description
-            </th>
-            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start">
-              Amount
-            </th>
-            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-end">
-              Increase %
-            </th>
+          <tr>
+            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start">Description</th>
+            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center">Beneficiary</th>
+            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-end">Percentage</th>
           </tr>
         </thead>
         <tbody className="divide-y divide-neutral-200">
-          {residues.map((residue: Residue, residueIndex) => (
+          {residues.map((residue: Residue, index) => (
             <tr key={residue.id} className="hover:bg-neutral-50">
               <td className="table-actions-cell p-1 text-center section-start section-end">
                 <ActionButtonGroup>
@@ -188,6 +165,7 @@ export default function ResidueTable({ viewMode, searchTerm }: ResidueTableProps
                   <DeleteButton onClick={() => handleDeleteResidue(residue.id)} disabled={isUpdating} />
                 </ActionButtonGroup>
               </td>
+              
               <td className="p-1 section-start">
                 <input
                   type="text"
@@ -198,41 +176,42 @@ export default function ResidueTable({ viewMode, searchTerm }: ResidueTableProps
                   disabled={isUpdating}
                 />
               </td>
-              <td className="p-1 section-start">
+              
+              <td className="p-1">
                 <input
-                  key={`amount-${residue.id}-${residue.amount}`}
                   type="text"
-                  defaultValue={residue.amount}
-                  className={`table-input ${getFieldClass('currency')} ${getValueClass(residue.amount, 'currency')}`}
+                  defaultValue={residue.beneficiary}
+                  className={`table-input ${getFieldClass('text')} ${getValueClass(residue.beneficiary, 'text')}`}
                   onFocus={handleDefaultValueFocus}
-                  onBlur={(e) => handleInputBlur(residue.id, 'amount', e.target.value)}
+                  onBlur={(e) => handleInputBlur(residue.id, 'beneficiary', e.target.value)}
                   disabled={isUpdating}
                 />
               </td>
+              
               <td className="p-1 section-end">
                 <input
-                  key={`increasePercentage-${residue.id}-${residue.increasePercentage}`}
+                  key={`percentage-${residue.id}-${residue.percentage}`}
                   type="text"
-                  defaultValue={residue.increasePercentage}
-                  className={`table-input ${getFieldClass('percentage')} ${getValueClass(residue.increasePercentage, 'percentage')}`}
+                  defaultValue={residue.percentage}
+                  className={`table-input ${getFieldClass('percentage')} ${getValueClass(residue.percentage, 'percentage')}`}
                   onFocus={handleDefaultValueFocus}
-                  onBlur={(e) => handleInputBlur(residue.id, 'increasePercentage', e.target.value)}
+                  onBlur={(e) => handleInputBlur(residue.id, 'percentage', e.target.value)}
                   disabled={isUpdating}
                 />
               </td>
             </tr>
           ))}
         </tbody>
-
-        {/* Totals Footer */}
+        
         <tfoot>
           <tr>
             <td className="totals-cell-label text-right" colSpan={2}>Totals</td>
-            <td className="totals-cell-value">R {totals.amount.toLocaleString()}</td>
-            <td className="totals-cell-label"></td>
+            <td className="totals-cell-value section-end">{totals.percentage}%</td>
           </tr>
         </tfoot>
       </table>
     </div>
   );
 }
+
+export default ResidueTable;

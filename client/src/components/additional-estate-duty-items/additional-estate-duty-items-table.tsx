@@ -1,37 +1,32 @@
-import React, { useState, useCallback, useMemo } from "react";
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { Plus, Trash2 } from "lucide-react";
-import { getFieldClass, getFieldWidth } from "@/lib/design-tokens";
-import { getCellClass } from "@/lib/field-types";
-import { formatCurrencyValue, getValueClass, isDefaultValue } from "@/lib/formatting";
-import { AddButton, DeleteButton, DuplicateButton, ActionButtonGroup } from "@/components/ui/action-buttons";
-import type { AdditionalEstateDutyItems, InsertAdditionalEstateDutyItems } from "@shared/schema";
+import { useState, useCallback, useMemo } from 'react';
+import { useQuery, useMutation } from '@tanstack/react-query';
+import { queryClient } from '@/lib/queryClient';
+import { AdditionalEstateDutyItems, InsertAdditionalEstateDutyItems } from '@shared/schema';
+import { AddButton, ActionButtonGroup, DuplicateButton, DeleteButton } from '@/components/ui/action-buttons';
+import { getFieldClass, getCellClass } from '@/lib/field-types';
+import { formatCurrencyValue, getValueClass, handleDefaultValueFocus } from '@/lib/formatting';
 
-export default function AdditionalEstateDutyItemsTable() {
+interface AdditionalEstateDutyItemsTableProps {
+  viewMode: 'table' | 'hybrid';
+  searchTerm?: string;
+}
+
+function AdditionalEstateDutyItemsTable({ viewMode, searchTerm }: AdditionalEstateDutyItemsTableProps) {
   const [isUpdating, setIsUpdating] = useState(false);
-  const queryClient = useQueryClient();
 
-  // Fetch additional estate duty items
   const { data: items = [], isLoading, error } = useQuery<AdditionalEstateDutyItems[]>({
     queryKey: ['/api/additional-estate-duty-items'],
-    queryFn: async () => {
-      const response = await fetch('/api/additional-estate-duty-items');
-      if (!response.ok) {
-        throw new Error('Failed to fetch additional estate duty items');
-      }
-      return response.json();
-    }
   });
 
-  // Add new item mutation
   const addMutation = useMutation({
     mutationFn: async (): Promise<AdditionalEstateDutyItems> => {
       const newItem: InsertAdditionalEstateDutyItems = {
         description: "Enter details ...",
+        owner: "Donald Edwards",
         amount: "R 0",
-        increasePercentage: "0%",
+        additionalOwners: [],
       };
-
+      
       const response = await fetch('/api/additional-estate-duty-items', {
         method: 'POST',
         headers: {
@@ -39,11 +34,11 @@ export default function AdditionalEstateDutyItemsTable() {
         },
         body: JSON.stringify(newItem),
       });
-
+      
       if (!response.ok) {
-        throw new Error('Failed to create additional estate duty item');
+        throw new Error('Failed to add additional estate duty item');
       }
-
+      
       return response.json();
     },
     onSuccess: () => {
@@ -56,7 +51,6 @@ export default function AdditionalEstateDutyItemsTable() {
     }
   });
 
-  // Update item mutation
   const updateMutation = useMutation({
     mutationFn: async ({ id, updates }: { id: number; updates: Partial<AdditionalEstateDutyItems> }) => {
       const response = await fetch(`/api/additional-estate-duty-items/${id}`, {
@@ -66,11 +60,11 @@ export default function AdditionalEstateDutyItemsTable() {
         },
         body: JSON.stringify(updates),
       });
-
+      
       if (!response.ok) {
         throw new Error('Failed to update additional estate duty item');
       }
-
+      
       return response.json();
     },
     onSuccess: () => {
@@ -83,13 +77,12 @@ export default function AdditionalEstateDutyItemsTable() {
     }
   });
 
-  // Delete item mutation
   const deleteMutation = useMutation({
     mutationFn: async (id: number) => {
       const response = await fetch(`/api/additional-estate-duty-items/${id}`, {
         method: 'DELETE',
       });
-
+      
       if (!response.ok) {
         throw new Error('Failed to delete additional estate duty item');
       }
@@ -99,31 +92,31 @@ export default function AdditionalEstateDutyItemsTable() {
     }
   });
 
-  // No filtering needed - show all items
-  const filteredItems = items;
-
-  // Calculate totals
   const totals = useMemo(() => {
     return {
       count: items.length,
+      amount: items.reduce((sum: number, item: AdditionalEstateDutyItems) => {
+        const value = parseFloat(item.amount.replace(/[^\d.-]/g, '')) || 0;
+        return sum + value;
+      }, 0),
     };
   }, [items]);
 
-  const handleAddItem = useCallback(() => {
-    addMutation.mutate();
-  }, [addMutation]);
-
-  const handleUpdateItem = useCallback((id: number, field: keyof AdditionalEstateDutyItems, value: string | boolean) => {
+  const handleUpdateItem = useCallback((id: number, field: keyof AdditionalEstateDutyItems, value: string | string[]) => {
     setIsUpdating(true);
     const updates = { [field]: value };
     updateMutation.mutate({ id, updates });
   }, [updateMutation]);
 
   const handleInputBlur = useCallback((id: number, field: keyof AdditionalEstateDutyItems, value: string) => {
-    const formattedValue = field === 'amount' ? formatCurrencyValue(value) : field === 'increasePercentage' ? value + '%' : value;
+    let formattedValue: string;
+    if (field === 'amount') {
+      formattedValue = formatCurrencyValue(value);
+    } else {
+      formattedValue = value;
+    }
     handleUpdateItem(id, field, formattedValue);
-
-    // Update DOM element directly for immediate visual feedback
+    
     const target = document.activeElement as HTMLInputElement;
     if (target && formattedValue !== value) {
       setTimeout(() => {
@@ -133,19 +126,10 @@ export default function AdditionalEstateDutyItemsTable() {
   }, [handleUpdateItem]);
 
   const handleDeleteItem = useCallback((id: number) => {
-    if (window.confirm('Are you sure you want to delete this estate duty item?')) {
+    if (window.confirm('Are you sure you want to delete this additional estate duty item?')) {
       deleteMutation.mutate(id);
     }
   }, [deleteMutation]);
-
-  const handleDuplicateItem = useCallback((item: AdditionalEstateDutyItems) => {
-    const duplicatedItem: InsertAdditionalEstateDutyItems = {
-      description: item.description,
-      amount: item.amount,
-      increasePercentage: item.increasePercentage,
-    };
-    addMutation.mutate();
-  }, [addMutation]);
 
   if (isLoading) {
     return <div className="flex justify-center py-8">Loading additional estate duty items...</div>;
@@ -156,68 +140,78 @@ export default function AdditionalEstateDutyItemsTable() {
   }
 
   return (
-    <div>
-      {/* Table */}
-      <table className="min-w-full border">
+    <div className="space-y-6">
+      <table>
         <thead>
           <tr>
-            <th className="px-3 py-2 text-center text-xs font-medium text-neutral-600 uppercase tracking-wider w-16">
-              <AddButton onClick={handleAddItem} disabled={isUpdating} />
+            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start section-end" rowSpan={2}>
+              <AddButton onClick={() => addMutation.mutate()} disabled={isUpdating} />
             </th>
-            <th className="px-3 py-2 text-left text-xs font-medium text-neutral-600 uppercase tracking-wider">Description</th>
-            <th className="px-3 py-2 text-left text-xs font-medium text-neutral-600 uppercase tracking-wider">Amount</th>
-            <th className="px-3 py-2 text-center text-xs font-medium text-neutral-600 uppercase tracking-wider">Increase %</th>
+            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start" colSpan={2}>Overview</th>
+            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start section-end">Financial Details</th>
+          </tr>
+          <tr>
+            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start">Description</th>
+            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center">Owner</th>
+            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-end">Amount</th>
           </tr>
         </thead>
         <tbody className="divide-y divide-neutral-200">
-          {items.map((item: AdditionalEstateDutyItems) => (
-            <tr key={item.id}>
-              <td className="table-actions-cell text-center">
+          {items.map((item: AdditionalEstateDutyItems, index) => (
+            <tr key={item.id} className="hover:bg-neutral-50">
+              <td className="table-actions-cell p-1 text-center section-start section-end">
                 <ActionButtonGroup>
-                  <DuplicateButton onClick={() => handleDuplicateItem(item)} disabled={isUpdating} />
-                  <DeleteButton onClick={() => handleDeleteItem(item.id)} />
+                  <DuplicateButton onClick={() => addMutation.mutate()} disabled={isUpdating} />
+                  <DeleteButton onClick={() => handleDeleteItem(item.id)} disabled={isUpdating} />
                 </ActionButtonGroup>
               </td>
-              <td className="px-3 py-2">
+              
+              <td className="p-1 section-start">
                 <input
                   type="text"
                   defaultValue={item.description}
-                  onBlur={(e) => handleUpdateItem(item.id, 'description', e.target.value)}
-                  className={getFieldClass('description')}
+                  className={`table-input ${getFieldClass('text')} ${getValueClass(item.description, 'text')}`}
+                  onFocus={handleDefaultValueFocus}
+                  onBlur={(e) => handleInputBlur(item.id, 'description', e.target.value)}
                   disabled={isUpdating}
                 />
               </td>
-              <td className="px-3 py-2">
+              
+              <td className="p-1">
+                <input
+                  type="text"
+                  defaultValue={item.owner}
+                  className={`table-input ${getFieldClass('text')} ${getValueClass(item.owner, 'text')}`}
+                  onFocus={handleDefaultValueFocus}
+                  onBlur={(e) => handleInputBlur(item.id, 'owner', e.target.value)}
+                  disabled={isUpdating}
+                />
+              </td>
+              
+              <td className="p-1 section-end">
                 <input
                   key={`amount-${item.id}-${item.amount}`}
                   type="text"
-                  defaultValue={formatCurrencyValue(item.amount)}
+                  defaultValue={item.amount}
+                  className={`table-input ${getFieldClass('currency')} ${getValueClass(item.amount, 'currency')}`}
+                  onFocus={handleDefaultValueFocus}
                   onBlur={(e) => handleInputBlur(item.id, 'amount', e.target.value)}
-                  className={getFieldClass('amount')}
-                  disabled={isUpdating}
-                />
-              </td>
-              <td className="px-3 py-2">
-                <input
-                  key={`increasePercentage-${item.id}-${item.increasePercentage}`}
-                  type="text"
-                  defaultValue={item.increasePercentage}
-                  onBlur={(e) => handleInputBlur(item.id, 'increasePercentage', e.target.value)}
-                  className={getFieldClass('percentage')}
                   disabled={isUpdating}
                 />
               </td>
             </tr>
           ))}
-          {items.length === 0 && (
-            <tr>
-              <td colSpan={4} className="px-3 py-8 text-center text-neutral-500">
-                No estate duty items found. Add new items using the header button.
-              </td>
-            </tr>
-          )}
         </tbody>
+        
+        <tfoot>
+          <tr>
+            <td className="totals-cell-label text-right" colSpan={2}>Totals</td>
+            <td className="totals-cell-value section-end">R {totals.amount.toLocaleString()}</td>
+          </tr>
+        </tfoot>
       </table>
     </div>
   );
 }
+
+export default AdditionalEstateDutyItemsTable;

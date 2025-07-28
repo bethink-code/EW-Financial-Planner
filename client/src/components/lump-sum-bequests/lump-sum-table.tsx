@@ -1,36 +1,32 @@
 import { useState, useCallback, useMemo } from 'react';
 import { useQuery, useMutation } from '@tanstack/react-query';
 import { queryClient } from '@/lib/queryClient';
-import { LumpSumBequest, InsertLumpSumBequest } from '@shared/schema';
+import { LumpSumBequests, InsertLumpSumBequests } from '@shared/schema';
 import { AddButton, ActionButtonGroup, DuplicateButton, DeleteButton } from '@/components/ui/action-buttons';
 import { getFieldClass, getCellClass } from '@/lib/field-types';
-import { formatCurrencyValue, formatPercentageValue, formatTextValue, isDefaultValue, getValueClass } from '@/lib/formatting';
-import { handleDefaultValueFocus, createEnhancedBlurHandler } from '@/lib/formatting';
+import { formatCurrencyValue, getValueClass, handleDefaultValueFocus } from '@/lib/formatting';
 
 interface LumpSumTableProps {
   viewMode: 'table' | 'hybrid';
   searchTerm?: string;
 }
 
-export function LumpSumTable({ viewMode, searchTerm }: LumpSumTableProps) {
+function LumpSumTable({ viewMode, searchTerm }: LumpSumTableProps) {
   const [isUpdating, setIsUpdating] = useState(false);
 
   // Query for lump sum bequests
-  const { data: bequests = [], isLoading, error } = useQuery<LumpSumBequest[]>({
+  const { data: bequests = [], isLoading, error } = useQuery<LumpSumBequests[]>({
     queryKey: ['/api/lump-sum-bequests'],
   });
 
   // Add bequest mutation
   const addMutation = useMutation({
-    mutationFn: async (): Promise<LumpSumBequest> => {
-      const newBequest: InsertLumpSumBequest = {
+    mutationFn: async (): Promise<LumpSumBequests> => {
+      const newBequest: InsertLumpSumBequests = {
         description: "Enter details ...",
-        entity: "Enter details ...",
-        start: "Enter details ...",
+        beneficiary: "Enter beneficiary",
         amount: "R 0",
-        increasePercentage: "0%",
-        cpi: false,
-        valueAtDeath: "R 0",
+        additionalBeneficiaries: [],
       };
       
       const response = await fetch('/api/lump-sum-bequests', {
@@ -57,36 +53,15 @@ export function LumpSumTable({ viewMode, searchTerm }: LumpSumTableProps) {
     }
   });
 
-  // Delete bequest mutation
-  const deleteMutation = useMutation({
-    mutationFn: async (id: number) => {
-      const response = await fetch(`/api/lump-sum-bequests/${id}`, {
-        method: 'DELETE',
-      });
-      
-      if (!response.ok) {
-        throw new Error('Failed to delete lump sum bequest');
-      }
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['/api/lump-sum-bequests'] });
-      setIsUpdating(false);
-    },
-    onError: (error) => {
-      console.error('Failed to delete lump sum bequest:', error);
-      setIsUpdating(false);
-    }
-  });
-
   // Update bequest mutation
   const updateMutation = useMutation({
-    mutationFn: async ({ id, field, value }: { id: number; field: keyof InsertLumpSumBequest; value: string | boolean }) => {
+    mutationFn: async ({ id, updates }: { id: number; updates: Partial<LumpSumBequests> }) => {
       const response = await fetch(`/api/lump-sum-bequests/${id}`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ [field]: value }),
+        body: JSON.stringify(updates),
       });
       
       if (!response.ok) {
@@ -105,230 +80,151 @@ export function LumpSumTable({ viewMode, searchTerm }: LumpSumTableProps) {
     }
   });
 
-  // Handle input blur with proper formatting
-  const handleInputBlur = useCallback((id: number, field: keyof InsertLumpSumBequest, value: string) => {
-    setIsUpdating(true);
-    
-    // Format the value based on field type
-    let formattedValue = value;
-    if (field === 'amount' || field === 'valueAtDeath') {
-      formattedValue = formatCurrencyValue(value);
-    } else if (field === 'increasePercentage') {
-      formattedValue = formatPercentageValue(value);
-    } else if (field === 'description' || field === 'entity' || field === 'start') {
-      formattedValue = formatTextValue(value);
+  // Delete bequest mutation
+  const deleteMutation = useMutation({
+    mutationFn: async (id: number) => {
+      const response = await fetch(`/api/lump-sum-bequests/${id}`, {
+        method: 'DELETE',
+      });
+      
+      if (!response.ok) {
+        throw new Error('Failed to delete lump sum bequest');
+      }
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['/api/lump-sum-bequests'] });
     }
-
-    updateMutation.mutate({ id, field, value: formattedValue });
-
-    // Update DOM immediately for visual feedback
-    const element = document.querySelector(`input[data-field="${field}-${id}"]`) as HTMLInputElement;
-    if (element) {
-      element.value = formattedValue;
-    }
-  }, [updateMutation]);
-
-  // Handle checkbox change
-  const handleCheckboxChange = useCallback((id: number, field: 'cpi', value: boolean) => {
-    setIsUpdating(true);
-    updateMutation.mutate({ id, field, value });
-  }, [updateMutation]);
-
-  // Handle duplicate
-  const handleDuplicate = useCallback((bequest: LumpSumBequest) => {
-    setIsUpdating(true);
-    addMutation.mutate();
-  }, [addMutation]);
-
-  // Handle delete
-  const handleDelete = useCallback((id: number) => {
-    setIsUpdating(true);
-    deleteMutation.mutate(id);
-  }, [deleteMutation]);
+  });
 
   // Calculate totals
   const totals = useMemo(() => {
-    const totalAmount = bequests.reduce((sum, bequest) => {
-      const amount = parseFloat(bequest.amount?.replace(/[^\d.-]/g, '') || '0') || 0;
-      return sum + amount;
-    }, 0);
-
-    const totalValueAtDeath = bequests.reduce((sum, bequest) => {
-      const value = parseFloat(bequest.valueAtDeath?.replace(/[^\d.-]/g, '') || '0') || 0;
-      return sum + value;
-    }, 0);
-
     return {
-      amount: `R ${totalAmount.toLocaleString()}`,
-      valueAtDeath: `R ${totalValueAtDeath.toLocaleString()}`,
+      count: bequests.length,
+      amount: bequests.reduce((sum: number, bequest: LumpSumBequests) => {
+        const value = parseFloat(bequest.amount.replace(/[^\d.-]/g, '')) || 0;
+        return sum + value;
+      }, 0),
     };
   }, [bequests]);
 
+  const handleUpdateBequest = useCallback((id: number, field: keyof LumpSumBequests, value: string | string[]) => {
+    setIsUpdating(true);
+    const updates = { [field]: value };
+    updateMutation.mutate({ id, updates });
+  }, [updateMutation]);
+
+  const handleInputBlur = useCallback((id: number, field: keyof LumpSumBequests, value: string) => {
+    let formattedValue: string;
+    if (field === 'amount') {
+      formattedValue = formatCurrencyValue(value);
+    } else {
+      formattedValue = value;
+    }
+    handleUpdateBequest(id, field, formattedValue);
+    
+    // Update DOM element for immediate visual feedback
+    const target = document.activeElement as HTMLInputElement;
+    if (target && formattedValue !== value) {
+      setTimeout(() => {
+        target.value = formattedValue;
+      }, 0);
+    }
+  }, [handleUpdateBequest]);
+
+  const handleDeleteBequest = useCallback((id: number) => {
+    if (window.confirm('Are you sure you want to delete this lump sum bequest?')) {
+      deleteMutation.mutate(id);
+    }
+  }, [deleteMutation]);
+
   if (isLoading) {
-    return <div className="flex justify-center items-center p-8">Loading lump sum bequests...</div>;
+    return <div className="flex justify-center py-8">Loading lump sum bequests...</div>;
   }
 
   if (error) {
-    return <div className="text-red-500 p-4">Error loading lump sum bequests</div>;
+    return <div className="text-red-600 py-8">Error loading lump sum bequests. Please try again.</div>;
   }
 
   return (
-    <div>
-      {/* Table */}
-      <table className="min-w-full border">
+    <div className="space-y-6">
+      <table>
         <thead>
-          <tr className="order">
-            <th className="px-3 py-3 text-center text-xs font-medium text-neutral-600 uppercase tracking-wider w-16">
+          <tr>
+            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start section-end" rowSpan={2}>
               <AddButton onClick={() => addMutation.mutate()} disabled={isUpdating} />
             </th>
-            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start" colSpan={2}>
-              Overview
-            </th>
-            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start section-end" colSpan={5}>
-              Need Details
-            </th>
+            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start" colSpan={2}>Overview</th>
+            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start section-end">Financial Details</th>
           </tr>
-          <tr className="order">
-            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center"></th>
-            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start">
-              Description
-            </th>
-            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center">
-              Entity
-            </th>
-            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start">
-              Start
-            </th>
-            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center">
-              Amount
-            </th>
-            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center">
-              Increase %
-            </th>
-            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center">
-              CPI
-            </th>
-            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-end">
-              Value at Death
-            </th>
+          <tr>
+            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start">Description</th>
+            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center">Beneficiary</th>
+            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-end">Amount</th>
           </tr>
         </thead>
         <tbody className="divide-y divide-neutral-200">
-          {bequests.map((bequest, index) => (
+          {bequests.map((bequest: LumpSumBequests, index) => (
             <tr key={bequest.id} className="hover:bg-neutral-50">
-              {/* Actions */}
-              <td className="table-actions-cell text-center">
-                <div>
-                  <ActionButtonGroup>
-                    <DuplicateButton onClick={() => handleDuplicate(bequest)} disabled={isUpdating} />
-                    <DeleteButton onClick={() => handleDelete(bequest.id)} disabled={isUpdating} />
-                  </ActionButtonGroup>
-                </div>
+              <td className="table-actions-cell p-1 text-center section-start section-end">
+                <ActionButtonGroup>
+                  <DuplicateButton
+                    onClick={() => addMutation.mutate()}
+                    disabled={isUpdating}
+                  />
+                  <DeleteButton
+                    onClick={() => handleDeleteBequest(bequest.id)}
+                    disabled={isUpdating}
+                  />
+                </ActionButtonGroup>
               </td>
-
-              {/* Overview - Description */}
-              <td className="px-3 py-2 section-start">
+              
+              <td className="p-1 section-start">
                 <input
                   type="text"
                   defaultValue={bequest.description}
-                  onBlur={createEnhancedBlurHandler((value) => handleInputBlur(bequest.id, 'description', value), 'text')}
-                  onFocus={handleDefaultValueFocus}
                   className={`table-input ${getFieldClass('text')} ${getValueClass(bequest.description, 'text')}`}
-                  data-field={`description-${bequest.id}`}
+                  onFocus={handleDefaultValueFocus}
+                  onBlur={(e) => handleInputBlur(bequest.id, 'description', e.target.value)}
                   disabled={isUpdating}
                 />
               </td>
-
-              {/* Overview - Entity */}
-              <td className="px-3 py-2">
+              
+              <td className="p-1">
                 <input
                   type="text"
-                  defaultValue={bequest.entity}
-                  onBlur={createEnhancedBlurHandler((value) => handleInputBlur(bequest.id, 'entity', value), 'text')}
+                  defaultValue={bequest.beneficiary}
+                  className={`table-input ${getFieldClass('text')} ${getValueClass(bequest.beneficiary, 'text')}`}
                   onFocus={handleDefaultValueFocus}
-                  className={`table-input ${getFieldClass('text')} ${getValueClass(bequest.entity, 'text')}`}
-                  data-field={`entity-${bequest.id}`}
+                  onBlur={(e) => handleInputBlur(bequest.id, 'beneficiary', e.target.value)}
                   disabled={isUpdating}
                 />
               </td>
-
-              {/* Need Details - Start Date */}
-              <td className="px-3 py-2 section-start">
+              
+              <td className="p-1 section-end">
                 <input
-                  type="text"
-                  defaultValue={bequest.start}
-                  onBlur={createEnhancedBlurHandler((value) => handleInputBlur(bequest.id, 'start', value), 'text')}
-                  onFocus={handleDefaultValueFocus}
-                  className={`table-input ${getFieldClass('text')} ${getValueClass(bequest.start, 'text')}`}
-                  data-field={`start-${bequest.id}`}
-                  disabled={isUpdating}
-                />
-              </td>
-
-              {/* Need Details - Amount */}
-              <td className="px-3 py-2">
-                <input
+                  key={`amount-${bequest.id}-${bequest.amount}`}
                   type="text"
                   defaultValue={bequest.amount}
-                  onBlur={createEnhancedBlurHandler((value) => handleInputBlur(bequest.id, 'amount', value), 'currency')}
+                  className={`table-input ${getFieldClass('currency')} ${getValueClass(bequest.amount, 'currency')}`}
                   onFocus={handleDefaultValueFocus}
-                  className={`table-input ${getFieldClass('currency')} ${getValueClass(bequest.amount, 'currency')} text-right`}
-                  data-field={`amount-${bequest.id}`}
+                  onBlur={(e) => handleInputBlur(bequest.id, 'amount', e.target.value)}
                   disabled={isUpdating}
-                />
-              </td>
-
-              {/* Need Details - Increase % */}
-              <td className="px-3 py-2">
-                <input
-                  type="text"
-                  defaultValue={bequest.increasePercentage}
-                  onBlur={createEnhancedBlurHandler((value) => handleInputBlur(bequest.id, 'increasePercentage', value), 'percentage')}
-                  onFocus={handleDefaultValueFocus}
-                  className={`table-input ${getFieldClass('percentage')} ${getValueClass(bequest.increasePercentage, 'percentage')} text-right`}
-                  data-field={`increasePercentage-${bequest.id}`}
-                  disabled={isUpdating}
-                />
-              </td>
-
-              {/* Need Details - CPI Checkbox */}
-              <td className="px-3 py-2 text-center">
-                <div className="flex justify-center">
-                  <input
-                    type="checkbox"
-                    checked={bequest.cpi || false}
-                    onChange={(e) => handleCheckboxChange(bequest.id, 'cpi', e.target.checked)}
-                    className="w-4 h-4 text-primary bg-gray-100 border-gray-300 rounded focus:ring-primary focus:ring-2"
-                    disabled={isUpdating}
-                  />
-                </div>
-              </td>
-
-              {/* Need Details - Value at Death (Calculated) */}
-              <td className="px-3 py-2 section-end">
-                <input
-                  type="text"
-                  value={bequest.valueAtDeath || 'R 0'}
-                  className="calculated-field"
-                  readOnly
-                  tabIndex={-1}
                 />
               </td>
             </tr>
           ))}
         </tbody>
-
+        
         {/* Totals Footer */}
         <tfoot>
           <tr>
-            <td className="totals-cell-label text-right" colSpan={4}>Totals</td>
-            <td className="totals-cell-value">{totals.amount}</td>
-            <td className="totals-cell-label"></td>
-            <td className="totals-cell-label"></td>
-            <td className="totals-cell-value">{totals.valueAtDeath}</td>
+            <td className="totals-cell-label text-right" colSpan={2}>Totals</td>
+            <td className="totals-cell-value section-end">R {totals.amount.toLocaleString()}</td>
           </tr>
         </tfoot>
       </table>
     </div>
   );
 }
+
+export { LumpSumTable };
