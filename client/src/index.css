@@ -353,7 +353,7 @@ th, td {
     color: #374151 !important; /* text-neutral-700 */
     font-size: 0.875rem !important;
     font-weight: normal !important;
-    padding: 1rem 1.25rem !important; /* Match input field padding for alignment */
+    padding: 1rem 0.5rem !important; /* Match input field padding for alignment */
   }
 
   .totals-cell-value {
@@ -362,7 +362,7 @@ th, td {
     font-weight: 600 !important;
     color: #374151 !important;
     font-size: 0.875rem !important;
-    padding: 1rem 1.25rem !important; /* Match input field padding for alignment */
+    padding: 1rem 0.5rem !important; /* Match input field padding for alignment */
   }
   
   /* Teal color utilities */
@@ -435,7 +435,7 @@ th, td {
   .table-input {
     width: auto;
     height: 1.25rem;
-    padding: 1rem 1.25rem; /* Extra generous padding for maximum text spacing */
+    padding: 1rem 0.5rem; /* Keep vertical padding, reduce horizontal for content space */
     background-color: hsl(var(--primary) / 0.05);
     border: 1px solid hsl(var(--border));
     outline: none;
@@ -478,7 +478,7 @@ th, td {
   select[class*="table"] {
     width: auto;
     height: 2.3rem !important;
-    padding: 0 1.25rem !important;
+    padding: 0 0.5rem !important; /* Reduced padding to match input fields */
     background-color: hsl(var(--primary) / 0.05);
     border: 1px solid hsl(var(--border));
     outline: none;
@@ -592,7 +592,7 @@ th, td {
     outline: none !important;
     box-shadow: none !important;
     color: #374151 !important; /* grey-700 - same as entered values */
-    padding: 1rem 1.25rem !important;
+    padding: 1rem 0.5rem !important; /* Keep vertical padding, reduce horizontal */
     font-size: 0.875rem !important;
     text-align: right !important;
     height: 1.25rem !important;
