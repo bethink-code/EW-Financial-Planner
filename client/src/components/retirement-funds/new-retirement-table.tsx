@@ -192,7 +192,7 @@ export function NewRetirementTable({
           
           {/* Individual column headers */}
           <tr className="border-b border-border">
-            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start">Description</th>
+            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center">Description</th>
             <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center">Owners</th>
             <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start">Cover Amount</th>
             <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center">Beneficiaries</th>
@@ -241,7 +241,7 @@ export function NewRetirementTable({
                 </td>
 
                 {/* Overview - Description */}
-                <td className="p-1 section-start">
+                <td className="p-1">
                   {rowIndex === 0 && (
                     <input
                       type="text"
