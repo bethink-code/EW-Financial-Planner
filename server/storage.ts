@@ -44,7 +44,7 @@ export interface IStorage {
   deleteVoluntaryInvestment(id: number): Promise<boolean>;
   searchVoluntaryInvestments(query: string): Promise<VoluntaryInvestment[]>;
   
-  // Assets and Liabilities  
+  // Assets and Liabilities
   getAssetsAndLiabilities(): Promise<AssetAndLiability[]>;
   getAssetAndLiability(id: number): Promise<AssetAndLiability | undefined>;
   createAssetAndLiability(asset: InsertAssetAndLiability): Promise<AssetAndLiability>;
@@ -112,8 +112,6 @@ export class MemStorage implements IStorage {
   private incomeProvisions: Map<number, IncomeProvision>;
   private residue: Map<number, Residue>;
   private additionalEstateDutyItems: Map<number, AdditionalEstateDutyItem>;
-  private liabilities: Map<number, Liabilities>;
-  private assets: Map<number, Assets>;
   private currentFundId: number;
   private currentBequestId: number;
   private currentAssuranceId: number;
@@ -124,8 +122,6 @@ export class MemStorage implements IStorage {
   private currentIncomeProvisionId: number;
   private currentResidueId: number;
   private currentAdditionalEstateDutyItemId: number;
-  private currentLiabilityId: number;
-  private currentAssetId: number;
 
   constructor() {
     this.retirementFunds = new Map();
@@ -138,8 +134,6 @@ export class MemStorage implements IStorage {
     this.incomeProvisions = new Map();
     this.residue = new Map();
     this.additionalEstateDutyItems = new Map();
-    this.liabilities = new Map();
-    this.assets = new Map();
     this.currentFundId = 1;
     this.currentBequestId = 1;
     this.currentAssuranceId = 1;
@@ -150,8 +144,6 @@ export class MemStorage implements IStorage {
     this.currentIncomeProvisionId = 1;
     this.currentResidueId = 1;
     this.currentAdditionalEstateDutyItemId = 1;
-    this.currentLiabilityId = 1;
-    this.currentAssetId = 1;
     
     // Initialize with sample data
     this.createRetirementFund({
@@ -897,92 +889,6 @@ export class MemStorage implements IStorage {
     const lowerQuery = query.toLowerCase();
     return allItems.filter(item => 
       item.description.toLowerCase().includes(lowerQuery)
-    );
-  }
-
-  // Liabilities methods
-  async getLiabilities(): Promise<Liabilities[]> {
-    return Array.from(this.liabilities.values());
-  }
-
-  async getLiability(id: number): Promise<Liabilities | undefined> {
-    return this.liabilities.get(id);
-  }
-
-  async createLiability(liability: InsertLiabilities): Promise<Liabilities> {
-    const newLiability: Liabilities = {
-      id: this.currentLiabilityId++,
-      ...liability
-    };
-    
-    this.liabilities.set(newLiability.id, newLiability);
-    return newLiability;
-  }
-
-  async updateLiability(id: number, updates: UpdateLiabilities): Promise<Liabilities | undefined> {
-    const existing = this.liabilities.get(id);
-    if (!existing) return undefined;
-    
-    const updated: Liabilities = { ...existing, ...updates };
-    this.liabilities.set(id, updated);
-    return updated;
-  }
-
-  async deleteLiability(id: number): Promise<boolean> {
-    return this.liabilities.delete(id);
-  }
-
-  async searchLiabilities(query: string): Promise<Liabilities[]> {
-    const allLiabilities = Array.from(this.liabilities.values());
-    if (!query.trim()) return allLiabilities;
-    
-    const lowerQuery = query.toLowerCase();
-    return allLiabilities.filter(liability => 
-      liability.category?.toLowerCase().includes(lowerQuery) ||
-      liability.description?.toLowerCase().includes(lowerQuery)
-    );
-  }
-
-  // Assets methods
-  async getAssets(): Promise<Assets[]> {
-    return Array.from(this.assets.values());
-  }
-
-  async getAsset(id: number): Promise<Assets | undefined> {
-    return this.assets.get(id);
-  }
-
-  async createAsset(asset: InsertAssets): Promise<Assets> {
-    const newAsset: Assets = {
-      id: this.currentAssetId++,
-      ...asset
-    };
-    
-    this.assets.set(newAsset.id, newAsset);
-    return newAsset;
-  }
-
-  async updateAsset(id: number, updates: Partial<InsertAssets>): Promise<Assets | undefined> {
-    const existing = this.assets.get(id);
-    if (!existing) return undefined;
-    
-    const updated: Assets = { ...existing, ...updates };
-    this.assets.set(id, updated);
-    return updated;
-  }
-
-  async deleteAsset(id: number): Promise<boolean> {
-    return this.assets.delete(id);
-  }
-
-  async searchAssets(query: string): Promise<Assets[]> {
-    const allAssets = Array.from(this.assets.values());
-    if (!query.trim()) return allAssets;
-    
-    const lowerQuery = query.toLowerCase();
-    return allAssets.filter(asset => 
-      asset.category?.toLowerCase().includes(lowerQuery) ||
-      asset.description?.toLowerCase().includes(lowerQuery)
     );
   }
 }
