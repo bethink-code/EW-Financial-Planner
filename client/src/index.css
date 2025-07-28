@@ -332,8 +332,8 @@ th, td {
   /* Summary card description text styling */
   .summary-card h3,
   .summary-card .text-sm {
-    font-size: 1rem !important; /* Increased from 0.875rem to 1rem */
-    font-weight: 500 !important;
+    font-size: 1.125rem !important; /* Increased to 18px for better visibility */
+    font-weight: 600 !important; /* Slightly bolder for prominence */
     color: #374151 !important;
     margin-bottom: 0.5rem !important;
     line-height: 1.25 !important; /* Better line spacing for wrapped text */
