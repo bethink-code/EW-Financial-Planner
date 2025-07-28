@@ -14,16 +14,13 @@ const tables: TableNavItem[] = [
   { name: "Retirement Funds", path: "/new-retirement-funds", category: "Main Calculator" },
   { name: "Defined Benefit Funds", path: "/defined-benefit-funds", category: "Main Calculator" },
   { name: "Voluntary Investments", path: "/voluntary-investments", category: "Main Calculator" },
-  { name: "Assets-and-Liabilities", path: "/assets-and-liabilities", category: "Main Calculator" },
+  { name: "Assets", path: "/assets", category: "Main Calculator" },
+  { name: "Liabilities", path: "/liabilities", category: "Main Calculator" },
   { name: "Income Needs", path: "/income-needs", category: "Main Calculator" },
   { name: "Income Provisions", path: "/income-provisions", category: "Main Calculator" },
   { name: "Residue", path: "/residue", category: "Main Calculator" },
   { name: "Lump Sum Bequests", path: "/lump-sum-bequests", category: "Main Calculator" },
-  { name: "Additional Estate Duty Items", path: "/additional-estate-duty-items", category: "Main Calculator" },
-  
-  // Separate Tables
-  { name: "Assets (Standalone)", path: "/assets", category: "Standalone" },
-  { name: "Liabilities (Standalone)", path: "/liabilities", category: "Standalone" }
+  { name: "Additional Estate Duty Items", path: "/additional-estate-duty-items", category: "Main Calculator" }
 ];
 
 export function TableNavigationDropdown() {

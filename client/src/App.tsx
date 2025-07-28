@@ -17,7 +17,7 @@ import DefinedBenefitFunds from "@/pages/defined-benefit-funds";
 import VoluntaryInvestments from "@/pages/voluntary-investments";
 import Residue from "@/pages/residue";
 import AdditionalEstateDutyItems from "@/pages/additional-estate-duty-items";
-import AssetsAndLiabilities from "@/pages/assets-and-liabilities";
+
 
 function Router() {
   return (
@@ -28,7 +28,7 @@ function Router() {
           <Route path="/" component={TableNavigation} />
           <Route path="/assurance" component={Assurance} />
           <Route path="/new-retirement-funds" component={NewRetirementFunds} />
-          <Route path="/assets-and-liabilities" component={AssetsAndLiabilities} />
+
           <Route path="/defined-benefit-funds" component={DefinedBenefitFunds} />
           <Route path="/voluntary-investments" component={VoluntaryInvestments} />
           <Route path="/assets" component={AssetsPage} />
