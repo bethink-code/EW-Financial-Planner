@@ -296,10 +296,10 @@ export default function DefinedBenefitFundsTable() {
                       defaultValue={fund.description}
                       className={`table-input ${getFieldClass('text')} ${getValueClass(fund.description, 'text')}`}
                       onFocus={handleDefaultValueFocus}
-                      onBlur={createEnhancedBlurHandler(
-                        (e) => handleUpdateFund(fund.id, 'description', e.target.value),
-                        'text'
-                      )}
+                      onBlur={(e) => {
+                        const formattedValue = e.target.value || "";
+                        handleUpdateFund(fund.id, 'description', formattedValue);
+                      }}
                       disabled={isUpdating}
                     />
                   )}
@@ -339,10 +339,11 @@ export default function DefinedBenefitFundsTable() {
                     type="text"
                     defaultValue={fund.ownershipPercentages[rowIndex] || "0%"}
                     onFocus={handleDefaultValueFocus}
-                    onBlur={createEnhancedBlurHandler(
-                      (e) => handleOwnerUpdate(fund.id, rowIndex, 'percentage', e.target.value),
-                      'percentage'
-                    )}
+                    onBlur={(e) => {
+                      const formattedValue = formatPercentageValue(e.target.value);
+                      handleOwnerUpdate(fund.id, rowIndex, 'percentage', formattedValue);
+                      e.target.value = formattedValue;
+                    }}
                     className={`table-input ${getFieldClass('percentage')} ${getValueClass(fund.ownershipPercentages[rowIndex] || "0%", 'percentage')}`}
                     disabled={isUpdating}
                   />
