@@ -234,13 +234,13 @@ function VoluntaryInvestmentsTable({ viewMode, searchTerm }: VoluntaryInvestment
       <table>
         <thead>
           <tr>
-            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start section-end" rowSpan={2}>
+            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start" rowSpan={2}>
               <AddButton onClick={() => addMutation.mutate()} disabled={isUpdating} />
             </th>
             <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start" colSpan={3}>Overview</th>
             <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start" colSpan={3}>Investment Details</th>
             <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start" colSpan={2}>Bequeath To</th>
-            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start section-end" colSpan={4}>Exclusions</th>
+            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start" colSpan={4}>Exclusions</th>
           </tr>
           <tr>
             <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center border-b border-neutral-200">Description</th>
@@ -254,7 +254,7 @@ function VoluntaryInvestmentsTable({ viewMode, searchTerm }: VoluntaryInvestment
             <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start border-b border-neutral-200">Joint Estate</th>
             <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center border-b border-neutral-200">Estate Duty</th>
             <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center border-b border-neutral-200">CGT</th>
-            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-end border-b border-neutral-200">Executor's Fees</th>
+            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center border-b border-neutral-200">Executor's Fees</th>
           </tr>
         </thead>
         <tbody className="divide-y divide-neutral-200">
@@ -268,7 +268,7 @@ function VoluntaryInvestmentsTable({ viewMode, searchTerm }: VoluntaryInvestment
                 className="hover:bg-neutral-50"
               >
                 {ownerIndex === 0 && (
-                  <td className="table-actions-cell p-1 text-center section-start section-end align-top" rowSpan={maxRows}>
+                  <td className="table-actions-cell p-1 text-center section-start align-top" rowSpan={maxRows}>
                     <ActionButtonGroup>
                       <DuplicateButton
                         onClick={() => addMutation.mutate()}
@@ -424,7 +424,7 @@ function VoluntaryInvestmentsTable({ viewMode, searchTerm }: VoluntaryInvestment
                       />
                     </td>
                     
-                    <td className="p-2 text-center section-end align-top" rowSpan={maxRows}>
+                    <td className="p-2 text-center align-top" rowSpan={maxRows}>
                       <input
                         type="checkbox"
                         checked={investment.excludedFromExecutorsFees}
@@ -449,7 +449,7 @@ function VoluntaryInvestmentsTable({ viewMode, searchTerm }: VoluntaryInvestment
             <td className="totals-cell-label"></td>
             <td className="totals-cell-value section-start">R {totals.spouse.toLocaleString()}</td>
             <td className="totals-cell-value">R {totals.others.toLocaleString()}</td>
-            <td className="totals-cell-label section-start section-end" colSpan={4}></td>
+            <td className="totals-cell-label section-start" colSpan={4}></td>
           </tr>
         </tfoot>
       </table>
