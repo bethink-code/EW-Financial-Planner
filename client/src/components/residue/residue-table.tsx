@@ -4,7 +4,7 @@ import { queryClient } from '@/lib/queryClient';
 import { Residue, InsertResidue } from '@shared/schema';
 import { AddButton, ActionButtonGroup, DuplicateButton, DeleteButton } from '@/components/ui/action-buttons';
 import { getFieldClass, getCellClass } from '@/lib/field-types';
-import { formatCurrencyValue, formatPercentageValue, getValueClass, handleDefaultValueFocus } from '@/lib/formatting';
+import { formatCurrencyValue, formatPercentageValue, getValueClass, handleDefaultValueFocus, createEnhancedBlurHandler } from '@/lib/formatting';
 
 interface ResidueTableProps {
   viewMode: 'table' | 'hybrid';
@@ -22,9 +22,8 @@ function ResidueTable({ viewMode, searchTerm }: ResidueTableProps) {
     mutationFn: async (): Promise<Residue> => {
       const newResidue: InsertResidue = {
         description: "Enter details ...",
-        beneficiary: "Enter beneficiary",
-        percentage: "0%",
-        additionalBeneficiaries: [],
+        amount: "R 0",
+        increasePercentage: "0%",
       };
       
       const response = await fetch('/api/residue', {
@@ -95,8 +94,12 @@ function ResidueTable({ viewMode, searchTerm }: ResidueTableProps) {
   const totals = useMemo(() => {
     return {
       count: residues.length,
-      percentage: residues.reduce((sum: number, residue: Residue) => {
-        const value = parseFloat((residue.percentage || '').replace(/[^\d.-]/g, '')) || 0;
+      amount: residues.reduce((sum: number, residue: Residue) => {
+        const value = parseFloat((residue.amount || '').replace(/[^\d.-]/g, '')) || 0;
+        return sum + value;
+      }, 0),
+      increasePercentage: residues.reduce((sum: number, residue: Residue) => {
+        const value = parseFloat((residue.increasePercentage || '').replace(/[^\d.-]/g, '')) || 0;
         return sum + value;
       }, 0),
     };
@@ -109,12 +112,8 @@ function ResidueTable({ viewMode, searchTerm }: ResidueTableProps) {
   }, [updateMutation]);
 
   const handleInputBlur = useCallback((id: number, field: keyof Residue, value: string) => {
-    let formattedValue: string;
-    if (field === 'percentage') {
-      formattedValue = formatPercentageValue(value);
-    } else {
-      formattedValue = value;
-    }
+    const enhancedBlurHandler = createEnhancedBlurHandler(field);
+    const formattedValue = enhancedBlurHandler(value);
     handleUpdateResidue(id, field, formattedValue);
     
     const target = document.activeElement as HTMLInputElement;
@@ -144,29 +143,29 @@ function ResidueTable({ viewMode, searchTerm }: ResidueTableProps) {
       <table>
         <thead>
           <tr>
-            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start section-end" rowSpan={2}>
+            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center" rowSpan={2}>
               <AddButton onClick={() => addMutation.mutate()} disabled={isUpdating} />
             </th>
-            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start" colSpan={2}>Overview</th>
-            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start section-end">Distribution</th>
+            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start" colSpan={1}>Overview</th>
+            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start" colSpan={2}>Financial Details</th>
           </tr>
           <tr>
             <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start">Description</th>
-            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center">Beneficiary</th>
-            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-end">Percentage</th>
+            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start">Amount</th>
+            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-end">Increase %</th>
           </tr>
         </thead>
         <tbody className="divide-y divide-neutral-200">
           {residues.map((residue: Residue, index) => (
             <tr key={residue.id} className="hover:bg-neutral-50">
-              <td className="table-actions-cell p-1 text-center section-start section-end">
+              <td className="table-actions-cell p-2 text-center">
                 <ActionButtonGroup>
                   <DuplicateButton onClick={() => addMutation.mutate()} disabled={isUpdating} />
                   <DeleteButton onClick={() => handleDeleteResidue(residue.id)} disabled={isUpdating} />
                 </ActionButtonGroup>
               </td>
               
-              <td className="p-1 section-start">
+              <td className="p-2 text-left">
                 <input
                   type="text"
                   defaultValue={residue.description}
@@ -177,25 +176,26 @@ function ResidueTable({ viewMode, searchTerm }: ResidueTableProps) {
                 />
               </td>
               
-              <td className="p-1">
+              <td className="p-2 text-right">
                 <input
+                  key={`amount-${residue.id}-${residue.amount}`}
                   type="text"
-                  defaultValue={residue.beneficiary}
-                  className={`table-input ${getFieldClass('text')} ${getValueClass(residue.beneficiary, 'text')}`}
+                  defaultValue={residue.amount}
+                  className={`table-input ${getFieldClass('currency')} ${getValueClass(residue.amount, 'currency')}`}
                   onFocus={handleDefaultValueFocus}
-                  onBlur={(e) => handleInputBlur(residue.id, 'beneficiary', e.target.value)}
+                  onBlur={(e) => handleInputBlur(residue.id, 'amount', e.target.value)}
                   disabled={isUpdating}
                 />
               </td>
               
-              <td className="p-1 section-end">
+              <td className="p-2 text-center">
                 <input
-                  key={`percentage-${residue.id}-${residue.percentage}`}
+                  key={`increasePercentage-${residue.id}-${residue.increasePercentage}`}
                   type="text"
-                  defaultValue={residue.percentage}
-                  className={`table-input ${getFieldClass('percentage')} ${getValueClass(residue.percentage, 'percentage')}`}
+                  defaultValue={residue.increasePercentage}
+                  className={`table-input ${getFieldClass('percentage')} ${getValueClass(residue.increasePercentage, 'percentage')}`}
                   onFocus={handleDefaultValueFocus}
-                  onBlur={(e) => handleInputBlur(residue.id, 'percentage', e.target.value)}
+                  onBlur={(e) => handleInputBlur(residue.id, 'increasePercentage', e.target.value)}
                   disabled={isUpdating}
                 />
               </td>
@@ -206,7 +206,8 @@ function ResidueTable({ viewMode, searchTerm }: ResidueTableProps) {
         <tfoot>
           <tr>
             <td className="totals-cell-label text-right" colSpan={2}>Totals</td>
-            <td className="totals-cell-value section-end">{totals.percentage}%</td>
+            <td className="totals-cell-value">R {totals.amount.toLocaleString()}</td>
+            <td className="totals-cell-value">{totals.increasePercentage}%</td>
           </tr>
         </tfoot>
       </table>
