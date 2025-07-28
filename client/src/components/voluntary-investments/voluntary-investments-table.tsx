@@ -160,97 +160,52 @@ function VoluntaryInvestmentsTable({ viewMode, searchTerm }: VoluntaryInvestment
     }
   }, [deleteMutation]);
 
-  const handleAddOwner = useCallback(async (id: number) => {
+  const handleAddOwner = useCallback((id: number) => {
     if (isUpdating) return; // Prevent concurrent operations
     
-    try {
-      setIsUpdating(true);
-      
-      // Fetch fresh data to avoid stale cache issues
-      const response = await fetch(`/api/voluntary-investments/${id}`);
-      if (!response.ok) throw new Error('Failed to fetch investment');
-      
-      const investment: VoluntaryInvestment = await response.json();
-      const newOwners = [...investment.owners, ""];
-      const newPercentages = [...investment.ownershipPercentages, "0%"];
-      
-      updateMutation.mutate({ 
-        id, 
-        updates: { 
-          owners: newOwners,
-          ownershipPercentages: newPercentages
-        }
-      });
-    } catch (error) {
-      console.error('Error adding owner:', error);
-      setIsUpdating(false);
-    }
-  }, [updateMutation, isUpdating]);
+    const investment = investments.find(inv => inv.id === id);
+    if (!investment) return;
+    
+    const newOwners = [...investment.owners, ""];
+    const newPercentages = [...investment.ownershipPercentages, "0%"];
+    
+    handleUpdateInvestment(id, 'owners', newOwners);
+    handleUpdateInvestment(id, 'ownershipPercentages', newPercentages);
+  }, [handleUpdateInvestment, investments, isUpdating]);
 
-  const handleRemoveOwner = useCallback(async (id: number, ownerIndex: number) => {
+  const handleRemoveOwner = useCallback((id: number, ownerIndex: number) => {
     if (isUpdating) return; // Prevent concurrent operations
     
-    try {
-      setIsUpdating(true);
-      
-      // Fetch fresh data to avoid stale cache issues
-      const response = await fetch(`/api/voluntary-investments/${id}`);
-      if (!response.ok) throw new Error('Failed to fetch investment');
-      
-      const investment: VoluntaryInvestment = await response.json();
-      if (investment.owners.length <= 1 || ownerIndex === 0) {
-        setIsUpdating(false);
-        return; // Protect first owner
-      }
-      
-      const newOwners = [...investment.owners];
-      const newPercentages = [...investment.ownershipPercentages];
-      
-      newOwners.splice(ownerIndex, 1);
-      newPercentages.splice(ownerIndex, 1);
-      
-      updateMutation.mutate({ 
-        id, 
-        updates: { 
-          owners: newOwners,
-          ownershipPercentages: newPercentages
-        }
-      });
-    } catch (error) {
-      console.error('Error removing owner:', error);
-      setIsUpdating(false);
-    }
-  }, [updateMutation, isUpdating]);
+    const investment = investments.find(inv => inv.id === id);
+    if (!investment || investment.owners.length <= 1 || ownerIndex === 0) return;
+    
+    const newOwners = [...investment.owners];
+    const newPercentages = [...investment.ownershipPercentages];
+    
+    newOwners.splice(ownerIndex, 1);
+    newPercentages.splice(ownerIndex, 1);
+    
+    handleUpdateInvestment(id, 'owners', newOwners);
+    handleUpdateInvestment(id, 'ownershipPercentages', newPercentages);
+  }, [handleUpdateInvestment, investments, isUpdating]);
 
-  const handleOwnerChange = useCallback(async (id: number, ownerIndex: number, newOwner: string) => {
-    try {
-      // Fetch fresh data to avoid stale cache issues
-      const response = await fetch(`/api/voluntary-investments/${id}`);
-      if (!response.ok) return;
-      
-      const investment: VoluntaryInvestment = await response.json();
-      const updatedOwners = [...investment.owners];
-      updatedOwners[ownerIndex] = newOwner;
-      handleUpdateInvestment(id, 'owners', updatedOwners);
-    } catch (error) {
-      console.error('Error updating owner:', error);
-    }
-  }, [handleUpdateInvestment]);
+  const handleOwnerChange = useCallback((id: number, ownerIndex: number, newOwner: string) => {
+    const investment = investments.find(inv => inv.id === id);
+    if (!investment) return;
+    
+    const updatedOwners = [...investment.owners];
+    updatedOwners[ownerIndex] = newOwner;
+    handleUpdateInvestment(id, 'owners', updatedOwners);
+  }, [handleUpdateInvestment, investments]);
 
-  const handleOwnershipPercentageChange = useCallback(async (id: number, ownerIndex: number, newPercentage: string) => {
-    try {
-      // Fetch fresh data to avoid stale cache issues
-      const response = await fetch(`/api/voluntary-investments/${id}`);
-      if (!response.ok) return;
-      
-      const investment: VoluntaryInvestment = await response.json();
-      const updatedPercentages = [...investment.ownershipPercentages];
-      updatedPercentages[ownerIndex] = newPercentage;
-      handleUpdateInvestment(id, 'ownershipPercentages', updatedPercentages);
-    } catch (error) {
-      console.error('Error updating ownership percentage:', error);
-    }
-  }, [handleUpdateInvestment]);
+  const handleOwnershipPercentageChange = useCallback((id: number, ownerIndex: number, newPercentage: string) => {
+    const investment = investments.find(inv => inv.id === id);
+    if (!investment) return;
+    
+    const updatedPercentages = [...investment.ownershipPercentages];
+    updatedPercentages[ownerIndex] = formatPercentageValue(newPercentage);
+    handleUpdateInvestment(id, 'ownershipPercentages', updatedPercentages);
+  }, [handleUpdateInvestment, investments]);
 
   if (isLoading) {
     return <div className="flex justify-center py-8">Loading voluntary investments...</div>;
