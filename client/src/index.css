@@ -285,15 +285,15 @@ th, td {
     position: relative;
   }
 
-  /* Override any conflicting border classes globally */
-  table .border-b,
-  table .border-neutral-200,
-  table .border-bottom,
-  table th.border-b,
-  table td.border-b,
-  table .border,
-  table .border-neutral-300,
-  table .border-gray-300 {
+  /* Override any conflicting border classes globally - but preserve section borders */
+  table .border-b:not(.section-start):not(.section-end),
+  table .border-neutral-200:not(.section-start):not(.section-end),
+  table .border-bottom:not(.section-start):not(.section-end),
+  table th.border-b:not(.section-start):not(.section-end),
+  table td.border-b:not(.section-start):not(.section-end),
+  table .border:not(.section-start):not(.section-end),
+  table .border-neutral-300:not(.section-start):not(.section-end),
+  table .border-gray-300:not(.section-start):not(.section-end) {
     border: none !important;
     border-bottom: none !important;
     border-top: none !important;
@@ -302,17 +302,23 @@ th, td {
   }
 
   /* ONLY section separators - vertical borders that separate major sections */
-  /* Apply to ALL table elements: header, body, footer */
-  thead .section-start,
-  tbody .section-start,
-  tfoot .section-start {
-    border-left: 1px solid #d1d5db !important;
+  /* Apply to ALL table elements: header, body, footer with higher specificity */
+  table thead .section-start,
+  table tbody .section-start,
+  table tfoot .section-start {
+    border-left: 2px solid #9ca3af !important;
+    border-top: none !important;
+    border-bottom: none !important;
+    border-right: none !important;
   }
 
-  thead .section-end,
-  tbody .section-end,
-  tfoot .section-end {
-    border-right: 1px solid #d1d5db !important;
+  table thead .section-end,
+  table tbody .section-end,
+  table tfoot .section-end {
+    border-right: 2px solid #9ca3af !important;
+    border-top: none !important;
+    border-bottom: none !important;
+    border-left: none !important;
   }
 
   /* Prevent double borders when section-end is immediately followed by section-start */
