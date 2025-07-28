@@ -613,9 +613,9 @@ th, td {
   input.field-currency,
   .table-input.field-currency,
   .field-currency.table-input {
-    min-width: 80px !important;
-    max-width: 110px !important;
-    width: 90px !important;
+    min-width: 100px !important;
+    max-width: 140px !important;
+    width: 120px !important;
     text-align: right !important;
     font-size: 0.875rem !important; /* 14px standardized font size */
   }
