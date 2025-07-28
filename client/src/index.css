@@ -577,7 +577,7 @@ th, td {
 
   /* GLOBAL CALCULATED FIELD STYLING - Apply to all calculated/readonly fields */
   .calculated-field {
-    background-color: #f3f4f6 !important; /* light grey background */
+    background-color: transparent !important;
     border: 1px solid transparent !important;
     cursor: default !important;
     user-select: none !important;
@@ -596,20 +596,20 @@ th, td {
   }
 
   .calculated-field:hover {
-    background-color: #f3f4f6 !important; /* maintain light grey on hover */
+    background-color: transparent !important;
     border: 1px solid transparent !important;
     box-shadow: none !important;
   }
 
   .calculated-field:focus {
-    background-color: #f3f4f6 !important; /* maintain light grey on focus */
+    background-color: transparent !important;
     border: 1px solid transparent !important;
     box-shadow: none !important;
     outline: none !important;
   }
 
   .calculated-field:disabled {
-    background-color: #f3f4f6 !important; /* maintain light grey when disabled */
+    background-color: transparent !important;
     border: 1px solid transparent !important;
     opacity: 1 !important;
     color: #374151 !important;

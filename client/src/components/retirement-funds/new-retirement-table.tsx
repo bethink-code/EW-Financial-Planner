@@ -352,7 +352,7 @@ export function NewRetirementTable({
                 </td>
 
                 {/* Unapproved Life Cover - Cover Split (Calculated) */}
-                <td className="p-1">
+                <td className="p-1 bg-neutral-100">
                   {rowIndex < fund.unapprovedCoverSplits.length && (
                     <span className="calculated-field">
                       {fund.unapprovedCoverSplits[rowIndex]}
@@ -456,7 +456,7 @@ export function NewRetirementTable({
                 </td>
 
                 {/* Approved Life Cover - Fund Value at Death (Calculated) */}
-                <td className="p-1">
+                <td className="p-1 bg-neutral-100">
                   {rowIndex === 0 && (
                     <span className="calculated-field">
                       {fund.fundValueAtDeath}
@@ -517,7 +517,7 @@ export function NewRetirementTable({
                 </td>
 
                 {/* Fund Value Beneficiaries - Cover (Calculated) */}
-                <td className="p-1">
+                <td className="p-1 bg-neutral-100">
                   {rowIndex < fund.fundValueCoverSplits.length && (
                     <span className="calculated-field">
                       {fund.fundValueCoverSplits[rowIndex]}
@@ -558,7 +558,7 @@ export function NewRetirementTable({
                 </td>
 
                 {/* Fund Value Beneficiaries - Living Annuity (Calculated) */}
-                <td className="p-1">
+                <td className="p-1 bg-neutral-100">
                   {rowIndex === 0 && (
                     <span className="calculated-field">
                       {fund.livingAnnuity}
