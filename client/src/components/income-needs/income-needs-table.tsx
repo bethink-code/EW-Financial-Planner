@@ -195,7 +195,7 @@ function IncomeNeedsTable({ viewMode, searchTerm }: IncomeNeedsTableProps) {
               <td className="p-2 text-left">
                 <input
                   type="text"
-                  defaultValue={incomeNeed.description}
+                  defaultValue={formatTextValue(incomeNeed.description)}
                   className={`table-input ${getFieldClass('text')} ${getValueClass(incomeNeed.description, 'text')}`}
                   onFocus={handleDefaultValueFocus}
                   onBlur={(e) => handleInputBlur(incomeNeed.id, 'description', e.target.value)}
@@ -206,7 +206,7 @@ function IncomeNeedsTable({ viewMode, searchTerm }: IncomeNeedsTableProps) {
               <td className="p-2 text-left">
                 <input
                   type="text"
-                  defaultValue={incomeNeed.personName}
+                  defaultValue={formatTextValue(incomeNeed.personName)}
                   className={`table-input ${getFieldClass('text')} ${getValueClass(incomeNeed.personName, 'text')}`}
                   onFocus={handleDefaultValueFocus}
                   onBlur={(e) => handleInputBlur(incomeNeed.id, 'personName', e.target.value)}

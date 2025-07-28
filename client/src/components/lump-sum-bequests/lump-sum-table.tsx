@@ -208,7 +208,7 @@ function LumpSumTable({ viewMode, searchTerm }: LumpSumTableProps) {
               <td className="p-2 text-left">
                 <input
                   type="text"
-                  defaultValue={bequest.description}
+                  defaultValue={formatTextValue(bequest.description)}
                   className={`table-input ${getFieldClass('text')} ${getValueClass(bequest.description, 'text')}`}
                   onFocus={handleDefaultValueFocus}
                   onBlur={(e) => handleInputBlur(bequest.id, 'description', e.target.value, e.target)}
@@ -219,7 +219,7 @@ function LumpSumTable({ viewMode, searchTerm }: LumpSumTableProps) {
               <td className="p-2 text-left">
                 <input
                   type="text"
-                  defaultValue={bequest.entity}
+                  defaultValue={formatTextValue(bequest.entity)}
                   className={`table-input ${getFieldClass('text')} ${getValueClass(bequest.entity, 'text')}`}
                   onFocus={handleDefaultValueFocus}
                   onBlur={(e) => handleInputBlur(bequest.id, 'entity', e.target.value, e.target)}
@@ -230,7 +230,7 @@ function LumpSumTable({ viewMode, searchTerm }: LumpSumTableProps) {
               <td className="p-2 text-left">
                 <input
                   type="text"
-                  defaultValue={bequest.start}
+                  defaultValue={formatTextValue(bequest.start)}
                   className={`table-input ${getFieldClass('text')} ${getValueClass(bequest.start, 'text')}`}
                   onFocus={handleDefaultValueFocus}
                   onBlur={(e) => handleInputBlur(bequest.id, 'start', e.target.value, e.target)}

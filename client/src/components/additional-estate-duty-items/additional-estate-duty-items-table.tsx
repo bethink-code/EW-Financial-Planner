@@ -232,7 +232,7 @@ function AdditionalEstateDutyItemsTable({ viewMode, searchTerm }: AdditionalEsta
               <td className="p-2 text-left">
                 <input
                   type="text"
-                  defaultValue={item.description}
+                  defaultValue={formatTextValue(item.description)}
                   placeholder="Enter details ..."
                   className={`table-input ${getFieldClass('text')} ${getValueClass(item.description, 'text')}`}
                   onFocus={handleDefaultValueFocus}

@@ -5,7 +5,7 @@ import { VoluntaryInvestment, InsertVoluntaryInvestment } from '@shared/schema';
 import { AddButton, ActionButtonGroup, DuplicateButton, DeleteButton } from '@/components/ui/action-buttons';
 
 import { getFieldClass, getCellClass } from '@/lib/field-types';
-import { formatCurrencyValue, formatPercentageValue, getValueClass, handleDefaultValueFocus } from '@/lib/formatting';
+import { formatCurrencyValue, formatPercentageValue, formatTextValue, getValueClass, handleDefaultValueFocus } from '@/lib/formatting';
 
 interface VoluntaryInvestmentsTableProps {
   viewMode: 'table' | 'hybrid';
@@ -239,7 +239,7 @@ function VoluntaryInvestmentsTable({ viewMode, searchTerm }: VoluntaryInvestment
                   <td className="p-2 vertical-align-middle" rowSpan={maxRows}>
                     <input
                       type="text"
-                      defaultValue={investment.description}
+                      defaultValue={formatTextValue(investment.description)}
                       className={`table-input ${getFieldClass('text')} ${getValueClass(investment.description, 'text')}`}
                       onFocus={handleDefaultValueFocus}
                       onBlur={(e) => handleInputBlur(investment.id, 'description', e.target.value)}

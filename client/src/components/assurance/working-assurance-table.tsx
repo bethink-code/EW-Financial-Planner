@@ -293,7 +293,7 @@ export function AssuranceTable({}: AssuranceTableProps) {
                     {rowIndex === 0 && (
                       <input
                         type="text"
-                        defaultValue={policy.description}
+                        defaultValue={formatTextValue(policy.description)}
                         placeholder="Enter details ..."
                         className={`table-input ${getFieldClass('text')} ${getValueClass(policy.description, 'text')}`}
                         onFocus={handleDefaultValueFocus}

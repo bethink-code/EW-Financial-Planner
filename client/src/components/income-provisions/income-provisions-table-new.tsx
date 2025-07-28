@@ -4,8 +4,7 @@ import { queryClient } from '@/lib/queryClient';
 import { IncomeProvisions, InsertIncomeProvisions } from '@shared/schema';
 import { ActionButtonGroup, DuplicateButton, DeleteButton, AddButton } from '@/components/ui/action-buttons';
 import { getFieldClass, getCellClass } from '@/lib/field-types';
-import { formatCurrencyValue, formatPercentageValue, formatTextValue, formatNumberValue, isDefaultValue, getValueClass, parseCurrencyValue } from '@/lib/formatting';
-import { handleDefaultValueFocus } from '@/lib/formatting';
+import { formatCurrencyValue, formatPercentageValue, formatTextValue, formatNumberValue, isDefaultValue, getValueClass, parseCurrencyValue, handleDefaultValueFocus } from '@/lib/formatting';
 
 interface IncomeProvisionsTableProps {
   viewMode: 'table' | 'hybrid';
@@ -235,7 +234,7 @@ export default function IncomeProvisionsTable({ viewMode, searchTerm }: IncomePr
                   <input
                     key={`description-${provision.id}-${provision.description}`}
                     type="text"
-                    defaultValue={provision.description}
+                    defaultValue={formatTextValue(provision.description)}
                     className={`table-input ${getFieldClass('text')} ${getValueClass(provision.description, 'text')}`}
                     onFocus={handleDefaultValueFocus}
                     onBlur={(e) => handleInputBlur(provision.id, 'description', e.target.value, e.target)}
@@ -248,7 +247,7 @@ export default function IncomeProvisionsTable({ viewMode, searchTerm }: IncomePr
                   <input
                     key={`personName-${provision.id}-${provision.personName}`}
                     type="text"
-                    defaultValue={provision.personName}
+                    defaultValue={formatTextValue(provision.personName)}
                     className={`table-input ${getFieldClass('text')} ${getValueClass(provision.personName, 'text')}`}
                     onFocus={handleDefaultValueFocus}
                     onBlur={(e) => handleInputBlur(provision.id, 'personName', e.target.value, e.target)}

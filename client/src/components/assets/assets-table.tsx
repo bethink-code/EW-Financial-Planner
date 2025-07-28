@@ -4,8 +4,7 @@ import { queryClient } from '@/lib/queryClient';
 import { Assets, InsertAssets } from '@shared/assets-schema';
 import { AddButton, ActionButtonGroup, DuplicateButton, DeleteButton } from '@/components/ui/action-buttons';
 import { getFieldClass, getFieldWidth, getCellClass } from '@/lib/field-types';
-import { formatCurrencyValue, formatPercentageValue, isDefaultValue, getValueClass } from '@/lib/formatting';
-import { handleDefaultValueFocus } from '@/lib/formatting';
+import { formatCurrencyValue, formatPercentageValue, isDefaultValue, getValueClass, formatTextValue, handleDefaultValueFocus } from '@/lib/formatting';
 
 interface AssetsTableProps {
   viewMode: 'table' | 'hybrid';
@@ -237,7 +236,7 @@ function AssetsTable({ viewMode, searchTerm }: AssetsTableProps) {
               <td className="p-2 text-left">
                 <input
                   type="text"
-                  defaultValue={asset.description}
+                  defaultValue={formatTextValue(asset.description)}
                   className={`table-input ${getFieldClass('text')} ${getValueClass(asset.description, 'text')}`}
                   onFocus={handleDefaultValueFocus}
                   onBlur={(e) => handleInputBlur(asset.id, 'description', e.target.value)}

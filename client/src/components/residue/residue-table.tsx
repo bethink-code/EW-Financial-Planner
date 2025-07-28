@@ -233,7 +233,7 @@ function ResidueTable({ viewMode, searchTerm }: ResidueTableProps) {
               <td className="p-2 text-left">
                 <input
                   type="text"
-                  defaultValue={residue.description}
+                  defaultValue={formatTextValue(residue.description)}
                   className={`table-input ${getFieldClass('text')} ${getValueClass(residue.description, 'text')}`}
                   onFocus={handleDefaultValueFocus}
                   onBlur={(e) => handleInputBlur(residue.id, 'description', e.target.value)}

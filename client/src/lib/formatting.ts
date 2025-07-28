@@ -55,11 +55,12 @@ export const formatYearsValue = (value: string): string => {
 };
 
 /**
- * Format text value with trimming - returns empty string for empty values
+ * Format text value - returns "Enter details ..." for empty values
  */
 export const formatTextValue = (value: string): string => {
   // Convert to string and handle null/undefined values
   const stringValue = String(value || '');
+  if (!stringValue.trim() || stringValue.trim() === '') return 'Enter details ...';
   return stringValue.trim();
 };
 

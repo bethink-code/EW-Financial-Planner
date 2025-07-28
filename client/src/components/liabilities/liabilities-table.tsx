@@ -4,7 +4,7 @@ import { queryClient } from '@/lib/queryClient';
 import { Liabilities, InsertLiabilities } from '@shared/schema';
 import { AddButton, ActionButtonGroup, DuplicateButton, DeleteButton } from '@/components/ui/action-buttons';
 import { getFieldClass, getCellClass } from '@/lib/field-types';
-import { formatCurrencyValue, formatPercentageValue, getValueClass, handleDefaultValueFocus } from '@/lib/formatting';
+import { formatCurrencyValue, formatPercentageValue, getValueClass, handleDefaultValueFocus, formatTextValue } from '@/lib/formatting';
 
 interface LiabilitiesTableProps {
   viewMode: 'table' | 'hybrid';
@@ -232,7 +232,7 @@ function LiabilitiesTable({ viewMode, searchTerm }: LiabilitiesTableProps) {
                   <td className="p-2 text-left section-start">
                     <input
                       type="text"
-                      defaultValue={liability.description}
+                      defaultValue={formatTextValue(liability.description)}
                       className={`table-input ${getFieldClass('text')} ${getValueClass(liability.description, 'text')}`}
                       onFocus={handleDefaultValueFocus}
                       onBlur={(e) => handleInputBlur(liability.id, 'description', e.target.value)}
