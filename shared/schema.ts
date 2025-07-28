@@ -6,12 +6,12 @@ export const retirementFunds = pgTable("retirement_funds", {
   id: serial("id").primaryKey(),
   
   // Overview Section
-  description: text("description").notNull().default("Enter details ..."),
+  description: text("description").notNull().default(""),
   owners: text("owners").array().notNull().default(["Donald Edwards"]),
   
   // Unapproved Life Cover Section
   coverAmount: text("cover_amount").notNull().default("R 0"),
-  unapprovedBeneficiaries: text("unapproved_beneficiaries").array().notNull().default(["Enter details ..."]),
+  unapprovedBeneficiaries: text("unapproved_beneficiaries").array().notNull().default([""]),
   unapprovedPercentageSplits: text("unapproved_percentage_splits").array().notNull().default(["0%"]),
   unapprovedCoverSplits: text("unapproved_cover_splits").array().notNull().default(["R 0"]), // Calculated
   
@@ -27,7 +27,7 @@ export const retirementFunds = pgTable("retirement_funds", {
   fundValueAtDeath: text("fund_value_at_death").notNull().default("R 0"), // Calculated
   
   // Fund Value Beneficiaries Section
-  fundValueBeneficiaries: text("fund_value_beneficiaries").array().notNull().default(["Enter details ..."]),
+  fundValueBeneficiaries: text("fund_value_beneficiaries").array().notNull().default([""]),
   fundValuePercentageSplits: text("fund_value_percentage_splits").array().notNull().default(["0%"]),
   fundValueCoverSplits: text("fund_value_cover_splits").array().notNull().default(["R 0"]), // Calculated
   lumpSumTaken: text("lump_sum_taken").notNull().default("R 0"),
@@ -54,11 +54,11 @@ export const lumpSumBequests = pgTable("lump_sum_bequests", {
   id: serial("id").primaryKey(),
   
   // Overview Section
-  description: text("description").notNull().default("Enter details ..."),
-  entity: text("entity").notNull().default("Enter details ..."),
+  description: text("description").notNull().default(""),
+  entity: text("entity").notNull().default(""),
   
   // Need Details Section
-  start: text("start").notNull().default("Enter details ..."), // Date field
+  start: text("start").notNull().default(""), // Date field
   amount: text("amount").notNull().default("R 0"),
   increasePercentage: text("increase_percentage").notNull().default("0%"),
   cpi: boolean("cpi").notNull().default(false),
@@ -82,13 +82,13 @@ export const assurance = pgTable("assurance", {
   id: serial("id").primaryKey(),
   
   // Basic policy information
-  description: text("description").notNull().default("Enter details ..."),
+  description: text("description").notNull().default(""),
   
   // Owner information
   owners: text("owners").array().notNull().default(["Donald Edwards"]),
   
   // Beneficiary information 
-  beneficiaries: text("beneficiaries").array().notNull().default(["Enter details ..."]),
+  beneficiaries: text("beneficiaries").array().notNull().default([""]),
   
   // Financial details
   deathBenefit: text("death_benefit").notNull().default("R 0"),
@@ -98,7 +98,7 @@ export const assurance = pgTable("assurance", {
   benefitSplit: text("benefit_split").notNull().default("0%"),
   
   // Additional info
-  additionalInfo: text("additional_info").notNull().default("Enter details ..."),
+  additionalInfo: text("additional_info").notNull().default(""),
 });
 
 export const insertAssuranceSchema = createInsertSchema(assurance).omit({

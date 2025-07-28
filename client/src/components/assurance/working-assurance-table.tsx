@@ -294,6 +294,7 @@ export function AssuranceTable({}: AssuranceTableProps) {
                       <input
                         type="text"
                         defaultValue={policy.description}
+                        placeholder="Enter details ..."
                         className={`table-input ${getFieldClass('text')} ${getValueClass(policy.description, 'text')}`}
                         onFocus={handleDefaultValueFocus}
                         onBlur={(e) => handleUpdatePolicy(policy.id, 'description', e.target.value)}
@@ -308,6 +309,7 @@ export function AssuranceTable({}: AssuranceTableProps) {
                         <input
                           type="text"
                           defaultValue={policy.owners[rowIndex]}
+                          placeholder="Enter details ..."
                           className={`table-input ${getFieldClass('text')} flex-1`}
                           onBlur={(e) => handleOwnerChange(policy.id, rowIndex, e.target.value)}
                         />
@@ -339,8 +341,9 @@ export function AssuranceTable({}: AssuranceTableProps) {
                     {rowIndex === 0 && (
                       <input
                         type="text"
-                        defaultValue="Enter here ..."
-                        className={`table-input ${getFieldClass('text')} ${getValueClass("Enter here ...", 'text')}`}
+                        defaultValue=""
+                        placeholder="Enter details ..."
+                        className={`table-input ${getFieldClass('text')} ${getValueClass("", 'text')}`}
                         onFocus={handleDefaultValueFocus}
                         onBlur={(e) => handleUpdatePolicy(policy.id, 'description', e.target.value)}
                       />
@@ -367,6 +370,7 @@ export function AssuranceTable({}: AssuranceTableProps) {
                         <input
                           type="text"
                           defaultValue={policy.beneficiaries[rowIndex]}
+                          placeholder="Enter details ..."
                           className={`table-input ${getFieldClass('text')} flex-1`}
                           onBlur={(e) => handleBeneficiaryChange(policy.id, rowIndex, e.target.value)}
                         />
@@ -399,6 +403,7 @@ export function AssuranceTable({}: AssuranceTableProps) {
                       <input
                         type="text"
                         defaultValue={policy.additionalInfo}
+                        placeholder="Enter details ..."
                         className={`table-input ${getFieldClass('text')} ${getValueClass(policy.additionalInfo, 'text')}`}
                         onFocus={handleDefaultValueFocus}
                         onBlur={(e) => handleUpdatePolicy(policy.id, 'additionalInfo', e.target.value)}

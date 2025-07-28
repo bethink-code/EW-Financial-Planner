@@ -748,10 +748,10 @@ export class DbStorage {
   // Helper function to apply defaults for retirement funds
   private applyRetirementFundDefaults(fund: Partial<InsertRetirementFund>): InsertRetirementFund {
     return {
-      description: fund.description || "Enter details ...",
+      description: fund.description || "",
       owners: fund.owners || ["Donald Edwards"],
       coverAmount: fund.coverAmount || "R 0",
-      unapprovedBeneficiaries: fund.unapprovedBeneficiaries || ["Enter details ..."],
+      unapprovedBeneficiaries: fund.unapprovedBeneficiaries || [""],
       unapprovedPercentageSplits: fund.unapprovedPercentageSplits || ["0%"],
       unapprovedCoverSplits: fund.unapprovedCoverSplits || ["R 0"],
       monthlyIncome: fund.monthlyIncome || "R 0",
@@ -761,7 +761,7 @@ export class DbStorage {
       approvedLifeCover: fund.approvedLifeCover || "R 0",
       fundValue: fund.fundValue || "R 0",
       fundValueAtDeath: fund.fundValueAtDeath || "R 0",
-      fundValueBeneficiaries: fund.fundValueBeneficiaries || ["Enter details ..."],
+      fundValueBeneficiaries: fund.fundValueBeneficiaries || [""],
       fundValuePercentageSplits: fund.fundValuePercentageSplits || ["0%"],
       fundValueCoverSplits: fund.fundValueCoverSplits || ["R 0"],
       lumpSumTaken: fund.lumpSumTaken || "R 0",
@@ -775,15 +775,15 @@ export class DbStorage {
   // Helper function to apply defaults for assurance
   private applyAssuranceDefaults(assuranceData: Partial<InsertAssurance>): InsertAssurance {
     return {
-      description: assuranceData.description || "Enter details ...",
+      description: assuranceData.description !== undefined ? assuranceData.description : "",
       owners: assuranceData.owners || ["Donald Edwards"],
-      beneficiaries: assuranceData.beneficiaries || ["Enter details ..."],
-      deathBenefit: assuranceData.deathBenefit || "R 0",
-      amount: assuranceData.amount || "R 0",
-      premiumsByOthers: assuranceData.premiumsByOthers || "R 0",
-      collateralSession: assuranceData.collateralSession || "R 0",
-      benefitSplit: assuranceData.benefitSplit || "0%",
-      additionalInfo: assuranceData.additionalInfo || "Enter details ..."
+      beneficiaries: assuranceData.beneficiaries || [""],
+      deathBenefit: assuranceData.deathBenefit !== undefined ? assuranceData.deathBenefit : "R 0",
+      amount: assuranceData.amount !== undefined ? assuranceData.amount : "R 0",
+      premiumsByOthers: assuranceData.premiumsByOthers !== undefined ? assuranceData.premiumsByOthers : "R 0",
+      collateralSession: assuranceData.collateralSession !== undefined ? assuranceData.collateralSession : "R 0",
+      benefitSplit: assuranceData.benefitSplit !== undefined ? assuranceData.benefitSplit : "0%",
+      additionalInfo: assuranceData.additionalInfo !== undefined ? assuranceData.additionalInfo : ""
     };
   }
 
