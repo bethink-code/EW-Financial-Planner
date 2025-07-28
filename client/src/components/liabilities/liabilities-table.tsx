@@ -217,11 +217,11 @@ export function LiabilitiesTable({ viewMode = 'table', onShowCategoryDialog }: L
       <td className={getCellClass('text')}>
         <input
           type="text"
-          defaultValue={liability.description}
+          defaultValue={formatTextValue(liability.description)}
           onFocus={handleDefaultValueFocus}
           onBlur={createEnhancedBlurHandler((value) => handleInputBlur(liability.id, 'description', value), 'text')}
           data-field={`description-${liability.id}`}
-          className={`table-input ${getValueClass(liability.description, 'text')}`}
+          className={`${getFieldClass('text')} ${getValueClass(liability.description, 'text')}`}
           disabled={isUpdating}
         />
       </td>
@@ -236,88 +236,88 @@ export function LiabilitiesTable({ viewMode = 'table', onShowCategoryDialog }: L
       <td className={getCellClass('currency')}>
         <input
           type="text"
-          defaultValue={liability.debtAmount}
+          defaultValue={formatCurrencyValue(liability.debtAmount)}
           onFocus={handleDefaultValueFocus}
           onBlur={createEnhancedBlurHandler((value) => handleInputBlur(liability.id, 'debtAmount', value), 'currency')}
           data-field={`debtAmount-${liability.id}`}
-          className={`table-input ${getValueClass(liability.debtAmount, 'currency')}`}
+          className={`${getFieldClass('currency')} ${getValueClass(liability.debtAmount, 'currency')}`}
           disabled={isUpdating}
         />
       </td>
       <td className={getCellClass('percentage')}>
         <input
           type="text"
-          defaultValue={liability.peterLambie}
+          defaultValue={formatPercentageValue(liability.peterLambie)}
           onFocus={handleDefaultValueFocus}
           onBlur={createEnhancedBlurHandler((value) => handleInputBlur(liability.id, 'peterLambie', value), 'percentage')}
           data-field={`peterLambie-${liability.id}`}
-          className={`table-input ${getValueClass(liability.peterLambie, 'percentage')}`}
+          className={`${getFieldClass('percentage')} ${getValueClass(liability.peterLambie, 'percentage')}`}
           disabled={isUpdating}
         />
       </td>
       <td className={getCellClass('percentage')}>
         <input
           type="text"
-          defaultValue={liability.victoriaLambie}
+          defaultValue={formatPercentageValue(liability.victoriaLambie)}
           onFocus={handleDefaultValueFocus}
           onBlur={createEnhancedBlurHandler((value) => handleInputBlur(liability.id, 'victoriaLambie', value), 'percentage')}
           data-field={`victoriaLambie-${liability.id}`}
-          className={`table-input ${getValueClass(liability.victoriaLambie, 'percentage')}`}
+          className={`${getFieldClass('percentage')} ${getValueClass(liability.victoriaLambie, 'percentage')}`}
           disabled={isUpdating}
         />
       </td>
       <td className={getCellClass('percentage')}>
         <input
           type="text"
-          defaultValue={liability.juniorLambie}
+          defaultValue={formatPercentageValue(liability.juniorLambie)}
           onFocus={handleDefaultValueFocus}
           onBlur={createEnhancedBlurHandler((value) => handleInputBlur(liability.id, 'juniorLambie', value), 'percentage')}
           data-field={`juniorLambie-${liability.id}`}
-          className={`table-input ${getValueClass(liability.juniorLambie, 'percentage')}`}
+          className={`${getFieldClass('percentage')} ${getValueClass(liability.juniorLambie, 'percentage')}`}
           disabled={isUpdating}
         />
       </td>
       <td className={getCellClass('percentage')}>
         <input
           type="text"
-          defaultValue={liability.lambiesFamilyTrust}
+          defaultValue={formatPercentageValue(liability.lambiesFamilyTrust)}
           onFocus={handleDefaultValueFocus}
           onBlur={createEnhancedBlurHandler((value) => handleInputBlur(liability.id, 'lambiesFamilyTrust', value), 'percentage')}
           data-field={`lambiesFamilyTrust-${liability.id}`}
-          className={`table-input ${getValueClass(liability.lambiesFamilyTrust, 'percentage')}`}
+          className={`${getFieldClass('percentage')} ${getValueClass(liability.lambiesFamilyTrust, 'percentage')}`}
           disabled={isUpdating}
         />
       </td>
       <td className={getCellClass('currency')}>
         <input
           type="text"
-          defaultValue={liability.estate}
+          defaultValue={formatCurrencyValue(liability.estate)}
           onFocus={handleDefaultValueFocus}
           onBlur={createEnhancedBlurHandler((value) => handleInputBlur(liability.id, 'estate', value), 'currency')}
           data-field={`estate-${liability.id}`}
-          className={`table-input ${getValueClass(liability.estate, 'currency')}`}
+          className={`${getFieldClass('currency')} ${getValueClass(liability.estate, 'currency')}`}
           disabled={isUpdating}
         />
       </td>
       <td className={getCellClass('currency')}>
         <input
           type="text"
-          defaultValue={liability.others}
+          defaultValue={formatCurrencyValue(liability.others)}
           onFocus={handleDefaultValueFocus}
           onBlur={createEnhancedBlurHandler((value) => handleInputBlur(liability.id, 'others', value), 'currency')}
           data-field={`others-${liability.id}`}
-          className={`table-input ${getValueClass(liability.others, 'currency')}`}
+          className={`${getFieldClass('currency')} ${getValueClass(liability.others, 'currency')}`}
           disabled={isUpdating}
         />
       </td>
       <td className={getCellClass('currency')}>
         <input
           type="text"
-          defaultValue={liability.client}
+          defaultValue={formatCurrencyValue(liability.client)}
           onFocus={handleDefaultValueFocus}
           onBlur={createEnhancedBlurHandler((value) => handleInputBlur(liability.id, 'client', value), 'currency')}
           data-field={`client-${liability.id}`}
-          className={`table-input ${getValueClass(liability.client, 'currency')}`}
+          className={`${getFieldClass('currency')} ${getValueClass(liability.client, 'currency')}`}
           disabled={isUpdating}
         />
       </td>
