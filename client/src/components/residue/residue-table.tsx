@@ -21,10 +21,10 @@ function ResidueTable({ viewMode, searchTerm }: ResidueTableProps) {
   const addMutation = useMutation({
     mutationFn: async (): Promise<Residue> => {
       const newResidue: InsertResidue = {
-        description: "Enter details ...",
+        description: "",
         amount: "R 0",
         increasePercentage: "0%",
-        category: "Enter details ...",
+        category: "",
         johnDoe: "0%",
         janetteDoe: "0%",
         doeJunior: "0%",

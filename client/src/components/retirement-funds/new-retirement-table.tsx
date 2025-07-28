@@ -1,7 +1,7 @@
 import React, { useCallback, useMemo } from 'react';
 import { RetirementFund } from '@shared/schema';
 import { Plus, UserPlus, UserMinus, Trash2, Copy } from 'lucide-react';
-import { formatCurrencyValue, formatPercentageValue, formatTextValue, formatYearsValue, getValueClass, isDefaultValue, handleDefaultValueFocus } from "@/lib/formatting";
+import { formatCurrencyValue, formatPercentageValue, formatTextValue, cleanTextValue, formatYearsValue, getValueClass, isDefaultValue, handleDefaultValueFocus } from "@/lib/formatting";
 import { getFieldClass, getCellClass } from "@/lib/field-types";
 import { ActionButtonGroup, DuplicateButton, DeleteButton, AddButton } from "@/components/ui/action-buttons";
 
@@ -249,7 +249,7 @@ export function NewRetirementTable({
                       className={`table-input ${getFieldClass('text')} ${getValueClass(fund.description, 'text')}`}
                       onFocus={handleDefaultValueFocus}
                       onBlur={(e) => {
-                        const value = e.target.value;
+                        const value = cleanTextValue(e.target.value);
                         handleCellUpdate(fund.id, 'description', value);
                       }}
                     />

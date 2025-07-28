@@ -21,7 +21,7 @@ function IncomeProvisionsTable({ viewMode, searchTerm }: IncomeProvisionsTablePr
   const addMutation = useMutation({
     mutationFn: async (): Promise<IncomeProvisions> => {
       const newIncomeProvision: InsertIncomeProvisions = {
-        description: "Enter details ...",
+        description: "",
         beneficiary: "Enter beneficiary",
         monthlyAmount: "R 0",
         additionalBeneficiaries: [],

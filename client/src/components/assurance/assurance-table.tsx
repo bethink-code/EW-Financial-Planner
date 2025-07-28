@@ -21,7 +21,7 @@ function AssuranceTable({ viewMode, searchTerm }: AssuranceTableProps) {
   const addMutation = useMutation({
     mutationFn: async (): Promise<Assurance> => {
       const newAssurance: InsertAssurance = {
-        description: "Enter details ...",
+        description: "",
         owner: "Donald Edwards",
         amount: "R 0",
         increasePercentage: "0%",

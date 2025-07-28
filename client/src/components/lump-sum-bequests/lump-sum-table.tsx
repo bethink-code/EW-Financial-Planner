@@ -23,9 +23,9 @@ function LumpSumTable({ viewMode, searchTerm }: LumpSumTableProps) {
   const addMutation = useMutation({
     mutationFn: async (): Promise<LumpSumBequest> => {
       const newBequest: InsertLumpSumBequest = {
-        description: "Enter details ...",
-        entity: "Enter details ...",
-        start: "Enter details ...",
+        description: "",  // Store empty string, UI will show placeholder
+        entity: "",       // Store empty string, UI will show placeholder
+        start: "",        // Store empty string, UI will show placeholder
         amount: "R 0",
         increasePercentage: "0%",
         cpi: false,

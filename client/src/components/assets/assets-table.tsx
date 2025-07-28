@@ -23,7 +23,7 @@ function AssetsTable({ viewMode, searchTerm }: AssetsTableProps) {
   const addMutation = useMutation({
     mutationFn: async (): Promise<Assets> => {
       const newAsset: InsertAssets = {
-        description: "Enter details ...",
+        description: "",
         marketValue: "R 0",
         johnDoe: "0%",
         janetteDoe: "0%",

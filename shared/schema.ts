@@ -9,7 +9,7 @@ export const retirementFunds = pgTable("retirement_funds", {
   description: text("description").notNull().default(""),
   owners: text("owners").array().notNull().default(["Donald Edwards"]),
   
-  // Unapproved Life Cover Section
+  // Unapproved Life Cover Section  
   coverAmount: text("cover_amount").notNull().default("R 0"),
   unapprovedBeneficiaries: text("unapproved_beneficiaries").array().notNull().default([""]),
   unapprovedPercentageSplits: text("unapproved_percentage_splits").array().notNull().default(["0%"]),

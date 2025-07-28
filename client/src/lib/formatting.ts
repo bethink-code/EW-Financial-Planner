@@ -55,13 +55,22 @@ export const formatYearsValue = (value: string): string => {
 };
 
 /**
- * Format text value - returns "Enter details ..." for empty values
+ * Format text value for display - shows "Enter details ..." for empty values but doesn't modify data
  */
 export const formatTextValue = (value: string): string => {
   // Convert to string and handle null/undefined values
   const stringValue = String(value || '');
   if (!stringValue.trim() || stringValue.trim() === '') return 'Enter details ...';
   return stringValue.trim();
+};
+
+/**
+ * Clean text value for saving - removes placeholder text and returns empty string for storage
+ */
+export const cleanTextValue = (value: string): string => {
+  const stringValue = String(value || '').trim();
+  if (stringValue === 'Enter details ...' || stringValue === '') return '';
+  return stringValue;
 };
 
 /**

@@ -23,7 +23,7 @@ function LiabilitiesTable({ viewMode, searchTerm }: LiabilitiesTableProps) {
   const addMutation = useMutation({
     mutationFn: async (): Promise<Liabilities> => {
       const newLiability: InsertLiabilities = {
-        description: "Enter details ...",
+        description: "",
         debtAmount: "R 0",
         peterLambie: "0%",
         victoriaLambie: "0%",

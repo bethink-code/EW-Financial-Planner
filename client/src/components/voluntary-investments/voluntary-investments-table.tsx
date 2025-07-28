@@ -24,7 +24,7 @@ function VoluntaryInvestmentsTable({ viewMode, searchTerm }: VoluntaryInvestment
   const addMutation = useMutation({
     mutationFn: async (): Promise<VoluntaryInvestment> => {
       const newInvestment: InsertVoluntaryInvestment = {
-        description: "Enter details ...",
+        description: "",
         owners: ["Enter details ..."],
         ownershipPercentages: ["100%"],
         baseCost: "R 0",

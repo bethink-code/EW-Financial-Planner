@@ -60,7 +60,7 @@ export default function IncomeProvisionsTable({ viewMode, searchTerm }: IncomePr
   const addMutation = useMutation({
     mutationFn: async (): Promise<IncomeProvisions> => {
       const newProvision: InsertIncomeProvisions = {
-        description: "Enter details ...",
+        description: "",
         personName: "Enter details ...",
         startDate: "Enter details ...",
         termYears: "0 years",
