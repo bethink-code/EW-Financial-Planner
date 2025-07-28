@@ -315,6 +315,21 @@ th, td {
     border-right: 0.5px solid #d1d5db !important;
   }
 
+  /* Prevent double borders when section-end is immediately followed by section-start */
+  /* This handles the thick border issue by removing left border from section-start when it follows section-end */
+  thead .section-end + .section-start,
+  tbody .section-end + .section-start,
+  tfoot .section-end + .section-start {
+    border-left: none !important;
+  }
+  
+  /* Also handle the case where first column after Actions doesn't need section-start border */
+  thead th[rowspan]:first-child.section-end + th,
+  tbody td[rowspan]:first-child.section-end + td,
+  tfoot td[rowspan]:first-child.section-end + td {
+    border-left: none !important;
+  }
+
   /* No row borders - completely clean */
   table tbody tr,
   table tbody tr.bg-neutral-50 {
