@@ -275,8 +275,8 @@ th, td {
   }
 
   /* Remove ALL borders from table cells by default */
-  table th,
-  table td {
+  table th:not(.section-start),
+  table td:not(.section-start) {
     border: none !important;
     border-bottom: none !important;
     border-top: none !important;
@@ -737,18 +737,22 @@ th, td {
     text-align: left !important;
   }
 
-  /* SECTION BORDER STYLING - Create visible section separators */
-  .section-start {
-    border-left: 2px solid #9ca3af !important;
-  }
-
-  /* Apply section borders to all table elements (headers, body, footer) - HIGH SPECIFICITY */
+  /* SECTION BORDER STYLING - Create visible section separators with MAXIMUM SPECIFICITY */
+  table.section-start,
   table th.section-start,
   table td.section-start,
   table thead th.section-start,
   table tbody td.section-start,
-  table tfoot td.section-start {
+  table tfoot td.section-start,
+  .section-start {
     border-left: 2px solid #9ca3af !important;
+  }
+
+  /* Force section borders to override any other border rules */
+  table th.section-start,
+  table td.section-start {
+    border-left: 2px solid #9ca3af !important;
+    border-right: inherit !important;
   }
 }
 
@@ -769,4 +773,18 @@ th, td {
 
 .save-flash {
   animation: save-flash 500ms ease-out;
+}
+
+/* CRITICAL: Section borders must always override any other border rules */
+table th.section-start,
+table td.section-start,
+thead th.section-start,
+tbody td.section-start,
+tfoot td.section-start {
+  border-left: 2px solid #9ca3af !important;
+}
+
+/* Ensure no other rules can override section borders */
+.section-start {
+  border-left: 2px solid #9ca3af !important;
 }
