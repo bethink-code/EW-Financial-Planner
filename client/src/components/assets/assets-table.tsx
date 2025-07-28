@@ -200,7 +200,7 @@ function AssetsTable({ viewMode, searchTerm }: AssetsTableProps) {
 
             return Object.entries(groupedAssets).map(([sectionName, sectionAssets]) => [
               // Section Header
-              <tr key={`section-${sectionName}`} className="bg-neutral-50">
+              <tr key={`section-${sectionName}`} className="bg-blue-50">
                 <td colSpan={11} className="px-4 py-2 text-sm font-medium text-neutral-700 uppercase tracking-wider">
                   {sectionName.replace('_', ' ')}
                 </td>
