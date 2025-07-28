@@ -208,7 +208,8 @@ export function NewRetirementTable({
                       <input
                         type="text"
                         defaultValue={formatTextValue(fund.owners[rowIndex], 'owner')}
-                        className={`table-input ${getFieldClass('text')} flex-1`}
+                        className={`table-input ${getFieldClass('text')} flex-1 ${getValueClass(fund.owners[rowIndex], 'text')}`}
+                        onFocus={handleDefaultValueFocus}
                         onBlur={(e) => ownerManager.changeOwner(fund.id, rowIndex, e.target.value)}
                       />
                       {rowIndex === 0 ? (
@@ -251,7 +252,8 @@ export function NewRetirementTable({
                       <input
                         type="text"
                         defaultValue={formatTextValue(fund.unapprovedBeneficiaries[rowIndex])}
-                        className={`table-input ${getFieldClass('text')} flex-1`}
+                        className={`table-input ${getFieldClass('text')} flex-1 ${getValueClass(fund.unapprovedBeneficiaries[rowIndex], 'text')}`}
+                        onFocus={handleDefaultValueFocus}
                         onBlur={(e) => {
                           unapprovedBeneficiaryManager.changeBeneficiary(fund.id, rowIndex, e.target.value);
                         }}
@@ -414,7 +416,8 @@ export function NewRetirementTable({
                       <input
                         type="text"
                         defaultValue={formatTextValue(fund.fundValueBeneficiaries[rowIndex])}
-                        className={`table-input ${getFieldClass('text')} flex-1`}
+                        className={`table-input ${getFieldClass('text')} flex-1 ${getValueClass(fund.fundValueBeneficiaries[rowIndex], 'text')}`}
+                        onFocus={handleDefaultValueFocus}
                         onBlur={(e) => {
                           fundValueBeneficiaryManager.changeBeneficiary(fund.id, rowIndex, e.target.value);
                         }}
