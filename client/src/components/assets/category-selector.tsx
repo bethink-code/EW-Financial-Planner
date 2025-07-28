@@ -19,7 +19,20 @@ export function CategorySelector({ value, onChange, className = "" }: CategorySe
   ];
 
   const handleChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    onChange(event.target.value);
+    const selectedCategory = event.target.value;
+    onChange(selectedCategory);
+    
+    // Also update the section field to match the category
+    if (selectedCategory) {
+      const sectionField = event.target.getAttribute('data-section-field');
+      if (sectionField) {
+        const sectionInput = document.querySelector(`[data-field="${sectionField}"]`) as HTMLInputElement;
+        if (sectionInput) {
+          sectionInput.value = selectedCategory;
+          sectionInput.dispatchEvent(new Event('blur', { bubbles: true }));
+        }
+      }
+    }
   };
 
   return (

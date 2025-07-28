@@ -24,7 +24,20 @@ export function AssetsTable({ viewMode = 'table' }: AssetsTableProps) {
 
   // Add mutation
   const addMutation = useMutation({
-    mutationFn: () => apiRequest('POST', '/api/assets', {}),
+    mutationFn: () => apiRequest('POST', '/api/assets', {
+      category: 'PROPERTY',
+      description: 'Enter details...',
+      marketValue: 'R 0',
+      johnDoe: '0%',
+      janetteDoe: '0%',
+      doeJunior: '0%',
+      doeFamilyTrust: '0%',
+      estate: 'R 0',
+      others: 'R 0',
+      client: 'R 0',
+      section: 'PROPERTY',
+      included: true
+    }),
     onSettled: () => {
       setIsUpdating(false);
       queryClient.invalidateQueries({ queryKey: ['/api/assets'] });
@@ -166,7 +179,10 @@ export function AssetsTable({ viewMode = 'table' }: AssetsTableProps) {
         <td className={getCellClass('text')}>
           <CategorySelector
             value={asset.category}
-            onChange={(value) => handleInputBlur(asset.id, 'category', value)}
+            onChange={(value) => {
+              handleInputBlur(asset.id, 'category', value);
+              handleInputBlur(asset.id, 'section', value);
+            }}
           />
         </td>
         <td className={getCellClass('text')}>
