@@ -1,90 +1,62 @@
-import React, { useState, useCallback } from 'react';
-import { useQuery, useMutation } from '@tanstack/react-query';
-import { queryClient, apiRequest } from '@/lib/queryClient';
+import React from 'react';
+import { CalculatorHeader } from '@/components/ui/calculator-header';
 import { LiabilitiesTable } from '@/components/liabilities/liabilities-table';
 import { LiabilitiesSummary } from '@/components/liabilities/liabilities-summary';
-import { CalculatorHeader } from '@/components/ui/calculator-header';
-import { CategorySelector } from '@/components/liabilities/category-selector';
+import { useQuery, useMutation } from '@tanstack/react-query';
+import { queryClient, apiRequest } from '@/lib/queryClient';
+import { AddButton } from '@/components/ui/action-buttons';
 
 export default function LiabilitiesPage() {
-  const [viewMode, setViewMode] = useState<'table' | 'hybrid'>('table');
-
-  // Fetch liabilities for count
+  // Fetch liabilities
   const { data: liabilities = [] } = useQuery<any[]>({
     queryKey: ['/api/liabilities'],
   });
 
-  // Add mutation with category selection
+  // Add mutation
   const addMutation = useMutation({
-    mutationFn: (category: string) => apiRequest('POST', '/api/liabilities', { section: category }),
+    mutationFn: () => apiRequest('POST', '/api/liabilities', {
+      category: 'BONDS',
+      description: 'Enter details...',
+      currency: 'ZAR',
+      debtAmount: 'R 0',
+      johnDoe: '0%',
+      janetteDoe: '0%',
+      doeJunior: '0%',
+      doeFamilyTrust: '0%',
+      estate: 'R 0',
+      others: 'R 0',
+      client: 'R 0',
+      section: 'BONDS',
+      included: true
+    }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['/api/liabilities'] });
     },
   });
 
-  const handleAddLiability = useCallback((category: string) => {
-    addMutation.mutate(category);
-  }, [addMutation]);
-
-  const handleViewModeChange = useCallback((mode: 'table' | 'hybrid') => {
-    setViewMode(mode);
-  }, []);
+  const handleAddLiability = () => {
+    addMutation.mutate();
+  };
 
   return (
     <div className="bg-gray-50">
       <div className="w-full px-6 py-6">
-        {/* Combined Header and Summary */}
         <div className="mb-6 max-w-6xl">
-          <div className="bg-white rounded-lg border border-neutral-200 shadow-sm">
-            <div className="px-6 py-6">
-              {/* Header Section */}
-              <div className="flex items-center justify-between mb-6">
-                <div className="flex items-center gap-4">
-                  <h1 className="text-2xl font-bold text-neutral-900">Liabilities</h1>
-                  <div className="bg-neutral-100 text-neutral-700 px-3 py-1 rounded-full text-sm font-medium">
-                    {liabilities.length} {liabilities.length === 1 ? 'liability' : 'liabilities'}
-                  </div>
-                </div>
-                
-                <div className="flex items-center gap-3">
-                  <CategorySelector 
-                    onAddLiability={handleAddLiability}
-                    isLoading={addMutation.isPending}
-                  />
-                  
-                  {/* View Mode Toggle */}
-                  <div className="flex bg-neutral-100 rounded-full p-1">
-                    <button
-                      onClick={() => handleViewModeChange('table')}
-                      className={`px-4 py-2 text-sm font-medium rounded-full transition-colors ${
-                        viewMode === 'table'
-                          ? 'bg-[#016991] text-white'
-                          : 'text-neutral-600 hover:text-neutral-900'
-                      }`}
-                    >
-                      Table
-                    </button>
-                    <button
-                      onClick={() => handleViewModeChange('hybrid')}
-                      className={`px-4 py-2 text-sm font-medium rounded-full transition-colors ${
-                        viewMode === 'hybrid'
-                          ? 'bg-[#016991] text-white'
-                          : 'text-neutral-600 hover:text-neutral-900'
-                      }`}
-                    >
-                      Hybrid
-                    </button>
-                  </div>
-                </div>
-              </div>
-              
-              {/* Summary Section */}
-              <LiabilitiesSummary />
-            </div>
-          </div>
+          <CalculatorHeader 
+            title="Liabilities" 
+            itemCount={liabilities.length}
+            countLabel="liabilities"
+            actionButton={
+              <AddButton onClick={handleAddLiability} disabled={addMutation.isPending}>
+                Add Liability
+              </AddButton>
+            }
+          >
+            <LiabilitiesSummary />
+          </CalculatorHeader>
         </div>
         
-        <LiabilitiesTable viewMode={viewMode} />
+        <LiabilitiesTable />
       </div>
     </div>
   );
