@@ -301,27 +301,12 @@ th, td {
     border-right: none !important;
   }
 
-  /* ONLY section separators - vertical borders that separate major sections */
-  /* Apply to ALL table elements: header, body, footer with higher specificity */
-  table thead .section-start,
-  table tbody .section-start,
-  table tfoot .section-start {
-    border-left: 2px solid #9ca3af !important;
-    border-top: none !important;
-    border-bottom: none !important;
+  /* Remove ALL vertical borders completely - clean slate */
+  table th,
+  table td {
+    border-left: none !important;
     border-right: none !important;
   }
-
-  table thead .section-end,
-  table tbody .section-end,
-  table tfoot .section-end {
-    border-right: 2px solid #9ca3af !important;
-    border-top: none !important;
-    border-bottom: none !important;
-    border-left: none !important;
-  }
-
-  /* All section borders should display consistently */
 
   /* No row borders - completely clean */
   table tbody tr,
