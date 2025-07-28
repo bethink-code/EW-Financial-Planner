@@ -306,13 +306,13 @@ th, td {
   thead .section-start,
   tbody .section-start,
   tfoot .section-start {
-    border-left: 0.5px solid #d1d5db !important;
+    border-left: 1px solid #d1d5db !important;
   }
 
   thead .section-end,
   tbody .section-end,
   tfoot .section-end {
-    border-right: 0.5px solid #d1d5db !important;
+    border-right: 1px solid #d1d5db !important;
   }
 
   /* Prevent double borders when section-end is immediately followed by section-start */
