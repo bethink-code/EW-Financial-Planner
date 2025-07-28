@@ -81,7 +81,6 @@ function VoluntaryInvestmentsTable({ viewMode, searchTerm }: VoluntaryInvestment
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['/api/voluntary-investments'] });
-      queryClient.refetchQueries({ queryKey: ['/api/voluntary-investments'] });
       setIsUpdating(false);
     },
     onError: (error) => {
@@ -162,16 +161,19 @@ function VoluntaryInvestmentsTable({ viewMode, searchTerm }: VoluntaryInvestment
   }, [deleteMutation]);
 
   const handleAddOwner = useCallback(async (id: number) => {
+    if (isUpdating) return; // Prevent concurrent operations
+    
     try {
+      setIsUpdating(true);
+      
       // Fetch fresh data to avoid stale cache issues
       const response = await fetch(`/api/voluntary-investments/${id}`);
-      if (!response.ok) return;
+      if (!response.ok) throw new Error('Failed to fetch investment');
       
       const investment: VoluntaryInvestment = await response.json();
       const newOwners = [...investment.owners, ""];
       const newPercentages = [...investment.ownershipPercentages, "0%"];
       
-      setIsUpdating(true);
       updateMutation.mutate({ 
         id, 
         updates: { 
@@ -181,17 +183,25 @@ function VoluntaryInvestmentsTable({ viewMode, searchTerm }: VoluntaryInvestment
       });
     } catch (error) {
       console.error('Error adding owner:', error);
+      setIsUpdating(false);
     }
-  }, [updateMutation]);
+  }, [updateMutation, isUpdating]);
 
   const handleRemoveOwner = useCallback(async (id: number, ownerIndex: number) => {
+    if (isUpdating) return; // Prevent concurrent operations
+    
     try {
+      setIsUpdating(true);
+      
       // Fetch fresh data to avoid stale cache issues
       const response = await fetch(`/api/voluntary-investments/${id}`);
-      if (!response.ok) return;
+      if (!response.ok) throw new Error('Failed to fetch investment');
       
       const investment: VoluntaryInvestment = await response.json();
-      if (investment.owners.length <= 1 || ownerIndex === 0) return; // Protect first owner
+      if (investment.owners.length <= 1 || ownerIndex === 0) {
+        setIsUpdating(false);
+        return; // Protect first owner
+      }
       
       const newOwners = [...investment.owners];
       const newPercentages = [...investment.ownershipPercentages];
@@ -199,7 +209,6 @@ function VoluntaryInvestmentsTable({ viewMode, searchTerm }: VoluntaryInvestment
       newOwners.splice(ownerIndex, 1);
       newPercentages.splice(ownerIndex, 1);
       
-      setIsUpdating(true);
       updateMutation.mutate({ 
         id, 
         updates: { 
@@ -209,8 +218,9 @@ function VoluntaryInvestmentsTable({ viewMode, searchTerm }: VoluntaryInvestment
       });
     } catch (error) {
       console.error('Error removing owner:', error);
+      setIsUpdating(false);
     }
-  }, [updateMutation]);
+  }, [updateMutation, isUpdating]);
 
   const handleOwnerChange = useCallback(async (id: number, ownerIndex: number, newOwner: string) => {
     try {
@@ -280,7 +290,7 @@ function VoluntaryInvestmentsTable({ viewMode, searchTerm }: VoluntaryInvestment
         </thead>
         <tbody className="divide-y divide-neutral-200">
           {investments.map((investment: VoluntaryInvestment) => {
-            console.log(`Rendering investment ${investment.id} with owners:`, investment.owners, `maxRows: ${Math.max(investment.owners.length, 1)}`);
+
             const maxRows = Math.max(investment.owners.length, 1);
             
             return Array.from({ length: maxRows }, (_, ownerIndex) => (
@@ -322,17 +332,14 @@ function VoluntaryInvestmentsTable({ viewMode, searchTerm }: VoluntaryInvestment
                       <input
                         type="text"
                         defaultValue={formatTextValue(investment.owners[ownerIndex])}
-                        placeholder={`Owner ${ownerIndex + 1} for Investment ${investment.id}`}
+                        placeholder="Enter details ..."
                         className={`table-input ${getFieldClass('text')} ${getValueClass(investment.owners[ownerIndex], 'text')} flex-1`}
                         onFocus={handleDefaultValueFocus}
                         onBlur={(e) => handleOwnerChange(investment.id, ownerIndex, e.target.value)}
                       />
                       {ownerIndex === 0 ? (
                         <AddButton
-                          onClick={() => {
-                            console.log(`Adding owner to investment ${investment.id}`);
-                            handleAddOwner(investment.id);
-                          }}
+                          onClick={() => handleAddOwner(investment.id)}
                           disabled={isUpdating}
                           size="sm"
                           type="button"
