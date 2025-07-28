@@ -339,6 +339,11 @@ th, td {
     border-top: none !important;
     border-bottom: none !important;
   }
+  
+  /* Ensure all currency fields in footer align right */
+  tfoot td.totals-cell-value {
+    text-align: right !important;
+  }
 
   tfoot td:last-child {
     border-right: none !important;
