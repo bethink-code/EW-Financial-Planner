@@ -745,6 +745,65 @@ export class DbStorage {
     this.db = drizzle(pool);
   }
 
+  // Helper function to apply defaults for retirement funds
+  private applyRetirementFundDefaults(fund: Partial<InsertRetirementFund>): InsertRetirementFund {
+    return {
+      description: fund.description || "Enter details ...",
+      owners: fund.owners || ["Donald Edwards"],
+      coverAmount: fund.coverAmount || "R 0",
+      unapprovedBeneficiaries: fund.unapprovedBeneficiaries || ["Enter details ..."],
+      unapprovedPercentageSplits: fund.unapprovedPercentageSplits || ["0%"],
+      unapprovedCoverSplits: fund.unapprovedCoverSplits || ["R 0"],
+      monthlyIncome: fund.monthlyIncome || "R 0",
+      monthlyIncomeCheckbox: fund.monthlyIncomeCheckbox || false,
+      termYears: fund.termYears || "0 years",
+      increasePercentage: fund.increasePercentage || "0%",
+      approvedLifeCover: fund.approvedLifeCover || "R 0",
+      fundValue: fund.fundValue || "R 0",
+      fundValueAtDeath: fund.fundValueAtDeath || "R 0",
+      fundValueBeneficiaries: fund.fundValueBeneficiaries || ["Enter details ..."],
+      fundValuePercentageSplits: fund.fundValuePercentageSplits || ["0%"],
+      fundValueCoverSplits: fund.fundValueCoverSplits || ["R 0"],
+      lumpSumTaken: fund.lumpSumTaken || "R 0",
+      nonDeductibleContribution: fund.nonDeductibleContribution || "R 0",
+      livingAnnuity: fund.livingAnnuity || "R 0",
+      livingAnnuityCheckbox: fund.livingAnnuityCheckbox || false,
+      incomeTerm: fund.incomeTerm || "0 years"
+    };
+  }
+
+  // Helper function to apply defaults for assurance
+  private applyAssuranceDefaults(assuranceData: Partial<InsertAssurance>): InsertAssurance {
+    return {
+      description: assuranceData.description || "Enter details ...",
+      owners: assuranceData.owners || ["Donald Edwards"],
+      beneficiaries: assuranceData.beneficiaries || ["Enter details ..."],
+      deathBenefit: assuranceData.deathBenefit || "R 0",
+      amount: assuranceData.amount || "R 0",
+      premiumsByOthers: assuranceData.premiumsByOthers || "R 0",
+      collateralSession: assuranceData.collateralSession || "R 0",
+      benefitSplit: assuranceData.benefitSplit || "0%",
+      additionalInfo: assuranceData.additionalInfo || "Enter details ..."
+    };
+  }
+
+  // Helper function to apply defaults for additional estate duty items
+  private applyAdditionalEstateDutyItemDefaults(item: Partial<InsertAdditionalEstateDutyItems>): InsertAdditionalEstateDutyItems {
+    return {
+      category: item.category || "",
+      description: item.description || "",
+      amount: item.amount || "R 0",
+      increasePercentage: item.increasePercentage || "0%",
+      johnDoe: item.johnDoe || "0%",
+      janetteDoe: item.janetteDoe || "0%",
+      doeJunior: item.doeJunior || "0%",
+      doeFamilyTrust: item.doeFamilyTrust || "0%",
+      estate: item.estate || "R 0",
+      others: item.others || "R 0",
+      client: item.client || "R 0"
+    };
+  }
+
   // Retirement Funds methods
   async getRetirementFunds(): Promise<RetirementFund[]> {
     return await this.db.select().from(retirementFunds);
@@ -756,7 +815,8 @@ export class DbStorage {
   }
 
   async createRetirementFund(fund: InsertRetirementFund): Promise<RetirementFund> {
-    const result = await this.db.insert(retirementFunds).values(fund).returning();
+    const fundWithDefaults = this.applyRetirementFundDefaults(fund);
+    const result = await this.db.insert(retirementFunds).values(fundWithDefaults).returning();
     return result[0];
   }
 
@@ -789,7 +849,8 @@ export class DbStorage {
   }
 
   async createAssurance(assuranceData: InsertAssurance): Promise<Assurance> {
-    const result = await this.db.insert(assurance).values(assuranceData).returning();
+    const assuranceWithDefaults = this.applyAssuranceDefaults(assuranceData);
+    const result = await this.db.insert(assurance).values(assuranceWithDefaults).returning();
     return result[0];
   }
 
@@ -857,7 +918,11 @@ export class DbStorage {
 
   async getAdditionalEstateDutyItems(): Promise<AdditionalEstateDutyItems[]> { return await this.db.select().from(additionalEstateDutyItems); }
   async getAdditionalEstateDutyItem(id: number): Promise<AdditionalEstateDutyItems | undefined> { const result = await this.db.select().from(additionalEstateDutyItems).where(eq(additionalEstateDutyItems.id, id)); return result[0]; }
-  async createAdditionalEstateDutyItem(item: InsertAdditionalEstateDutyItems): Promise<AdditionalEstateDutyItems> { const result = await this.db.insert(additionalEstateDutyItems).values(item).returning(); return result[0]; }
+  async createAdditionalEstateDutyItem(item: InsertAdditionalEstateDutyItems): Promise<AdditionalEstateDutyItems> { 
+    const itemWithDefaults = this.applyAdditionalEstateDutyItemDefaults(item);
+    const result = await this.db.insert(additionalEstateDutyItems).values(itemWithDefaults).returning(); 
+    return result[0]; 
+  }
   async updateAdditionalEstateDutyItem(id: number, updates: UpdateAdditionalEstateDutyItems): Promise<AdditionalEstateDutyItems | undefined> { const result = await this.db.update(additionalEstateDutyItems).set(updates).where(eq(additionalEstateDutyItems.id, id)).returning(); return result[0]; }
   async deleteAdditionalEstateDutyItem(id: number): Promise<boolean> { const result = await this.db.delete(additionalEstateDutyItems).where(eq(additionalEstateDutyItems.id, id)); return (result.rowCount || 0) > 0; }
   async searchAdditionalEstateDutyItems(query: string): Promise<AdditionalEstateDutyItems[]> { return await this.db.select().from(additionalEstateDutyItems).where(ilike(additionalEstateDutyItems.description, `%${query}%`)); }
