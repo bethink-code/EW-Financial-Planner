@@ -18,7 +18,6 @@ import VoluntaryInvestments from "@/pages/voluntary-investments";
 import Residue from "@/pages/residue";
 import AdditionalEstateDutyItems from "@/pages/additional-estate-duty-items";
 import AssetsAndLiabilities from "@/pages/assets-and-liabilities";
-import DeathWithEstateLiquidity from "./pages/death-with-estate-liquidity";
 
 function Router() {
   return (
@@ -27,7 +26,6 @@ function Router() {
       <div className="pt-16">
         <Switch>
           <Route path="/" component={TableNavigation} />
-          <Route path="/death-with-estate-liquidity" component={DeathWithEstateLiquidity} />
           <Route path="/assurance" component={Assurance} />
           <Route path="/new-retirement-funds" component={NewRetirementFunds} />
           <Route path="/assets-and-liabilities" component={AssetsAndLiabilities} />

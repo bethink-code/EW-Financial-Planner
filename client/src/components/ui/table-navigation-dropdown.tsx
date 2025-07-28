@@ -26,7 +26,6 @@ const tables: TableNavItem[] = [
   { name: "Liabilities (Standalone)", path: "/liabilities", category: "Standalone" },
   
   // Special Views
-  { name: "All Tabs (Estate Liquidity)", path: "/death-with-estate-liquidity", category: "Special" },
   { name: "Table Navigation Home", path: "/", category: "Special" }
 ];
 
