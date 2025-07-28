@@ -169,9 +169,16 @@ function VoluntaryInvestmentsTable({ viewMode, searchTerm }: VoluntaryInvestment
     const newOwners = [...investment.owners, ""];
     const newPercentages = [...investment.ownershipPercentages, "0%"];
     
-    handleUpdateInvestment(id, 'owners', newOwners);
-    handleUpdateInvestment(id, 'ownershipPercentages', newPercentages);
-  }, [handleUpdateInvestment, investments, isUpdating]);
+    // Update both arrays in a single call to prevent race conditions
+    setIsUpdating(true);
+    updateMutation.mutate({ 
+      id, 
+      updates: { 
+        owners: newOwners,
+        ownershipPercentages: newPercentages
+      }
+    });
+  }, [updateMutation, investments, isUpdating]);
 
   const handleRemoveOwner = useCallback((id: number, ownerIndex: number) => {
     if (isUpdating) return; // Prevent concurrent operations
@@ -185,9 +192,16 @@ function VoluntaryInvestmentsTable({ viewMode, searchTerm }: VoluntaryInvestment
     newOwners.splice(ownerIndex, 1);
     newPercentages.splice(ownerIndex, 1);
     
-    handleUpdateInvestment(id, 'owners', newOwners);
-    handleUpdateInvestment(id, 'ownershipPercentages', newPercentages);
-  }, [handleUpdateInvestment, investments, isUpdating]);
+    // Update both arrays in a single call to prevent race conditions
+    setIsUpdating(true);
+    updateMutation.mutate({ 
+      id, 
+      updates: { 
+        owners: newOwners,
+        ownershipPercentages: newPercentages
+      }
+    });
+  }, [updateMutation, investments, isUpdating]);
 
   const handleOwnerChange = useCallback((id: number, ownerIndex: number, newOwner: string) => {
     const investment = investments.find(inv => inv.id === id);
