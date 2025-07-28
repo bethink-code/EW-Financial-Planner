@@ -4,7 +4,7 @@ import { queryClient } from '@/lib/queryClient';
 import { Residue, InsertResidue } from '@shared/schema';
 import { AddButton, ActionButtonGroup, DuplicateButton, DeleteButton } from '@/components/ui/action-buttons';
 import { getFieldClass, getCellClass } from '@/lib/field-types';
-import { formatCurrencyValue, formatPercentageValue, getValueClass, handleDefaultValueFocus, createEnhancedBlurHandler } from '@/lib/formatting';
+import { formatCurrencyValue, formatPercentageValue, formatTextValue, getValueClass, handleDefaultValueFocus, createEnhancedBlurHandler } from '@/lib/formatting';
 
 interface ResidueTableProps {
   viewMode: 'table' | 'hybrid';
@@ -148,10 +148,18 @@ function ResidueTable({ viewMode, searchTerm }: ResidueTableProps) {
   }, [updateMutation]);
 
   const handleInputBlur = useCallback((id: number, field: keyof Residue, value: string) => {
-    const enhancedBlurHandler = createEnhancedBlurHandler(field);
-    const formattedValue = enhancedBlurHandler(value);
+    // Determine field type for formatting
+    const fieldType = field === 'increasePercentage' || field === 'johnDoe' || field === 'janetteDoe' || field === 'doeJunior' || field === 'doeFamilyTrust' ? 'percentage' : 
+                     field === 'amount' || field === 'estate' || field === 'others' || field === 'client' ? 'currency' : 'text';
+    
+    // Format the value based on field type
+    const formattedValue = fieldType === 'percentage' ? formatPercentageValue(value) : 
+                          fieldType === 'currency' ? formatCurrencyValue(value) : 
+                          formatTextValue(value);
+    
     handleUpdateResidue(id, field, formattedValue);
     
+    // Update the input field with formatted value if it changed
     const target = document.activeElement as HTMLInputElement;
     if (target && formattedValue !== value) {
       setTimeout(() => {
