@@ -160,22 +160,24 @@ function VoluntaryInvestmentsTable({ viewMode, searchTerm }: VoluntaryInvestment
     }
   }, [deleteMutation]);
 
-  const handleAddOwner = useCallback((id: number, currentOwners: string[]) => {
-    console.log('Adding owner to investment:', id, 'current owners:', currentOwners);
-    const newOwners = [...currentOwners, ""];
-    setIsUpdating(true);
-    updateMutation.mutate({ id, updates: { owners: newOwners } });
-  }, [updateMutation]);
+  const handleAddOwner = useCallback((id: number) => {
+    const investment = investments.find((i: VoluntaryInvestment) => i.id === id);
+    if (investment) {
+      const newOwners = [...investment.owners, ""];
+      setIsUpdating(true);
+      updateMutation.mutate({ id, updates: { owners: newOwners } });
+    }
+  }, [investments, updateMutation]);
 
-  const handleDeleteOwner = useCallback((id: number, ownerIndex: number, currentOwners: string[]) => {
-    if (currentOwners.length > 1 && ownerIndex > 0) { // Protect first owner
-      console.log('Deleting owner at index:', ownerIndex, 'from investment:', id, 'current owners:', currentOwners);
-      const newOwners = [...currentOwners];
+  const handleRemoveOwner = useCallback((id: number, ownerIndex: number) => {
+    const investment = investments.find((i: VoluntaryInvestment) => i.id === id);
+    if (investment && investment.owners.length > 1 && ownerIndex > 0) { // Protect first owner
+      const newOwners = [...investment.owners];
       newOwners.splice(ownerIndex, 1);
       setIsUpdating(true);
       updateMutation.mutate({ id, updates: { owners: newOwners } });
     }
-  }, [updateMutation]);
+  }, [investments, updateMutation]);
 
   if (isLoading) {
     return <div className="flex justify-center py-8">Loading voluntary investments...</div>;
@@ -266,7 +268,7 @@ function VoluntaryInvestmentsTable({ viewMode, searchTerm }: VoluntaryInvestment
                           onClick={(e) => {
                             e.preventDefault();
                             e.stopPropagation();
-                            handleAddOwner(investment.id, investment.owners);
+                            handleAddOwner(investment.id);
                           }}
                           disabled={isUpdating}
                           size="sm"
@@ -277,7 +279,7 @@ function VoluntaryInvestmentsTable({ viewMode, searchTerm }: VoluntaryInvestment
                           onClick={(e) => {
                             e.preventDefault();
                             e.stopPropagation();
-                            handleDeleteOwner(investment.id, ownerIndex, investment.owners);
+                            handleRemoveOwner(investment.id, ownerIndex);
                           }}
                           disabled={isUpdating}
                           size="sm"
