@@ -80,8 +80,9 @@ function VoluntaryInvestmentsTable({ viewMode, searchTerm }: VoluntaryInvestment
       return response.json();
     },
     onSuccess: () => {
-      setIsUpdating(false);
       queryClient.invalidateQueries({ queryKey: ['/api/voluntary-investments'] });
+      queryClient.refetchQueries({ queryKey: ['/api/voluntary-investments'] });
+      setIsUpdating(false);
     },
     onError: (error) => {
       console.error('Failed to update voluntary investment:', error);
@@ -167,9 +168,14 @@ function VoluntaryInvestmentsTable({ viewMode, searchTerm }: VoluntaryInvestment
     const owners = [...investment.owners, ""];
     const percentages = [...investment.ownershipPercentages, "0%"];
     
-    handleUpdateInvestment(id, 'owners', owners);
-    handleUpdateInvestment(id, 'ownershipPercentages', percentages);
-  }, [investments, handleUpdateInvestment]);
+    // Single mutation with both arrays - prevents race conditions
+    const updates = { 
+      owners: owners, 
+      ownershipPercentages: percentages 
+    };
+    setIsUpdating(true);
+    updateMutation.mutate({ id, updates });
+  }, [investments, updateMutation]);
 
   const handleRemoveOwner = useCallback((id: number, ownerIndex: number) => {
     const investment = investments.find((i: VoluntaryInvestment) => i.id === id);
@@ -181,9 +187,14 @@ function VoluntaryInvestmentsTable({ viewMode, searchTerm }: VoluntaryInvestment
     owners.splice(ownerIndex, 1);
     percentages.splice(ownerIndex, 1);
     
-    handleUpdateInvestment(id, 'owners', owners);
-    handleUpdateInvestment(id, 'ownershipPercentages', percentages);
-  }, [investments, handleUpdateInvestment]);
+    // Single mutation with both arrays - prevents race conditions
+    const updates = { 
+      owners: owners, 
+      ownershipPercentages: percentages 
+    };
+    setIsUpdating(true);
+    updateMutation.mutate({ id, updates });
+  }, [investments, updateMutation]);
 
   const handleOwnerChange = useCallback((id: number, ownerIndex: number, newOwner: string) => {
     const investment = investments.find((i: VoluntaryInvestment) => i.id === id);
