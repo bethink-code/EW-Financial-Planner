@@ -274,48 +274,11 @@ th, td {
     border-spacing: 0 !important;
   }
 
-  /* Remove borders from table cells - but NEVER from section-start elements */
+  /* Clean table styling - no borders by default */
   table th,
   table td {
-    border: none !important;
-    border-bottom: none !important;
-    border-top: none !important;
-    border-right: none !important;
+    border: none;
     position: relative;
-  }
-  
-  /* Preserve left borders ONLY for section-start elements */
-  table th:not(.section-start),
-  table td:not(.section-start) {
-    border-left: none !important;
-  }
-
-  /* IMMEDIATELY APPLY SECTION BORDERS - Highest Priority */
-  table th.section-start,
-  table td.section-start {
-    border-left: 2px solid #9ca3af !important;
-  }
-
-  /* Override any conflicting border classes globally - but preserve section borders */
-  table .border-b:not(.section-start):not(.section-end),
-  table .border-neutral-200:not(.section-start):not(.section-end),
-  table .border-bottom:not(.section-start):not(.section-end),
-  table th.border-b:not(.section-start):not(.section-end),
-  table td.border-b:not(.section-start):not(.section-end),
-  table .border:not(.section-start):not(.section-end),
-  table .border-neutral-300:not(.section-start):not(.section-end),
-  table .border-gray-300:not(.section-start):not(.section-end) {
-    border: none !important;
-    border-bottom: none !important;
-    border-top: none !important;
-    border-left: none !important;
-    border-right: none !important;
-  }
-
-  /* Remove right borders from all elements */
-  table th,
-  table td {
-    border-right: none !important;
   }
 
   /* No row borders - completely clean */
@@ -747,22 +710,9 @@ th, td {
     text-align: left !important;
   }
 
-  /* SECTION BORDER STYLING - Create visible section separators with MAXIMUM SPECIFICITY */
-  table.section-start,
-  table th.section-start,
-  table td.section-start,
-  table thead th.section-start,
-  table tbody td.section-start,
-  table tfoot td.section-start,
+  /* Section borders - simple and clean */
   .section-start {
-    border-left: 2px solid #9ca3af !important;
-  }
-
-  /* Force section borders to override any other border rules */
-  table th.section-start,
-  table td.section-start {
-    border-left: 2px solid #9ca3af !important;
-    border-right: inherit !important;
+    border-left: 2px solid #9ca3af;
   }
 }
 
@@ -785,16 +735,4 @@ th, td {
   animation: save-flash 500ms ease-out;
 }
 
-/* CRITICAL: Section borders must always override any other border rules */
-table th.section-start,
-table td.section-start,
-thead th.section-start,
-tbody td.section-start,
-tfoot td.section-start {
-  border-left: 2px solid #9ca3af !important;
-}
 
-/* Ensure no other rules can override section borders */
-.section-start {
-  border-left: 2px solid #9ca3af !important;
-}
