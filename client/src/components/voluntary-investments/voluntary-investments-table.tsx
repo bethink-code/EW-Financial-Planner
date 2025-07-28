@@ -160,42 +160,41 @@ function VoluntaryInvestmentsTable({ viewMode, searchTerm }: VoluntaryInvestment
     }
   }, [deleteMutation]);
 
-  const handleAddOwner = useCallback((investmentId: number, currentOwners: string[], currentPercentages: string[]) => {
-    console.log('Adding owner to investment:', investmentId, 'current owners:', currentOwners);
-    const newOwners = [...currentOwners, "Enter details ..."];
-    const newPercentages = [...currentPercentages, "0%"];
-    
-    // Update both arrays in a single mutation to prevent race conditions
-    setIsUpdating(true);
-    updateMutation.mutate({ 
-      id: investmentId, 
-      updates: { 
-        owners: newOwners,
-        ownershipPercentages: newPercentages
-      } 
-    });
-  }, [updateMutation]);
+  const handleAddOwner = useCallback((id: number) => {
+    const investment = investments.find((i: VoluntaryInvestment) => i.id === id);
+    if (investment) {
+      console.log('Adding owner to investment:', id, 'current owners:', investment.owners);
+      const newOwners = [...investment.owners, ""];
+      const newPercentages = [...investment.ownershipPercentages, "0%"];
+      setIsUpdating(true);
+      updateMutation.mutate({ 
+        id, 
+        updates: { 
+          owners: newOwners,
+          ownershipPercentages: newPercentages
+        } 
+      });
+    }
+  }, [investments, updateMutation]);
 
-  const handleDeleteOwner = useCallback((investmentId: number, ownerIndex: number, currentOwners: string[], currentPercentages: string[]) => {
-    if (currentOwners.length <= 1) return; // Don't delete the last owner
-    
-    console.log('Deleting owner at index:', ownerIndex, 'from investment:', investmentId, 'current owners:', currentOwners);
-    
-    const newOwners = [...currentOwners];
-    const newPercentages = [...currentPercentages];
-    newOwners.splice(ownerIndex, 1);
-    newPercentages.splice(ownerIndex, 1);
-    
-    // Update both arrays in a single mutation to prevent race conditions
-    setIsUpdating(true);
-    updateMutation.mutate({ 
-      id: investmentId, 
-      updates: { 
-        owners: newOwners,
-        ownershipPercentages: newPercentages
-      } 
-    });
-  }, [updateMutation]);
+  const handleDeleteOwner = useCallback((id: number, ownerIndex: number) => {
+    const investment = investments.find((i: VoluntaryInvestment) => i.id === id);
+    if (investment && investment.owners.length > 1 && ownerIndex > 0) { // Protect first owner
+      console.log('Deleting owner at index:', ownerIndex, 'from investment:', id, 'current owners:', investment.owners);
+      const newOwners = [...investment.owners];
+      const newPercentages = [...investment.ownershipPercentages];
+      newOwners.splice(ownerIndex, 1);
+      newPercentages.splice(ownerIndex, 1);
+      setIsUpdating(true);
+      updateMutation.mutate({ 
+        id, 
+        updates: { 
+          owners: newOwners,
+          ownershipPercentages: newPercentages
+        } 
+      });
+    }
+  }, [investments, updateMutation]);
 
   if (isLoading) {
     return <div className="flex justify-center py-8">Loading voluntary investments...</div>;
@@ -235,12 +234,13 @@ function VoluntaryInvestmentsTable({ viewMode, searchTerm }: VoluntaryInvestment
         </thead>
         <tbody className="divide-y divide-neutral-200">
           {investments.map((investment: VoluntaryInvestment) => {
-            const owners = Array.isArray(investment.owners) ? investment.owners : JSON.parse(investment.owners || '["Enter details ..."]');
-            const percentages = Array.isArray(investment.ownershipPercentages) ? investment.ownershipPercentages : JSON.parse(investment.ownershipPercentages || '["100%"]');
-            const maxRows = Math.max(owners.length, 1);
+            const maxRows = Math.max(investment.owners.length, 1);
             
-            return owners.map((owner: string, ownerIndex: number) => (
-              <tr key={`${investment.id}-${ownerIndex}-${owners.length}`} className="hover:bg-neutral-50">
+            return Array.from({ length: maxRows }, (_, ownerIndex) => (
+              <tr 
+                key={`${investment.id}-${ownerIndex}-${investment.owners.length}`} 
+                className="hover:bg-neutral-50"
+              >
                 {ownerIndex === 0 && (
                   <td className="table-actions-cell p-1 text-center section-start section-end align-top" rowSpan={maxRows}>
                     <ActionButtonGroup>
@@ -269,60 +269,54 @@ function VoluntaryInvestmentsTable({ viewMode, searchTerm }: VoluntaryInvestment
                   </td>
                 )}
                 
-                <td className="p-2">
-                  <div className="flex items-center gap-2">
-                    <input
-                      type="text"
-                      defaultValue={formatTextValue(owner)}
-                      className={`table-input ${getFieldClass('text')} ${getValueClass(owner, 'text')} flex-1`}
-                      onFocus={handleDefaultValueFocus}
-                      onBlur={(e) => {
-                        const newOwners = [...owners];
-                        newOwners[ownerIndex] = e.target.value;
-                        handleUpdateInvestment(investment.id, 'owners', newOwners);
-                      }}
-                      disabled={isUpdating}
-                    />
-                    {ownerIndex === 0 && (
-                      <AddButton
-                        onClick={(e) => {
-                          e.preventDefault();
-                          e.stopPropagation();
-                          handleAddOwner(investment.id, owners, percentages);
-                        }}
-                        disabled={isUpdating}
-                        size="sm"
-                        type="button"
+                <td className="p-2 align-top">
+                  {ownerIndex < investment.owners.length && (
+                    <div className="flex items-center gap-1">
+                      <input
+                        type="text"
+                        defaultValue={formatTextValue(investment.owners[ownerIndex])}
+                        placeholder="Enter details ..."
+                        className={`table-input ${getFieldClass('text')} ${getValueClass(investment.owners[ownerIndex], 'text')} flex-1`}
+                        onFocus={handleDefaultValueFocus}
+                        onBlur={(e) => handleInputBlur(investment.id, `owners-${ownerIndex}`, e.target.value)}
                       />
-                    )}
-                    {ownerIndex > 0 && (
-                      <DeleteButton
-                        onClick={(e) => {
-                          e.preventDefault();
-                          e.stopPropagation();
-                          handleDeleteOwner(investment.id, ownerIndex, owners, percentages);
-                        }}
-                        disabled={isUpdating}
-                        size="sm"
-                        type="button"
-                      />
-                    )}
-                  </div>
+                      {ownerIndex === 0 ? (
+                        <AddButton
+                          onClick={(e) => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            handleAddOwner(investment.id);
+                          }}
+                          disabled={isUpdating}
+                          size="sm"
+                          type="button"
+                        />
+                      ) : (
+                        <DeleteButton
+                          onClick={(e) => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            handleDeleteOwner(investment.id, ownerIndex);
+                          }}
+                          disabled={isUpdating}
+                          size="sm"
+                          type="button"
+                        />
+                      )}
+                    </div>
+                  )}
                 </td>
                 
-                <td className="p-2">
-                  <input
-                    type="text"
-                    defaultValue={percentages[ownerIndex] || "0%"}
-                    className={`table-input ${getFieldClass('percentage')} ${getValueClass(percentages[ownerIndex] || "0%", 'percentage')}`}
-                    onFocus={handleDefaultValueFocus}
-                    onBlur={(e) => {
-                      const newPercentages = [...percentages];
-                      newPercentages[ownerIndex] = e.target.value;
-                      handleUpdateInvestment(investment.id, 'ownershipPercentages', newPercentages);
-                    }}
-                    disabled={isUpdating}
-                  />
+                <td className="p-2 align-top">
+                  {ownerIndex < investment.owners.length && (
+                    <input
+                      type="text"
+                      defaultValue={formatPercentageValue(investment.ownershipPercentages[ownerIndex] || "0%")}
+                      className={`table-input ${getFieldClass('percentage')} ${getValueClass(investment.ownershipPercentages[ownerIndex] || "0%", 'percentage')}`}
+                      onFocus={handleDefaultValueFocus}
+                      onBlur={(e) => handleInputBlur(investment.id, `ownershipPercentages-${ownerIndex}`, e.target.value)}
+                    />
+                  )}
                 </td>
                 
                 {ownerIndex === 0 && (
