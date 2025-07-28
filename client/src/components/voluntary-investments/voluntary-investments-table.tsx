@@ -3,9 +3,9 @@ import { useQuery, useMutation } from '@tanstack/react-query';
 import { queryClient } from '@/lib/queryClient';
 import { VoluntaryInvestment, InsertVoluntaryInvestment } from '@shared/schema';
 import { AddButton, ActionButtonGroup, DuplicateButton, DeleteButton } from '@/components/ui/action-buttons';
-import { UserPlus, UserMinus } from 'lucide-react';
+
 import { getFieldClass, getCellClass } from '@/lib/field-types';
-import { formatCurrencyValue, formatPercentageValue, getValueClass, handleDefaultValueFocus } from '@/lib/formatting';
+import { formatCurrencyValue, formatPercentageValue, getValueClass, handleDefaultValueFocus, createEnhancedBlurHandler } from '@/lib/formatting';
 
 interface VoluntaryInvestmentsTableProps {
   viewMode: 'table' | 'hybrid';
@@ -134,25 +134,18 @@ function VoluntaryInvestmentsTable({ viewMode, searchTerm }: VoluntaryInvestment
     updateMutation.mutate({ id, updates });
   }, [updateMutation]);
 
-  const handleInputBlur = useCallback((id: number, field: keyof VoluntaryInvestment, value: string) => {
-    let formattedValue: string;
-    if (field === 'liquidationPercentage' || field.includes('Percentage')) {
-      formattedValue = formatPercentageValue(value);
-    } else if (field === 'baseCost' || field === 'marketValue' || field === 'spouse' || field === 'others') {
-      formattedValue = formatCurrencyValue(value);
-    } else {
-      formattedValue = value;
-    }
-    handleUpdateInvestment(id, field, formattedValue);
-    
-    // Update DOM element for immediate visual feedback
-    const target = document.activeElement as HTMLInputElement;
-    if (target && formattedValue !== value) {
-      setTimeout(() => {
-        target.value = formattedValue;
-      }, 0);
-    }
-  }, [handleUpdateInvestment]);
+  // Create enhanced blur handlers for different field types
+  const handleCurrencyBlur = useCallback(createEnhancedBlurHandler('currency', (field: string, value: string) => {
+    handleUpdateInvestment(parseInt(field), 'baseCost', value); // Will be overridden by specific calls
+  }), [handleUpdateInvestment]);
+
+  const handlePercentageBlur = useCallback(createEnhancedBlurHandler('percentage', (field: string, value: string) => {
+    handleUpdateInvestment(parseInt(field), 'liquidationPercentage', value); // Will be overridden by specific calls
+  }), [handleUpdateInvestment]);
+
+  const handleTextBlur = useCallback(createEnhancedBlurHandler('text', (field: string, value: string) => {
+    handleUpdateInvestment(parseInt(field), 'description', value); // Will be overridden by specific calls
+  }), [handleUpdateInvestment]);
 
   const handleDeleteInvestment = useCallback((id: number) => {
     if (window.confirm('Are you sure you want to delete this voluntary investment?')) {
@@ -189,7 +182,7 @@ function VoluntaryInvestmentsTable({ viewMode, searchTerm }: VoluntaryInvestment
       <table>
         <thead>
           <tr>
-            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center" rowSpan={2}>
+            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start section-end" rowSpan={2}>
               <AddButton onClick={() => addMutation.mutate()} disabled={isUpdating} />
             </th>
             <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start" colSpan={3}>Overview</th>
@@ -221,7 +214,7 @@ function VoluntaryInvestmentsTable({ viewMode, searchTerm }: VoluntaryInvestment
             return owners.map((owner: string, ownerIndex: number) => (
               <tr key={`${investment.id}-${ownerIndex}`} className="hover:bg-neutral-50">
                 {ownerIndex === 0 && (
-                  <td className="table-actions-cell p-2 text-center" rowSpan={maxRows}>
+                  <td className="table-actions-cell p-1 text-center section-start section-end" rowSpan={maxRows}>
                     <ActionButtonGroup>
                       <DuplicateButton
                         onClick={() => addMutation.mutate()}
@@ -236,19 +229,19 @@ function VoluntaryInvestmentsTable({ viewMode, searchTerm }: VoluntaryInvestment
                 )}
                 
                 {ownerIndex === 0 && (
-                  <td className="p-2 section-start" rowSpan={maxRows}>
+                  <td className="p-1 section-start" rowSpan={maxRows}>
                     <input
                       type="text"
                       defaultValue={investment.description}
                       className={`table-input ${getFieldClass('text')} ${getValueClass(investment.description, 'text')}`}
                       onFocus={handleDefaultValueFocus}
-                      onBlur={(e) => handleInputBlur(investment.id, 'description', e.target.value)}
+                      onBlur={(e) => handleUpdateInvestment(investment.id, 'description', handleTextBlur(String(investment.id), e.target.value))}
                       disabled={isUpdating}
                     />
                   </td>
                 )}
                 
-                <td className="p-2">
+                <td className="p-1">
                   <div className="flex items-center gap-2">
                     <input
                       type="text"
@@ -262,38 +255,24 @@ function VoluntaryInvestmentsTable({ viewMode, searchTerm }: VoluntaryInvestment
                       }}
                       disabled={isUpdating}
                     />
-                    {ownerIndex === owners.length - 1 && (
-                      <button
-                        type="button"
-                        onClick={(e) => {
-                          e.preventDefault();
-                          e.stopPropagation();
-                          handleAddOwner(investment.id, owners, percentages);
-                        }}
+                    {ownerIndex === 0 && (
+                      <AddButton
+                        onClick={() => handleAddOwner(investment.id, owners, percentages)}
                         disabled={isUpdating}
-                        className="h-6 w-6 flex items-center justify-center text-primary border border-primary bg-white hover:bg-primary/10 rounded"
-                      >
-                        <UserPlus className="h-3 w-3" />
-                      </button>
+                        size="sm"
+                      />
                     )}
-                    {owners.length > 1 && (
-                      <button
-                        type="button"
-                        onClick={(e) => {
-                          e.preventDefault();
-                          e.stopPropagation();
-                          handleDeleteOwner(investment.id, ownerIndex, owners, percentages);
-                        }}
+                    {ownerIndex > 0 && (
+                      <DeleteButton
+                        onClick={() => handleDeleteOwner(investment.id, ownerIndex, owners, percentages)}
                         disabled={isUpdating}
-                        className="h-6 w-6 flex items-center justify-center text-neutral-500 border border-neutral-300 bg-white hover:bg-neutral-50 rounded"
-                      >
-                        <UserMinus className="h-3 w-3" />
-                      </button>
+                        size="sm"
+                      />
                     )}
                   </div>
                 </td>
                 
-                <td className="p-2">
+                <td className="p-1">
                   <input
                     type="text"
                     defaultValue={percentages[ownerIndex] || "0%"}
@@ -310,62 +289,62 @@ function VoluntaryInvestmentsTable({ viewMode, searchTerm }: VoluntaryInvestment
                 
                 {ownerIndex === 0 && (
                   <>
-                    <td className="p-2 section-start" rowSpan={maxRows}>
+                    <td className="p-1 section-start" rowSpan={maxRows}>
                       <input
                         type="text"
                         defaultValue={investment.baseCost}
                         className={`table-input ${getFieldClass('currency')} ${getValueClass(investment.baseCost, 'currency')}`}
                         onFocus={handleDefaultValueFocus}
-                        onBlur={(e) => handleInputBlur(investment.id, 'baseCost', e.target.value)}
+                        onBlur={(e) => handleUpdateInvestment(investment.id, 'baseCost', handleCurrencyBlur(String(investment.id), e.target.value))}
                         disabled={isUpdating}
                       />
                     </td>
                     
-                    <td className="p-2" rowSpan={maxRows}>
+                    <td className="p-1" rowSpan={maxRows}>
                       <input
                         type="text"
                         defaultValue={investment.marketValue}
                         className={`table-input ${getFieldClass('currency')} ${getValueClass(investment.marketValue, 'currency')}`}
                         onFocus={handleDefaultValueFocus}
-                        onBlur={(e) => handleInputBlur(investment.id, 'marketValue', e.target.value)}
+                        onBlur={(e) => handleUpdateInvestment(investment.id, 'marketValue', handleCurrencyBlur(String(investment.id), e.target.value))}
                         disabled={isUpdating}
                       />
                     </td>
                     
-                    <td className="p-2" rowSpan={maxRows}>
+                    <td className="p-1" rowSpan={maxRows}>
                       <input
                         type="text"
                         defaultValue={investment.liquidationPercentage}
                         className={`table-input ${getFieldClass('percentage')} ${getValueClass(investment.liquidationPercentage, 'percentage')}`}
                         onFocus={handleDefaultValueFocus}
-                        onBlur={(e) => handleInputBlur(investment.id, 'liquidationPercentage', e.target.value)}
+                        onBlur={(e) => handleUpdateInvestment(investment.id, 'liquidationPercentage', handlePercentageBlur(String(investment.id), e.target.value))}
                         disabled={isUpdating}
                       />
                     </td>
                     
-                    <td className="p-2 section-start" rowSpan={maxRows}>
+                    <td className="p-1 section-start" rowSpan={maxRows}>
                       <input
                         type="text"
                         defaultValue={investment.spouse}
                         className={`table-input ${getFieldClass('currency')} ${getValueClass(investment.spouse, 'currency')}`}
                         onFocus={handleDefaultValueFocus}
-                        onBlur={(e) => handleInputBlur(investment.id, 'spouse', e.target.value)}
+                        onBlur={(e) => handleUpdateInvestment(investment.id, 'spouse', handleCurrencyBlur(String(investment.id), e.target.value))}
                         disabled={isUpdating}
                       />
                     </td>
                     
-                    <td className="p-2" rowSpan={maxRows}>
+                    <td className="p-1" rowSpan={maxRows}>
                       <input
                         type="text"
                         defaultValue={investment.others}
                         className={`table-input ${getFieldClass('currency')} ${getValueClass(investment.others, 'currency')}`}
                         onFocus={handleDefaultValueFocus}
-                        onBlur={(e) => handleInputBlur(investment.id, 'others', e.target.value)}
+                        onBlur={(e) => handleUpdateInvestment(investment.id, 'others', handleCurrencyBlur(String(investment.id), e.target.value))}
                         disabled={isUpdating}
                       />
                     </td>
                     
-                    <td className="p-2 text-center section-start" rowSpan={maxRows}>
+                    <td className="p-1 text-center section-start" rowSpan={maxRows}>
                       <input
                         type="checkbox"
                         checked={investment.excludedFromJointEstate}
@@ -375,7 +354,7 @@ function VoluntaryInvestmentsTable({ viewMode, searchTerm }: VoluntaryInvestment
                       />
                     </td>
                     
-                    <td className="p-2 text-center" rowSpan={maxRows}>
+                    <td className="p-1 text-center" rowSpan={maxRows}>
                       <input
                         type="checkbox"
                         checked={investment.excludedFromEstateDuty}
@@ -385,7 +364,7 @@ function VoluntaryInvestmentsTable({ viewMode, searchTerm }: VoluntaryInvestment
                       />
                     </td>
                     
-                    <td className="p-2 text-center" rowSpan={maxRows}>
+                    <td className="p-1 text-center" rowSpan={maxRows}>
                       <input
                         type="checkbox"
                         checked={investment.excludedFromCGT}
@@ -395,7 +374,7 @@ function VoluntaryInvestmentsTable({ viewMode, searchTerm }: VoluntaryInvestment
                       />
                     </td>
                     
-                    <td className="p-2 text-center section-end" rowSpan={maxRows}>
+                    <td className="p-1 text-center section-end" rowSpan={maxRows}>
                       <input
                         type="checkbox"
                         checked={investment.excludedFromExecutorsFees}
