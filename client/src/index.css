@@ -328,7 +328,10 @@ th, td {
   /* Standardized footer/totals styling - keep border for section separation */
   tfoot {
     background-color: #f9fafb !important; /* bg-neutral-50 */
-    border-top: 2px solid #d1d5db !important; /* Stronger border for section separation */
+  }
+
+  tfoot tr {
+    border-top: 2px solid #d1d5db !important; /* Single strong border for section separation */
   }
 
   tfoot td {
