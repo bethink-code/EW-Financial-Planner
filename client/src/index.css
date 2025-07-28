@@ -736,6 +736,26 @@ th, td {
   td:has(input[type="text"]:not(.field-currency):not(.field-percentage):not(.field-years):not(.field-number)) {
     text-align: left !important;
   }
+
+  /* SECTION BORDER STYLING - Create visible section separators */
+  .section-start {
+    border-left: 2px solid #9ca3af !important;
+  }
+
+  .section-end {
+    border-right: 2px solid #9ca3af !important;
+  }
+
+  /* Apply section borders to all table elements (headers, body, footer) */
+  table th.section-start,
+  table td.section-start {
+    border-left: 2px solid #9ca3af !important;
+  }
+
+  table th.section-end,
+  table td.section-end {
+    border-right: 2px solid #9ca3af !important;
+  }
 }
 
 /* Custom input styling for inline editing */
