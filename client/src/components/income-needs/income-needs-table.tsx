@@ -208,17 +208,17 @@ export default function IncomeNeedsTable({ viewMode, searchTerm }: IncomeNeedsTa
             <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start" colSpan={2}>Overview</th>
             <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start section-end" colSpan={7}>Income Need Details</th>
           </tr>
-          <tr className="border-b border-border">
-            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center border-b border-neutral-200"></th>
-            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start border-b border-neutral-200">Description</th>
-            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center border-b border-neutral-200">Entity</th>
-            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start border-b border-neutral-200">Amount</th>
-            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center border-b border-neutral-200">Start</th>
-            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center border-b border-neutral-200">Term (years)</th>
-            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center border-b border-neutral-200">Increase %</th>
-            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center border-b border-neutral-200">CPI</th>
-            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center border-b border-neutral-200">Frequency</th>
-            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-end border-b border-neutral-200">Capitalised Amount</th>
+          <tr>
+            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center"></th>
+            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start">Description</th>
+            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-end">Entity</th>
+            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start">Amount</th>
+            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center">Start</th>
+            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center">Term (years)</th>
+            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center">Increase %</th>
+            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center">CPI</th>
+            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center">Frequency</th>
+            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-end">Capitalised Amount</th>
           </tr>
         </thead>
         <tbody className="divide-y divide-neutral-200">
@@ -255,7 +255,7 @@ export default function IncomeNeedsTable({ viewMode, searchTerm }: IncomeNeedsTa
               </td>
               
               {/* Entity */}
-              <td className="p-1">
+              <td className="p-1 section-end">
                 <input
                   key={`personName-${need.id}-${need.personName}`}
                   type="text"
@@ -362,8 +362,8 @@ export default function IncomeNeedsTable({ viewMode, searchTerm }: IncomeNeedsTa
         {/* Totals Footer */}
         <tfoot>
           <tr>
-            <td className="totals-cell-label text-right" colSpan={9}>Totals</td>
-            <td className="totals-cell-value">
+            <td className="totals-cell-label text-right section-start" colSpan={9}>Totals</td>
+            <td className="totals-cell-value section-end">
               R {filteredNeeds.reduce((sum, need) => {
                 const capitalisedAmount = parseFloat(calculateCapitalisedAmount(need).replace(/[^\d.-]/g, '')) || 0;
                 return sum + capitalisedAmount;
@@ -371,8 +371,8 @@ export default function IncomeNeedsTable({ viewMode, searchTerm }: IncomeNeedsTa
             </td>
           </tr>
           <tr>
-            <td className="totals-cell-label text-right" colSpan={9}>Capital Required for Income Shortfall</td>
-            <td className="totals-cell-value">
+            <td className="totals-cell-label text-right section-start" colSpan={9}>Capital Required for Income Shortfall</td>
+            <td className="totals-cell-value section-end">
               R {filteredNeeds.reduce((sum, need) => {
                 const capitalisedAmount = parseFloat(calculateCapitalisedAmount(need).replace(/[^\d.-]/g, '')) || 0;
                 return sum + capitalisedAmount;
