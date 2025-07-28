@@ -270,6 +270,27 @@ th, td {
     border-radius: 0.5rem !important;
     box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1) !important;
     border: 1px solid #e5e7eb !important;
+    border-collapse: separate !important;
+    border-spacing: 0 !important;
+  }
+
+  /* Remove all internal horizontal borders */
+  table tr {
+    border: none !important;
+  }
+
+  table td {
+    border-top: none !important;
+    border-bottom: none !important;
+  }
+
+  table th {
+    border-top: none !important;
+    border-bottom: none !important;
+  }
+
+  tbody tr {
+    border: none !important;
   }
 
   /* Table section border classes - structural approach */
@@ -305,10 +326,10 @@ th, td {
     border: 1px solid #D1E7F0 !important;
   }
 
-  /* Standardized footer/totals styling */
+  /* Standardized footer/totals styling - keep border for section separation */
   tfoot {
     background-color: #f9fafb !important; /* bg-neutral-50 */
-    border-top: 1px solid #d1d5db !important; /* border-t border-neutral-300 */
+    border-top: 2px solid #d1d5db !important; /* Stronger border for section separation */
   }
 
   .totals-cell-label {
