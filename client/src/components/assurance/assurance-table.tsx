@@ -148,11 +148,11 @@ export function AssuranceTable({ searchTerm }: AssuranceTableProps) {
       </div>
 
       {/* Main Table */}
-      <div className="rounded-lg border border-neutral-200 overflow-hidden">
+      <div className="rounded-lg border  overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full min-w-full">
             <thead>
-              <tr className="border-b border-neutral-300">
+              <tr className="border-neutral-300">
                 <th className="p-3 text-center text-xs font-semibold text-neutral-700 uppercase tracking-wider w-16">
                   <AddButton onClick={handleAddPolicy} disabled={addMutation.isPending} />
                 </th>

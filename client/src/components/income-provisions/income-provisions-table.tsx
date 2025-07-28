@@ -2,7 +2,7 @@ import { useState, useCallback, useMemo } from 'react';
 import { useQuery, useMutation } from '@tanstack/react-query';
 import { queryClient } from '@/lib/queryClient';
 import { IncomeProvisions, InsertIncomeProvisions } from '@shared/schema';
-import { ActionButtonGroup, DuplicateButton, DeleteButton } from '@/components/ui/action-buttons';
+import { ActionButtonGroup, DuplicateButton, DeleteButton, AddButton } from '@/components/ui/action-buttons';
 import { getFieldClass, getFieldWidth } from '@/lib/field-types';
 import { formatCurrencyValue, formatPercentageValue, isDefaultValue, getValueClass } from '@/lib/formatting';
 import { handleDefaultValueFocus, createEnhancedBlurHandler } from '@/lib/formatting';
@@ -155,17 +155,17 @@ export default function IncomeProvisionsTable({ viewMode, searchTerm }: IncomePr
     <div className="space-y-6">
       <table>
         <thead>
-          <tr className="border-b border-border">
+          <tr>
             <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start section-end" rowSpan={2}>
               <AddButton onClick={handleAddProvision} disabled={isUpdating} />
             </th>
             <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start" colSpan={1}>Overview</th>
             <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start section-end" colSpan={2}>Financial Details</th>
           </tr>
-          <tr className="border-b border-border">
-            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start border-b border-neutral-200">Description</th>
-            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start border-b border-neutral-200">Amount</th>
-            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-end border-b border-neutral-200">Increase %</th>
+          <tr>
+            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start">Description</th>
+            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start">Amount</th>
+            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-end">Increase %</th>
           </tr>
         </thead>
         <tbody className="divide-y divide-neutral-200">
@@ -221,14 +221,18 @@ export default function IncomeProvisionsTable({ viewMode, searchTerm }: IncomePr
             </tr>
           ))}
           
-          {/* Totals Row */}
-          <tr className="table-total-row bg-neutral-100 font-bold">
-            <td className="section-start section-end p-1 text-center font-bold">TOTALS</td>
-            <td className="section-start p-1 font-bold">-</td>
-            <td className="section-start p-1 font-bold">R {totals.amount.toLocaleString()}</td>
-            <td className="section-end p-1 font-bold">-</td>
-          </tr>
+
         </tbody>
+        
+        {/* Totals Footer */}
+        <tfoot>
+          <tr>
+            <td className="totals-cell-label text-right section-start section-end" colSpan={1}>Totals</td>
+            <td className="totals-cell-label text-right section-start" colSpan={1}>-</td>
+            <td className="totals-cell-value section-start">R {totals.amount.toLocaleString()}</td>
+            <td className="totals-cell-value section-end">-</td>
+          </tr>
+        </tfoot>
       </table>
     </div>
   );
