@@ -274,15 +274,26 @@ th, td {
     border-spacing: 0 !important;
   }
 
-  /* Remove ALL borders from table cells by default */
-  table th:not(.section-start),
-  table td:not(.section-start) {
+  /* Remove borders from table cells - but NEVER from section-start elements */
+  table th,
+  table td {
     border: none !important;
     border-bottom: none !important;
     border-top: none !important;
-    border-left: none !important;
     border-right: none !important;
     position: relative;
+  }
+  
+  /* Preserve left borders ONLY for section-start elements */
+  table th:not(.section-start),
+  table td:not(.section-start) {
+    border-left: none !important;
+  }
+
+  /* IMMEDIATELY APPLY SECTION BORDERS - Highest Priority */
+  table th.section-start,
+  table td.section-start {
+    border-left: 2px solid #9ca3af !important;
   }
 
   /* Override any conflicting border classes globally - but preserve section borders */
@@ -301,10 +312,9 @@ th, td {
     border-right: none !important;
   }
 
-  /* Remove ALL vertical borders completely - clean slate */
-  table th:not(.section-start),
-  table td:not(.section-start) {
-    border-left: none !important;
+  /* Remove right borders from all elements */
+  table th,
+  table td {
     border-right: none !important;
   }
 
