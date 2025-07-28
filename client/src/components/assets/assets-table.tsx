@@ -211,6 +211,14 @@ export function AssetsTable({ viewMode = 'table', onShowCategoryDialog }: Assets
         </td>
 
         {/* Overview */}
+        <td className="p-2 text-center">
+          <input
+            type="checkbox"
+            checked={asset.included || false}
+            onChange={(e) => handleCheckboxChange(asset.id, 'included', e.target.checked)}
+            className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+          />
+        </td>
         <td className="p-2">
           <input
             type="text"
@@ -317,15 +325,7 @@ export function AssetsTable({ viewMode = 'table', onShowCategoryDialog }: Assets
           />
         </td>
 
-        {/* Included checkbox */}
-        <td className="p-2 text-center">
-          <input
-            type="checkbox"
-            checked={asset.included || false}
-            onChange={(e) => handleCheckboxChange(asset.id, 'included', e.target.checked)}
-            className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
-          />
-        </td>
+
       </tr>
     </SafeFragment>
   );
@@ -339,14 +339,14 @@ export function AssetsTable({ viewMode = 'table', onShowCategoryDialog }: Assets
             <th className="px-3 py-3 text-center text-xs font-medium text-neutral-600 uppercase tracking-wider w-16" rowSpan={2}>
               <AddButton onClick={handleAddAsset} disabled={isUpdating} />
             </th>
-            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start" colSpan={1}>Overview</th>
+            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start" colSpan={2}>Overview</th>
             <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start" colSpan={1}>Asset Details</th>
             <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start" colSpan={4}>Ownership Split</th>
-            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start" colSpan={3}>Distribution</th>
-            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start section-end" rowSpan={2}>Include</th>
+            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start section-end" colSpan={3}>Distribution</th>
           </tr>
           <tr className="border-b border-border">
-            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start border-b border-neutral-200">Description</th>
+            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start border-b border-neutral-200">Include</th>
+            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center border-b border-neutral-200">Description</th>
             <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start border-b border-neutral-200">Market Value</th>
             <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start border-b border-neutral-200">John Doe</th>
             <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center border-b border-neutral-200">Janette Doe (Spouse)</th>
@@ -381,6 +381,7 @@ export function AssetsTable({ viewMode = 'table', onShowCategoryDialog }: Assets
           <tr>
             <td className="totals-cell-label">Totals</td>
             <td className="totals-cell-label"></td>
+            <td className="totals-cell-label"></td>
             <td className="totals-cell-value">{totals.totalMarketValue}</td>
             <td className="totals-cell-label"></td>
             <td className="totals-cell-label"></td>
@@ -389,7 +390,6 @@ export function AssetsTable({ viewMode = 'table', onShowCategoryDialog }: Assets
             <td className="totals-cell-value">{totals.totalEstate}</td>
             <td className="totals-cell-value">{totals.totalOthers}</td>
             <td className="totals-cell-value">{totals.totalClient}</td>
-            <td className="totals-cell-label"></td>
           </tr>
         </tfoot>
       </table>

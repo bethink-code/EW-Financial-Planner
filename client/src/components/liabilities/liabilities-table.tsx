@@ -207,6 +207,14 @@ export function LiabilitiesTable({ viewMode = 'table', onShowCategoryDialog }: L
           />
         </div>
       </td>
+      <td className="p-2 text-center">
+        <input
+          type="checkbox"
+          checked={liability.included}
+          onChange={(e) => handleCheckboxChange(liability.id, 'included', e.target.checked)}
+          disabled={isUpdating}
+        />
+      </td>
       <td className="p-2">
         <input
           type="text"
@@ -216,14 +224,6 @@ export function LiabilitiesTable({ viewMode = 'table', onShowCategoryDialog }: L
           data-field={`description-${liability.id}`}
           className={`table-input h-7 text-sm bg-primary/5 border-gray-200 focus:border-primary w-full px-3 py-1 border rounded-md text-sm ${getValueClass(liability.description, 'text')}`}
           style={{ textAlign: "left" }}
-          disabled={isUpdating}
-        />
-      </td>
-      <td className="p-2 text-center">
-        <input
-          type="checkbox"
-          checked={liability.included}
-          onChange={(e) => handleCheckboxChange(liability.id, 'included', e.target.checked)}
           disabled={isUpdating}
         />
       </td>
@@ -341,8 +341,8 @@ export function LiabilitiesTable({ viewMode = 'table', onShowCategoryDialog }: L
             <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start section-end" colSpan={3}>Distribution</th>
           </tr>
           <tr className="border-b border-border">
-            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start border-b border-neutral-200">Description</th>
-            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center border-b border-neutral-200">Include</th>
+            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start border-b border-neutral-200">Include</th>
+            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center border-b border-neutral-200">Description</th>
             <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start border-b border-neutral-200">Debt Amount</th>
             <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start border-b border-neutral-200">John Doe</th>
             <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center border-b border-neutral-200">Janette Doe (Spouse)</th>
