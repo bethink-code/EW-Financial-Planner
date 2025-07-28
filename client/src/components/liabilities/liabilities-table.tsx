@@ -8,7 +8,7 @@ import { SimpleCategorySelector } from './simple-category-selector';
 import { formatCurrencyValue, formatPercentageValue, formatTextValue, isDefaultValue, getValueClass } from '@/lib/formatting';
 import { getFieldClass, getCellClass } from '@/lib/field-types';
 import { createEnhancedBlurHandler, handleDefaultValueFocus } from '@/lib/formatting';
-import { DuplicateButton, DeleteButton } from '@/components/ui/action-buttons';
+import { AddButton, DuplicateButton, DeleteButton } from '@/components/ui/action-buttons';
 
 interface LiabilitiesTableProps {
   viewMode?: 'table' | 'hybrid';
