@@ -305,27 +305,27 @@ export function AssetsTable({ viewMode = 'table' }: AssetsTableProps) {
       <table className="table">
         {/* Header */}
         <thead>
-          <tr>
-            <th rowSpan={2} className="w-20 text-center">
+          <tr className="border-b border-border">
+            <th className="px-3 py-3 text-center text-xs font-medium text-neutral-600 uppercase tracking-wider w-16" rowSpan={2}>
               <AddButton onClick={handleAddAsset} disabled={isUpdating} />
             </th>
-            <th colSpan={2} className="border-b border-neutral-200">Overview</th>
-            <th colSpan={1} className="border-b border-neutral-200">Asset Details</th>
-            <th colSpan={4} className="border-b border-neutral-200">Ownership Split</th>
-            <th colSpan={3} className="border-b border-neutral-200">Distribution</th>
-            <th rowSpan={2} className="border-b border-neutral-200">Include</th>
+            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start" colSpan={2}>Overview</th>
+            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start" colSpan={1}>Asset Details</th>
+            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start" colSpan={4}>Ownership Split</th>
+            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start" colSpan={3}>Distribution</th>
+            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start section-end" rowSpan={2}>Include</th>
           </tr>
-          <tr>
-            <th className="border-b border-neutral-200">Category</th>
-            <th className="border-b border-neutral-200">Description</th>
-            <th className="border-b border-neutral-200">Market Value</th>
-            <th className="border-b border-neutral-200">John Doe</th>
-            <th className="border-b border-neutral-200">Janette Doe (Spouse)</th>
-            <th className="border-b border-neutral-200">Doe Junior</th>
-            <th className="border-b border-neutral-200">Doe family trust</th>
-            <th className="border-b border-neutral-200">Estate</th>
-            <th className="border-b border-neutral-200">Others</th>
-            <th className="border-b border-neutral-200">Client</th>
+          <tr className="border-b border-border">
+            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start border-b border-neutral-200">Category</th>
+            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center border-b border-neutral-200">Description</th>
+            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start border-b border-neutral-200">Market Value</th>
+            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start border-b border-neutral-200">John Doe</th>
+            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center border-b border-neutral-200">Janette Doe (Spouse)</th>
+            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center border-b border-neutral-200">Doe Junior</th>
+            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center border-b border-neutral-200">Doe family trust</th>
+            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start border-b border-neutral-200">Estate</th>
+            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center border-b border-neutral-200">Others</th>
+            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-end border-b border-neutral-200">Client</th>
           </tr>
         </thead>
 

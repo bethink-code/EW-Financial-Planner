@@ -1,12 +1,13 @@
-import React from 'react';
+import React, { useState, useCallback } from 'react';
 import { CalculatorHeader } from '@/components/ui/calculator-header';
 import { LiabilitiesTable } from '@/components/liabilities/liabilities-table';
 import { LiabilitiesSummary } from '@/components/liabilities/liabilities-summary';
 import { useQuery, useMutation } from '@tanstack/react-query';
 import { queryClient, apiRequest } from '@/lib/queryClient';
-import { AddButton } from '@/components/ui/action-buttons';
 
 export default function LiabilitiesPage() {
+  const [viewMode, setViewMode] = useState<'table' | 'hybrid'>('table');
+
   // Fetch liabilities
   const { data: liabilities = [] } = useQuery<any[]>({
     queryKey: ['/api/liabilities'],
@@ -34,29 +35,34 @@ export default function LiabilitiesPage() {
     },
   });
 
-  const handleAddLiability = () => {
+  const handleAddLiability = useCallback(() => {
     addMutation.mutate();
-  };
+  }, [addMutation]);
+
+  const handleViewModeChange = useCallback((newMode: 'table' | 'hybrid') => {
+    setViewMode(newMode);
+  }, []);
 
   return (
-    <div className="bg-gray-50">
+    <div className="">
       <div className="w-full px-6 py-6">
+        {/* Combined Header and Summary */}
         <div className="mb-6 max-w-6xl">
-          <CalculatorHeader 
-            title="Liabilities" 
+          <CalculatorHeader
+            title="Liabilities"
             itemCount={liabilities.length}
-            countLabel="liabilities"
-            actionButton={
-              <AddButton onClick={handleAddLiability} disabled={addMutation.isPending}>
-                Add Liability
-              </AddButton>
-            }
+            itemLabel="liabilities"
+            onAddItem={handleAddLiability}
+            addButtonText="Add Liability"
+            isAddingItem={addMutation.isPending}
+            viewMode={viewMode}
+            onViewModeChange={handleViewModeChange}
           >
             <LiabilitiesSummary />
           </CalculatorHeader>
         </div>
         
-        <LiabilitiesTable />
+        <LiabilitiesTable viewMode={viewMode} />
       </div>
     </div>
   );
