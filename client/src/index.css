@@ -321,14 +321,7 @@ th, td {
     border-left: none !important;
   }
 
-  /* All section borders should display - no double border prevention */
-  
-  /* Also handle the case where first column after Actions doesn't need section-start border */
-  thead th[rowspan]:first-child.section-end + th,
-  tbody td[rowspan]:first-child.section-end + td,
-  tfoot td[rowspan]:first-child.section-end + td {
-    border-left: none !important;
-  }
+  /* All section borders should display consistently */
 
   /* No row borders - completely clean */
   table tbody tr,
