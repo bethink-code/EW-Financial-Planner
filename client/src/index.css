@@ -566,6 +566,7 @@ th, td {
     max-width: 300px !important;
     width: auto !important;
     text-align: left !important;
+    font-size: 0.875rem !important; /* 14px standardized font size */
   }
 
   .field-currency,
@@ -576,6 +577,7 @@ th, td {
     max-width: 110px !important;
     width: 90px !important;
     text-align: right !important;
+    font-size: 0.875rem !important; /* 14px standardized font size */
   }
 
   .field-percentage,
@@ -586,18 +588,28 @@ th, td {
     max-width: 50px !important;
     width: 50px !important;
     text-align: right !important;
+    font-size: 0.875rem !important; /* 14px standardized font size */
   }
 
-  .field-years {
-    min-width: 80px;
-    max-width: 80px;
+  .field-years,
+  input.field-years,
+  .table-input.field-years,
+  .field-years.table-input {
+    min-width: 80px !important;
+    max-width: 80px !important;
+    width: 80px !important;
     text-align: right !important;
+    font-size: 0.875rem !important; /* 14px standardized font size */
   }
 
-  .field-number {
-    min-width: 70px;
-    max-width: 120px;
+  .field-number,
+  input.field-number,
+  .table-input.field-number,
+  .field-number.table-input {
+    min-width: 70px !important;
+    max-width: 120px !important;
     text-align: right !important;
+    font-size: 0.875rem !important; /* 14px standardized font size */
   }
 
   /* Default value styling - grey text to distinguish from user-entered values */
