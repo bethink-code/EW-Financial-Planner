@@ -13,9 +13,10 @@ import { AddButton, DuplicateButton, DeleteButton } from '@/components/ui/action
 
 interface LiabilitiesTableProps {
   viewMode?: 'table' | 'hybrid';
+  onShowCategoryDialog?: () => void;
 }
 
-export function LiabilitiesTable({ viewMode = 'table' }: LiabilitiesTableProps) {
+export function LiabilitiesTable({ viewMode = 'table', onShowCategoryDialog }: LiabilitiesTableProps) {
   const [isUpdating, setIsUpdating] = useState(false);
   const [showCategoryDialog, setShowCategoryDialog] = useState(false);
 
@@ -30,10 +31,10 @@ export function LiabilitiesTable({ viewMode = 'table' }: LiabilitiesTableProps) 
       category,
       description: 'Enter details...',
       debtAmount: 'R 0',
-      johnDoe: '0%',
-      janetteDoe: '0%',
-      doeJunior: '0%',
-      doeFamilyTrust: '0%',
+      peterLambie: '0%',
+      victoriaLambie: '0%',
+      juniorLambie: '0%',
+      lambiesFamilyTrust: '0%',
       estate: 'R 0',
       others: 'R 0',
       client: 'R 0',
@@ -78,10 +79,14 @@ export function LiabilitiesTable({ viewMode = 'table' }: LiabilitiesTableProps) 
     { value: 'OTHER_DEBT', label: 'Other Debt' }
   ];
 
-  // Handle add liability
+  // Handle add liability - use prop function if provided, fallback to dialog
   const handleAddLiability = useCallback(() => {
-    setShowCategoryDialog(true);
-  }, []);
+    if (onShowCategoryDialog) {
+      onShowCategoryDialog();
+    } else {
+      setShowCategoryDialog(true);
+    }
+  }, [onShowCategoryDialog]);
 
   // Handle category selection
   const handleCategorySelect = useCallback((category: string) => {
@@ -102,7 +107,7 @@ export function LiabilitiesTable({ viewMode = 'table' }: LiabilitiesTableProps) 
         
         if (field.includes('Amount') || field.includes('estate') || field.includes('others') || field.includes('client')) {
           formattedValue = formatCurrencyValue(value);
-        } else if (field.includes('johnDoe') || field.includes('janetteDoe') || field.includes('doeJunior') || field.includes('doeFamilyTrust')) {
+        } else if (field.includes('peterLambie') || field.includes('victoriaLambie') || field.includes('juniorLambie') || field.includes('lambiesFamilyTrust')) {
           formattedValue = formatPercentageValue(value);
         } else {
           formattedValue = formatTextValue(value);
@@ -214,7 +219,7 @@ export function LiabilitiesTable({ viewMode = 'table' }: LiabilitiesTableProps) 
           type="text"
           defaultValue={liability.description}
           onFocus={handleDefaultValueFocus}
-          onBlur={createEnhancedBlurHandler(liability.id, 'description', handleInputBlur)}
+          onBlur={createEnhancedBlurHandler((value) => handleInputBlur(liability.id, 'description', value), 'text')}
           data-field={`description-${liability.id}`}
           className={`table-input ${getValueClass(liability.description, 'text')}`}
           disabled={isUpdating}
@@ -233,7 +238,7 @@ export function LiabilitiesTable({ viewMode = 'table' }: LiabilitiesTableProps) 
           type="text"
           defaultValue={liability.debtAmount}
           onFocus={handleDefaultValueFocus}
-          onBlur={createEnhancedBlurHandler(liability.id, 'debtAmount', handleInputBlur)}
+          onBlur={createEnhancedBlurHandler((value) => handleInputBlur(liability.id, 'debtAmount', value), 'currency')}
           data-field={`debtAmount-${liability.id}`}
           className={`table-input ${getValueClass(liability.debtAmount, 'currency')}`}
           disabled={isUpdating}
@@ -242,44 +247,44 @@ export function LiabilitiesTable({ viewMode = 'table' }: LiabilitiesTableProps) 
       <td className={getCellClass('percentage')}>
         <input
           type="text"
-          defaultValue={liability.johnDoe}
+          defaultValue={liability.peterLambie}
           onFocus={handleDefaultValueFocus}
-          onBlur={createEnhancedBlurHandler(liability.id, 'johnDoe', handleInputBlur)}
-          data-field={`johnDoe-${liability.id}`}
-          className={`table-input ${getValueClass(liability.johnDoe, 'percentage')}`}
+          onBlur={createEnhancedBlurHandler((value) => handleInputBlur(liability.id, 'peterLambie', value), 'percentage')}
+          data-field={`peterLambie-${liability.id}`}
+          className={`table-input ${getValueClass(liability.peterLambie, 'percentage')}`}
           disabled={isUpdating}
         />
       </td>
       <td className={getCellClass('percentage')}>
         <input
           type="text"
-          defaultValue={liability.janetteDoe}
+          defaultValue={liability.victoriaLambie}
           onFocus={handleDefaultValueFocus}
-          onBlur={createEnhancedBlurHandler(liability.id, 'janetteDoe', handleInputBlur)}
-          data-field={`janetteDoe-${liability.id}`}
-          className={`table-input ${getValueClass(liability.janetteDoe, 'percentage')}`}
+          onBlur={createEnhancedBlurHandler((value) => handleInputBlur(liability.id, 'victoriaLambie', value), 'percentage')}
+          data-field={`victoriaLambie-${liability.id}`}
+          className={`table-input ${getValueClass(liability.victoriaLambie, 'percentage')}`}
           disabled={isUpdating}
         />
       </td>
       <td className={getCellClass('percentage')}>
         <input
           type="text"
-          defaultValue={liability.doeJunior}
+          defaultValue={liability.juniorLambie}
           onFocus={handleDefaultValueFocus}
-          onBlur={createEnhancedBlurHandler(liability.id, 'doeJunior', handleInputBlur)}
-          data-field={`doeJunior-${liability.id}`}
-          className={`table-input ${getValueClass(liability.doeJunior, 'percentage')}`}
+          onBlur={createEnhancedBlurHandler((value) => handleInputBlur(liability.id, 'juniorLambie', value), 'percentage')}
+          data-field={`juniorLambie-${liability.id}`}
+          className={`table-input ${getValueClass(liability.juniorLambie, 'percentage')}`}
           disabled={isUpdating}
         />
       </td>
       <td className={getCellClass('percentage')}>
         <input
           type="text"
-          defaultValue={liability.doeFamilyTrust}
+          defaultValue={liability.lambiesFamilyTrust}
           onFocus={handleDefaultValueFocus}
-          onBlur={createEnhancedBlurHandler(liability.id, 'doeFamilyTrust', handleInputBlur)}
-          data-field={`doeFamilyTrust-${liability.id}`}
-          className={`table-input ${getValueClass(liability.doeFamilyTrust, 'percentage')}`}
+          onBlur={createEnhancedBlurHandler((value) => handleInputBlur(liability.id, 'lambiesFamilyTrust', value), 'percentage')}
+          data-field={`lambiesFamilyTrust-${liability.id}`}
+          className={`table-input ${getValueClass(liability.lambiesFamilyTrust, 'percentage')}`}
           disabled={isUpdating}
         />
       </td>
@@ -288,7 +293,7 @@ export function LiabilitiesTable({ viewMode = 'table' }: LiabilitiesTableProps) 
           type="text"
           defaultValue={liability.estate}
           onFocus={handleDefaultValueFocus}
-          onBlur={createEnhancedBlurHandler(liability.id, 'estate', handleInputBlur)}
+          onBlur={createEnhancedBlurHandler((value) => handleInputBlur(liability.id, 'estate', value), 'currency')}
           data-field={`estate-${liability.id}`}
           className={`table-input ${getValueClass(liability.estate, 'currency')}`}
           disabled={isUpdating}
@@ -299,7 +304,7 @@ export function LiabilitiesTable({ viewMode = 'table' }: LiabilitiesTableProps) 
           type="text"
           defaultValue={liability.others}
           onFocus={handleDefaultValueFocus}
-          onBlur={createEnhancedBlurHandler(liability.id, 'others', handleInputBlur)}
+          onBlur={createEnhancedBlurHandler((value) => handleInputBlur(liability.id, 'others', value), 'currency')}
           data-field={`others-${liability.id}`}
           className={`table-input ${getValueClass(liability.others, 'currency')}`}
           disabled={isUpdating}
@@ -310,7 +315,7 @@ export function LiabilitiesTable({ viewMode = 'table' }: LiabilitiesTableProps) 
           type="text"
           defaultValue={liability.client}
           onFocus={handleDefaultValueFocus}
-          onBlur={createEnhancedBlurHandler(liability.id, 'client', handleInputBlur)}
+          onBlur={createEnhancedBlurHandler((value) => handleInputBlur(liability.id, 'client', value), 'currency')}
           data-field={`client-${liability.id}`}
           className={`table-input ${getValueClass(liability.client, 'currency')}`}
           disabled={isUpdating}

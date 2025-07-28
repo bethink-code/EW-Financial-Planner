@@ -13,9 +13,10 @@ import { AddButton, DuplicateButton, DeleteButton } from '@/components/ui/action
 
 interface AssetsTableProps {
   viewMode?: 'table' | 'hybrid';
+  onShowCategoryDialog?: () => void;
 }
 
-export function AssetsTable({ viewMode = 'table' }: AssetsTableProps) {
+export function AssetsTable({ viewMode = 'table', onShowCategoryDialog }: AssetsTableProps) {
   const [isUpdating, setIsUpdating] = useState(false);
   const [showCategoryDialog, setShowCategoryDialog] = useState(false);
 
@@ -77,16 +78,28 @@ export function AssetsTable({ viewMode = 'table' }: AssetsTableProps) {
     { value: 'OTHER_ASSETS', label: 'Other Assets' }
   ];
 
-  // Handle add asset
+  // Handle add asset - use prop function if provided, fallback to dialog
   const handleAddAsset = useCallback(() => {
-    setShowCategoryDialog(true);
-  }, []);
+    if (onShowCategoryDialog) {
+      onShowCategoryDialog();
+    } else {
+      setShowCategoryDialog(true);
+    }
+  }, [onShowCategoryDialog]);
 
   // Handle category selection
   const handleCategorySelect = useCallback((category: string) => {
     setIsUpdating(true);
     addMutation.mutate(category);
   }, [addMutation]);
+
+  // Handle checkbox changes
+  const handleCheckboxChange = useCallback((id: number, field: string, checked: boolean) => {
+    updateMutation.mutate({
+      id,
+      updates: { [field]: checked }
+    });
+  }, [updateMutation]);
 
   // Handle input blur with formatting
   const handleInputBlur = useCallback((id: number, field: string, value: string) => {
@@ -309,7 +322,7 @@ export function AssetsTable({ viewMode = 'table' }: AssetsTableProps) {
           <input
             type="checkbox"
             checked={asset.included || false}
-            onChange={(e) => handleInputBlur(asset.id, 'included', e.target.checked)}
+            onChange={(e) => handleCheckboxChange(asset.id, 'included', e.target.checked)}
             className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
           />
         </td>
