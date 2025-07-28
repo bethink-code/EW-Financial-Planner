@@ -58,15 +58,15 @@ export const formatYearsValue = (value: string): string => {
  * Format text value for display - shows "Enter details ..." for empty values
  */
 export const formatTextValue = (value: string | null, fieldType?: string): string => {
-  // Handle null, undefined, and empty values - show placeholder for display only
-  if (value === null || value === undefined || value === '') {
+  // Handle null, undefined, empty values, and the literal string "null" - show placeholder for display only
+  if (value === null || value === undefined || value === '' || value === 'null') {
     if (fieldType === 'owner') {
       return 'Donald Edwards'; // Show default for owner fields
     }
     return 'Enter details ...';
   }
   const stringValue = String(value).trim();
-  if (!stringValue) {
+  if (!stringValue || stringValue === 'null') {
     if (fieldType === 'owner') {
       return 'Donald Edwards';
     }
@@ -80,7 +80,7 @@ export const formatTextValue = (value: string | null, fieldType?: string): strin
  */
 export const cleanTextValue = (value: string): string | null => {
   const stringValue = String(value || '').trim();
-  if (stringValue === 'Enter details ...' || stringValue === '') return null;
+  if (stringValue === 'Enter details ...' || stringValue === '' || stringValue === 'null') return null;
   return stringValue;
 };
 
@@ -141,7 +141,7 @@ export const formatPercentage = (value: string | number): string => {
  * Check if a value is a default value (used for styling)
  */
 export const isDefaultValue = (value: string, fieldType: FieldType): boolean => {
-  if (!value || value.trim() === '') return true;
+  if (!value || value.trim() === '' || value === 'null') return true;
   
   switch (fieldType) {
     case 'currency':
@@ -151,11 +151,11 @@ export const isDefaultValue = (value: string, fieldType: FieldType): boolean => 
     case 'years':
       return value === '0 years' || value === '0';
     case 'text':
-      return value.trim() === '' || value === 'Donald Edwards';
+      return value.trim() === '' || value === 'Donald Edwards' || value === 'Enter details ...' || value === 'null';
     case 'number':
       return value === '0';
     default:
-      return value.trim() === '';
+      return value.trim() === '' || value === 'null';
   }
 };
 
@@ -173,8 +173,10 @@ export const getValueClass = (value: string, fieldType: FieldType): string => {
  */
 export const handleDefaultValueFocus = (e: React.FocusEvent<HTMLInputElement>) => {
   const value = e.target.value;
-  // Check for all default value patterns
+  // Check for all default value patterns including null
   if (value === "" || 
+      value === "null" ||
+      value === "Enter details ..." ||
       value === "R 0" || 
       value === "0%" || 
       value === "0 years" ||
