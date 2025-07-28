@@ -352,9 +352,9 @@ export function NewRetirementTable({
                 </td>
 
                 {/* Unapproved Life Cover - Cover Split (Calculated) */}
-                <td className="p-1 bg-neutral-100">
+                <td className="p-1">
                   {rowIndex < fund.unapprovedCoverSplits.length && (
-                    <span className="text-xs text-neutral-600">
+                    <span className="calculated-field">
                       {fund.unapprovedCoverSplits[rowIndex]}
                     </span>
                   )}
@@ -456,9 +456,9 @@ export function NewRetirementTable({
                 </td>
 
                 {/* Approved Life Cover - Fund Value at Death (Calculated) */}
-                <td className="p-1 bg-neutral-100">
+                <td className="p-1">
                   {rowIndex === 0 && (
-                    <span className="text-xs text-neutral-600">
+                    <span className="calculated-field">
                       {fund.fundValueAtDeath}
                     </span>
                   )}
@@ -517,9 +517,9 @@ export function NewRetirementTable({
                 </td>
 
                 {/* Fund Value Beneficiaries - Cover (Calculated) */}
-                <td className="p-1 bg-neutral-100">
+                <td className="p-1">
                   {rowIndex < fund.fundValueCoverSplits.length && (
-                    <span className="text-xs text-neutral-600">
+                    <span className="calculated-field">
                       {fund.fundValueCoverSplits[rowIndex]}
                     </span>
                   )}
@@ -558,9 +558,9 @@ export function NewRetirementTable({
                 </td>
 
                 {/* Fund Value Beneficiaries - Living Annuity (Calculated) */}
-                <td className="p-1 bg-neutral-100">
+                <td className="p-1">
                   {rowIndex === 0 && (
-                    <span className="text-xs text-neutral-600">
+                    <span className="calculated-field">
                       {fund.livingAnnuity}
                     </span>
                   )}
