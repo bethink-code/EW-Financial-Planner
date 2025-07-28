@@ -283,7 +283,7 @@ th, td {
 
   /* Add spacing to table cells for better field separation */
   td {
-    padding: 0.5rem 0.25rem;
+    padding: 0.75rem 0.5rem;
   }
   
   th {
@@ -293,7 +293,7 @@ th, td {
   /* More generous checkbox column spacing */
   .field-checkbox {
     width: 60px;
-    padding: 0.5rem;
+    padding: 0.75rem;
   }
 
   /* Centralized summary card styling */
@@ -397,7 +397,7 @@ th, td {
   .table-input {
     width: auto;
     height: 1.25rem;
-    padding: 0.6rem 0.75rem; /* Increased horizontal padding for better spacing */
+    padding: 0.75rem 1rem; /* Generous padding for comfortable text spacing */
     background-color: hsl(var(--primary) / 0.05);
     border: 1px solid hsl(var(--border));
     outline: none;
@@ -440,7 +440,7 @@ th, td {
   select[class*="table"] {
     width: auto;
     height: 2.3rem !important;
-    padding: 0 10px !important;
+    padding: 0 1rem !important;
     background-color: hsl(var(--primary) / 0.05);
     border: 1px solid hsl(var(--border));
     outline: none;
@@ -554,7 +554,7 @@ th, td {
     outline: none !important;
     box-shadow: none !important;
     color: #374151 !important; /* grey-700 - same as entered values */
-    padding: 1.2rem 0.4rem !important;
+    padding: 0.75rem 1rem !important;
     font-size: 0.875rem !important;
     text-align: right !important;
     height: 1.25rem !important;
