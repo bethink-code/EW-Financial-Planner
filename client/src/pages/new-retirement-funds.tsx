@@ -70,30 +70,8 @@ export default function NewRetirementFunds() {
   }, [updateMutation]);
 
   const handleAddFund = useCallback(() => {
-    const newFund: Omit<RetirementFund, 'id'> = {
-      description: "Enter details ...",
-      owners: ["Donald Edwards"],
-      coverAmount: "R 0",
-      unapprovedBeneficiaries: ["Enter details ..."],
-      unapprovedPercentageSplits: ["0%"],
-      unapprovedCoverSplits: ["R 0"],
-      monthlyIncome: "R 0",
-      monthlyIncomeCheckbox: false,
-      termYears: "0 years",
-      increasePercentage: "0%",
-      approvedLifeCover: "R 0",
-      fundValue: "R 0",
-      fundValueAtDeath: "R 0",
-      fundValueBeneficiaries: ["Enter details ..."],
-      fundValuePercentageSplits: ["0%"],
-      fundValueCoverSplits: ["R 0"],
-      lumpSumTaken: "R 0",
-      nonDeductibleContribution: "R 0",
-      livingAnnuity: "R 0",
-      livingAnnuityCheckbox: false,
-      incomeTerm: "0 years"
-    };
-    addMutation.mutate(newFund);
+    const newFund = {}; // Send empty object to use database defaults
+    addMutation.mutate(newFund as Omit<RetirementFund, 'id'>);
   }, [addMutation]);
 
   const deleteMutation = useMutation({

@@ -30,17 +30,7 @@ export function AssetsPage() {
   const addMutation = useMutation({
     mutationFn: (category: string) => apiRequest('POST', '/api/assets', {
       category,
-      description: 'Enter details...',
-      marketValue: 'R 0',
-      johnDoe: '0%',
-      janetteDoe: '0%',
-      doeJunior: '0%',
-      doeFamilyTrust: '0%',
-      estate: 'R 0',
-      others: 'R 0',
-      client: 'R 0',
-      section: category,
-      included: true
+      section: category
     }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['/api/assets'] });

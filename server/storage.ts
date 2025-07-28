@@ -368,8 +368,8 @@ export class MemStorage implements IStorage {
   async createVoluntaryInvestment(investment: InsertVoluntaryInvestment): Promise<VoluntaryInvestment> {
     const newInvestment: VoluntaryInvestment = {
       id: this.currentVoluntaryInvestmentId++,
-      description: investment.description || "Enter details ...",
-      owners: investment.owners || ["Enter details ..."],
+      description: investment.description || "",
+      owners: investment.owners || ["Donald Edwards"],
       ownershipPercentages: investment.ownershipPercentages || ["100%"],
       baseCost: investment.baseCost || "R 0",
       marketValue: investment.marketValue || "R 0",
@@ -421,9 +421,9 @@ export class MemStorage implements IStorage {
   async createIncomeNeed(need: InsertIncomeNeeds): Promise<IncomeNeeds> {
     const newNeed: IncomeNeeds = {
       id: this.currentIncomeNeedId++,
-      description: need.description || "Enter here ...",
-      personName: need.personName || "Enter details ...",
-      startDate: need.startDate || "Enter details ...",
+      description: need.description || "",
+      personName: need.personName || "",
+      startDate: need.startDate || "",
       amount: need.amount || "R 0",
       termYears: need.termYears || "0 years",
       increasePercentage: need.increasePercentage || "0%",

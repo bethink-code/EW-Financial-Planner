@@ -24,20 +24,7 @@ export default function VoluntaryInvestments() {
   // Add new investment mutation
   const addMutation = useMutation({
     mutationFn: async () => {
-      const newInvestment: InsertVoluntaryInvestment = {
-        description: "Enter details ...",
-        owners: ["Enter details ..."],
-        ownershipPercentages: ["100%"],
-        baseCost: "R 0",
-        marketValue: "R 0",
-        liquidationPercentage: "0%",
-        spouse: "R 0",
-        others: "R 0",
-        excludedFromJointEstate: false,
-        excludedFromEstateDuty: false,
-        excludedFromCGT: false,
-        excludedFromExecutorsFees: false,
-      };
+      const newInvestment = {}; // Send empty object to use database defaults
       return apiRequest("POST", "/api/voluntary-investments", newInvestment);
     },
     onSuccess: () => {

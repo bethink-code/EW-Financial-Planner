@@ -24,12 +24,7 @@ export default function AdditionalEstateDutyItems() {
   // Add new item mutation
   const addMutation = useMutation({
     mutationFn: async () => {
-      const newItem: InsertAdditionalEstateDutyItem = {
-        description: "Enter here ...",
-        amount: "0",
-        isDeduction: false,
-        excludeFromJointEstate: false
-      };
+      const newItem = {}; // Send empty object to use database defaults
       return apiRequest("POST", "/api/additional-estate-duty-items", newItem);
     },
     onSuccess: () => {

@@ -24,18 +24,7 @@ export default function IncomeNeeds() {
   // Add new need mutation
   const addMutation = useMutation({
     mutationFn: async () => {
-      const newNeed: InsertIncomeNeed = {
-        entity: "Donald Edwards",
-        description: "Enter here ...",
-        amount: "0",
-        start: "0",
-        termYears: "0",
-        termEditable: true,
-        increasePercentage: "0%",
-        cpi: false,
-        frequency: "monthly",
-        capitalisedAmount: "0"
-      };
+      const newNeed = {}; // Send empty object to use database defaults
       return apiRequest("POST", "/api/income-needs", newNeed);
     },
     onSuccess: () => {

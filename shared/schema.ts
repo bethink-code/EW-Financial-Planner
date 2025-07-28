@@ -118,7 +118,7 @@ export const definedBenefitFunds = pgTable("defined_benefit_funds", {
   id: serial("id").primaryKey(),
   
   // Overview Section
-  description: text("description").notNull().default("Enter details ..."),
+  description: text("description").notNull().default(""),
   owners: text("owners").array().notNull().default(["Donald Edwards"]),
   ownershipPercentages: text("ownership_percentages").array().notNull().default(["100%"]),
   
@@ -150,7 +150,7 @@ export const voluntaryInvestments = pgTable("voluntary_investments", {
   id: serial("id").primaryKey(),
   
   // Overview Section
-  description: text("description").notNull().default("Enter details ..."),
+  description: text("description").notNull().default(""),
   owners: text("owners").array().notNull().default(["Donald Edwards"]),
   ownershipPercentages: text("ownership_percentages").array().notNull().default(["100%"]),
   
@@ -189,11 +189,11 @@ export const incomeNeeds = pgTable("income_needs", {
   id: serial("id").primaryKey(),
   
   // Overview Section
-  description: text("description").notNull().default("Enter details ..."),
-  personName: text("person_name").notNull().default("Enter details ..."),
+  description: text("description").notNull().default(""),
+  personName: text("person_name").notNull().default(""),
   
   // Income Need Details Section
-  startDate: text("start_date").notNull().default("Enter details ..."),
+  startDate: text("start_date").notNull().default(""),
   termYears: text("term_years").notNull().default("0"),
   increasePercentage: text("increase_percentage").notNull().default("0%"),
   cpi: boolean("cpi").notNull().default(false),
@@ -219,11 +219,11 @@ export const incomeProvisions = pgTable("income_provisions", {
   id: serial("id").primaryKey(),
   
   // Overview Section (same as Income Needs)
-  description: text("description").notNull().default("Enter details ..."),
-  personName: text("person_name").notNull().default("Enter details ..."),
+  description: text("description").notNull().default(""),
+  personName: text("person_name").notNull().default(""),
   
   // Income Provision Details Section (extended from Income Needs)
-  startDate: text("start_date").notNull().default("Enter details ..."),
+  startDate: text("start_date").notNull().default(""),
   termYears: text("term_years").notNull().default("0 years"),
   increasePercentage: text("increase_percentage").notNull().default("0%"),
   cpi: boolean("cpi").notNull().default(false),
@@ -253,8 +253,8 @@ export const residue = pgTable("residue", {
   id: serial("id").primaryKey(),
   
   // Basic information
-  category: text("category").notNull().default("Enter details ..."),
-  description: text("description").notNull().default("Enter details ..."),
+  category: text("category").notNull().default(""),
+  description: text("description").notNull().default(""),
   
   // Financial details
   amount: text("amount").notNull().default("R 0"),

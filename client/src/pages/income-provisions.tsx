@@ -25,19 +25,7 @@ export default function IncomeProvisions() {
   // Add new provision mutation
   const addMutation = useMutation({
     mutationFn: async () => {
-      const newProvision: InsertIncomeProvisions = {
-        description: "Enter details ...",
-        personName: "Enter details ...",
-        startDate: "Enter details ...",
-        termYears: "0 years",
-        increasePercentage: "0%",
-        cpi: false,
-        frequency: "monthly",
-        amount: "R 0",
-        capitalisedAmount: "R 0",
-        taxPercentage: "0%",
-        taxRate: "0%",
-      };
+      const newProvision = {}; // Send empty object to use database defaults
       return apiRequest("POST", "/api/income-provisions", newProvision);
     },
     onSuccess: () => {

@@ -30,17 +30,7 @@ export default function LiabilitiesPage() {
   const addMutation = useMutation({
     mutationFn: (category: string) => apiRequest('POST', '/api/liabilities', {
       category,
-      description: 'Enter details...',
-      debtAmount: 'R 0',
-      johnDoe: '0%',
-      janetteDoe: '0%',
-      doeJunior: '0%',
-      doeFamilyTrust: '0%',
-      estate: 'R 0',
-      others: 'R 0',
-      client: 'R 0',
-      section: category,
-      included: true
+      section: category
     }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['/api/liabilities'] });
