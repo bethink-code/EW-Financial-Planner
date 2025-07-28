@@ -4,7 +4,7 @@ import { Plus, Trash2 } from "lucide-react";
 import { getFieldClass, getFieldWidth } from "@/lib/design-tokens";
 import { getCellClass } from "@/lib/field-types";
 import { formatCurrencyValue, getValueClass, isDefaultValue } from "@/lib/formatting";
-import { DeleteButton, DuplicateButton, ActionButtonGroup } from "@/components/ui/action-buttons";
+import { AddButton, DeleteButton, DuplicateButton, ActionButtonGroup } from "@/components/ui/action-buttons";
 import type { AdditionalEstateDutyItem, InsertAdditionalEstateDutyItem } from "@shared/schema";
 
 
