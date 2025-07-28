@@ -748,10 +748,10 @@ export class DbStorage {
   // Helper function to apply defaults for retirement funds
   private applyRetirementFundDefaults(fund: Partial<InsertRetirementFund>): InsertRetirementFund {
     return {
-      description: fund.description || "",
+      description: fund.description !== undefined ? fund.description : null,
       owners: fund.owners || ["Donald Edwards"],
       coverAmount: fund.coverAmount || "R 0",
-      unapprovedBeneficiaries: fund.unapprovedBeneficiaries || [""],
+      unapprovedBeneficiaries: fund.unapprovedBeneficiaries || [null],
       unapprovedPercentageSplits: fund.unapprovedPercentageSplits || ["0%"],
       unapprovedCoverSplits: fund.unapprovedCoverSplits || ["R 0"],
       monthlyIncome: fund.monthlyIncome || "R 0",
@@ -761,7 +761,7 @@ export class DbStorage {
       approvedLifeCover: fund.approvedLifeCover || "R 0",
       fundValue: fund.fundValue || "R 0",
       fundValueAtDeath: fund.fundValueAtDeath || "R 0",
-      fundValueBeneficiaries: fund.fundValueBeneficiaries || [""],
+      fundValueBeneficiaries: fund.fundValueBeneficiaries || [null],
       fundValuePercentageSplits: fund.fundValuePercentageSplits || ["0%"],
       fundValueCoverSplits: fund.fundValueCoverSplits || ["R 0"],
       lumpSumTaken: fund.lumpSumTaken || "R 0",

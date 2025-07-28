@@ -10,7 +10,7 @@ import { cleanTextValue } from './formatting';
 // Default values for different array types
 export const DEFAULT_VALUES = {
   owner: 'Donald Edwards',
-  beneficiary: '', // Store empty string, display as "Enter details ..."
+  beneficiary: null, // Store null, display as "Enter details ..."
   percentage: '0%',
   currency: 'R 0',
   years: '0 years'
@@ -101,7 +101,7 @@ export const createArrayManager = <T extends Record<string, any>>(
     const updatedArray = [...currentArray];
     
     // Clean the value if it's a text field
-    const finalValue = isTextField ? (cleanTextValue(newValue) || '') : newValue;
+    const finalValue = isTextField ? cleanTextValue(newValue) : newValue;
     updatedArray[arrayIndex] = finalValue;
     
     updateFunction(itemId, arrayField, updatedArray);
@@ -125,7 +125,7 @@ export const createOwnerManager = <T extends Record<string, any>>(
   
   return {
     addOwner: (itemId: number) => {
-      handleAdd(itemId, 'owners', [], ''); // Additional owners always start empty
+      handleAdd(itemId, 'owners', [], null); // Additional owners always start null
     },
     
     removeOwner: (itemId: number, ownerIndex: number) => {
@@ -133,7 +133,8 @@ export const createOwnerManager = <T extends Record<string, any>>(
     },
     
     changeOwner: (itemId: number, ownerIndex: number, newOwner: string) => {
-      handleChange(itemId, ownerIndex, 'owners', newOwner, true);
+      const cleanedValue = cleanTextValue(newOwner);
+      handleChange(itemId, ownerIndex, 'owners', cleanedValue || null, true);
     }
   };
 };
@@ -151,7 +152,7 @@ export const createBeneficiaryManager = <T extends Record<string, any>>(
     addBeneficiary: (itemId: number) => {
       handleAdd(itemId, beneficiaryField, [
         { field: percentageField, defaultValue: DEFAULT_VALUES.percentage }
-      ], ''); // All beneficiaries start empty
+      ], null); // All beneficiaries start null
     },
     
     removeBeneficiary: (itemId: number, beneficiaryIndex: number) => {
@@ -159,7 +160,8 @@ export const createBeneficiaryManager = <T extends Record<string, any>>(
     },
     
     changeBeneficiary: (itemId: number, beneficiaryIndex: number, newBeneficiary: string) => {
-      handleChange(itemId, beneficiaryIndex, beneficiaryField, newBeneficiary, true);
+      const cleanedValue = cleanTextValue(newBeneficiary);
+      handleChange(itemId, beneficiaryIndex, beneficiaryField, cleanedValue || null, true);
     },
     
     changePercentage: (itemId: number, beneficiaryIndex: number, newPercentage: string) => {
@@ -183,7 +185,7 @@ export const createComplexBeneficiaryManager = <T extends Record<string, any>>(
       handleAdd(itemId, beneficiaryField, [
         { field: percentageField, defaultValue: DEFAULT_VALUES.percentage },
         { field: currencyField, defaultValue: DEFAULT_VALUES.currency }
-      ], ''); // All beneficiaries start empty
+      ], null); // All beneficiaries start null
     },
     
     removeBeneficiary: (itemId: number, beneficiaryIndex: number) => {
@@ -191,7 +193,8 @@ export const createComplexBeneficiaryManager = <T extends Record<string, any>>(
     },
     
     changeBeneficiary: (itemId: number, beneficiaryIndex: number, newBeneficiary: string) => {
-      handleChange(itemId, beneficiaryIndex, beneficiaryField, newBeneficiary, true);
+      const cleanedValue = cleanTextValue(newBeneficiary);
+      handleChange(itemId, beneficiaryIndex, beneficiaryField, cleanedValue || null, true);
     },
     
     changePercentage: (itemId: number, beneficiaryIndex: number, newPercentage: string) => {
