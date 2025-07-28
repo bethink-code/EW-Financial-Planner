@@ -83,11 +83,7 @@ export function AssetsTable({ viewMode = 'table' }: AssetsTableProps) {
     }, 50);
   }, [updateMutation]);
 
-  // Handle add asset
-  const handleAddAsset = useCallback(() => {
-    setIsUpdating(true);
-    addMutation.mutate();
-  }, [addMutation]);
+
 
   // Handle duplicate
   const handleDuplicate = useCallback((asset: Assets) => {
@@ -167,11 +163,16 @@ export function AssetsTable({ viewMode = 'table' }: AssetsTableProps) {
   const renderAssetRow = (asset: Assets) => (
     <SafeFragment key={`asset-${asset.id}`}>
       <tr>
-        {/* Actions */}
         <td className="table-actions-cell">
-          <div className="flex space-x-1">
-            <DuplicateButton onClick={() => handleDuplicate(asset)} />
-            <DeleteButton onClick={() => handleDelete(asset.id)} />
+          <div className="flex gap-2">
+            <DuplicateButton
+              onClick={() => handleDuplicate(asset)}
+              disabled={isUpdating}
+            />
+            <DeleteButton
+              onClick={() => handleDelete(asset.id)}
+              disabled={isUpdating}
+            />
           </div>
         </td>
 
@@ -301,16 +302,12 @@ export function AssetsTable({ viewMode = 'table' }: AssetsTableProps) {
         {/* Header */}
         <thead>
           <tr>
-            <th rowSpan={2} className="w-20 text-center">
-              <div className="flex justify-center">
-                <AddButton onClick={handleAddAsset} disabled={isUpdating} />
-              </div>
-            </th>
+            <th rowSpan={2} className="w-20 text-center">Actions</th>
             <th colSpan={2} className="border-b border-neutral-200">Overview</th>
             <th colSpan={1} className="border-b border-neutral-200">Asset Details</th>
-            <th colSpan={4} className="border-b border-neutral-200">Owner(s)</th>
-            <th colSpan={3} className="border-b border-neutral-200">Asset distribution by</th>
-            <th rowSpan={2} className="border-b border-neutral-200">Included</th>
+            <th colSpan={4} className="border-b border-neutral-200">Ownership Split</th>
+            <th colSpan={3} className="border-b border-neutral-200">Distribution</th>
+            <th rowSpan={2} className="border-b border-neutral-200">Include</th>
           </tr>
           <tr>
             <th className="border-b border-neutral-200">Category</th>
@@ -326,33 +323,39 @@ export function AssetsTable({ viewMode = 'table' }: AssetsTableProps) {
           </tr>
         </thead>
 
-        {/* Body with grouped sections */}
+        {/* Body */}
         <tbody>
-          {Object.entries(groupedAssets).map(([sectionKey, sectionAssets]) => 
-            sectionAssets.length > 0 && (
-              <SafeFragment key={`section-${sectionKey}`}>
-                <tr>
-                  <td colSpan={12} className="bg-gray-100 px-4 py-2 font-semibold text-gray-700 border-t border-gray-300">
-                    {sectionNames[sectionKey as keyof typeof sectionNames]}
-                  </td>
-                </tr>
-                {sectionAssets.map(renderAssetRow)}
-              </SafeFragment>
-            )
-          )}
+          {Object.entries(groupedAssets).map(([sectionKey, sectionAssets]) => (
+            <SafeFragment key={sectionKey}>
+              {sectionAssets.length > 0 && (
+                <SafeFragment key={`${sectionKey}-header`}>
+                  <tr className="bg-neutral-50">
+                    <td colSpan={12} className="px-4 py-2 font-medium text-neutral-700 border-b border-neutral-200">
+                      {sectionNames[sectionKey as keyof typeof sectionNames]}
+                    </td>
+                  </tr>
+                  {sectionAssets.map(renderAssetRow)}
+                </SafeFragment>
+              )}
+            </SafeFragment>
+          ))}
         </tbody>
 
-        {/* Totals */}
+        {/* Totals Footer */}
         <tfoot>
           <tr className="bg-neutral-50 border-t border-neutral-300">
-            <td className="px-4 py-3 text-gray-600 font-normal text-sm">Totals</td>
-            <td colSpan={2} className="px-4 py-3 text-gray-600 font-normal text-sm"></td>
-            <td className="px-4 py-3 text-gray-700 font-semibold text-sm text-right">{totals.totalMarketValue}</td>
-            <td colSpan={4} className="px-4 py-3"></td>
-            <td className="px-4 py-3 text-gray-700 font-semibold text-sm text-right">{totals.totalEstate}</td>
-            <td className="px-4 py-3 text-gray-700 font-semibold text-sm text-right">{totals.totalOthers}</td>
-            <td className="px-4 py-3 text-gray-700 font-semibold text-sm text-right">{totals.totalClient}</td>
-            <td className="px-4 py-3"></td>
+            <td className="px-3 py-2 font-semibold text-neutral-700">Totals</td>
+            <td className="px-3 py-2"></td>
+            <td className="px-3 py-2"></td>
+            <td className="px-3 py-2 text-right font-semibold text-neutral-700">{totals.totalMarketValue}</td>
+            <td className="px-3 py-2"></td>
+            <td className="px-3 py-2"></td>
+            <td className="px-3 py-2"></td>
+            <td className="px-3 py-2"></td>
+            <td className="px-3 py-2 text-right font-semibold text-neutral-700">{totals.totalEstate}</td>
+            <td className="px-3 py-2 text-right font-semibold text-neutral-700">{totals.totalOthers}</td>
+            <td className="px-3 py-2 text-right font-semibold text-neutral-700">{totals.totalClient}</td>
+            <td className="px-3 py-2"></td>
           </tr>
         </tfoot>
       </table>
