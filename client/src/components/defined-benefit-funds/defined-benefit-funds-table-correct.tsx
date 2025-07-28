@@ -293,11 +293,11 @@ export default function DefinedBenefitFundsTable() {
                   {rowIndex === 0 && (
                     <input
                       type="text"
-                      defaultValue={fund.description}
+                      defaultValue={fund.description || "Enter details ..."}
                       className={`table-input ${getFieldClass('text')} ${getValueClass(fund.description, 'text')}`}
                       onFocus={handleDefaultValueFocus}
                       onBlur={(e) => {
-                        const formattedValue = e.target.value || "";
+                        const formattedValue = e.target.value === "Enter details ..." ? "" : e.target.value;
                         handleUpdateFund(fund.id, 'description', formattedValue);
                       }}
                       disabled={isUpdating}
