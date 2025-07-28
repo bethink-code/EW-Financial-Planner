@@ -39,27 +39,31 @@ export function AssetsSummary() {
   }, [assets]);
 
   return (
-    <div className="summary-card">
-      <div className="grid grid-cols-2 lg:grid-cols-5 gap-6">
-        <div>
-          <div className="text-sm font-medium text-gray-600">Total Assets</div>
-          <div className="text-2xl font-bold text-gray-900">{summary.totalAssets}</div>
+    <div className="px-5 pb-5">
+      <div className="grid grid-cols-2 md:grid-cols-5 gap-6">
+        <div className="summary-card">
+          <div className="text-sm font-medium text-neutral-600">Total Assets</div>
+          <div className="text-2xl font-bold text-neutral-900">{summary.totalAssets}</div>
         </div>
-        <div>
-          <div className="text-sm font-medium text-gray-600">Market Value</div>
-          <div className="text-2xl font-bold text-gray-900">{summary.totalMarketValue}</div>
+        
+        <div className="summary-card">
+          <div className="text-sm font-medium text-neutral-600">Market Value</div>
+          <div className="text-lg font-semibold text-neutral-900">{summary.totalMarketValue}</div>
         </div>
-        <div>
-          <div className="text-sm font-medium text-gray-600">Estate</div>
-          <div className="text-2xl font-bold text-gray-900">{summary.totalEstate}</div>
+        
+        <div className="summary-card">
+          <div className="text-sm font-medium text-neutral-600">Estate</div>
+          <div className="text-lg font-semibold text-neutral-900">{summary.totalEstate}</div>
         </div>
-        <div>
-          <div className="text-sm font-medium text-gray-600">Others</div>
-          <div className="text-2xl font-bold text-gray-900">{summary.totalOthers}</div>
+        
+        <div className="summary-card">
+          <div className="text-sm font-medium text-neutral-600">Others</div>
+          <div className="text-lg font-semibold text-neutral-900">{summary.totalOthers}</div>
         </div>
-        <div>
-          <div className="text-sm font-medium text-gray-600">Client</div>
-          <div className="text-2xl font-bold text-gray-900">{summary.totalClient}</div>
+        
+        <div className="summary-card">
+          <div className="text-sm font-medium text-neutral-600">Client</div>
+          <div className="text-lg font-semibold text-neutral-900">{summary.totalClient}</div>
         </div>
       </div>
     </div>

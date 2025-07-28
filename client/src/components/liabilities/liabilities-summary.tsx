@@ -39,30 +39,32 @@ export function LiabilitiesSummary() {
   }, [liabilities]);
 
   return (
-    <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
-      <div className="summary-card">
-        <div className="text-sm font-medium text-neutral-600">Total Liabilities</div>
-        <div className="text-2xl font-bold text-neutral-900">{summary.totalLiabilities}</div>
-      </div>
-      
-      <div className="summary-card">
-        <div className="text-sm font-medium text-neutral-600">Total Debt Amount</div>
-        <div className="text-lg font-semibold text-neutral-900">{summary.totalDebtAmount}</div>
-      </div>
-      
-      <div className="summary-card">
-        <div className="text-sm font-medium text-neutral-600">Estate Settlement</div>
-        <div className="text-lg font-semibold text-neutral-900">{summary.totalEstate}</div>
-      </div>
-      
-      <div className="summary-card">
-        <div className="text-sm font-medium text-neutral-600">Others Settlement</div>
-        <div className="text-lg font-semibold text-neutral-900">{summary.totalOthers}</div>
-      </div>
-      
-      <div className="summary-card">
-        <div className="text-sm font-medium text-neutral-600">Client Settlement</div>
-        <div className="text-lg font-semibold text-neutral-900">{summary.totalClient}</div>
+    <div className="px-5 pb-5">
+      <div className="grid grid-cols-2 md:grid-cols-5 gap-6">
+        <div className="summary-card">
+          <div className="text-sm font-medium text-neutral-600">Total Liabilities</div>
+          <div className="text-2xl font-bold text-neutral-900">{summary.totalLiabilities}</div>
+        </div>
+        
+        <div className="summary-card">
+          <div className="text-sm font-medium text-neutral-600">Total Debt Amount</div>
+          <div className="text-lg font-semibold text-neutral-900">{summary.totalDebtAmount}</div>
+        </div>
+        
+        <div className="summary-card">
+          <div className="text-sm font-medium text-neutral-600">Estate Settlement</div>
+          <div className="text-lg font-semibold text-neutral-900">{summary.totalEstate}</div>
+        </div>
+        
+        <div className="summary-card">
+          <div className="text-sm font-medium text-neutral-600">Others Settlement</div>
+          <div className="text-lg font-semibold text-neutral-900">{summary.totalOthers}</div>
+        </div>
+        
+        <div className="summary-card">
+          <div className="text-sm font-medium text-neutral-600">Client Settlement</div>
+          <div className="text-lg font-semibold text-neutral-900">{summary.totalClient}</div>
+        </div>
       </div>
     </div>
   );
