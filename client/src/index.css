@@ -318,12 +318,13 @@ th, td {
   td {
     padding: 0.5rem 0.75rem;
     vertical-align: middle;
-    min-height: 2.3rem;
+    min-height: 2.7rem; /* Increased to accommodate taller input fields */
   }
   
   th {
     padding: 0.75rem 0.75rem;
     vertical-align: middle;
+    min-height: 2.7rem; /* Match body cell height */
   }
   
   /* More generous checkbox column spacing */
@@ -496,8 +497,8 @@ th, td {
   /* Input fields for editable content */
   .table-input {
     width: auto;
-    height: auto;
-    padding: 0.25rem 0.5rem; /* Compact padding for consistent table row height */
+    height: 2.3rem !important; /* Match dropdown height for consistency */
+    padding: 0.5rem 0.75rem !important; /* Increased padding for better field height */
     background-color: hsl(var(--primary) / 0.05);
     border: 1px solid hsl(var(--border));
     outline: none;
