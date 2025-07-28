@@ -12,7 +12,7 @@ interface AssetsAndLiabilitiesTableProps {
   searchTerm?: string;
 }
 
-export default function AssetsAndLiabilitiesTable({ viewMode, searchTerm }: AssetsAndLiabilitiesTableProps) {
+function AssetsAndLiabilitiesTable({ viewMode, searchTerm }: AssetsAndLiabilitiesTableProps) {
   const [isUpdating, setIsUpdating] = useState(false);
 
   // Query for assets
@@ -249,3 +249,6 @@ export default function AssetsAndLiabilitiesTable({ viewMode, searchTerm }: Asse
     </div>
   );
 }
+
+export { AssetsAndLiabilitiesTable as AssetsTable };
+export default AssetsAndLiabilitiesTable;
