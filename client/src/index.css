@@ -281,6 +281,21 @@ th, td {
     border-right: 1px solid #e5e7eb !important;
   }
 
+  /* Add spacing to table cells for better field separation */
+  td {
+    padding: 0.5rem 0.25rem;
+  }
+  
+  th {
+    padding: 0.75rem 0.5rem;
+  }
+  
+  /* More generous checkbox column spacing */
+  .field-checkbox {
+    width: 60px;
+    padding: 0.5rem;
+  }
+
   /* Centralized summary card styling */
   .summary-card {
     background-color: #EDF4F9 !important;
@@ -382,7 +397,7 @@ th, td {
   .table-input {
     width: auto;
     height: 1.25rem;
-    padding: 0.6rem 0.4rem; /* Reduced padding for more compact appearance */
+    padding: 0.6rem 0.75rem; /* Increased horizontal padding for better spacing */
     background-color: hsl(var(--primary) / 0.05);
     border: 1px solid hsl(var(--border));
     outline: none;
@@ -483,21 +498,21 @@ th, td {
 
   /* Field type-specific widths for consistent table behavior */
   .field-text {
-    min-width: 150px;
-    max-width: 300px;
+    min-width: 180px;
+    max-width: 350px;
     text-align: left !important;
   }
 
   .field-currency {
-    min-width: 80px;
-    max-width: 110px;
+    min-width: 100px;
+    max-width: 140px;
     text-align: right !important;
   }
 
   .field-percentage {
-    min-width: 40px !important;
-    max-width: 50px !important;
-    width: 50px !important;
+    min-width: 60px !important;
+    max-width: 80px !important;
+    width: 70px !important;
     text-align: right !important;
   }
 
