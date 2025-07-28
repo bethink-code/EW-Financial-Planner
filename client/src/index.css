@@ -278,7 +278,20 @@ th, td {
   table th,
   table td {
     border: none !important;
+    border-bottom: none !important;
+    border-top: none !important;
+    border-left: none !important;
+    border-right: none !important;
     position: relative;
+  }
+
+  /* Override any conflicting border classes globally */
+  table .border-b,
+  table .border-neutral-200,
+  table .border-bottom,
+  table th.border-b,
+  table td.border-b {
+    border-bottom: none !important;
   }
 
   /* ONLY section separators - vertical borders that separate major sections */
