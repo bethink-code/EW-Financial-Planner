@@ -211,15 +211,6 @@ export function AssetsTable({ viewMode = 'table', onShowCategoryDialog }: Assets
         </td>
 
         {/* Overview */}
-        <td className="p-2 text-left">
-          <CategorySelector
-            value={asset.category}
-            onChange={(value) => {
-              handleInputBlur(asset.id, 'category', value);
-              handleInputBlur(asset.id, 'section', value);
-            }}
-          />
-        </td>
         <td className="p-2">
           <input
             type="text"
@@ -348,15 +339,14 @@ export function AssetsTable({ viewMode = 'table', onShowCategoryDialog }: Assets
             <th className="px-3 py-3 text-center text-xs font-medium text-neutral-600 uppercase tracking-wider w-16" rowSpan={2}>
               <AddButton onClick={handleAddAsset} disabled={isUpdating} />
             </th>
-            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start" colSpan={2}>Overview</th>
+            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start" colSpan={1}>Overview</th>
             <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start" colSpan={1}>Asset Details</th>
             <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start" colSpan={4}>Ownership Split</th>
             <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start" colSpan={3}>Distribution</th>
             <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start section-end" rowSpan={2}>Include</th>
           </tr>
           <tr className="border-b border-border">
-            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start border-b border-neutral-200">Category</th>
-            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center border-b border-neutral-200">Description</th>
+            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start border-b border-neutral-200">Description</th>
             <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start border-b border-neutral-200">Market Value</th>
             <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start border-b border-neutral-200">John Doe</th>
             <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center border-b border-neutral-200">Janette Doe (Spouse)</th>
@@ -375,7 +365,7 @@ export function AssetsTable({ viewMode = 'table', onShowCategoryDialog }: Assets
               {sectionAssets.length > 0 && (
                 <SafeFragment key={`${sectionKey}-header`}>
                   <tr className="bg-neutral-50">
-                    <td colSpan={12} className="px-4 py-2 text-neutral-700 border-b border-neutral-200 text-[14px] font-semibold bg-[#edf4f9]">
+                    <td colSpan={11} className="px-4 py-2 text-neutral-700 border-b border-neutral-200 text-[14px] font-semibold bg-[#edf4f9]">
                       {sectionNames[sectionKey as keyof typeof sectionNames]}
                     </td>
                   </tr>
@@ -390,7 +380,6 @@ export function AssetsTable({ viewMode = 'table', onShowCategoryDialog }: Assets
         <tfoot>
           <tr>
             <td className="totals-cell-label">Totals</td>
-            <td className="totals-cell-label"></td>
             <td className="totals-cell-label"></td>
             <td className="totals-cell-value">{totals.totalMarketValue}</td>
             <td className="totals-cell-label"></td>

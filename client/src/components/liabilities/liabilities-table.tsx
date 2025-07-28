@@ -207,13 +207,6 @@ export function LiabilitiesTable({ viewMode = 'table', onShowCategoryDialog }: L
           />
         </div>
       </td>
-      <td className="p-2 text-left">
-        <SimpleCategorySelector
-          value={liability.category}
-          onChange={(category) => handleInputBlur(liability.id, 'category', category)}
-          disabled={isUpdating}
-        />
-      </td>
       <td className="p-2">
         <input
           type="text"
@@ -318,14 +311,15 @@ export function LiabilitiesTable({ viewMode = 'table', onShowCategoryDialog }: L
           disabled={isUpdating}
         />
       </td>
-      <td className={getCellClass('currency')}>
+      <td className="p-2 text-right">
         <input
           type="text"
           defaultValue={formatCurrencyValue(liability.client)}
           onFocus={handleDefaultValueFocus}
           onBlur={createEnhancedBlurHandler((value) => handleInputBlur(liability.id, 'client', value), 'currency')}
           data-field={`client-${liability.id}`}
-          className={`${getFieldClass('currency')} ${getValueClass(liability.client, 'currency')}`}
+          className={`table-input h-7 text-sm bg-primary/5 border-gray-200 focus:border-primary w-full px-3 py-1 border rounded-md text-sm ${getValueClass(liability.client, 'currency')}`}
+          style={{ textAlign: "right", minWidth: "100px" }}
           disabled={isUpdating}
         />
       </td>
@@ -341,14 +335,13 @@ export function LiabilitiesTable({ viewMode = 'table', onShowCategoryDialog }: L
             <th className="px-3 py-3 text-center text-xs font-medium text-neutral-600 uppercase tracking-wider w-16" rowSpan={2}>
               <AddButton onClick={handleAddLiability} disabled={isUpdating} />
             </th>
-            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start" colSpan={3}>Overview</th>
+            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start" colSpan={2}>Overview</th>
             <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start" colSpan={1}>Liability Details</th>
             <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start" colSpan={4}>Ownership Split</th>
             <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start section-end" colSpan={3}>Distribution</th>
           </tr>
           <tr className="border-b border-border">
-            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start border-b border-neutral-200">Category</th>
-            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center border-b border-neutral-200">Description</th>
+            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start border-b border-neutral-200">Description</th>
             <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center border-b border-neutral-200">Include</th>
             <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start border-b border-neutral-200">Debt Amount</th>
             <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start border-b border-neutral-200">John Doe</th>
@@ -368,7 +361,7 @@ export function LiabilitiesTable({ viewMode = 'table', onShowCategoryDialog }: L
               {sectionLiabilities.length > 0 && (
                 <SafeFragment key={`${sectionKey}-header`}>
                   <tr className="bg-neutral-50">
-                    <td colSpan={12} className="px-4 py-2 text-neutral-700 border-b border-neutral-200 text-[14px] font-semibold bg-[#edf4f9]">
+                    <td colSpan={11} className="px-4 py-2 text-neutral-700 border-b border-neutral-200 text-[14px] font-semibold bg-[#edf4f9]">
                       {sectionLabels[sectionKey as keyof typeof sectionLabels]}
                     </td>
                   </tr>
@@ -383,7 +376,6 @@ export function LiabilitiesTable({ viewMode = 'table', onShowCategoryDialog }: L
         <tfoot>
           <tr>
             <td className="totals-cell-label">Totals</td>
-            <td className="totals-cell-label"></td>
             <td className="totals-cell-label"></td>
             <td className="totals-cell-label"></td>
             <td className="totals-cell-value">{totals.debtAmount}</td>
