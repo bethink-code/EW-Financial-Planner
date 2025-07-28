@@ -318,7 +318,15 @@ export class MemStorage implements IStorage {
   async createDefinedBenefitFund(fund: InsertDefinedBenefitFund): Promise<DefinedBenefitFund> {
     const newFund: DefinedBenefitFund = {
       id: this.currentDefinedBenefitFundId++,
-      ...fund
+      description: fund.description || "Enter details ...",
+      owners: fund.owners || ["Enter details ..."],
+      ownershipPercentages: fund.ownershipPercentages || ["100%"],
+      yearsOfService: fund.yearsOfService || "0 years",
+      finalMonthlySalary: fund.finalMonthlySalary || "R 0",
+      deathLumpSum: fund.deathLumpSum || "R 0",
+      additionalTaxFreeAmount: fund.additionalTaxFreeAmount || "R 0",
+      pensionIncomeAmount: fund.pensionIncomeAmount || "R 0",
+      pensionIncomeIncrease: fund.pensionIncomeIncrease || "0%"
     };
     
     this.definedBenefitFunds.set(newFund.id, newFund);
@@ -360,7 +368,18 @@ export class MemStorage implements IStorage {
   async createVoluntaryInvestment(investment: InsertVoluntaryInvestment): Promise<VoluntaryInvestment> {
     const newInvestment: VoluntaryInvestment = {
       id: this.currentVoluntaryInvestmentId++,
-      ...investment
+      description: investment.description || "Enter details ...",
+      owners: investment.owners || ["Enter details ..."],
+      ownershipPercentages: investment.ownershipPercentages || ["100%"],
+      baseCost: investment.baseCost || "R 0",
+      marketValue: investment.marketValue || "R 0",
+      liquidationPercentage: investment.liquidationPercentage || "0%",
+      spouse: investment.spouse || "R 0",
+      others: investment.others || "R 0",
+      excludedFromJointEstate: investment.excludedFromJointEstate || false,
+      excludedFromEstateDuty: investment.excludedFromEstateDuty || false,
+      excludedFromCGT: investment.excludedFromCGT || false,
+      excludedFromExecutorsFees: investment.excludedFromExecutorsFees || false
     };
     
     this.voluntaryInvestments.set(newInvestment.id, newInvestment);
@@ -402,7 +421,15 @@ export class MemStorage implements IStorage {
   async createIncomeNeed(need: InsertIncomeNeeds): Promise<IncomeNeeds> {
     const newNeed: IncomeNeeds = {
       id: this.currentIncomeNeedId++,
-      ...need
+      description: need.description || "Enter here ...",
+      personName: need.personName || "Enter details ...",
+      startDate: need.startDate || "Enter details ...",
+      amount: need.amount || "R 0",
+      termYears: need.termYears || "0 years",
+      increasePercentage: need.increasePercentage || "0%",
+      cpi: need.cpi || false,
+      frequency: need.frequency || "Monthly",
+      capitalisedAmount: need.capitalisedAmount || "R 0"
     };
     
     this.incomeNeeds.set(newNeed.id, newNeed);
@@ -445,7 +472,17 @@ export class MemStorage implements IStorage {
   async createIncomeProvision(provision: InsertIncomeProvisions): Promise<IncomeProvisions> {
     const newProvision: IncomeProvisions = {
       id: this.currentIncomeProvisionId++,
-      ...provision
+      description: provision.description || "Enter details ...",
+      personName: provision.personName || "Enter details ...",
+      startDate: provision.startDate || "Enter details ...",
+      amount: provision.amount || "R 0",
+      termYears: provision.termYears || "0 years",
+      increasePercentage: provision.increasePercentage || "0%",
+      cpi: provision.cpi || false,
+      frequency: provision.frequency || "Monthly",
+      capitalisedAmount: provision.capitalisedAmount || "R 0",
+      taxPercentage: provision.taxPercentage || "0%",
+      taxRate: provision.taxRate || "R 0"
     };
     
     this.incomeProvisions.set(newProvision.id, newProvision);
@@ -488,7 +525,17 @@ export class MemStorage implements IStorage {
   async createResidueItem(item: InsertResidue): Promise<Residue> {
     const newItem: Residue = {
       id: this.currentResidueId++,
-      ...item
+      category: item.category || "Enter details ...",
+      description: item.description || "Enter details ...",
+      amount: item.amount || "R 0",
+      increasePercentage: item.increasePercentage || "0%",
+      johnDoe: item.johnDoe || "0%",
+      janetteDoe: item.janetteDoe || "0%",
+      doeJunior: item.doeJunior || "0%",
+      doeFamilyTrust: item.doeFamilyTrust || "0%",
+      estate: item.estate || "R 0",
+      others: item.others || "R 0",
+      client: item.client || "R 0"
     };
     
     this.residue.set(newItem.id, newItem);
@@ -531,7 +578,17 @@ export class MemStorage implements IStorage {
   async createAdditionalEstateDutyItem(item: InsertAdditionalEstateDutyItems): Promise<AdditionalEstateDutyItems> {
     const newItem: AdditionalEstateDutyItems = {
       id: this.currentAdditionalEstateDutyItemId++,
-      ...item
+      category: item.category || "Enter details ...",
+      description: item.description || "Enter details ...",
+      amount: item.amount || "R 0",
+      increasePercentage: item.increasePercentage || "0%",
+      johnDoe: item.johnDoe || "R 0",
+      janetteDoe: item.janetteDoe || "R 0",
+      doeJunior: item.doeJunior || "R 0",
+      doeFamilyTrust: item.doeFamilyTrust || "R 0",
+      estate: item.estate || "R 0",
+      others: item.others || "R 0",
+      client: item.client || "R 0"
     };
     
     this.additionalEstateDutyItems.set(newItem.id, newItem);
@@ -574,7 +631,18 @@ export class MemStorage implements IStorage {
   async createLiability(liability: InsertLiabilities): Promise<Liabilities> {
     const newLiability: Liabilities = {
       id: this.currentLiabilityId++,
-      ...liability
+      description: liability.description || "Enter details...",
+      debtAmount: liability.debtAmount || "R 0",
+      currency: liability.currency || "ZAR",
+      peterLambie: liability.peterLambie || "0%",
+      victoriaLambie: liability.victoriaLambie || "0%",
+      juniorLambie: liability.juniorLambie || "0%",
+      lambiesFamilyTrust: liability.lambiesFamilyTrust || "0%",
+      others: liability.others || "R 0",
+      estate: liability.estate || "R 0",
+      client: liability.client || "R 0",
+      section: liability.section || "Enter details...",
+      included: liability.included || true
     };
     
     this.liabilities.set(newLiability.id, newLiability);
@@ -616,7 +684,17 @@ export class MemStorage implements IStorage {
   async createAsset(asset: InsertAssets): Promise<Assets> {
     const newAsset: Assets = {
       id: this.currentAssetId++,
-      ...asset
+      description: asset.description || "Enter details...",
+      marketValue: asset.marketValue || "R 0",
+      johnDoe: asset.johnDoe || "0%",
+      janetteDoe: asset.janetteDoe || "0%",
+      doeJunior: asset.doeJunior || "0%",
+      doeFamilyTrust: asset.doeFamilyTrust || "0%",
+      others: asset.others || "R 0",
+      estate: asset.estate || "R 0",
+      client: asset.client || "R 0",
+      section: asset.section || "Enter details...",
+      included: asset.included || true
     };
     
     this.assets.set(newAsset.id, newAsset);
