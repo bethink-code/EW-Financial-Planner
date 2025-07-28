@@ -349,19 +349,19 @@ export function AssetsTable({ viewMode = 'table' }: AssetsTableProps) {
 
         {/* Totals Footer */}
         <tfoot>
-          <tr className="bg-neutral-50 border-t border-neutral-300">
-            <td className="px-3 py-2 font-semibold text-neutral-700">Totals</td>
-            <td className="px-3 py-2"></td>
-            <td className="px-3 py-2"></td>
-            <td className="px-3 py-2 text-right font-semibold text-neutral-700">{totals.totalMarketValue}</td>
-            <td className="px-3 py-2"></td>
-            <td className="px-3 py-2"></td>
-            <td className="px-3 py-2"></td>
-            <td className="px-3 py-2"></td>
-            <td className="px-3 py-2 text-right font-semibold text-neutral-700">{totals.totalEstate}</td>
-            <td className="px-3 py-2 text-right font-semibold text-neutral-700">{totals.totalOthers}</td>
-            <td className="px-3 py-2 text-right font-semibold text-neutral-700">{totals.totalClient}</td>
-            <td className="px-3 py-2"></td>
+          <tr>
+            <td className="totals-cell-label">Totals</td>
+            <td className="totals-cell-label"></td>
+            <td className="totals-cell-label"></td>
+            <td className="totals-cell-value">{totals.totalMarketValue}</td>
+            <td className="totals-cell-label"></td>
+            <td className="totals-cell-label"></td>
+            <td className="totals-cell-label"></td>
+            <td className="totals-cell-label"></td>
+            <td className="totals-cell-value">{totals.totalEstate}</td>
+            <td className="totals-cell-value">{totals.totalOthers}</td>
+            <td className="totals-cell-value">{totals.totalClient}</td>
+            <td className="totals-cell-label"></td>
           </tr>
         </tfoot>
       </table>

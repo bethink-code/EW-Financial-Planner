@@ -436,30 +436,14 @@ export default function DefinedBenefitFundsTable() {
         </tbody>
         
         {/* Totals Footer */}
-        <tfoot className="bg-neutral-50 border-t border-neutral-300">
+        <tfoot>
           <tr>
-            <td className="p-1 text-right text-neutral-700" colSpan={5} style={{ fontSize: '0.875rem' }}>Totals</td>
-            <td className="text-right" style={{ padding: '0.6rem 0.8rem' }}>
-              <span style={{ fontFamily: 'inherit', fontWeight: '600', color: '#374151', fontSize: '0.875rem' }}>
-                R {totals.finalMonthlySalary.toLocaleString()}
-              </span>
-            </td>
-            <td className="text-right" style={{ padding: '0.6rem 0.8rem' }}>
-              <span style={{ fontFamily: 'inherit', fontWeight: '600', color: '#374151', fontSize: '0.875rem' }}>
-                R {totals.deathLumpSum.toLocaleString()}
-              </span>
-            </td>
-            <td className="text-right" style={{ padding: '0.6rem 0.8rem' }}>
-              <span style={{ fontFamily: 'inherit', fontWeight: '600', color: '#374151', fontSize: '0.875rem' }}>
-                R {totals.additionalTaxFreeAmount.toLocaleString()}
-              </span>
-            </td>
-            <td className="text-right" style={{ padding: '0.6rem 0.8rem' }}>
-              <span style={{ fontFamily: 'inherit', fontWeight: '600', color: '#374151', fontSize: '0.875rem' }}>
-                R {totals.pensionIncomeAmount.toLocaleString()}
-              </span>
-            </td>
-            <td className="p-1"></td>
+            <td className="totals-cell-label text-right" colSpan={5}>Totals</td>
+            <td className="totals-cell-value">R {totals.finalMonthlySalary.toLocaleString()}</td>
+            <td className="totals-cell-value">R {totals.deathLumpSum.toLocaleString()}</td>
+            <td className="totals-cell-value">R {totals.additionalTaxFreeAmount.toLocaleString()}</td>
+            <td className="totals-cell-value">R {totals.pensionIncomeAmount.toLocaleString()}</td>
+            <td className="totals-cell-label"></td>
           </tr>
         </tfoot>
       </table>

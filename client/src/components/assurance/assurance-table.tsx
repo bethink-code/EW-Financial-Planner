@@ -291,26 +291,23 @@ export function AssuranceTable({ searchTerm }: AssuranceTableProps) {
                 </tr>
               ))}
               
-              {/* Total Row */}
-              <tr className="bg-[#F5F5F5] border-t-2 border-neutral-300">
-                <td className="p-2"></td>
-                <td className="p-2 text-left font-bold text-neutral-900" style={{ fontFamily: "system-ui, -apple-system, sans-serif", fontWeight: 700 }}>
-                  Total
-                </td>
-                <td className="p-2"></td>
-                <td className="p-2"></td>
-                <td className="p-2"></td>
-                <td className="p-2"></td>
-                <td className="p-2"></td>
-                <td className="p-2 text-right font-bold text-neutral-900" style={{ fontFamily: "system-ui, -apple-system, sans-serif", fontWeight: 700 }}>
-                  R {totalDeathBenefits.toLocaleString()}
-                </td>
-                <td className="p-2 text-center font-bold text-neutral-900" style={{ fontFamily: "system-ui, -apple-system, sans-serif", fontWeight: 700 }}>
-                  {totalExcludedFromEstateDuty}
-                </td>
-                <td className="p-2"></td>
-              </tr>
             </tbody>
+            
+            {/* Totals Footer */}
+            <tfoot>
+              <tr>
+                <td className="totals-cell-label"></td>
+                <td className="totals-cell-label">Total</td>
+                <td className="totals-cell-label"></td>
+                <td className="totals-cell-label"></td>
+                <td className="totals-cell-label"></td>
+                <td className="totals-cell-label"></td>
+                <td className="totals-cell-label"></td>
+                <td className="totals-cell-value">R {totalDeathBenefits.toLocaleString()}</td>
+                <td className="totals-cell-value">{totalExcludedFromEstateDuty}</td>
+                <td className="totals-cell-label"></td>
+              </tr>
+            </tfoot>
           </table>
         </div>
       </div>

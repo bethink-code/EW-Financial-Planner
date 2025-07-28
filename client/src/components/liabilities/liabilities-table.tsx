@@ -346,19 +346,19 @@ export function LiabilitiesTable({ viewMode = 'table' }: LiabilitiesTableProps) 
 
         {/* Totals Footer */}
         <tfoot>
-          <tr className="bg-neutral-50 border-t border-neutral-300">
-            <td className="px-3 py-2 font-semibold text-neutral-700">Totals</td>
-            <td className="px-3 py-2"></td>
-            <td className="px-3 py-2"></td>
-            <td className="px-3 py-2"></td>
-            <td className="px-3 py-2 text-right font-semibold text-neutral-700">{totals.debtAmount}</td>
-            <td className="px-3 py-2"></td>
-            <td className="px-3 py-2"></td>
-            <td className="px-3 py-2"></td>
-            <td className="px-3 py-2"></td>
-            <td className="px-3 py-2 text-right font-semibold text-neutral-700">{totals.estate}</td>
-            <td className="px-3 py-2 text-right font-semibold text-neutral-700">{totals.others}</td>
-            <td className="px-3 py-2 text-right font-semibold text-neutral-700">{totals.client}</td>
+          <tr>
+            <td className="totals-cell-label">Totals</td>
+            <td className="totals-cell-label"></td>
+            <td className="totals-cell-label"></td>
+            <td className="totals-cell-label"></td>
+            <td className="totals-cell-value">{totals.debtAmount}</td>
+            <td className="totals-cell-label"></td>
+            <td className="totals-cell-label"></td>
+            <td className="totals-cell-label"></td>
+            <td className="totals-cell-label"></td>
+            <td className="totals-cell-value">{totals.estate}</td>
+            <td className="totals-cell-value">{totals.others}</td>
+            <td className="totals-cell-value">{totals.client}</td>
           </tr>
         </tfoot>
       </table>

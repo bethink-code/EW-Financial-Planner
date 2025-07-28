@@ -600,47 +600,27 @@ export function NewRetirementTable({
         </tbody>
         
         {/* Totals Footer */}
-        <tfoot className="bg-neutral-50 border-t border-neutral-300">
+        <tfoot>
           <tr>
-            <td className="p-1 text-right text-neutral-700" colSpan={3} style={{ fontSize: '0.875rem' }}>Totals</td>
-            <td className="text-right" style={{ padding: '0.6rem 0.8rem' }}>
-              <span style={{ fontFamily: 'inherit', fontWeight: '600', color: '#374151', fontSize: '0.875rem' }}>
-                {formatTotal(totals.coverAmount)}
-              </span>
-            </td>
-            <td className="p-1"></td>
-            <td className="p-1"></td>
-            <td className="p-1"></td>
-            <td className="text-right" style={{ padding: '0.6rem 0.8rem' }}>
-              <span style={{ fontFamily: 'inherit', fontWeight: '600', color: '#374151', fontSize: '0.875rem' }}>
-                {formatTotal(totals.monthlyIncome)}
-              </span>
-            </td>
-            <td className="p-1"></td>
-            <td className="p-1"></td>
-            <td className="p-1"></td>
-            <td className="text-right" style={{ padding: '0.6rem 0.8rem' }}>
-              <span style={{ fontFamily: 'inherit', fontWeight: '600', color: '#374151', fontSize: '0.875rem' }}>
-                {formatTotal(totals.approvedLifeCover)}
-              </span>
-            </td>
-            <td className="text-right" style={{ padding: '0.6rem 0.8rem' }}>
-              <span style={{ fontFamily: 'inherit', fontWeight: '600', color: '#374151', fontSize: '0.875rem' }}>
-                {formatTotal(totals.fundValue)}
-              </span>
-            </td>
-            <td className="text-right" style={{ padding: '0.6rem 0.8rem' }}>
-              <span style={{ fontFamily: 'inherit', fontWeight: '600', color: '#374151', fontSize: '0.875rem' }}>
-                {formatTotal(totals.fundValueAtDeath)}
-              </span>
-            </td>
-            <td className="p-1"></td>
-            <td className="p-1"></td>
-            <td className="p-1"></td>
-            <td className="p-1"></td>
-            <td className="p-1"></td>
-            <td className="p-1"></td>
-            <td className="p-1"></td>
+            <td className="totals-cell-label text-right" colSpan={3}>Totals</td>
+            <td className="totals-cell-value">{formatTotal(totals.coverAmount)}</td>
+            <td className="totals-cell-label"></td>
+            <td className="totals-cell-label"></td>
+            <td className="totals-cell-label"></td>
+            <td className="totals-cell-value">{formatTotal(totals.monthlyIncome)}</td>
+            <td className="totals-cell-label"></td>
+            <td className="totals-cell-label"></td>
+            <td className="totals-cell-label"></td>
+            <td className="totals-cell-value">{formatTotal(totals.approvedLifeCover)}</td>
+            <td className="totals-cell-value">{formatTotal(totals.fundValue)}</td>
+            <td className="totals-cell-value">{formatTotal(totals.fundValueAtDeath)}</td>
+            <td className="totals-cell-label"></td>
+            <td className="totals-cell-label"></td>
+            <td className="totals-cell-label"></td>
+            <td className="totals-cell-label"></td>
+            <td className="totals-cell-label"></td>
+            <td className="totals-cell-label"></td>
+            <td className="totals-cell-label"></td>
           </tr>
         </tfoot>
       </table>

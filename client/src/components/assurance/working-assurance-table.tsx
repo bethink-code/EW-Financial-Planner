@@ -512,36 +512,20 @@ export function AssuranceTable({}: AssuranceTableProps) {
           </tbody>
           
           {/* Totals Footer */}
-          <tfoot className="bg-neutral-50 border-t border-neutral-300">
+          <tfoot>
             <tr>
-              <td className="p-1 text-right text-neutral-700" colSpan={4} style={{ fontSize: '0.875rem' }}>Totals</td>
-              <td className="text-right" style={{ padding: '0.6rem 0.8rem' }}>
-                <span style={{ fontFamily: 'inherit', fontWeight: '600', color: '#374151', fontSize: '0.875rem' }}>
-                  R {totals.deathBenefit.toLocaleString()}
-                </span>
-              </td>
-              <td className="p-1"></td>
-              <td className="p-1"></td>
-              <td className="p-1"></td>
-              <td className="text-right" style={{ padding: '0.6rem 0.8rem' }}>
-                <span style={{ fontFamily: 'inherit', fontWeight: '600', color: '#374151', fontSize: '0.875rem' }}>
-                  R {totals.amount.toLocaleString()}
-                </span>
-              </td>
-              <td className="p-1"></td>
-              <td className="p-1"></td>
-              <td className="p-1"></td>
-              <td className="p-1"></td>
-              <td className="text-right" style={{ padding: '0.6rem 0.8rem' }}>
-                <span style={{ fontFamily: 'inherit', fontWeight: '600', color: '#374151', fontSize: '0.875rem' }}>
-                  R {totals.premiumsByOthers.toLocaleString()}
-                </span>
-              </td>
-              <td className="text-right" style={{ padding: '0.6rem 0.8rem' }}>
-                <span style={{ fontFamily: 'inherit', fontWeight: '600', color: '#374151', fontSize: '0.875rem' }}>
-                  R {totals.collateralSession.toLocaleString()}
-                </span>
-              </td>
+              <td className="totals-cell-label text-right" colSpan={4}>Totals</td>
+              <td className="totals-cell-value">R {totals.deathBenefit.toLocaleString()}</td>
+              <td className="totals-cell-label"></td>
+              <td className="totals-cell-label"></td>
+              <td className="totals-cell-label"></td>
+              <td className="totals-cell-value">R {totals.amount.toLocaleString()}</td>
+              <td className="totals-cell-label"></td>
+              <td className="totals-cell-label"></td>
+              <td className="totals-cell-label"></td>
+              <td className="totals-cell-label"></td>
+              <td className="totals-cell-value">R {totals.premiumsByOthers.toLocaleString()}</td>
+              <td className="totals-cell-value">R {totals.collateralSession.toLocaleString()}</td>
             </tr>
           </tfoot>
         </table>

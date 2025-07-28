@@ -518,33 +518,27 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
             ))}
             
             {/* Flows total row */}
-            <tr className="bg-gray-100 font-bold">
+            <tr>
               {columnVisibility.overview && (
                 <>
                 {/* Description */}
-                <td className="table-cell whitespace-nowrap table-text-14 font-bold" style={{ color: '#094161', minWidth: '200px', width: '200px' }}>
+                <td className="totals-cell-label">
                   Total
                 </td>
                 
                 {/* Estate */}
-                <td className="p-2 text-right ">
-                  <span className="font-bold text-right table-text-14" style={{ color: '#094161', fontWeight: '700' }}>
-                    R {flowsTotals.estate.toLocaleString()}
-                  </span>
+                <td className="totals-cell-value">
+                  R {flowsTotals.estate.toLocaleString()}
                 </td>
                 
                 {/* Spouse */}
-                <td className="p-2 text-right ">
-                  <span className="font-bold text-right table-text-14" style={{ color: '#094161', fontWeight: '700' }}>
-                    R {flowsTotals.spouse.toLocaleString()}
-                  </span>
+                <td className="totals-cell-value">
+                  R {flowsTotals.spouse.toLocaleString()}
                 </td>
                 
                 {/* Other */}
-                <td className="p-2 text-right ">
-                  <span className="font-bold text-right table-text-14" style={{ color: '#094161', fontWeight: '700' }}>
-                    R {flowsTotals.other.toLocaleString()}
-                  </span>
+                <td className="totals-cell-value">
+                  R {flowsTotals.other.toLocaleString()}
                 </td>
               </>
               )}
@@ -912,73 +906,61 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
         </tbody>
         
         {/* Totals Footer */}
-        <tfoot className="bg-neutral-50 border-t border-neutral-300">
+        <tfoot>
           <tr>
             {/* Overview Section */}
             {columnVisibility.overview && (
               <>
-                <td className="text-right text-neutral-700" style={{ fontSize: '0.875rem', padding: '0.6rem 0.8rem' }}>
-                  Totals
-                </td>
-                <td className="p-1"></td>
+                <td className="totals-cell-label text-right">Totals</td>
+                <td className="totals-cell-label"></td>
               </>
             )}
             
             {/* Unapproved Life Cover Section */}
             {columnVisibility.unapprovedLifeCover && (
-              <td className="text-right border-l border-neutral-300" style={{ padding: '0.6rem 0.8rem' }}>
-                <span style={{ fontFamily: 'inherit', fontWeight: '600', color: '#374151', fontSize: '0.875rem' }}>
-                  R {funds.reduce((sum, fund) => {
-                    const amount = parseInt(fund.coverAmount?.replace(/[^0-9]/g, '') || '0');
-                    return sum + amount;
-                  }, 0).toLocaleString()}
-                </span>
+              <td className="totals-cell-value border-l border-neutral-300">
+                R {funds.reduce((sum, fund) => {
+                  const amount = parseInt(fund.coverAmount?.replace(/[^0-9]/g, '') || '0');
+                  return sum + amount;
+                }, 0).toLocaleString()}
               </td>
             )}
             
             {/* Monthly Death Benefit Section */}
             {columnVisibility.monthlyDeathBenefit && (
               <>
-                <td className="text-right border-l border-neutral-300" style={{ padding: '0.6rem 0.8rem' }}>
-                  <span style={{ fontFamily: 'inherit', fontWeight: '600', color: '#374151', fontSize: '0.875rem' }}>
-                    R {funds.reduce((sum, fund) => {
-                      const amount = parseInt(fund.monthlyIncome?.replace(/[^0-9]/g, '') || '0');
-                      return sum + amount;
-                    }, 0).toLocaleString()}
-                  </span>
+                <td className="totals-cell-value border-l border-neutral-300">
+                  R {funds.reduce((sum, fund) => {
+                    const amount = parseInt(fund.monthlyIncome?.replace(/[^0-9]/g, '') || '0');
+                    return sum + amount;
+                  }, 0).toLocaleString()}
                 </td>
-                <td className="p-1"></td>
-                <td className="p-1"></td>
-                <td className="p-1"></td>
+                <td className="totals-cell-label"></td>
+                <td className="totals-cell-label"></td>
+                <td className="totals-cell-label"></td>
               </>
             )}
             
             {/* Fund Value Section */}
             {columnVisibility.fundValue && (
               <>
-                <td className="text-right border-l border-neutral-300" style={{ padding: '0.6rem 0.8rem' }}>
-                  <span style={{ fontFamily: 'inherit', fontWeight: '600', color: '#374151', fontSize: '0.875rem' }}>
-                    R {funds.reduce((sum, fund) => {
-                      const amount = parseInt(fund.approvedLifeCover?.replace(/[^0-9]/g, '') || '0');
-                      return sum + amount;
-                    }, 0).toLocaleString()}
-                  </span>
+                <td className="totals-cell-value border-l border-neutral-300">
+                  R {funds.reduce((sum, fund) => {
+                    const amount = parseInt(fund.approvedLifeCover?.replace(/[^0-9]/g, '') || '0');
+                    return sum + amount;
+                  }, 0).toLocaleString()}
                 </td>
-                <td className="text-right" style={{ padding: '0.6rem 0.8rem' }}>
-                  <span style={{ fontFamily: 'inherit', fontWeight: '600', color: '#374151', fontSize: '0.875rem' }}>
-                    R {funds.reduce((sum, fund) => {
-                      const amount = parseInt(fund.fundValue?.replace(/[^0-9]/g, '') || '0');
-                      return sum + amount;
-                    }, 0).toLocaleString()}
-                  </span>
+                <td className="totals-cell-value">
+                  R {funds.reduce((sum, fund) => {
+                    const amount = parseInt(fund.fundValue?.replace(/[^0-9]/g, '') || '0');
+                    return sum + amount;
+                  }, 0).toLocaleString()}
                 </td>
-                <td className="text-right" style={{ padding: '0.6rem 0.8rem' }}>
-                  <span style={{ fontFamily: 'inherit', fontWeight: '600', color: '#374151', fontSize: '0.875rem' }}>
-                    R {funds.reduce((sum, fund) => {
-                      const amount = parseInt(fund.fundValueAtDeath?.replace(/[^0-9]/g, '') || '0');
-                      return sum + amount;
-                    }, 0).toLocaleString()}
-                  </span>
+                <td className="totals-cell-value">
+                  R {funds.reduce((sum, fund) => {
+                    const amount = parseInt(fund.fundValueAtDeath?.replace(/[^0-9]/g, '') || '0');
+                    return sum + amount;
+                  }, 0).toLocaleString()}
                 </td>
               </>
             )}
@@ -986,14 +968,14 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
             {/* Fund Value Beneficiaries Section */}
             {columnVisibility.fundValueBeneficiaries && (
               <>
-                <td className="p-1 border-l border-neutral-300"></td>
-                <td className="p-1"></td>
-                <td className="p-1"></td>
-                <td className="p-1"></td>
-                <td className="p-1"></td>
-                <td className="p-1"></td>
-                <td className="p-1"></td>
-                <td className="p-1"></td>
+                <td className="totals-cell-label border-l border-neutral-300"></td>
+                <td className="totals-cell-label"></td>
+                <td className="totals-cell-label"></td>
+                <td className="totals-cell-label"></td>
+                <td className="totals-cell-label"></td>
+                <td className="totals-cell-label"></td>
+                <td className="totals-cell-label"></td>
+                <td className="totals-cell-label"></td>
               </>
             )}
           </tr>

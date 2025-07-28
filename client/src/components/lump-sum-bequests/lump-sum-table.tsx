@@ -309,21 +309,13 @@ export function LumpSumTable({ viewMode, searchTerm }: LumpSumTableProps) {
         </tbody>
         
         {/* Totals Footer */}
-        <tfoot className="bg-neutral-50 border-t border-neutral-300">
+        <tfoot>
           <tr>
-            <td className="p-1 text-right text-neutral-700" colSpan={4} style={{ fontSize: '0.875rem' }}>Totals</td>
-            <td className="text-right" style={{ padding: '0.6rem 0.8rem' }}>
-              <span style={{ fontFamily: 'inherit', fontWeight: '600', color: '#374151', fontSize: '0.875rem' }}>
-                {totals.amount}
-              </span>
-            </td>
-            <td className="p-1"></td>
-            <td className="p-1"></td>
-            <td className="text-right" style={{ padding: '0.6rem 0.8rem' }}>
-              <span style={{ fontFamily: 'inherit', fontWeight: '600', color: '#374151', fontSize: '0.875rem' }}>
-                {totals.valueAtDeath}
-              </span>
-            </td>
+            <td className="totals-cell-label text-right" colSpan={4}>Totals</td>
+            <td className="totals-cell-value">{totals.amount}</td>
+            <td className="totals-cell-label"></td>
+            <td className="totals-cell-label"></td>
+            <td className="totals-cell-value">{totals.valueAtDeath}</td>
           </tr>
         </tfoot>
       </table>

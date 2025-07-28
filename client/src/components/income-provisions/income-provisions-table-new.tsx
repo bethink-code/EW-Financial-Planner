@@ -376,27 +376,23 @@ export default function IncomeProvisionsTable({ viewMode, searchTerm }: IncomePr
         </tbody>
         
         {/* Totals Footer */}
-        <tfoot className="bg-neutral-50 border-t border-neutral-300">
+        <tfoot>
           <tr>
-            <td className="p-1 text-right text-neutral-700" colSpan={11} style={{ fontSize: '0.875rem' }}>Totals</td>
-            <td className="text-right" style={{ padding: '0.6rem 0.8rem' }}>
-              <span style={{ fontFamily: 'inherit', fontWeight: '600', color: '#374151', fontSize: '0.875rem' }}>
-                R {filteredProvisions.reduce((sum, provision) => {
-                  const capitalisedAmount = parseFloat(calculateCapitalisedAmount(provision).replace(/[^\d.-]/g, '')) || 0;
-                  return sum + capitalisedAmount;
-                }, 0).toLocaleString()}
-              </span>
+            <td className="totals-cell-label text-right" colSpan={11}>Totals</td>
+            <td className="totals-cell-value">
+              R {filteredProvisions.reduce((sum, provision) => {
+                const capitalisedAmount = parseFloat(calculateCapitalisedAmount(provision).replace(/[^\d.-]/g, '')) || 0;
+                return sum + capitalisedAmount;
+              }, 0).toLocaleString()}
             </td>
           </tr>
           <tr>
-            <td className="p-1 text-right text-neutral-700" colSpan={11} style={{ fontSize: '0.875rem' }}>Capital Required for Income Shortfall</td>
-            <td className="text-right" style={{ padding: '0.6rem 0.8rem' }}>
-              <span style={{ fontFamily: 'inherit', fontWeight: '600', color: '#374151', fontSize: '0.875rem' }}>
-                R {filteredProvisions.reduce((sum, provision) => {
-                  const capitalisedAmount = parseFloat(calculateCapitalisedAmount(provision).replace(/[^\d.-]/g, '')) || 0;
-                  return sum + capitalisedAmount;
-                }, 0).toLocaleString()}
-              </span>
+            <td className="totals-cell-label text-right" colSpan={11}>Capital Required for Income Shortfall</td>
+            <td className="totals-cell-value">
+              R {filteredProvisions.reduce((sum, provision) => {
+                const capitalisedAmount = parseFloat(calculateCapitalisedAmount(provision).replace(/[^\d.-]/g, '')) || 0;
+                return sum + capitalisedAmount;
+              }, 0).toLocaleString()}
             </td>
           </tr>
         </tfoot>

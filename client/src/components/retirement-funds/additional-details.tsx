@@ -166,26 +166,12 @@ export function AdditionalDetails({ funds, onFieldUpdate, isUpdating }: Addition
               ))}
             </tbody>
             {/* Totals Row */}
-            <tfoot className="bg-neutral-50 border-t border-neutral-300">
+            <tfoot>
               <tr>
-              <td className="text-right text-neutral-700" style={{ fontSize: '0.875rem', padding: '0.6rem 0.8rem' }}>
-                Total
-              </td>
-              <td className="text-right" style={{ padding: '0.6rem 0.8rem' }}>
-                <span style={{ fontFamily: 'inherit', fontWeight: '600', color: '#374151', fontSize: '0.875rem' }}>
-                  {totals.lumpSumDeathFormatted}
-                </span>
-              </td>
-              <td className="text-right" style={{ padding: '0.6rem 0.8rem' }}>
-                <span style={{ fontFamily: 'inherit', fontWeight: '600', color: '#374151', fontSize: '0.875rem' }}>
-                  {totals.previousLumpSumsFormatted}
-                </span>
-              </td>
-              <td className="text-right" style={{ padding: '0.6rem 0.8rem' }}>
-                <span style={{ fontFamily: 'inherit', fontWeight: '600', color: '#374151', fontSize: '0.875rem' }}>
-                  {totals.additionalTaxFreeAmountFormatted}
-                </span>
-              </td>
+              <td className="totals-cell-label text-right">Total</td>
+              <td className="totals-cell-value">{totals.lumpSumDeathFormatted}</td>
+              <td className="totals-cell-value">{totals.previousLumpSumsFormatted}</td>
+              <td className="totals-cell-value">{totals.additionalTaxFreeAmountFormatted}</td>
             </tr>
           </tfoot>
         </table>

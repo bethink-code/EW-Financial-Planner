@@ -324,27 +324,7 @@ export default function DefinedBenefitFundsTable() {
               </tr>
             ))}
             
-            {/* Total Row */}
-            {filteredFunds.length > 0 && (
-              <tr className="border-t-2 border-neutral-300 font-bold">
-                <td className="px-3 py-2"></td>
-                <td className="px-3 py-2 text-sm font-bold text-neutral-800">Total</td>
-                <td colSpan={3} className="px-3 py-2"></td>
-                <td className="px-3 py-2 text-sm font-bold text-neutral-800 text-right">
-                  {formatCurrencyValue(totals.finalMonthlySalary.toString())}
-                </td>
-                <td className="px-3 py-2 text-sm font-bold text-neutral-800 text-right">
-                  {formatCurrencyValue(totals.deathLumpSum.toString())}
-                </td>
-                <td className="px-3 py-2 text-sm font-bold text-neutral-800 text-right">
-                  {formatCurrencyValue(totals.additionalTaxFreeAmount.toString())}
-                </td>
-                <td className="px-3 py-2 text-sm font-bold text-neutral-800 text-right">
-                  {formatCurrencyValue(totals.pensionIncomeAmount.toString())}
-                </td>
-                <td className="px-3 py-2"></td>
-              </tr>
-            )}
+
             
             {filteredFunds.length === 0 && (
               <tr>
@@ -354,6 +334,30 @@ export default function DefinedBenefitFundsTable() {
               </tr>
             )}
           </tbody>
+
+          {/* Totals Footer */}
+          {filteredFunds.length > 0 && (
+            <tfoot>
+              <tr>
+                <td className="totals-cell-label"></td>
+                <td className="totals-cell-label">Total</td>
+                <td className="totals-cell-label" colSpan={3}></td>
+                <td className="totals-cell-value">
+                  {formatCurrencyValue(totals.finalMonthlySalary.toString())}
+                </td>
+                <td className="totals-cell-value">
+                  {formatCurrencyValue(totals.deathLumpSum.toString())}
+                </td>
+                <td className="totals-cell-value">
+                  {formatCurrencyValue(totals.additionalTaxFreeAmount.toString())}
+                </td>
+                <td className="totals-cell-value">
+                  {formatCurrencyValue(totals.pensionIncomeAmount.toString())}
+                </td>
+                <td className="totals-cell-label"></td>
+              </tr>
+            </tfoot>
+          )}
       </table>
     </div>
   );
