@@ -302,8 +302,8 @@ th, td {
   }
 
   /* Remove ALL vertical borders completely - clean slate */
-  table th,
-  table td {
+  table th:not(.section-start),
+  table td:not(.section-start) {
     border-left: none !important;
     border-right: none !important;
   }
@@ -742,9 +742,12 @@ th, td {
     border-left: 2px solid #9ca3af !important;
   }
 
-  /* Apply section borders to all table elements (headers, body, footer) */
+  /* Apply section borders to all table elements (headers, body, footer) - HIGH SPECIFICITY */
   table th.section-start,
-  table td.section-start {
+  table td.section-start,
+  table thead th.section-start,
+  table tbody td.section-start,
+  table tfoot td.section-start {
     border-left: 2px solid #9ca3af !important;
   }
 }
