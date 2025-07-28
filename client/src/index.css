@@ -459,7 +459,7 @@ th, td {
   .table-input {
     width: auto;
     height: 1.25rem;
-    padding: 1rem 0.5rem; /* Keep vertical padding, reduce horizontal for content space */
+    padding: 0.375rem 0.5rem; /* Standardized padding to match table cell height */
     background-color: hsl(var(--primary) / 0.05);
     border: 1px solid hsl(var(--border));
     outline: none;
@@ -638,7 +638,7 @@ th, td {
     outline: none !important;
     box-shadow: none !important;
     color: #374151 !important; /* grey-700 - same as entered values */
-    padding: 1rem 0.5rem !important; /* Keep vertical padding, reduce horizontal */
+    padding: 0.375rem 0.5rem !important; /* Standardized padding to match table cell height */
     font-size: 0.875rem !important;
     text-align: right !important;
     height: 1.25rem !important;
