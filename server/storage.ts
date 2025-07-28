@@ -1,4 +1,4 @@
-import { retirementFunds, lumpSumBequests, assurance, definedBenefitFunds, voluntaryInvestments, assetsAndLiabilities, incomeNeeds, incomeProvisions, residue, additionalEstateDutyItems, liabilities, assets, type RetirementFund, type InsertRetirementFund, type UpdateRetirementFund, type LumpSumBequest, type InsertLumpSumBequest, type Assurance, type InsertAssurance, type UpdateAssurance, type DefinedBenefitFund, type InsertDefinedBenefitFund, type UpdateDefinedBenefitFund, type VoluntaryInvestment, type InsertVoluntaryInvestment, type UpdateVoluntaryInvestment, type AssetsAndLiabilities, type InsertAssetsAndLiabilities, type UpdateAssetsAndLiabilities, type IncomeNeeds, type InsertIncomeNeeds, type UpdateIncomeNeeds, type IncomeProvisions, type InsertIncomeProvisions, type UpdateIncomeProvisions, type Residue, type InsertResidue, type UpdateResidue, type AdditionalEstateDutyItems, type InsertAdditionalEstateDutyItems, type UpdateAdditionalEstateDutyItems, type Liabilities, type InsertLiabilities, type UpdateLiabilities, type Assets, type InsertAssets } from "@shared/schema";
+import { retirementFunds, lumpSumBequests, assurance, definedBenefitFunds, voluntaryInvestments, assetsAndLiabilities, incomeNeeds, incomeProvisions, residue, additionalEstateDutyItems, liabilities, assets, type RetirementFund, type InsertRetirementFund, type UpdateRetirementFund, type LumpSumBequest, type InsertLumpSumBequest, type Assurance, type InsertAssurance, type UpdateAssurance, type DefinedBenefitFund, type InsertDefinedBenefitFund, type UpdateDefinedBenefitFund, type VoluntaryInvestment, type InsertVoluntaryInvestment, type UpdateVoluntaryInvestment, type AssetAndLiability, type InsertAssetAndLiability, type UpdateAssetAndLiability, type IncomeNeed, type InsertIncomeNeed, type UpdateIncomeNeed, type IncomeProvision, type InsertIncomeProvision, type UpdateIncomeProvision, type Residue, type InsertResidue, type UpdateResidue, type AdditionalEstateDutyItem, type InsertAdditionalEstateDutyItem, type UpdateAdditionalEstateDutyItem, type Liabilities, type InsertLiabilities, type UpdateLiabilities, type Assets, type InsertAssets } from "@shared/schema";
 import { drizzle } from "drizzle-orm/node-postgres";
 import { Pool } from "pg";
 import { eq, ilike, or } from "drizzle-orm";
@@ -45,28 +45,28 @@ export interface IStorage {
   searchVoluntaryInvestments(query: string): Promise<VoluntaryInvestment[]>;
   
   // Assets and Liabilities  
-  getAssetsAndLiabilities(): Promise<AssetsAndLiabilities[]>;
-  getAssetAndLiability(id: number): Promise<AssetsAndLiabilities | undefined>;
-  createAssetAndLiability(asset: InsertAssetsAndLiabilities): Promise<AssetsAndLiabilities>;
-  updateAssetAndLiability(id: number, updates: UpdateAssetsAndLiabilities): Promise<AssetsAndLiabilities | undefined>;
+  getAssetsAndLiabilities(): Promise<AssetAndLiability[]>;
+  getAssetAndLiability(id: number): Promise<AssetAndLiability | undefined>;
+  createAssetAndLiability(asset: InsertAssetAndLiability): Promise<AssetAndLiability>;
+  updateAssetAndLiability(id: number, updates: UpdateAssetAndLiability): Promise<AssetAndLiability | undefined>;
   deleteAssetAndLiability(id: number): Promise<boolean>;
-  searchAssetsAndLiabilities(query: string): Promise<AssetsAndLiabilities[]>;
+  searchAssetsAndLiabilities(query: string): Promise<AssetAndLiability[]>;
   
   // Income Needs
-  getIncomeNeeds(): Promise<IncomeNeeds[]>;
-  getIncomeNeed(id: number): Promise<IncomeNeeds | undefined>;
-  createIncomeNeed(need: InsertIncomeNeeds): Promise<IncomeNeeds>;
-  updateIncomeNeed(id: number, updates: UpdateIncomeNeeds): Promise<IncomeNeeds | undefined>;
+  getIncomeNeeds(): Promise<IncomeNeed[]>;
+  getIncomeNeed(id: number): Promise<IncomeNeed | undefined>;
+  createIncomeNeed(need: InsertIncomeNeed): Promise<IncomeNeed>;
+  updateIncomeNeed(id: number, updates: UpdateIncomeNeed): Promise<IncomeNeed | undefined>;
   deleteIncomeNeed(id: number): Promise<boolean>;
-  searchIncomeNeeds(query: string): Promise<IncomeNeeds[]>;
+  searchIncomeNeeds(query: string): Promise<IncomeNeed[]>;
   
   // Income Provisions
-  getIncomeProvisions(): Promise<IncomeProvisions[]>;
-  getIncomeProvision(id: number): Promise<IncomeProvisions | undefined>;
-  createIncomeProvision(provision: InsertIncomeProvisions): Promise<IncomeProvisions>;
-  updateIncomeProvision(id: number, updates: UpdateIncomeProvisions): Promise<IncomeProvisions | undefined>;
+  getIncomeProvisions(): Promise<IncomeProvision[]>;
+  getIncomeProvision(id: number): Promise<IncomeProvision | undefined>;
+  createIncomeProvision(provision: InsertIncomeProvision): Promise<IncomeProvision>;
+  updateIncomeProvision(id: number, updates: UpdateIncomeProvision): Promise<IncomeProvision | undefined>;
   deleteIncomeProvision(id: number): Promise<boolean>;
-  searchIncomeProvisions(query: string): Promise<IncomeProvisions[]>;
+  searchIncomeProvisions(query: string): Promise<IncomeProvision[]>;
   
   // Residue
   getResidue(): Promise<Residue[]>;
@@ -77,12 +77,12 @@ export interface IStorage {
   searchResidue(query: string): Promise<Residue[]>;
   
   // Additional Estate Duty Items
-  getAdditionalEstateDutyItems(): Promise<AdditionalEstateDutyItems[]>;
-  getAdditionalEstateDutyItem(id: number): Promise<AdditionalEstateDutyItems | undefined>;
-  createAdditionalEstateDutyItem(item: InsertAdditionalEstateDutyItems): Promise<AdditionalEstateDutyItems>;
-  updateAdditionalEstateDutyItem(id: number, updates: UpdateAdditionalEstateDutyItems): Promise<AdditionalEstateDutyItems | undefined>;
+  getAdditionalEstateDutyItems(): Promise<AdditionalEstateDutyItem[]>;
+  getAdditionalEstateDutyItem(id: number): Promise<AdditionalEstateDutyItem | undefined>;
+  createAdditionalEstateDutyItem(item: InsertAdditionalEstateDutyItem): Promise<AdditionalEstateDutyItem>;
+  updateAdditionalEstateDutyItem(id: number, updates: UpdateAdditionalEstateDutyItem): Promise<AdditionalEstateDutyItem | undefined>;
   deleteAdditionalEstateDutyItem(id: number): Promise<boolean>;
-  searchAdditionalEstateDutyItems(query: string): Promise<AdditionalEstateDutyItems[]>;
+  searchAdditionalEstateDutyItems(query: string): Promise<AdditionalEstateDutyItem[]>;
   
   // Liabilities
   getLiabilities(): Promise<Liabilities[]>;
@@ -107,11 +107,11 @@ export class MemStorage implements IStorage {
   private assurance: Map<number, Assurance>;
   private definedBenefitFunds: Map<number, DefinedBenefitFund>;
   private voluntaryInvestments: Map<number, VoluntaryInvestment>;
-  private assetsAndLiabilities: Map<number, AssetsAndLiabilities>;
-  private incomeNeeds: Map<number, IncomeNeeds>;
-  private incomeProvisions: Map<number, IncomeProvisions>;
+  private assetsAndLiabilities: Map<number, AssetAndLiability>;
+  private incomeNeeds: Map<number, IncomeNeed>;
+  private incomeProvisions: Map<number, IncomeProvision>;
   private residue: Map<number, Residue>;
-  private additionalEstateDutyItems: Map<number, AdditionalEstateDutyItems>;
+  private additionalEstateDutyItems: Map<number, AdditionalEstateDutyItem>;
   private liabilities: Map<number, Liabilities>;
   private assets: Map<number, Assets>;
   private currentFundId: number;
