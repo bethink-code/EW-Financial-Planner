@@ -4,7 +4,7 @@ import { queryClient } from '@/lib/queryClient';
 import { AdditionalEstateDutyItems, InsertAdditionalEstateDutyItems } from '@shared/schema';
 import { AddButton, ActionButtonGroup, DuplicateButton, DeleteButton } from '@/components/ui/action-buttons';
 import { getFieldClass, getCellClass } from '@/lib/field-types';
-import { formatCurrencyValue, getValueClass, handleDefaultValueFocus, createEnhancedBlurHandler } from '@/lib/formatting';
+import { formatCurrencyValue, formatPercentageValue, formatTextValue, getValueClass, handleDefaultValueFocus, createEnhancedBlurHandler } from '@/lib/formatting';
 
 interface AdditionalEstateDutyItemsTableProps {
   viewMode: 'table' | 'hybrid';
@@ -152,9 +152,9 @@ function AdditionalEstateDutyItemsTable({ viewMode, searchTerm }: AdditionalEsta
     if (field === 'amount' || field === 'estate' || field === 'others' || field === 'client') {
       formattedValue = formatCurrencyValue(value);
     } else if (field === 'increasePercentage' || field === 'johnDoe' || field === 'janetteDoe' || field === 'doeJunior' || field === 'doeFamilyTrust') {
-      formattedValue = createEnhancedBlurHandler('percentage')(value);
+      formattedValue = formatPercentageValue(value);
     } else {
-      formattedValue = value;
+      formattedValue = formatTextValue(value);
     }
     handleUpdateItem(id, field, formattedValue);
     
