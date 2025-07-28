@@ -274,7 +274,7 @@ export default function DefinedBenefitFundsTable() {
               <tr key={`${fund.id}-${rowIndex}-${fund.owners.length}-${fund.ownershipPercentages.length}`} className="hover:bg-neutral-50">
                 {/* Actions Section - Only show on first row */}
                 {rowIndex === 0 && (
-                  <td className="table-actions-cell p-1 text-center section-start section-end" rowSpan={maxRows}>
+                  <td className="table-actions-cell p-1 text-center section-start section-end align-top" rowSpan={maxRows}>
                     <ActionButtonGroup>
                       <DuplicateButton
                         onClick={() => handleDuplicateFund(fund)}
@@ -290,7 +290,7 @@ export default function DefinedBenefitFundsTable() {
                 
                 {/* Overview Section - Only show on first row */}
                 {rowIndex === 0 && (
-                  <td className="p-1 section-start" rowSpan={maxRows}>
+                  <td className="p-1 section-start align-top" rowSpan={maxRows}>
                     <input
                       type="text"
                       defaultValue={formatTextValue(fund.description)}
@@ -352,7 +352,7 @@ export default function DefinedBenefitFundsTable() {
                 
                 {/* Fund Details Section - Only show on first row */}
                 {rowIndex === 0 && (
-                  <td className={`p-1 section-start ${getCellClass('years')}`} rowSpan={maxRows}>
+                  <td className={`p-1 section-start align-top ${getCellClass('years')}`} rowSpan={maxRows}>
                     <input
                       key={`yearsOfService-${fund.id}-${fund.yearsOfService}`}
                       type="text"
@@ -365,7 +365,7 @@ export default function DefinedBenefitFundsTable() {
                   </td>
                 )}
                 {rowIndex === 0 && (
-                  <td className={`p-1 ${getCellClass('currency')}`} rowSpan={maxRows}>
+                  <td className={`p-1 align-top ${getCellClass('currency')}`} rowSpan={maxRows}>
                     <input
                       key={`finalMonthlySalary-${fund.id}-${fund.finalMonthlySalary}`}
                       type="text"
@@ -378,7 +378,7 @@ export default function DefinedBenefitFundsTable() {
                   </td>
                 )}
                 {rowIndex === 0 && (
-                  <td className={`p-1 ${getCellClass('currency')}`} rowSpan={maxRows}>
+                  <td className={`p-1 align-top ${getCellClass('currency')}`} rowSpan={maxRows}>
                     <input
                       key={`deathLumpSum-${fund.id}-${fund.deathLumpSum}`}
                       type="text"
@@ -391,7 +391,7 @@ export default function DefinedBenefitFundsTable() {
                   </td>
                 )}
                 {rowIndex === 0 && (
-                  <td className={`p-1 ${getCellClass('currency')}`} rowSpan={maxRows}>
+                  <td className={`p-1 align-top ${getCellClass('currency')}`} rowSpan={maxRows}>
                     <input
                       key={`additionalTaxFreeAmount-${fund.id}-${fund.additionalTaxFreeAmount}`}
                       type="text"
@@ -406,7 +406,7 @@ export default function DefinedBenefitFundsTable() {
                 
                 {/* Pension Income at Death Section */}
                 {rowIndex === 0 && (
-                  <td className={`p-1 section-start ${getCellClass('currency')}`} rowSpan={maxRows}>
+                  <td className={`p-1 section-start align-top ${getCellClass('currency')}`} rowSpan={maxRows}>
                     <input
                       key={`pensionIncomeAmount-${fund.id}-${fund.pensionIncomeAmount}`}
                       type="text"
@@ -419,7 +419,7 @@ export default function DefinedBenefitFundsTable() {
                   </td>
                 )}
                 {rowIndex === 0 && (
-                  <td className={`p-1 section-end ${getCellClass('percentage')}`} rowSpan={maxRows}>
+                  <td className={`p-1 section-end align-top ${getCellClass('percentage')}`} rowSpan={maxRows}>
                     <input
                       key={`pensionIncomeIncrease-${fund.id}-${fund.pensionIncomeIncrease}`}
                       type="text"
