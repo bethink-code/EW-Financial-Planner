@@ -333,7 +333,7 @@ export function LiabilitiesTable({ viewMode = 'table' }: LiabilitiesTableProps) 
               {sectionLiabilities.length > 0 && (
                 <SafeFragment key={`${sectionKey}-header`}>
                   <tr className="bg-neutral-50">
-                    <td colSpan={12} className="px-4 py-2 font-medium text-neutral-700 border-b border-neutral-200">
+                    <td colSpan={12} className="px-4 py-2 text-neutral-700 border-b border-neutral-200 text-[14px] font-semibold bg-[#edf4f9]">
                       {sectionLabels[sectionKey as keyof typeof sectionLabels]}
                     </td>
                   </tr>
