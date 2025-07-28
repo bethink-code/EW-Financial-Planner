@@ -221,7 +221,7 @@ function VoluntaryInvestmentsTable({ viewMode, searchTerm }: VoluntaryInvestment
             return owners.map((owner: string, ownerIndex: number) => (
               <tr key={`${investment.id}-${ownerIndex}`} className="hover:bg-neutral-50">
                 {ownerIndex === 0 && (
-                  <td className="table-actions-cell p-1 text-center section-start section-end" rowSpan={maxRows}>
+                  <td className="table-actions-cell p-1 text-center section-start section-end align-top" rowSpan={maxRows}>
                     <ActionButtonGroup>
                       <DuplicateButton
                         onClick={() => addMutation.mutate()}
@@ -236,7 +236,7 @@ function VoluntaryInvestmentsTable({ viewMode, searchTerm }: VoluntaryInvestment
                 )}
                 
                 {ownerIndex === 0 && (
-                  <td className="p-2 vertical-align-middle" rowSpan={maxRows}>
+                  <td className="p-2 align-top" rowSpan={maxRows}>
                     <input
                       type="text"
                       defaultValue={formatTextValue(investment.description)}

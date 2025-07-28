@@ -736,7 +736,7 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
                   {columnVisibility.overview && (
                     <>
                       {/* Description */}
-                      <td className="table-cell whitespace-nowrap table-text-14 text-neutral-900" rowSpan={beneficiaries.length + 1}>
+                      <td className="table-cell whitespace-nowrap table-text-14 text-neutral-900 align-top" rowSpan={beneficiaries.length + 1}>
                         <input
                           defaultValue={fund.description || "Enter details ..."} onFocus={handleDefaultValueFocus}
                           onBlur={(e) => handleInputBlur(fund.id, "description", e.target.value)}
@@ -747,7 +747,7 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
                       </td>
                       
                       {/* Owner */}
-                      <td className="p-2 text-right" rowSpan={beneficiaries.length + 1}>
+                      <td className="p-2 text-right align-top" rowSpan={beneficiaries.length + 1}>
                         <Select
                           value={fund.owner || "John Doe"}
                           onValueChange={(value) => handleInputBlur(fund.id, "owner", value)}
@@ -771,7 +771,7 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
                   {/* Unapproved Life Cover Section - Header Row */}
                   {columnVisibility.unapprovedLifeCover && (
                     <>
-                      <td className="p-2 text-right border-l border-neutral-300 bg-teal-50" rowSpan={beneficiaries.length + 1}>
+                      <td className="p-2 text-right border-l border-neutral-300 bg-teal-50 align-top" rowSpan={beneficiaries.length + 1}>
                         <input
                           defaultValue={fund.coverAmount || "Enter details ..."} onFocus={handleDefaultValueFocus}
                           onBlur={(e) => {
