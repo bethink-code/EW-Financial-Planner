@@ -23,7 +23,6 @@ function LiabilitiesTable({ viewMode, searchTerm }: LiabilitiesTableProps) {
   const addMutation = useMutation({
     mutationFn: async (): Promise<Liabilities> => {
       const newLiability: InsertLiabilities = {
-        category: "Enter details ...",
         description: "Enter details ...",
         debtAmount: "R 0",
         peterLambie: "0%",
@@ -125,7 +124,7 @@ function LiabilitiesTable({ viewMode, searchTerm }: LiabilitiesTableProps) {
     let formattedValue: string;
     if (field === 'peterLambie' || field === 'victoriaLambie' || field === 'juniorLambie' || field === 'lambiesFamilyTrust') {
       formattedValue = formatPercentageValue(value);
-    } else if (field === 'debtAmount' || field === 'estateDuty' || field === 'others' || field === 'client') {
+    } else if (field === 'debtAmount' || field === 'estate' || field === 'others' || field === 'client') {
       formattedValue = formatCurrencyValue(value);
     } else {
       formattedValue = value;
@@ -163,14 +162,13 @@ function LiabilitiesTable({ viewMode, searchTerm }: LiabilitiesTableProps) {
             <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center" rowSpan={2}>
               <AddButton onClick={() => addMutation.mutate()} disabled={isUpdating} />
             </th>
-            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start" colSpan={2}>Overview</th>
+            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start" colSpan={1}>Overview</th>
             <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start" colSpan={1}>Liability Details</th>
             <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start" colSpan={4}>Ownership Split</th>
             <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start" colSpan={3}>Settlement</th>
           </tr>
           <tr>
-            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start">Category</th>
-            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center">Description</th>
+            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start">Description</th>
             <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start">Debt Amount</th>
             <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start">Peter Lambie</th>
             <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center">Victoria Lambie (Spouse)</th>
@@ -185,7 +183,7 @@ function LiabilitiesTable({ viewMode, searchTerm }: LiabilitiesTableProps) {
           {(() => {
             // Group liabilities by section/category
             const groupedLiabilities = liabilities.reduce((groups, liability) => {
-              const section = liability.section || liability.category || 'Other';
+              const section = liability.section || 'Other';
               if (!groups[section]) {
                 groups[section] = [];
               }
@@ -196,7 +194,7 @@ function LiabilitiesTable({ viewMode, searchTerm }: LiabilitiesTableProps) {
             return Object.entries(groupedLiabilities).map(([sectionName, sectionLiabilities]) => [
               // Section Header
               <tr key={`section-${sectionName}`} className="bg-blue-50">
-                <td colSpan={11} className="px-4 py-2 text-sm font-medium text-neutral-700 uppercase tracking-wider">
+                <td colSpan={10} className="px-4 py-2 text-sm font-medium text-neutral-700 uppercase tracking-wider">
                   {sectionName.replace('_', ' ')}
                 </td>
               </tr>,
@@ -216,18 +214,7 @@ function LiabilitiesTable({ viewMode, searchTerm }: LiabilitiesTableProps) {
                     </ActionButtonGroup>
                   </td>
                   
-                  <td className="p-2 text-left">
-                    <input
-                      type="text"
-                      defaultValue={liability.category}
-                      className={`table-input ${getFieldClass('text')} ${getValueClass(liability.category, 'text')}`}
-                      onFocus={handleDefaultValueFocus}
-                      onBlur={(e) => handleInputBlur(liability.id, 'category', e.target.value)}
-                      disabled={isUpdating}
-                    />
-                  </td>
-                  
-                  <td className="p-2 text-left">
+                  <td className="p-2 text-left section-start">
                     <input
                       type="text"
                       defaultValue={liability.description}
@@ -238,7 +225,7 @@ function LiabilitiesTable({ viewMode, searchTerm }: LiabilitiesTableProps) {
                     />
                   </td>
                   
-                  <td className="p-2 text-right">
+                  <td className="p-2 text-right section-start">
                     <input
                       key={`debtAmount-${liability.id}-${liability.debtAmount}`}
                       type="text"
@@ -250,7 +237,7 @@ function LiabilitiesTable({ viewMode, searchTerm }: LiabilitiesTableProps) {
                     />
                   </td>
                   
-                  <td className="p-2 text-center">
+                  <td className="p-2 text-center section-start">
                     <input
                       key={`peterLambie-${liability.id}-${liability.peterLambie}`}
                       type="text"
@@ -298,7 +285,7 @@ function LiabilitiesTable({ viewMode, searchTerm }: LiabilitiesTableProps) {
                     />
                   </td>
                   
-                  <td className="p-2 text-right">
+                  <td className="p-2 text-right section-start">
                     <input
                       key={`estate-${liability.id}-${liability.estate}`}
                       type="text"
@@ -341,10 +328,16 @@ function LiabilitiesTable({ viewMode, searchTerm }: LiabilitiesTableProps) {
         
         {/* Totals Footer */}
         <tfoot>
-          <tr>
-            <td className="totals-cell-label text-right" colSpan={3}>Totals</td>
-            <td className="totals-cell-value section-start">R {totals.amount.toLocaleString()}</td>
-            <td className="totals-cell-label section-end"></td>
+          <tr className="bg-neutral-50 border-t border-neutral-300">
+            <td className="totals-cell-label text-right" colSpan={1}>Totals</td>
+            <td className="totals-cell-value section-start text-right">R {totals.amount.toLocaleString()}</td>
+            <td className="totals-cell-label"></td>
+            <td className="totals-cell-label"></td>
+            <td className="totals-cell-label"></td>
+            <td className="totals-cell-label"></td>
+            <td className="totals-cell-value section-start text-right">R {totals.estate.toLocaleString()}</td>
+            <td className="totals-cell-value text-right">R {totals.others.toLocaleString()}</td>
+            <td className="totals-cell-value section-end text-right">R {totals.client.toLocaleString()}</td>
           </tr>
         </tfoot>
       </table>

@@ -24,7 +24,6 @@ function AssetsTable({ viewMode, searchTerm }: AssetsTableProps) {
   const addMutation = useMutation({
     mutationFn: async (): Promise<Assets> => {
       const newAsset: InsertAssets = {
-        category: "Enter details ...",
         description: "Enter details ...",
         marketValue: "R 0",
         johnDoe: "0%",
@@ -168,13 +167,12 @@ function AssetsTable({ viewMode, searchTerm }: AssetsTableProps) {
             <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center" rowSpan={2}>
               <AddButton onClick={() => addMutation.mutate()} disabled={isUpdating} />
             </th>
-            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center" colSpan={2}>Overview</th>
+            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center" colSpan={1}>Overview</th>
             <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center" colSpan={1}>Asset Details</th>
             <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center" colSpan={4}>Ownership Split</th>
             <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center" colSpan={3}>Distribution</th>
           </tr>
           <tr>
-            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center">Category</th>
             <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center">Description</th>
             <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center">Market Value</th>
             <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center">John Doe</th>
@@ -219,17 +217,6 @@ function AssetsTable({ viewMode, searchTerm }: AssetsTableProps) {
                     disabled={isUpdating}
                   />
                 </ActionButtonGroup>
-              </td>
-              
-              <td className="p-2 text-left">
-                <input
-                  type="text"
-                  defaultValue={asset.category}
-                  className={`table-input ${getFieldClass('text')} ${getValueClass(asset.category, 'text')}`}
-                  onFocus={handleDefaultValueFocus}
-                  onBlur={(e) => handleInputBlur(asset.id, 'category', e.target.value)}
-                  disabled={isUpdating}
-                />
               </td>
               
               <td className="p-2 text-left">
@@ -346,8 +333,15 @@ function AssetsTable({ viewMode, searchTerm }: AssetsTableProps) {
         
         <tfoot>
           <tr className="bg-neutral-50 border-t border-neutral-300">
-            <td className="totals-cell-label text-right" colSpan={9}>Total Market Value</td>
-            <td className="totals-cell-value text-right">R {totals.amount.toLocaleString()}</td>
+            <td className="totals-cell-label text-right" colSpan={1}>Totals</td>
+            <td className="totals-cell-value section-start text-right">R {totals.amount.toLocaleString()}</td>
+            <td className="totals-cell-label"></td>
+            <td className="totals-cell-label"></td>
+            <td className="totals-cell-label"></td>
+            <td className="totals-cell-label"></td>
+            <td className="totals-cell-value section-start text-right">R {totals.estate.toLocaleString()}</td>
+            <td className="totals-cell-value text-right">R {totals.others.toLocaleString()}</td>
+            <td className="totals-cell-value section-end text-right">R {totals.client.toLocaleString()}</td>
           </tr>
         </tfoot>
       </table>

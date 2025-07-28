@@ -4,7 +4,6 @@ import { z } from 'zod';
 
 export const assets = pgTable('assets', {
   id: serial('id').primaryKey(),
-  category: text('category').notNull().default('Enter details ...'),
   description: text('description').notNull().default('Enter details ...'),
   marketValue: text('market_value').notNull().default('R 0'),
   johnDoe: text('john_doe').notNull().default('0%'),

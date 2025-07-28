@@ -351,7 +351,6 @@ export const liabilities = pgTable("liabilities", {
   id: serial("id").primaryKey(),
   
   // Overview Section
-  category: text("category").notNull().default("Enter details ..."),
   description: text("description").notNull().default("Enter details ..."),
   currency: text("currency").notNull().default("ZAR"),
   
