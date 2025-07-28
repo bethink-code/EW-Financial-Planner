@@ -470,7 +470,7 @@ th, td {
   
   /* Action buttons alignment in table cells */
   .table-actions-cell {
-    vertical-align: middle !important;
+    vertical-align: top !important;
     padding: 0.5rem 0.75rem;
     text-align: center;
   }
