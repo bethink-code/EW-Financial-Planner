@@ -290,16 +290,37 @@ th, td {
   table .border-neutral-200,
   table .border-bottom,
   table th.border-b,
-  table td.border-b {
+  table td.border-b,
+  table .border,
+  table .border-neutral-300,
+  table .border-gray-300 {
+    border: none !important;
     border-bottom: none !important;
+    border-top: none !important;
+    border-left: none !important;
+    border-right: none !important;
   }
 
   /* ONLY section separators - vertical borders that separate major sections */
-  .section-start {
+  /* Apply to ALL table elements: header, body, footer */
+  thead .section-start,
+  tbody .section-start,
+  tfoot .section-start {
     border-left: 1px solid #e5e7eb !important;
   }
 
-  .section-end {
+  thead .section-end,
+  tbody .section-end,
+  tfoot .section-end {
+    border-right: 1px solid #e5e7eb !important;
+  }
+  tfoot .section-start {
+    border-left: 1px solid #e5e7eb !important;
+  }
+
+  thead .section-end,
+  tbody .section-end,
+  tfoot .section-end {
     border-right: 1px solid #e5e7eb !important;
   }
 
