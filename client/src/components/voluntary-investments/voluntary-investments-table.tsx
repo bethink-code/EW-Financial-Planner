@@ -162,21 +162,27 @@ function VoluntaryInvestmentsTable({ viewMode, searchTerm }: VoluntaryInvestment
 
   const handleAddOwner = useCallback((id: number) => {
     const investment = investments.find((i: VoluntaryInvestment) => i.id === id);
-    if (investment) {
-      const newOwners = [...investment.owners, ""];
-      setIsUpdating(true);
-      updateMutation.mutate({ id, updates: { owners: newOwners } });
-    }
+    if (!investment) return;
+    
+    const owners = [...investment.owners, ""];
+    const percentages = [...investment.ownershipPercentages, "0%"];
+    
+    setIsUpdating(true);
+    updateMutation.mutate({ id, updates: { owners, ownershipPercentages: percentages } });
   }, [investments, updateMutation]);
 
   const handleRemoveOwner = useCallback((id: number, ownerIndex: number) => {
     const investment = investments.find((i: VoluntaryInvestment) => i.id === id);
-    if (investment && investment.owners.length > 1 && ownerIndex > 0) { // Protect first owner
-      const newOwners = [...investment.owners];
-      newOwners.splice(ownerIndex, 1);
-      setIsUpdating(true);
-      updateMutation.mutate({ id, updates: { owners: newOwners } });
-    }
+    if (!investment || investment.owners.length <= 1 || ownerIndex === 0) return;
+    
+    const owners = [...investment.owners];
+    const percentages = [...investment.ownershipPercentages];
+    
+    owners.splice(ownerIndex, 1);
+    percentages.splice(ownerIndex, 1);
+    
+    setIsUpdating(true);
+    updateMutation.mutate({ id, updates: { owners, ownershipPercentages: percentages } });
   }, [investments, updateMutation]);
 
   if (isLoading) {
