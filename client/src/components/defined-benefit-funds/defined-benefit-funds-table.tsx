@@ -1,7 +1,7 @@
 import { useState, useCallback, useMemo } from 'react';
 import { useQuery, useMutation } from '@tanstack/react-query';
 import { queryClient } from '@/lib/queryClient';
-import { DefinedBenefitFunds, InsertDefinedBenefitFunds } from '@shared/schema';
+import { DefinedBenefitFund, InsertDefinedBenefitFund } from '@shared/schema';
 import { AddButton, ActionButtonGroup, DuplicateButton, DeleteButton } from '@/components/ui/action-buttons';
 import { getFieldClass, getCellClass } from '@/lib/field-types';
 import { formatCurrencyValue, formatPercentageValue, getValueClass, handleDefaultValueFocus } from '@/lib/formatting';
@@ -15,19 +15,23 @@ function DefinedBenefitFundsTable({ viewMode, searchTerm }: DefinedBenefitFundsT
   const [isUpdating, setIsUpdating] = useState(false);
 
   // Query for defined benefit funds
-  const { data: funds = [], isLoading, error } = useQuery<DefinedBenefitFunds[]>({
+  const { data: funds = [], isLoading, error } = useQuery<DefinedBenefitFund[]>({
     queryKey: ['/api/defined-benefit-funds'],
   });
 
   // Add fund mutation
   const addMutation = useMutation({
-    mutationFn: async (): Promise<DefinedBenefitFunds> => {
-      const newFund: InsertDefinedBenefitFunds = {
-        description: """,
-        owner: "Donald Edwards",
-        amount: "R 0",
-        increasePercentage: "0%",
-        additionalOwners: [],
+    mutationFn: async (): Promise<DefinedBenefitFund> => {
+      const newFund: InsertDefinedBenefitFund = {
+        description: "",
+        owners: ["Donald Edwards"],
+        ownershipPercentages: ["100%"],
+        yearsOfService: "0 years",
+        finalMonthlySalary: "R 0",
+        deathLumpSum: "R 0",
+        additionalTaxFreeAmount: "R 0",
+        pensionIncomeAmount: "R 0",
+        pensionIncomeIncrease: "0%",
       };
       
       const response = await fetch('/api/defined-benefit-funds', {
@@ -56,7 +60,7 @@ function DefinedBenefitFundsTable({ viewMode, searchTerm }: DefinedBenefitFundsT
 
   // Update fund mutation
   const updateMutation = useMutation({
-    mutationFn: async ({ id, updates }: { id: number; updates: Partial<DefinedBenefitFunds> }) => {
+    mutationFn: async ({ id, updates }: { id: number; updates: Partial<DefinedBenefitFund> }) => {
       const response = await fetch(`/api/defined-benefit-funds/${id}`, {
         method: 'PATCH',
         headers: {
@@ -101,24 +105,24 @@ function DefinedBenefitFundsTable({ viewMode, searchTerm }: DefinedBenefitFundsT
   const totals = useMemo(() => {
     return {
       count: funds.length,
-      amount: funds.reduce((sum: number, fund: DefinedBenefitFunds) => {
-        const value = parseFloat(fund.amount.replace(/[^\d.-]/g, '')) || 0;
+      deathLumpSum: funds.reduce((sum: number, fund: DefinedBenefitFund) => {
+        const value = parseFloat((fund.deathLumpSum || '0').replace(/[^\d.-]/g, '')) || 0;
         return sum + value;
       }, 0),
     };
   }, [funds]);
 
-  const handleUpdateFund = useCallback((id: number, field: keyof DefinedBenefitFunds, value: string | string[]) => {
+  const handleUpdateFund = useCallback((id: number, field: keyof DefinedBenefitFund, value: string | string[]) => {
     setIsUpdating(true);
     const updates = { [field]: value };
     updateMutation.mutate({ id, updates });
   }, [updateMutation]);
 
-  const handleInputBlur = useCallback((id: number, field: keyof DefinedBenefitFunds, value: string) => {
+  const handleInputBlur = useCallback((id: number, field: keyof DefinedBenefitFund, value: string) => {
     let formattedValue: string;
-    if (field === 'increasePercentage') {
+    if (field === 'pensionIncomeIncrease') {
       formattedValue = formatPercentageValue(value);
-    } else if (field === 'amount') {
+    } else if (field === 'deathLumpSum' || field === 'finalMonthlySalary' || field === 'additionalTaxFreeAmount' || field === 'pensionIncomeAmount') {
       formattedValue = formatCurrencyValue(value);
     } else {
       formattedValue = value;
@@ -167,7 +171,7 @@ function DefinedBenefitFundsTable({ viewMode, searchTerm }: DefinedBenefitFundsT
           </tr>
         </thead>
         <tbody className="divide-y divide-neutral-200">
-          {funds.map((fund: DefinedBenefitFunds, index) => (
+          {funds.map((fund: DefinedBenefitFund, index) => (
             <tr key={fund.id} className="hover:bg-neutral-50">
               <td className="table-actions-cell p-2 text-center section-start section-end">
                 <ActionButtonGroup>
@@ -196,34 +200,34 @@ function DefinedBenefitFundsTable({ viewMode, searchTerm }: DefinedBenefitFundsT
               <td className="p-2">
                 <input
                   type="text"
-                  defaultValue={fund.owner}
-                  className={`table-input ${getFieldClass('text')} ${getValueClass(fund.owner, 'text')}`}
+                  defaultValue={fund.owners?.[0] || "Donald Edwards"}
+                  className={`table-input ${getFieldClass('text')} ${getValueClass(fund.owners?.[0] || "Donald Edwards", 'text')}`}
                   onFocus={handleDefaultValueFocus}
-                  onBlur={(e) => handleInputBlur(fund.id, 'owner', e.target.value)}
+                  onBlur={(e) => handleInputBlur(fund.id, 'owners', [e.target.value])}
                   disabled={isUpdating}
                 />
               </td>
               
               <td className="p-2 section-start">
                 <input
-                  key={`amount-${fund.id}-${fund.amount}`}
+                  key={`deathLumpSum-${fund.id}-${fund.deathLumpSum}`}
                   type="text"
-                  defaultValue={fund.amount}
-                  className={`table-input ${getFieldClass('currency')} ${getValueClass(fund.amount, 'currency')}`}
+                  defaultValue={fund.deathLumpSum}
+                  className={`table-input ${getFieldClass('currency')} ${getValueClass(fund.deathLumpSum, 'currency')}`}
                   onFocus={handleDefaultValueFocus}
-                  onBlur={(e) => handleInputBlur(fund.id, 'amount', e.target.value)}
+                  onBlur={(e) => handleInputBlur(fund.id, 'deathLumpSum', e.target.value)}
                   disabled={isUpdating}
                 />
               </td>
               
               <td className="p-2 section-end">
                 <input
-                  key={`increasePercentage-${fund.id}-${fund.increasePercentage}`}
+                  key={`pensionIncomeIncrease-${fund.id}-${fund.pensionIncomeIncrease}`}
                   type="text"
-                  defaultValue={fund.increasePercentage}
-                  className={`table-input ${getFieldClass('percentage')} ${getValueClass(fund.increasePercentage, 'percentage')}`}
+                  defaultValue={fund.pensionIncomeIncrease}
+                  className={`table-input ${getFieldClass('percentage')} ${getValueClass(fund.pensionIncomeIncrease, 'percentage')}`}
                   onFocus={handleDefaultValueFocus}
-                  onBlur={(e) => handleInputBlur(fund.id, 'increasePercentage', e.target.value)}
+                  onBlur={(e) => handleInputBlur(fund.id, 'pensionIncomeIncrease', e.target.value)}
                   disabled={isUpdating}
                 />
               </td>
@@ -235,7 +239,7 @@ function DefinedBenefitFundsTable({ viewMode, searchTerm }: DefinedBenefitFundsT
         <tfoot>
           <tr>
             <td className="totals-cell-label text-right" colSpan={3}>Totals</td>
-            <td className="totals-cell-value section-start">R {totals.amount.toLocaleString()}</td>
+            <td className="totals-cell-value section-start">R {totals.deathLumpSum.toLocaleString()}</td>
             <td className="totals-cell-label section-end"></td>
           </tr>
         </tfoot>

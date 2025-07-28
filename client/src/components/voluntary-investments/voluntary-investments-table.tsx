@@ -167,9 +167,9 @@ function VoluntaryInvestmentsTable({ viewMode, searchTerm }: VoluntaryInvestment
     const owners = [...investment.owners, ""];
     const percentages = [...investment.ownershipPercentages, "0%"];
     
-    setIsUpdating(true);
-    updateMutation.mutate({ id, updates: { owners, ownershipPercentages: percentages } });
-  }, [investments, updateMutation]);
+    handleUpdateInvestment(id, 'owners', owners);
+    handleUpdateInvestment(id, 'ownershipPercentages', percentages);
+  }, [investments, handleUpdateInvestment]);
 
   const handleRemoveOwner = useCallback((id: number, ownerIndex: number) => {
     const investment = investments.find((i: VoluntaryInvestment) => i.id === id);
@@ -181,9 +181,29 @@ function VoluntaryInvestmentsTable({ viewMode, searchTerm }: VoluntaryInvestment
     owners.splice(ownerIndex, 1);
     percentages.splice(ownerIndex, 1);
     
-    setIsUpdating(true);
-    updateMutation.mutate({ id, updates: { owners, ownershipPercentages: percentages } });
-  }, [investments, updateMutation]);
+    handleUpdateInvestment(id, 'owners', owners);
+    handleUpdateInvestment(id, 'ownershipPercentages', percentages);
+  }, [investments, handleUpdateInvestment]);
+
+  const handleOwnerChange = useCallback((id: number, ownerIndex: number, newOwner: string) => {
+    const investment = investments.find((i: VoluntaryInvestment) => i.id === id);
+    if (!investment) return;
+    
+    const owners = [...investment.owners];
+    owners[ownerIndex] = newOwner;
+    
+    handleUpdateInvestment(id, 'owners', owners);
+  }, [investments, handleUpdateInvestment]);
+
+  const handleOwnershipPercentageChange = useCallback((id: number, ownerIndex: number, newPercentage: string) => {
+    const investment = investments.find((i: VoluntaryInvestment) => i.id === id);
+    if (!investment) return;
+    
+    const percentages = [...investment.ownershipPercentages];
+    percentages[ownerIndex] = newPercentage;
+    
+    handleUpdateInvestment(id, 'ownershipPercentages', percentages);
+  }, [investments, handleUpdateInvestment]);
 
   if (isLoading) {
     return <div className="flex justify-center py-8">Loading voluntary investments...</div>;
@@ -267,26 +287,18 @@ function VoluntaryInvestmentsTable({ viewMode, searchTerm }: VoluntaryInvestment
                         placeholder="Enter details ..."
                         className={`table-input ${getFieldClass('text')} ${getValueClass(investment.owners[ownerIndex], 'text')} flex-1`}
                         onFocus={handleDefaultValueFocus}
-                        onBlur={(e) => handleInputBlur(investment.id, `owners-${ownerIndex}`, e.target.value)}
+                        onBlur={(e) => handleOwnerChange(investment.id, ownerIndex, e.target.value)}
                       />
                       {ownerIndex === 0 ? (
                         <AddButton
-                          onClick={(e) => {
-                            e.preventDefault();
-                            e.stopPropagation();
-                            handleAddOwner(investment.id);
-                          }}
+                          onClick={() => handleAddOwner(investment.id)}
                           disabled={isUpdating}
                           size="sm"
                           type="button"
                         />
                       ) : (
                         <DeleteButton
-                          onClick={(e) => {
-                            e.preventDefault();
-                            e.stopPropagation();
-                            handleRemoveOwner(investment.id, ownerIndex);
-                          }}
+                          onClick={() => handleRemoveOwner(investment.id, ownerIndex)}
                           disabled={isUpdating}
                           size="sm"
                           type="button"
@@ -303,7 +315,7 @@ function VoluntaryInvestmentsTable({ viewMode, searchTerm }: VoluntaryInvestment
                       defaultValue={formatPercentageValue(investment.ownershipPercentages?.[ownerIndex] || "0%")}
                       className={`table-input ${getFieldClass('percentage')} ${getValueClass(investment.ownershipPercentages?.[ownerIndex] || "0%", 'percentage')}`}
                       onFocus={handleDefaultValueFocus}
-                      onBlur={(e) => handleInputBlur(investment.id, `ownershipPercentages-${ownerIndex}`, e.target.value)}
+                      onBlur={(e) => handleOwnershipPercentageChange(investment.id, ownerIndex, e.target.value)}
                     />
                   )}
                 </td>
