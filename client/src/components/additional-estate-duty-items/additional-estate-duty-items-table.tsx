@@ -21,8 +21,8 @@ function AdditionalEstateDutyItemsTable({ viewMode, searchTerm }: AdditionalEsta
   const addMutation = useMutation({
     mutationFn: async (): Promise<AdditionalEstateDutyItems> => {
       const newItem: InsertAdditionalEstateDutyItems = {
-        category: "Enter details ...",
-        description: "Enter details ...",
+        category: "",
+        description: "",
         amount: "R 0",
         increasePercentage: "0%",
         johnDoe: "0%",
@@ -221,6 +221,7 @@ function AdditionalEstateDutyItemsTable({ viewMode, searchTerm }: AdditionalEsta
                 <input
                   type="text"
                   defaultValue={item.category}
+                  placeholder="Enter details ..."
                   className={`table-input ${getFieldClass('text')} ${getValueClass(item.category, 'text')}`}
                   onFocus={handleDefaultValueFocus}
                   onBlur={(e) => handleInputBlur(item.id, 'category', e.target.value)}
@@ -232,6 +233,7 @@ function AdditionalEstateDutyItemsTable({ viewMode, searchTerm }: AdditionalEsta
                 <input
                   type="text"
                   defaultValue={item.description}
+                  placeholder="Enter details ..."
                   className={`table-input ${getFieldClass('text')} ${getValueClass(item.description, 'text')}`}
                   onFocus={handleDefaultValueFocus}
                   onBlur={(e) => handleInputBlur(item.id, 'description', e.target.value)}

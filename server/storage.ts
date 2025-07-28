@@ -578,8 +578,8 @@ export class MemStorage implements IStorage {
   async createAdditionalEstateDutyItem(item: InsertAdditionalEstateDutyItems): Promise<AdditionalEstateDutyItems> {
     const newItem: AdditionalEstateDutyItems = {
       id: this.currentAdditionalEstateDutyItemId++,
-      category: item.category || "Enter details ...",
-      description: item.description || "Enter details ...",
+      category: item.category || "",
+      description: item.description || "",
       amount: item.amount || "R 0",
       increasePercentage: item.increasePercentage || "0%",
       johnDoe: item.johnDoe || "0%",

@@ -289,8 +289,8 @@ export const additionalEstateDutyItems = pgTable("additional_estate_duty_items",
   id: serial("id").primaryKey(),
   
   // Overview Section
-  category: text("category").notNull().default("Enter details ..."),
-  description: text("description").notNull().default("Enter details ..."),
+  category: text("category").notNull().default(""),
+  description: text("description").notNull().default(""),
   
   // Financial Details Section
   amount: text("amount").notNull().default("R 0"),
