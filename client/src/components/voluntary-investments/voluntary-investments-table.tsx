@@ -252,7 +252,7 @@ function VoluntaryInvestmentsTable({ viewMode, searchTerm }: VoluntaryInvestment
                   <div className="flex items-center gap-2">
                     <input
                       type="text"
-                      defaultValue={owner}
+                      defaultValue={formatTextValue(owner)}
                       className={`table-input ${getFieldClass('text')} ${getValueClass(owner, 'text')} flex-1`}
                       onFocus={handleDefaultValueFocus}
                       onBlur={(e) => {

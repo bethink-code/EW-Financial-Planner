@@ -308,9 +308,10 @@ export function AssuranceTable({}: AssuranceTableProps) {
                       <div className="flex items-center gap-1">
                         <input
                           type="text"
-                          defaultValue={policy.owners[rowIndex]}
+                          defaultValue={formatTextValue(policy.owners[rowIndex])}
                           placeholder="Enter details ..."
-                          className={`table-input ${getFieldClass('text')} flex-1`}
+                          className={`table-input ${getFieldClass('text')} flex-1 ${getValueClass(policy.owners[rowIndex], 'text')}`}
+                          onFocus={handleDefaultValueFocus}
                           onBlur={(e) => handleOwnerChange(policy.id, rowIndex, e.target.value)}
                         />
                         {rowIndex === 0 ? (
@@ -369,9 +370,10 @@ export function AssuranceTable({}: AssuranceTableProps) {
                       <div className="flex items-center gap-1">
                         <input
                           type="text"
-                          defaultValue={policy.beneficiaries[rowIndex]}
+                          defaultValue={formatTextValue(policy.beneficiaries[rowIndex])}
                           placeholder="Enter details ..."
-                          className={`table-input ${getFieldClass('text')} flex-1`}
+                          className={`table-input ${getFieldClass('text')} flex-1 ${getValueClass(policy.beneficiaries[rowIndex], 'text')}`}
+                          onFocus={handleDefaultValueFocus}
                           onBlur={(e) => handleBeneficiaryChange(policy.id, rowIndex, e.target.value)}
                         />
                         {rowIndex === 0 ? (

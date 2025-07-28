@@ -293,7 +293,7 @@ export default function DefinedBenefitFundsTable() {
                   {rowIndex === 0 && (
                     <input
                       type="text"
-                      defaultValue={fund.description || "Enter details ..."}
+                      defaultValue={formatTextValue(fund.description)}
                       className={`table-input ${getFieldClass('text')} ${getValueClass(fund.description, 'text')}`}
                       onFocus={handleDefaultValueFocus}
                       onBlur={(e) => {
@@ -312,8 +312,8 @@ export default function DefinedBenefitFundsTable() {
                     <input
                       key={`owner-${fund.id}-${rowIndex}-${fund.owners[rowIndex]}`}
                       type="text"
-                      defaultValue={fund.owners[rowIndex] || "Donald Edwards"}
-                      className={`table-input ${getFieldClass('text')} ${getValueClass(fund.owners[rowIndex] || "Donald Edwards", 'text')}`}
+                      defaultValue={formatTextValue(fund.owners[rowIndex], 'owner')}
+                      className={`table-input ${getFieldClass('text')} ${getValueClass(fund.owners[rowIndex], 'text')}`}
                       style={{ flex: 1 }}
                       onFocus={handleDefaultValueFocus}
                       onBlur={(e) => handleOwnerUpdate(fund.id, rowIndex, 'name', e.target.value)}
