@@ -1,4 +1,4 @@
-import { useState, useCallback, useMemo } from 'react';
+import React, { useState, useCallback, useMemo } from 'react';
 import { useQuery, useMutation } from '@tanstack/react-query';
 import { queryClient } from '@/lib/queryClient';
 import { AssetsAndLiabilities, InsertAssetsAndLiabilities } from '@shared/schema';

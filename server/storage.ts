@@ -1,4 +1,4 @@
-import { retirementFunds, lumpSumBequests, assurance, definedBenefitFunds, voluntaryInvestments, assetsAndLiabilities, incomeNeeds, incomeProvisions, residue, additionalEstateDutyItems, liabilities, assets, type RetirementFund, type InsertRetirementFund, type UpdateRetirementFund, type LumpSumBequest, type InsertLumpSumBequest, type Assurance, type InsertAssurance, type UpdateAssurance, type DefinedBenefitFund, type InsertDefinedBenefitFund, type UpdateDefinedBenefitFund, type VoluntaryInvestment, type InsertVoluntaryInvestment, type UpdateVoluntaryInvestment, type AssetAndLiability, type InsertAssetAndLiability, type UpdateAssetAndLiability, type IncomeNeed, type InsertIncomeNeed, type UpdateIncomeNeed, type IncomeProvision, type InsertIncomeProvision, type UpdateIncomeProvision, type Residue, type InsertResidue, type UpdateResidue, type AdditionalEstateDutyItem, type InsertAdditionalEstateDutyItem, type UpdateAdditionalEstateDutyItem, type Liabilities, type InsertLiabilities, type UpdateLiabilities, type Assets, type InsertAssets } from "@shared/schema";
+import { retirementFunds, lumpSumBequests, assurance, definedBenefitFunds, voluntaryInvestments, assetsAndLiabilities, incomeNeeds, incomeProvisions, residue, additionalEstateDutyItems, liabilities, assets, type RetirementFund, type InsertRetirementFund, type UpdateRetirementFund, type LumpSumBequest, type InsertLumpSumBequest, type Assurance, type InsertAssurance, type UpdateAssurance, type DefinedBenefitFund, type InsertDefinedBenefitFund, type UpdateDefinedBenefitFund, type VoluntaryInvestment, type InsertVoluntaryInvestment, type UpdateVoluntaryInvestment, type AssetsAndLiabilities, type InsertAssetsAndLiabilities, type UpdateAssetsAndLiabilities, type IncomeNeeds, type InsertIncomeNeeds, type UpdateIncomeNeeds, type IncomeProvisions, type InsertIncomeProvisions, type UpdateIncomeProvisions, type Residue, type InsertResidue, type UpdateResidue, type AdditionalEstateDutyItems, type InsertAdditionalEstateDutyItems, type UpdateAdditionalEstateDutyItems, type Liabilities, type InsertLiabilities, type UpdateLiabilities, type Assets, type InsertAssets } from "@shared/schema";
 import { drizzle } from "drizzle-orm/node-postgres";
 import { Pool } from "pg";
 import { eq, ilike, or } from "drizzle-orm";
@@ -44,29 +44,29 @@ export interface IStorage {
   deleteVoluntaryInvestment(id: number): Promise<boolean>;
   searchVoluntaryInvestments(query: string): Promise<VoluntaryInvestment[]>;
   
-  // Assets and Liabilities
-  getAssetsAndLiabilities(): Promise<AssetAndLiability[]>;
-  getAssetAndLiability(id: number): Promise<AssetAndLiability | undefined>;
-  createAssetAndLiability(asset: InsertAssetAndLiability): Promise<AssetAndLiability>;
-  updateAssetAndLiability(id: number, updates: UpdateAssetAndLiability): Promise<AssetAndLiability | undefined>;
+  // Assets and Liabilities  
+  getAssetsAndLiabilities(): Promise<AssetsAndLiabilities[]>;
+  getAssetAndLiability(id: number): Promise<AssetsAndLiabilities | undefined>;
+  createAssetAndLiability(asset: InsertAssetsAndLiabilities): Promise<AssetsAndLiabilities>;
+  updateAssetAndLiability(id: number, updates: UpdateAssetsAndLiabilities): Promise<AssetsAndLiabilities | undefined>;
   deleteAssetAndLiability(id: number): Promise<boolean>;
-  searchAssetsAndLiabilities(query: string): Promise<AssetAndLiability[]>;
+  searchAssetsAndLiabilities(query: string): Promise<AssetsAndLiabilities[]>;
   
   // Income Needs
-  getIncomeNeeds(): Promise<IncomeNeed[]>;
-  getIncomeNeed(id: number): Promise<IncomeNeed | undefined>;
-  createIncomeNeed(need: InsertIncomeNeed): Promise<IncomeNeed>;
-  updateIncomeNeed(id: number, updates: UpdateIncomeNeed): Promise<IncomeNeed | undefined>;
+  getIncomeNeeds(): Promise<IncomeNeeds[]>;
+  getIncomeNeed(id: number): Promise<IncomeNeeds | undefined>;
+  createIncomeNeed(need: InsertIncomeNeeds): Promise<IncomeNeeds>;
+  updateIncomeNeed(id: number, updates: UpdateIncomeNeeds): Promise<IncomeNeeds | undefined>;
   deleteIncomeNeed(id: number): Promise<boolean>;
-  searchIncomeNeeds(query: string): Promise<IncomeNeed[]>;
+  searchIncomeNeeds(query: string): Promise<IncomeNeeds[]>;
   
   // Income Provisions
-  getIncomeProvisions(): Promise<IncomeProvision[]>;
-  getIncomeProvision(id: number): Promise<IncomeProvision | undefined>;
-  createIncomeProvision(provision: InsertIncomeProvision): Promise<IncomeProvision>;
-  updateIncomeProvision(id: number, updates: UpdateIncomeProvision): Promise<IncomeProvision | undefined>;
+  getIncomeProvisions(): Promise<IncomeProvisions[]>;
+  getIncomeProvision(id: number): Promise<IncomeProvisions | undefined>;
+  createIncomeProvision(provision: InsertIncomeProvisions): Promise<IncomeProvisions>;
+  updateIncomeProvision(id: number, updates: UpdateIncomeProvisions): Promise<IncomeProvisions | undefined>;
   deleteIncomeProvision(id: number): Promise<boolean>;
-  searchIncomeProvisions(query: string): Promise<IncomeProvision[]>;
+  searchIncomeProvisions(query: string): Promise<IncomeProvisions[]>;
   
   // Residue
   getResidue(): Promise<Residue[]>;
@@ -77,12 +77,12 @@ export interface IStorage {
   searchResidue(query: string): Promise<Residue[]>;
   
   // Additional Estate Duty Items
-  getAdditionalEstateDutyItems(): Promise<AdditionalEstateDutyItem[]>;
-  getAdditionalEstateDutyItem(id: number): Promise<AdditionalEstateDutyItem | undefined>;
-  createAdditionalEstateDutyItem(item: InsertAdditionalEstateDutyItem): Promise<AdditionalEstateDutyItem>;
-  updateAdditionalEstateDutyItem(id: number, updates: UpdateAdditionalEstateDutyItem): Promise<AdditionalEstateDutyItem | undefined>;
+  getAdditionalEstateDutyItems(): Promise<AdditionalEstateDutyItems[]>;
+  getAdditionalEstateDutyItem(id: number): Promise<AdditionalEstateDutyItems | undefined>;
+  createAdditionalEstateDutyItem(item: InsertAdditionalEstateDutyItems): Promise<AdditionalEstateDutyItems>;
+  updateAdditionalEstateDutyItem(id: number, updates: UpdateAdditionalEstateDutyItems): Promise<AdditionalEstateDutyItems | undefined>;
   deleteAdditionalEstateDutyItem(id: number): Promise<boolean>;
-  searchAdditionalEstateDutyItems(query: string): Promise<AdditionalEstateDutyItem[]>;
+  searchAdditionalEstateDutyItems(query: string): Promise<AdditionalEstateDutyItems[]>;
   
   // Liabilities
   getLiabilities(): Promise<Liabilities[]>;
@@ -107,11 +107,13 @@ export class MemStorage implements IStorage {
   private assurance: Map<number, Assurance>;
   private definedBenefitFunds: Map<number, DefinedBenefitFund>;
   private voluntaryInvestments: Map<number, VoluntaryInvestment>;
-  private assetsAndLiabilities: Map<number, AssetAndLiability>;
-  private incomeNeeds: Map<number, IncomeNeed>;
-  private incomeProvisions: Map<number, IncomeProvision>;
+  private assetsAndLiabilities: Map<number, AssetsAndLiabilities>;
+  private incomeNeeds: Map<number, IncomeNeeds>;
+  private incomeProvisions: Map<number, IncomeProvisions>;
   private residue: Map<number, Residue>;
-  private additionalEstateDutyItems: Map<number, AdditionalEstateDutyItem>;
+  private additionalEstateDutyItems: Map<number, AdditionalEstateDutyItems>;
+  private liabilities: Map<number, Liabilities>;
+  private assets: Map<number, Assets>;
   private currentFundId: number;
   private currentBequestId: number;
   private currentAssuranceId: number;
@@ -122,6 +124,8 @@ export class MemStorage implements IStorage {
   private currentIncomeProvisionId: number;
   private currentResidueId: number;
   private currentAdditionalEstateDutyItemId: number;
+  private currentLiabilityId: number;
+  private currentAssetId: number;
 
   constructor() {
     this.retirementFunds = new Map();
@@ -134,6 +138,8 @@ export class MemStorage implements IStorage {
     this.incomeProvisions = new Map();
     this.residue = new Map();
     this.additionalEstateDutyItems = new Map();
+    this.liabilities = new Map();
+    this.assets = new Map();
     this.currentFundId = 1;
     this.currentBequestId = 1;
     this.currentAssuranceId = 1;
@@ -144,6 +150,8 @@ export class MemStorage implements IStorage {
     this.currentIncomeProvisionId = 1;
     this.currentResidueId = 1;
     this.currentAdditionalEstateDutyItemId = 1;
+    this.currentLiabilityId = 1;
+    this.currentAssetId = 1;
     
     // Initialize with sample data
     this.createRetirementFund({
@@ -889,6 +897,92 @@ export class MemStorage implements IStorage {
     const lowerQuery = query.toLowerCase();
     return allItems.filter(item => 
       item.description.toLowerCase().includes(lowerQuery)
+    );
+  }
+
+  // Liabilities methods
+  async getLiabilities(): Promise<Liabilities[]> {
+    return Array.from(this.liabilities.values());
+  }
+
+  async getLiability(id: number): Promise<Liabilities | undefined> {
+    return this.liabilities.get(id);
+  }
+
+  async createLiability(liability: InsertLiabilities): Promise<Liabilities> {
+    const newLiability: Liabilities = {
+      id: this.currentLiabilityId++,
+      ...liability
+    };
+    
+    this.liabilities.set(newLiability.id, newLiability);
+    return newLiability;
+  }
+
+  async updateLiability(id: number, updates: UpdateLiabilities): Promise<Liabilities | undefined> {
+    const existing = this.liabilities.get(id);
+    if (!existing) return undefined;
+    
+    const updated: Liabilities = { ...existing, ...updates };
+    this.liabilities.set(id, updated);
+    return updated;
+  }
+
+  async deleteLiability(id: number): Promise<boolean> {
+    return this.liabilities.delete(id);
+  }
+
+  async searchLiabilities(query: string): Promise<Liabilities[]> {
+    const allLiabilities = Array.from(this.liabilities.values());
+    if (!query.trim()) return allLiabilities;
+    
+    const lowerQuery = query.toLowerCase();
+    return allLiabilities.filter(liability => 
+      liability.category?.toLowerCase().includes(lowerQuery) ||
+      liability.description?.toLowerCase().includes(lowerQuery)
+    );
+  }
+
+  // Assets methods
+  async getAssets(): Promise<Assets[]> {
+    return Array.from(this.assets.values());
+  }
+
+  async getAsset(id: number): Promise<Assets | undefined> {
+    return this.assets.get(id);
+  }
+
+  async createAsset(asset: InsertAssets): Promise<Assets> {
+    const newAsset: Assets = {
+      id: this.currentAssetId++,
+      ...asset
+    };
+    
+    this.assets.set(newAsset.id, newAsset);
+    return newAsset;
+  }
+
+  async updateAsset(id: number, updates: Partial<InsertAssets>): Promise<Assets | undefined> {
+    const existing = this.assets.get(id);
+    if (!existing) return undefined;
+    
+    const updated: Assets = { ...existing, ...updates };
+    this.assets.set(id, updated);
+    return updated;
+  }
+
+  async deleteAsset(id: number): Promise<boolean> {
+    return this.assets.delete(id);
+  }
+
+  async searchAssets(query: string): Promise<Assets[]> {
+    const allAssets = Array.from(this.assets.values());
+    if (!query.trim()) return allAssets;
+    
+    const lowerQuery = query.toLowerCase();
+    return allAssets.filter(asset => 
+      asset.category?.toLowerCase().includes(lowerQuery) ||
+      asset.description?.toLowerCase().includes(lowerQuery)
     );
   }
 }
