@@ -65,17 +65,10 @@ export function NewRetirementTable({
     'fundValueCoverSplits'
   );
 
-  // Unapproved beneficiary management
+  // Legacy handlers using new managers
   const handleAddUnapprovedBeneficiary = useCallback((fundId: number) => {
-    const fund = funds.find(f => f.id === fundId);
-    if (!fund) return;
-    const updatedBeneficiaries = [...fund.unapprovedBeneficiaries, ""];
-    const updatedSplits = [...fund.unapprovedPercentageSplits, "0%"];
-    const updatedCoverSplits = [...fund.unapprovedCoverSplits, "R 0"];
-    onFieldUpdate(fundId, 'unapprovedBeneficiaries', updatedBeneficiaries);
-    onFieldUpdate(fundId, 'unapprovedPercentageSplits', updatedSplits);
-    onFieldUpdate(fundId, 'unapprovedCoverSplits', updatedCoverSplits);
-  }, [funds, onFieldUpdate]);
+    unapprovedBeneficiaryManager.addBeneficiary(fundId);
+  }, [unapprovedBeneficiaryManager]);
 
   const handleRemoveUnapprovedBeneficiary = useCallback((fundId: number, beneficiaryIndex: number) => {
     const fund = funds.find(f => f.id === fundId);
