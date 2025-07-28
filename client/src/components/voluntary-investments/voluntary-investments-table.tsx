@@ -165,19 +165,8 @@ function VoluntaryInvestmentsTable({ viewMode, searchTerm }: VoluntaryInvestment
     if (investment) {
       console.log('Adding owner to investment:', id, 'current owners:', investment.owners);
       const newOwners = [...investment.owners, ""];
-      const newPercentages = [...investment.ownershipPercentages, "0%"];
       setIsUpdating(true);
-      
-      // Update owners first, then percentages sequentially to avoid race condition
-      updateMutation.mutate({ 
-        id, 
-        updates: { owners: newOwners } 
-      }, {
-        onSuccess: () => {
-          // Update percentages after owners update completes
-          updateMutation.mutate({ id, updates: { ownershipPercentages: newPercentages } });
-        }
-      });
+      updateMutation.mutate({ id, updates: { owners: newOwners } });
     }
   }, [investments, updateMutation]);
 
@@ -186,21 +175,9 @@ function VoluntaryInvestmentsTable({ viewMode, searchTerm }: VoluntaryInvestment
     if (investment && investment.owners.length > 1 && ownerIndex > 0) { // Protect first owner
       console.log('Deleting owner at index:', ownerIndex, 'from investment:', id, 'current owners:', investment.owners);
       const newOwners = [...investment.owners];
-      const newPercentages = [...investment.ownershipPercentages];
       newOwners.splice(ownerIndex, 1);
-      newPercentages.splice(ownerIndex, 1);
       setIsUpdating(true);
-      
-      // Update owners first, then percentages sequentially to avoid race condition
-      updateMutation.mutate({ 
-        id, 
-        updates: { owners: newOwners } 
-      }, {
-        onSuccess: () => {
-          // Update percentages after owners update completes
-          updateMutation.mutate({ id, updates: { ownershipPercentages: newPercentages } });
-        }
-      });
+      updateMutation.mutate({ id, updates: { owners: newOwners } });
     }
   }, [investments, updateMutation]);
 
@@ -319,8 +296,8 @@ function VoluntaryInvestmentsTable({ viewMode, searchTerm }: VoluntaryInvestment
                   {ownerIndex < investment.owners.length && (
                     <input
                       type="text"
-                      defaultValue={formatPercentageValue(investment.ownershipPercentages[ownerIndex] || "0%")}
-                      className={`table-input ${getFieldClass('percentage')} ${getValueClass(investment.ownershipPercentages[ownerIndex] || "0%", 'percentage')}`}
+                      defaultValue={formatPercentageValue(investment.ownershipPercentages?.[ownerIndex] || "0%")}
+                      className={`table-input ${getFieldClass('percentage')} ${getValueClass(investment.ownershipPercentages?.[ownerIndex] || "0%", 'percentage')}`}
                       onFocus={handleDefaultValueFocus}
                       onBlur={(e) => handleInputBlur(investment.id, `ownershipPercentages-${ownerIndex}`, e.target.value)}
                     />
