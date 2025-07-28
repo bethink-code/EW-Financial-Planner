@@ -162,13 +162,13 @@ export function NewRetirementTable({
         <tbody className="divide-y divide-neutral-200">
           {funds.map((fund, fundIndex) => {
             const maxRows = Math.max(
-              fund.owners.length,
-              fund.unapprovedBeneficiaries.length,
-              fund.fundValueBeneficiaries.length
+              fund.owners?.length || 1,
+              fund.unapprovedBeneficiaries?.length || 1,
+              fund.fundValueBeneficiaries?.length || 1
             );
 
             return Array.from({ length: maxRows }, (_, rowIndex) => (
-              <tr key={`${fund.id}-${rowIndex}-${fund.owners.length}-${fund.unapprovedBeneficiaries.length}-${fund.fundValueBeneficiaries.length}`} className="hover:bg-neutral-50">
+              <tr key={`${fund.id}-${rowIndex}-${fund.owners?.length || 0}-${fund.unapprovedBeneficiaries?.length || 0}-${fund.fundValueBeneficiaries?.length || 0}`} className="hover:bg-neutral-50">
                 {/* Actions */}
                 <td className="table-actions-cell p-1 text-center section-start section-end">
                   {rowIndex === 0 && (
@@ -190,7 +190,7 @@ export function NewRetirementTable({
                   {rowIndex === 0 && (
                     <input
                       type="text"
-                      defaultValue={formatTextValue(fund.description)}
+                      defaultValue={formatTextValue(fund.description || "")}
                       className={`table-input ${getFieldClass('text')} ${getValueClass(fund.description, 'text')}`}
                       onFocus={handleDefaultValueFocus}
                       onBlur={(e) => {
@@ -203,12 +203,12 @@ export function NewRetirementTable({
 
                 {/* Overview - Owner */}
                 <td className="p-1">
-                  {rowIndex < fund.owners.length && (
+                  {rowIndex < (fund.owners?.length || 0) && (
                     <div className="flex items-center gap-1">
                       <input
                         type="text"
-                        defaultValue={formatTextValue(fund.owners[rowIndex], 'owner')}
-                        className={`table-input ${getFieldClass('text')} flex-1 ${getValueClass(fund.owners[rowIndex], 'text')}`}
+                        defaultValue={formatTextValue(fund.owners?.[rowIndex], 'owner')}
+                        className={`table-input ${getFieldClass('text')} flex-1 ${getValueClass(fund.owners?.[rowIndex], 'text')}`}
                         onFocus={handleDefaultValueFocus}
                         onBlur={(e) => ownerManager.changeOwner(fund.id, rowIndex, e.target.value)}
                       />
@@ -247,12 +247,12 @@ export function NewRetirementTable({
 
                 {/* Unapproved Life Cover - Beneficiary */}
                 <td className="p-1">
-                  {rowIndex < fund.unapprovedBeneficiaries.length && (
+                  {rowIndex < (fund.unapprovedBeneficiaries?.length || 0) && (
                     <div className="flex items-center gap-1">
                       <input
                         type="text"
-                        defaultValue={formatTextValue(fund.unapprovedBeneficiaries[rowIndex])}
-                        className={`table-input ${getFieldClass('text')} flex-1 ${getValueClass(fund.unapprovedBeneficiaries[rowIndex], 'text')}`}
+                        defaultValue={formatTextValue(fund.unapprovedBeneficiaries?.[rowIndex])}
+                        className={`table-input ${getFieldClass('text')} flex-1 ${getValueClass(fund.unapprovedBeneficiaries?.[rowIndex], 'text')}`}
                         onFocus={handleDefaultValueFocus}
                         onBlur={(e) => {
                           unapprovedBeneficiaryManager.changeBeneficiary(fund.id, rowIndex, e.target.value);
@@ -277,18 +277,18 @@ export function NewRetirementTable({
 
                 {/* Unapproved Life Cover - Percentage Split */}
                 <td className="p-1">
-                  {rowIndex < fund.unapprovedPercentageSplits.length && (
+                  {rowIndex < (fund.unapprovedPercentageSplits?.length || 0) && (
                     <input
                       type="text"
-                      defaultValue={formatPercentageValue(fund.unapprovedPercentageSplits[rowIndex])}
-                      className={`table-input ${getFieldClass('percentage')} ${getValueClass(fund.unapprovedPercentageSplits[rowIndex], 'percentage')}`}
+                      defaultValue={formatPercentageValue(fund.unapprovedPercentageSplits?.[rowIndex])}
+                      className={`table-input ${getFieldClass('percentage')} ${getValueClass(fund.unapprovedPercentageSplits?.[rowIndex], 'percentage')}`}
                       onFocus={handleDefaultValueFocus}
                       onBlur={(e) => {
-                        const updatedSplits = [...fund.unapprovedPercentageSplits];
+                        const updatedSplits = [...(fund.unapprovedPercentageSplits || [])];
                         updatedSplits[rowIndex] = e.target.value;
                         onFieldUpdate(fund.id, 'unapprovedPercentageSplits', updatedSplits);
                         // Update calculated cover split
-                        const updatedCoverSplits = [...fund.unapprovedCoverSplits];
+                        const updatedCoverSplits = [...(fund.unapprovedCoverSplits || [])];
                         updatedCoverSplits[rowIndex] = calculateCoverSplit(fund.coverAmount, e.target.value);
                         onFieldUpdate(fund.id, 'unapprovedCoverSplits', updatedCoverSplits);
                       }}
@@ -298,9 +298,9 @@ export function NewRetirementTable({
 
                 {/* Unapproved Life Cover - Cover Split (Calculated) */}
                 <td className="p-1 bg-neutral-100 text-right">
-                  {rowIndex < fund.unapprovedCoverSplits.length && (
+                  {rowIndex < (fund.unapprovedCoverSplits?.length || 0) && (
                     <span className="calculated-field">
-                      {fund.unapprovedCoverSplits[rowIndex]}
+                      {fund.unapprovedCoverSplits?.[rowIndex]}
                     </span>
                   )}
                 </td>
@@ -411,12 +411,12 @@ export function NewRetirementTable({
 
                 {/* Fund Value Beneficiaries - Beneficiary */}
                 <td className="p-1 section-start">
-                  {rowIndex < fund.fundValueBeneficiaries.length && (
+                  {rowIndex < (fund.fundValueBeneficiaries?.length || 0) && (
                     <div className="flex items-center gap-1">
                       <input
                         type="text"
-                        defaultValue={formatTextValue(fund.fundValueBeneficiaries[rowIndex])}
-                        className={`table-input ${getFieldClass('text')} flex-1 ${getValueClass(fund.fundValueBeneficiaries[rowIndex], 'text')}`}
+                        defaultValue={formatTextValue(fund.fundValueBeneficiaries?.[rowIndex])}
+                        className={`table-input ${getFieldClass('text')} flex-1 ${getValueClass(fund.fundValueBeneficiaries?.[rowIndex], 'text')}`}
                         onFocus={handleDefaultValueFocus}
                         onBlur={(e) => {
                           fundValueBeneficiaryManager.changeBeneficiary(fund.id, rowIndex, e.target.value);
@@ -441,18 +441,18 @@ export function NewRetirementTable({
 
                 {/* Fund Value Beneficiaries - Cover % Split */}
                 <td className="p-1">
-                  {rowIndex < fund.fundValuePercentageSplits.length && (
+                  {rowIndex < (fund.fundValuePercentageSplits?.length || 0) && (
                     <input
                       type="text"
-                      defaultValue={formatPercentageValue(fund.fundValuePercentageSplits[rowIndex])}
-                      className={`table-input ${getFieldClass('percentage')} ${getValueClass(fund.fundValuePercentageSplits[rowIndex], 'percentage')}`}
+                      defaultValue={formatPercentageValue(fund.fundValuePercentageSplits?.[rowIndex])}
+                      className={`table-input ${getFieldClass('percentage')} ${getValueClass(fund.fundValuePercentageSplits?.[rowIndex], 'percentage')}`}
                       onFocus={handleDefaultValueFocus}
                       onBlur={(e) => {
-                        const updatedSplits = [...fund.fundValuePercentageSplits];
+                        const updatedSplits = [...(fund.fundValuePercentageSplits || [])];
                         updatedSplits[rowIndex] = e.target.value;
                         onFieldUpdate(fund.id, 'fundValuePercentageSplits', updatedSplits);
                         // Update calculated cover split
-                        const updatedCoverSplits = [...fund.fundValueCoverSplits];
+                        const updatedCoverSplits = [...(fund.fundValueCoverSplits || [])];
                         updatedCoverSplits[rowIndex] = calculateCoverSplit(fund.fundValue, e.target.value);
                         onFieldUpdate(fund.id, 'fundValueCoverSplits', updatedCoverSplits);
                       }}
@@ -462,9 +462,9 @@ export function NewRetirementTable({
 
                 {/* Fund Value Beneficiaries - Cover (Calculated) */}
                 <td className="p-1 bg-neutral-100 text-right">
-                  {rowIndex < fund.fundValueCoverSplits.length && (
+                  {rowIndex < (fund.fundValueCoverSplits?.length || 0) && (
                     <span className="calculated-field">
-                      {fund.fundValueCoverSplits[rowIndex]}
+                      {fund.fundValueCoverSplits?.[rowIndex]}
                     </span>
                   )}
                 </td>
