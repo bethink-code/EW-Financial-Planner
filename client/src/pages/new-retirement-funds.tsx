@@ -170,28 +170,24 @@ export default function NewRetirementFunds() {
 
         {/* Table View */}
         {viewMode === "table" && (
-          <div className="bg-white rounded-lg shadow-sm border border-neutral-200">
-            <NewRetirementTable
-              funds={funds}
-              onFieldUpdate={handleFieldUpdate}
-              onRemoveFund={handleRemoveFund}
-              onDuplicateFund={handleDuplicateFund}
-              isUpdating={updateMutation.isPending}
-            />
-          </div>
+          <NewRetirementTable
+            funds={funds}
+            onFieldUpdate={handleFieldUpdate}
+            onRemoveFund={handleRemoveFund}
+            onDuplicateFund={handleDuplicateFund}
+            isUpdating={updateMutation.isPending}
+          />
         )}
 
         {/* Hybrid View - Using same table for now */}
         {viewMode === "hybrid" && (
-          <div className="bg-white rounded-lg shadow-sm border border-neutral-200">
-            <NewRetirementTable
-              funds={funds}
-              onFieldUpdate={handleFieldUpdate}
-              onRemoveFund={handleRemoveFund}
-              onDuplicateFund={handleDuplicateFund}
-              isUpdating={updateMutation.isPending}
-            />
-          </div>
+          <NewRetirementTable
+            funds={funds}
+            onFieldUpdate={handleFieldUpdate}
+            onRemoveFund={handleRemoveFund}
+            onDuplicateFund={handleDuplicateFund}
+            isUpdating={updateMutation.isPending}
+          />
         )}
 
         {/* Remove Add Fund Dialog - now handled directly */}
