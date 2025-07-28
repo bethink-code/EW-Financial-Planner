@@ -211,7 +211,7 @@ export function AssetsTable({ viewMode = 'table', onShowCategoryDialog }: Assets
         </td>
 
         {/* Overview */}
-        <td className="p-2 text-center">
+        <td className="p-2 text-center section-start">
           <input
             type="checkbox"
             checked={asset.included || false}
@@ -232,7 +232,7 @@ export function AssetsTable({ viewMode = 'table', onShowCategoryDialog }: Assets
         </td>
 
         {/* Asset Details */}
-        <td className="p-2 text-right">
+        <td className="p-2 text-right section-start">
           <input
             type="text"
             defaultValue={formatCurrencyValue(asset.marketValue)}
@@ -245,7 +245,7 @@ export function AssetsTable({ viewMode = 'table', onShowCategoryDialog }: Assets
         </td>
 
         {/* Owner(s) - Individual ownership percentages */}
-        <td className="p-2 text-right">
+        <td className="p-2 text-right section-start">
           <input
             type="text"
             defaultValue={formatPercentageValue(asset.johnDoe)}
@@ -291,7 +291,7 @@ export function AssetsTable({ viewMode = 'table', onShowCategoryDialog }: Assets
         </td>
 
         {/* Asset distribution by */}
-        <td className="p-2 text-right">
+        <td className="p-2 text-right section-start">
           <input
             type="text"
             defaultValue={formatCurrencyValue(asset.estate)}
@@ -313,7 +313,7 @@ export function AssetsTable({ viewMode = 'table', onShowCategoryDialog }: Assets
             onBlur={createEnhancedBlurHandler((value) => handleInputBlur(asset.id, 'others', value), 'currency')}
           />
         </td>
-        <td className="p-2 text-right">
+        <td className="p-2 text-right section-end">
           <input
             type="text"
             defaultValue={formatCurrencyValue(asset.client)}

@@ -207,7 +207,7 @@ export function LiabilitiesTable({ viewMode = 'table', onShowCategoryDialog }: L
           />
         </div>
       </td>
-      <td className="p-2 text-center">
+      <td className="p-2 text-center section-start">
         <input
           type="checkbox"
           checked={liability.included}
@@ -227,7 +227,7 @@ export function LiabilitiesTable({ viewMode = 'table', onShowCategoryDialog }: L
           disabled={isUpdating}
         />
       </td>
-      <td className="p-2 text-right">
+      <td className="p-2 text-right section-start">
         <input
           type="text"
           defaultValue={formatCurrencyValue(liability.debtAmount)}
@@ -239,7 +239,7 @@ export function LiabilitiesTable({ viewMode = 'table', onShowCategoryDialog }: L
           disabled={isUpdating}
         />
       </td>
-      <td className="p-2 text-right">
+      <td className="p-2 text-right section-start">
         <input
           type="text"
           defaultValue={formatPercentageValue(liability.peterLambie)}
@@ -287,7 +287,7 @@ export function LiabilitiesTable({ viewMode = 'table', onShowCategoryDialog }: L
           disabled={isUpdating}
         />
       </td>
-      <td className="p-2 text-right">
+      <td className="p-2 text-right section-start">
         <input
           type="text"
           defaultValue={formatCurrencyValue(liability.estate)}
@@ -311,7 +311,7 @@ export function LiabilitiesTable({ viewMode = 'table', onShowCategoryDialog }: L
           disabled={isUpdating}
         />
       </td>
-      <td className="p-2 text-right">
+      <td className="p-2 text-right section-end">
         <input
           type="text"
           defaultValue={formatCurrencyValue(liability.client)}
