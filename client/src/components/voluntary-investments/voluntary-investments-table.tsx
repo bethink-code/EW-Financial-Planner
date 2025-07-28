@@ -5,7 +5,7 @@ import { VoluntaryInvestment, InsertVoluntaryInvestment } from '@shared/schema';
 import { AddButton, ActionButtonGroup, DuplicateButton, DeleteButton } from '@/components/ui/action-buttons';
 
 import { getFieldClass, getCellClass } from '@/lib/field-types';
-import { formatCurrencyValue, formatPercentageValue, getValueClass, handleDefaultValueFocus, createEnhancedBlurHandler } from '@/lib/formatting';
+import { formatCurrencyValue, formatPercentageValue, getValueClass, handleDefaultValueFocus } from '@/lib/formatting';
 
 interface VoluntaryInvestmentsTableProps {
   viewMode: 'table' | 'hybrid';
@@ -134,18 +134,25 @@ function VoluntaryInvestmentsTable({ viewMode, searchTerm }: VoluntaryInvestment
     updateMutation.mutate({ id, updates });
   }, [updateMutation]);
 
-  // Create enhanced blur handlers for different field types
-  const handleCurrencyBlur = useCallback(createEnhancedBlurHandler('currency', (field: string, value: string) => {
-    handleUpdateInvestment(parseInt(field), 'baseCost', value); // Will be overridden by specific calls
-  }), [handleUpdateInvestment]);
-
-  const handlePercentageBlur = useCallback(createEnhancedBlurHandler('percentage', (field: string, value: string) => {
-    handleUpdateInvestment(parseInt(field), 'liquidationPercentage', value); // Will be overridden by specific calls
-  }), [handleUpdateInvestment]);
-
-  const handleTextBlur = useCallback(createEnhancedBlurHandler('text', (field: string, value: string) => {
-    handleUpdateInvestment(parseInt(field), 'description', value); // Will be overridden by specific calls
-  }), [handleUpdateInvestment]);
+  const handleInputBlur = useCallback((id: number, field: keyof VoluntaryInvestment, value: string) => {
+    let formattedValue: string;
+    if (field === 'liquidationPercentage' || field.includes('Percentage')) {
+      formattedValue = formatPercentageValue(value);
+    } else if (field === 'baseCost' || field === 'marketValue' || field === 'spouse' || field === 'others') {
+      formattedValue = formatCurrencyValue(value);
+    } else {
+      formattedValue = value;
+    }
+    handleUpdateInvestment(id, field, formattedValue);
+    
+    // Update DOM element for immediate visual feedback
+    const target = document.activeElement as HTMLInputElement;
+    if (target && formattedValue !== value) {
+      setTimeout(() => {
+        target.value = formattedValue;
+      }, 0);
+    }
+  }, [handleUpdateInvestment]);
 
   const handleDeleteInvestment = useCallback((id: number) => {
     if (window.confirm('Are you sure you want to delete this voluntary investment?')) {
@@ -235,7 +242,7 @@ function VoluntaryInvestmentsTable({ viewMode, searchTerm }: VoluntaryInvestment
                       defaultValue={investment.description}
                       className={`table-input ${getFieldClass('text')} ${getValueClass(investment.description, 'text')}`}
                       onFocus={handleDefaultValueFocus}
-                      onBlur={(e) => handleUpdateInvestment(investment.id, 'description', handleTextBlur(String(investment.id), e.target.value))}
+                      onBlur={(e) => handleInputBlur(investment.id, 'description', e.target.value)}
                       disabled={isUpdating}
                     />
                   </td>
@@ -295,7 +302,7 @@ function VoluntaryInvestmentsTable({ viewMode, searchTerm }: VoluntaryInvestment
                         defaultValue={investment.baseCost}
                         className={`table-input ${getFieldClass('currency')} ${getValueClass(investment.baseCost, 'currency')}`}
                         onFocus={handleDefaultValueFocus}
-                        onBlur={(e) => handleUpdateInvestment(investment.id, 'baseCost', handleCurrencyBlur(String(investment.id), e.target.value))}
+                        onBlur={(e) => handleInputBlur(investment.id, 'baseCost', e.target.value)}
                         disabled={isUpdating}
                       />
                     </td>
@@ -306,7 +313,7 @@ function VoluntaryInvestmentsTable({ viewMode, searchTerm }: VoluntaryInvestment
                         defaultValue={investment.marketValue}
                         className={`table-input ${getFieldClass('currency')} ${getValueClass(investment.marketValue, 'currency')}`}
                         onFocus={handleDefaultValueFocus}
-                        onBlur={(e) => handleUpdateInvestment(investment.id, 'marketValue', handleCurrencyBlur(String(investment.id), e.target.value))}
+                        onBlur={(e) => handleInputBlur(investment.id, 'marketValue', e.target.value)}
                         disabled={isUpdating}
                       />
                     </td>
@@ -317,7 +324,7 @@ function VoluntaryInvestmentsTable({ viewMode, searchTerm }: VoluntaryInvestment
                         defaultValue={investment.liquidationPercentage}
                         className={`table-input ${getFieldClass('percentage')} ${getValueClass(investment.liquidationPercentage, 'percentage')}`}
                         onFocus={handleDefaultValueFocus}
-                        onBlur={(e) => handleUpdateInvestment(investment.id, 'liquidationPercentage', handlePercentageBlur(String(investment.id), e.target.value))}
+                        onBlur={(e) => handleInputBlur(investment.id, 'liquidationPercentage', e.target.value)}
                         disabled={isUpdating}
                       />
                     </td>
@@ -328,7 +335,7 @@ function VoluntaryInvestmentsTable({ viewMode, searchTerm }: VoluntaryInvestment
                         defaultValue={investment.spouse}
                         className={`table-input ${getFieldClass('currency')} ${getValueClass(investment.spouse, 'currency')}`}
                         onFocus={handleDefaultValueFocus}
-                        onBlur={(e) => handleUpdateInvestment(investment.id, 'spouse', handleCurrencyBlur(String(investment.id), e.target.value))}
+                        onBlur={(e) => handleInputBlur(investment.id, 'spouse', e.target.value)}
                         disabled={isUpdating}
                       />
                     </td>
@@ -339,7 +346,7 @@ function VoluntaryInvestmentsTable({ viewMode, searchTerm }: VoluntaryInvestment
                         defaultValue={investment.others}
                         className={`table-input ${getFieldClass('currency')} ${getValueClass(investment.others, 'currency')}`}
                         onFocus={handleDefaultValueFocus}
-                        onBlur={(e) => handleUpdateInvestment(investment.id, 'others', handleCurrencyBlur(String(investment.id), e.target.value))}
+                        onBlur={(e) => handleInputBlur(investment.id, 'others', e.target.value)}
                         disabled={isUpdating}
                       />
                     </td>
