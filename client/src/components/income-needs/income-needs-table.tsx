@@ -22,8 +22,8 @@ function IncomeNeedsTable({ viewMode, searchTerm }: IncomeNeedsTableProps) {
     mutationFn: async (): Promise<IncomeNeeds> => {
       const newIncomeNeed: InsertIncomeNeeds = {
         description: "Enter details ...",
-        beneficiary: "Enter beneficiary",
-        monthlyAmount: "R 0",
+        personName: "Enter beneficiary",
+        amount: "R 0",
         additionalBeneficiaries: [],
       };
       
@@ -96,7 +96,7 @@ function IncomeNeedsTable({ viewMode, searchTerm }: IncomeNeedsTableProps) {
     return {
       count: incomeNeeds.length,
       monthlyAmount: incomeNeeds.reduce((sum: number, incomeNeed: IncomeNeeds) => {
-        const value = parseFloat((incomeNeed.monthlyAmount || '').replace(/[^\d.-]/g, '')) || 0;
+        const value = parseFloat((incomeNeed.amount || '').replace(/[^\d.-]/g, '')) || 0;
         return sum + value;
       }, 0),
     };
@@ -110,7 +110,7 @@ function IncomeNeedsTable({ viewMode, searchTerm }: IncomeNeedsTableProps) {
 
   const handleInputBlur = useCallback((id: number, field: keyof IncomeNeeds, value: string) => {
     let formattedValue: string;
-    if (field === 'monthlyAmount') {
+    if (field === 'amount') {
       formattedValue = formatCurrencyValue(value);
     } else {
       formattedValue = value;
@@ -180,22 +180,22 @@ function IncomeNeedsTable({ viewMode, searchTerm }: IncomeNeedsTableProps) {
               <td className="p-1">
                 <input
                   type="text"
-                  defaultValue={incomeNeed.beneficiary}
-                  className={`table-input ${getFieldClass('text')} ${getValueClass(incomeNeed.beneficiary, 'text')}`}
+                  defaultValue={incomeNeed.personName}
+                  className={`table-input ${getFieldClass('text')} ${getValueClass(incomeNeed.personName, 'text')}`}
                   onFocus={handleDefaultValueFocus}
-                  onBlur={(e) => handleInputBlur(incomeNeed.id, 'beneficiary', e.target.value)}
+                  onBlur={(e) => handleInputBlur(incomeNeed.id, 'personName', e.target.value)}
                   disabled={isUpdating}
                 />
               </td>
               
               <td className="p-1 section-end">
                 <input
-                  key={`monthlyAmount-${incomeNeed.id}-${incomeNeed.monthlyAmount}`}
+                  key={`amount-${incomeNeed.id}-${incomeNeed.amount}`}
                   type="text"
-                  defaultValue={incomeNeed.monthlyAmount}
-                  className={`table-input ${getFieldClass('currency')} ${getValueClass(incomeNeed.monthlyAmount, 'currency')}`}
+                  defaultValue={incomeNeed.amount}
+                  className={`table-input ${getFieldClass('currency')} ${getValueClass(incomeNeed.amount, 'currency')}`}
                   onFocus={handleDefaultValueFocus}
-                  onBlur={(e) => handleInputBlur(incomeNeed.id, 'monthlyAmount', e.target.value)}
+                  onBlur={(e) => handleInputBlur(incomeNeed.id, 'amount', e.target.value)}
                   disabled={isUpdating}
                 />
               </td>
