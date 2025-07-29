@@ -727,6 +727,11 @@ th, td {
     border-top: none !important;
     border-bottom: none !important;
   }
+
+  /* EMERGENCY OVERRIDE - MAXIMUM CSS SPECIFICITY */
+  table tfoot tr td.section-start {
+    border-left: 2px solid #9ca3af !important;
+  }
   
   /* Section end borders for right side separators */
   thead th.section-end,
