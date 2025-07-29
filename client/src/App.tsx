@@ -1,9 +1,10 @@
-import { Switch, Route } from "wouter";
+import { Switch, Route, useLocation } from "wouter";
 import { queryClient } from "./lib/queryClient";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { TopNavigation } from "@/components/ui/top-navigation";
+import { NavigationLayout } from "@/components/navigation/navigation-layout";
 import TableNavigation from "@/pages/table-navigation";
 import NotFound from "@/pages/not-found";
 
@@ -40,26 +41,112 @@ import ClientDetails from "@/pages/needs/death-estate-liquidity/setup/client-det
 import ParametersSubSection from "@/pages/needs/death-estate-liquidity/setup/parameters/parameters";
 
 
+
+
 function Router() {
+  const [location] = useLocation();
+  
+  // Check if we're on a calculator page that needs the new navigation
+  const needsNewNavigation = [
+    "/assurance",
+    "/new-retirement-funds", 
+    "/defined-benefit-funds",
+    "/voluntary-investments",
+    "/assets",
+    "/liabilities",
+    "/income-needs",
+    "/income-provisions",
+    "/residue",
+    "/lump-sum-bequests",
+    "/additional-estate-duty-items",
+    "/needs/death-estate-liquidity"
+  ].some(path => location.includes(path));
+  
   return (
     <div className="min-h-screen bg-gray-50">
-      <TopNavigation />
-      <div className="pt-16">
+      {!needsNewNavigation && <TopNavigation />}
+      <div className={!needsNewNavigation ? "pt-16" : ""}>
         <Switch>
           <Route path="/" component={TableNavigation} />
           
-          {/* Existing calculator routes */}
-          <Route path="/assurance" component={Assurance} />
-          <Route path="/new-retirement-funds" component={NewRetirementFunds} />
-          <Route path="/defined-benefit-funds" component={DefinedBenefitFunds} />
-          <Route path="/voluntary-investments" component={VoluntaryInvestments} />
-          <Route path="/assets" component={AssetsPage} />
-          <Route path="/liabilities" component={Liabilities} />
-          <Route path="/income-needs" component={IncomeNeeds} />
-          <Route path="/income-provisions" component={IncomeProvisions} />
-          <Route path="/residue" component={Residue} />
-          <Route path="/lump-sum-bequests" component={LumpSumBequests} />
-          <Route path="/additional-estate-duty-items" component={AdditionalEstateDutyItems} />
+          {/* Existing calculator routes with navigation */}
+          <Route path="/assurance">
+            {() => (
+              <NavigationLayout>
+                <Assurance />
+              </NavigationLayout>
+            )}
+          </Route>
+          <Route path="/new-retirement-funds">
+            {() => (
+              <NavigationLayout>
+                <NewRetirementFunds />
+              </NavigationLayout>
+            )}
+          </Route>
+          <Route path="/defined-benefit-funds">
+            {() => (
+              <NavigationLayout>
+                <DefinedBenefitFunds />
+              </NavigationLayout>
+            )}
+          </Route>
+          <Route path="/voluntary-investments">
+            {() => (
+              <NavigationLayout>
+                <VoluntaryInvestments />
+              </NavigationLayout>
+            )}
+          </Route>
+          <Route path="/assets">
+            {() => (
+              <NavigationLayout>
+                <AssetsPage />
+              </NavigationLayout>
+            )}
+          </Route>
+          <Route path="/liabilities">
+            {() => (
+              <NavigationLayout>
+                <Liabilities />
+              </NavigationLayout>
+            )}
+          </Route>
+          <Route path="/income-needs">
+            {() => (
+              <NavigationLayout>
+                <IncomeNeeds />
+              </NavigationLayout>
+            )}
+          </Route>
+          <Route path="/income-provisions">
+            {() => (
+              <NavigationLayout>
+                <IncomeProvisions />
+              </NavigationLayout>
+            )}
+          </Route>
+          <Route path="/residue">
+            {() => (
+              <NavigationLayout>
+                <Residue />
+              </NavigationLayout>
+            )}
+          </Route>
+          <Route path="/lump-sum-bequests">
+            {() => (
+              <NavigationLayout>
+                <LumpSumBequests />
+              </NavigationLayout>
+            )}
+          </Route>
+          <Route path="/additional-estate-duty-items">
+            {() => (
+              <NavigationLayout>
+                <AdditionalEstateDutyItems />
+              </NavigationLayout>
+            )}
+          </Route>
           
           {/* Placeholder need routes */}
           <Route path="/needs/death" component={DeathNeed} />
@@ -74,11 +161,35 @@ function Router() {
           <Route path="/needs/income-from-capital" component={IncomeFromCapitalNeed} />
           <Route path="/needs/debt-repayment" component={DebtRepaymentNeed} />
           
-          {/* Death with estate liquidity placeholder routes */}
-          <Route path="/needs/death-estate-liquidity/project" component={ProjectStep} />
-          <Route path="/needs/death-estate-liquidity/implement" component={ImplementStep} />
-          <Route path="/needs/death-estate-liquidity/setup/client-details" component={ClientDetails} />
-          <Route path="/needs/death-estate-liquidity/setup/parameters/parameters" component={ParametersSubSection} />
+          {/* Death with estate liquidity placeholder routes with navigation */}
+          <Route path="/needs/death-estate-liquidity/project">
+            {() => (
+              <NavigationLayout>
+                <ProjectStep />
+              </NavigationLayout>
+            )}
+          </Route>
+          <Route path="/needs/death-estate-liquidity/implement">
+            {() => (
+              <NavigationLayout>
+                <ImplementStep />
+              </NavigationLayout>
+            )}
+          </Route>
+          <Route path="/needs/death-estate-liquidity/setup/client-details">
+            {() => (
+              <NavigationLayout>
+                <ClientDetails />
+              </NavigationLayout>
+            )}
+          </Route>
+          <Route path="/needs/death-estate-liquidity/setup/parameters/parameters">
+            {() => (
+              <NavigationLayout>
+                <ParametersSubSection />
+              </NavigationLayout>
+            )}
+          </Route>
           
           <Route component={NotFound} />
         </Switch>
