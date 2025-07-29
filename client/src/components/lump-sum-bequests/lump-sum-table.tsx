@@ -290,7 +290,7 @@ function LumpSumTable({ viewMode, searchTerm }: LumpSumTableProps) {
  <tfoot>
  <tr>
  <td className="totals-cell-label text-right" colSpan={4}>Totals</td>
- <td className="totals-cell-value section-start">R {totals.amount.toLocaleString()}</td>
+ <td className="totals-cell-value">R {totals.amount.toLocaleString()}</td>
  <td className="totals-cell-value">{totals.increasePercentage}%</td>
  <td className="totals-cell-value">{totals.cpiCount} CPI</td>
  <td className="totals-cell-value section-start">R {totals.valueAtDeath.toLocaleString()}</td>
