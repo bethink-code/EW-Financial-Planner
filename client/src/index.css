@@ -364,6 +364,16 @@ th, td {
   thead tr {
     background-color: #f9fafb !important; /* bg-neutral-50 */
   }
+  
+  /* Add border to the last header row */
+  thead tr:last-child {
+    border-bottom: 1px solid #e5e7eb !important;
+  }
+  
+  /* Alternative approach - add border to last header row cells */
+  thead tr:last-child th {
+    border-bottom: 1px solid #e5e7eb !important;
+  }
 
   thead th:not(.section-start):not(.section-end) {
     border-left: none !important;
