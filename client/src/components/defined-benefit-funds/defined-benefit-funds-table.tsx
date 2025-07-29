@@ -238,10 +238,10 @@ function DefinedBenefitFundsTable({ viewMode, searchTerm }: DefinedBenefitFundsT
  {/* Totals Footer */}
  <tfoot>
  <tr>
- <td className="totals-cell-label text-right section-start" style={{borderLeft: '2px solid #9ca3af'}}></td>
- <td className="totals-cell-label text-right section-start" style={{borderLeft: '2px solid #9ca3af'}}>Totals</td>
+ <td className="totals-cell-label text-right section-start"></td>
+ <td className="totals-cell-label text-right section-start">Totals</td>
  <td className="totals-cell-label text-right"></td>
- <td className="totals-cell-value section-start" style={{borderLeft: '2px solid #9ca3af'}}>R {totals.deathLumpSum.toLocaleString()}</td>
+ <td className="totals-cell-value section-start">R {totals.deathLumpSum.toLocaleString()}</td>
  <td className="totals-cell-label"></td>
  </tr>
  </tfoot>

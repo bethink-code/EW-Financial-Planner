@@ -362,14 +362,11 @@ th, td {
     border-top: 1px solid #d1d5db !important; /* Single border for section separation */
   }
 
-  tfoot td:not(.section-start):not(.section-end) {
-    border: none !important;
-  }
-
-  /* Remove footer borders too - clean slate (except section borders) */
+  /* Remove only non-section borders from footer cells */
   tfoot td:not(.section-start):not(.section-end) {
     border-left: none !important;
     border-right: none !important;
+    border-bottom: none !important;
   }
   
   /* Ensure all currency fields in footer align right */
@@ -722,8 +719,9 @@ th, td {
     border-left: 2px solid #9ca3af !important;
   }
 
-  /* EMERGENCY FOOTER SECTION BORDERS - MAXIMUM SPECIFICITY */
-  table tfoot td.section-start {
+  /* ULTRA STRONG FOOTER SECTION BORDERS - FORCE DISPLAY */
+  table tfoot td.section-start,
+  tfoot td.section-start {
     border-left: 2px solid #9ca3af !important;
     border-right: none !important;
     border-top: none !important;
