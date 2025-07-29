@@ -387,7 +387,14 @@ th, td {
     font-weight: 600 !important;
     color: #374151 !important;
     font-size: 0.875rem !important;
-    padding: 1rem 0.5rem !important; /* Match input field padding for alignment */
+    padding: 0.5rem !important;
+    height: 2.3rem !important;
+    line-height: 1.3rem !important;
+  }
+  
+  /* Special padding for currency alignment */
+  .totals-cell-value[style*="paddingRight"] {
+    padding-right: 1.5rem !important;
   }
   
   /* Teal color utilities */

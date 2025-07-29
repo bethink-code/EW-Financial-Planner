@@ -290,10 +290,10 @@ function LumpSumTable({ viewMode, searchTerm }: LumpSumTableProps) {
  <tfoot>
  <tr>
  <td className="totals-cell-label text-right" colSpan={4}>Totals</td>
- <td className="totals-cell-value" style={{textAlign: 'right', padding: '0.5rem', paddingRight: '1.25rem', height: '2.3rem', lineHeight: '1.3rem'}}>R {totals.amount.toLocaleString()}</td>
- <td className="totals-cell-value" style={{textAlign: 'center', padding: '0.5rem', height: '2.3rem', lineHeight: '1.3rem'}}>{totals.increasePercentage}%</td>
- <td className="totals-cell-value" style={{padding: '0.5rem', height: '2.3rem'}}></td>
- <td className="totals-cell-value section-start" style={{textAlign: 'right', padding: '0.5rem', paddingRight: '1.25rem', height: '2.3rem', lineHeight: '1.3rem'}}>R {totals.valueAtDeath.toLocaleString()}</td>
+ <td className="totals-cell-value" style={{paddingRight: '1.5rem'}}>R {totals.amount.toLocaleString()}</td>
+ <td className="totals-cell-value" style={{textAlign: 'center'}}>{totals.increasePercentage}%</td>
+ <td className="totals-cell-value"></td>
+ <td className="totals-cell-value section-start" style={{paddingRight: '1.5rem'}}>R {totals.valueAtDeath.toLocaleString()}</td>
  </tr>
  </tfoot>
  </table>
