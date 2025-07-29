@@ -721,6 +721,11 @@ th, td {
     border-top: none !important;
     border-bottom: none !important;
   }
+
+  /* Row borders for table content - matching section border style */
+  table tbody tr {
+    border-bottom: 1px solid #d1d5db !important;
+  }
   
   /* Section end borders for right side separators */
   thead th.section-end,
