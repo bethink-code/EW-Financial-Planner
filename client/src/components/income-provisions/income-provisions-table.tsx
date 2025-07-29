@@ -188,7 +188,7 @@ function IncomeProvisionsTable({ viewMode, searchTerm }: IncomeProvisionsTablePr
  />
  </td>
  
- <td className="p-1">
+ <td className="p-1 section-start">
  <input
  key={`monthlyAmount-${incomeProvision.id}-${incomeProvision.monthlyAmount}`}
  type="text"
@@ -205,8 +205,8 @@ function IncomeProvisionsTable({ viewMode, searchTerm }: IncomeProvisionsTablePr
  
  <tfoot>
  <tr>
- <td className="totals-cell-label text-right" colSpan={2}>Totals</td>
- <td className="totals-cell-value">R {totals.monthlyAmount.toLocaleString()}</td>
+ <td className="totals-cell-label text-right section-start" colSpan={2}>Totals</td>
+ <td className="totals-cell-value section-start">R {totals.monthlyAmount.toLocaleString()}</td>
  </tr>
  </tfoot>
  </table>

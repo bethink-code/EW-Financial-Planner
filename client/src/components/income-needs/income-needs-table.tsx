@@ -185,14 +185,14 @@ function IncomeNeedsTable({ viewMode, searchTerm }: IncomeNeedsTableProps) {
         <tbody className="divide-y divide-neutral-200">
           {incomeNeeds.map((incomeNeed: IncomeNeeds, index) => (
             <tr key={incomeNeed.id} className="hover:bg-neutral-50">
-              <td className="table-actions-cell p-2 text-center">
+              <td className="table-actions-cell p-2 text-center section-start">
                 <ActionButtonGroup>
                   <DuplicateButton onClick={() => addMutation.mutate()} disabled={isUpdating} />
                   <DeleteButton onClick={() => handleDeleteIncomeNeed(incomeNeed.id)} disabled={isUpdating} />
                 </ActionButtonGroup>
               </td>
               
-              <td className="p-2 text-left">
+              <td className="p-2 text-left section-start">
                 <input
                   type="text"
                   defaultValue={formatTextValue(incomeNeed.description)}
@@ -214,7 +214,7 @@ function IncomeNeedsTable({ viewMode, searchTerm }: IncomeNeedsTableProps) {
                 />
               </td>
               
-              <td className="p-2 text-right">
+              <td className="p-2 text-right section-start">
                 <input
                   key={`amount-${incomeNeed.id}-${incomeNeed.amount}`}
                   type="text"
@@ -300,8 +300,8 @@ function IncomeNeedsTable({ viewMode, searchTerm }: IncomeNeedsTableProps) {
         <tfoot>
           <tr>
             <td className="totals-cell-label text-right section-start" colSpan={3}>Totals</td>
-            <td className="totals-cell-value">R {totals.amount.toLocaleString()}</td>
-            <td className="totals-cell-label" colSpan={5}></td>
+            <td className="totals-cell-value section-start">R {totals.amount.toLocaleString()}</td>
+            <td className="totals-cell-label" colSpan={4}></td>
             <td className="totals-cell-value">R {totals.capitalisedAmount.toLocaleString()}</td>
           </tr>
         </tfoot>
