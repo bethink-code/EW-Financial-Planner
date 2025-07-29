@@ -952,6 +952,17 @@ export class DbStorage {
   async searchAssets(query: string): Promise<Assets[]> { return await this.db.select().from(assets).where(ilike(assets.description, `%${query}%`)); }
 }
 
-// Temporarily use memory storage to fix connection issues
-console.log("Using memory storage for development");
-export const storage: IStorage = new MemStorage();
+// Use database storage for production readiness
+const useDatabase = process.env.DATABASE_URL !== undefined;
+
+let storageInstance: IStorage;
+
+if (useDatabase) {
+  console.log("Using database storage with PostgreSQL");
+  storageInstance = new DbStorage();
+} else {
+  console.log("Using memory storage for development");
+  storageInstance = new MemStorage();
+}
+
+export const storage: IStorage = storageInstance;
