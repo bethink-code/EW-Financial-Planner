@@ -174,7 +174,7 @@ function LiabilitiesTable({ viewMode, searchTerm }: LiabilitiesTableProps) {
       <table>
         <thead>
           <tr>
-            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center" rowSpan={2}>
+            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start" rowSpan={2}>
               <AddButton onClick={() => addMutation.mutate()} disabled={isUpdating} />
             </th>
             <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start" colSpan={1}>Overview</th>
@@ -216,7 +216,7 @@ function LiabilitiesTable({ viewMode, searchTerm }: LiabilitiesTableProps) {
               // Section Liabilities
               ...sectionLiabilities.map((liability: Liabilities) => (
                 <tr key={liability.id} className="hover:bg-neutral-50">
-                  <td className="table-actions-cell p-2 text-center">
+                  <td className="table-actions-cell p-2 text-center section-start">
                     <ActionButtonGroup>
                       <DuplicateButton
                         onClick={() => addMutation.mutate()}

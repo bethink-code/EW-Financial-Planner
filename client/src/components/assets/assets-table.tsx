@@ -178,7 +178,7 @@ function AssetsTable({ viewMode, searchTerm }: AssetsTableProps) {
       <table>
         <thead>
           <tr>
-            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center" rowSpan={2}>
+            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start" rowSpan={2}>
               <AddButton onClick={() => addMutation.mutate()} disabled={isUpdating} />
             </th>
             <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start" colSpan={1}>Overview</th>
@@ -220,7 +220,7 @@ function AssetsTable({ viewMode, searchTerm }: AssetsTableProps) {
               // Section Assets
               ...sectionAssets.map((asset: Assets, assetIndex) => (
                 <tr key={asset.id} className="hover:bg-neutral-50">
-              <td className="table-actions-cell p-2 text-center">
+              <td className="table-actions-cell p-2 text-center section-start">
                 <ActionButtonGroup>
                   <DuplicateButton
                     onClick={() => addMutation.mutate()}
