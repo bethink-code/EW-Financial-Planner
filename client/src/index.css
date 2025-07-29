@@ -728,9 +728,14 @@ th, td {
     border-bottom: 1px solid #d1d5db !important;
   }
   
-  /* Ensure row borders are not overridden by cell border removal */
+  /* Force row borders with maximum specificity */
+  table tbody tr:not(:last-child) {
+    border-bottom: 1px solid #d1d5db !important;
+  }
+  
+  /* Ensure cells don't override row borders */
   table tbody td {
-    border-bottom: inherit !important;
+    border-bottom: none !important;
   }
   
   /* Section end borders for right side separators */
