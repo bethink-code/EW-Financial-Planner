@@ -714,30 +714,12 @@ th, td {
     text-align: left !important;
   }
 
-  /* Section borders - simple and clean with higher specificity */
-  table thead th.section-start,
-  table tbody td.section-start,
-  table tfoot td.section-start,
-  thead th.section-start,
-  tbody td.section-start,
-  tfoot td.section-start,
-  th.section-start,
-  td.section-start {
-    border-left: 2px solid #9ca3af !important;
-  }
-
-  /* ULTRA STRONG FOOTER SECTION BORDERS - FORCE DISPLAY */
-  table tfoot td.section-start,
-  tfoot td.section-start {
-    border-left: 2px solid #9ca3af !important;
+  /* Section borders - unified style for all table elements */
+  .section-start {
+    border-left: 1px solid #d1d5db !important;
     border-right: none !important;
     border-top: none !important;
     border-bottom: none !important;
-  }
-
-  /* EMERGENCY OVERRIDE - MAXIMUM CSS SPECIFICITY */
-  table tfoot tr td.section-start {
-    border-left: 2px solid #9ca3af !important;
   }
   
   /* Section end borders for right side separators */
