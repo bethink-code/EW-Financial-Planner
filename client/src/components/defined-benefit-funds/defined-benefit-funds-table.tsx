@@ -105,8 +105,20 @@ function DefinedBenefitFundsTable({ viewMode, searchTerm }: DefinedBenefitFundsT
  const totals = useMemo(() => {
  return {
  count: funds.length,
+ finalMonthlySalary: funds.reduce((sum: number, fund: DefinedBenefitFund) => {
+ const value = parseFloat((fund.finalMonthlySalary || '0').replace(/[^\d.-]/g, '')) || 0;
+ return sum + value;
+ }, 0),
  deathLumpSum: funds.reduce((sum: number, fund: DefinedBenefitFund) => {
  const value = parseFloat((fund.deathLumpSum || '0').replace(/[^\d.-]/g, '')) || 0;
+ return sum + value;
+ }, 0),
+ additionalTaxFreeAmount: funds.reduce((sum: number, fund: DefinedBenefitFund) => {
+ const value = parseFloat((fund.additionalTaxFreeAmount || '0').replace(/[^\d.-]/g, '')) || 0;
+ return sum + value;
+ }, 0),
+ pensionIncomeAmount: funds.reduce((sum: number, fund: DefinedBenefitFund) => {
+ const value = parseFloat((fund.pensionIncomeAmount || '0').replace(/[^\d.-]/g, '')) || 0;
  return sum + value;
  }, 0),
  };
@@ -156,22 +168,30 @@ function DefinedBenefitFundsTable({ viewMode, searchTerm }: DefinedBenefitFundsT
  <div className="space-y-6">
  <table>
  <thead>
+ {/* First Header Row - Section Groups */}
  <tr>
  <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start" rowSpan={2}>
  <AddButton onClick={() => addMutation.mutate()} disabled={isUpdating} />
  </th>
- <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start" colSpan={2}>Overview</th>
- <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start" colSpan={2}>Financial Details</th>
+ <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start" colSpan={3}>Overview</th>
+ <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start" colSpan={4}>Fund Details</th>
+ <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start" colSpan={2}>Pension Income at Death</th>
  </tr>
+ {/* Second Header Row - Individual Fields */}
  <tr>
  <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start">Description</th>
- <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center">Owner</th>
+ <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center">Owner Name</th>
+ <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center">Ownership %</th>
+ <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start">Years of Service</th>
+ <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center">Final Monthly Salary</th>
+ <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center">Death Lump Sum</th>
+ <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center">Additional Tax Free Amount</th>
  <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start">Amount</th>
- <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center">Increase %</th>
+ <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center">Increase</th>
  </tr>
  </thead>
  <tbody className="divide-y divide-neutral-200">
- {funds.map((fund: DefinedBenefitFund, index) => (
+ {funds.map((fund: DefinedBenefitFund) => (
  <tr key={fund.id} className="hover:bg-neutral-50">
  <td className="table-actions-cell p-2 text-center section-start">
  <ActionButtonGroup>
@@ -203,12 +223,46 @@ function DefinedBenefitFundsTable({ viewMode, searchTerm }: DefinedBenefitFundsT
  defaultValue={fund.owners?.[0] ||"Donald Edwards"}
  className={`table-input ${getFieldClass('text')} ${getValueClass(fund.owners?.[0] ||"Donald Edwards", 'text')}`}
  onFocus={handleDefaultValueFocus}
- onBlur={(e) => handleInputBlur(fund.id, 'owners', [e.target.value])}
+ onBlur={(e) => handleInputBlur(fund.id, 'owners', e.target.value)}
+ disabled={isUpdating}
+ />
+ </td>
+ 
+ <td className="p-2">
+ <input
+ type="text"
+ defaultValue={fund.ownershipPercentages?.[0] ||"100%"}
+ className={`table-input ${getFieldClass('percentage')} ${getValueClass(fund.ownershipPercentages?.[0] ||"100%", 'percentage')}`}
+ onFocus={handleDefaultValueFocus}
+ onBlur={(e) => handleInputBlur(fund.id, 'ownershipPercentages', e.target.value)}
  disabled={isUpdating}
  />
  </td>
  
  <td className="p-2 section-start">
+ <input
+ type="text"
+ defaultValue={fund.yearsOfService ||"0 years"}
+ className={`table-input ${getFieldClass('years')} ${getValueClass(fund.yearsOfService ||"0 years", 'years')}`}
+ onFocus={handleDefaultValueFocus}
+ onBlur={(e) => handleInputBlur(fund.id, 'yearsOfService', e.target.value)}
+ disabled={isUpdating}
+ />
+ </td>
+ 
+ <td className="p-2">
+ <input
+ key={`finalMonthlySalary-${fund.id}-${fund.finalMonthlySalary}`}
+ type="text"
+ defaultValue={fund.finalMonthlySalary}
+ className={`table-input ${getFieldClass('currency')} ${getValueClass(fund.finalMonthlySalary, 'currency')}`}
+ onFocus={handleDefaultValueFocus}
+ onBlur={(e) => handleInputBlur(fund.id, 'finalMonthlySalary', e.target.value)}
+ disabled={isUpdating}
+ />
+ </td>
+ 
+ <td className="p-2">
  <input
  key={`deathLumpSum-${fund.id}-${fund.deathLumpSum}`}
  type="text"
@@ -216,6 +270,30 @@ function DefinedBenefitFundsTable({ viewMode, searchTerm }: DefinedBenefitFundsT
  className={`table-input ${getFieldClass('currency')} ${getValueClass(fund.deathLumpSum, 'currency')}`}
  onFocus={handleDefaultValueFocus}
  onBlur={(e) => handleInputBlur(fund.id, 'deathLumpSum', e.target.value)}
+ disabled={isUpdating}
+ />
+ </td>
+ 
+ <td className="p-2">
+ <input
+ key={`additionalTaxFreeAmount-${fund.id}-${fund.additionalTaxFreeAmount}`}
+ type="text"
+ defaultValue={fund.additionalTaxFreeAmount}
+ className={`table-input ${getFieldClass('currency')} ${getValueClass(fund.additionalTaxFreeAmount, 'currency')}`}
+ onFocus={handleDefaultValueFocus}
+ onBlur={(e) => handleInputBlur(fund.id, 'additionalTaxFreeAmount', e.target.value)}
+ disabled={isUpdating}
+ />
+ </td>
+ 
+ <td className="p-2 section-start">
+ <input
+ key={`pensionIncomeAmount-${fund.id}-${fund.pensionIncomeAmount}`}
+ type="text"
+ defaultValue={fund.pensionIncomeAmount}
+ className={`table-input ${getFieldClass('currency')} ${getValueClass(fund.pensionIncomeAmount, 'currency')}`}
+ onFocus={handleDefaultValueFocus}
+ onBlur={(e) => handleInputBlur(fund.id, 'pensionIncomeAmount', e.target.value)}
  disabled={isUpdating}
  />
  </td>
@@ -238,10 +316,11 @@ function DefinedBenefitFundsTable({ viewMode, searchTerm }: DefinedBenefitFundsT
  {/* Totals Footer */}
  <tfoot>
  <tr className="bg-neutral-50 border-t border-neutral-300">
- <td className="totals-cell-label section-start"></td>
- <td className="totals-cell-label text-right section-start">Totals</td>
- <td className="totals-cell-label"></td>
- <td className="totals-cell-value section-start text-right">R {totals.deathLumpSum.toLocaleString()}</td>
+ <td className="totals-cell-label text-right section-start" colSpan={5}>Totals</td>
+ <td className="totals-cell-value section-start text-right">R {totals.finalMonthlySalary.toLocaleString()}</td>
+ <td className="totals-cell-value text-right">R {totals.deathLumpSum.toLocaleString()}</td>
+ <td className="totals-cell-value text-right">R {totals.additionalTaxFreeAmount.toLocaleString()}</td>
+ <td className="totals-cell-value section-start text-right">R {totals.pensionIncomeAmount.toLocaleString()}</td>
  <td className="totals-cell-label"></td>
  </tr>
  </tfoot>
