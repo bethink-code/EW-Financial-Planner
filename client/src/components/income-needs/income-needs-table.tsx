@@ -164,7 +164,7 @@ function IncomeNeedsTable({ viewMode, searchTerm }: IncomeNeedsTableProps) {
       <table>
         <thead>
           <tr>
-            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center" rowSpan={2}>
+            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start" rowSpan={2}>
               <AddButton onClick={() => addMutation.mutate()} disabled={isUpdating} />
             </th>
             <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start" colSpan={2}>Overview</th>
@@ -299,7 +299,8 @@ function IncomeNeedsTable({ viewMode, searchTerm }: IncomeNeedsTableProps) {
         
         <tfoot>
           <tr>
-            <td className="totals-cell-label text-right section-start" colSpan={3}>Totals</td>
+            <td className="totals-cell-label text-right section-start">Totals</td>
+            <td className="totals-cell-label section-start" colSpan={2}></td>
             <td className="totals-cell-value section-start">R {totals.amount.toLocaleString()}</td>
             <td className="totals-cell-label" colSpan={4}></td>
             <td className="totals-cell-value">R {totals.capitalisedAmount.toLocaleString()}</td>
