@@ -282,6 +282,15 @@ th, td {
     border-top: none;
     position: relative;
   }
+  
+  /* Preserve row borders - don't remove bottom borders from tbody rows */
+  table tbody tr td:not(.section-start):not(.section-end) {
+    border-left: none;
+    border-right: none;
+    border-top: none;
+    border-bottom: inherit !important;
+    position: relative;
+  }
 
   /* Row styling without border conflicts */
   table tbody tr.bg-neutral-50 {
@@ -723,19 +732,12 @@ th, td {
     border-bottom: none !important;
   }
 
-  /* Row borders for table content - matching section border style */
-  table tbody tr {
+  /* Row borders for table content - matching section border style with maximum specificity */
+  table tbody tr,
+  table tbody tr:not(:last-child),
+  tbody tr,
+  tr {
     border-bottom: 1px solid #d1d5db !important;
-  }
-  
-  /* Force row borders with maximum specificity */
-  table tbody tr:not(:last-child) {
-    border-bottom: 1px solid #d1d5db !important;
-  }
-  
-  /* Ensure cells don't override row borders */
-  table tbody td {
-    border-bottom: none !important;
   }
   
   /* Section end borders for right side separators */
