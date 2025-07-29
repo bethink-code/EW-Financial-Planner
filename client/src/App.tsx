@@ -55,10 +55,9 @@ function Router() {
       <Switch>
         {/* Default route - redirect to assurance */}
         <Route path="/">
-          {() => {
-            window.location.href = "/assurance";
-            return null;
-          }}
+          <NavigationLayout>
+            <Assurance />
+          </NavigationLayout>
         </Route>
           
           {/* Existing calculator routes with navigation */}
