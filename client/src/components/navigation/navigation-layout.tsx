@@ -68,13 +68,13 @@ export function NavigationLayout({ children }: NavigationLayoutProps) {
   return (
     <div className="min-h-screen bg-gray-50">
       <div className="sticky top-0 z-50 bg-white shadow-sm">
-        <div className="max-w-6xl mx-auto">
+        <div className="max-w-6xl">
           <FinancialPlanHeader 
             currentNeed="Death with estate liquidity"
           />
         </div>
         
-        <div className="max-w-6xl mx-auto">
+        <div className="max-w-6xl">
           <StepNavigation 
             steps={stepsWithStatus}
             currentStepId={currentStep.id}
@@ -83,7 +83,7 @@ export function NavigationLayout({ children }: NavigationLayoutProps) {
         
         {tabs.length > 0 && (
           <div className="bg-white">
-            <div className="max-w-6xl mx-auto">
+            <div className="max-w-6xl">
               <SectionTabs tabs={tabs} />
             </div>
           </div>
@@ -91,7 +91,7 @@ export function NavigationLayout({ children }: NavigationLayoutProps) {
         
         {subTabs.length > 0 && (
           <div className="bg-gray-50">
-            <div className="max-w-6xl mx-auto">
+            <div className="max-w-6xl">
               <SectionTabs tabs={subTabs} variant="secondary" />
             </div>
           </div>
