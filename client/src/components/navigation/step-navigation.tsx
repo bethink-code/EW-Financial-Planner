@@ -35,9 +35,9 @@ export function StepNavigation({ steps, currentStepId }: StepNavigationProps) {
             <Link href={step.path}>
               <button
                 className={cn(
-                  "flex items-center gap-2 px-4 py-2 rounded-md font-medium transition-colors",
+                  "flex items-center gap-2 px-5 py-3 rounded-lg font-normal text-base transition-colors",
                   isActive
-                    ? "bg-orange-500 text-white hover:bg-orange-600"
+                    ? "bg-[#E97627] text-white hover:bg-[#E97627]/90"
                     : isComplete
                     ? "bg-green-100 text-green-700 hover:bg-green-200"
                     : step.hasContent
@@ -46,13 +46,20 @@ export function StepNavigation({ steps, currentStepId }: StepNavigationProps) {
                 )}
                 disabled={!step.hasContent}
               >
-                {isComplete ? (
-                  <Check className="h-4 w-4" />
-                ) : (
-                  <span className="flex items-center justify-center h-5 w-5 rounded-full bg-white text-gray-700 text-sm">
-                    {step.number}
-                  </span>
-                )}
+                <span className={cn(
+                  "flex items-center justify-center h-8 w-8 rounded text-sm font-medium",
+                  isActive 
+                    ? "bg-white/20 text-white"
+                    : isComplete
+                    ? "bg-transparent"
+                    : "bg-[#E97627] text-white"
+                )}>
+                  {isComplete ? (
+                    <Check className="h-4 w-4" />
+                  ) : (
+                    step.number
+                  )}
+                </span>
                 <span>{step.label}</span>
               </button>
             </Link>

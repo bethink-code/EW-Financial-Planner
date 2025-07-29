@@ -67,7 +67,7 @@ export function NavigationLayout({ children }: NavigationLayoutProps) {
   
   return (
     <div className="min-h-screen bg-gray-50">
-      <div className="sticky top-0 z-50 bg-white shadow-sm">
+      <div className="sticky top-0 z-50">
         <div className="max-w-6xl">
           <FinancialPlanHeader 
             currentNeed="Death with estate liquidity"
