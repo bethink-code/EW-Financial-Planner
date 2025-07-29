@@ -24,8 +24,8 @@ export function FinancialPlanHeader({ currentNeed, onBack }: FinancialPlanHeader
   
   return (
     <div className="bg-white border-b">
-      {/* First row with plan name */}
       <div className="flex items-center justify-between px-4 py-3">
+        {/* Left side with plan info */}
         <div className="flex items-center gap-3">
           <Button
             variant="ghost"
@@ -50,8 +50,35 @@ export function FinancialPlanHeader({ currentNeed, onBack }: FinancialPlanHeader
               <Edit2 className="h-3.5 w-3.5" />
             </Button>
           </div>
+          
+          {/* Need section on same line */}
+          <div className="flex items-center gap-3 ml-8">
+            <span className="text-xs text-gray-500 uppercase tracking-wider font-medium">Need</span>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button 
+                  className="bg-[#E97627] hover:bg-[#E97627]/90 text-white h-9 px-4 flex items-center gap-2 text-sm"
+                >
+                  {currentNeed}
+                  <ChevronDown className="h-4 w-4" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="start" className="w-72">
+                {needs.map((need) => (
+                  <DropdownMenuItem key={need.id} asChild>
+                    <Link href={need.path}>
+                      <span className={need.hasContent ? "" : "text-gray-400"}>
+                        {need.label}
+                      </span>
+                    </Link>
+                  </DropdownMenuItem>
+                ))}
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </div>
         </div>
         
+        {/* Right side with icons */}
         <div className="flex items-center gap-2">
           <Button
             variant="ghost"
@@ -67,34 +94,6 @@ export function FinancialPlanHeader({ currentNeed, onBack }: FinancialPlanHeader
           >
             <RefreshCw className="h-4 w-4" />
           </Button>
-        </div>
-      </div>
-      
-      {/* Second row with need dropdown */}
-      <div className="px-4 pb-3">
-        <div className="flex items-center gap-4">
-          <span className="text-xs text-gray-500 uppercase tracking-wider font-medium">Need</span>
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button 
-                className="bg-[#E97627] hover:bg-[#E97627]/90 text-white h-9 px-4 flex items-center gap-2 text-sm"
-              >
-                {currentNeed}
-                <ChevronDown className="h-4 w-4" />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="start" className="w-72">
-              {needs.map((need) => (
-                <DropdownMenuItem key={need.id} asChild>
-                  <Link href={need.path}>
-                    <span className={need.hasContent ? "" : "text-gray-400"}>
-                      {need.label}
-                    </span>
-                  </Link>
-                </DropdownMenuItem>
-              ))}
-            </DropdownMenuContent>
-          </DropdownMenu>
         </div>
       </div>
     </div>
