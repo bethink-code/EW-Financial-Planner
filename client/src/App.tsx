@@ -37,6 +37,9 @@ import ProjectStep from "@/pages/needs/death-estate-liquidity/project";
 import ImplementStep from "@/pages/needs/death-estate-liquidity/implement";
 import ClientDetails from "@/pages/needs/death-estate-liquidity/setup/client-details";
 import ParametersSubSection from "@/pages/needs/death-estate-liquidity/setup/parameters/parameters";
+import RetirementFundsGroup from "@/pages/needs/death-estate-liquidity/build/retirement-funds";
+import AssetsLiabilitiesGroup from "@/pages/needs/death-estate-liquidity/build/assets-liabilities";
+import IncomeCapitalNeedsGroup from "@/pages/needs/death-estate-liquidity/build/income-capital-needs";
 
 
 
@@ -146,6 +149,27 @@ function Router() {
           <Route path="/needs/debt-repayment" component={DebtRepaymentNeed} />
           
           {/* Death with estate liquidity placeholder routes with navigation */}
+          <Route path="/needs/death-estate-liquidity/build/retirement-funds">
+            {() => (
+              <NavigationLayout>
+                <RetirementFundsGroup />
+              </NavigationLayout>
+            )}
+          </Route>
+          <Route path="/needs/death-estate-liquidity/build/assets-liabilities">
+            {() => (
+              <NavigationLayout>
+                <AssetsLiabilitiesGroup />
+              </NavigationLayout>
+            )}
+          </Route>
+          <Route path="/needs/death-estate-liquidity/build/income-capital-needs">
+            {() => (
+              <NavigationLayout>
+                <IncomeCapitalNeedsGroup />
+              </NavigationLayout>
+            )}
+          </Route>
           <Route path="/needs/death-estate-liquidity/project">
             {() => (
               <NavigationLayout>
