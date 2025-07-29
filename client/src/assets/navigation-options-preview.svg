@@ -1,0 +1,164 @@
+<svg viewBox="0 0 1200 1600" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1200" height="1600" fill="#EFF2F5"/>
+  
+  <!-- Title -->
+  <text x="600" y="40" text-anchor="middle" font-family="Arial" font-size="24" font-weight="bold">Navigation Design Options</text>
+  
+  <!-- Option 1: Tabs in Card Header -->
+  <g transform="translate(50, 80)">
+    <text x="0" y="0" font-family="Arial" font-size="18" font-weight="bold">Option 1: Tabs in Card Header</text>
+    <rect x="0" y="20" width="500" height="200" fill="white" stroke="#ddd" rx="8"/>
+    
+    <!-- Tab header -->
+    <rect x="0" y="20" width="500" height="50" fill="white" stroke="#ddd" rx="8 8 0 0"/>
+    <line x1="0" y1="70" x2="500" y2="70" stroke="#ddd"/>
+    
+    <!-- Active tab -->
+    <rect x="20" y="40" width="120" height="30" fill="#EDF4F9"/>
+    <text x="80" y="60" text-anchor="middle" font-family="Arial" font-size="14" fill="#016991">Retirement funds</text>
+    <line x1="20" y1="68" x2="140" y2="68" stroke="#016991" stroke-width="2"/>
+    
+    <!-- Inactive tab -->
+    <text x="220" y="60" text-anchor="middle" font-family="Arial" font-size="14" fill="#666">Defined benefit funds</text>
+    
+    <!-- Content -->
+    <text x="20" y="100" font-family="Arial" font-size="16" font-weight="bold">Retirement Funds</text>
+    <text x="400" y="100" font-family="Arial" font-size="14" fill="#666">3 funds</text>
+    <rect x="430" y="85" width="60" height="30" fill="#016991" rx="4"/>
+    <text x="460" y="103" text-anchor="middle" font-family="Arial" font-size="12" fill="white">+ Add</text>
+    
+    <!-- Summary cards -->
+    <rect x="20" y="130" width="90" height="70" fill="#EDF4F9" stroke="#D1E7F0" rx="4"/>
+    <rect x="120" y="130" width="90" height="70" fill="#EDF4F9" stroke="#D1E7F0" rx="4"/>
+    <rect x="220" y="130" width="90" height="70" fill="#EDF4F9" stroke="#D1E7F0" rx="4"/>
+    <rect x="320" y="130" width="90" height="70" fill="#EDF4F9" stroke="#D1E7F0" rx="4"/>
+  </g>
+  
+  <!-- Option 2: Pill Buttons -->
+  <g transform="translate(650, 80)">
+    <text x="0" y="0" font-family="Arial" font-size="18" font-weight="bold">Option 2: Pill Buttons in Header</text>
+    <rect x="0" y="20" width="500" height="200" fill="white" stroke="#ddd" rx="8"/>
+    
+    <!-- Header with pills -->
+    <text x="20" y="60" font-family="Arial" font-size="16" font-weight="bold">Retirement Funds</text>
+    
+    <!-- Active pill -->
+    <rect x="160" y="40" width="110" height="30" fill="#016991" rx="15"/>
+    <text x="215" y="59" text-anchor="middle" font-family="Arial" font-size="12" fill="white">Retirement funds</text>
+    
+    <!-- Inactive pill -->
+    <rect x="280" y="40" width="110" height="30" fill="#f0f0f0" rx="15"/>
+    <text x="335" y="59" text-anchor="middle" font-family="Arial" font-size="12" fill="#666">Defined benefit</text>
+    
+    <text x="400" y="100" font-family="Arial" font-size="14" fill="#666">3 funds</text>
+    <rect x="430" y="85" width="60" height="30" fill="#016991" rx="4"/>
+    <text x="460" y="103" text-anchor="middle" font-family="Arial" font-size="12" fill="white">+ Add</text>
+    
+    <!-- Summary cards -->
+    <rect x="20" y="130" width="90" height="70" fill="#EDF4F9" stroke="#D1E7F0" rx="4"/>
+    <rect x="120" y="130" width="90" height="70" fill="#EDF4F9" stroke="#D1E7F0" rx="4"/>
+    <rect x="220" y="130" width="90" height="70" fill="#EDF4F9" stroke="#D1E7F0" rx="4"/>
+    <rect x="320" y="130" width="90" height="70" fill="#EDF4F9" stroke="#D1E7F0" rx="4"/>
+  </g>
+  
+  <!-- Option 3: Sidebar Navigation -->
+  <g transform="translate(50, 400)">
+    <text x="0" y="0" font-family="Arial" font-size="18" font-weight="bold">Option 3: Sidebar Navigation</text>
+    <rect x="0" y="20" width="500" height="200" fill="white" stroke="#ddd" rx="8"/>
+    
+    <!-- Sidebar -->
+    <rect x="0" y="20" width="150" height="200" fill="#f8f9fa" stroke="#ddd" rx="8 0 0 8"/>
+    <text x="10" y="50" font-family="Arial" font-size="14" font-weight="bold">Retirement Funds</text>
+    
+    <!-- Active item -->
+    <rect x="10" y="70" width="130" height="35" fill="white" rx="4"/>
+    <text x="20" y="92" font-family="Arial" font-size="12" fill="#016991" font-weight="bold">Retirement funds</text>
+    
+    <!-- Inactive item -->
+    <text x="20" y="130" font-family="Arial" font-size="12" fill="#666">Defined benefit funds</text>
+    
+    <!-- Content area -->
+    <line x1="150" y1="20" x2="150" y2="220" stroke="#ddd"/>
+    <text x="170" y="50" font-family="Arial" font-size="14" fill="#666">3 funds</text>
+    <rect x="430" y="35" width="60" height="30" fill="#016991" rx="4"/>
+    <text x="460" y="53" text-anchor="middle" font-family="Arial" font-size="12" fill="white">+ Add</text>
+    
+    <!-- Summary cards -->
+    <rect x="170" y="80" width="70" height="60" fill="#EDF4F9" stroke="#D1E7F0" rx="4"/>
+    <rect x="250" y="80" width="70" height="60" fill="#EDF4F9" stroke="#D1E7F0" rx="4"/>
+    <rect x="330" y="80" width="70" height="60" fill="#EDF4F9" stroke="#D1E7F0" rx="4"/>
+    <rect x="410" y="80" width="70" height="60" fill="#EDF4F9" stroke="#D1E7F0" rx="4"/>
+  </g>
+  
+  <!-- Option 4: Dropdown Selector -->
+  <g transform="translate(650, 400)">
+    <text x="0" y="0" font-family="Arial" font-size="18" font-weight="bold">Option 4: Dropdown Selector</text>
+    <rect x="0" y="20" width="500" height="200" fill="white" stroke="#ddd" rx="8"/>
+    
+    <!-- Header with dropdown -->
+    <text x="20" y="60" font-family="Arial" font-size="16" font-weight="bold">Retirement Funds</text>
+    
+    <!-- Dropdown -->
+    <rect x="160" y="40" width="180" height="35" fill="white" stroke="#ddd" rx="4"/>
+    <text x="170" y="62" font-family="Arial" font-size="12">Retirement funds</text>
+    <text x="320" y="62" font-family="Arial" font-size="12" fill="#666">▼</text>
+    
+    <text x="400" y="100" font-family="Arial" font-size="14" fill="#666">3 funds</text>
+    <rect x="430" y="85" width="60" height="30" fill="#016991" rx="4"/>
+    <text x="460" y="103" text-anchor="middle" font-family="Arial" font-size="12" fill="white">+ Add</text>
+    
+    <!-- Summary cards -->
+    <rect x="20" y="130" width="90" height="70" fill="#EDF4F9" stroke="#D1E7F0" rx="4"/>
+    <rect x="120" y="130" width="90" height="70" fill="#EDF4F9" stroke="#D1E7F0" rx="4"/>
+    <rect x="220" y="130" width="90" height="70" fill="#EDF4F9" stroke="#D1E7F0" rx="4"/>
+    <rect x="320" y="130" width="90" height="70" fill="#EDF4F9" stroke="#D1E7F0" rx="4"/>
+  </g>
+  
+  <!-- Pros/Cons -->
+  <g transform="translate(50, 700)">
+    <text x="0" y="0" font-family="Arial" font-size="20" font-weight="bold" fill="#333">Design Comparison</text>
+    
+    <!-- Option 1 pros/cons -->
+    <text x="0" y="40" font-family="Arial" font-size="16" font-weight="bold">Option 1: Tabs in Header</text>
+    <text x="0" y="60" font-family="Arial" font-size="14" fill="#4a5568">✓ Familiar tab pattern</text>
+    <text x="0" y="80" font-family="Arial" font-size="14" fill="#4a5568">✓ Clear visual hierarchy</text>
+    <text x="0" y="100" font-family="Arial" font-size="14" fill="#4a5568">✓ Easy to scan options</text>
+    <text x="0" y="120" font-family="Arial" font-size="14" fill="#9ca3af">− Takes more vertical space</text>
+    
+    <!-- Option 2 pros/cons -->
+    <text x="300" y="40" font-family="Arial" font-size="16" font-weight="bold">Option 2: Pill Buttons</text>
+    <text x="300" y="60" font-family="Arial" font-size="14" fill="#4a5568">✓ Compact and modern</text>
+    <text x="300" y="80" font-family="Arial" font-size="14" fill="#4a5568">✓ Saves vertical space</text>
+    <text x="300" y="100" font-family="Arial" font-size="14" fill="#4a5568">✓ Integrates with title</text>
+    <text x="300" y="120" font-family="Arial" font-size="14" fill="#9ca3af">− Less room for long names</text>
+    
+    <!-- Option 3 pros/cons -->
+    <text x="600" y="40" font-family="Arial" font-size="16" font-weight="bold">Option 3: Sidebar</text>
+    <text x="600" y="60" font-family="Arial" font-size="14" fill="#4a5568">✓ Good for many options</text>
+    <text x="600" y="80" font-family="Arial" font-size="14" fill="#4a5568">✓ Always visible</text>
+    <text x="600" y="100" font-family="Arial" font-size="14" fill="#4a5568">✓ Room for expansion</text>
+    <text x="600" y="120" font-family="Arial" font-size="14" fill="#9ca3af">− Takes horizontal space</text>
+    
+    <!-- Option 4 pros/cons -->
+    <text x="900" y="40" font-family="Arial" font-size="16" font-weight="bold">Option 4: Dropdown</text>
+    <text x="900" y="60" font-family="Arial" font-size="14" fill="#4a5568">✓ Most compact</text>
+    <text x="900" y="80" font-family="Arial" font-size="14" fill="#4a5568">✓ Familiar pattern</text>
+    <text x="900" y="100" font-family="Arial" font-size="14" fill="#4a5568">✓ Minimal UI</text>
+    <text x="900" y="120" font-family="Arial" font-size="14" fill="#9ca3af">− Current selection less visible</text>
+  </g>
+  
+  <!-- Recommendation -->
+  <g transform="translate(50, 900)">
+    <rect x="0" y="0" width="1100" height="120" fill="#EDF4F9" stroke="#D1E7F0" rx="8"/>
+    <text x="20" y="30" font-family="Arial" font-size="18" font-weight="bold" fill="#016991">Recommendation</text>
+    <text x="20" y="55" font-family="Arial" font-size="14" fill="#4a5568">
+      Option 2 (Pill Buttons) offers the best balance - it's compact, modern, and integrates seamlessly with the header.
+    </text>
+    <text x="20" y="75" font-family="Arial" font-size="14" fill="#4a5568">
+      It eliminates the confusing gap between navigation and content while maintaining clear visual hierarchy.
+    </text>
+    <text x="20" y="95" font-family="Arial" font-size="14" fill="#4a5568">
+      This approach is already familiar from the Table/Flows switcher pattern used elsewhere in the app.
+    </text>
+  </g>
+</svg>

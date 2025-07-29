@@ -1,4 +1,5 @@
 import { Switch, Route, useLocation } from "wouter";
+import { lazy } from "react";
 import { queryClient } from "./lib/queryClient";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "@/components/ui/toaster";
@@ -138,6 +139,9 @@ function Router() {
               </NavigationLayout>
             )}
           </Route>
+          
+          {/* Navigation design options demo */}
+          <Route path="/navigation-options" component={lazy(() => import("./pages/navigation-design-options"))} />
           
           {/* Placeholder need routes */}
           <Route path="/needs/death" component={DeathNeed} />
