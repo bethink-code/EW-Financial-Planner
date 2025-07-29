@@ -3,6 +3,7 @@ import { ChevronLeft, ChevronDown, Edit2, FileText, RefreshCw, Palette } from "l
 import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
 import { getFinancialPlanName, needs } from "@shared/navigation-config";
+import { useNavigationDesign } from "@/contexts/navigation-design-context";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -45,15 +46,14 @@ const navigationOptions = [
 
 export function FinancialPlanHeader({ currentNeed, onBack }: FinancialPlanHeaderProps) {
   const planName = getFinancialPlanName();
-  const [selectedNavOption, setSelectedNavOption] = useState("current");
+  const { design, setDesign } = useNavigationDesign();
   
   const handleBack = () => {
     window.history.back();
   };
 
   const handleNavOptionChange = (optionId: string) => {
-    setSelectedNavOption(optionId);
-    // Here you could trigger different navigation layouts based on selection
+    setDesign(optionId as any);
     console.log("Navigation design changed to:", optionId);
   };
   
@@ -147,7 +147,7 @@ export function FinancialPlanHeader({ currentNeed, onBack }: FinancialPlanHeader
                         </span>
                       )}
                     </span>
-                    {selectedNavOption === option.id && (
+                    {design === option.id && (
                       <div className="w-2 h-2 bg-[#016991] rounded-full" />
                     )}
                   </div>
