@@ -374,6 +374,17 @@ th, td {
   thead tr:last-child th {
     border-bottom: 1px solid #e5e7eb !important;
   }
+  
+  /* Fix for rowSpan header cells that don't get border from last row */
+  thead th[rowspan] {
+    border-bottom: 1px solid #e5e7eb !important;
+  }
+  
+  /* Ultra-specific targeting for all header cells */
+  table thead th,
+  thead th {
+    border-bottom: 1px solid #e5e7eb !important;
+  }
 
   thead th:not(.section-start):not(.section-end) {
     border-left: none !important;
