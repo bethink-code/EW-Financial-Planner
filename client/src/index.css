@@ -738,12 +738,12 @@ th, td {
 
   /* CRITICAL: Row borders with absolute maximum specificity - no conflicts allowed */
   html body table tbody tr {
-    border-bottom: 1px solid #f3f4f6 !important;
+    border-bottom: 1px solid #e5e7eb !important;
   }
   
   /* Alternative approach: Apply border to table cells directly */
   html body table tbody tr td {
-    border-bottom: 1px solid #f3f4f6 !important;
+    border-bottom: 1px solid #e5e7eb !important;
   }
   
   /* Nuclear option: Override ALL possible border conflicts */
@@ -753,13 +753,13 @@ th, td {
   table tbody tr td,
   .table tbody tr,
   .table tbody tr td {
-    border-bottom: 1px solid #f3f4f6 !important;
+    border-bottom: 1px solid #e5e7eb !important;
   }
   
   /* Force override any "border: none" rules specifically for tbody */
   tbody tr:not(.no-border),
   tbody tr td:not(.no-border) {
-    border-bottom: 1px solid #f3f4f6 !important;
+    border-bottom: 1px solid #e5e7eb !important;
   }
   
   /* Section end borders for right side separators */
