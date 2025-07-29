@@ -9,9 +9,10 @@ import { formatCurrencyValue, formatPercentageValue, getValueClass, handleDefaul
 interface LiabilitiesTableProps {
   viewMode: 'table' | 'hybrid';
   searchTerm?: string;
+  onShowCategoryDialog?: () => void;
 }
 
-function LiabilitiesTable({ viewMode, searchTerm }: LiabilitiesTableProps) {
+function LiabilitiesTable({ viewMode, searchTerm, onShowCategoryDialog }: LiabilitiesTableProps) {
   const [isUpdating, setIsUpdating] = useState(false);
 
   // Query for liabilities
@@ -29,7 +30,7 @@ function LiabilitiesTable({ viewMode, searchTerm }: LiabilitiesTableProps) {
         victoriaLambie: "0%",
         juniorLambie: "0%",
         lambiesFamilyTrust: "0%",
-        estateDuty: "R 0",
+        estate: "R 0",
         others: "R 0",
         client: "R 0",
         section: "BONDS",
@@ -175,7 +176,7 @@ function LiabilitiesTable({ viewMode, searchTerm }: LiabilitiesTableProps) {
         <thead>
           <tr>
             <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start" rowSpan={2}>
-              <AddButton onClick={() => addMutation.mutate()} disabled={isUpdating} />
+              <AddButton onClick={onShowCategoryDialog || (() => addMutation.mutate())} disabled={isUpdating} />
             </th>
             <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start" colSpan={1}>Overview</th>
             <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start" colSpan={1}>Liability Details</th>
@@ -219,7 +220,7 @@ function LiabilitiesTable({ viewMode, searchTerm }: LiabilitiesTableProps) {
                   <td className="table-actions-cell p-2 text-center section-start">
                     <ActionButtonGroup>
                       <DuplicateButton
-                        onClick={() => addMutation.mutate()}
+                        onClick={onShowCategoryDialog || (() => addMutation.mutate())}
                         disabled={isUpdating}
                       />
                       <DeleteButton

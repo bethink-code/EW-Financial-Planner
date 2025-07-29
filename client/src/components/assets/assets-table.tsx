@@ -9,9 +9,10 @@ import { formatCurrencyValue, formatPercentageValue, isDefaultValue, getValueCla
 interface AssetsTableProps {
   viewMode: 'table' | 'hybrid';
   searchTerm?: string;
+  onShowCategoryDialog?: () => void;
 }
 
-function AssetsTable({ viewMode, searchTerm }: AssetsTableProps) {
+function AssetsTable({ viewMode, searchTerm, onShowCategoryDialog }: AssetsTableProps) {
   const [isUpdating, setIsUpdating] = useState(false);
 
   // Query for assets
@@ -179,7 +180,7 @@ function AssetsTable({ viewMode, searchTerm }: AssetsTableProps) {
         <thead>
           <tr>
             <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start" rowSpan={2}>
-              <AddButton onClick={() => addMutation.mutate()} disabled={isUpdating} />
+              <AddButton onClick={onShowCategoryDialog || (() => addMutation.mutate())} disabled={isUpdating} />
             </th>
             <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start" colSpan={1}>Overview</th>
             <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start" colSpan={1}>Asset Details</th>
@@ -202,7 +203,7 @@ function AssetsTable({ viewMode, searchTerm }: AssetsTableProps) {
           {(() => {
             // Group assets by section/category
             const groupedAssets = assets.reduce((groups, asset) => {
-              const section = asset.section || asset.category || 'Other';
+              const section = asset.section || 'Other';
               if (!groups[section]) {
                 groups[section] = [];
               }
@@ -223,7 +224,7 @@ function AssetsTable({ viewMode, searchTerm }: AssetsTableProps) {
               <td className="table-actions-cell p-2 text-center section-start">
                 <ActionButtonGroup>
                   <DuplicateButton
-                    onClick={() => addMutation.mutate()}
+                    onClick={onShowCategoryDialog || (() => addMutation.mutate())}
                     disabled={isUpdating}
                   />
                   <DeleteButton
