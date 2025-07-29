@@ -911,7 +911,8 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
             {/* Overview Section */}
             {columnVisibility.overview && (
               <>
-                <td className="totals-cell-label text-right">Totals</td>
+                <td className="totals-cell-label section-start"></td>
+                <td className="totals-cell-label text-right section-start">Totals</td>
                 <td className="totals-cell-label"></td>
               </>
             )}
