@@ -351,6 +351,7 @@ th, td {
   /* Standardized header styling - clean appearance with light grey background */
   thead {
     background-color: #f9fafb !important; /* bg-neutral-50 - same as footer */
+    border-bottom: 1px solid #e5e7eb !important; /* Match horizontal row border style */
   }
 
   thead tr {
