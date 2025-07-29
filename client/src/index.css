@@ -274,17 +274,18 @@ th, td {
     border-spacing: 0 !important;
   }
 
-  /* Clean table styling - no borders by default (except section borders) */
+  /* Clean table styling - no borders by default (except section borders and row borders) */
   table th:not(.section-start):not(.section-end),
   table td:not(.section-start):not(.section-end) {
-    border: none;
+    border-left: none;
+    border-right: none;
+    border-top: none;
     position: relative;
   }
 
-  /* No row borders - completely clean */
-  table tbody tr,
+  /* Row styling without border conflicts */
   table tbody tr.bg-neutral-50 {
-    border: none !important;
+    background-color: #f9fafb !important;
   }
 
   /* Add spacing to table cells for better field separation */
@@ -725,6 +726,11 @@ th, td {
   /* Row borders for table content - matching section border style */
   table tbody tr {
     border-bottom: 1px solid #d1d5db !important;
+  }
+  
+  /* Ensure row borders are not overridden by cell border removal */
+  table tbody td {
+    border-bottom: inherit !important;
   }
   
   /* Section end borders for right side separators */
