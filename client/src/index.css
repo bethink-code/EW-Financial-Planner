@@ -274,9 +274,9 @@ th, td {
     border-spacing: 0 !important;
   }
 
-  /* Clean table styling - no borders by default */
-  table th,
-  table td {
+  /* Clean table styling - no borders by default (except section borders) */
+  table th:not(.section-start):not(.section-end),
+  table td:not(.section-start):not(.section-end) {
     border: none;
     position: relative;
   }
@@ -348,7 +348,7 @@ th, td {
     background-color: #f9fafb !important; /* bg-neutral-50 */
   }
 
-  thead th {
+  thead th:not(.section-start):not(.section-end) {
     border: none !important;
     background-color: #f9fafb !important; /* bg-neutral-50 */
   }
@@ -362,12 +362,12 @@ th, td {
     border-top: 1px solid #d1d5db !important; /* Single border for section separation */
   }
 
-  tfoot td {
+  tfoot td:not(.section-start):not(.section-end) {
     border: none !important;
   }
 
-  /* Remove footer borders too - clean slate */
-  tfoot td {
+  /* Remove footer borders too - clean slate (except section borders) */
+  tfoot td:not(.section-start):not(.section-end) {
     border-left: none !important;
     border-right: none !important;
   }
