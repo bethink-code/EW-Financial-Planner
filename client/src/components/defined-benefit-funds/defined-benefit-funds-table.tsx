@@ -239,7 +239,8 @@ function DefinedBenefitFundsTable({ viewMode, searchTerm }: DefinedBenefitFundsT
  <tfoot>
  <tr>
  <td className="totals-cell-label text-right section-start"></td>
- <td className="totals-cell-label text-right section-start" colSpan={2}>Totals</td>
+ <td className="totals-cell-label text-right section-start">Totals</td>
+ <td className="totals-cell-label text-right"></td>
  <td className="totals-cell-value section-start">R {totals.deathLumpSum.toLocaleString()}</td>
  <td className="totals-cell-label"></td>
  </tr>
