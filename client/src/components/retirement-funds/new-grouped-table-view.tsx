@@ -220,7 +220,7 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
             {/* Second level headers - Flows */}
             <tr className="border-b border-neutral-200" style={{ backgroundColor: '#D6ECF5' }}>
               {columnVisibility.overview && (
-                <th className="p-2 text-left font-medium text-neutral-600 uppercase tracking-wider text-xs" style={{ minWidth: '200px', width: '200px' }}>
+                <th className="p-2 text-left font-medium text-neutral-600 uppercase tracking-wider text-xs section-start" style={{ minWidth: '200px', width: '200px' }}>
                   Description
                 </th>
               )}
