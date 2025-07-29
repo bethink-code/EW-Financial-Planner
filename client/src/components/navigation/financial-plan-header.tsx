@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { ChevronLeft, ChevronDown, Edit2, FileText, RefreshCw } from "lucide-react";
+import { ChevronLeft, ChevronDown, Edit2, FileText, RefreshCw, Palette } from "lucide-react";
 import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
 import { getFinancialPlanName, needs } from "@shared/navigation-config";
@@ -15,11 +15,46 @@ interface FinancialPlanHeaderProps {
   onBack?: () => void;
 }
 
+const navigationOptions = [
+  {
+    id: "current",
+    label: "Current Design",
+    description: "Default navigation layout"
+  },
+  {
+    id: "tabs-in-header",
+    label: "Tabs in Card Header",
+    description: "Traditional tab pattern with visual hierarchy"
+  },
+  {
+    id: "pill-buttons",
+    label: "Pill Buttons (Recommended)",
+    description: "Compact modern design with rounded buttons"
+  },
+  {
+    id: "sidebar",
+    label: "Sidebar Navigation",
+    description: "Always visible navigation in sidebar"
+  },
+  {
+    id: "dropdown",
+    label: "Dropdown Selector",
+    description: "Most compact with dropdown selection"
+  }
+];
+
 export function FinancialPlanHeader({ currentNeed, onBack }: FinancialPlanHeaderProps) {
   const planName = getFinancialPlanName();
+  const [selectedNavOption, setSelectedNavOption] = useState("current");
   
   const handleBack = () => {
     window.history.back();
+  };
+
+  const handleNavOptionChange = (optionId: string) => {
+    setSelectedNavOption(optionId);
+    // Here you could trigger different navigation layouts based on selection
+    console.log("Navigation design changed to:", optionId);
   };
   
   return (
@@ -80,6 +115,58 @@ export function FinancialPlanHeader({ currentNeed, onBack }: FinancialPlanHeader
         
         {/* Right side with icons */}
         <div className="flex items-center gap-2">
+          {/* Navigation Design Selector */}
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button
+                variant="ghost"
+                size="icon"
+                className="h-8 w-8 text-gray-500 hover:text-gray-700"
+                title="Navigation Design Options"
+              >
+                <Palette className="h-4 w-4" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" className="w-80">
+              <div className="px-3 py-2 border-b">
+                <h4 className="text-sm font-medium">Navigation Design Options</h4>
+                <p className="text-xs text-gray-500 mt-1">Choose how secondary navigation integrates with summary cards</p>
+              </div>
+              {navigationOptions.map((option) => (
+                <DropdownMenuItem 
+                  key={option.id} 
+                  onClick={() => handleNavOptionChange(option.id)}
+                  className="flex-col items-start py-3 cursor-pointer"
+                >
+                  <div className="flex items-center justify-between w-full">
+                    <span className="font-medium text-sm">
+                      {option.label}
+                      {option.id === "pill-buttons" && (
+                        <span className="ml-2 px-2 py-0.5 bg-green-100 text-green-700 text-xs rounded-full">
+                          Recommended
+                        </span>
+                      )}
+                    </span>
+                    {selectedNavOption === option.id && (
+                      <div className="w-2 h-2 bg-[#016991] rounded-full" />
+                    )}
+                  </div>
+                  <span className="text-xs text-gray-500 mt-1">{option.description}</span>
+                </DropdownMenuItem>
+              ))}
+              <div className="px-3 py-2 border-t">
+                <Button 
+                  variant="outline" 
+                  size="sm" 
+                  className="w-full"
+                  onClick={() => window.open('/navigation-options', '_blank')}
+                >
+                  View Full Demo
+                </Button>
+              </div>
+            </DropdownMenuContent>
+          </DropdownMenu>
+          
           <Button
             variant="ghost"
             size="icon"
