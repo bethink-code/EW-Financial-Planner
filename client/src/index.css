@@ -710,9 +710,22 @@ th, td {
     text-align: left !important;
   }
 
-  /* Section borders - simple and clean */
-  .section-start {
-    border-left: 2px solid #9ca3af;
+  /* Section borders - simple and clean with higher specificity */
+  thead th.section-start,
+  tbody td.section-start,
+  tfoot td.section-start,
+  th.section-start,
+  td.section-start {
+    border-left: 2px solid #9ca3af !important;
+  }
+  
+  /* Section end borders for right side separators */
+  thead th.section-end,
+  tbody td.section-end,
+  tfoot td.section-end,
+  th.section-end,
+  td.section-end {
+    border-right: 2px solid #9ca3af !important;
   }
 }
 
