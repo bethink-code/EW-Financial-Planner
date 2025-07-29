@@ -58,7 +58,7 @@ function LumpSumTable({ viewMode, searchTerm }: LumpSumTableProps) {
 
  // Update bequest mutation
  const updateMutation = useMutation({
- mutationFn: async ({ id, updates }: { id: number; updates: Partial<LumpSumBequests> }) => {
+ mutationFn: async ({ id, updates }: { id: number; updates: Partial<LumpSumBequest> }) => {
  const response = await fetch(`/api/lump-sum-bequests/${id}`, {
  method: 'PATCH',
  headers: {
@@ -190,7 +190,7 @@ function LumpSumTable({ viewMode, searchTerm }: LumpSumTableProps) {
  </tr>
  </thead>
  <tbody className="divide-y divide-neutral-200">
- {bequests.map((bequest: LumpSumBequests, index) => (
+ {bequests.map((bequest: LumpSumBequest, index) => (
  <tr key={bequest.id} className="hover:bg-neutral-50">
  <td className="table-actions-cell p-1 text-center section-start">
  <ActionButtonGroup>
@@ -290,10 +290,10 @@ function LumpSumTable({ viewMode, searchTerm }: LumpSumTableProps) {
  <tfoot>
  <tr>
  <td className="totals-cell-label text-right" colSpan={4}>Totals</td>
- <td className="totals-cell-value text-right p-2" style={{paddingRight: '0.75rem'}}>R {totals.amount.toLocaleString()}</td>
- <td className="totals-cell-value text-center p-2">{totals.increasePercentage}%</td>
- <td className="totals-cell-value p-2"></td>
- <td className="totals-cell-value text-right p-2 section-start" style={{paddingRight: '0.75rem'}}>R {totals.valueAtDeath.toLocaleString()}</td>
+ <td className="totals-cell-value" style={{textAlign: 'right', padding: '0.5rem', paddingRight: '0.75rem', height: '2.3rem', lineHeight: '1.3rem'}}>R {totals.amount.toLocaleString()}</td>
+ <td className="totals-cell-value" style={{textAlign: 'center', padding: '0.5rem', height: '2.3rem', lineHeight: '1.3rem'}}>{totals.increasePercentage}%</td>
+ <td className="totals-cell-value" style={{padding: '0.5rem', height: '2.3rem'}}></td>
+ <td className="totals-cell-value section-start" style={{textAlign: 'right', padding: '0.5rem', paddingRight: '0.75rem', height: '2.3rem', lineHeight: '1.3rem'}}>R {totals.valueAtDeath.toLocaleString()}</td>
  </tr>
  </tfoot>
  </table>
