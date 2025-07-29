@@ -721,6 +721,14 @@ th, td {
   td.section-start {
     border-left: 2px solid #9ca3af !important;
   }
+
+  /* EMERGENCY FOOTER SECTION BORDERS - MAXIMUM SPECIFICITY */
+  table tfoot td.section-start {
+    border-left: 2px solid #9ca3af !important;
+    border-right: none !important;
+    border-top: none !important;
+    border-bottom: none !important;
+  }
   
   /* Section end borders for right side separators */
   thead th.section-end,
