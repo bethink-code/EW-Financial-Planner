@@ -711,6 +711,9 @@ th, td {
   }
 
   /* Section borders - simple and clean with higher specificity */
+  table thead th.section-start,
+  table tbody td.section-start,
+  table tfoot td.section-start,
   thead th.section-start,
   tbody td.section-start,
   tfoot td.section-start,
