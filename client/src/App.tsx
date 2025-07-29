@@ -5,7 +5,7 @@ import { QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { NavigationLayout } from "@/components/navigation/navigation-layout";
-import { NavigationDesignProvider } from "@/contexts/navigation-design-context";
+
 import NotFound from "@/pages/not-found";
 
 // Existing calculator pages
@@ -140,8 +140,7 @@ function Router() {
             )}
           </Route>
           
-          {/* Navigation design options demo */}
-          <Route path="/navigation-options" component={lazy(() => import("./pages/navigation-design-options"))} />
+
           
           {/* Placeholder need routes */}
           <Route path="/needs/death" component={DeathNeed} />
@@ -244,12 +243,10 @@ function Router() {
 function App() {
   return (
     <QueryClientProvider client={queryClient}>
-      <NavigationDesignProvider>
-        <TooltipProvider>
-          <Toaster />
-          <Router />
-        </TooltipProvider>
-      </NavigationDesignProvider>
+      <TooltipProvider>
+        <Toaster />
+        <Router />
+      </TooltipProvider>
     </QueryClientProvider>
   );
 }
