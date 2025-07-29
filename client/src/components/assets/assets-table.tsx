@@ -233,7 +233,7 @@ function AssetsTable({ viewMode, searchTerm }: AssetsTableProps) {
                 </ActionButtonGroup>
               </td>
               
-              <td className="p-2 text-left">
+              <td className="p-2 text-left section-start">
                 <input
                   type="text"
                   defaultValue={formatTextValue(asset.description)}
@@ -244,7 +244,7 @@ function AssetsTable({ viewMode, searchTerm }: AssetsTableProps) {
                 />
               </td>
               
-              <td className="p-2 text-right">
+              <td className="p-2 text-right section-start">
                 <input
                   key={`marketValue-${asset.id}-${asset.marketValue}`}
                   type="text"
@@ -256,7 +256,7 @@ function AssetsTable({ viewMode, searchTerm }: AssetsTableProps) {
                 />
               </td>
               
-              <td className="p-2 text-right">
+              <td className="p-2 text-right section-start">
                 <input
                   key={`johnDoe-${asset.id}-${asset.johnDoe}`}
                   type="text"
@@ -304,7 +304,7 @@ function AssetsTable({ viewMode, searchTerm }: AssetsTableProps) {
                 />
               </td>
               
-              <td className="p-2 text-right">
+              <td className="p-2 text-right section-start">
                 <input
                   key={`estate-${asset.id}-${asset.estate}`}
                   type="text"
