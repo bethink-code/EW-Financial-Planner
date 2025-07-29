@@ -139,7 +139,7 @@ th, td {
 }
 
 :root {
-  --background: #f8f9fa;
+  --background: #EFF2F5;
   --foreground: hsl(220, 13%, 18%);
   --muted: hsl(210, 40%, 98%);
   --muted-foreground: hsl(215, 16%, 47%);
@@ -233,7 +233,7 @@ th, td {
   html, body {
     margin: 0;
     padding: 0;
-    background-color: #f8f9fa;
+    background-color: #EFF2F5;
   }
   
   body {
@@ -252,7 +252,7 @@ th, td {
   body {
     @apply font-sans antialiased text-foreground;
     font-family: 'Inter', sans-serif;
-    background-color: #f8f9fa !important;
+    background-color: #EFF2F5 !important;
   }
 }
 
@@ -467,7 +467,7 @@ th, td {
   
   /* Neutral color utilities */
   .bg-neutral-50 { background-color: var(--neutral-50); }
-  .bg-gray-50 { background-color: #f8f9fa; }
+  .bg-gray-50 { background-color: #EFF2F5; }
   .bg-neutral-100 { background-color: var(--neutral-100); }
   .bg-neutral-200 { background-color: var(--neutral-200); }
   
