@@ -736,19 +736,29 @@ th, td {
     border-bottom: none !important;
   }
 
-  /* Row borders for table content - matching section border style with maximum specificity */
-  table tbody tr {
+  /* CRITICAL: Row borders with absolute maximum specificity - no conflicts allowed */
+  html body table tbody tr {
     border-bottom: 1px solid #d1d5db !important;
   }
   
-  /* Override any conflicting border removal rules for tbody rows specifically */
-  table tbody tr td {
+  /* Alternative approach: Apply border to table cells directly */
+  html body table tbody tr td {
     border-bottom: 1px solid #d1d5db !important;
   }
   
-  /* Force tbody row borders with ultra-high specificity */
-  body table tbody tr,
-  body table tbody tr td {
+  /* Nuclear option: Override ALL possible border conflicts */
+  tbody tr,
+  tbody tr td,
+  table tbody tr,
+  table tbody tr td,
+  .table tbody tr,
+  .table tbody tr td {
+    border-bottom: 1px solid #d1d5db !important;
+  }
+  
+  /* Force override any "border: none" rules specifically for tbody */
+  tbody tr:not(.no-border),
+  tbody tr td:not(.no-border) {
     border-bottom: 1px solid #d1d5db !important;
   }
   
