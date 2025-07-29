@@ -22,10 +22,14 @@ function AssuranceTable({ viewMode, searchTerm }: AssuranceTableProps) {
  mutationFn: async (): Promise<Assurance> => {
  const newAssurance: InsertAssurance = {
  description:"",
- owner:"Donald Edwards",
+ owners:["Donald Edwards"],
+ beneficiaries:[""],
+ deathBenefit:"R 0",
  amount:"R 0",
- increasePercentage:"0%",
- additionalOwners: [],
+ premiumsByOthers:"R 0",
+ collateralSession:"R 0",
+ benefitSplit:"0%",
+ additionalInfo:"",
  };
  
  const response = await fetch('/api/assurance', {
@@ -109,9 +113,9 @@ function AssuranceTable({ viewMode, searchTerm }: AssuranceTableProps) {
  updateMutation.mutate({ id, updates });
  }, [updateMutation]);
 
- const handleInputBlur = useCallback((id: number, field: keyof Assurance, value: string) => {
+ const handleInputBlur = useCallback((id: number, field: keyof Assurance, value: string | string[]) => {
  let formattedValue: string;
- if (field === 'increasePercentage') {
+ if (field === 'benefitSplit') {
  formattedValue = formatPercentageValue(value);
  } else if (field === 'amount') {
  formattedValue = formatCurrencyValue(value);
@@ -184,10 +188,10 @@ function AssuranceTable({ viewMode, searchTerm }: AssuranceTableProps) {
  <td className="p-2">
  <input
  type="text"
- defaultValue={assurance.owner}
- className={`table-input ${getFieldClass('text')} ${getValueClass(assurance.owner, 'text')}`}
+ defaultValue={assurance.owners[0] || "Donald Edwards"}
+ className={`table-input ${getFieldClass('text')} ${getValueClass(assurance.owners[0] || "", 'text')}`}
  onFocus={handleDefaultValueFocus}
- onBlur={(e) => handleInputBlur(assurance.id, 'owner', e.target.value)}
+ onBlur={(e) => handleInputBlur(assurance.id, 'owners', [e.target.value])}
  disabled={isUpdating}
  />
  </td>
@@ -206,12 +210,12 @@ function AssuranceTable({ viewMode, searchTerm }: AssuranceTableProps) {
  
  <td className="p-2">
  <input
- key={`increasePercentage-${assurance.id}-${assurance.increasePercentage}`}
+ key={`benefitSplit-${assurance.id}-${assurance.benefitSplit}`}
  type="text"
- defaultValue={assurance.increasePercentage}
- className={`table-input ${getFieldClass('percentage')} ${getValueClass(assurance.increasePercentage, 'percentage')}`}
+ defaultValue={assurance.benefitSplit}
+ className={`table-input ${getFieldClass('percentage')} ${getValueClass(assurance.benefitSplit, 'percentage')}`}
  onFocus={handleDefaultValueFocus}
- onBlur={(e) => handleInputBlur(assurance.id, 'increasePercentage', e.target.value)}
+ onBlur={(e) => handleInputBlur(assurance.id, 'benefitSplit', e.target.value)}
  disabled={isUpdating}
  />
  </td>
