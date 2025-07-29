@@ -221,7 +221,7 @@ function AssuranceTable({ viewMode, searchTerm }: AssuranceTableProps) {
  
  <tfoot>
  <tr>
- <td className="totals-cell-label text-right" colSpan={3}>Totals</td>
+ <td className="totals-cell-label text-right section-start" colSpan={3}>Totals</td>
  <td className="totals-cell-value section-start">R {totals.amount.toLocaleString()}</td>
  <td className="totals-cell-label"></td>
  </tr>

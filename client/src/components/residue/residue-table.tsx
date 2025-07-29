@@ -354,7 +354,7 @@ function ResidueTable({ viewMode, searchTerm }: ResidueTableProps) {
         
         <tfoot>
           <tr>
-            <td className="totals-cell-label text-right" colSpan={3}>Totals</td>
+            <td className="totals-cell-label text-right section-start" colSpan={3}>Totals</td>
             <td className="totals-cell-value">R {totals.amount.toLocaleString()}</td>
             <td className="totals-cell-value">{totals.increasePercentage}%</td>
             <td className="totals-cell-value">{totals.johnDoe}%</td>

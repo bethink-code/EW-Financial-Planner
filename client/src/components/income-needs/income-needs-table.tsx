@@ -299,7 +299,7 @@ function IncomeNeedsTable({ viewMode, searchTerm }: IncomeNeedsTableProps) {
         
         <tfoot>
           <tr>
-            <td className="totals-cell-label text-right" colSpan={3}>Totals</td>
+            <td className="totals-cell-label text-right section-start" colSpan={3}>Totals</td>
             <td className="totals-cell-value">R {totals.amount.toLocaleString()}</td>
             <td className="totals-cell-label" colSpan={5}></td>
             <td className="totals-cell-value">R {totals.capitalisedAmount.toLocaleString()}</td>
