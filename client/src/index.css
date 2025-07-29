@@ -372,10 +372,15 @@ th, td {
     border-top: 1px solid #d1d5db !important; /* Single border for section separation */
   }
 
-  /* Remove only non-section borders from footer cells */
+  /* Remove only non-section borders from footer cells (but preserve tbody row borders) */
   tfoot td:not(.section-start):not(.section-end) {
     border-left: none !important;
     border-right: none !important;
+    border-bottom: none !important;
+  }
+  
+  /* Ensure footer borders don't interfere with tbody row borders */
+  tfoot tr td {
     border-bottom: none !important;
   }
   
@@ -733,10 +738,18 @@ th, td {
   }
 
   /* Row borders for table content - matching section border style with maximum specificity */
-  table tbody tr,
-  table tbody tr:not(:last-child),
-  tbody tr,
-  tr {
+  table tbody tr {
+    border-bottom: 1px solid #d1d5db !important;
+  }
+  
+  /* Override any conflicting border removal rules for tbody rows specifically */
+  table tbody tr td {
+    border-bottom: 1px solid #d1d5db !important;
+  }
+  
+  /* Force tbody row borders with ultra-high specificity */
+  body table tbody tr,
+  body table tbody tr td {
     border-bottom: 1px solid #d1d5db !important;
   }
   
