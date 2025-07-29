@@ -362,12 +362,12 @@ th, td {
     border-top: 1px solid #d1d5db !important; /* Single border for section separation */
   }
 
-  /* Remove only non-section borders from footer cells - DISABLED FOR TESTING */
-  /* tfoot td:not(.section-start):not(.section-end) {
+  /* Remove only non-section borders from footer cells */
+  tfoot td:not(.section-start):not(.section-end) {
     border-left: none !important;
     border-right: none !important;
     border-bottom: none !important;
-  } */
+  }
   
   /* Ensure all currency fields in footer align right */
   tfoot td.totals-cell-value {
