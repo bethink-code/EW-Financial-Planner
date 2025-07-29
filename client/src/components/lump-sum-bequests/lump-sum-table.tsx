@@ -289,8 +289,7 @@ function LumpSumTable({ viewMode, searchTerm }: LumpSumTableProps) {
  {/* Totals Footer */}
  <tfoot>
  <tr>
- <td className="totals-cell-label text-right section-start">Totals</td>
- <td className="totals-cell-label section-start" colSpan={2}></td>
+ <td className="totals-cell-label text-right section-start" colSpan={3}>Totals</td>
  <td className="totals-cell-value section-start">R {totals.amount.toLocaleString()}</td>
  <td className="totals-cell-value">{totals.increasePercentage}%</td>
  <td className="totals-cell-value">{totals.cpiCount} CPI</td>
