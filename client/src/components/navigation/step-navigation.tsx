@@ -38,21 +38,15 @@ export function StepNavigation({ steps, currentStepId }: StepNavigationProps) {
                   "flex items-center gap-2 px-5 py-3 rounded-lg font-normal text-base transition-colors",
                   isActive
                     ? "bg-[#E97627] text-white hover:bg-[#E97627]/90"
-                    : isComplete
-                    ? "bg-green-100 text-green-700 hover:bg-green-200"
-                    : step.hasContent
-                    ? "bg-white text-gray-700 border border-gray-300 hover:bg-gray-50"
-                    : "bg-gray-100 text-gray-400 cursor-not-allowed"
+                    : "bg-white text-gray-700 hover:bg-gray-50"
                 )}
                 disabled={!step.hasContent}
               >
                 <span className={cn(
-                  "flex items-center justify-center h-8 w-8 rounded text-sm font-medium",
+                  "flex items-center justify-center h-7 w-7 rounded text-sm font-medium",
                   isActive 
                     ? "bg-white/20 text-white"
-                    : isComplete
-                    ? "bg-transparent"
-                    : "bg-[#E97627] text-white"
+                    : "bg-[#F5F5F5] text-[#E97627]"
                 )}>
                   {isComplete ? (
                     <Check className="h-4 w-4" />
