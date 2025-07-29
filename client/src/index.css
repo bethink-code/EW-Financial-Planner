@@ -275,20 +275,19 @@ th, td {
   }
 
   /* Clean table styling - no borders by default (except section borders and row borders) */
-  table th:not(.section-start):not(.section-end),
+  table th:not(.section-start):not(.section-end) {
+    border-left: none;
+    border-right: none;
+    border-top: none;
+    border-bottom: none;
+    position: relative;
+  }
+  
+  /* For table cells, preserve row borders but remove other borders */
   table td:not(.section-start):not(.section-end) {
     border-left: none;
     border-right: none;
     border-top: none;
-    position: relative;
-  }
-  
-  /* Preserve row borders - don't remove bottom borders from tbody rows */
-  table tbody tr td:not(.section-start):not(.section-end) {
-    border-left: none;
-    border-right: none;
-    border-top: none;
-    border-bottom: inherit !important;
     position: relative;
   }
 
