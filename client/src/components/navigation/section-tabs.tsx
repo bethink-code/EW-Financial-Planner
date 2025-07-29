@@ -1,6 +1,7 @@
 import React from "react";
 import { Link, useLocation } from "wouter";
 import { cn } from "@/lib/utils";
+import { SafeFragment } from "@/lib/safe-fragment";
 
 interface TabItem {
   id: string;
@@ -65,7 +66,7 @@ export function SectionTabs({ tabs, activeTabId, variant = "primary" }: SectionT
           tab.id === activeTabId;
         
         return (
-          <React.Fragment key={tab.id}>
+          <SafeFragment key={tab.id}>
             <TabButton tab={tab} isActive={isActive} />
             
             {tab.children && isActive && variant === "primary" && (
@@ -76,7 +77,7 @@ export function SectionTabs({ tabs, activeTabId, variant = "primary" }: SectionT
                 />
               </div>
             )}
-          </React.Fragment>
+          </SafeFragment>
         );
       })}
     </div>

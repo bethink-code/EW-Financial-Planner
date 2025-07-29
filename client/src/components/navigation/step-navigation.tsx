@@ -2,6 +2,7 @@ import React from "react";
 import { Link, useLocation } from "wouter";
 import { Check } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { SafeFragment } from "@/lib/safe-fragment";
 
 interface Step {
   id: string;
@@ -27,7 +28,7 @@ export function StepNavigation({ steps, currentStepId }: StepNavigationProps) {
         const isComplete = step.isComplete;
         
         return (
-          <React.Fragment key={step.id}>
+          <SafeFragment key={step.id}>
             {index > 0 && (
               <div className="flex-1 h-px bg-gray-300 max-w-[40px]" />
             )}
@@ -55,7 +56,7 @@ export function StepNavigation({ steps, currentStepId }: StepNavigationProps) {
                 <span>{step.label}</span>
               </button>
             </Link>
-          </React.Fragment>
+          </SafeFragment>
         );
       })}
     </div>

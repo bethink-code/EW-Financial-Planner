@@ -33,9 +33,13 @@ import IncomeFromCapitalNeed from "@/pages/needs/income-from-capital";
 import DebtRepaymentNeed from "@/pages/needs/debt-repayment";
 
 // Death with estate liquidity placeholder pages
+import DeathEstateLiquidityNeed from "@/pages/needs/death-estate-liquidity";
 import ProjectStep from "@/pages/needs/death-estate-liquidity/project";
 import ImplementStep from "@/pages/needs/death-estate-liquidity/implement";
+import SetupStep from "@/pages/needs/death-estate-liquidity/setup";
+import BuildStep from "@/pages/needs/death-estate-liquidity/build";
 import ClientDetails from "@/pages/needs/death-estate-liquidity/setup/client-details";
+import ParametersSection from "@/pages/needs/death-estate-liquidity/setup/parameters";
 import ParametersSubSection from "@/pages/needs/death-estate-liquidity/setup/parameters/parameters";
 import RetirementFundsGroup from "@/pages/needs/death-estate-liquidity/build/retirement-funds";
 import AssetsLiabilitiesGroup from "@/pages/needs/death-estate-liquidity/build/assets-liabilities";
@@ -149,6 +153,34 @@ function Router() {
           <Route path="/needs/debt-repayment" component={DebtRepaymentNeed} />
           
           {/* Death with estate liquidity placeholder routes with navigation */}
+          <Route path="/needs/death-estate-liquidity">
+            {() => (
+              <NavigationLayout>
+                <DeathEstateLiquidityNeed />
+              </NavigationLayout>
+            )}
+          </Route>
+          <Route path="/needs/death-estate-liquidity/setup">
+            {() => (
+              <NavigationLayout>
+                <SetupStep />
+              </NavigationLayout>
+            )}
+          </Route>
+          <Route path="/needs/death-estate-liquidity/build">
+            {() => (
+              <NavigationLayout>
+                <BuildStep />
+              </NavigationLayout>
+            )}
+          </Route>
+          <Route path="/needs/death-estate-liquidity/setup/parameters">
+            {() => (
+              <NavigationLayout>
+                <ParametersSection />
+              </NavigationLayout>
+            )}
+          </Route>
           <Route path="/needs/death-estate-liquidity/build/retirement-funds">
             {() => (
               <NavigationLayout>
