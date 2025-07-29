@@ -45,6 +45,20 @@ export function NavigationLayout({ children }: NavigationLayoutProps) {
     }))
   }));
   
+  // Find the active section based on current location
+  const activeSection = sections.find(section => 
+    location.includes(section.path) ||
+    section.children?.some(child => location.includes(child.path))
+  );
+  
+  // Get sub-tabs if the active section has children
+  const subTabs = activeSection?.children?.map(child => ({
+    id: child.id,
+    label: child.label,
+    path: child.path,
+    hasContent: child.hasContent
+  })) || [];
+  
   // Mark Setup as complete since we have content there
   const stepsWithStatus = currentNeed.steps.map(step => ({
     ...step,
@@ -65,6 +79,12 @@ export function NavigationLayout({ children }: NavigationLayoutProps) {
       {tabs.length > 0 && (
         <div className="bg-white">
           <SectionTabs tabs={tabs} />
+        </div>
+      )}
+      
+      {subTabs.length > 0 && (
+        <div className="bg-gray-50">
+          <SectionTabs tabs={subTabs} variant="secondary" />
         </div>
       )}
       

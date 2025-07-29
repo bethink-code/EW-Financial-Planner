@@ -68,15 +68,6 @@ export function SectionTabs({ tabs, activeTabId, variant = "primary" }: SectionT
         return (
           <SafeFragment key={tab.id}>
             <TabButton tab={tab} isActive={isActive} />
-            
-            {tab.children && isActive && variant === "primary" && (
-              <div className="ml-4">
-                <SectionTabs 
-                  tabs={tab.children} 
-                  variant="secondary"
-                />
-              </div>
-            )}
           </SafeFragment>
         );
       })}
