@@ -67,26 +67,36 @@ export function NavigationLayout({ children }: NavigationLayoutProps) {
   
   return (
     <div className="min-h-screen bg-gray-50">
-      <FinancialPlanHeader 
-        currentNeed="Death with estate liquidity"
-      />
-      
-      <StepNavigation 
-        steps={stepsWithStatus}
-        currentStepId={currentStep.id}
-      />
-      
-      {tabs.length > 0 && (
-        <div className="bg-white">
-          <SectionTabs tabs={tabs} />
+      <div className="sticky top-0 z-50 bg-white shadow-sm">
+        <div className="max-w-6xl mx-auto">
+          <FinancialPlanHeader 
+            currentNeed="Death with estate liquidity"
+          />
         </div>
-      )}
-      
-      {subTabs.length > 0 && (
-        <div className="bg-gray-50">
-          <SectionTabs tabs={subTabs} variant="secondary" />
+        
+        <div className="max-w-6xl mx-auto">
+          <StepNavigation 
+            steps={stepsWithStatus}
+            currentStepId={currentStep.id}
+          />
         </div>
-      )}
+        
+        {tabs.length > 0 && (
+          <div className="bg-white">
+            <div className="max-w-6xl mx-auto">
+              <SectionTabs tabs={tabs} />
+            </div>
+          </div>
+        )}
+        
+        {subTabs.length > 0 && (
+          <div className="bg-gray-50">
+            <div className="max-w-6xl mx-auto">
+              <SectionTabs tabs={subTabs} variant="secondary" />
+            </div>
+          </div>
+        )}
+      </div>
       
       <div>
         {children}

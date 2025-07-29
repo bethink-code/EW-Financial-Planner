@@ -57,8 +57,8 @@ export function SectionTabs({ tabs, activeTabId, variant = "primary" }: SectionT
   return (
     <div className={cn(
       "flex items-center gap-1",
-      variant === "primary" && "border-b border-gray-200 px-6",
-      variant === "secondary" && "px-6 py-2 bg-gray-50"
+      variant === "primary" && "border-b border-gray-200 px-6 py-0",
+      variant === "secondary" && "px-6 py-2"
     )}>
       {tabs.map((tab) => {
         const isActive = tab.path === location || 

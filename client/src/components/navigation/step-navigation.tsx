@@ -22,7 +22,7 @@ export function StepNavigation({ steps, currentStepId }: StepNavigationProps) {
   const [location] = useLocation();
   
   return (
-    <div className="flex items-center gap-2 px-6 py-4 bg-gray-50 border-b">
+    <div className="flex items-center gap-2 px-6 py-4 bg-gray-50">
       {steps.map((step, index) => {
         const isActive = step.id === currentStepId;
         const isComplete = step.isComplete;
