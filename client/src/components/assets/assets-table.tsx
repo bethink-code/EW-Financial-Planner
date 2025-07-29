@@ -355,7 +355,7 @@ function AssetsTable({ viewMode, searchTerm }: AssetsTableProps) {
             <td className="totals-cell-label"></td>
             <td className="totals-cell-value section-start text-right">R {totals.estate.toLocaleString()}</td>
             <td className="totals-cell-value text-right">R {totals.others.toLocaleString()}</td>
-            <td className="totals-cell-value section-end text-right">R {totals.client.toLocaleString()}</td>
+            <td className="totals-cell-value text-right">R {totals.client.toLocaleString()}</td>
           </tr>
         </tfoot>
       </table>

@@ -191,7 +191,7 @@ function LiabilitiesTable({ viewMode, searchTerm }: LiabilitiesTableProps) {
             <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center">Lambies Family Trust</th>
             <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start">Estate Duty</th>
             <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center">Others</th>
-            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-end">Client</th>
+            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center">Client</th>
           </tr>
         </thead>
         <tbody className="divide-y divide-neutral-200">
@@ -344,7 +344,7 @@ function LiabilitiesTable({ viewMode, searchTerm }: LiabilitiesTableProps) {
         {/* Totals Footer */}
         <tfoot>
           <tr className="bg-neutral-50 border-t border-neutral-300">
-            <td className="totals-cell-label text-right" colSpan={1}>Totals</td>
+            <td className="totals-cell-label text-right section-start" colSpan={1}>Totals</td>
             <td className="totals-cell-value section-start text-right">R {totals.amount.toLocaleString()}</td>
             <td className="totals-cell-label"></td>
             <td className="totals-cell-label"></td>
@@ -352,7 +352,7 @@ function LiabilitiesTable({ viewMode, searchTerm }: LiabilitiesTableProps) {
             <td className="totals-cell-label"></td>
             <td className="totals-cell-value section-start text-right">R {totals.estate.toLocaleString()}</td>
             <td className="totals-cell-value text-right">R {totals.others.toLocaleString()}</td>
-            <td className="totals-cell-value section-end text-right">R {totals.client.toLocaleString()}</td>
+            <td className="totals-cell-value text-right">R {totals.client.toLocaleString()}</td>
           </tr>
         </tfoot>
       </table>
