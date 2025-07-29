@@ -77,7 +77,7 @@ export function FinancialPlanHeader({ currentNeed, onBack }: FinancialPlanHeader
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button 
-                className="bg-[#E97627] hover:bg-[#E97627]/90 text-white px-4 py-1.5 h-auto flex items-center gap-2 text-sm font-normal"
+                className="bg-[#E97627] hover:bg-[#E97627]/90 text-white h-9 px-4 flex items-center gap-2 text-sm"
               >
                 {currentNeed}
                 <ChevronDown className="h-4 w-4" />
