@@ -3,9 +3,7 @@ import { queryClient } from "./lib/queryClient";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
-import { TopNavigation } from "@/components/ui/top-navigation";
 import { NavigationLayout } from "@/components/navigation/navigation-layout";
-import TableNavigation from "@/pages/table-navigation";
 import NotFound from "@/pages/not-found";
 
 // Existing calculator pages
@@ -44,30 +42,16 @@ import ParametersSubSection from "@/pages/needs/death-estate-liquidity/setup/par
 
 
 function Router() {
-  const [location] = useLocation();
-  
-  // Check if we're on a calculator page that needs the new navigation
-  const needsNewNavigation = [
-    "/assurance",
-    "/new-retirement-funds", 
-    "/defined-benefit-funds",
-    "/voluntary-investments",
-    "/assets",
-    "/liabilities",
-    "/income-needs",
-    "/income-provisions",
-    "/residue",
-    "/lump-sum-bequests",
-    "/additional-estate-duty-items",
-    "/needs/death-estate-liquidity"
-  ].some(path => location.includes(path));
-  
   return (
     <div className="min-h-screen bg-gray-50">
-      {!needsNewNavigation && <TopNavigation />}
-      <div className={!needsNewNavigation ? "pt-16" : ""}>
-        <Switch>
-          <Route path="/" component={TableNavigation} />
+      <Switch>
+        {/* Default route - redirect to assurance */}
+        <Route path="/">
+          {() => {
+            window.location.href = "/assurance";
+            return null;
+          }}
+        </Route>
           
           {/* Existing calculator routes with navigation */}
           <Route path="/assurance">
@@ -193,7 +177,6 @@ function Router() {
           
           <Route component={NotFound} />
         </Switch>
-      </div>
     </div>
   );
 }
