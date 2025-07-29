@@ -175,18 +175,18 @@ function LumpSumTable({ viewMode, searchTerm }: LumpSumTableProps) {
  <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start" rowSpan={2}>
  <AddButton onClick={() => addMutation.mutate()} disabled={isUpdating} />
  </th>
- <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center" colSpan={2}>Overview</th>
- <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center" colSpan={4}>Need Details</th>
- <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center" colSpan={1}>Calculation</th>
+ <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start" colSpan={2}>Overview</th>
+ <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start" colSpan={4}>Need Details</th>
+ <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start" colSpan={1}>Calculation</th>
  </tr>
  <tr>
- <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center">Description</th>
+ <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start">Description</th>
  <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center">Entity</th>
- <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center">Start</th>
+ <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start">Start</th>
  <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center">Amount</th>
  <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center">Increase %</th>
  <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center">CPI</th>
- <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center">Value at Death</th>
+ <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start">Value at Death</th>
  </tr>
  </thead>
  <tbody className="divide-y divide-neutral-200">
@@ -205,7 +205,7 @@ function LumpSumTable({ viewMode, searchTerm }: LumpSumTableProps) {
  </ActionButtonGroup>
  </td>
  
- <td className="p-2 text-left">
+ <td className="p-2 text-left section-start">
  <input
  type="text"
  defaultValue={formatTextValue(bequest.description)}
@@ -227,7 +227,7 @@ function LumpSumTable({ viewMode, searchTerm }: LumpSumTableProps) {
  />
  </td>
  
- <td className="p-2 text-left">
+ <td className="p-2 text-left section-start">
  <input
  type="text"
  defaultValue={formatTextValue(bequest.start)}
@@ -272,7 +272,7 @@ function LumpSumTable({ viewMode, searchTerm }: LumpSumTableProps) {
  />
  </td>
  
- <td className="p-2 text-right">
+ <td className="p-2 text-right section-start">
  <input
  key={`valueAtDeath-${bequest.id}-${bequest.valueAtDeath}`}
  type="text"
@@ -289,11 +289,12 @@ function LumpSumTable({ viewMode, searchTerm }: LumpSumTableProps) {
  {/* Totals Footer */}
  <tfoot>
  <tr>
- <td className="totals-cell-label text-right section-start" colSpan={4}>Totals</td>
- <td className="totals-cell-value">R {totals.amount.toLocaleString()}</td>
+ <td className="totals-cell-label text-right section-start">Totals</td>
+ <td className="totals-cell-label section-start" colSpan={2}></td>
+ <td className="totals-cell-value section-start">R {totals.amount.toLocaleString()}</td>
  <td className="totals-cell-value">{totals.increasePercentage}%</td>
  <td className="totals-cell-value">{totals.cpiCount} CPI</td>
- <td className="totals-cell-value">R {totals.valueAtDeath.toLocaleString()}</td>
+ <td className="totals-cell-value section-start">R {totals.valueAtDeath.toLocaleString()}</td>
  </tr>
  </tfoot>
  </table>
