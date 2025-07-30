@@ -73,12 +73,13 @@ export function CalculatorHeader({
           <div className="flex gap-3 items-center">
             {/* View Mode Buttons */}
             {onViewModeChange && (
-              <div className="flex border border-neutral-200 rounded-lg overflow-hidden">
+              <div className="flex border border-neutral-200 rounded-lg overflow-hidden view-mode-switcher">
                 <Button
                   variant={viewMode === "table" ? "default" : "ghost"}
                   size="sm"
                   onClick={() => onViewModeChange("table")}
                   className="rounded-none border-0 h-9 px-4"
+                  data-state={viewMode === "table" ? "active" : "inactive"}
                 >
                   <Table size={16} className="mr-2" />
                   Table
@@ -89,6 +90,7 @@ export function CalculatorHeader({
                   size="sm"
                   onClick={() => onViewModeChange("hybrid")}
                   className="rounded-none border-0 border-l border-neutral-200 h-9 px-4"
+                  data-state={viewMode === "hybrid" ? "active" : "inactive"}
                 >
                   <List size={16} className="mr-2" />
                   Hybrid
@@ -98,12 +100,13 @@ export function CalculatorHeader({
 
             {/* Table/Flows Switcher for retirement funds */}
             {showTableFlowsSwitcher && onTableModeChange && (
-              <div className="flex border border-neutral-200 rounded-lg overflow-hidden">
+              <div className="flex border border-neutral-200 rounded-lg overflow-hidden view-mode-switcher">
                 <Button
                   variant={tableMode === "inputs" ? "default" : "ghost"}
                   size="sm"
                   onClick={() => onTableModeChange("inputs")}
                   className="rounded-none border-0 h-9 px-4"
+                  data-state={tableMode === "inputs" ? "active" : "inactive"}
                 >
                   Table
                 </Button>
@@ -112,6 +115,7 @@ export function CalculatorHeader({
                   size="sm"
                   onClick={() => onTableModeChange("flows")}
                   className="rounded-none border-0 border-l border-neutral-200 h-9 px-4"
+                  data-state={tableMode === "flows" ? "active" : "inactive"}
                 >
                   Flows
                 </Button>

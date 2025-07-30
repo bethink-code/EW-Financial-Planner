@@ -831,4 +831,36 @@ th, td {
   margin-bottom: 1.25rem;
 }
 
+/* Global styling for Table/Hybrid switcher buttons */
+.view-mode-switcher {
+  background-color: #f9fafb !important;
+  border: 1px solid #e5e7eb !important;
+  box-shadow: none !important;
+}
+
+.view-mode-switcher button {
+  background-color: transparent !important;
+  color: #6b7280 !important;
+  font-weight: 400 !important;
+  font-size: 0.875rem !important;
+  border: none !important;
+  box-shadow: none !important;
+  transition: all 0.15s ease-in-out !important;
+}
+
+.view-mode-switcher button:hover:not([data-state="active"]) {
+  background-color: #f3f4f6 !important;
+  color: #374151 !important;
+}
+
+.view-mode-switcher button[data-state="active"],
+.view-mode-switcher button.bg-primary {
+  background-color: white !important;
+  color: #111827 !important;
+  font-weight: 500 !important;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05) !important;
+  border-radius: 0.375rem !important;
+  margin: 0.125rem !important;
+}
+
 
