@@ -121,6 +121,9 @@ export function AssuranceTable({}: AssuranceTableProps) {
 
   // Debounced update for text fields
   const debouncedUpdate = useDebouncedUpdate(executeUpdate, 300);
+  
+  // Track which field is being edited to prevent jumping
+  const [editingField, setEditingField] = useState<string | null>(null);
 
   // Note: handleAddPolicy moved to parent component
 
@@ -147,13 +150,20 @@ export function AssuranceTable({}: AssuranceTableProps) {
 
   // Note: Policy deletion removed - only individual owners/beneficiaries can be deleted
 
-  const handleInputBlur = useCallback((id: number, field: keyof Assurance, value: string, element: HTMLInputElement) => {
-    const formattedValue = formatCurrencyValue(value, field);
+  const handleInputBlur = useCallback((id: number, field: keyof Assurance, value: string, element: HTMLInputElement, fieldType: string) => {
+    const formattedValue = formatCurrencyValue(value, fieldType);
+    
+    // Update the DOM directly to avoid re-render jump
     if (formattedValue !== value) {
       element.value = formattedValue;
     }
-    handleUpdatePolicy(id, field, formattedValue);
-  }, [handleUpdatePolicy]);
+    
+    // Only update if the actual value changed (not just formatting)
+    const policy = policies.find((p: Assurance) => p.id === id);
+    if (policy && policy[field] !== formattedValue) {
+      handleUpdatePolicy(id, field, formattedValue);
+    }
+  }, [policies, handleUpdatePolicy]);
 
   // Add owner to policy
   const handleAddOwner = useCallback((id: number) => {
@@ -379,7 +389,7 @@ export function AssuranceTable({}: AssuranceTableProps) {
                         defaultValue={policy.deathBenefit}
                         className={`table-input ${getFieldClass('currency')} ${getValueClass(policy.deathBenefit, 'currency')}`}
                         onFocus={handleDefaultValueFocus}
-                        onBlur={(e) => handleInputBlur(policy.id, 'deathBenefit', e.target.value, e.target)}
+                        onBlur={(e) => handleInputBlur(policy.id, 'deathBenefit', e.target.value, e.target, 'deathBenefit')}
                       />
                     </td>
                   )}
@@ -447,7 +457,7 @@ export function AssuranceTable({}: AssuranceTableProps) {
                         defaultValue={policy.benefitSplit}
                         className={`table-input ${getFieldClass('percentage')} ${getValueClass(policy.benefitSplit, 'percentage')}`}
                         onFocus={handleDefaultValueFocus}
-                        onBlur={(e) => handleInputBlur(policy.id, 'benefitSplit', e.target.value, e.target)}
+                        onBlur={(e) => handleInputBlur(policy.id, 'benefitSplit', e.target.value, e.target, 'benefitSplit')}
                       />
                     )}
                   </td>
@@ -461,7 +471,7 @@ export function AssuranceTable({}: AssuranceTableProps) {
                         defaultValue={policy.amount}
                         className={`table-input ${getFieldClass('currency')} ${getValueClass(policy.amount, 'currency')}`}
                         onFocus={handleDefaultValueFocus}
-                        onBlur={(e) => handleInputBlur(policy.id, 'amount', e.target.value, e.target)}
+                        onBlur={(e) => handleInputBlur(policy.id, 'amount', e.target.value, e.target, 'amount')}
                       />
                     )}
                   </td>
@@ -527,7 +537,7 @@ export function AssuranceTable({}: AssuranceTableProps) {
                         defaultValue={policy.premiumsByOthers}
                         className={`table-input ${getFieldClass('currency')} ${getValueClass(policy.premiumsByOthers, 'currency')}`}
                         onFocus={handleDefaultValueFocus}
-                        onBlur={(e) => handleInputBlur(policy.id, 'premiumsByOthers', e.target.value, e.target)}
+                        onBlur={(e) => handleInputBlur(policy.id, 'premiumsByOthers', e.target.value, e.target, 'premiumsByOthers')}
                       />
                     )}
                   </td>
@@ -541,7 +551,7 @@ export function AssuranceTable({}: AssuranceTableProps) {
                         defaultValue={policy.collateralSession}
                         className={`table-input ${getFieldClass('currency')} ${getValueClass(policy.collateralSession, 'currency')}`}
                         onFocus={handleDefaultValueFocus}
-                        onBlur={(e) => handleInputBlur(policy.id, 'collateralSession', e.target.value, e.target)}
+                        onBlur={(e) => handleInputBlur(policy.id, 'collateralSession', e.target.value, e.target, 'collateralSession')}
                       />
                     )}
                   </td>
