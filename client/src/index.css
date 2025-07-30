@@ -760,12 +760,19 @@ th, td {
   }
 
   /* Section borders - unified style for all table elements */
-  /* Section start borders - exclude first column to prevent double border */
-  .section-start:not(:first-child) {
+  /* Section start borders */
+  .section-start {
     border-left: 1px solid #d1d5db !important;
     border-right: none !important;
     border-top: none !important;
     border-bottom: none !important;
+  }
+  
+  /* Remove left border from first section (Actions column) */
+  thead tr th:first-child.section-start,
+  tbody tr td:first-child.section-start,
+  tfoot tr td:first-child.section-start {
+    border-left: none !important;
   }
 
   /* CRITICAL: Row borders with absolute maximum specificity - no conflicts allowed */
