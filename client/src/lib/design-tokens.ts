@@ -51,7 +51,7 @@ export const designTokens = {
       bodyCell: "table-text-14 text-neutral-900 dark:text-neutral-100",
       row: "table-row hover:bg-neutral-50 dark:hover:bg-neutral-700 transition-colors",
       totalRow: "table-total-row bg-neutral-100 dark:bg-neutral-600 font-bold",
-      wrapper: "w-full border-collapse bg-white dark:bg-neutral-800 shadow-sm rounded-lg overflow-hidden",
+      wrapper: "w-full border-collapse bg-white dark:bg-neutral-800 rounded-lg overflow-hidden",
       input: "table-input",
     },
     
