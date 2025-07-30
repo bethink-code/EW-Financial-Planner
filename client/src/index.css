@@ -766,8 +766,8 @@ th, td {
     border-right: none !important;
     border-top: none !important;
     border-bottom: none !important;
-    padding-left: 12px !important;
-    padding-right: 8px !important;
+    padding-left: 20px !important;
+    padding-right: 12px !important;
   }
   
   /* Special handling for cells with rowSpan */
