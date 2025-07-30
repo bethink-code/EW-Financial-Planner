@@ -275,37 +275,37 @@ export function NewRetirementTable({
  <table>
  <thead>
  {/* Main section headers */}
- <tr className="border-b border-border">
- <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start" rowSpan={2}>Actions</th>
- <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start" colSpan={2}>Overview</th>
- <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start" colSpan={4}>Unapproved Life Cover</th>
- <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start" colSpan={4}>Monthly Death Benefit</th>
- <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start" colSpan={3}>Approved Life Cover</th>
- <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start" colSpan={7}>Fund Value Beneficiaries</th>
+ <tr className="border-b border-neutral-200">
+ <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center bg-neutral-50 section-start" rowSpan={2}>Actions</th>
+ <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center bg-neutral-50 section-start" colSpan={2}>Overview</th>
+ <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center bg-neutral-50 section-start" colSpan={4}>Unapproved Life Cover</th>
+ <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center bg-neutral-50 section-start" colSpan={4}>Monthly Death Benefit</th>
+ <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center bg-neutral-50 section-start" colSpan={3}>Approved Life Cover</th>
+ <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center bg-neutral-50 section-start" colSpan={7}>Fund Value Beneficiaries</th>
  </tr>
  
  {/* Individual column headers */}
- <tr className="border-b border-border">
- <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start">Description</th>
- <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center">Owners</th>
- <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start">Cover Amount</th>
- <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center">Beneficiaries</th>
- <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center">Percentage Split</th>
- <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center">Cover Split</th>
- <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start">Monthly Income</th>
- <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center">Checkbox</th>
- <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center">Term Years</th>
- <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center">Increase %</th>
- <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start">Cover</th>
- <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center">Fund Value</th>
- <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center">Fund Value at Death</th>
- <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start">Beneficiary Name</th>
- <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center">Percentage</th>
- <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center">Amount</th>
- <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center">Lump Sum Taken</th>
- <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center">Non-deductible Contribution</th>
- <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center">Living Annuity</th>
- <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center">Income Term</th>
+ <tr className="border-b border-neutral-200">
+ <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center bg-neutral-50 section-start">Description</th>
+ <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center bg-neutral-50">Owners</th>
+ <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center bg-neutral-50 section-start">Cover Amount</th>
+ <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center bg-neutral-50">Beneficiaries</th>
+ <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center bg-neutral-50">Percentage Split</th>
+ <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center bg-neutral-50">Cover Split</th>
+ <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center bg-neutral-50 section-start">Monthly Income</th>
+ <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center bg-neutral-50">Checkbox</th>
+ <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center bg-neutral-50">Term Years</th>
+ <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center bg-neutral-50">Increase %</th>
+ <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center bg-neutral-50 section-start">Cover</th>
+ <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center bg-neutral-50">Fund Value</th>
+ <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center bg-neutral-50">Fund Value at Death</th>
+ <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center bg-neutral-50 section-start">Beneficiary Name</th>
+ <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center bg-neutral-50">Percentage</th>
+ <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center bg-neutral-50">Amount</th>
+ <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center bg-neutral-50">Lump Sum Taken</th>
+ <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center bg-neutral-50">Non-deductible Contribution</th>
+ <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center bg-neutral-50">Living Annuity</th>
+ <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center bg-neutral-50">Income Term</th>
  </tr>
  </thead>
  <tbody className="divide-y divide-neutral-200">
