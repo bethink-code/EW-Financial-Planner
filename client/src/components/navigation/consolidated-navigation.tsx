@@ -97,20 +97,16 @@ export function ConsolidatedNavigation({
                 FINANCIAL PLAN
               </span>
               
-              {/* Financial Plan name with edit and back button */}
+              {/* Financial Plan name with edit button */}
               <div className="flex items-center gap-2">
-                <div className="flex items-center gap-2 bg-[#F5F1E8] rounded px-3 py-1.5">
-                  <span className="text-sm text-gray-700" title={planName}>
+                <button className="flex items-center gap-3 pl-3 pr-1 text-sm font-medium transition-colors h-10 rounded-[6px] focus:outline-none focus:ring-0 focus:border-0 bg-[#F5F1E8] text-gray-700 border-0 hover:bg-[#F0EBE0]">
+                  <span title={planName}>
                     {planName}
                   </span>
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    className="h-5 w-5 p-0 text-gray-500 hover:text-gray-700"
-                  >
+                  <span className="flex items-center justify-center h-8 w-8 rounded-lg text-sm font-semibold bg-white text-[#E97627]">
                     <Edit2 className="h-3.5 w-3.5" />
-                  </Button>
-                </div>
+                  </span>
+                </button>
                 
                 {/* Back to all plans button */}
                 <Button
