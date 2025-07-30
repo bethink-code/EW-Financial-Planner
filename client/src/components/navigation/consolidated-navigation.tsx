@@ -186,6 +186,7 @@ export function ConsolidatedNavigation({
                         >
                           <span className={cn(
                             "flex items-center justify-center h-8 w-8 rounded-lg text-sm font-semibold",
+                            "pl-1", // 4px left padding for proper number positioning
                             isActive 
                               ? "bg-white/20 text-white"
                               : "bg-white text-[#E97627]"
@@ -224,6 +225,7 @@ export function ConsolidatedNavigation({
                     >
                       <span className={cn(
                         "flex items-center justify-center h-8 w-8 rounded-lg text-sm font-semibold",
+                        "pl-1", // 4px left padding for proper number positioning
                         isActive 
                           ? "bg-white/20 text-white"
                           : "bg-white text-[#E97627]"
