@@ -147,7 +147,7 @@ export class MemStorage implements IStorage {
 
   // Retirement Funds methods
   async getRetirementFunds(): Promise<RetirementFund[]> {
-    return Array.from(this.retirementFunds.values());
+    return Array.from(this.retirementFunds.values()).sort((a, b) => a.id - b.id);
   }
 
   async getRetirementFund(id: number): Promise<RetirementFund | undefined> {
