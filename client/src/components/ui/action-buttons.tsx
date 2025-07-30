@@ -24,21 +24,36 @@ export function AddButton({
   children
 }: ActionButtonProps) {
   const isTableSize = size === "sm";
+  
+  // Use icon button blue for small sizes (table icons)
+  if (isTableSize && !children) {
+    return (
+      <button
+        onClick={onClick}
+        disabled={disabled}
+        className={cn(
+          "btn-icon-blue rounded-md",
+          className
+        )}
+      >
+        <Plus className="h-4 w-4" />
+      </button>
+    );
+  }
+  
+  // Use primary button for larger sizes with text
   return (
-    <Button
+    <button
       onClick={onClick}
       disabled={disabled}
-      size={size}
-      variant="ghost"
       className={cn(
-        "flex items-center gap-1 bg-white text-gray-700 hover:text-gray-900 hover:bg-gray-50 border border-neutral-200",
-        isTableSize && "h-6 w-6 p-0",
+        "btn-primary px-4 rounded-md flex items-center gap-2",
         className
       )}
     >
-      <Plus className={isTableSize && children === undefined ? "h-3 w-3" : "h-4 w-4"} />
-      {children || (isTableSize ? "" : "Add")}
-    </Button>
+      <Plus className="h-4 w-4" />
+      {children || "Add"}
+    </button>
   );
 }
 
@@ -52,21 +67,36 @@ export function DeleteButton({
   size = "sm" 
 }: Omit<ActionButtonProps, 'variant'>) {
   const isTableSize = size === "sm";
+  
+  // Use icon button white for small sizes (matching duplicate button style)
+  if (isTableSize) {
+    return (
+      <button
+        onClick={onClick}
+        disabled={disabled}
+        className={cn(
+          "btn-icon-white rounded-md",
+          className
+        )}
+      >
+        <Trash2 className="h-4 w-4" />
+      </button>
+    );
+  }
+  
+  // Use destructive button for larger sizes
   return (
-    <Button
+    <button
       onClick={onClick}
       disabled={disabled}
-      size={size}
-      variant="destructive"
       className={cn(
-        "btn-destructive",
-        isTableSize ? "btn-icon-sm" : "",
-        "flex items-center justify-center",
+        "btn-destructive px-4 rounded-md flex items-center gap-2",
         className
       )}
     >
-      <Trash2 className="h-3 w-3" />
-    </Button>
+      <Trash2 className="h-4 w-4" />
+      <span>Delete</span>
+    </button>
   );
 }
 
@@ -80,21 +110,36 @@ export function DuplicateButton({
   size = "sm" 
 }: Omit<ActionButtonProps, 'variant'>) {
   const isTableSize = size === "sm";
+  
+  // Use icon button white for small sizes
+  if (isTableSize) {
+    return (
+      <button
+        onClick={onClick}
+        disabled={disabled}
+        className={cn(
+          "btn-icon-white rounded-md",
+          className
+        )}
+      >
+        <Copy className="h-4 w-4" />
+      </button>
+    );
+  }
+  
+  // Use secondary button for larger sizes
   return (
-    <Button
+    <button
       onClick={onClick}
       disabled={disabled}
-      size={size}
-      variant="ghost"
       className={cn(
-        "btn-secondary",
-        isTableSize ? "btn-icon-sm" : "",
-        "flex items-center justify-center",
+        "btn-secondary px-4 rounded-md flex items-center gap-2",
         className
       )}
     >
-      <Copy className="h-3 w-3" />
-    </Button>
+      <Copy className="h-4 w-4" />
+      <span>Duplicate</span>
+    </button>
   );
 }
 
@@ -108,20 +153,36 @@ export function EditButton({
   size = "sm" 
 }: Omit<ActionButtonProps, 'variant'>) {
   const isTableSize = size === "sm";
+  
+  // Use icon button white for small sizes
+  if (isTableSize) {
+    return (
+      <button
+        onClick={onClick}
+        disabled={disabled}
+        className={cn(
+          "btn-icon-white rounded-md",
+          className
+        )}
+      >
+        <Edit3 className="h-4 w-4" />
+      </button>
+    );
+  }
+  
+  // Use secondary button for larger sizes
   return (
-    <Button
+    <button
       onClick={onClick}
       disabled={disabled}
-      size={size}
-      variant="ghost"
       className={cn(
-        "flex items-center gap-1 text-neutral-600 hover:text-neutral-900",
-        isTableSize && "h-6 w-6 p-0",
+        "btn-secondary px-4 rounded-md flex items-center gap-2",
         className
       )}
     >
-      <Edit3 className={isTableSize ? "h-3 w-3" : "h-4 w-4"} />
-    </Button>
+      <Edit3 className="h-4 w-4" />
+      <span>Edit</span>
+    </button>
   );
 }
 
@@ -135,21 +196,36 @@ export function SaveButton({
   size = "sm" 
 }: Omit<ActionButtonProps, 'variant'>) {
   const isTableSize = size === "sm";
+  
+  // Use icon button blue for small sizes
+  if (isTableSize) {
+    return (
+      <button
+        onClick={onClick}
+        disabled={disabled}
+        className={cn(
+          "btn-icon-blue rounded-md",
+          className
+        )}
+      >
+        <Save className="h-4 w-4" />
+      </button>
+    );
+  }
+  
+  // Use primary button for larger sizes
   return (
-    <Button
+    <button
       onClick={onClick}
       disabled={disabled}
-      size={size}
-      variant="default"
       className={cn(
-        "flex items-center gap-1 bg-primary hover:bg-primary/90 text-primary-foreground",
-        isTableSize && "h-6 w-6 p-0",
+        "btn-primary px-4 rounded-md flex items-center gap-2",
         className
       )}
     >
-      <Save className={isTableSize ? "h-3 w-3" : "h-4 w-4"} />
-      {!isTableSize && "Save"}
-    </Button>
+      <Save className="h-4 w-4" />
+      <span>Save</span>
+    </button>
   );
 }
 
