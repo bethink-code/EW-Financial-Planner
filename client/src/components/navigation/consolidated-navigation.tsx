@@ -42,23 +42,47 @@ export function ConsolidatedNavigation({
     if (!step || !step.sections) return [];
     
     const items: any[] = [];
-    step.sections.forEach((section: any) => {
-      // If section has children, add children directly without parent
-      if (section.children && section.children.length > 0) {
-        section.children.forEach((child: any) => {
+    
+    // For Build step, show all calculator pages directly
+    if (step.id === 'build') {
+      items.push(
+        { id: 'assurance', label: 'Risk & Assurance', path: '/assurance', hasContent: true },
+        { id: 'retirement-funds', label: 'Retirement funds', path: '/new-retirement-funds', hasContent: true },
+        { id: 'defined-benefit', label: 'Defined benefit funds (GEPF)', path: '/defined-benefit-funds', hasContent: true },
+        { id: 'voluntary-investments', label: 'Voluntary investments', path: '/voluntary-investments', hasContent: true },
+        { id: 'assets', label: 'Lifestyle assets', path: '/assets', hasContent: true },
+        { id: 'liabilities', label: 'Liabilities', path: '/liabilities', hasContent: true },
+        { id: 'income-needs', label: 'Income needs', path: '/income-needs', hasContent: true },
+        { id: 'lump-sum', label: 'Lump sum needs and cash bequests', path: '/lump-sum-bequests', hasContent: true },
+        { id: 'income-provisions', label: 'Income provisions', path: '/income-provisions', hasContent: true }
+      );
+    } 
+    // For Setup step, show the actual pages
+    else if (step.id === 'setup') {
+      items.push(
+        { id: 'residue', label: 'Residue', path: '/residue', hasContent: true },
+        { id: 'additional-estate-duty', label: 'Additional estate duty items', path: '/additional-estate-duty-items', hasContent: true }
+      );
+    }
+    // For other steps, use original logic
+    else {
+      step.sections.forEach((section: any) => {
+        if (section.children && section.children.length > 0) {
+          section.children.forEach((child: any) => {
+            items.push({
+              ...child,
+              type: 'section'
+            });
+          });
+        } else {
           items.push({
-            ...child,
+            ...section,
             type: 'section'
           });
-        });
-      } else {
-        // If no children, add the section itself
-        items.push({
-          ...section,
-          type: 'section'
-        });
-      }
-    });
+        }
+      });
+    }
+    
     return items;
   };
 
