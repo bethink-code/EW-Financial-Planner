@@ -26,21 +26,21 @@ export function Switcher({
   size = "md"
 }: SwitcherProps) {
   const sizeClasses = {
-    sm: "text-sm h-10 px-3",
-    md: "text-sm h-10 px-4", 
-    lg: "text-base h-11 px-5"
+    sm: "text-sm h-10 px-6 min-w-[80px]",
+    md: "text-sm h-10 px-8 min-w-[100px]", 
+    lg: "text-base h-11 px-10 min-w-[120px]"
   };
 
   const containerClasses = {
-    sm: "p-0.5",
+    sm: "p-1",
     md: "p-1",
-    lg: "p-1.5"
+    lg: "p-1"
   };
 
   return (
     <div 
       className={cn(
-        "inline-flex bg-[#F5F8FA] rounded-full",
+        "inline-flex bg-[#EDF4F9] rounded-lg",
         containerClasses[size],
         className
       )}
@@ -53,10 +53,10 @@ export function Switcher({
             key={option.value}
             onClick={() => onChange(option.value)}
             className={cn(
-              "relative flex items-center justify-center font-medium rounded-full transition-all duration-200 ease-in-out",
+              "relative flex items-center justify-center font-medium rounded-md transition-all duration-200 ease-in-out",
               sizeClasses[size],
               isSelected
-                ? "bg-[#E8F3F8] text-[#016991] font-semibold shadow-sm"
+                ? "bg-white text-[#016991] font-semibold"
                 : "text-[#6B7280] hover:text-gray-700"
             )}
           >
