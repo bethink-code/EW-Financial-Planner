@@ -2,7 +2,7 @@ import { retirementFunds, lumpSumBequests, assurance, definedBenefitFunds, volun
 import { assets, type Assets, type InsertAssets } from "@shared/assets-schema";
 import { drizzle } from "drizzle-orm/node-postgres";
 import { Pool } from "pg";
-import { eq, ilike, or } from "drizzle-orm";
+import { eq, ilike, or, asc } from "drizzle-orm";
 
 export interface IStorage {
   // Retirement Funds
@@ -816,7 +816,7 @@ export class DbStorage {
 
   // Retirement Funds methods
   async getRetirementFunds(): Promise<RetirementFund[]> {
-    return await this.db.select().from(retirementFunds);
+    return await this.db.select().from(retirementFunds).orderBy(asc(retirementFunds.id));
   }
 
   async getRetirementFund(id: number): Promise<RetirementFund | undefined> {
