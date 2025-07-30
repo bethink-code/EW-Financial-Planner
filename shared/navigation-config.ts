@@ -170,14 +170,54 @@ export const needs: Need[] = [
         number: 3,
         label: "Project",
         path: "/needs/death-estate-liquidity/project",
-        hasContent: false
+        hasContent: true,
+        sections: [
+          {
+            id: "projections",
+            label: "Projections",
+            path: "/needs/death-estate-liquidity/project/projections",
+            hasContent: false
+          },
+          {
+            id: "reports",
+            label: "Reports",
+            path: "/needs/death-estate-liquidity/project/reports",
+            hasContent: false
+          },
+          {
+            id: "analysis",
+            label: "Analysis",
+            path: "/needs/death-estate-liquidity/project/analysis",
+            hasContent: false
+          }
+        ]
       },
       {
         id: "implement",
         number: 4,
         label: "Implement",
         path: "/needs/death-estate-liquidity/implement",
-        hasContent: false
+        hasContent: true,
+        sections: [
+          {
+            id: "action-plan",
+            label: "Action plan",
+            path: "/needs/death-estate-liquidity/implement/action-plan",
+            hasContent: false
+          },
+          {
+            id: "recommendations",
+            label: "Recommendations",
+            path: "/needs/death-estate-liquidity/implement/recommendations",
+            hasContent: false
+          },
+          {
+            id: "tracking",
+            label: "Implementation tracking",
+            path: "/needs/death-estate-liquidity/implement/tracking",
+            hasContent: false
+          }
+        ]
       }
     ]
   },
