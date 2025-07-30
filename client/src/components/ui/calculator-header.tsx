@@ -1,5 +1,6 @@
-import { Table, List, Plus } from "lucide-react";
+import { Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { GraphTableSwitcher, InputFlowSwitcher } from "@/components/ui/switcher";
 
 interface CalculatorHeaderProps {
   title: string;
@@ -60,53 +61,20 @@ export function CalculatorHeader({
             
             {/* Table/Flows Switcher for retirement funds */}
             {showTableFlowsSwitcher && onTableModeChange && (
-              <div className="flex border border-neutral-200 rounded-lg overflow-hidden view-mode-switcher">
-                <Button
-                  variant={tableMode === "inputs" ? "default" : "ghost"}
-                  size="sm"
-                  onClick={() => onTableModeChange("inputs")}
-                  className="rounded-none border-0 h-9 px-4"
-                  data-state={tableMode === "inputs" ? "active" : "inactive"}
-                >
-                  Table
-                </Button>
-                <Button
-                  variant={tableMode === "flows" ? "default" : "ghost"}
-                  size="sm"
-                  onClick={() => onTableModeChange("flows")}
-                  className="rounded-none border-0 border-l border-neutral-200 h-9 px-4"
-                  data-state={tableMode === "flows" ? "active" : "inactive"}
-                >
-                  Flows
-                </Button>
-              </div>
+              <InputFlowSwitcher
+                value={tableMode === "inputs" ? "input" : "flow"}
+                onChange={(value) => onTableModeChange(value === "input" ? "inputs" : "flows")}
+                size="sm"
+              />
             )}
 
             {/* View Mode Buttons */}
             {onViewModeChange && (
-              <div className="flex border border-neutral-200 rounded-lg overflow-hidden view-mode-switcher">
-                <Button
-                  variant={viewMode === "table" ? "default" : "ghost"}
-                  size="sm"
-                  onClick={() => onViewModeChange("table")}
-                  className="rounded-none border-0 h-9 px-4"
-                  data-state={viewMode === "table" ? "active" : "inactive"}
-                >
-                  <Table size={16} className="mr-2" />
-                  Table
-                </Button>
-
-                <Button
-                  variant={viewMode === "hybrid" ? "default" : "ghost"}
-                  size="sm"
-                  onClick={() => onViewModeChange("hybrid")}
-                  className="rounded-none border-0 border-l border-neutral-200 h-9 px-4"
-                  data-state={viewMode === "hybrid" ? "active" : "inactive"}
-                >
-                  <List size={16} className="mr-2" />
-                  Hybrid
-                </Button>
-              </div>
+              <GraphTableSwitcher
+                value={viewMode}
+                onChange={(value) => onViewModeChange(value as "table" | "hybrid")}
+                size="sm"
+              />
             )}
           </div>
 
