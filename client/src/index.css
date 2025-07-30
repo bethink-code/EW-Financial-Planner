@@ -760,7 +760,8 @@ th, td {
   }
 
   /* Section borders - unified style for all table elements */
-  .section-start {
+  /* Section start borders - exclude first column to prevent double border */
+  .section-start:not(:first-child) {
     border-left: 1px solid #d1d5db !important;
     border-right: none !important;
     border-top: none !important;
