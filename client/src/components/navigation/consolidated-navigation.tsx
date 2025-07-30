@@ -103,7 +103,7 @@ export function ConsolidatedNavigation({
                   <span title={planName}>
                     {planName}
                   </span>
-                  <span className="flex items-center justify-center h-6 w-6 rounded text-sm font-semibold bg-white text-[#F97415]">
+                  <span className="flex items-center justify-center h-8 w-8 rounded text-sm font-semibold bg-white text-[#F97415]">
                     <Edit2 className="h-3 w-3" />
                   </span>
                 </button>
@@ -181,7 +181,7 @@ export function ConsolidatedNavigation({
                           disabled={!step.hasContent}
                         >
                           <span className={cn(
-                            "flex items-center justify-center h-6 w-6 rounded text-sm font-semibold",
+                            "flex items-center justify-center h-8 w-8 rounded text-sm font-semibold",
                             isActive 
                               ? "bg-white/20 text-white"
                               : "bg-white text-[#F97415]"
@@ -220,7 +220,7 @@ export function ConsolidatedNavigation({
                       disabled={!step.hasContent}
                     >
                       <span className={cn(
-                        "flex items-center justify-center h-6 w-6 rounded text-sm font-semibold",
+                        "flex items-center justify-center h-8 w-8 rounded text-sm font-semibold",
                         isActive 
                           ? "bg-white/20 text-white"
                           : "bg-white text-[#F97415]"
