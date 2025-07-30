@@ -26,21 +26,21 @@ export function Switcher({
   size = "md"
 }: SwitcherProps) {
   const sizeClasses = {
-    sm: "text-xs py-1 px-2",
-    md: "text-sm py-2 px-3", 
-    lg: "text-base py-2.5 px-4"
+    sm: "text-sm py-1.5 px-3",
+    md: "text-sm py-2 px-4", 
+    lg: "text-base py-2.5 px-5"
   };
 
   const containerClasses = {
-    sm: "p-1",
-    md: "p-1.5",
-    lg: "p-2"
+    sm: "p-0.5",
+    md: "p-1",
+    lg: "p-1.5"
   };
 
   return (
     <div 
       className={cn(
-        "inline-flex bg-neutral-100 rounded-lg",
+        "inline-flex bg-gray-100 rounded-lg",
         containerClasses[size],
         className
       )}
@@ -56,8 +56,8 @@ export function Switcher({
               "relative font-medium rounded-md transition-all duration-200 ease-in-out",
               sizeClasses[size],
               isSelected
-                ? "bg-blue-100 text-blue-700 shadow-sm font-semibold"
-                : "text-neutral-600 hover:text-neutral-900 hover:bg-neutral-50"
+                ? "bg-[#E8F3F8] text-[#016991] font-semibold"
+                : "text-gray-600 hover:text-gray-900"
             )}
           >
             {option.label}
