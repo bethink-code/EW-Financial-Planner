@@ -6,6 +6,7 @@ import { CalculatorHeader } from "@/components/ui/calculator-header";
 import { RetirementFundsSummary } from "@/components/retirement-funds/retirement-funds-summary";
 import { NewRetirementTable } from "@/components/retirement-funds/new-retirement-table";
 import { AdditionalDetails } from "@/components/retirement-funds/additional-details";
+import { useDebouncedUpdate } from "@/hooks/use-debounced-update";
 
 
 type ViewMode = "table" | "hybrid";
@@ -64,10 +65,28 @@ export default function NewRetirementFunds() {
     },
   });
 
-  // Immediate field update without debouncing to fix input issues
-  const handleFieldUpdate = useCallback((id: number, field: string, value: any) => {
+  // Base update handler
+  const executeUpdate = useCallback((id: number, field: string, value: any) => {
     updateMutation.mutate({ id, updates: { [field]: value } });
   }, [updateMutation]);
+
+  // Debounced update for text fields to prevent race conditions
+  const debouncedUpdate = useDebouncedUpdate(executeUpdate, 300);
+
+  // Smart field update that uses debouncing for text fields, immediate for arrays
+  const handleFieldUpdate = useCallback((id: number, field: string, value: any) => {
+    // Use immediate updates for array fields to prevent synchronization issues
+    const arrayFields = ['owners', 'ownershipPercentages', 'unapprovedBeneficiaries', 
+                        'unapprovedPercentageSplits', 'unapprovedCoverSplits',
+                        'fundValueBeneficiaries', 'fundValuePercentageSplits', 
+                        'fundValueCoverSplits'];
+    
+    if (arrayFields.includes(field)) {
+      executeUpdate(id, field, value);
+    } else {
+      debouncedUpdate(id, field, value);
+    }
+  }, [executeUpdate, debouncedUpdate]);
 
   const handleAddFund = useCallback(() => {
     const newFund = {}; // Send empty object to use database defaults

@@ -134,7 +134,7 @@ export const createOwnerManager = <T extends Record<string, any>>(
     
     changeOwner: (itemId: number, ownerIndex: number, newOwner: string) => {
       const cleanedValue = cleanTextValue(newOwner);
-      handleChange(itemId, ownerIndex, 'owners', cleanedValue || null, true);
+      handleChange(itemId, ownerIndex, 'owners', cleanedValue || "", true);
     }
   };
 };
@@ -161,7 +161,7 @@ export const createBeneficiaryManager = <T extends Record<string, any>>(
     
     changeBeneficiary: (itemId: number, beneficiaryIndex: number, newBeneficiary: string) => {
       const cleanedValue = cleanTextValue(newBeneficiary);
-      handleChange(itemId, beneficiaryIndex, beneficiaryField, cleanedValue || null, true);
+      handleChange(itemId, beneficiaryIndex, beneficiaryField, cleanedValue || "", true);
     },
     
     changePercentage: (itemId: number, beneficiaryIndex: number, newPercentage: string) => {
@@ -194,7 +194,7 @@ export const createComplexBeneficiaryManager = <T extends Record<string, any>>(
     
     changeBeneficiary: (itemId: number, beneficiaryIndex: number, newBeneficiary: string) => {
       const cleanedValue = cleanTextValue(newBeneficiary);
-      handleChange(itemId, beneficiaryIndex, beneficiaryField, cleanedValue || null, true);
+      handleChange(itemId, beneficiaryIndex, beneficiaryField, cleanedValue || "", true);
     },
     
     changePercentage: (itemId: number, beneficiaryIndex: number, newPercentage: string) => {

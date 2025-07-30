@@ -168,7 +168,7 @@ export function NewRetirementTable({
  );
 
  return Array.from({ length: maxRows }, (_, rowIndex) => (
- <tr key={`${fund.id}-${rowIndex}-${fund.owners?.length || 0}-${fund.unapprovedBeneficiaries?.length || 0}-${fund.fundValueBeneficiaries?.length || 0}`} className="hover:bg-neutral-50">
+ <tr key={`${fund.id}-row-${rowIndex}`} className="hover:bg-neutral-50">
  {/* Actions */}
  <td className="table-actions-cell p-1 text-center section-start">
  {rowIndex === 0 && (
@@ -189,9 +189,10 @@ export function NewRetirementTable({
  <td className="p-1 section-start">
  {rowIndex === 0 && (
  <input
+ key={`desc-${fund.id}`}
  type="text"
  defaultValue={formatTextValue(fund.description ||"")}
- className={`table-input ${getFieldClass('text')} ${getValueClass(fund.description, 'text')}`}
+ className={`table-input ${getFieldClass('text')} ${getValueClass(fund.description || "", 'text')}`}
  onFocus={handleDefaultValueFocus}
  onBlur={(e) => {
  const value = cleanTextValue(e.target.value);
@@ -206,6 +207,7 @@ export function NewRetirementTable({
  {rowIndex < (fund.owners?.length || 0) && (
  <div className="flex items-center gap-1">
  <input
+ key={`owner-${fund.id}-${rowIndex}`}
  type="text"
  defaultValue={formatTextValue(fund.owners?.[rowIndex], 'owner')}
  className={`table-input ${getFieldClass('text')} flex-1 ${getValueClass(fund.owners?.[rowIndex], 'text')}`}
@@ -251,8 +253,8 @@ export function NewRetirementTable({
  <div className="flex items-center gap-1">
  <input
  type="text"
- defaultValue={formatTextValue(fund.unapprovedBeneficiaries?.[rowIndex])}
- className={`table-input ${getFieldClass('text')} flex-1 ${getValueClass(fund.unapprovedBeneficiaries?.[rowIndex], 'text')}`}
+ defaultValue={formatTextValue(fund.unapprovedBeneficiaries?.[rowIndex] || "")}
+ className={`table-input ${getFieldClass('text')} flex-1 ${getValueClass(fund.unapprovedBeneficiaries?.[rowIndex] || "", 'text')}`}
  onFocus={handleDefaultValueFocus}
  onBlur={(e) => {
  unapprovedBeneficiaryManager.changeBeneficiary(fund.id, rowIndex, e.target.value);
@@ -415,8 +417,8 @@ export function NewRetirementTable({
  <div className="flex items-center gap-1">
  <input
  type="text"
- defaultValue={formatTextValue(fund.fundValueBeneficiaries?.[rowIndex])}
- className={`table-input ${getFieldClass('text')} flex-1 ${getValueClass(fund.fundValueBeneficiaries?.[rowIndex], 'text')}`}
+ defaultValue={formatTextValue(fund.fundValueBeneficiaries?.[rowIndex] || "")}
+ className={`table-input ${getFieldClass('text')} flex-1 ${getValueClass(fund.fundValueBeneficiaries?.[rowIndex] || "", 'text')}`}
  onFocus={handleDefaultValueFocus}
  onBlur={(e) => {
  fundValueBeneficiaryManager.changeBeneficiary(fund.id, rowIndex, e.target.value);
