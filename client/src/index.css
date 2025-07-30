@@ -336,6 +336,31 @@ th, td {
     max-height: 2.5rem !important;
   }
 
+  /* DOUBLE ROW HEADER SPACING - Reduce distance between header rows */
+  /* For tables with multiple header rows, make them tighter */
+  table thead tr + tr {
+    height: 2rem !important;
+    min-height: 2rem !important;
+    max-height: 2rem !important;
+  }
+
+  table thead tr + tr th {
+    padding-top: 0.2rem !important;
+    padding-bottom: 0.2rem !important;
+    height: 2rem !important;
+    min-height: 2rem !important;
+    max-height: 2rem !important;
+  }
+
+  /* Reduce spacing between first and second header rows */
+  table thead tr:first-child th {
+    padding-bottom: 0.2rem !important;
+  }
+
+  table thead tr:not(:first-child) th {
+    padding-top: 0.2rem !important;
+  }
+
   /* Ensure section headers blend with compact style */
   table thead th.section-start {
     border-left: 1px solid #d1d5db !important;
