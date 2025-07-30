@@ -176,7 +176,7 @@ export function ConsolidatedNavigation({
                       <DropdownMenuTrigger asChild>
                         <button
                           className={cn(
-                            "flex items-center gap-1 pl-1 pr-2 h-10 text-sm font-medium transition-colors",
+                            "flex items-center gap-3 px-4 text-sm font-medium transition-colors h-10",
                             "rounded-[6px] border",
                             isActive
                               ? "bg-[#E97627] text-white border-[#E97627]"
@@ -185,14 +185,14 @@ export function ConsolidatedNavigation({
                           disabled={!step.hasContent}
                         >
                           <span className={cn(
-                            "flex items-center justify-center h-6 w-6 rounded text-xs font-semibold",
+                            "flex items-center justify-center h-8 w-8 rounded-lg text-sm font-semibold",
                             isActive 
                               ? "bg-white/20 text-white"
                               : "bg-white text-[#E97627]"
                           )}>
                             {step.number}
                           </span>
-                          <span className="text-xs">{step.label}</span>
+                          <span>{step.label}</span>
                         </button>
                       </DropdownMenuTrigger>
                       <DropdownMenuContent align="start" className="w-72">
@@ -214,7 +214,7 @@ export function ConsolidatedNavigation({
                     <button
                       onClick={() => setLocation(step.path)}
                       className={cn(
-                        "flex items-center gap-1 pl-1 pr-2 h-10 text-sm font-medium transition-colors",
+                        "flex items-center gap-3 px-4 text-sm font-medium transition-colors h-10",
                         "rounded-[6px] border",
                         isActive
                           ? "bg-[#E97627] text-white border-[#E97627]"
@@ -223,14 +223,14 @@ export function ConsolidatedNavigation({
                       disabled={!step.hasContent}
                     >
                       <span className={cn(
-                        "flex items-center justify-center h-6 w-6 rounded text-xs font-semibold",
+                        "flex items-center justify-center h-8 w-8 rounded-lg text-sm font-semibold",
                         isActive 
                           ? "bg-white/20 text-white"
                           : "bg-white text-[#E97627]"
                       )}>
                         {step.number}
                       </span>
-                      <span className="text-xs">{step.label}</span>
+                      <span>{step.label}</span>
                     </button>
                   )}
                 </SafeFragment>
