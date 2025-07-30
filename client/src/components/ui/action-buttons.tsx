@@ -25,7 +25,7 @@ export function AddButton({
 }: ActionButtonProps) {
   const isTableSize = size === "sm";
   
-  // Small table icon button
+  // Small table icon button - Light blue background with dark blue icon
   if (isTableSize && !children) {
     return (
       <button
@@ -33,7 +33,7 @@ export function AddButton({
         onClick={onClick}
         disabled={disabled}
         className={cn(
-          "h-6 w-6 bg-white border border-gray-300 text-blue-600 hover:bg-gray-50 rounded-md flex items-center justify-center transition-colors",
+          "h-6 w-6 bg-[#E8F3F8] border border-[#E0E0E0] text-[#016991] hover:bg-[#d1e7dd] rounded-md flex items-center justify-center transition-colors",
           disabled && "opacity-50 cursor-not-allowed",
           className
         )}
@@ -50,7 +50,7 @@ export function AddButton({
       onClick={onClick}
       disabled={disabled}
       className={cn(
-        "px-4 py-2 bg-blue-600 text-white hover:bg-blue-700 rounded-md flex items-center gap-2 transition-colors",
+        "px-4 py-2 bg-[#016991] text-white hover:bg-[#014f73] rounded-md flex items-center gap-2 transition-colors",
         disabled && "opacity-50 cursor-not-allowed",
         className
       )}
@@ -72,7 +72,7 @@ export function DeleteButton({
 }: Omit<ActionButtonProps, 'variant'>) {
   const isTableSize = size === "sm";
   
-  // Small table icon button
+  // Small table icon button - White background with gray icon
   if (isTableSize) {
     return (
       <button
@@ -80,7 +80,7 @@ export function DeleteButton({
         onClick={onClick}
         disabled={disabled}
         className={cn(
-          "h-6 w-6 bg-white border border-gray-300 text-gray-600 hover:bg-gray-50 rounded-md flex items-center justify-center transition-colors",
+          "h-6 w-6 bg-white border border-[#E0E0E0] text-gray-600 hover:bg-gray-50 rounded-md flex items-center justify-center transition-colors",
           disabled && "opacity-50 cursor-not-allowed",
           className
         )}
@@ -118,14 +118,15 @@ export function DuplicateButton({
 }: Omit<ActionButtonProps, 'variant'>) {
   const isTableSize = size === "sm";
   
-  // Small table icon button
+  // Small table icon button - White background with gray icon
   if (isTableSize) {
     return (
       <button
+        type="button"
         onClick={onClick}
         disabled={disabled}
         className={cn(
-          "h-6 w-6 bg-white border border-gray-300 text-gray-600 hover:bg-gray-50 rounded-md flex items-center justify-center transition-colors",
+          "h-6 w-6 bg-white border border-[#E0E0E0] text-gray-600 hover:bg-gray-50 rounded-md flex items-center justify-center transition-colors",
           disabled && "opacity-50 cursor-not-allowed",
           className
         )}
@@ -138,10 +139,11 @@ export function DuplicateButton({
   // Larger secondary button
   return (
     <button
+      type="button"
       onClick={onClick}
       disabled={disabled}
       className={cn(
-        "px-4 py-2 bg-white border border-gray-300 text-gray-700 hover:bg-gray-50 rounded-md flex items-center gap-2 transition-colors",
+        "px-4 py-2 bg-white border border-[#E0E0E0] text-gray-700 hover:bg-gray-50 rounded-md flex items-center gap-2 transition-colors",
         disabled && "opacity-50 cursor-not-allowed",
         className
       )}
@@ -163,29 +165,33 @@ export function EditButton({
 }: Omit<ActionButtonProps, 'variant'>) {
   const isTableSize = size === "sm";
   
-  // Use icon button white for small sizes
+  // Small table icon button - White background with gray icon
   if (isTableSize) {
     return (
       <button
+        type="button"
         onClick={onClick}
         disabled={disabled}
         className={cn(
-          "btn-icon-white rounded-md",
+          "h-6 w-6 bg-white border border-[#E0E0E0] text-gray-600 hover:bg-gray-50 rounded-md flex items-center justify-center transition-colors",
+          disabled && "opacity-50 cursor-not-allowed",
           className
         )}
       >
-        <Edit3 className="h-4 w-4" />
+        <Edit3 className="h-3 w-3" />
       </button>
     );
   }
   
-  // Use secondary button for larger sizes
+  // Larger secondary button
   return (
     <button
+      type="button"
       onClick={onClick}
       disabled={disabled}
       className={cn(
-        "btn-secondary px-4 rounded-md flex items-center gap-2",
+        "px-4 py-2 bg-white border border-[#E0E0E0] text-gray-700 hover:bg-gray-50 rounded-md flex items-center gap-2 transition-colors",
+        disabled && "opacity-50 cursor-not-allowed",
         className
       )}
     >
@@ -206,29 +212,33 @@ export function SaveButton({
 }: Omit<ActionButtonProps, 'variant'>) {
   const isTableSize = size === "sm";
   
-  // Use icon button blue for small sizes
+  // Small table icon button - Light blue background with dark blue icon
   if (isTableSize) {
     return (
       <button
+        type="button"
         onClick={onClick}
         disabled={disabled}
         className={cn(
-          "btn-icon-blue rounded-md",
+          "h-6 w-6 bg-[#E8F3F8] border border-[#E0E0E0] text-[#016991] hover:bg-[#d1e7dd] rounded-md flex items-center justify-center transition-colors",
+          disabled && "opacity-50 cursor-not-allowed",
           className
         )}
       >
-        <Save className="h-4 w-4" />
+        <Save className="h-3 w-3" />
       </button>
     );
   }
   
-  // Use primary button for larger sizes
+  // Larger primary button
   return (
     <button
+      type="button"
       onClick={onClick}
       disabled={disabled}
       className={cn(
-        "btn-primary px-4 rounded-md flex items-center gap-2",
+        "px-4 py-2 bg-[#016991] text-white hover:bg-[#014f73] rounded-md flex items-center gap-2 transition-colors",
+        disabled && "opacity-50 cursor-not-allowed",
         className
       )}
     >
