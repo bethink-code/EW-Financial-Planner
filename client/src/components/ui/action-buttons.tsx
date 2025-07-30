@@ -31,7 +31,7 @@ export function AddButton({
       size={size}
       variant="ghost"
       className={cn(
-        "flex items-center gap-1  text-primary hover:text-primary hover:bg-blue-50 border border-primary",
+        "flex items-center gap-1 bg-white text-gray-700 hover:text-gray-900 hover:bg-gray-50 border border-neutral-200",
         isTableSize && "h-6 w-6 p-0",
         className
       )}
