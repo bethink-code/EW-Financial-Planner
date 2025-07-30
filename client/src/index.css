@@ -309,39 +309,41 @@ th, td {
     min-height: 2.7rem; /* Match body cell height */
   }
 
-  /* COMPACT TABLE HEADERS - Global Style Override */
-  /* Make all table headers render in compact single-row style like your mockup */
+  /* OPTIMIZED COMPACT TABLE HEADERS - Fixed for all browsers */
+  /* Force compact header styling with proper hierarchy */
   table thead th {
-    padding: 0.4rem 0.5rem !important;
-    font-size: 0.75rem !important;
-    font-weight: 500 !important;
+    padding: 0.5rem 0.6rem !important;
+    font-size: 11px !important;
+    font-weight: 600 !important;
     text-transform: uppercase !important;
-    letter-spacing: 0.05em !important;
-    color: #6b7280 !important;
-    background-color: #f9fafb !important;
+    letter-spacing: 0.025em !important;
+    color: #4b5563 !important;
+    background-color: #f8fafc !important;
     vertical-align: middle !important;
-    line-height: 1.2 !important;
-    height: 2.5rem !important;
-    min-height: 2.5rem !important;
-    max-height: 2.5rem !important;
+    line-height: 1.3 !important;
+    height: 2.75rem !important;
+    min-height: 2.75rem !important;
+    max-height: 2.75rem !important;
     white-space: nowrap !important;
     overflow: hidden !important;
     text-overflow: ellipsis !important;
+    border-bottom: 1px solid #e5e7eb !important;
   }
 
-  /* Force compact header row height */
+  /* Ensure header row heights are consistent */
   table thead tr {
-    height: 2.5rem !important;
-    min-height: 2.5rem !important;
-    max-height: 2.5rem !important;
+    height: 2.75rem !important;
+    min-height: 2.75rem !important;
+    max-height: 2.75rem !important;
   }
 
-  /* DOUBLE ROW HEADER SPACING - Reduce distance between header rows */
-  /* For tables with multiple header rows, make them tighter */
-  table thead tr + tr {
-    height: 2rem !important;
-    min-height: 2rem !important;
-    max-height: 2rem !important;
+  /* For multi-row headers, keep consistent spacing */
+  table thead tr:first-child th {
+    border-bottom: 1px solid #d1d5db !important;
+  }
+  
+  table thead tr:last-child th {
+    border-bottom: 2px solid #9ca3af !important;
   }
 
   table thead tr + tr th {
