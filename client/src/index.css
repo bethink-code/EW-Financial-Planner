@@ -317,7 +317,7 @@ th, td {
 
   /* Centralized summary card styling */
   .summary-card {
-    background-color: #f9fafb !important; /* Same as table footer bg-neutral-50 */
+    background-color: #EDF4F9 !important; /* Same as switcher background */
     border-radius: 0.5rem !important;
     padding: 1rem !important;
     text-align: center !important;
