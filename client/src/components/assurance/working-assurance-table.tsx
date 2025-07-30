@@ -330,6 +330,7 @@ export function AssuranceTable({}: AssuranceTableProps) {
                   <td className="border border-neutral-300 p-1">
                     {rowIndex < policy.owners.length ? (
                       <div className="flex items-center gap-1">
+                        {rowIndex > 0 && <span className="text-blue-600">↳</span>}
                         <input
                           key={`owner-${policy.id}-${rowIndex}-${policy.owners[rowIndex]}`}
                           type="text"
@@ -398,6 +399,7 @@ export function AssuranceTable({}: AssuranceTableProps) {
                   <td className="border border-neutral-300 p-1">
                     {rowIndex < policy.beneficiaries.length ? (
                       <div className="flex items-center gap-1">
+                        {rowIndex > 0 && <span className="text-green-600">↳</span>}
                         <input
                           key={`beneficiary-${policy.id}-${rowIndex}-${policy.beneficiaries[rowIndex]}`}
                           type="text"

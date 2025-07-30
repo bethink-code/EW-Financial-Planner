@@ -357,6 +357,7 @@ export function NewRetirementTable({
  <td className="p-1">
  {rowIndex < (fund.owners?.length || 0) && (
  <div className="flex items-center gap-1">
+ {rowIndex > 0 && <span className="text-blue-600">↳</span>}
  <input
  key={`owner-${fund.id}-${rowIndex}`}
  type="text"
@@ -403,6 +404,7 @@ export function NewRetirementTable({
  <td className="p-1">
  {rowIndex < (fund.unapprovedBeneficiaries?.length || 0) && (
  <div className="flex items-center gap-1">
+ {rowIndex > 0 && <span className="text-green-600">↳</span>}
  <input
  key={`unapproved-benef-${fund.id}-${rowIndex}`}
  type="text"
@@ -572,6 +574,7 @@ export function NewRetirementTable({
  <td className="p-1 section-start">
  {rowIndex < (fund.fundValueBeneficiaries?.length || 0) && (
  <div className="flex items-center gap-1">
+ {rowIndex > 0 && <span className="text-green-600">↳</span>}
  <input
  key={`fundvalue-benef-${fund.id}-${rowIndex}`}
  type="text"
