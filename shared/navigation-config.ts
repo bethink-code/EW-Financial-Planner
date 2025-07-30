@@ -246,5 +246,5 @@ export const needs: Need[] = [
 // Helper function to get current financial plan name
 export function getFinancialPlanName(): string {
   // This could be fetched from an API or context in a real app
-  return "What happens if I make this a very long name that shouldn't be that long";
+  return "Lambie Estate plan 2025";
 }
