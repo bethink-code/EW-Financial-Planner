@@ -177,7 +177,7 @@ export function ConsolidatedNavigation({
                         <button
                           className={cn(
                             "flex items-center gap-3 pl-1 pr-3 text-sm font-medium transition-colors h-10",
-                            "rounded-[6px]",
+                            "rounded-[6px] focus:outline-none focus:ring-0 focus:border-0",
                             isActive
                               ? "bg-[#E97627] text-white border-0"
                               : "bg-[#F5F1E8] text-gray-700 border-0 hover:bg-[#F0EBE0]"
@@ -215,7 +215,7 @@ export function ConsolidatedNavigation({
                       onClick={() => setLocation(step.path)}
                       className={cn(
                         "flex items-center gap-3 pl-1 pr-3 text-sm font-medium transition-colors h-10",
-                        "rounded-[6px]",
+                        "rounded-[6px] focus:outline-none focus:ring-0 focus:border-0",
                         isActive
                           ? "bg-[#E97627] text-white border-0"
                           : "bg-[#F5F1E8] text-gray-700 border-0 hover:bg-[#F0EBE0]"
