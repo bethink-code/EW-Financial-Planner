@@ -925,35 +925,7 @@ th, td {
   margin-bottom: 1.25rem;
 }
 
-/* ===== GLOBAL BUTTON STYLE SYSTEM ===== */
-
-/* Primary Button Style - Main actions (Elite Wealth Blue) */
-.btn-primary {
-  background-color: #016991 !important;
-  color: white !important;
-  border: 1px solid #016991 !important;
-  font-weight: 500 !important;
-  height: 2.5rem !important; /* 40px */
-  border-radius: 6px !important; /* 6px radius */
-  transition: all 0.15s ease-in-out !important;
-}
-
-.btn-primary:hover:not(:disabled) {
-  background-color: #4C8DB4 !important; /* Blue/400 */
-  border-color: #4C8DB4 !important;
-}
-
-.btn-primary:active:not(:disabled) {
-  background-color: #114E72 !important; /* Blue/700 */
-  border-color: #114E72 !important;
-}
-
-.btn-primary:disabled {
-  background-color: #828282 !important; /* Gray/700 */
-  border-color: #828282 !important;
-  color: white !important;
-  cursor: not-allowed !important;
-}
+/* ===== SIMPLE BUTTON STYLES ===== */
 
 /* Secondary Button Style - White with gray border */
 .btn-secondary {
@@ -1239,18 +1211,6 @@ th, td {
   opacity: 1 !important;
 }
 
-/* Action Button Overrides - Apply global styles to existing buttons */
-button[class*="bg-white"][class*="text-gray"] {
-  @apply btn-secondary;
-}
-
-button[class*="bg-primary"],
-button[style*="background-color: #016991"] {
-  @apply btn-primary;
-}
-
-button[class*="destructive"] {
-  @apply btn-destructive;
-}
+/* Action Button Styles - Simple and clean */
 
 

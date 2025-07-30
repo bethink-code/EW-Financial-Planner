@@ -13,7 +13,7 @@ interface ActionButtonProps {
 }
 
 /**
- * Add new item button with consistent styling - Primary Blue
+ * Add new item button with simple inline styling
  */
 export function AddButton({ 
   onClick, 
@@ -25,7 +25,7 @@ export function AddButton({
 }: ActionButtonProps) {
   const isTableSize = size === "sm";
   
-  // Use icon button blue for small sizes (table icons)
+  // Small table icon button
   if (isTableSize && !children) {
     return (
       <button
@@ -33,23 +33,25 @@ export function AddButton({
         onClick={onClick}
         disabled={disabled}
         className={cn(
-          "btn-icon-blue rounded-md",
+          "h-6 w-6 bg-white border border-gray-300 text-blue-600 hover:bg-gray-50 rounded-md flex items-center justify-center transition-colors",
+          disabled && "opacity-50 cursor-not-allowed",
           className
         )}
       >
-        <Plus className="h-4 w-4" />
+        <Plus className="h-3 w-3" />
       </button>
     );
   }
   
-  // Use primary button for larger sizes with text
+  // Larger button with text
   return (
     <button
       type="button"
       onClick={onClick}
       disabled={disabled}
       className={cn(
-        "btn-primary px-4 rounded-md flex items-center gap-2",
+        "px-4 py-2 bg-blue-600 text-white hover:bg-blue-700 rounded-md flex items-center gap-2 transition-colors",
+        disabled && "opacity-50 cursor-not-allowed",
         className
       )}
     >
@@ -60,7 +62,7 @@ export function AddButton({
 }
 
 /**
- * Delete item button with consistent styling
+ * Delete item button with simple inline styling
  */
 export function DeleteButton({ 
   onClick, 
@@ -70,7 +72,7 @@ export function DeleteButton({
 }: Omit<ActionButtonProps, 'variant'>) {
   const isTableSize = size === "sm";
   
-  // Use icon button white for small sizes (matching duplicate button style)
+  // Small table icon button
   if (isTableSize) {
     return (
       <button
@@ -78,22 +80,24 @@ export function DeleteButton({
         onClick={onClick}
         disabled={disabled}
         className={cn(
-          "btn-icon-white rounded-md",
+          "h-6 w-6 bg-white border border-gray-300 text-gray-600 hover:bg-gray-50 rounded-md flex items-center justify-center transition-colors",
+          disabled && "opacity-50 cursor-not-allowed",
           className
         )}
       >
-        <Trash2 className="h-4 w-4" />
+        <Trash2 className="h-3 w-3" />
       </button>
     );
   }
   
-  // Use destructive button for larger sizes
+  // Larger destructive button
   return (
     <button
       onClick={onClick}
       disabled={disabled}
       className={cn(
-        "btn-destructive px-4 rounded-md flex items-center gap-2",
+        "px-4 py-2 bg-red-600 text-white hover:bg-red-700 rounded-md flex items-center gap-2 transition-colors",
+        disabled && "opacity-50 cursor-not-allowed",
         className
       )}
     >
@@ -104,7 +108,7 @@ export function DeleteButton({
 }
 
 /**
- * Duplicate item button with consistent styling
+ * Duplicate item button with simple inline styling
  */
 export function DuplicateButton({ 
   onClick, 
@@ -114,29 +118,31 @@ export function DuplicateButton({
 }: Omit<ActionButtonProps, 'variant'>) {
   const isTableSize = size === "sm";
   
-  // Use icon button white for small sizes
+  // Small table icon button
   if (isTableSize) {
     return (
       <button
         onClick={onClick}
         disabled={disabled}
         className={cn(
-          "btn-icon-white rounded-md",
+          "h-6 w-6 bg-white border border-gray-300 text-gray-600 hover:bg-gray-50 rounded-md flex items-center justify-center transition-colors",
+          disabled && "opacity-50 cursor-not-allowed",
           className
         )}
       >
-        <Copy className="h-4 w-4" />
+        <Copy className="h-3 w-3" />
       </button>
     );
   }
   
-  // Use secondary button for larger sizes
+  // Larger secondary button
   return (
     <button
       onClick={onClick}
       disabled={disabled}
       className={cn(
-        "btn-secondary px-4 rounded-md flex items-center gap-2",
+        "px-4 py-2 bg-white border border-gray-300 text-gray-700 hover:bg-gray-50 rounded-md flex items-center gap-2 transition-colors",
+        disabled && "opacity-50 cursor-not-allowed",
         className
       )}
     >
