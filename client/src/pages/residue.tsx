@@ -64,8 +64,8 @@ export default function Residue() {
             <ResidueSummary />
           </div>
           
-          {/* Table with full width */}
-          <div className="mt-6">
+          {/* Table with full width and margin */}
+          <div className="table-container-wrapper">
             <ResidueTable />
           </div>
         </CalculatorHeader>

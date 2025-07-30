@@ -70,8 +70,8 @@ export default function DefinedBenefitFunds() {
             <DefinedBenefitFundsSummary />
           </div>
           
-          {/* Table with full width */}
-          <div className="mt-6">
+          {/* Table with full width and margin */}
+          <div className="table-container-wrapper">
             <DefinedBenefitFundsTable />
           </div>
         </CalculatorHeader>

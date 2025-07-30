@@ -823,4 +823,12 @@ th, td {
   animation: save-flash 500ms ease-out;
 }
 
+/* Table Container Wrapper - adds margin around tables in cards */
+.table-container-wrapper {
+  margin-top: 1.5rem;
+  margin-left: 1.25rem;
+  margin-right: 1.25rem;
+  margin-bottom: 1.25rem;
+}
+
 

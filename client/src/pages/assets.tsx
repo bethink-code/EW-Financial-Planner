@@ -70,8 +70,8 @@ export function AssetsPage() {
             <AssetsSummary />
           </div>
           
-          {/* Table with full width */}
-          <div className="mt-6">
+          {/* Table with full width and margin */}
+          <div className="table-container-wrapper">
             <AssetsTable 
               viewMode={viewMode} 
               onShowCategoryDialog={() => setShowCategoryDialog(true)}

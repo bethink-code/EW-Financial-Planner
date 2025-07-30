@@ -60,8 +60,8 @@ export default function IncomeNeeds() {
             <IncomeNeedsSummary />
           </div>
           
-          {/* Table with full width */}
-          <div className="mt-6">
+          {/* Table with full width and margin */}
+          <div className="table-container-wrapper">
             <IncomeNeedsTable viewMode={viewMode} />
           </div>
         </CalculatorHeader>
