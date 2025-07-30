@@ -62,138 +62,138 @@ export function ConsolidatedNavigation({
     return items;
   };
 
-  // Generate a form ID (you can replace this with actual form ID logic)
-  const formId = "FRM-2025-001";
-
   return (
     <div className="bg-white border-b border-gray-200">
       <div className="w-full">
         <div className="flex items-center justify-between px-6 py-3">
           {/* Left side */}
           <div className="flex items-center gap-3">
+            {/* Back button */}
             <Button
               variant="ghost"
               size="icon"
               onClick={handleBack}
-              className="h-8 w-8"
+              className="h-8 w-8 -ml-2"
             >
-              <ChevronLeft className="h-5 w-5" />
+              <ChevronLeft className="h-5 w-5 text-gray-600" />
             </Button>
             
+            {/* FINANCIAL PLAN label */}
             <span className="text-xs text-gray-500 uppercase tracking-wider font-medium">
               FINANCIAL PLAN
             </span>
             
-            <div className="flex items-center gap-1">
+            {/* Financial Plan name with edit */}
+            <div className="flex items-center gap-2 bg-[#F5F1E8] rounded px-3 py-1.5">
               <span className="text-sm text-gray-700" title={planName}>
                 {planName}
               </span>
               <Button
                 variant="ghost"
                 size="icon"
-                className="h-6 w-6 text-gray-400 hover:text-gray-600"
+                className="h-5 w-5 p-0 text-gray-500 hover:text-gray-700"
               >
                 <Edit2 className="h-3.5 w-3.5" />
               </Button>
             </div>
             
-            {/* Need section */}
-            <span className="text-xs text-gray-500 uppercase tracking-wider font-medium ml-8">
+            {/* NEED label */}
+            <span className="text-xs text-gray-500 uppercase tracking-wider font-medium ml-4">
               NEED
             </span>
             
-            {/* Main dropdown - shows needs when clicking the need button, sections when clicking step buttons */}
+            {/* Need dropdown */}
             <DropdownMenu open={isDropdownOpen} onOpenChange={setIsDropdownOpen}>
-              <DropdownMenuTrigger asChild>
-                <Button 
-                  onClick={() => {
-                    setSelectedStepForDropdown(null);
-                    setIsDropdownOpen(true);
-                  }}
-                  className="bg-[#E97627] hover:bg-[#E97627]/90 text-white h-9 px-4 flex items-center gap-2 text-sm"
-                >
-                  {currentNeed.label}
-                  <ChevronDown className="h-4 w-4" />
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="start" className="w-72">
-                {!selectedStepForDropdown ? (
-                  // Show needs
-                  needs.map((need) => (
-                    <DropdownMenuItem key={need.id} asChild>
-                      <Link href={need.path} onClick={() => setIsDropdownOpen(false)}>
-                        <span className={cn(
-                          need.hasContent ? "" : "text-gray-400",
-                          need.id === currentNeed.id && "text-[#E97627] font-medium"
-                        )}>
-                          {need.label}
-                        </span>
-                      </Link>
-                    </DropdownMenuItem>
-                  ))
-                ) : (
-                  // Show sections for selected step
-                  getDropdownContent().map((item) => (
-                    <DropdownMenuItem key={item.id} asChild>
-                      <Link href={item.path} onClick={() => setIsDropdownOpen(false)}>
-                        <span className={cn(
-                          item.hasContent ? "" : "text-gray-400",
-                          item.isChild && "pl-6",
-                          location.includes(item.path) && "text-[#E97627] font-medium"
-                        )}>
-                          {item.label}
-                        </span>
-                      </Link>
-                    </DropdownMenuItem>
-                  ))
-                )}
-              </DropdownMenuContent>
-            </DropdownMenu>
-
-            {/* Step navigation */}
-            <div className="flex items-center gap-2 ml-6">
-              {stepsWithStatus.map((step, index) => {
-                const isActive = step.id === currentStep.id;
-                
-                return (
-                  <SafeFragment key={step.id}>
-                    <button
-                      onClick={() => {
-                        if (step.sections && step.sections.length > 0) {
-                          setSelectedStepForDropdown(step.id);
-                          setIsDropdownOpen(true);
-                        } else {
-                          setLocation(step.path);
-                        }
-                      }}
-                      className={cn(
-                        "flex items-center gap-2 h-9 px-4 rounded text-sm font-medium transition-colors",
-                        isActive
-                          ? "bg-[#E97627] text-white hover:bg-[#E97627]/90"
-                          : "hover:bg-gray-100"
-                      )}
-                      disabled={!step.hasContent}
-                    >
+            <DropdownMenuTrigger asChild>
+              <Button 
+                onClick={() => {
+                  setSelectedStepForDropdown(null);
+                  setIsDropdownOpen(true);
+                }}
+                className="bg-[#E97627] hover:bg-[#E97627]/90 text-white h-9 px-5 flex items-center gap-2 text-sm rounded-md"
+              >
+                {currentNeed.label}
+                <ChevronDown className="h-4 w-4" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="start" className="w-72">
+              {!selectedStepForDropdown ? (
+                // Show needs
+                needs.map((need) => (
+                  <DropdownMenuItem key={need.id} asChild>
+                    <Link href={need.path} onClick={() => setIsDropdownOpen(false)}>
                       <span className={cn(
-                        "flex items-center justify-center h-5 w-5 rounded-full text-xs font-semibold",
-                        isActive 
-                          ? "bg-white/20 text-white"
-                          : "bg-gray-200 text-gray-600"
+                        need.hasContent ? "" : "text-gray-400",
+                        need.id === currentNeed.id && "text-[#E97627] font-medium"
                       )}>
-                        {step.number}
+                        {need.label}
                       </span>
-                      <span className={isActive ? "text-white" : "text-gray-700"}>{step.label}</span>
-                    </button>
-                  </SafeFragment>
-                );
-              })}
+                    </Link>
+                  </DropdownMenuItem>
+                ))
+              ) : (
+                // Show sections for selected step
+                getDropdownContent().map((item) => (
+                  <DropdownMenuItem key={item.id} asChild>
+                    <Link href={item.path} onClick={() => setIsDropdownOpen(false)}>
+                      <span className={cn(
+                        item.hasContent ? "" : "text-gray-400",
+                        item.isChild && "pl-6",
+                        location.includes(item.path) && "text-[#E97627] font-medium"
+                      )}>
+                        {item.label}
+                      </span>
+                    </Link>
+                  </DropdownMenuItem>
+                ))
+              )}
+            </DropdownMenuContent>
+          </DropdownMenu>
+
+          {/* Step navigation */}
+          <div className="flex items-center gap-2">
+            {stepsWithStatus.map((step, index) => {
+              const isActive = step.id === currentStep.id;
+              
+              return (
+                <SafeFragment key={step.id}>
+                  <button
+                    onClick={() => {
+                      if (step.sections && step.sections.length > 0) {
+                        setSelectedStepForDropdown(step.id);
+                        setIsDropdownOpen(true);
+                      } else {
+                        setLocation(step.path);
+                      }
+                    }}
+                    className={cn(
+                      "flex items-center gap-2 h-9 px-4 rounded-md text-sm font-medium transition-colors",
+                      isActive
+                        ? "bg-[#E97627] text-white hover:bg-[#E97627]/90"
+                        : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                    )}
+                    disabled={!step.hasContent}
+                  >
+                    <span className={cn(
+                      "flex items-center justify-center h-5 w-5 rounded-full text-xs font-semibold",
+                      isActive 
+                        ? "bg-white/20 text-white"
+                        : "bg-white text-gray-700"
+                    )}>
+                      {step.number}
+                    </span>
+                    <span>{step.label}</span>
+                  </button>
+                </SafeFragment>
+              );
+            })}
             </div>
           </div>
-
+          
           {/* Right side */}
           <div className="flex items-center gap-4">
             <span className="text-sm text-gray-500">
-              {formId}
+              FRM-2025-001
             </span>
             <Button
               variant="ghost"
