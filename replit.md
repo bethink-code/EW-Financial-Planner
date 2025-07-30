@@ -134,6 +134,196 @@ The application has been comprehensively optimized and streamlined for productio
 - Legacy table components with interface conflicts
 - Unused imports and deprecated code paths
 
+## TABLE STABILITY REFERENCE PATTERNS
+
+### CRITICAL: Use These Patterns to Fix Table Jumping/Flickering Issues
+
+**When to Use:** If any table exhibits jumping, flickering, or unstable behavior when adding/removing rows, updating fields, or managing arrays (owners, beneficiaries)
+
+**Reference Files:**
+- `client/src/components/assurance/working-assurance-table.tsx` (Master reference)
+- `client/src/components/retirement-funds/new-retirement-table.tsx` (Applied pattern)
+- `client/src/components/defined-benefit-funds/defined-benefit-funds-table-correct-stable.tsx` (Applied pattern)
+- `client/src/hooks/use-debounced-update.ts` (Debounced updates hook)
+- `client/src/lib/array-management.ts` (Array management utilities)
+
+### 1. REACT.FRAGMENT WRAPPING WITH STABLE KEYS
+```tsx
+// ✅ CORRECT: Wrap each item in React.Fragment with stable key
+{items.map((item) => (
+  <React.Fragment key={`item-${item.id}`}>
+    {/* All table rows for this item */}
+  </React.Fragment>
+))}
+
+// ❌ WRONG: Flattened array approach
+{items.flatMap((item, index) => [
+  <tr key={`${item.id}-main`}>...</tr>,
+  <tr key={`${item.id}-additional`}>...</tr>
+])}
+```
+
+### 2. DEBOUNCED UPDATES FOR TEXT FIELDS
+```tsx
+// ✅ CORRECT: Use debounced updates for text/currency fields
+const debouncedUpdate = useDebouncedUpdate(300);
+
+const handleInputBlur = useCallback((id: number, field: string, value: string) => {
+  debouncedUpdate(() => {
+    handleUpdateItem(id, { [field]: value });
+  });
+}, [debouncedUpdate, handleUpdateItem]);
+
+// Usage in JSX
+<input
+  defaultValue={item.description || "Enter details ..."}
+  onBlur={(e) => handleInputBlur(item.id, 'description', e.target.value)}
+/>
+```
+
+### 3. IMMEDIATE UPDATES FOR ARRAY OPERATIONS
+```tsx
+// ✅ CORRECT: Immediate updates for array operations
+const handleAddOwner = useCallback((itemId: number) => {
+  const item = items.find(i => i.id === itemId);
+  if (!item) return;
+  
+  const newOwners = [...item.owners, ""];
+  const newPercentages = [...item.ownershipPercentages, "0%"];
+  
+  // Immediate update, no debouncing
+  handleUpdateItem(itemId, { 
+    owners: newOwners,
+    ownershipPercentages: newPercentages
+  });
+}, [items, handleUpdateItem]);
+```
+
+### 4. PROPER EVENT HANDLING FOR ACTION BUTTONS
+```tsx
+// ✅ CORRECT: Action buttons with proper event handling
+<AddButton
+  onClick={() => handleAddOwner(item.id)}  // No event parameter needed
+  disabled={isUpdating}
+  size="sm"
+/>
+
+<DeleteButton
+  onClick={() => handleRemoveOwner(item.id, ownerIndex)}  // No event parameter
+  disabled={isUpdating}
+  size="sm"
+/>
+
+// ✅ CORRECT: Event handler functions without event parameters
+const handleRemoveOwner = useCallback((itemId: number, ownerIndex: number) => {
+  // No event.preventDefault() needed here
+  const item = items.find(i => i.id === itemId);
+  if (!item || item.owners.length <= 1) return;
+  
+  const newOwners = [...item.owners];
+  const newPercentages = [...item.ownershipPercentages];
+  
+  newOwners.splice(ownerIndex, 1);
+  newPercentages.splice(ownerIndex, 1);
+  
+  handleUpdateItem(itemId, { 
+    owners: newOwners,
+    ownershipPercentages: newPercentages
+  });
+}, [items, handleUpdateItem]);
+```
+
+### 5. ROWSPAN IMPLEMENTATION FOR STABILITY
+```tsx
+// ✅ CORRECT: RowSpan for single-instance cells
+<td rowSpan={maxRows} className="p-2 text-center border-l border-gray-200">
+  {/* Single-instance content */}
+</td>
+
+// ✅ CORRECT: Calculate maxRows based on array lengths
+const maxRows = Math.max(
+  item.owners?.length || 1,
+  item.beneficiaries?.length || 1,
+  1
+);
+```
+
+### 6. SAFEFRAGMENT FOR METADATA WARNINGS
+```tsx
+import { SafeFragment } from "@/lib/safe-fragment";
+
+// ✅ CORRECT: Use SafeFragment to prevent React metadata warnings
+<SafeFragment key={`item-${item.id}`}>
+  {/* Table rows */}
+</SafeFragment>
+```
+
+### 7. STABLE REACT KEYS
+```tsx
+// ✅ CORRECT: Use stable IDs for keys, not array lengths
+key={`item-${item.id}`}  // Stable
+key={`owner-${item.id}-${ownerIndex}`}  // Stable
+
+// ❌ WRONG: Keys that change when arrays change
+key={`item-${item.id}-${item.owners.length}`}  // Unstable
+```
+
+### 8. UNIFIED UPDATE PATTERN
+```tsx
+// ✅ CORRECT: Single update function pattern
+const handleUpdateItem = useCallback((id: number, updates: Partial<ItemType>) => {
+  updateMutation.mutate({ id, ...updates });
+}, [updateMutation]);
+
+// ✅ CORRECT: Use unified pattern for all field updates
+const handleOwnerUpdate = useCallback((itemId: number, ownerIndex: number, field: string, value: string) => {
+  const item = items.find(i => i.id === itemId);
+  if (!item) return;
+  
+  const newOwners = [...item.owners];
+  newOwners[ownerIndex] = value;
+  
+  handleUpdateItem(itemId, { owners: newOwners });
+}, [items, handleUpdateItem]);
+```
+
+### 9. DATABASE SCHEMA REQUIREMENTS
+```sql
+-- ✅ CRITICAL: Arrays must have default values to ensure action buttons appear
+owners text[] DEFAULT ARRAY['Donald Edwards'],
+beneficiaries text[] DEFAULT ARRAY[''],
+ownershipPercentages text[] DEFAULT ARRAY['100%'],
+```
+
+### 10. ARRAY SYNCHRONIZATION PROTECTION
+```tsx
+// ✅ CORRECT: Always maintain array synchronization
+const handleRemoveOwner = useCallback((itemId: number, ownerIndex: number) => {
+  const item = items.find(i => i.id === itemId);
+  if (!item || item.owners.length <= 1) return; // Protect minimum length
+  
+  // Update ALL related arrays simultaneously
+  const newOwners = [...item.owners];
+  const newPercentages = [...item.ownershipPercentages];
+  
+  newOwners.splice(ownerIndex, 1);
+  newPercentages.splice(ownerIndex, 1);
+  
+  // Single atomic update
+  handleUpdateItem(itemId, { 
+    owners: newOwners,
+    ownershipPercentages: newPercentages
+  });
+}, [items, handleUpdateItem]);
+```
+
+**SUCCESS INDICATORS:**
+- No jumping/flickering when adding/removing items
+- Smooth transitions between different row states
+- Action buttons appear consistently
+- Text editing works without interface conflicts
+- Array operations complete without data corruption
+
 ## Changelog
 
 Changelog:
@@ -305,3 +495,5 @@ Changelog:
 - July 30, 2025: **BUTTON STYLING REVERSION TO SIMPLE INLINE STYLES** - Reverted from complex global button system back to simple inline Tailwind styling for all action buttons. Removed all .btn-* CSS classes and global button system from index.css, updated ActionButtons component (AddButton, DeleteButton, DuplicateButton) to use straightforward inline classes with proper hover states and disabled styling. Button sizing and colors now use standard Tailwind classes (bg-white, border-gray-300, text-blue-600, etc.) providing cleaner, more maintainable styling without complex CSS overrides.
 - July 30, 2025: **ASSURANCE TABLE BLUR JUMPING FIX** - Resolved jumping/flickering issue in assurance table when blur events occur. Implemented smart update logic that only triggers database updates when actual values change, not just formatting. Added direct DOM manipulation for currency formatting to prevent unnecessary re-renders. Enhanced handleInputBlur with value comparison to avoid table jumping during field formatting operations.
 - July 30, 2025: **GLOBAL COMPACT TABLE HEADERS** - Added comprehensive global CSS styling for compact table headers across all calculator modules. Headers now render with smaller text (0.75rem), reduced height (2.5rem), uppercase styling, and consistent spacing. For double-row headers, added special CSS rules to reduce distance between header text rows with tighter padding (0.2rem) and compact second row height (2rem). All tables now have uniform, professional header appearance matching design specifications.
+
+- July 30, 2025: **TABLE STABILITY PATTERNS COMPLETION & DOCUMENTATION** - Successfully completed implementation of table stability patterns across Assurance, Retirement Funds, and Defined Benefits tables. All tables now follow unified stable patterns eliminating interface jumping, flickering, and array management issues. User confirmed all tables working as expected. Documented comprehensive table stability patterns for future reference (see TABLE STABILITY REFERENCE PATTERNS section below).
