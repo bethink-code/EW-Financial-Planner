@@ -64,7 +64,7 @@ export function ConsolidatedNavigation({
 
   return (
     <div className="bg-white border-b border-gray-200">
-      <div className="w-full">
+      <div className="max-w-6xl mx-auto">
         <div className="flex items-center justify-between px-6 py-3">
           {/* Left side */}
           <div className="flex items-center gap-3">
