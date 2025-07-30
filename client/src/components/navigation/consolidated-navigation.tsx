@@ -102,8 +102,8 @@ export function ConsolidatedNavigation({
           </div>
           
           {/* Second row: Need, Steps, and Right side items */}
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3">
+          <div className="flex items-end justify-between">
+            <div className="flex items-end gap-3">
               {/* Need section */}
               <div className="ml-10">
                 {/* NEED label */}
@@ -161,7 +161,7 @@ export function ConsolidatedNavigation({
               </div>
 
               {/* Step navigation */}
-              <div className="flex items-center gap-2 ml-4">
+              <div className="flex items-center gap-2 ml-6">
                 {stepsWithStatus.map((step, index) => {
               const isActive = step.id === currentStep.id;
               
@@ -201,7 +201,7 @@ export function ConsolidatedNavigation({
             </div>
             
             {/* Right side */}
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-4 mb-1">
               <span className="text-sm text-gray-500">
                 FRM-2025-001
               </span>
