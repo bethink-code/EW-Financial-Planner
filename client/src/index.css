@@ -766,6 +766,7 @@ th, td {
     border-right: none !important;
     border-top: none !important;
     border-bottom: none !important;
+    padding-left: 12px !important;
   }
   
   /* Special handling for cells with rowSpan */
