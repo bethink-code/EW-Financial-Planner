@@ -308,6 +308,38 @@ th, td {
     vertical-align: middle;
     min-height: 2.7rem; /* Match body cell height */
   }
+
+  /* COMPACT TABLE HEADERS - Global Style Override */
+  /* Make all table headers render in compact single-row style like your mockup */
+  table thead th {
+    padding: 0.4rem 0.5rem !important;
+    font-size: 0.75rem !important;
+    font-weight: 500 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.05em !important;
+    color: #6b7280 !important;
+    background-color: #f9fafb !important;
+    vertical-align: middle !important;
+    line-height: 1.2 !important;
+    height: 2.5rem !important;
+    min-height: 2.5rem !important;
+    max-height: 2.5rem !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+  }
+
+  /* Force compact header row height */
+  table thead tr {
+    height: 2.5rem !important;
+    min-height: 2.5rem !important;
+    max-height: 2.5rem !important;
+  }
+
+  /* Ensure section headers blend with compact style */
+  table thead th.section-start {
+    border-left: 1px solid #d1d5db !important;
+  }
   
   /* More generous checkbox column spacing */
   .field-checkbox {
