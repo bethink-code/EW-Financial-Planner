@@ -309,32 +309,32 @@ th, td {
     min-height: 2.7rem; /* Match body cell height */
   }
 
-  /* OPTIMIZED COMPACT TABLE HEADERS - Fixed for all browsers */
+  /* OPTIMIZED COMPACT TABLE HEADERS - Text closer to bottom border */
   /* Force compact header styling with proper hierarchy */
   table thead th {
-    padding: 0.5rem 0.6rem !important;
+    padding: 0.25rem 0.6rem 0.4rem 0.6rem !important; /* Reduced top padding, smaller bottom padding */
     font-size: 11px !important;
     font-weight: 600 !important;
     text-transform: uppercase !important;
     letter-spacing: 0.025em !important;
     color: #4b5563 !important;
     background-color: #f8fafc !important;
-    vertical-align: middle !important;
-    line-height: 1.3 !important;
-    height: 2.75rem !important;
-    min-height: 2.75rem !important;
-    max-height: 2.75rem !important;
+    vertical-align: bottom !important; /* Changed to bottom alignment */
+    line-height: 1.2 !important;
+    height: 2.5rem !important; /* Slightly reduced height */
+    min-height: 2.5rem !important;
+    max-height: 2.5rem !important;
     white-space: nowrap !important;
     overflow: hidden !important;
     text-overflow: ellipsis !important;
     border-bottom: 1px solid #e5e7eb !important;
   }
 
-  /* Ensure header row heights are consistent */
+  /* Ensure header row heights are consistent - reduced for closer text */
   table thead tr {
-    height: 2.75rem !important;
-    min-height: 2.75rem !important;
-    max-height: 2.75rem !important;
+    height: 2.5rem !important;
+    min-height: 2.5rem !important;
+    max-height: 2.5rem !important;
   }
 
   /* For multi-row headers, keep consistent spacing */
