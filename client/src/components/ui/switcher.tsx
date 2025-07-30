@@ -53,11 +53,11 @@ export function Switcher({
             key={option.value}
             onClick={() => onChange(option.value)}
             className={cn(
-              "relative flex items-center justify-center font-medium rounded-md transition-all duration-200 ease-in-out",
+              "relative flex items-center justify-center font-medium transition-all duration-200 ease-in-out",
               sizeClasses[size],
               isSelected
                 ? "bg-white text-[#016991] font-semibold rounded-md"
-                : "text-[#6B7280] hover:text-gray-700"
+                : "text-[#6B7280] hover:text-gray-700 rounded-md"
             )}
           >
             {option.label}
