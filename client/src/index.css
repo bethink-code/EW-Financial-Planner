@@ -947,7 +947,7 @@ th, td {
 .btn-icon-white {
   background-color: white !important;
   color: #4F4F4F !important; /* Gray/800 */
-  border: 1px solid #BDBDBD !important; /* Gray/600 */
+  border: 1px solid #E0E0E0 !important; /* Gray/500 - Lighter border */
   width: 2.5rem !important; /* 40px */
   height: 2.5rem !important; /* 40px */
   padding: 0 !important;
@@ -959,8 +959,8 @@ th, td {
 }
 
 .btn-icon-white:hover:not(:disabled) {
-  background-color: #F2F2F2 !important; /* Gray/400 */
-  border-color: #828282 !important; /* Gray/700 */
+  background-color: #F8F8F8 !important; /* Very light gray hover */
+  border-color: #D0D0D0 !important; /* Slightly darker border on hover */
 }
 
 .btn-icon-white:active:not(:disabled) {
