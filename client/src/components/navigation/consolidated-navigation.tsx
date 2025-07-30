@@ -239,8 +239,8 @@ export function ConsolidatedNavigation({
             
             {/* Right side */}
             <div className="flex items-center gap-4 mb-1">
-              <button className="flex items-center justify-center min-w-[32px] min-h-[32px] w-8 h-8 rounded border border-gray-300 bg-white text-gray-600 focus:outline-none focus:ring-0 focus:border-0 hover:bg-gray-50">
-                <RefreshCw className="h-4 w-4" />
+              <button className="inline-flex items-center justify-center w-8 h-8 flex-shrink-0 rounded border border-gray-300 bg-white text-gray-600 focus:outline-none focus:ring-0 focus:border-0 hover:bg-gray-50">
+                <RefreshCw className="h-4 w-4 flex-shrink-0" />
               </button>
             </div>
           </div>
