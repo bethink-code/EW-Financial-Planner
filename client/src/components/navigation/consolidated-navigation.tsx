@@ -134,7 +134,7 @@ export function ConsolidatedNavigation({
                 <DropdownMenu open={isNeedDropdownOpen} onOpenChange={setIsNeedDropdownOpen}>
                   <DropdownMenuTrigger asChild>
                     <Button 
-                      className="btn-need px-5 flex items-center gap-2 text-sm rounded-md"
+                      className="btn-need px-3 flex items-center gap-2 text-sm rounded-md"
                     >
                       {currentNeed.label}
                       <ChevronDown className="h-4 w-4" />
