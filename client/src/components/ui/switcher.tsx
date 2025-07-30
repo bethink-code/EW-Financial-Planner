@@ -56,7 +56,7 @@ export function Switcher({
               "relative font-medium rounded-md transition-all duration-200 ease-in-out",
               sizeClasses[size],
               isSelected
-                ? "bg-primary text-primary-foreground shadow-sm"
+                ? "bg-blue-100 text-blue-700 shadow-sm font-semibold"
                 : "text-neutral-600 hover:text-neutral-900 hover:bg-neutral-50"
             )}
           >
