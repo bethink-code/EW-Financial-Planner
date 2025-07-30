@@ -116,7 +116,7 @@ export function ConsolidatedNavigation({
                 <Button
                   variant="ghost"
                   onClick={handleBack}
-                  className="h-9 px-3 text-sm text-gray-600 hover:text-gray-800 hover:bg-gray-100"
+                  className="btn-ghost h-9 px-3 text-sm"
                 >
                   Back to all plans
                 </Button>
@@ -138,7 +138,7 @@ export function ConsolidatedNavigation({
                 <DropdownMenu open={isNeedDropdownOpen} onOpenChange={setIsNeedDropdownOpen}>
                   <DropdownMenuTrigger asChild>
                     <Button 
-                      className="bg-[#E97627] hover:bg-[#E97627]/90 text-white h-9 px-5 flex items-center gap-2 text-sm rounded-md"
+                      className="btn-need h-9 px-5 flex items-center gap-2 text-sm rounded-md"
                     >
                       {currentNeed.label}
                       <ChevronDown className="h-4 w-4" />
@@ -178,8 +178,8 @@ export function ConsolidatedNavigation({
                           className={cn(
                             "flex items-center gap-2 h-9 px-4 rounded-md text-sm font-medium transition-colors",
                             isActive
-                              ? "bg-[#E97627] text-white hover:bg-[#E97627]/90"
-                              : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                              ? "nav-button active"
+                              : "nav-button"
                           )}
                           disabled={!step.hasContent}
                         >
@@ -215,8 +215,8 @@ export function ConsolidatedNavigation({
                       className={cn(
                         "flex items-center gap-2 h-9 px-4 rounded-md text-sm font-medium transition-colors",
                         isActive
-                          ? "bg-[#E97627] text-white hover:bg-[#E97627]/90"
-                          : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                          ? "nav-button active"
+                          : "nav-button"
                       )}
                       disabled={!step.hasContent}
                     >

@@ -88,6 +88,25 @@ The `.nav-button` class is used for navigation elements with active states:
 <button className="nav-button">Step 2</button>
 ```
 
+### Need Dropdown Button
+The `.btn-need` class provides orange styling for the need dropdown:
+```jsx
+<Button className="btn-need">Death with estate liquidity</Button>
+```
+
+### Action Buttons (Table Icons)
+Action buttons in tables use icon button sizing:
+```jsx
+// Duplicate button
+<DuplicateButton onClick={handleDuplicate} size="sm" />
+
+// Delete button  
+<DeleteButton onClick={handleDelete} size="sm" />
+
+// Add button
+<AddButton onClick={handleAdd} size="sm" />
+```
+
 ## Migration Guide
 
 ### Old Style → New Style

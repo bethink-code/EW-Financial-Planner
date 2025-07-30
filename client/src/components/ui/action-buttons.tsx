@@ -59,12 +59,13 @@ export function DeleteButton({
       size={size}
       variant="destructive"
       className={cn(
-        "flex items-center gap-1",
-        isTableSize && "h-6 w-6 p-0",
+        "btn-destructive",
+        isTableSize ? "btn-icon-sm" : "",
+        "flex items-center justify-center",
         className
       )}
     >
-      <Trash2 className={isTableSize ? "h-3 w-3" : "h-4 w-4"} />
+      <Trash2 className="h-3 w-3" />
     </Button>
   );
 }
@@ -86,12 +87,13 @@ export function DuplicateButton({
       size={size}
       variant="ghost"
       className={cn(
-        "flex items-center gap-1  text-primary hover:text-primary hover:bg-blue-50 border border-primary",
-        isTableSize && "h-6 w-6 p-0",
+        "btn-secondary",
+        isTableSize ? "btn-icon-sm" : "",
+        "flex items-center justify-center",
         className
       )}
     >
-      <Copy className={isTableSize ? "h-3 w-3" : "h-4 w-4"} />
+      <Copy className="h-3 w-3" />
     </Button>
   );
 }
