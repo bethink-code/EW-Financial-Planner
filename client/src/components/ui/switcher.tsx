@@ -26,9 +26,9 @@ export function Switcher({
   size = "md"
 }: SwitcherProps) {
   const sizeClasses = {
-    sm: "text-sm py-1.5 px-3",
-    md: "text-sm py-2 px-4", 
-    lg: "text-base py-2.5 px-5"
+    sm: "text-sm h-10 px-3",
+    md: "text-sm h-10 px-4", 
+    lg: "text-base h-11 px-5"
   };
 
   const containerClasses = {
@@ -53,7 +53,7 @@ export function Switcher({
             key={option.value}
             onClick={() => onChange(option.value)}
             className={cn(
-              "relative font-medium rounded-md transition-all duration-200 ease-in-out",
+              "relative flex items-center justify-center font-medium rounded-md transition-all duration-200 ease-in-out",
               sizeClasses[size],
               isSelected
                 ? "bg-[#E8F3F8] text-[#016991] font-semibold"
