@@ -845,7 +845,8 @@ export class DbStorage {
 
   async searchRetirementFunds(query: string): Promise<RetirementFund[]> {
     return await this.db.select().from(retirementFunds)
-      .where(ilike(retirementFunds.description, `%${query}%`));
+      .where(ilike(retirementFunds.description, `%${query}%`))
+      .orderBy(asc(retirementFunds.id));
   }
 
   // Assurance methods
