@@ -768,6 +768,14 @@ th, td {
     border-bottom: none !important;
   }
   
+  /* Section end borders for right side */
+  .section-end {
+    border-right: 1px solid #d1d5db !important;
+    border-left: none !important;
+    border-top: none !important;
+    border-bottom: none !important;
+  }
+  
   /* Remove left border ONLY from Actions column (the actual first column) */
   thead tr th:first-child.section-start,
   tbody tr td:first-child.section-start,
