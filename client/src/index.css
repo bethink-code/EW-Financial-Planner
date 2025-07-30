@@ -768,12 +768,10 @@ th, td {
     border-bottom: none !important;
   }
   
-  /* Section end borders for right side */
-  .section-end {
-    border-right: 1px solid #d1d5db !important;
-    border-left: none !important;
-    border-top: none !important;
-    border-bottom: none !important;
+  /* Special handling for cells with rowSpan */
+  th[rowSpan].section-start,
+  td[rowSpan].section-start {
+    border-left: 1px solid #d1d5db !important;
   }
   
   /* Remove left border ONLY from Actions column (the actual first column) */
