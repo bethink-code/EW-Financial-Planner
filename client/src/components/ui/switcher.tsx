@@ -32,9 +32,9 @@ export function Switcher({
   };
 
   const containerClasses = {
-    sm: "p-1.5",
-    md: "p-1.5",
-    lg: "p-1.5"
+    sm: "px-1.5 py-1",
+    md: "px-1.5 py-1",
+    lg: "px-1.5 py-1"
   };
 
   return (
