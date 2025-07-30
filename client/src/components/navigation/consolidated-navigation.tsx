@@ -85,11 +85,11 @@ export function ConsolidatedNavigation({
   };
 
   return (
-    <div className="w-full px-6 pt-6 pb-4">
-      <div className="max-w-6xl bg-white rounded-lg shadow-sm border border-gray-200 px-6 py-4">
+    <div className="w-full px-6 pt-4 pb-2">
+      <div className="max-w-6xl bg-white rounded-lg shadow-sm border border-gray-200 px-4 py-3">
         <div>
           {/* First row: Financial Plan */}
-          <div className="flex items-start gap-3 mb-3">
+          <div className="flex items-start gap-3 mb-2">
             {/* Financial Plan section */}
             <div>
               {/* FINANCIAL PLAN label */}
@@ -99,12 +99,12 @@ export function ConsolidatedNavigation({
               
               {/* Financial Plan name with edit button */}
               <div className="flex items-center gap-2">
-                <button className="flex items-center gap-3 pl-3 pr-1 text-sm font-medium transition-colors h-10 rounded-[6px] focus:outline-none focus:ring-0 focus:border-0 bg-[#F5F1E8] text-gray-700 border-0 hover:bg-[#F0EBE0]">
+                <button className="flex items-center gap-2 pl-2 pr-1 text-sm font-medium transition-colors h-8 rounded-[6px] focus:outline-none focus:ring-0 focus:border-0 bg-[#F5F1E8] text-gray-700 border-0 hover:bg-[#F0EBE0]">
                   <span title={planName}>
                     {planName}
                   </span>
-                  <span className="flex items-center justify-center h-8 w-8 rounded-lg text-sm font-semibold bg-white text-[#F97415]">
-                    <Edit2 className="h-3.5 w-3.5" />
+                  <span className="flex items-center justify-center h-6 w-6 rounded text-sm font-semibold bg-white text-[#F97415]">
+                    <Edit2 className="h-3 w-3" />
                   </span>
                 </button>
                 
@@ -112,7 +112,7 @@ export function ConsolidatedNavigation({
                 <Button
                   variant="ghost"
                   onClick={handleBack}
-                  className="btn-ghost px-3 text-sm"
+                  className="btn-ghost px-2 text-sm h-8"
                 >
                   Back to all plans
                 </Button>
@@ -134,10 +134,10 @@ export function ConsolidatedNavigation({
                 <DropdownMenu open={isNeedDropdownOpen} onOpenChange={setIsNeedDropdownOpen}>
                   <DropdownMenuTrigger asChild>
                     <Button 
-                      className="btn-need px-3 flex items-center gap-2 text-sm rounded-md"
+                      className="btn-need px-2 flex items-center gap-2 text-sm rounded-md h-8"
                     >
                       {currentNeed.label}
-                      <ChevronDown className="h-4 w-4" />
+                      <ChevronDown className="h-3.5 w-3.5" />
                     </Button>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent align="start" className="w-72">
@@ -172,7 +172,7 @@ export function ConsolidatedNavigation({
                       <DropdownMenuTrigger asChild>
                         <button
                           className={cn(
-                            "flex items-center gap-3 pl-1 pr-3 text-sm font-medium transition-colors h-10",
+                            "flex items-center gap-2 pl-1 pr-2 text-sm font-medium transition-colors h-8",
                             "rounded-[6px] focus:outline-none focus:ring-0 focus:border-0",
                             isActive
                               ? "bg-[#F97415] text-white border-0"
@@ -181,7 +181,7 @@ export function ConsolidatedNavigation({
                           disabled={!step.hasContent}
                         >
                           <span className={cn(
-                            "flex items-center justify-center h-8 w-8 rounded-lg text-sm font-semibold",
+                            "flex items-center justify-center h-6 w-6 rounded text-sm font-semibold",
                             isActive 
                               ? "bg-white/20 text-white"
                               : "bg-white text-[#F97415]"
@@ -189,7 +189,7 @@ export function ConsolidatedNavigation({
                             {step.number}
                           </span>
                           <span>{step.label}</span>
-                          <ChevronDown className="h-4 w-4 ml-1" />
+                          <ChevronDown className="h-3.5 w-3.5 ml-1" />
                         </button>
                       </DropdownMenuTrigger>
                       <DropdownMenuContent align="start" className="w-72">
@@ -211,7 +211,7 @@ export function ConsolidatedNavigation({
                     <button
                       onClick={() => setLocation(step.path)}
                       className={cn(
-                        "flex items-center gap-3 pl-1 pr-3 text-sm font-medium transition-colors h-10",
+                        "flex items-center gap-2 pl-1 pr-2 text-sm font-medium transition-colors h-8",
                         "rounded-[6px] focus:outline-none focus:ring-0 focus:border-0",
                         isActive
                           ? "bg-[#F97415] text-white border-0"
@@ -220,7 +220,7 @@ export function ConsolidatedNavigation({
                       disabled={!step.hasContent}
                     >
                       <span className={cn(
-                        "flex items-center justify-center h-8 w-8 rounded-lg text-sm font-semibold",
+                        "flex items-center justify-center h-6 w-6 rounded text-sm font-semibold",
                         isActive 
                           ? "bg-white/20 text-white"
                           : "bg-white text-[#F97415]"
@@ -228,7 +228,7 @@ export function ConsolidatedNavigation({
                         {step.number}
                       </span>
                       <span>{step.label}</span>
-                      <ChevronDown className="h-4 w-4 ml-1" />
+                      <ChevronDown className="h-3.5 w-3.5 ml-1" />
                     </button>
                   )}
                 </SafeFragment>
@@ -238,9 +238,9 @@ export function ConsolidatedNavigation({
             </div>
             
             {/* Right side */}
-            <div className="flex items-center gap-4 mb-1">
-              <button className="inline-flex items-center justify-center w-8 h-8 flex-shrink-0 rounded border border-gray-300 bg-white text-gray-600 focus:outline-none focus:ring-0 focus:border-0 hover:bg-gray-50">
-                <RefreshCw className="h-4 w-4 flex-shrink-0" />
+            <div className="flex items-center gap-2">
+              <button className="inline-flex items-center justify-center w-7 h-7 flex-shrink-0 rounded border border-gray-300 bg-white text-gray-600 focus:outline-none focus:ring-0 focus:border-0 hover:bg-gray-50">
+                <RefreshCw className="h-3.5 w-3.5 flex-shrink-0" />
               </button>
             </div>
           </div>
