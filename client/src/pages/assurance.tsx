@@ -43,24 +43,28 @@ export default function Assurance() {
   return (
     <div className="">
       <div className="w-full px-6">
-        {/* Combined Header and Summary */}
-        <div className="mb-6 max-w-6xl">
-          <CalculatorHeader
-            title="Assurance"
-            itemCount={policies.length}
-            itemLabel="policies"
-            onAddItem={handleAddPolicy}
-            addButtonText="Add Policy"
-            isAddingItem={addMutation.isPending}
-            viewMode={viewMode}
-            onViewModeChange={handleViewModeChange}
-          >
+        {/* Combined Header, Summary and Table */}
+        <CalculatorHeader
+          title="Assurance"
+          itemCount={policies.length}
+          itemLabel="policies"
+          onAddItem={handleAddPolicy}
+          addButtonText="Add Policy"
+          isAddingItem={addMutation.isPending}
+          viewMode={viewMode}
+          onViewModeChange={handleViewModeChange}
+          className="mb-6"
+        >
+          {/* Summary with max width constraint */}
+          <div className="max-w-6xl">
             <AssuranceSummary />
-          </CalculatorHeader>
-        </div>
-
-        {/* Main Table */}
-        <AssuranceTable />
+          </div>
+          
+          {/* Table with full width */}
+          <div className="mt-6">
+            <AssuranceTable />
+          </div>
+        </CalculatorHeader>
       </div>
     </div>
   );

@@ -37,7 +37,7 @@ export function CalculatorHeader({
   return (
     <div className={`bg-white rounded-lg shadow-sm border border-neutral-200 ${className}`}>
       <div className="px-5 pt-5 pb-6">
-        <div className="flex items-center justify-between w-full">
+        <div className="flex items-center justify-between w-full max-w-6xl">
           {/* Left section: Title, count, and Add button */}
           <div className="flex items-center gap-4">
             <h1 className="text-2xl font-semibold text-neutral-900">{title}</h1>
