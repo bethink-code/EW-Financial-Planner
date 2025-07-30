@@ -67,47 +67,52 @@ export function ConsolidatedNavigation({
       <div className="max-w-6xl bg-white rounded-lg shadow-sm border border-gray-200 px-6 py-4">
         <div>
           {/* First row: Back button and Financial Plan */}
-          <div className="flex items-center gap-3 mb-3">
+          <div className="flex items-start gap-3 mb-3">
             {/* Back button */}
             <Button
               variant="ghost"
               size="icon"
               onClick={handleBack}
-              className="h-8 w-8 -ml-2"
+              className="h-8 w-8 -ml-2 mt-5"
             >
               <ChevronLeft className="h-5 w-5 text-gray-600" />
             </Button>
             
-            {/* FINANCIAL PLAN label */}
-            <span className="text-xs text-gray-500 uppercase tracking-wider font-medium">
-              FINANCIAL PLAN
-            </span>
-            
-            {/* Financial Plan name with edit */}
-            <div className="flex items-center gap-2 bg-[#F5F1E8] rounded px-3 py-1.5">
-              <span className="text-sm text-gray-700" title={planName}>
-                {planName}
+            {/* Financial Plan section */}
+            <div>
+              {/* FINANCIAL PLAN label */}
+              <span className="text-xs text-gray-500 uppercase tracking-wider font-medium block mb-1">
+                FINANCIAL PLAN
               </span>
-              <Button
-                variant="ghost"
-                size="icon"
-                className="h-5 w-5 p-0 text-gray-500 hover:text-gray-700"
-              >
-                <Edit2 className="h-3.5 w-3.5" />
-              </Button>
+              
+              {/* Financial Plan name with edit */}
+              <div className="flex items-center gap-2 bg-[#F5F1E8] rounded px-3 py-1.5">
+                <span className="text-sm text-gray-700" title={planName}>
+                  {planName}
+                </span>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="h-5 w-5 p-0 text-gray-500 hover:text-gray-700"
+                >
+                  <Edit2 className="h-3.5 w-3.5" />
+                </Button>
+              </div>
             </div>
           </div>
           
           {/* Second row: Need, Steps, and Right side items */}
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
-              {/* NEED label */}
-              <span className="text-xs text-gray-500 uppercase tracking-wider font-medium ml-10">
-                NEED
-              </span>
-              
-              {/* Need dropdown */}
-              <DropdownMenu open={isDropdownOpen} onOpenChange={setIsDropdownOpen}>
+              {/* Need section */}
+              <div className="ml-10">
+                {/* NEED label */}
+                <span className="text-xs text-gray-500 uppercase tracking-wider font-medium block mb-1">
+                  NEED
+                </span>
+                
+                {/* Need dropdown */}
+                <DropdownMenu open={isDropdownOpen} onOpenChange={setIsDropdownOpen}>
             <DropdownMenuTrigger asChild>
               <Button 
                 onClick={() => {
@@ -153,6 +158,7 @@ export function ConsolidatedNavigation({
               )}
             </DropdownMenuContent>
           </DropdownMenu>
+              </div>
 
               {/* Step navigation */}
               <div className="flex items-center gap-2 ml-4">
