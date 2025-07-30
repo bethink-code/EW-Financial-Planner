@@ -180,7 +180,7 @@ export function ConsolidatedNavigation({
                             "rounded-[6px]",
                             isActive
                               ? "bg-[#E97627] text-white border-0"
-                              : "bg-[#F5F1E8] text-gray-700 border border-gray-200 hover:bg-[#F0EBE0]"
+                              : "bg-[#F5F1E8] text-gray-700 border-0 hover:bg-[#F0EBE0]"
                           )}
                           disabled={!step.hasContent}
                         >
@@ -218,7 +218,7 @@ export function ConsolidatedNavigation({
                         "rounded-[6px]",
                         isActive
                           ? "bg-[#E97627] text-white border-0"
-                          : "bg-[#F5F1E8] text-gray-700 border border-gray-200 hover:bg-[#F0EBE0]"
+                          : "bg-[#F5F1E8] text-gray-700 border-0 hover:bg-[#F0EBE0]"
                       )}
                       disabled={!step.hasContent}
                     >
