@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useMemo } from "react";
+import React, { useState, useCallback, useMemo, memo } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { Plus, Trash2, Copy } from "lucide-react";
 import { getFieldClass, getFieldWidth } from "@/lib/design-tokens";
@@ -6,6 +6,7 @@ import { getCellClass } from "@/lib/field-types";
 import { formatTextValue, getValueClass, isDefaultValue, handleDefaultValueFocus } from "@/lib/formatting";
 import { apiRequest } from "@/lib/queryClient";
 import { AddButton, DuplicateButton, DeleteButton, ActionButtonGroup } from "@/components/ui/action-buttons";
+import { useDebouncedUpdate } from "@/hooks/use-debounced-update";
 import type { Assurance, InsertAssurance } from "@shared/schema";
 
 interface AssuranceTableProps {}
@@ -112,6 +113,15 @@ export function AssuranceTable({}: AssuranceTableProps) {
     }
   });
 
+  // Base update function
+  const executeUpdate = useCallback((id: number, field: keyof Assurance, value: string | boolean | string[]) => {
+    const updates = { [field]: value };
+    updateMutation.mutate({ id, updates });
+  }, [updateMutation]);
+
+  // Debounced update for text fields
+  const debouncedUpdate = useDebouncedUpdate(executeUpdate, 300);
+
   // Note: handleAddPolicy moved to parent component
 
   const handleDeletePolicy = useCallback((id: number) => {
@@ -125,10 +135,15 @@ export function AssuranceTable({}: AssuranceTableProps) {
   }, [duplicateMutation]);
 
   const handleUpdatePolicy = useCallback((id: number, field: keyof Assurance, value: string | boolean | string[]) => {
-    setIsUpdating(true);
-    const updates = { [field]: value };
-    updateMutation.mutate({ id, updates });
-  }, [updateMutation]);
+    // Use immediate updates for array fields to prevent synchronization issues
+    const arrayFields = ['owners', 'beneficiaries'];
+    
+    if (arrayFields.includes(field)) {
+      executeUpdate(id, field, value);
+    } else {
+      debouncedUpdate(id, field, value);
+    }
+  }, [executeUpdate, debouncedUpdate]);
 
   // Note: Policy deletion removed - only individual owners/beneficiaries can be deleted
 
@@ -263,14 +278,16 @@ export function AssuranceTable({}: AssuranceTableProps) {
               // Calculate max rows needed for this policy
               const maxRows = Math.max(policy.owners.length, policy.beneficiaries.length);
               
-              return Array.from({ length: maxRows }, (_, rowIndex) => (
-                <tr 
-                  key={`${policy.id}-${rowIndex}-${policy.owners.length}-${policy.beneficiaries.length}`} 
-                  className="hover:bg-neutral-50"
-                >
+              return (
+                <React.Fragment key={policy.id}>
+                  {Array.from({ length: maxRows }, (_, rowIndex) => (
+                    <tr 
+                      key={`${policy.id}-${rowIndex}`} 
+                      className="hover:bg-neutral-50"
+                    >
                   {/* Actions - only show on first row */}
-                  <td className="table-actions-cell p-1 text-center">
-                    {rowIndex === 0 && (
+                  {rowIndex === 0 && (
+                    <td className="table-actions-cell p-1 text-center align-top" rowSpan={maxRows}>
                       <ActionButtonGroup>
                         <DuplicateButton 
                           onClick={() => handleDuplicatePolicy(policy)} 
@@ -281,12 +298,12 @@ export function AssuranceTable({}: AssuranceTableProps) {
                           disabled={deleteMutation.isPending}
                         />
                       </ActionButtonGroup>
-                    )}
-                  </td>
+                    </td>
+                  )}
 
                   {/* Description - only show on first row */}
-                  <td className="border border-neutral-300 p-1">
-                    {rowIndex === 0 && (
+                  {rowIndex === 0 && (
+                    <td className="border border-neutral-300 p-1 align-top" rowSpan={maxRows}>
                       <input
                         key={`desc-${policy.id}`}
                         type="text"
@@ -296,8 +313,8 @@ export function AssuranceTable({}: AssuranceTableProps) {
                         onFocus={handleDefaultValueFocus}
                         onBlur={(e) => handleUpdatePolicy(policy.id, 'description', e.target.value)}
                       />
-                    )}
-                  </td>
+                    </td>
+                  )}
 
                   {/* Owner */}
                   <td className="border border-neutral-300 p-1">
@@ -336,8 +353,8 @@ export function AssuranceTable({}: AssuranceTableProps) {
                   </td>
 
                   {/* Life Assured - only show on first row */}
-                  <td className="border border-neutral-300 p-1">
-                    {rowIndex === 0 && (
+                  {rowIndex === 0 && (
+                    <td className="border border-neutral-300 p-1 align-top" rowSpan={maxRows}>
                       <input
                         key={`life-assured-${policy.id}`}
                         type="text"
@@ -347,12 +364,12 @@ export function AssuranceTable({}: AssuranceTableProps) {
                         onFocus={handleDefaultValueFocus}
                         onBlur={(e) => handleUpdatePolicy(policy.id, 'description', e.target.value)}
                       />
-                    )}
-                  </td>
+                    </td>
+                  )}
 
                   {/* Death Benefit - only show on first row */}
-                  <td className="border border-neutral-300 p-1">
-                    {rowIndex === 0 && (
+                  {rowIndex === 0 && (
+                    <td className="border border-neutral-300 p-1 align-top" rowSpan={maxRows}>
                       <input
                         key={`death-benefit-${policy.id}`}
                         type="text"
@@ -361,8 +378,8 @@ export function AssuranceTable({}: AssuranceTableProps) {
                         onFocus={handleDefaultValueFocus}
                         onBlur={(e) => handleInputBlur(policy.id, 'deathBenefit', e.target.value, e.target)}
                       />
-                    )}
-                  </td>
+                    </td>
+                  )}
 
                   {/* Beneficiary */}
                   <td className="border border-neutral-300 p-1">
@@ -523,9 +540,10 @@ export function AssuranceTable({}: AssuranceTableProps) {
                     )}
                   </td>
                 </tr>
-              ));
-            }).flat()}
-
+                  ))}
+                </React.Fragment>
+              );
+            })}
           </tbody>
           
           {/* Totals Footer */}
