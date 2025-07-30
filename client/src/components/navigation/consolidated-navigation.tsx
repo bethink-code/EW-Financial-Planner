@@ -189,6 +189,7 @@ export function ConsolidatedNavigation({
                             {step.number}
                           </span>
                           <span>{step.label}</span>
+                          <ChevronDown className="h-4 w-4 ml-1" />
                         </button>
                       </DropdownMenuTrigger>
                       <DropdownMenuContent align="start" className="w-72">
@@ -227,6 +228,7 @@ export function ConsolidatedNavigation({
                         {step.number}
                       </span>
                       <span>{step.label}</span>
+                      <ChevronDown className="h-4 w-4 ml-1" />
                     </button>
                   )}
                 </SafeFragment>
