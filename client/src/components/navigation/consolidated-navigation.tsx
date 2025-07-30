@@ -43,19 +43,19 @@ export function ConsolidatedNavigation({
     
     const items: any[] = [];
     step.sections.forEach((section: any) => {
-      items.push({
-        ...section,
-        isSection: true,
-        type: 'section'
-      });
-      if (section.children) {
+      // If section has children, add children directly without parent
+      if (section.children && section.children.length > 0) {
         section.children.forEach((child: any) => {
           items.push({
             ...child,
-            isChild: true,
-            parentId: section.id,
-            type: 'subsection'
+            type: 'section'
           });
+        });
+      } else {
+        // If no children, add the section itself
+        items.push({
+          ...section,
+          type: 'section'
         });
       }
     });
@@ -148,7 +148,6 @@ export function ConsolidatedNavigation({
                     <Link href={item.path} onClick={() => setIsDropdownOpen(false)}>
                       <span className={cn(
                         item.hasContent ? "" : "text-gray-400",
-                        item.isChild && "pl-6",
                         location.includes(item.path) && "text-[#E97627] font-medium"
                       )}>
                         {item.label}
