@@ -38,7 +38,7 @@ export function CalculatorHeader({
     <div className={`bg-white rounded-lg shadow-sm border border-neutral-200 ${className}`}>
       <div className="px-5 pt-5 pb-6">
         <div className="flex items-center justify-between w-full max-w-6xl">
-          {/* Left section: Title, count, and Add button */}
+          {/* Left section: Title, count, Add button, and switchers */}
           <div className="flex items-center gap-4">
             <h1 className="text-2xl font-semibold text-neutral-900">{title}</h1>
             {itemCount !== undefined && (
@@ -57,10 +57,7 @@ export function CalculatorHeader({
                 {isAddingItem ? "Adding..." : addButtonText}
               </Button>
             )}
-          </div>
-
-          {/* Right section: View mode switcher and additional controls */}
-          <div className="flex gap-3 items-center">
+            
             {/* View Mode Buttons */}
             {onViewModeChange && (
               <div className="flex border border-neutral-200 rounded-lg overflow-hidden view-mode-switcher">
@@ -111,7 +108,10 @@ export function CalculatorHeader({
                 </Button>
               </div>
             )}
+          </div>
 
+          {/* Right section: Additional controls only */}
+          <div className="flex gap-3 items-center">
             {/* Additional controls */}
             {additionalControls}
           </div>
