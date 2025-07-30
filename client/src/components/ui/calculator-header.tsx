@@ -1,6 +1,5 @@
 import { Table, List, Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { TableNavigationDropdown } from "./table-navigation-dropdown";
 
 interface CalculatorHeaderProps {
   title: string;
