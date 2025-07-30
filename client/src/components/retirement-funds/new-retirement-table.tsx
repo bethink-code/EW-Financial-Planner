@@ -235,6 +235,7 @@ export function NewRetirementTable({
  <td className="p-1 section-start">
  {rowIndex === 0 && (
  <input
+ key={`cover-amount-${fund.id}`}
  type="text"
  defaultValue={formatCurrencyValue(fund.coverAmount)}
  className={`table-input ${getFieldClass('currency')} ${getValueClass(fund.coverAmount, 'currency')}`}
@@ -252,6 +253,7 @@ export function NewRetirementTable({
  {rowIndex < (fund.unapprovedBeneficiaries?.length || 0) && (
  <div className="flex items-center gap-1">
  <input
+ key={`unapproved-benef-${fund.id}-${rowIndex}`}
  type="text"
  defaultValue={formatTextValue(fund.unapprovedBeneficiaries?.[rowIndex] || "")}
  className={`table-input ${getFieldClass('text')} flex-1 ${getValueClass(fund.unapprovedBeneficiaries?.[rowIndex] || "", 'text')}`}
@@ -281,14 +283,13 @@ export function NewRetirementTable({
  <td className="p-1">
  {rowIndex < (fund.unapprovedPercentageSplits?.length || 0) && (
  <input
+ key={`unapproved-percent-${fund.id}-${rowIndex}`}
  type="text"
  defaultValue={formatPercentageValue(fund.unapprovedPercentageSplits?.[rowIndex])}
  className={`table-input ${getFieldClass('percentage')} ${getValueClass(fund.unapprovedPercentageSplits?.[rowIndex], 'percentage')}`}
  onFocus={handleDefaultValueFocus}
  onBlur={(e) => {
- const updatedSplits = [...(fund.unapprovedPercentageSplits || [])];
- updatedSplits[rowIndex] = e.target.value;
- onFieldUpdate(fund.id, 'unapprovedPercentageSplits', updatedSplits);
+ unapprovedBeneficiaryManager.changePercentage(fund.id, rowIndex, e.target.value);
  // Update calculated cover split
  const updatedCoverSplits = [...(fund.unapprovedCoverSplits || [])];
  updatedCoverSplits[rowIndex] = calculateCoverSplit(fund.coverAmount, e.target.value);
@@ -311,6 +312,7 @@ export function NewRetirementTable({
  <td className="p-1 section-start">
  {rowIndex === 0 && (
  <input
+ key={`monthly-income-${fund.id}`}
  type="text"
  defaultValue={formatCurrencyValue(fund.monthlyIncome)}
  className={`table-input ${getFieldClass('currency')} ${getValueClass(fund.monthlyIncome, 'currency')}`}
@@ -339,6 +341,7 @@ export function NewRetirementTable({
  <td className="p-1">
  {rowIndex === 0 && (
  <input
+ key={`term-years-${fund.id}`}
  type="text"
  defaultValue={formatYearsValue(fund.termYears)}
  className={`table-input ${getFieldClass('years')} ${getValueClass(fund.termYears, 'years')}`}
@@ -355,6 +358,7 @@ export function NewRetirementTable({
  <td className="p-1">
  {rowIndex === 0 && (
  <input
+ key={`increase-percent-${fund.id}`}
  type="text"
  defaultValue={formatPercentageValue(fund.increasePercentage)}
  className={`table-input ${getFieldClass('percentage')} ${getValueClass(fund.increasePercentage, 'percentage')}`}
@@ -371,6 +375,7 @@ export function NewRetirementTable({
  <td className="p-1 section-start">
  {rowIndex === 0 && (
  <input
+ key={`approved-life-${fund.id}`}
  type="text"
  defaultValue={formatCurrencyValue(fund.approvedLifeCover)}
  className={`table-input ${getFieldClass('currency')} ${getValueClass(fund.approvedLifeCover, 'currency')}`}
@@ -387,6 +392,7 @@ export function NewRetirementTable({
  <td className="p-1">
  {rowIndex === 0 && (
  <input
+ key={`fund-value-${fund.id}`}
  type="text"
  defaultValue={formatCurrencyValue(fund.fundValue)}
  className={`table-input ${getFieldClass('currency')} ${getValueClass(fund.fundValue, 'currency')}`}
@@ -416,6 +422,7 @@ export function NewRetirementTable({
  {rowIndex < (fund.fundValueBeneficiaries?.length || 0) && (
  <div className="flex items-center gap-1">
  <input
+ key={`fundvalue-benef-${fund.id}-${rowIndex}`}
  type="text"
  defaultValue={formatTextValue(fund.fundValueBeneficiaries?.[rowIndex] || "")}
  className={`table-input ${getFieldClass('text')} flex-1 ${getValueClass(fund.fundValueBeneficiaries?.[rowIndex] || "", 'text')}`}
@@ -445,14 +452,13 @@ export function NewRetirementTable({
  <td className="p-1">
  {rowIndex < (fund.fundValuePercentageSplits?.length || 0) && (
  <input
+ key={`fundvalue-percent-${fund.id}-${rowIndex}`}
  type="text"
  defaultValue={formatPercentageValue(fund.fundValuePercentageSplits?.[rowIndex])}
  className={`table-input ${getFieldClass('percentage')} ${getValueClass(fund.fundValuePercentageSplits?.[rowIndex], 'percentage')}`}
  onFocus={handleDefaultValueFocus}
  onBlur={(e) => {
- const updatedSplits = [...(fund.fundValuePercentageSplits || [])];
- updatedSplits[rowIndex] = e.target.value;
- onFieldUpdate(fund.id, 'fundValuePercentageSplits', updatedSplits);
+ fundValueBeneficiaryManager.changePercentage(fund.id, rowIndex, e.target.value);
  // Update calculated cover split
  const updatedCoverSplits = [...(fund.fundValueCoverSplits || [])];
  updatedCoverSplits[rowIndex] = calculateCoverSplit(fund.fundValue, e.target.value);
@@ -475,6 +481,7 @@ export function NewRetirementTable({
  <td className="p-1">
  {rowIndex === 0 && (
  <input
+ key={`lump-sum-${fund.id}`}
  type="text"
  defaultValue={formatCurrencyValue(fund.lumpSumTaken)}
  className={`table-input ${getFieldClass('currency')} ${getValueClass(fund.lumpSumTaken, 'currency')}`}
@@ -491,6 +498,7 @@ export function NewRetirementTable({
  <td className="p-1">
  {rowIndex === 0 && (
  <input
+ key={`non-deduct-${fund.id}`}
  type="text"
  defaultValue={formatCurrencyValue(fund.nonDeductibleContribution)}
  className={`table-input ${getFieldClass('currency')} ${getValueClass(fund.nonDeductibleContribution, 'currency')}`}
@@ -528,6 +536,7 @@ export function NewRetirementTable({
  <td className="p-1">
  {rowIndex === 0 && (
  <input
+ key={`income-term-${fund.id}`}
  type="text"
  defaultValue={formatYearsValue(fund.incomeTerm)}
  className={`table-input ${getFieldClass('years')} ${getValueClass(fund.incomeTerm, 'years')}`}
