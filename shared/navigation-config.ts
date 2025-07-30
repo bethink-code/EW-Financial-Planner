@@ -81,7 +81,7 @@ export const needs: Need[] = [
       {
         id: "build",
         number: 2,
-        label: "Build",
+        label: "Calculate",
         path: "/needs/death-estate-liquidity/build",
         hasContent: true,
         sections: [

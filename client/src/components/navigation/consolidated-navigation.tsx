@@ -41,7 +41,7 @@ export function ConsolidatedNavigation({
     
     const items: any[] = [];
     
-    // For Build step, show all calculator pages directly
+    // For Calculate step (id is still 'build'), show all calculator pages directly
     if (step.id === 'build') {
       items.push(
         { id: 'assurance', label: 'Risk & Assurance', path: '/assurance', hasContent: true },
