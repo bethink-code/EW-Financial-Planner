@@ -29,6 +29,7 @@ export function AddButton({
   if (isTableSize && !children) {
     return (
       <button
+        type="button"
         onClick={onClick}
         disabled={disabled}
         className={cn(
@@ -44,6 +45,7 @@ export function AddButton({
   // Use primary button for larger sizes with text
   return (
     <button
+      type="button"
       onClick={onClick}
       disabled={disabled}
       className={cn(
@@ -72,6 +74,7 @@ export function DeleteButton({
   if (isTableSize) {
     return (
       <button
+        type="button"
         onClick={onClick}
         disabled={disabled}
         className={cn(
