@@ -1,7 +1,28 @@
 import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
-import { insertRetirementFundSchema, updateRetirementFundSchema, insertLumpSumBequestSchema, updateLumpSumBequestSchema, insertAssuranceSchema, updateAssuranceSchema, insertDefinedBenefitFundSchema, updateDefinedBenefitFundSchema, insertVoluntaryInvestmentSchema, updateVoluntaryInvestmentSchema, insertIncomeNeedsSchema, updateIncomeNeedsSchema, insertIncomeProvisionsSchema, updateIncomeProvisionsSchema, insertResidueSchema, updateResidueSchema, insertAdditionalEstateDutyItemsSchema, updateAdditionalEstateDutyItemsSchema, insertLiabilitiesSchema, updateLiabilitiesSchema } from "@shared/schema";
+import {
+  insertRetirementFundSchema,
+  updateRetirementFundSchema,
+  insertLumpSumBequestSchema,
+  updateLumpSumBequestSchema,
+  insertAssuranceSchema,
+  updateAssuranceSchema,
+  insertDefinedBenefitFundSchema,
+  updateDefinedBenefitFundSchema,
+  insertVoluntaryInvestmentSchema,
+  updateVoluntaryInvestmentSchema,
+  insertIncomeNeedsSchema,
+  updateIncomeNeedsSchema,
+  insertIncomeProvisionsSchema,
+  updateIncomeProvisionsSchema,
+  insertResidueSchema,
+  updateResidueSchema,
+  insertAdditionalEstateDutyItemsSchema,
+  updateAdditionalEstateDutyItemsSchema,
+  insertLiabilitiesSchema,
+  updateLiabilitiesSchema,
+} from "@shared/schema";
 import { insertAssetsSchema } from "@shared/assets-schema";
 
 export async function registerRoutes(app: Express): Promise<Server> {
@@ -10,13 +31,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const { search } = req.query;
       let funds;
-      
+
       if (search && typeof search === "string") {
         funds = await storage.searchRetirementFunds(search);
       } else {
         funds = await storage.getRetirementFunds();
       }
-      
+
       res.json(funds);
     } catch (error) {
       console.error("Error fetching retirement funds:", error);
@@ -66,7 +87,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
       const validatedData = updateRetirementFundSchema.parse(req.body);
       const fund = await storage.updateRetirementFund(id, validatedData);
-      
+
       if (!fund) {
         return res.status(404).json({ message: "Retirement fund not found" });
       }
@@ -99,19 +120,19 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // Lump Sum Bequests Routes
-  
+
   // Get all lump sum bequests
   app.get("/api/lump-sum-bequests", async (req, res) => {
     try {
       const { search } = req.query;
       let bequests;
-      
+
       if (search && typeof search === "string") {
         bequests = await storage.searchLumpSumBequests(search);
       } else {
         bequests = await storage.getLumpSumBequests();
       }
-      
+
       res.json(bequests);
     } catch (error) {
       console.error("Error fetching lump sum bequests:", error);
@@ -161,7 +182,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
       const validatedData = updateLumpSumBequestSchema.parse(req.body);
       const bequest = await storage.updateLumpSumBequest(id, validatedData);
-      
+
       if (!bequest) {
         return res.status(404).json({ message: "Lump sum bequest not found" });
       }
@@ -194,19 +215,19 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // Assurance API routes
-  
+
   // Get all assurance policies
   app.get("/api/assurance", async (req, res) => {
     try {
       const { search } = req.query;
       let policies;
-      
+
       if (search && typeof search === "string") {
         policies = await storage.searchAssurance(search);
       } else {
         policies = await storage.getAssurance();
       }
-      
+
       res.json(policies);
     } catch (error) {
       console.error("Error fetching assurance policies:", error);
@@ -256,7 +277,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
       const validatedData = updateAssuranceSchema.parse(req.body);
       const policy = await storage.updateAssurance(id, validatedData);
-      
+
       if (!policy) {
         return res.status(404).json({ message: "Assurance policy not found" });
       }
@@ -289,23 +310,25 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // Defined Benefit Funds Routes
-  
+
   // Get all defined benefit funds
   app.get("/api/defined-benefit-funds", async (req, res) => {
     try {
       const { search } = req.query;
       let funds;
-      
+
       if (search && typeof search === "string") {
         funds = await storage.searchDefinedBenefitFunds(search);
       } else {
         funds = await storage.getDefinedBenefitFunds();
       }
-      
+
       res.json(funds);
     } catch (error) {
       console.error("Error fetching defined benefit funds:", error);
-      res.status(500).json({ message: "Failed to fetch defined benefit funds" });
+      res
+        .status(500)
+        .json({ message: "Failed to fetch defined benefit funds" });
     }
   });
 
@@ -319,7 +342,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
       const fund = await storage.getDefinedBenefitFund(id);
       if (!fund) {
-        return res.status(404).json({ message: "Defined benefit fund not found" });
+        return res
+          .status(404)
+          .json({ message: "Defined benefit fund not found" });
       }
 
       res.json(fund);
@@ -351,9 +376,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
       const validatedData = updateDefinedBenefitFundSchema.parse(req.body);
       const fund = await storage.updateDefinedBenefitFund(id, validatedData);
-      
+
       if (!fund) {
-        return res.status(404).json({ message: "Defined benefit fund not found" });
+        return res
+          .status(404)
+          .json({ message: "Defined benefit fund not found" });
       }
 
       res.json(fund);
@@ -373,34 +400,40 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
       const success = await storage.deleteDefinedBenefitFund(id);
       if (!success) {
-        return res.status(404).json({ message: "Defined benefit fund not found" });
+        return res
+          .status(404)
+          .json({ message: "Defined benefit fund not found" });
       }
 
       res.status(204).send();
     } catch (error) {
       console.error("Error deleting defined benefit fund:", error);
-      res.status(500).json({ message: "Failed to delete defined benefit fund" });
+      res
+        .status(500)
+        .json({ message: "Failed to delete defined benefit fund" });
     }
   });
 
   // Voluntary Investments Routes
-  
+
   // Get all voluntary investments
   app.get("/api/voluntary-investments", async (req, res) => {
     try {
       const { search } = req.query;
       let investments;
-      
+
       if (search && typeof search === "string") {
         investments = await storage.searchVoluntaryInvestments(search);
       } else {
         investments = await storage.getVoluntaryInvestments();
       }
-      
+
       res.json(investments);
     } catch (error) {
       console.error("Error fetching voluntary investments:", error);
-      res.status(500).json({ message: "Failed to fetch voluntary investments" });
+      res
+        .status(500)
+        .json({ message: "Failed to fetch voluntary investments" });
     }
   });
 
@@ -414,7 +447,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
       const investment = await storage.getVoluntaryInvestment(id);
       if (!investment) {
-        return res.status(404).json({ message: "Voluntary investment not found" });
+        return res
+          .status(404)
+          .json({ message: "Voluntary investment not found" });
       }
 
       res.json(investment);
@@ -451,10 +486,15 @@ export async function registerRoutes(app: Express): Promise<Server> {
       }
 
       const validatedData = updateVoluntaryInvestmentSchema.parse(req.body);
-      const investment = await storage.updateVoluntaryInvestment(id, validatedData);
-      
+      const investment = await storage.updateVoluntaryInvestment(
+        id,
+        validatedData,
+      );
+
       if (!investment) {
-        return res.status(404).json({ message: "Voluntary investment not found" });
+        return res
+          .status(404)
+          .json({ message: "Voluntary investment not found" });
       }
 
       res.json(investment);
@@ -474,32 +514,34 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
       const success = await storage.deleteVoluntaryInvestment(id);
       if (!success) {
-        return res.status(404).json({ message: "Voluntary investment not found" });
+        return res
+          .status(404)
+          .json({ message: "Voluntary investment not found" });
       }
 
       res.status(204).send();
     } catch (error) {
       console.error("Error deleting voluntary investment:", error);
-      res.status(500).json({ message: "Failed to delete voluntary investment" });
+      res
+        .status(500)
+        .json({ message: "Failed to delete voluntary investment" });
     }
   });
 
-
-
   // Income Needs Routes
-  
+
   // Get all income needs
   app.get("/api/income-needs", async (req, res) => {
     try {
       const { search } = req.query;
       let needs;
-      
+
       if (search && typeof search === "string") {
         needs = await storage.searchIncomeNeeds(search);
       } else {
         needs = await storage.getIncomeNeeds();
       }
-      
+
       res.json(needs);
     } catch (error) {
       console.error("Error fetching income needs:", error);
@@ -549,7 +591,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
       const validatedData = updateIncomeNeedsSchema.parse(req.body);
       const need = await storage.updateIncomeNeed(id, validatedData);
-      
+
       if (!need) {
         return res.status(404).json({ message: "Income need not found" });
       }
@@ -582,19 +624,19 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // Income Provisions Routes
-  
+
   // Get all income provisions
   app.get("/api/income-provisions", async (req, res) => {
     try {
       const { search } = req.query;
       let provisions;
-      
+
       if (search && typeof search === "string") {
         provisions = await storage.searchIncomeProvisions(search);
       } else {
         provisions = await storage.getIncomeProvisions();
       }
-      
+
       res.json(provisions);
     } catch (error) {
       console.error("Error fetching income provisions:", error);
@@ -644,7 +686,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
       const validatedData = updateIncomeProvisionsSchema.parse(req.body);
       const provision = await storage.updateIncomeProvision(id, validatedData);
-      
+
       if (!provision) {
         return res.status(404).json({ message: "Income provision not found" });
       }
@@ -677,19 +719,19 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // Residue Routes
-  
+
   // Get all residue items
   app.get("/api/residue", async (req, res) => {
     try {
       const { search } = req.query;
       let items;
-      
+
       if (search && typeof search === "string") {
         items = await storage.searchResidue(search);
       } else {
         items = await storage.getResidue();
       }
-      
+
       res.json(items);
     } catch (error) {
       console.error("Error fetching residue:", error);
@@ -739,7 +781,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
       const validatedData = updateResidueSchema.parse(req.body);
       const item = await storage.updateResidueItem(id, validatedData);
-      
+
       if (!item) {
         return res.status(404).json({ message: "Residue item not found" });
       }
@@ -772,23 +814,25 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // Additional Estate Duty Items Routes
-  
+
   // Get all additional estate duty items
   app.get("/api/additional-estate-duty-items", async (req, res) => {
     try {
       const { search } = req.query;
       let items;
-      
+
       if (search && typeof search === "string") {
         items = await storage.searchAdditionalEstateDutyItems(search);
       } else {
         items = await storage.getAdditionalEstateDutyItems();
       }
-      
+
       res.json(items);
     } catch (error) {
       console.error("Error fetching additional estate duty items:", error);
-      res.status(500).json({ message: "Failed to fetch additional estate duty items" });
+      res
+        .status(500)
+        .json({ message: "Failed to fetch additional estate duty items" });
     }
   });
 
@@ -802,25 +846,33 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
       const item = await storage.getAdditionalEstateDutyItem(id);
       if (!item) {
-        return res.status(404).json({ message: "Additional estate duty item not found" });
+        return res
+          .status(404)
+          .json({ message: "Additional estate duty item not found" });
       }
 
       res.json(item);
     } catch (error) {
       console.error("Error fetching additional estate duty item:", error);
-      res.status(500).json({ message: "Failed to fetch additional estate duty item" });
+      res
+        .status(500)
+        .json({ message: "Failed to fetch additional estate duty item" });
     }
   });
 
   // Create new additional estate duty item
   app.post("/api/additional-estate-duty-items", async (req, res) => {
     try {
-      const validatedData = insertAdditionalEstateDutyItemsSchema.parse(req.body);
+      const validatedData = insertAdditionalEstateDutyItemsSchema.parse(
+        req.body,
+      );
       const item = await storage.createAdditionalEstateDutyItem(validatedData);
       res.status(201).json(item);
     } catch (error) {
       console.error("Error creating additional estate duty item:", error);
-      res.status(400).json({ message: "Invalid additional estate duty item data" });
+      res
+        .status(400)
+        .json({ message: "Invalid additional estate duty item data" });
     }
   });
 
@@ -832,17 +884,26 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(400).json({ message: "Invalid estate duty item ID" });
       }
 
-      const validatedData = updateAdditionalEstateDutyItemsSchema.parse(req.body);
-      const item = await storage.updateAdditionalEstateDutyItem(id, validatedData);
-      
+      const validatedData = updateAdditionalEstateDutyItemsSchema.parse(
+        req.body,
+      );
+      const item = await storage.updateAdditionalEstateDutyItem(
+        id,
+        validatedData,
+      );
+
       if (!item) {
-        return res.status(404).json({ message: "Additional estate duty item not found" });
+        return res
+          .status(404)
+          .json({ message: "Additional estate duty item not found" });
       }
 
       res.json(item);
     } catch (error) {
       console.error("Error updating additional estate duty item:", error);
-      res.status(400).json({ message: "Invalid additional estate duty item data" });
+      res
+        .status(400)
+        .json({ message: "Invalid additional estate duty item data" });
     }
   });
 
@@ -856,13 +917,17 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
       const success = await storage.deleteAdditionalEstateDutyItem(id);
       if (!success) {
-        return res.status(404).json({ message: "Additional estate duty item not found" });
+        return res
+          .status(404)
+          .json({ message: "Additional estate duty item not found" });
       }
 
       res.status(204).send();
     } catch (error) {
       console.error("Error deleting additional estate duty item:", error);
-      res.status(500).json({ message: "Failed to delete additional estate duty item" });
+      res
+        .status(500)
+        .json({ message: "Failed to delete additional estate duty item" });
     }
   });
 
@@ -871,13 +936,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const { search } = req.query;
       let liabilities;
-      
+
       if (search && typeof search === "string") {
         liabilities = await storage.searchLiabilities(search);
       } else {
         liabilities = await storage.getLiabilities();
       }
-      
+
       res.json(liabilities);
     } catch (error) {
       console.error("Error fetching liabilities:", error);
@@ -927,7 +992,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
       const validatedData = updateLiabilitiesSchema.parse(req.body);
       const liability = await storage.updateLiability(id, validatedData);
-      
+
       if (!liability) {
         return res.status(404).json({ message: "Liability not found" });
       }
@@ -960,19 +1025,19 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // Assets Routes
-  
+
   // Get all assets
   app.get("/api/assets", async (req, res) => {
     try {
       const { search } = req.query;
       let assets;
-      
+
       if (search && typeof search === "string") {
         assets = await storage.searchAssets(search);
       } else {
         assets = await storage.getAssets();
       }
-      
+
       res.json(assets);
     } catch (error) {
       console.error("Error fetching assets:", error);
@@ -1022,7 +1087,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
       const validatedData = insertAssetsSchema.partial().parse(req.body);
       const asset = await storage.updateAsset(id, validatedData);
-      
+
       if (!asset) {
         return res.status(404).json({ message: "Asset not found" });
       }
