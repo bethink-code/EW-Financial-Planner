@@ -228,7 +228,6 @@ export function ConsolidatedNavigation({
                         {step.number}
                       </span>
                       <span>{step.label}</span>
-                      <ChevronDown className="h-3.5 w-3.5 ml-1" />
                     </button>
                   )}
                 </SafeFragment>
@@ -239,7 +238,7 @@ export function ConsolidatedNavigation({
             
             {/* Right side */}
             <div className="flex items-center gap-2">
-              <button className="inline-flex items-center justify-center w-7 h-7 flex-shrink-0 rounded border border-gray-300 bg-white text-gray-600 focus:outline-none focus:ring-0 focus:border-0 hover:bg-gray-50">
+              <button className="inline-flex items-center justify-center w-10 h-10 flex-shrink-0 rounded border border-gray-300 bg-white text-gray-600 focus:outline-none focus:ring-0 focus:border-0 hover:bg-gray-50">
                 <RefreshCw className="h-3.5 w-3.5 flex-shrink-0" />
               </button>
             </div>
