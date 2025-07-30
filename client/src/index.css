@@ -774,8 +774,8 @@ th, td {
     border-left: 1px solid #d1d5db !important;
   }
   
-  /* Remove left border ONLY from Actions column (the actual first column) */
-  thead tr th:first-child.section-start,
+  /* Remove left border ONLY from Actions column (first row, first cell with rowSpan) */
+  thead tr:first-child th:first-child.section-start[rowSpan],
   tbody tr td:first-child.section-start,
   tfoot tr td:first-child.section-start {
     border-left: none !important;
