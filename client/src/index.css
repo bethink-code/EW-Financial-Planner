@@ -762,7 +762,7 @@ th, td {
   /* Section borders - unified style for all table elements */
   /* Section start borders */
   .section-start {
-    border-left: 1px solid #d1d5db !important;
+    border-left: 2px solid #ef4444 !important;
     border-right: none !important;
     border-top: none !important;
     border-bottom: none !important;
