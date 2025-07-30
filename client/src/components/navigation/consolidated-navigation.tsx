@@ -176,7 +176,7 @@ export function ConsolidatedNavigation({
                       <DropdownMenuTrigger asChild>
                         <button
                           className={cn(
-                            "flex items-center gap-1 px-2 py-1.5 text-sm font-medium transition-colors",
+                            "flex items-center gap-1 pl-1 pr-2 h-10 text-sm font-medium transition-colors",
                             "rounded-[6px] border",
                             isActive
                               ? "bg-[#E97627] text-white border-[#E97627]"
@@ -214,7 +214,7 @@ export function ConsolidatedNavigation({
                     <button
                       onClick={() => setLocation(step.path)}
                       className={cn(
-                        "flex items-center gap-1 px-2 py-1.5 text-sm font-medium transition-colors",
+                        "flex items-center gap-1 pl-1 pr-2 h-10 text-sm font-medium transition-colors",
                         "rounded-[6px] border",
                         isActive
                           ? "bg-[#E97627] text-white border-[#E97627]"
