@@ -33,7 +33,7 @@ export function AddButton({
         onClick={onClick}
         disabled={disabled}
         className={cn(
-          "h-8 w-8 bg-[#E8F3F8] border border-[#E0E0E0] text-[#016991] hover:bg-[#d1e7dd] rounded-md flex items-center justify-center transition-colors",
+          "h-8 w-8 bg-[#E8F3F8] border border-[#E0E0E0] text-[#016991] hover:bg-[#D1E7F0] rounded-md flex items-center justify-center transition-colors",
           disabled && "opacity-50 cursor-not-allowed",
           className
         )}
@@ -220,7 +220,7 @@ export function SaveButton({
         onClick={onClick}
         disabled={disabled}
         className={cn(
-          "h-8 w-8 bg-[#E8F3F8] border border-[#E0E0E0] text-[#016991] hover:bg-[#d1e7dd] rounded-md flex items-center justify-center transition-colors",
+          "h-8 w-8 bg-[#E8F3F8] border border-[#E0E0E0] text-[#016991] hover:bg-[#D1E7F0] rounded-md flex items-center justify-center transition-colors",
           disabled && "opacity-50 cursor-not-allowed",
           className
         )}
