@@ -65,9 +65,9 @@ export function ConsolidatedNavigation({
   return (
     <div className="w-full px-6 pt-6 pb-4">
       <div className="max-w-6xl bg-white rounded-lg shadow-sm border border-gray-200 px-6 py-4">
-        <div className="flex items-center justify-between">
-          {/* Left side */}
-          <div className="flex items-center gap-3">
+        <div>
+          {/* First row: Back button and Financial Plan */}
+          <div className="flex items-center gap-3 mb-3">
             {/* Back button */}
             <Button
               variant="ghost"
@@ -96,14 +96,18 @@ export function ConsolidatedNavigation({
                 <Edit2 className="h-3.5 w-3.5" />
               </Button>
             </div>
-            
-            {/* NEED label */}
-            <span className="text-xs text-gray-500 uppercase tracking-wider font-medium ml-4">
-              NEED
-            </span>
-            
-            {/* Need dropdown */}
-            <DropdownMenu open={isDropdownOpen} onOpenChange={setIsDropdownOpen}>
+          </div>
+          
+          {/* Second row: Need, Steps, and Right side items */}
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              {/* NEED label */}
+              <span className="text-xs text-gray-500 uppercase tracking-wider font-medium ml-10">
+                NEED
+              </span>
+              
+              {/* Need dropdown */}
+              <DropdownMenu open={isDropdownOpen} onOpenChange={setIsDropdownOpen}>
             <DropdownMenuTrigger asChild>
               <Button 
                 onClick={() => {
@@ -150,9 +154,9 @@ export function ConsolidatedNavigation({
             </DropdownMenuContent>
           </DropdownMenu>
 
-          {/* Step navigation */}
-          <div className="flex items-center gap-2">
-            {stepsWithStatus.map((step, index) => {
+              {/* Step navigation */}
+              <div className="flex items-center gap-2 ml-4">
+                {stepsWithStatus.map((step, index) => {
               const isActive = step.id === currentStep.id;
               
               return (
@@ -187,21 +191,22 @@ export function ConsolidatedNavigation({
                 </SafeFragment>
               );
             })}
+              </div>
             </div>
-          </div>
-          
-          {/* Right side */}
-          <div className="flex items-center gap-4">
-            <span className="text-sm text-gray-500">
-              FRM-2025-001
-            </span>
-            <Button
-              variant="ghost"
-              size="icon"
-              className="h-8 w-8 text-gray-500 hover:text-gray-700"
-            >
-              <RefreshCw className="h-4 w-4" />
-            </Button>
+            
+            {/* Right side */}
+            <div className="flex items-center gap-4">
+              <span className="text-sm text-gray-500">
+                FRM-2025-001
+              </span>
+              <Button
+                variant="ghost"
+                size="icon"
+                className="h-8 w-8 text-gray-500 hover:text-gray-700"
+              >
+                <RefreshCw className="h-4 w-4" />
+              </Button>
+            </div>
           </div>
         </div>
       </div>
