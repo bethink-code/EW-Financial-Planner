@@ -1,7 +1,6 @@
 import React from "react";
 import { useLocation } from "wouter";
-import { FinancialPlanHeader } from "./financial-plan-header";
-import { StepNavigation } from "./step-navigation";
+import { ConsolidatedNavigation } from "./consolidated-navigation";
 import { SectionTabs } from "./section-tabs";
 import { needs } from "@shared/navigation-config";
 
@@ -67,34 +66,14 @@ export function NavigationLayout({ children }: NavigationLayoutProps) {
   
   return (
     <div className="min-h-screen bg-gray-50">
-      <div className="max-w-6xl">
-        <FinancialPlanHeader 
-          currentNeed="Death with estate liquidity"
-        />
-      </div>
+      <ConsolidatedNavigation 
+        currentNeed={currentNeed}
+        currentStep={currentStep}
+        stepsWithStatus={stepsWithStatus}
+        sections={sections}
+      />
       
-      <div className="max-w-6xl">
-        <StepNavigation 
-          steps={stepsWithStatus}
-          currentStepId={currentStep.id}
-        />
-      </div>
-      
-      {tabs.length > 0 && (
-        <div className="bg-white">
-          <div className="max-w-6xl">
-            <SectionTabs tabs={tabs} />
-          </div>
-        </div>
-      )}
-      
-      {subTabs.length > 0 && (
-        <div className="bg-gray-50">
-          <div className="max-w-6xl">
-            <SectionTabs tabs={subTabs} variant="secondary" />
-          </div>
-        </div>
-      )}
+      {/* Section tabs are now integrated into the consolidated navigation dropdown */}
       
       <div>
         {children}
