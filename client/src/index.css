@@ -831,7 +831,143 @@ th, td {
   margin-bottom: 1.25rem;
 }
 
-/* Global styling for Table/Hybrid switcher buttons */
+/* ===== GLOBAL BUTTON STYLE SYSTEM ===== */
+
+/* Primary Button Style - Main actions */
+.btn-primary {
+  background-color: #016991 !important;
+  color: white !important;
+  border: 1px solid #016991 !important;
+  font-weight: 500 !important;
+  transition: all 0.15s ease-in-out !important;
+}
+
+.btn-primary:hover:not(:disabled) {
+  background-color: #014d6b !important;
+  border-color: #014d6b !important;
+}
+
+.btn-primary:disabled {
+  opacity: 0.5 !important;
+  cursor: not-allowed !important;
+}
+
+/* Secondary Button Style - Default/neutral buttons */
+.btn-secondary {
+  background-color: white !important;
+  color: #374151 !important;
+  border: 1px solid #e5e7eb !important;
+  font-weight: 400 !important;
+  transition: all 0.15s ease-in-out !important;
+}
+
+.btn-secondary:hover:not(:disabled) {
+  background-color: #f9fafb !important;
+  color: #111827 !important;
+}
+
+.btn-secondary:disabled {
+  opacity: 0.5 !important;
+  cursor: not-allowed !important;
+}
+
+/* Destructive Button Style - Delete/remove actions */
+.btn-destructive {
+  background-color: #ef4444 !important;
+  color: white !important;
+  border: 1px solid #ef4444 !important;
+  font-weight: 500 !important;
+  transition: all 0.15s ease-in-out !important;
+}
+
+.btn-destructive:hover:not(:disabled) {
+  background-color: #dc2626 !important;
+  border-color: #dc2626 !important;
+}
+
+.btn-destructive:disabled {
+  opacity: 0.5 !important;
+  cursor: not-allowed !important;
+}
+
+/* Ghost Button Style - Minimal buttons */
+.btn-ghost {
+  background-color: transparent !important;
+  color: #6b7280 !important;
+  border: none !important;
+  font-weight: 400 !important;
+  transition: all 0.15s ease-in-out !important;
+}
+
+.btn-ghost:hover:not(:disabled) {
+  background-color: #f3f4f6 !important;
+  color: #374151 !important;
+}
+
+.btn-ghost:disabled {
+  opacity: 0.5 !important;
+  cursor: not-allowed !important;
+}
+
+/* Button Size Variants */
+.btn-sm {
+  height: 2rem !important; /* 32px */
+  padding: 0 0.75rem !important;
+  font-size: 0.875rem !important;
+}
+
+.btn-md {
+  height: 2.25rem !important; /* 36px */
+  padding: 0 1rem !important;
+  font-size: 0.875rem !important;
+}
+
+.btn-lg {
+  height: 2.5rem !important; /* 40px */
+  padding: 0 1.5rem !important;
+  font-size: 1rem !important;
+}
+
+/* Icon Button Variants */
+.btn-icon-sm {
+  width: 1.5rem !important; /* 24px */
+  height: 1.5rem !important;
+  padding: 0 !important;
+}
+
+.btn-icon-md {
+  width: 2rem !important; /* 32px */
+  height: 2rem !important;
+  padding: 0 !important;
+}
+
+.btn-icon-lg {
+  width: 2.5rem !important; /* 40px */
+  height: 2.5rem !important;
+  padding: 0 !important;
+}
+
+/* Button Group Styling */
+.btn-group {
+  display: inline-flex !important;
+  border-radius: 0.5rem !important;
+  overflow: hidden !important;
+  border: 1px solid #e5e7eb !important;
+}
+
+.btn-group button {
+  border-radius: 0 !important;
+  border: none !important;
+  margin: 0 !important;
+}
+
+.btn-group button:not(:last-child) {
+  border-right: 1px solid #e5e7eb !important;
+}
+
+/* Specific Component Styles */
+
+/* View Mode Switcher (Table/Hybrid buttons) */
 .view-mode-switcher {
   background-color: #f9fafb !important;
   border: 1px solid #e5e7eb !important;
@@ -861,6 +997,41 @@ th, td {
   box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05) !important;
   border-radius: 0.375rem !important;
   margin: 0.125rem !important;
+}
+
+/* Navigation Button Styles */
+.nav-button {
+  background-color: white !important;
+  color: #374151 !important;
+  border: 1px solid #e5e7eb !important;
+  font-weight: 400 !important;
+  transition: all 0.15s ease-in-out !important;
+}
+
+.nav-button:hover:not(:disabled) {
+  background-color: #f9fafb !important;
+  color: #111827 !important;
+}
+
+.nav-button.active {
+  background-color: #E97627 !important;
+  color: white !important;
+  border-color: #E97627 !important;
+  font-weight: 500 !important;
+}
+
+/* Action Button Overrides - Apply global styles to existing buttons */
+button[class*="bg-white"][class*="text-gray"] {
+  @apply btn-secondary;
+}
+
+button[class*="bg-primary"],
+button[style*="background-color: #016991"] {
+  @apply btn-primary;
+}
+
+button[class*="destructive"] {
+  @apply btn-destructive;
 }
 
 
