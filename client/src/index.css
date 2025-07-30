@@ -1124,22 +1124,23 @@ th, td {
 }
 
 .nav-button.active {
-  background-color: #EA8A2E !important; /* Orange/700 */
+  background-color: #F97415 !important; /* Design system orange */
   color: white !important;
-  border-color: #EA8A2E !important;
+  border-color: #F97415 !important;
   font-weight: 500 !important;
 }
 
 .nav-button.active:hover:not(:disabled) {
-  background-color: #F19C4A !important; /* Orange/600 */
-  border-color: #F19C4A !important;
+  background-color: #F97415 !important; /* Design system orange with 90% opacity */
+  border-color: #F97415 !important;
+  opacity: 0.9 !important;
 }
 
 /* Need Dropdown Button Style (Elite Wealth Tangerine) */
 .btn-need {
-  background-color: #EA8A2E !important; /* Orange/700 */
+  background-color: #F97415 !important; /* Design system orange */
   color: white !important;
-  border: 1px solid #EA8A2E !important;
+  border: 1px solid #F97415 !important;
   font-weight: 500 !important;
   height: 2.5rem !important; /* 40px */
   border-radius: 6px !important; /* 6px radius */
@@ -1147,13 +1148,15 @@ th, td {
 }
 
 .btn-need:hover:not(:disabled) {
-  background-color: #F19C4A !important; /* Orange/600 */
-  border-color: #F19C4A !important;
+  background-color: #F97415 !important; /* Design system orange with 90% opacity */
+  border-color: #F97415 !important;
+  opacity: 0.9 !important;
 }
 
 .btn-need:active:not(:disabled) {
-  background-color: #BE6917 !important; /* Orange/800 */
-  border-color: #BE6917 !important;
+  background-color: #F97415 !important; /* Design system orange with 80% opacity */
+  border-color: #F97415 !important;
+  opacity: 0.8 !important;
 }
 
 .btn-need:disabled {
@@ -1161,6 +1164,7 @@ th, td {
   border-color: #E0E0E0 !important;
   color: white !important;
   cursor: not-allowed !important;
+  opacity: 1 !important;
 }
 
 /* Action Button Overrides - Apply global styles to existing buttons */
