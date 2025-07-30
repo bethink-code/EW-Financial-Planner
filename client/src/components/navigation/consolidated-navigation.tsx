@@ -103,7 +103,7 @@ export function ConsolidatedNavigation({
                   <span title={planName}>
                     {planName}
                   </span>
-                  <span className="flex items-center justify-center h-8 w-8 rounded-lg text-sm font-semibold bg-white text-[#E97627]">
+                  <span className="flex items-center justify-center h-8 w-8 rounded-lg text-sm font-semibold bg-white text-[#F97415]">
                     <Edit2 className="h-3.5 w-3.5" />
                   </span>
                 </button>
@@ -146,7 +146,7 @@ export function ConsolidatedNavigation({
                         <Link href={need.path} onClick={() => setIsNeedDropdownOpen(false)}>
                           <span className={cn(
                             need.hasContent ? "" : "text-gray-400",
-                            need.id === currentNeed.id && "text-[#E97627] font-medium"
+                            need.id === currentNeed.id && "text-[#F97415] font-medium"
                           )}>
                             {need.label}
                           </span>
@@ -175,7 +175,7 @@ export function ConsolidatedNavigation({
                             "flex items-center gap-3 pl-1 pr-3 text-sm font-medium transition-colors h-10",
                             "rounded-[6px] focus:outline-none focus:ring-0 focus:border-0",
                             isActive
-                              ? "bg-[#E97627] text-white border-0"
+                              ? "bg-[#F97415] text-white border-0"
                               : "bg-[#F5F1E8] text-gray-700 border-0 hover:bg-[#F0EBE0]"
                           )}
                           disabled={!step.hasContent}
@@ -184,7 +184,7 @@ export function ConsolidatedNavigation({
                             "flex items-center justify-center h-8 w-8 rounded-lg text-sm font-semibold",
                             isActive 
                               ? "bg-white/20 text-white"
-                              : "bg-white text-[#E97627]"
+                              : "bg-white text-[#F97415]"
                           )}>
                             {step.number}
                           </span>
@@ -197,7 +197,7 @@ export function ConsolidatedNavigation({
                             <Link href={item.path} onClick={() => setStepDropdownOpen(null)}>
                               <span className={cn(
                                 item.hasContent ? "" : "text-gray-400",
-                                location.includes(item.path) && "text-[#E97627] font-medium"
+                                location.includes(item.path) && "text-[#F97415] font-medium"
                               )}>
                                 {item.label}
                               </span>
@@ -213,7 +213,7 @@ export function ConsolidatedNavigation({
                         "flex items-center gap-3 pl-1 pr-3 text-sm font-medium transition-colors h-10",
                         "rounded-[6px] focus:outline-none focus:ring-0 focus:border-0",
                         isActive
-                          ? "bg-[#E97627] text-white border-0"
+                          ? "bg-[#F97415] text-white border-0"
                           : "bg-[#F5F1E8] text-gray-700 border-0 hover:bg-[#F0EBE0]"
                       )}
                       disabled={!step.hasContent}
@@ -222,7 +222,7 @@ export function ConsolidatedNavigation({
                         "flex items-center justify-center h-8 w-8 rounded-lg text-sm font-semibold",
                         isActive 
                           ? "bg-white/20 text-white"
-                          : "bg-white text-[#E97627]"
+                          : "bg-white text-[#F97415]"
                       )}>
                         {step.number}
                       </span>
