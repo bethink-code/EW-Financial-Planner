@@ -762,13 +762,13 @@ th, td {
   /* Section borders - unified style for all table elements */
   /* Section start borders */
   .section-start {
-    border-left: 2px solid #ef4444 !important;
+    border-left: 1px solid #d1d5db !important;
     border-right: none !important;
     border-top: none !important;
     border-bottom: none !important;
   }
   
-  /* Remove left border from first section (Actions column) */
+  /* Remove left border ONLY from Actions column (the actual first column) */
   thead tr th:first-child.section-start,
   tbody tr td:first-child.section-start,
   tfoot tr td:first-child.section-start {
