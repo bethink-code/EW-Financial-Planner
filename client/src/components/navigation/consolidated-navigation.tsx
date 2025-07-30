@@ -189,8 +189,7 @@ export function ConsolidatedNavigation({
                             isActive 
                               ? "bg-white/20 text-white"
                               : "bg-white text-[#E97627]"
-                          )}
-                          style={{ paddingLeft: '4px' }}>
+                          )}>
                             {step.number}
                           </span>
                           <span>{step.label}</span>
@@ -228,8 +227,7 @@ export function ConsolidatedNavigation({
                         isActive 
                           ? "bg-white/20 text-white"
                           : "bg-white text-[#E97627]"
-                      )}
-                      style={{ paddingLeft: '4px' }}>
+                      )}>
                         {step.number}
                       </span>
                       <span>{step.label}</span>
