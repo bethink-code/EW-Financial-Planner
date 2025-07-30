@@ -26,15 +26,15 @@ export function Switcher({
   size = "md"
 }: SwitcherProps) {
   const sizeClasses = {
-    sm: "text-sm h-10 px-6 min-w-[80px]",
-    md: "text-sm h-10 px-8 min-w-[100px]", 
-    lg: "text-base h-11 px-10 min-w-[120px]"
+    sm: "text-sm h-8 px-6 min-w-[80px]",
+    md: "text-sm h-8 px-8 min-w-[100px]", 
+    lg: "text-base h-9 px-10 min-w-[120px]"
   };
 
   const containerClasses = {
-    sm: "p-1",
-    md: "p-1",
-    lg: "p-1"
+    sm: "p-0.5",
+    md: "p-0.5",
+    lg: "p-0.5"
   };
 
   return (
