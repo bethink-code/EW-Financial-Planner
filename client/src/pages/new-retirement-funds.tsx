@@ -127,48 +127,51 @@ export default function NewRetirementFunds() {
   return (
     <div className="">
       <div className="w-full px-6 py-6">
-        {/* Combined Header and Summary */}
-        <div className="mb-6 max-w-6xl">
-          <CalculatorHeader
-            title="Retirement Funds"
-            itemCount={funds.length}
-            itemLabel="funds"
-            onAddItem={handleAddFund}
-            addButtonText="Add Fund"
-            isAddingItem={addMutation.isPending}
-            viewMode={viewMode}
-            onViewModeChange={handleViewModeChange}
-            showTableFlowsSwitcher={viewMode === "table"}
-            tableMode={tableMode}
-            onTableModeChange={setTableMode}
-          >
+        {/* Combined Header, Summary and Table */}
+        <CalculatorHeader
+          title="Retirement Funds"
+          itemCount={funds.length}
+          itemLabel="funds"
+          onAddItem={handleAddFund}
+          addButtonText="Add Fund"
+          isAddingItem={addMutation.isPending}
+          viewMode={viewMode}
+          onViewModeChange={handleViewModeChange}
+          showTableFlowsSwitcher={viewMode === "table"}
+          tableMode={tableMode}
+          onTableModeChange={setTableMode}
+          className="mb-6"
+        >
+          {/* Summary with max width constraint */}
+          <div className="max-w-6xl">
             <RetirementFundsSummary />
-          </CalculatorHeader>
-        </div>
+          </div>
+          
+          {/* Table with full width */}
+          <div className="mt-6">
+            {/* Table View */}
+            {viewMode === "table" && (
+              <NewRetirementTable
+                funds={funds}
+                onFieldUpdate={handleFieldUpdate}
+                onRemoveFund={handleRemoveFund}
+                onDuplicateFund={handleDuplicateFund}
+                isUpdating={updateMutation.isPending}
+              />
+            )}
 
-        {/* Table View */}
-        {viewMode === "table" && (
-          <NewRetirementTable
-            funds={funds}
-            onFieldUpdate={handleFieldUpdate}
-            onRemoveFund={handleRemoveFund}
-            onDuplicateFund={handleDuplicateFund}
-            isUpdating={updateMutation.isPending}
-          />
-        )}
-
-        {/* Hybrid View - Using same table for now */}
-        {viewMode === "hybrid" && (
-          <NewRetirementTable
-            funds={funds}
-            onFieldUpdate={handleFieldUpdate}
-            onRemoveFund={handleRemoveFund}
-            onDuplicateFund={handleDuplicateFund}
-            isUpdating={updateMutation.isPending}
-          />
-        )}
-
-        {/* Remove Add Fund Dialog - now handled directly */}
+            {/* Hybrid View - Using same table for now */}
+            {viewMode === "hybrid" && (
+              <NewRetirementTable
+                funds={funds}
+                onFieldUpdate={handleFieldUpdate}
+                onRemoveFund={handleRemoveFund}
+                onDuplicateFund={handleDuplicateFund}
+                isUpdating={updateMutation.isPending}
+              />
+            )}
+          </div>
+        </CalculatorHeader>
       </div>
     </div>
   );

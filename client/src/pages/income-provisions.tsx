@@ -44,23 +44,28 @@ export default function IncomeProvisions() {
   return (
     <div className="">
       <div className="w-full px-6 py-6">
-        {/* Combined Header and Summary */}
-        <div className="mb-6 max-w-6xl">
-          <CalculatorHeader
-            title="Income Provisions"
-            itemCount={provisions.length}
-            itemLabel="provisions"
-            onAddItem={handleAddProvision}
-            addButtonText="Add Provision"
-            isAddingItem={addMutation.isPending}
-            viewMode={viewMode}
-            onViewModeChange={handleViewModeChange}
-          >
+        {/* Combined Header, Summary and Table */}
+        <CalculatorHeader
+          title="Income Provisions"
+          itemCount={provisions.length}
+          itemLabel="provisions"
+          onAddItem={handleAddProvision}
+          addButtonText="Add Provision"
+          isAddingItem={addMutation.isPending}
+          viewMode={viewMode}
+          onViewModeChange={handleViewModeChange}
+          className="mb-6"
+        >
+          {/* Summary with max width constraint */}
+          <div className="max-w-6xl">
             <IncomeProvisionsSummary searchTerm={searchTerm} />
-          </CalculatorHeader>
-        </div>
-        
-        <IncomeProvisionsTable viewMode={viewMode} searchTerm={searchTerm} />
+          </div>
+          
+          {/* Table with full width */}
+          <div className="mt-6">
+            <IncomeProvisionsTable viewMode={viewMode} searchTerm={searchTerm} />
+          </div>
+        </CalculatorHeader>
       </div>
     </div>
   );

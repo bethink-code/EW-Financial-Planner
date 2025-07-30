@@ -43,23 +43,28 @@ export default function AdditionalEstateDutyItems() {
   return (
     <div className="">
       <div className="w-full px-6 py-6">
-        {/* Combined Header and Summary */}
-        <div className="mb-6 max-w-6xl">
-          <CalculatorHeader
-            title="Additional Estate Duty Items"
-            itemCount={items.length}
-            itemLabel="items"
-            onAddItem={handleAddItem}
-            addButtonText="Add Item"
-            isAddingItem={addMutation.isPending}
-            viewMode={viewMode}
-            onViewModeChange={handleViewModeChange}
-          >
+        {/* Combined Header, Summary and Table */}
+        <CalculatorHeader
+          title="Additional Estate Duty Items"
+          itemCount={items.length}
+          itemLabel="items"
+          onAddItem={handleAddItem}
+          addButtonText="Add Item"
+          isAddingItem={addMutation.isPending}
+          viewMode={viewMode}
+          onViewModeChange={handleViewModeChange}
+          className="mb-6"
+        >
+          {/* Summary with max width constraint */}
+          <div className="max-w-6xl">
             <AdditionalEstateDutyItemsSummary />
-          </CalculatorHeader>
-        </div>
-        
-        <AdditionalEstateDutyItemsTable />
+          </div>
+          
+          {/* Table with full width */}
+          <div className="mt-6">
+            <AdditionalEstateDutyItemsTable />
+          </div>
+        </CalculatorHeader>
       </div>
     </div>
   );
