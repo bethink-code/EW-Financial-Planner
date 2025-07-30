@@ -54,7 +54,6 @@ export function CalculatorHeader({
                 size="sm"
                 className="h-9 px-4 bg-white text-gray-700 border border-neutral-200 hover:bg-gray-50 hover:text-gray-900 font-normal"
               >
-                <Plus className="h-4 w-4 mr-2" />
                 {isAddingItem ? "Adding..." : addButtonText}
               </Button>
             )}
