@@ -318,10 +318,10 @@ export function AssuranceTable({}: AssuranceTableProps) {
 
                   {/* Owner */}
                   <td className="border border-neutral-300 p-1">
-                    {rowIndex < policy.owners.length && (
+                    {rowIndex < policy.owners.length ? (
                       <div className="flex items-center gap-1">
                         <input
-                          key={`owner-${policy.id}-${rowIndex}`}
+                          key={`owner-${policy.id}-${rowIndex}-${policy.owners[rowIndex]}`}
                           type="text"
                           defaultValue={formatTextValue(policy.owners[rowIndex])}
                           placeholder="Enter details ..."
@@ -349,6 +349,9 @@ export function AssuranceTable({}: AssuranceTableProps) {
                           />
                         )}
                       </div>
+                    ) : (
+                      // Empty cell if no owner at this index
+                      <div></div>
                     )}
                   </td>
 
@@ -383,10 +386,10 @@ export function AssuranceTable({}: AssuranceTableProps) {
 
                   {/* Beneficiary */}
                   <td className="border border-neutral-300 p-1">
-                    {rowIndex < policy.beneficiaries.length && (
+                    {rowIndex < policy.beneficiaries.length ? (
                       <div className="flex items-center gap-1">
                         <input
-                          key={`beneficiary-${policy.id}-${rowIndex}`}
+                          key={`beneficiary-${policy.id}-${rowIndex}-${policy.beneficiaries[rowIndex]}`}
                           type="text"
                           defaultValue={formatTextValue(policy.beneficiaries[rowIndex])}
                           placeholder="Enter details ..."
@@ -414,6 +417,9 @@ export function AssuranceTable({}: AssuranceTableProps) {
                           />
                         )}
                       </div>
+                    ) : (
+                      // Empty cell if no beneficiary at this index
+                      <div></div>
                     )}
                   </td>
 
