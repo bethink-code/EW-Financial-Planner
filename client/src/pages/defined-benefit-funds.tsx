@@ -1,6 +1,6 @@
 import React, { useState, useCallback } from "react";
 import { useQuery, useMutation } from "@tanstack/react-query";
-import DefinedBenefitFundsTable from "../components/defined-benefit-funds/defined-benefit-funds-table-correct";
+import DefinedBenefitFundsTable from "../components/defined-benefit-funds/defined-benefit-funds-table-correct-stable";
 import { DefinedBenefitFundsSummary } from "@/components/defined-benefit-funds/defined-benefit-funds-summary";
 import { CalculatorHeader } from "@/components/ui/calculator-header";
 import { apiRequest, queryClient } from "@/lib/queryClient";
