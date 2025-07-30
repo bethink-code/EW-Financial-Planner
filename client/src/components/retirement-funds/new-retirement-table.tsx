@@ -373,7 +373,7 @@ export function NewRetirementTable({
  />
  ) : (
  <DeleteButton
- onClick={(e) => { e.preventDefault(); e.stopPropagation(); handleRemoveOwner(fund.id, rowIndex); }}
+ onClick={() => handleRemoveOwner(fund.id, rowIndex)}
  disabled={isUpdating}
  size="sm"
  />
@@ -421,7 +421,7 @@ export function NewRetirementTable({
  />
  ) : (
  <DeleteButton
- onClick={(e) => { e.preventDefault(); e.stopPropagation(); handleRemoveUnapprovedBeneficiary(fund.id, rowIndex); }}
+ onClick={() => handleRemoveUnapprovedBeneficiary(fund.id, rowIndex)}
  disabled={isUpdating}
  size="sm"
  />
@@ -590,7 +590,7 @@ export function NewRetirementTable({
  />
  ) : (
  <DeleteButton
- onClick={(e) => { e.preventDefault(); e.stopPropagation(); handleRemoveFundValueBeneficiary(fund.id, rowIndex); }}
+ onClick={() => handleRemoveFundValueBeneficiary(fund.id, rowIndex)}
  disabled={isUpdating}
  size="sm"
  />
