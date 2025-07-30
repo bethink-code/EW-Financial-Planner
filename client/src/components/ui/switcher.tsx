@@ -40,7 +40,7 @@ export function Switcher({
   return (
     <div 
       className={cn(
-        "inline-flex bg-gray-100 rounded-lg",
+        "inline-flex bg-[#F5F8FA] rounded-full",
         containerClasses[size],
         className
       )}
@@ -53,11 +53,11 @@ export function Switcher({
             key={option.value}
             onClick={() => onChange(option.value)}
             className={cn(
-              "relative flex items-center justify-center font-medium rounded-md transition-all duration-200 ease-in-out",
+              "relative flex items-center justify-center font-medium rounded-full transition-all duration-200 ease-in-out",
               sizeClasses[size],
               isSelected
-                ? "bg-[#E8F3F8] text-[#016991] font-semibold"
-                : "text-gray-600 hover:text-gray-900"
+                ? "bg-[#E8F3F8] text-[#016991] font-semibold shadow-sm"
+                : "text-[#6B7280] hover:text-gray-700"
             )}
           >
             {option.label}
@@ -79,7 +79,7 @@ export function GraphTableSwitcher({
 }: Omit<SwitcherProps, 'options'>) {
   const options = [
     { value: "table", label: "Table" },
-    { value: "graph", label: "Hybrid" }
+    { value: "hybrid", label: "Hybrid" }
   ];
 
   return (
