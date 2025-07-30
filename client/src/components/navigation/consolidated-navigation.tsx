@@ -63,9 +63,10 @@ export function ConsolidatedNavigation({
   };
 
   return (
-    <div className="bg-white border-b border-gray-200">
-      <div className="max-w-6xl mx-auto">
-        <div className="flex items-center justify-between px-6 py-3">
+    <div className="bg-gray-50 pb-6">
+      <div className="max-w-6xl mx-auto px-6 pt-6">
+        <div className="bg-white rounded-lg shadow-sm border border-gray-200 px-6 py-3">
+          <div className="flex items-center justify-between">
           {/* Left side */}
           <div className="flex items-center gap-3">
             {/* Back button */}
@@ -202,6 +203,7 @@ export function ConsolidatedNavigation({
             >
               <RefreshCw className="h-4 w-4" />
             </Button>
+          </div>
           </div>
         </div>
       </div>
