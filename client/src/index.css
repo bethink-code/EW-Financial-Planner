@@ -321,7 +321,7 @@ th, td {
     border-radius: 0.5rem !important;
     padding: 1rem !important;
     text-align: center !important;
-    border: 1px solid #e5e7eb !important; /* Same as table borders */
+    border: none !important; /* Remove border */
     display: flex !important;
     flex-direction: column !important;
     justify-content: flex-end !important; /* Align content to bottom */
