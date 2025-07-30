@@ -5,6 +5,7 @@ import { Assets, InsertAssets } from '@shared/assets-schema';
 import { AddButton, ActionButtonGroup, DuplicateButton, DeleteButton } from '@/components/ui/action-buttons';
 import { getFieldClass, getFieldWidth, getCellClass } from '@/lib/field-types';
 import { formatCurrencyValue, formatPercentageValue, isDefaultValue, getValueClass, formatTextValue, handleDefaultValueFocus } from '@/lib/formatting';
+import { useDebouncedUpdate } from '@/hooks/use-debounced-update';
 
 interface AssetsTableProps {
   viewMode: 'table' | 'hybrid';
@@ -140,6 +141,9 @@ function AssetsTable({ viewMode, searchTerm, onShowCategoryDialog }: AssetsTable
     updateMutation.mutate({ id, updates });
   }, [updateMutation]);
 
+  // Use debounced update for text fields
+  const debouncedUpdate = useDebouncedUpdate(handleUpdateAsset);
+
   const handleInputBlur = useCallback((id: number, field: keyof Assets, value: string) => {
     let formattedValue: string;
     if (field === 'johnDoe' || field === 'janetteDoe' || field === 'doeJunior' || field === 'doeFamilyTrust') {
@@ -240,6 +244,7 @@ function AssetsTable({ viewMode, searchTerm, onShowCategoryDialog }: AssetsTable
                   defaultValue={formatTextValue(asset.description)}
                   className={`table-input ${getFieldClass('text')} ${getValueClass(asset.description, 'text')}`}
                   onFocus={handleDefaultValueFocus}
+                  onChange={(e) => debouncedUpdate(asset.id, 'description', e.target.value)}
                   onBlur={(e) => handleInputBlur(asset.id, 'description', e.target.value)}
                   disabled={isUpdating}
                 />

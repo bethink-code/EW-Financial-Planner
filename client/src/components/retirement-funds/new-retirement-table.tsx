@@ -167,11 +167,13 @@ export function NewRetirementTable({
  fund.fundValueBeneficiaries?.length || 1
  );
 
- return Array.from({ length: maxRows }, (_, rowIndex) => (
- <tr key={`${fund.id}-row-${rowIndex}`} className="hover:bg-neutral-50">
+ return (
+ <React.Fragment key={fund.id}>
+ {Array.from({ length: maxRows }, (_, rowIndex) => (
+ <tr key={`${fund.id}-${rowIndex}`} className="hover:bg-neutral-50">
  {/* Actions */}
- <td className="table-actions-cell p-1 text-center section-start">
  {rowIndex === 0 && (
+ <td className="table-actions-cell p-1 text-center section-start align-top" rowSpan={maxRows}>
  <ActionButtonGroup>
  <DuplicateButton 
  onClick={() => onDuplicateFund(fund)} 
@@ -182,12 +184,12 @@ export function NewRetirementTable({
  disabled={isUpdating}
  />
  </ActionButtonGroup>
- )}
  </td>
+ )}
 
  {/* Overview - Description */}
- <td className="p-1 section-start">
  {rowIndex === 0 && (
+ <td className="p-1 section-start align-top" rowSpan={maxRows}>
  <input
  key={`desc-${fund.id}`}
  type="text"
@@ -199,8 +201,8 @@ export function NewRetirementTable({
  handleCellUpdate(fund.id, 'description', value);
  }}
  />
- )}
  </td>
+ )}
 
  {/* Overview - Owner */}
  <td className="p-1">
@@ -232,8 +234,8 @@ export function NewRetirementTable({
  </td>
 
  {/* Unapproved Life Cover - Cover Amount */}
- <td className="p-1 section-start">
  {rowIndex === 0 && (
+ <td className="p-1 section-start align-top" rowSpan={maxRows}>
  <input
  key={`cover-amount-${fund.id}`}
  type="text"
@@ -245,8 +247,8 @@ export function NewRetirementTable({
  handleCellUpdate(fund.id, 'coverAmount', value);
  }}
  />
- )}
  </td>
+ )}
 
  {/* Unapproved Life Cover - Beneficiary */}
  <td className="p-1">
@@ -309,8 +311,8 @@ export function NewRetirementTable({
  </td>
 
  {/* Monthly Death Benefit - Monthly Income */}
- <td className="p-1 section-start">
  {rowIndex === 0 && (
+ <td className="p-1 section-start align-top" rowSpan={maxRows}>
  <input
  key={`monthly-income-${fund.id}`}
  type="text"
@@ -322,24 +324,24 @@ export function NewRetirementTable({
  handleCellUpdate(fund.id, 'monthlyIncome', value);
  }}
  />
- )}
  </td>
+ )}
 
  {/* Monthly Death Benefit - Checkbox */}
- <td className="p-1 text-center">
  {rowIndex === 0 && (
+ <td className="p-1 text-center align-top" rowSpan={maxRows}>
  <input
  type="checkbox"
  checked={fund.monthlyIncomeCheckbox}
  onChange={(e) => handleCellUpdate(fund.id, 'monthlyIncomeCheckbox', e.target.checked)}
  className="text-xs"
  />
- )}
  </td>
+ )}
 
  {/* Monthly Death Benefit - Term Years */}
- <td className="p-1">
  {rowIndex === 0 && (
+ <td className="p-1 align-top" rowSpan={maxRows}>
  <input
  key={`term-years-${fund.id}`}
  type="text"
@@ -351,12 +353,12 @@ export function NewRetirementTable({
  handleCellUpdate(fund.id, 'termYears', value);
  }}
  />
- )}
  </td>
+ )}
 
  {/* Monthly Death Benefit - Increase % */}
- <td className="p-1">
  {rowIndex === 0 && (
+ <td className="p-1 align-top" rowSpan={maxRows}>
  <input
  key={`increase-percent-${fund.id}`}
  type="text"
@@ -368,12 +370,12 @@ export function NewRetirementTable({
  handleCellUpdate(fund.id, 'increasePercentage', value);
  }}
  />
- )}
  </td>
+ )}
 
  {/* Approved Life Cover - Cover */}
- <td className="p-1 section-start">
  {rowIndex === 0 && (
+ <td className="p-1 section-start align-top" rowSpan={maxRows}>
  <input
  key={`approved-life-${fund.id}`}
  type="text"
@@ -385,12 +387,12 @@ export function NewRetirementTable({
  handleCellUpdate(fund.id, 'approvedLifeCover', value);
  }}
  />
- )}
  </td>
+ )}
 
  {/* Approved Life Cover - Fund Value */}
- <td className="p-1">
  {rowIndex === 0 && (
+ <td className="p-1 align-top" rowSpan={maxRows}>
  <input
  key={`fund-value-${fund.id}`}
  type="text"
@@ -405,17 +407,17 @@ export function NewRetirementTable({
  handleCellUpdate(fund.id, 'fundValueAtDeath', calculatedValue);
  }}
  />
- )}
  </td>
+ )}
 
  {/* Approved Life Cover - Fund Value at Death (Calculated) */}
- <td className="p-1 bg-neutral-100 text-right">
  {rowIndex === 0 && (
+ <td className="p-1 bg-neutral-100 text-right align-top" rowSpan={maxRows}>
  <span className="calculated-field">
  {fund.fundValueAtDeath}
  </span>
- )}
  </td>
+ )}
 
  {/* Fund Value Beneficiaries - Beneficiary */}
  <td className="p-1 section-start">
@@ -478,8 +480,8 @@ export function NewRetirementTable({
  </td>
 
  {/* Fund Value Beneficiaries - Lump Assessed */}
- <td className="p-1">
  {rowIndex === 0 && (
+ <td className="p-1 align-top" rowSpan={maxRows}>
  <input
  key={`lump-sum-${fund.id}`}
  type="text"
@@ -491,12 +493,12 @@ export function NewRetirementTable({
  handleCellUpdate(fund.id, 'lumpSumTaken', value);
  }}
  />
- )}
  </td>
+ )}
 
  {/* Fund Value Beneficiaries - Non Deductible */}
- <td className="p-1">
  {rowIndex === 0 && (
+ <td className="p-1 align-top" rowSpan={maxRows}>
  <input
  key={`non-deduct-${fund.id}`}
  type="text"
@@ -508,33 +510,33 @@ export function NewRetirementTable({
  handleCellUpdate(fund.id, 'nonDeductibleContribution', value);
  }}
  />
- )}
  </td>
+ )}
 
  {/* Fund Value Beneficiaries - Living Annuity (Calculated) */}
- <td className="p-1 bg-neutral-100 text-right">
  {rowIndex === 0 && (
+ <td className="p-1 bg-neutral-100 text-right align-top" rowSpan={maxRows}>
  <span className="calculated-field">
  {fund.livingAnnuity}
  </span>
- )}
  </td>
+ )}
 
  {/* Fund Value Beneficiaries - Checkbox */}
- <td className="p-1 text-center">
  {rowIndex === 0 && (
+ <td className="p-1 text-center align-top" rowSpan={maxRows}>
  <input
  type="checkbox"
  checked={fund.livingAnnuityCheckbox}
  onChange={(e) => handleCellUpdate(fund.id, 'livingAnnuityCheckbox', e.target.checked)}
  className="text-xs"
  />
- )}
  </td>
+ )}
 
  {/* Fund Value Beneficiaries - Income Term */}
- <td className="p-1">
  {rowIndex === 0 && (
+ <td className="p-1 align-top" rowSpan={maxRows}>
  <input
  key={`income-term-${fund.id}`}
  type="text"
@@ -546,10 +548,12 @@ export function NewRetirementTable({
  handleCellUpdate(fund.id, 'incomeTerm', value);
  }}
  />
- )}
  </td>
+ )}
  </tr>
- ));
+ ))}
+ </React.Fragment>
+ );
  })}
  
  </tbody>
