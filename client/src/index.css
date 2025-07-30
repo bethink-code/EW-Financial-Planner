@@ -318,11 +318,11 @@ th, td {
 
   /* Centralized summary card styling */
   .summary-card {
-    background-color: #EDF4F9 !important;
+    background-color: #f9fafb !important; /* Same as table footer bg-neutral-50 */
     border-radius: 0.5rem !important;
     padding: 1rem !important;
     text-align: center !important;
-    border: 1px solid #D1E7F0 !important;
+    border: 1px solid #e5e7eb !important; /* Same as table borders */
     display: flex !important;
     flex-direction: column !important;
     justify-content: flex-end !important; /* Align content to bottom */
