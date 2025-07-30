@@ -65,19 +65,14 @@ export function NavigationLayout({ children }: NavigationLayoutProps) {
   }));
   
   return (
-    <div>
+    <>
       <ConsolidatedNavigation 
         currentNeed={currentNeed}
         currentStep={currentStep}
         stepsWithStatus={stepsWithStatus}
         sections={sections}
       />
-      
-      {/* Section tabs are now integrated into the consolidated navigation dropdown */}
-      
-      <div>
-        {children}
-      </div>
-    </div>
+      {children}
+    </>
   );
 }
