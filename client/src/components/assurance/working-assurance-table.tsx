@@ -288,6 +288,7 @@ export function AssuranceTable({}: AssuranceTableProps) {
                   <td className="border border-neutral-300 p-1">
                     {rowIndex === 0 && (
                       <input
+                        key={`desc-${policy.id}`}
                         type="text"
                         defaultValue={formatTextValue(policy.description)}
                         placeholder="Enter details ..."
@@ -303,6 +304,7 @@ export function AssuranceTable({}: AssuranceTableProps) {
                     {rowIndex < policy.owners.length && (
                       <div className="flex items-center gap-1">
                         <input
+                          key={`owner-${policy.id}-${rowIndex}`}
                           type="text"
                           defaultValue={formatTextValue(policy.owners[rowIndex])}
                           placeholder="Enter details ..."
@@ -337,6 +339,7 @@ export function AssuranceTable({}: AssuranceTableProps) {
                   <td className="border border-neutral-300 p-1">
                     {rowIndex === 0 && (
                       <input
+                        key={`life-assured-${policy.id}`}
                         type="text"
                         defaultValue=""
                         placeholder="Enter details ..."
@@ -351,6 +354,7 @@ export function AssuranceTable({}: AssuranceTableProps) {
                   <td className="border border-neutral-300 p-1">
                     {rowIndex === 0 && (
                       <input
+                        key={`death-benefit-${policy.id}`}
                         type="text"
                         defaultValue={policy.deathBenefit}
                         className={`table-input ${getFieldClass('currency')} ${getValueClass(policy.deathBenefit, 'currency')}`}
@@ -365,6 +369,7 @@ export function AssuranceTable({}: AssuranceTableProps) {
                     {rowIndex < policy.beneficiaries.length && (
                       <div className="flex items-center gap-1">
                         <input
+                          key={`beneficiary-${policy.id}-${rowIndex}`}
                           type="text"
                           defaultValue={formatTextValue(policy.beneficiaries[rowIndex])}
                           placeholder="Enter details ..."
@@ -399,6 +404,7 @@ export function AssuranceTable({}: AssuranceTableProps) {
                   <td className="border border-neutral-300 p-1">
                     {rowIndex === 0 && (
                       <input
+                        key={`additional-info-${policy.id}`}
                         type="text"
                         defaultValue={policy.additionalInfo}
                         placeholder="Enter details ..."
@@ -413,6 +419,7 @@ export function AssuranceTable({}: AssuranceTableProps) {
                   <td className="border border-neutral-300 p-1">
                     {rowIndex === 0 && (
                       <input
+                        key={`benefit-split-${policy.id}`}
                         type="text"
                         defaultValue={policy.benefitSplit}
                         className={`table-input ${getFieldClass('percentage')} ${getValueClass(policy.benefitSplit, 'percentage')}`}
@@ -426,6 +433,7 @@ export function AssuranceTable({}: AssuranceTableProps) {
                   <td className="border border-neutral-300 p-1">
                     {rowIndex === 0 && (
                       <input
+                        key={`amount-${policy.id}`}
                         type="text"
                         defaultValue={policy.amount}
                         className={`table-input ${getFieldClass('currency')} ${getValueClass(policy.amount, 'currency')}`}
@@ -439,6 +447,7 @@ export function AssuranceTable({}: AssuranceTableProps) {
                   <td className="border border-neutral-300 p-1 text-center">
                     {rowIndex === 0 && (
                       <input
+                        key={`buy-sell-${policy.id}`}
                         type="checkbox"
                         defaultChecked={false}
                         className="rounded border-neutral-300"
@@ -451,6 +460,7 @@ export function AssuranceTable({}: AssuranceTableProps) {
                   <td className="border border-neutral-300 p-1 text-center">
                     {rowIndex === 0 && (
                       <input
+                        key={`key-man-${policy.id}`}
                         type="checkbox"
                         defaultChecked={false}
                         className="rounded border-neutral-300"
@@ -463,6 +473,7 @@ export function AssuranceTable({}: AssuranceTableProps) {
                   <td className="border border-neutral-300 p-1 text-center">
                     {rowIndex === 0 && (
                       <input
+                        key={`excluded-estate-${policy.id}`}
                         type="checkbox"
                         defaultChecked={false}
                         className="rounded border-neutral-300"
@@ -475,6 +486,7 @@ export function AssuranceTable({}: AssuranceTableProps) {
                   <td className="border border-neutral-300 p-1 text-center">
                     {rowIndex === 0 && (
                       <input
+                        key={`excluded-provisions-${policy.id}`}
                         type="checkbox"
                         defaultChecked={false}
                         className="rounded border-neutral-300"
@@ -487,6 +499,7 @@ export function AssuranceTable({}: AssuranceTableProps) {
                   <td className="border border-neutral-300 p-1">
                     {rowIndex === 0 && (
                       <input
+                        key={`premiums-${policy.id}`}
                         type="text"
                         defaultValue={policy.premiumsByOthers}
                         className={`table-input ${getFieldClass('currency')} ${getValueClass(policy.premiumsByOthers, 'currency')}`}
@@ -500,6 +513,7 @@ export function AssuranceTable({}: AssuranceTableProps) {
                   <td className="border border-neutral-300 p-1">
                     {rowIndex === 0 && (
                       <input
+                        key={`collateral-${policy.id}`}
                         type="text"
                         defaultValue={policy.collateralSession}
                         className={`table-input ${getFieldClass('currency')} ${getValueClass(policy.collateralSession, 'currency')}`}
