@@ -66,18 +66,8 @@ export function ConsolidatedNavigation({
     <div className="w-full px-6 pt-6 pb-4">
       <div className="max-w-6xl bg-white rounded-lg shadow-sm border border-gray-200 px-6 py-4">
         <div>
-          {/* First row: Back button and Financial Plan */}
+          {/* First row: Financial Plan */}
           <div className="flex items-start gap-3 mb-3">
-            {/* Back button */}
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={handleBack}
-              className="h-8 w-8 -ml-2 mt-5"
-            >
-              <ChevronLeft className="h-5 w-5 text-gray-600" />
-            </Button>
-            
             {/* Financial Plan section */}
             <div>
               {/* FINANCIAL PLAN label */}
@@ -85,17 +75,28 @@ export function ConsolidatedNavigation({
                 FINANCIAL PLAN
               </span>
               
-              {/* Financial Plan name with edit */}
-              <div className="flex items-center gap-2 bg-[#F5F1E8] rounded px-3 py-1.5">
-                <span className="text-sm text-gray-700" title={planName}>
-                  {planName}
-                </span>
+              {/* Financial Plan name with edit and back button */}
+              <div className="flex items-center gap-2">
+                <div className="flex items-center gap-2 bg-[#F5F1E8] rounded px-3 py-1.5">
+                  <span className="text-sm text-gray-700" title={planName}>
+                    {planName}
+                  </span>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="h-5 w-5 p-0 text-gray-500 hover:text-gray-700"
+                  >
+                    <Edit2 className="h-3.5 w-3.5" />
+                  </Button>
+                </div>
+                
+                {/* Back to all plans button */}
                 <Button
                   variant="ghost"
-                  size="icon"
-                  className="h-5 w-5 p-0 text-gray-500 hover:text-gray-700"
+                  onClick={handleBack}
+                  className="h-9 px-3 text-sm text-gray-600 hover:text-gray-800 hover:bg-gray-100"
                 >
-                  <Edit2 className="h-3.5 w-3.5" />
+                  Back to all plans
                 </Button>
               </div>
             </div>
@@ -105,7 +106,7 @@ export function ConsolidatedNavigation({
           <div className="flex items-end justify-between">
             <div className="flex items-end gap-3">
               {/* Need section */}
-              <div className="ml-10">
+              <div>
                 {/* NEED label */}
                 <span className="text-xs text-gray-500 uppercase tracking-wider font-medium block mb-1">
                   NEED
