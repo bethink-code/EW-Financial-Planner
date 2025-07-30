@@ -116,7 +116,7 @@ export function ConsolidatedNavigation({
                 <Button
                   variant="ghost"
                   onClick={handleBack}
-                  className="btn-ghost h-9 px-3 text-sm"
+                  className="btn-ghost px-3 text-sm"
                 >
                   Back to all plans
                 </Button>
@@ -138,7 +138,7 @@ export function ConsolidatedNavigation({
                 <DropdownMenu open={isNeedDropdownOpen} onOpenChange={setIsNeedDropdownOpen}>
                   <DropdownMenuTrigger asChild>
                     <Button 
-                      className="btn-need h-9 px-5 flex items-center gap-2 text-sm rounded-md"
+                      className="btn-need px-5 flex items-center gap-2 text-sm rounded-md"
                     >
                       {currentNeed.label}
                       <ChevronDown className="h-4 w-4" />
@@ -176,7 +176,7 @@ export function ConsolidatedNavigation({
                       <DropdownMenuTrigger asChild>
                         <button
                           className={cn(
-                            "flex items-center gap-2 h-9 px-4 rounded-md text-sm font-medium transition-colors",
+                            "flex items-center gap-2 px-4 rounded-md text-sm font-medium transition-colors",
                             isActive
                               ? "nav-button active"
                               : "nav-button"
@@ -213,7 +213,7 @@ export function ConsolidatedNavigation({
                     <button
                       onClick={() => setLocation(step.path)}
                       className={cn(
-                        "flex items-center gap-2 h-9 px-4 rounded-md text-sm font-medium transition-colors",
+                        "flex items-center gap-2 px-4 rounded-md text-sm font-medium transition-colors",
                         isActive
                           ? "nav-button active"
                           : "nav-button"

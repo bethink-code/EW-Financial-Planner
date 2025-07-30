@@ -833,41 +833,58 @@ th, td {
 
 /* ===== GLOBAL BUTTON STYLE SYSTEM ===== */
 
-/* Primary Button Style - Main actions */
+/* Primary Button Style - Main actions (Elite Wealth Blue) */
 .btn-primary {
   background-color: #016991 !important;
   color: white !important;
   border: 1px solid #016991 !important;
   font-weight: 500 !important;
+  height: 2.5rem !important; /* 40px */
   transition: all 0.15s ease-in-out !important;
 }
 
 .btn-primary:hover:not(:disabled) {
-  background-color: #014d6b !important;
-  border-color: #014d6b !important;
+  background-color: #4C8DB4 !important; /* Blue/400 */
+  border-color: #4C8DB4 !important;
+}
+
+.btn-primary:active:not(:disabled) {
+  background-color: #114E72 !important; /* Blue/700 */
+  border-color: #114E72 !important;
 }
 
 .btn-primary:disabled {
-  opacity: 0.5 !important;
+  background-color: #828282 !important; /* Gray/700 */
+  border-color: #828282 !important;
+  color: white !important;
   cursor: not-allowed !important;
 }
 
-/* Secondary Button Style - Default/neutral buttons */
+/* Secondary Button Style - White with gray border */
 .btn-secondary {
   background-color: white !important;
-  color: #374151 !important;
-  border: 1px solid #e5e7eb !important;
+  color: #828282 !important; /* Gray/700 */
+  border: 1px solid #BDBDBD !important; /* Gray/600 */
   font-weight: 400 !important;
+  height: 2.5rem !important; /* 40px */
   transition: all 0.15s ease-in-out !important;
 }
 
 .btn-secondary:hover:not(:disabled) {
-  background-color: #f9fafb !important;
-  color: #111827 !important;
+  background-color: #F2F2F2 !important; /* Gray/400 */
+  color: #4F4F4F !important; /* Gray/800 */
+  border-color: #828282 !important; /* Gray/700 */
+}
+
+.btn-secondary:active:not(:disabled) {
+  background-color: #E0E0E0 !important; /* Gray/500 */
+  border-color: #828282 !important;
 }
 
 .btn-secondary:disabled {
-  opacity: 0.5 !important;
+  background-color: #F2F2F2 !important; /* Gray/400 */
+  color: #BDBDBD !important; /* Gray/600 */
+  border-color: #E0E0E0 !important; /* Gray/500 */
   cursor: not-allowed !important;
 }
 
@@ -896,6 +913,7 @@ th, td {
   color: #6b7280 !important;
   border: none !important;
   font-weight: 400 !important;
+  height: 2.5rem !important; /* 40px */
   transition: all 0.15s ease-in-out !important;
 }
 
@@ -909,15 +927,15 @@ th, td {
   cursor: not-allowed !important;
 }
 
-/* Button Size Variants */
+/* Button Size Variants - All 40px height */
 .btn-sm {
-  height: 2rem !important; /* 32px */
+  height: 2.5rem !important; /* 40px */
   padding: 0 0.75rem !important;
   font-size: 0.875rem !important;
 }
 
 .btn-md {
-  height: 2.25rem !important; /* 36px */
+  height: 2.5rem !important; /* 40px */
   padding: 0 1rem !important;
   font-size: 0.875rem !important;
 }
@@ -928,16 +946,16 @@ th, td {
   font-size: 1rem !important;
 }
 
-/* Icon Button Variants */
+/* Icon Button Variants - All 40px height */
 .btn-icon-sm {
-  width: 1.5rem !important; /* 24px */
-  height: 1.5rem !important;
+  width: 2.5rem !important; /* 40px */
+  height: 2.5rem !important;
   padding: 0 !important;
 }
 
 .btn-icon-md {
-  width: 2rem !important; /* 32px */
-  height: 2rem !important;
+  width: 2.5rem !important; /* 40px */
+  height: 2.5rem !important;
   padding: 0 !important;
 }
 
@@ -999,39 +1017,58 @@ th, td {
   margin: 0.125rem !important;
 }
 
-/* Navigation Button Styles */
+/* Navigation Step Button Styles */
 .nav-button {
   background-color: white !important;
-  color: #374151 !important;
-  border: 1px solid #e5e7eb !important;
+  color: #4F4F4F !important; /* Gray/800 */
+  border: 1px solid #E0E0E0 !important; /* Gray/500 */
   font-weight: 400 !important;
+  height: 2.5rem !important; /* 40px */
   transition: all 0.15s ease-in-out !important;
 }
 
 .nav-button:hover:not(:disabled) {
-  background-color: #f9fafb !important;
-  color: #111827 !important;
+  background-color: #F2F2F2 !important; /* Gray/400 */
+  border-color: #BDBDBD !important; /* Gray/600 */
 }
 
 .nav-button.active {
-  background-color: #E97627 !important;
+  background-color: #EA8A2E !important; /* Orange/700 */
   color: white !important;
-  border-color: #E97627 !important;
+  border-color: #EA8A2E !important;
   font-weight: 500 !important;
 }
 
-/* Need Dropdown Button Style */
+.nav-button.active:hover:not(:disabled) {
+  background-color: #F19C4A !important; /* Orange/600 */
+  border-color: #F19C4A !important;
+}
+
+/* Need Dropdown Button Style (Elite Wealth Tangerine) */
 .btn-need {
-  background-color: #E97627 !important;
+  background-color: #EA8A2E !important; /* Orange/700 */
   color: white !important;
-  border: 1px solid #E97627 !important;
+  border: 1px solid #EA8A2E !important;
   font-weight: 500 !important;
+  height: 2.5rem !important; /* 40px */
   transition: all 0.15s ease-in-out !important;
 }
 
 .btn-need:hover:not(:disabled) {
-  background-color: #d86319 !important;
-  border-color: #d86319 !important;
+  background-color: #F19C4A !important; /* Orange/600 */
+  border-color: #F19C4A !important;
+}
+
+.btn-need:active:not(:disabled) {
+  background-color: #BE6917 !important; /* Orange/800 */
+  border-color: #BE6917 !important;
+}
+
+.btn-need:disabled {
+  background-color: #E0E0E0 !important; /* Gray/500 */
+  border-color: #E0E0E0 !important;
+  color: white !important;
+  cursor: not-allowed !important;
 }
 
 /* Action Button Overrides - Apply global styles to existing buttons */
