@@ -25,7 +25,7 @@ export function AddButton({
 }: ActionButtonProps) {
   const isTableSize = size === "sm";
   
-  // Small table icon button - Light blue background with dark blue icon
+  // Small table icon button - Light blue background with dark blue icon (40px)
   if (isTableSize && !children) {
     return (
       <button
@@ -33,12 +33,12 @@ export function AddButton({
         onClick={onClick}
         disabled={disabled}
         className={cn(
-          "h-6 w-6 bg-[#E8F3F8] border border-[#E0E0E0] text-[#016991] hover:bg-[#d1e7dd] rounded-md flex items-center justify-center transition-colors",
+          "h-10 w-10 bg-[#E8F3F8] border border-[#E0E0E0] text-[#016991] hover:bg-[#d1e7dd] rounded-md flex items-center justify-center transition-colors",
           disabled && "opacity-50 cursor-not-allowed",
           className
         )}
       >
-        <Plus className="h-3 w-3" />
+        <Plus className="h-4 w-4" />
       </button>
     );
   }
@@ -72,7 +72,7 @@ export function DeleteButton({
 }: Omit<ActionButtonProps, 'variant'>) {
   const isTableSize = size === "sm";
   
-  // Small table icon button - White background with gray icon
+  // Small table icon button - White background with gray icon (40px)
   if (isTableSize) {
     return (
       <button
@@ -80,12 +80,12 @@ export function DeleteButton({
         onClick={onClick}
         disabled={disabled}
         className={cn(
-          "h-6 w-6 bg-white border border-[#E0E0E0] text-gray-600 hover:bg-gray-50 rounded-md flex items-center justify-center transition-colors",
+          "h-10 w-10 bg-white border border-[#E0E0E0] text-gray-600 hover:bg-gray-50 rounded-md flex items-center justify-center transition-colors",
           disabled && "opacity-50 cursor-not-allowed",
           className
         )}
       >
-        <Trash2 className="h-3 w-3" />
+        <Trash2 className="h-4 w-4" />
       </button>
     );
   }
@@ -118,7 +118,7 @@ export function DuplicateButton({
 }: Omit<ActionButtonProps, 'variant'>) {
   const isTableSize = size === "sm";
   
-  // Small table icon button - White background with gray icon
+  // Small table icon button - White background with gray icon (40px)
   if (isTableSize) {
     return (
       <button
@@ -126,12 +126,12 @@ export function DuplicateButton({
         onClick={onClick}
         disabled={disabled}
         className={cn(
-          "h-6 w-6 bg-white border border-[#E0E0E0] text-gray-600 hover:bg-gray-50 rounded-md flex items-center justify-center transition-colors",
+          "h-10 w-10 bg-white border border-[#E0E0E0] text-gray-600 hover:bg-gray-50 rounded-md flex items-center justify-center transition-colors",
           disabled && "opacity-50 cursor-not-allowed",
           className
         )}
       >
-        <Copy className="h-3 w-3" />
+        <Copy className="h-4 w-4" />
       </button>
     );
   }
@@ -165,7 +165,7 @@ export function EditButton({
 }: Omit<ActionButtonProps, 'variant'>) {
   const isTableSize = size === "sm";
   
-  // Small table icon button - White background with gray icon
+  // Small table icon button - White background with gray icon (40px)
   if (isTableSize) {
     return (
       <button
@@ -173,12 +173,12 @@ export function EditButton({
         onClick={onClick}
         disabled={disabled}
         className={cn(
-          "h-6 w-6 bg-white border border-[#E0E0E0] text-gray-600 hover:bg-gray-50 rounded-md flex items-center justify-center transition-colors",
+          "h-10 w-10 bg-white border border-[#E0E0E0] text-gray-600 hover:bg-gray-50 rounded-md flex items-center justify-center transition-colors",
           disabled && "opacity-50 cursor-not-allowed",
           className
         )}
       >
-        <Edit3 className="h-3 w-3" />
+        <Edit3 className="h-4 w-4" />
       </button>
     );
   }
@@ -212,7 +212,7 @@ export function SaveButton({
 }: Omit<ActionButtonProps, 'variant'>) {
   const isTableSize = size === "sm";
   
-  // Small table icon button - Light blue background with dark blue icon
+  // Small table icon button - Light blue background with dark blue icon (40px)
   if (isTableSize) {
     return (
       <button
@@ -220,12 +220,12 @@ export function SaveButton({
         onClick={onClick}
         disabled={disabled}
         className={cn(
-          "h-6 w-6 bg-[#E8F3F8] border border-[#E0E0E0] text-[#016991] hover:bg-[#d1e7dd] rounded-md flex items-center justify-center transition-colors",
+          "h-10 w-10 bg-[#E8F3F8] border border-[#E0E0E0] text-[#016991] hover:bg-[#d1e7dd] rounded-md flex items-center justify-center transition-colors",
           disabled && "opacity-50 cursor-not-allowed",
           className
         )}
       >
-        <Save className="h-3 w-3" />
+        <Save className="h-4 w-4" />
       </button>
     );
   }
