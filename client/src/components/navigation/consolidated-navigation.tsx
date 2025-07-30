@@ -176,18 +176,18 @@ export function ConsolidatedNavigation({
                       <DropdownMenuTrigger asChild>
                         <button
                           className={cn(
-                            "flex items-center gap-2 px-4 rounded-md text-sm font-medium transition-colors",
+                            "flex items-center gap-3 px-4 py-2 rounded-md text-sm font-medium transition-colors",
                             isActive
-                              ? "nav-button active"
-                              : "nav-button"
+                              ? "bg-[#E97627] text-white border-[#E97627]"
+                              : "bg-[#F5F1E8] text-gray-700 border-gray-200 hover:bg-[#F0EBE0]"
                           )}
                           disabled={!step.hasContent}
                         >
                           <span className={cn(
-                            "flex items-center justify-center h-5 w-5 rounded-full text-xs font-semibold",
+                            "flex items-center justify-center h-8 w-8 rounded-lg text-sm font-semibold",
                             isActive 
                               ? "bg-white/20 text-white"
-                              : "bg-white text-gray-700"
+                              : "bg-white text-[#E97627]"
                           )}>
                             {step.number}
                           </span>
@@ -213,18 +213,18 @@ export function ConsolidatedNavigation({
                     <button
                       onClick={() => setLocation(step.path)}
                       className={cn(
-                        "flex items-center gap-2 px-4 rounded-md text-sm font-medium transition-colors",
+                        "flex items-center gap-3 px-4 py-2 rounded-md text-sm font-medium transition-colors",
                         isActive
-                          ? "nav-button active"
-                          : "nav-button"
+                          ? "bg-[#E97627] text-white border-[#E97627]"
+                          : "bg-[#F5F1E8] text-gray-700 border-gray-200 hover:bg-[#F0EBE0]"
                       )}
                       disabled={!step.hasContent}
                     >
                       <span className={cn(
-                        "flex items-center justify-center h-5 w-5 rounded-full text-xs font-semibold",
+                        "flex items-center justify-center h-8 w-8 rounded-lg text-sm font-semibold",
                         isActive 
                           ? "bg-white/20 text-white"
-                          : "bg-white text-gray-700"
+                          : "bg-white text-[#E97627]"
                       )}>
                         {step.number}
                       </span>
