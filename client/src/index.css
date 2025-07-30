@@ -163,7 +163,7 @@ th, td {
   --destructive: hsl(0, 84.2%, 60.2%);
   --destructive-foreground: hsl(60, 9.1%, 97.8%);
   --ring: 198 99% 29%;
-  --radius: 0.25rem;
+  --radius: 8px;
   
   /* Blue color palette from design */
   --teal-900: hsl(198, 90%, 14%);
