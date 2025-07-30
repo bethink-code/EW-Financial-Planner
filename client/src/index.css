@@ -840,6 +840,7 @@ th, td {
   border: 1px solid #016991 !important;
   font-weight: 500 !important;
   height: 2.5rem !important; /* 40px */
+  border-radius: 6px !important; /* 6px radius */
   transition: all 0.15s ease-in-out !important;
 }
 
@@ -867,6 +868,7 @@ th, td {
   border: 1px solid #BDBDBD !important; /* Gray/600 */
   font-weight: 400 !important;
   height: 2.5rem !important; /* 40px */
+  border-radius: 6px !important; /* 6px radius */
   transition: all 0.15s ease-in-out !important;
 }
 
@@ -894,6 +896,8 @@ th, td {
   color: white !important;
   border: 1px solid #ef4444 !important;
   font-weight: 500 !important;
+  height: 2.5rem !important; /* 40px */
+  border-radius: 6px !important; /* 6px radius */
   transition: all 0.15s ease-in-out !important;
 }
 
@@ -907,33 +911,35 @@ th, td {
   cursor: not-allowed !important;
 }
 
-/* Icon Button Blue - Blue background with white icon */
+/* Icon Button Blue - Light blue background with dark blue icon */
 .btn-icon-blue {
-  background-color: #016991 !important; /* Elite Wealth Blue */
-  color: white !important;
-  border: 1px solid #016991 !important;
+  background-color: #E8F3F8 !important; /* Light Blue background */
+  color: #016991 !important; /* Elite Wealth Blue icon */
+  border: 1px solid #E8F3F8 !important;
   width: 2.5rem !important; /* 40px */
   height: 2.5rem !important; /* 40px */
   padding: 0 !important;
   display: inline-flex !important;
   align-items: center !important;
   justify-content: center !important;
+  border-radius: 6px !important; /* 6px radius */
   transition: all 0.15s ease-in-out !important;
 }
 
 .btn-icon-blue:hover:not(:disabled) {
-  background-color: #4C8DB4 !important; /* Blue/400 */
-  border-color: #4C8DB4 !important;
+  background-color: #D1E7F0 !important; /* Slightly darker blue on hover */
+  border-color: #D1E7F0 !important;
 }
 
 .btn-icon-blue:active:not(:disabled) {
-  background-color: #114E72 !important; /* Blue/700 */
-  border-color: #114E72 !important;
+  background-color: #B8DBE8 !important; /* Even darker blue when pressed */
+  border-color: #B8DBE8 !important;
 }
 
 .btn-icon-blue:disabled {
-  background-color: #828282 !important; /* Gray/700 */
-  border-color: #828282 !important;
+  background-color: #F2F2F2 !important; /* Gray/400 background */
+  color: #BDBDBD !important; /* Gray/600 icon */
+  border-color: #F2F2F2 !important;
   cursor: not-allowed !important;
 }
 
@@ -948,6 +954,7 @@ th, td {
   display: inline-flex !important;
   align-items: center !important;
   justify-content: center !important;
+  border-radius: 6px !important; /* 6px radius */
   transition: all 0.15s ease-in-out !important;
 }
 
@@ -975,6 +982,7 @@ th, td {
   border: none !important;
   font-weight: 400 !important;
   height: 2.5rem !important; /* 40px */
+  border-radius: 6px !important; /* 6px radius */
   transition: all 0.15s ease-in-out !important;
 }
 
@@ -1112,6 +1120,7 @@ th, td {
   border: 1px solid #EA8A2E !important;
   font-weight: 500 !important;
   height: 2.5rem !important; /* 40px */
+  border-radius: 6px !important; /* 6px radius */
   transition: all 0.15s ease-in-out !important;
 }
 
