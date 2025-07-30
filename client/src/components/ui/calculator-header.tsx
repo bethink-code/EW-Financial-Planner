@@ -51,17 +51,7 @@ export function CalculatorHeader({
                 onClick={onAddItem}
                 disabled={isAddingItem}
                 size="sm"
-                className="h-9 px-4 text-white font-medium"
-                style={{ 
-                  backgroundColor: '#016991', 
-                  borderColor: '#016991'
-                }}
-                onMouseEnter={(e) => { 
-                  e.currentTarget.style.backgroundColor = '#014d6b'; 
-                }}
-                onMouseLeave={(e) => { 
-                  e.currentTarget.style.backgroundColor = '#016991'; 
-                }}
+                className="h-9 px-4 bg-white text-gray-700 border border-neutral-200 hover:bg-gray-50 hover:text-gray-900 font-normal"
               >
                 <Plus className="h-4 w-4 mr-2" />
                 {isAddingItem ? "Adding..." : addButtonText}
