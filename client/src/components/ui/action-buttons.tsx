@@ -25,7 +25,7 @@ export function AddButton({
 }: ActionButtonProps) {
   const isTableSize = size === "sm";
   
-  // Small table icon button - Light blue background with dark blue icon (40px)
+  // Small table icon button - Light blue background with dark blue icon (32px)
   if (isTableSize && !children) {
     return (
       <button
@@ -33,7 +33,7 @@ export function AddButton({
         onClick={onClick}
         disabled={disabled}
         className={cn(
-          "h-10 w-10 bg-[#E8F3F8] border border-[#E0E0E0] text-[#016991] hover:bg-[#d1e7dd] rounded-md flex items-center justify-center transition-colors",
+          "h-8 w-8 bg-[#E8F3F8] border border-[#E0E0E0] text-[#016991] hover:bg-[#d1e7dd] rounded-md flex items-center justify-center transition-colors",
           disabled && "opacity-50 cursor-not-allowed",
           className
         )}
@@ -72,7 +72,7 @@ export function DeleteButton({
 }: Omit<ActionButtonProps, 'variant'>) {
   const isTableSize = size === "sm";
   
-  // Small table icon button - White background with gray icon (40px)
+  // Small table icon button - White background with gray icon (32px)
   if (isTableSize) {
     return (
       <button
@@ -80,7 +80,7 @@ export function DeleteButton({
         onClick={onClick}
         disabled={disabled}
         className={cn(
-          "h-10 w-10 bg-white border border-[#E0E0E0] text-gray-600 hover:bg-gray-50 rounded-md flex items-center justify-center transition-colors",
+          "h-8 w-8 bg-white border border-[#E0E0E0] text-gray-600 hover:bg-gray-50 rounded-md flex items-center justify-center transition-colors",
           disabled && "opacity-50 cursor-not-allowed",
           className
         )}
@@ -118,7 +118,7 @@ export function DuplicateButton({
 }: Omit<ActionButtonProps, 'variant'>) {
   const isTableSize = size === "sm";
   
-  // Small table icon button - White background with gray icon (40px)
+  // Small table icon button - White background with gray icon (32px)
   if (isTableSize) {
     return (
       <button
@@ -126,7 +126,7 @@ export function DuplicateButton({
         onClick={onClick}
         disabled={disabled}
         className={cn(
-          "h-10 w-10 bg-white border border-[#E0E0E0] text-gray-600 hover:bg-gray-50 rounded-md flex items-center justify-center transition-colors",
+          "h-8 w-8 bg-white border border-[#E0E0E0] text-gray-600 hover:bg-gray-50 rounded-md flex items-center justify-center transition-colors",
           disabled && "opacity-50 cursor-not-allowed",
           className
         )}
@@ -165,7 +165,7 @@ export function EditButton({
 }: Omit<ActionButtonProps, 'variant'>) {
   const isTableSize = size === "sm";
   
-  // Small table icon button - White background with gray icon (40px)
+  // Small table icon button - White background with gray icon (32px)
   if (isTableSize) {
     return (
       <button
@@ -173,7 +173,7 @@ export function EditButton({
         onClick={onClick}
         disabled={disabled}
         className={cn(
-          "h-10 w-10 bg-white border border-[#E0E0E0] text-gray-600 hover:bg-gray-50 rounded-md flex items-center justify-center transition-colors",
+          "h-8 w-8 bg-white border border-[#E0E0E0] text-gray-600 hover:bg-gray-50 rounded-md flex items-center justify-center transition-colors",
           disabled && "opacity-50 cursor-not-allowed",
           className
         )}
@@ -212,7 +212,7 @@ export function SaveButton({
 }: Omit<ActionButtonProps, 'variant'>) {
   const isTableSize = size === "sm";
   
-  // Small table icon button - Light blue background with dark blue icon (40px)
+  // Small table icon button - Light blue background with dark blue icon (32px)
   if (isTableSize) {
     return (
       <button
@@ -220,7 +220,7 @@ export function SaveButton({
         onClick={onClick}
         disabled={disabled}
         className={cn(
-          "h-10 w-10 bg-[#E8F3F8] border border-[#E0E0E0] text-[#016991] hover:bg-[#d1e7dd] rounded-md flex items-center justify-center transition-colors",
+          "h-8 w-8 bg-[#E8F3F8] border border-[#E0E0E0] text-[#016991] hover:bg-[#d1e7dd] rounded-md flex items-center justify-center transition-colors",
           disabled && "opacity-50 cursor-not-allowed",
           className
         )}
