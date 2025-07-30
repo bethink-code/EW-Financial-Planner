@@ -266,21 +266,13 @@ export function NewRetirementTable({
  />
  {rowIndex === 0 ? (
  <AddButton
- onClick={(e) => {
- e.preventDefault();
- e.stopPropagation();
- handleAddUnapprovedBeneficiary(fund.id);
- }}
+ onClick={() => handleAddUnapprovedBeneficiary(fund.id)}
  disabled={isUpdating}
  size="sm"
  />
  ) : (
  <DeleteButton
- onClick={(e) => {
- e.preventDefault();
- e.stopPropagation();
- handleRemoveUnapprovedBeneficiary(fund.id, rowIndex);
- }}
+ onClick={() => handleRemoveUnapprovedBeneficiary(fund.id, rowIndex)}
  disabled={isUpdating}
  size="sm"
  />
@@ -443,21 +435,13 @@ export function NewRetirementTable({
  />
  {rowIndex === 0 ? (
  <AddButton
- onClick={(e) => {
- e.preventDefault();
- e.stopPropagation();
- handleAddFundValueBeneficiary(fund.id);
- }}
+ onClick={() => handleAddFundValueBeneficiary(fund.id)}
  disabled={isUpdating}
  size="sm"
  />
  ) : (
  <DeleteButton
- onClick={(e) => {
- e.preventDefault();
- e.stopPropagation();
- handleRemoveFundValueBeneficiary(fund.id, rowIndex);
- }}
+ onClick={() => handleRemoveFundValueBeneficiary(fund.id, rowIndex)}
  disabled={isUpdating}
  size="sm"
  />

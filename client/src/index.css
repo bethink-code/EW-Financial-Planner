@@ -450,6 +450,21 @@ th, td {
     background-color: #f9fafb !important; /* bg-neutral-50 */
   }
 
+  /* Improved spacing between section headers and column headers */
+  thead tr:first-child th {
+    padding-bottom: 0.5rem !important; /* Reduce bottom padding on section headers */
+  }
+  
+  thead tr:last-child th {
+    padding-top: 0.5rem !important; /* Reduce top padding on column headers */
+    padding-bottom: 0.6rem !important; /* Slightly more bottom padding for visual separation from data */
+  }
+  
+  /* Add subtle visual separation between header levels */
+  thead tr:first-child {
+    border-bottom: 1px solid #e5e7eb !important; /* Light separator between header levels */
+  }
+
   /* Standardized footer/totals styling - clean appearance with section borders */
   tfoot {
     background-color: #f9fafb !important; /* bg-neutral-50 */
