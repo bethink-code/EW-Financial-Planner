@@ -177,10 +177,10 @@ export function ConsolidatedNavigation({
                         <button
                           className={cn(
                             "flex items-center gap-3 px-1 text-sm font-medium transition-colors h-10",
-                            "rounded-[6px] border",
+                            "rounded-[6px]",
                             isActive
-                              ? "bg-[#E97627] text-white border-[#E97627]"
-                              : "bg-[#F5F1E8] text-gray-700 border-gray-200 hover:bg-[#F0EBE0]"
+                              ? "bg-[#E97627] text-white border-0"
+                              : "bg-[#F5F1E8] text-gray-700 border border-gray-200 hover:bg-[#F0EBE0]"
                           )}
                           disabled={!step.hasContent}
                         >
@@ -215,10 +215,10 @@ export function ConsolidatedNavigation({
                       onClick={() => setLocation(step.path)}
                       className={cn(
                         "flex items-center gap-3 px-1 text-sm font-medium transition-colors h-10",
-                        "rounded-[6px] border",
+                        "rounded-[6px]",
                         isActive
-                          ? "bg-[#E97627] text-white border-[#E97627]"
-                          : "bg-[#F5F1E8] text-gray-700 border-gray-200 hover:bg-[#F0EBE0]"
+                          ? "bg-[#E97627] text-white border-0"
+                          : "bg-[#F5F1E8] text-gray-700 border border-gray-200 hover:bg-[#F0EBE0]"
                       )}
                       disabled={!step.hasContent}
                     >
