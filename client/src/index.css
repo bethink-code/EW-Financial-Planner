@@ -766,15 +766,15 @@ th, td {
     border-right: none !important;
     border-top: none !important;
     border-bottom: none !important;
-    padding-left: 12px !important;
-    padding-right: 12px !important;
+    padding-left: 6px !important;
+    padding-right: 6px !important;
   }
   
   /* Add extra spacing around section borders by increasing base table cell padding */
   table th,
   table td {
-    padding-left: 0.75rem !important;
-    padding-right: 0.75rem !important;
+    padding-left: 0.375rem !important;
+    padding-right: 0.375rem !important;
   }
   
   /* Special handling for cells with rowSpan */
