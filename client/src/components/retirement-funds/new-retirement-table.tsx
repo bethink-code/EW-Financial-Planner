@@ -5,6 +5,7 @@ import { formatCurrencyValue, formatPercentageValue, formatTextValue, cleanTextV
 import { createOwnerManager, createComplexBeneficiaryManager } from "@/lib/array-management";
 import { getFieldClass, getCellClass } from "@/lib/field-types";
 import { ActionButtonGroup, DuplicateButton, DeleteButton, AddButton } from "@/components/ui/action-buttons";
+
 import { useDebouncedUpdate } from "@/hooks/use-debounced-update";
 
 interface NewRetirementTableProps {
@@ -113,8 +114,8 @@ export function NewRetirementTable({
 
  const handleRemoveOwner = useCallback((fundId: number, ownerIndex: number) => {
    const fund = funds.find((f: RetirementFund) => f.id === fundId);
-   if (fund && fund.owners.length > 1 && ownerIndex > 0) { // Protect first owner
-     const newOwners = [...fund.owners];
+   if (fund && (fund.owners || []).length > 1 && ownerIndex > 0) { // Protect first owner
+     const newOwners = [...(fund.owners || [])];
      newOwners.splice(ownerIndex, 1);
      handleUpdateFund(fundId, 'owners', newOwners);
    }
@@ -316,7 +317,7 @@ export function NewRetirementTable({
  );
 
  return (
- <React.Fragment key={fund.id}>
+ <React.Fragment key={`fund-${fund.id}-${maxRows}`}>
  {Array.from({ length: maxRows }, (_, rowIndex) => (
  <tr key={`${fund.id}-${rowIndex}`} className="hover:bg-neutral-50">
  {/* Actions */}
@@ -372,7 +373,7 @@ export function NewRetirementTable({
  />
  ) : (
  <DeleteButton
- onClick={() => handleRemoveOwner(fund.id, rowIndex)}
+ onClick={(e) => { e.preventDefault(); e.stopPropagation(); handleRemoveOwner(fund.id, rowIndex); }}
  disabled={isUpdating}
  size="sm"
  />
@@ -420,7 +421,7 @@ export function NewRetirementTable({
  />
  ) : (
  <DeleteButton
- onClick={() => handleRemoveUnapprovedBeneficiary(fund.id, rowIndex)}
+ onClick={(e) => { e.preventDefault(); e.stopPropagation(); handleRemoveUnapprovedBeneficiary(fund.id, rowIndex); }}
  disabled={isUpdating}
  size="sm"
  />
@@ -589,7 +590,7 @@ export function NewRetirementTable({
  />
  ) : (
  <DeleteButton
- onClick={() => handleRemoveFundValueBeneficiary(fund.id, rowIndex)}
+ onClick={(e) => { e.preventDefault(); e.stopPropagation(); handleRemoveFundValueBeneficiary(fund.id, rowIndex); }}
  disabled={isUpdating}
  size="sm"
  />
