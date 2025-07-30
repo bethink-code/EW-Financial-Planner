@@ -65,7 +65,7 @@ export function NavigationLayout({ children }: NavigationLayoutProps) {
   }));
   
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div>
       <ConsolidatedNavigation 
         currentNeed={currentNeed}
         currentStep={currentStep}
