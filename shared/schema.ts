@@ -11,7 +11,7 @@ export const retirementFunds = pgTable("retirement_funds", {
   
   // Unapproved Life Cover Section  
   coverAmount: text("cover_amount").notNull().default("R 0"),
-  unapprovedBeneficiaries: text("unapproved_beneficiaries").array(),
+  unapprovedBeneficiaries: text("unapproved_beneficiaries").array().notNull().default([""]),
   unapprovedPercentageSplits: text("unapproved_percentage_splits").array().notNull().default(["0%"]),
   unapprovedCoverSplits: text("unapproved_cover_splits").array().notNull().default(["R 0"]), // Calculated
   
@@ -27,7 +27,7 @@ export const retirementFunds = pgTable("retirement_funds", {
   fundValueAtDeath: text("fund_value_at_death").notNull().default("R 0"), // Calculated
   
   // Fund Value Beneficiaries Section
-  fundValueBeneficiaries: text("fund_value_beneficiaries").array(),
+  fundValueBeneficiaries: text("fund_value_beneficiaries").array().notNull().default([""]),
   fundValuePercentageSplits: text("fund_value_percentage_splits").array().notNull().default(["0%"]),
   fundValueCoverSplits: text("fund_value_cover_splits").array().notNull().default(["R 0"]), // Calculated
   lumpSumTaken: text("lump_sum_taken").notNull().default("R 0"),
