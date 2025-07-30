@@ -59,20 +59,20 @@ export function CalculatorHeader({
               </Button>
             )}
             
-            {/* Table/Flows Switcher for retirement funds */}
-            {showTableFlowsSwitcher && onTableModeChange && (
-              <InputFlowSwitcher
-                value={tableMode === "inputs" ? "input" : "flow"}
-                onChange={(value) => onTableModeChange(value === "input" ? "inputs" : "flows")}
-                size="sm"
-              />
-            )}
-
             {/* View Mode Buttons */}
             {onViewModeChange && (
               <GraphTableSwitcher
                 value={viewMode}
                 onChange={(value) => onViewModeChange(value as "table" | "hybrid")}
+                size="sm"
+              />
+            )}
+
+            {/* Table/Flows Switcher for retirement funds */}
+            {showTableFlowsSwitcher && onTableModeChange && (
+              <InputFlowSwitcher
+                value={tableMode === "inputs" ? "input" : "flow"}
+                onChange={(value) => onTableModeChange(value === "input" ? "inputs" : "flows")}
                 size="sm"
               />
             )}
