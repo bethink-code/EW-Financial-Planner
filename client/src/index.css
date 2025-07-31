@@ -322,7 +322,7 @@ th, td {
     font-weight: 600 !important;
     text-transform: uppercase !important;
     letter-spacing: 0.025em !important;
-    color: #4b5563 !important;
+    color: #9ca3af !important; /* Lighter grey from design system */
     background-color: #f8fafc !important;
     vertical-align: middle !important; /* Center align text */
     line-height: 1.3rem !important;
