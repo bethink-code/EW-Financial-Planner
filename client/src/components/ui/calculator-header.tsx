@@ -1,4 +1,4 @@
-import { Plus } from"lucide-react";
+import { Plus, RefreshCw } from"lucide-react";
 import { Button } from"@/components/ui/button";
 import { GraphTableSwitcher, InputFlowSwitcher } from"@/components/ui/switcher";
 
@@ -14,6 +14,8 @@ interface CalculatorHeaderProps {
   showTableFlowsSwitcher?: boolean;
   tableMode?:"inputs" |"flows";
   onTableModeChange?: (mode:"inputs" |"flows") => void;
+  onRefresh?: () => void;
+  isRefreshing?: boolean;
   additionalControls?: React.ReactNode;
   className?: string;
   children?: React.ReactNode;
@@ -31,6 +33,8 @@ export function CalculatorHeader({
   showTableFlowsSwitcher = false,
   tableMode ="inputs",
   onTableModeChange,
+  onRefresh,
+  isRefreshing = false,
   additionalControls,
   className ="",
   children
@@ -70,6 +74,19 @@ export function CalculatorHeader({
                 onChange={(value) => onTableModeChange(value ==="input" ?"inputs" :"flows")}
                 size="sm"
               />
+            )}
+
+            {/* Refresh Button */}
+            {onRefresh && (
+              <Button
+                onClick={onRefresh}
+                disabled={isRefreshing}
+                size="sm"
+                variant="outline"
+                className="h-10 w-10 p-0"
+              >
+                <RefreshCw className={`h-4 w-4 ${isRefreshing ? 'animate-spin' : ''}`} />
+              </Button>
             )}
           </div>
 

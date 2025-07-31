@@ -10,9 +10,10 @@ type ViewMode = "table" | "hybrid";
 
 export default function Assurance() {
   const [viewMode, setViewMode] = useState<ViewMode>("table");
+  const [isRefreshing, setIsRefreshing] = useState(false);
 
   // Fetch policies for count
-  const { data: policies = [] } = useQuery({
+  const { data: policies = [], refetch } = useQuery({
     queryKey: ["/api/assurance"],  
     queryFn: async () => {
       const response = await fetch("/api/assurance");
@@ -40,6 +41,15 @@ export default function Assurance() {
     addMutation.mutate();
   }, [addMutation]);
 
+  const handleRefresh = useCallback(async () => {
+    setIsRefreshing(true);
+    try {
+      await refetch();
+    } finally {
+      setIsRefreshing(false);
+    }
+  }, [refetch]);
+
   return (
     <div className="">
       <div className="w-full px-6">
@@ -51,6 +61,8 @@ export default function Assurance() {
           isAddingItem={addMutation.isPending}
           viewMode={viewMode}
           onViewModeChange={handleViewModeChange}
+          onRefresh={handleRefresh}
+          isRefreshing={isRefreshing}
           className="mb-6"
         >
           {/* Summary with max width constraint */}
