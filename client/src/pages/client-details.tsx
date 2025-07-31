@@ -4,8 +4,7 @@ import { apiRequest } from "@/lib/queryClient";
 import { ClientDetails, InsertClientDetails } from "@shared/schema";
 
 import { CalculatorHeader } from "@/components/ui/calculator-header";
-import { Button } from "@/components/ui/button";
-import { Plus } from "lucide-react";
+import { AddButton, DeleteButton } from "@/components/ui/action-buttons";
 import { 
   formatCurrencyValue, 
   formatPercentageValue, 
@@ -148,24 +147,16 @@ function ClientDetailsTable() {
                 <tr key={`client-${client.id}`} className="border-b border-neutral-200">
                   <td className="section-start p-2 text-center">
                     <div className="flex gap-2 justify-center">
-                      <Button
-                        variant="outline"
-                        size="sm"
+                      <AddButton
                         onClick={() => createMutation.mutate({})}
                         disabled={isUpdating}
-                        className="h-6 w-6 p-0"
-                      >
-                        <Plus className="h-3 w-3" />
-                      </Button>
-                      <Button
-                        variant="outline"
                         size="sm"
+                      />
+                      <DeleteButton
                         onClick={() => handleDeleteClientDetail(client.id)}
                         disabled={isUpdating}
-                        className="h-6 w-6 p-0 text-red-600 hover:text-red-700"
-                      >
-                        ×
-                      </Button>
+                        size="sm"
+                      />
                     </div>
                   </td>
                   <td className="p-2 text-left">
