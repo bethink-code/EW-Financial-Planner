@@ -69,7 +69,7 @@ export function NavigationLayout({ children }: NavigationLayoutProps) {
     <>
       {/* Client Header Image */}
       <div className="w-full overflow-x-auto">
-        <div className="max-w-6xl mx-auto px-6">
+        <div className="pl-6">
           <img 
             src={headerImage} 
             alt="Client Header - Donald Edward" 
