@@ -675,17 +675,8 @@ export class MemStorage implements IStorage {
   async createResidueItem(item: InsertResidue): Promise<Residue> {
     const newItem: Residue = {
       id: this.currentResidueId++,
-      category: item.category || "Enter details ...",
-      description: item.description || "Enter details ...",
-      amount: item.amount || "R 0",
-      increasePercentage: item.increasePercentage || "0%",
-      johnDoe: item.johnDoe || "0%",
-      janetteDoe: item.janetteDoe || "0%",
-      doeJunior: item.doeJunior || "0%",
-      doeFamilyTrust: item.doeFamilyTrust || "0%",
-      estate: item.estate || "R 0",
-      others: item.others || "R 0",
-      client: item.client || "R 0",
+      entity: item.entity || "Residue to registered charities",
+      percentage: item.percentage || "0",
     };
 
     this.residue.set(newItem.id, newItem);
@@ -715,8 +706,7 @@ export class MemStorage implements IStorage {
     const lowerQuery = query.toLowerCase();
     return allResidue.filter(
       (item) =>
-        item.description.toLowerCase().includes(lowerQuery) ||
-        item.category.toLowerCase().includes(lowerQuery),
+        item.entity.toLowerCase().includes(lowerQuery),
     );
   }
 
@@ -1425,7 +1415,7 @@ export class DbStorage {
     return await this.db
       .select()
       .from(residue)
-      .where(ilike(residue.description, `%${query}%`))
+      .where(ilike(residue.entity, `%${query}%`))
       .orderBy(asc(residue.id));
   }
 
