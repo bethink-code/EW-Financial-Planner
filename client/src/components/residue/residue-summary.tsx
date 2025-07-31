@@ -1,36 +1,22 @@
-import { useQuery } from "@tanstack/react-query";
-import type { Residue } from "@shared/schema";
+import { useQuery } from '@tanstack/react-query';
+import { Residue } from '@shared/schema';
 
 export function ResidueSummary() {
-  const { data: residues = [], isLoading } = useQuery<Residue[]>({
-    queryKey: ["/api/residue"],
+  const { data: residueItems = [] } = useQuery<Residue[]>({
+    queryKey: ['/api/residue'],
   });
 
-  if (isLoading) {
-    return (
-      <div className="px-5 pb-5">
-        <div className="text-neutral-500">Loading summary...</div>
-      </div>
-    );
-  }
-
-  const totalEntries = residues.length;
-  const totalAmount = residues.reduce((sum, residue) => {
-    const amount = parseFloat(residue.amount.replace(/[^\d.-]/g, '')) || 0;
-    return sum + amount;
+  const total = residueItems.reduce((sum, item) => {
+    const percentage = parseFloat(item.percentage || '0');
+    return sum + percentage;
   }, 0);
 
   return (
-    <div className="px-5 pb-5">
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <div className="summary-card">
-          <div className="text-xs font-medium text-teal-700 mb-1">Total Entries</div>
-          <div className="text-lg font-bold text-neutral-900">{totalEntries}</div>
-        </div>
-        
-        <div className="summary-card">
-          <div className="text-xs font-medium text-teal-700 mb-1">Total Amount</div>
-          <div className="text-lg font-bold text-neutral-900">R {totalAmount.toLocaleString()}</div>
+    <div className="summary-card">
+      <div className="grid grid-cols-1 gap-6">
+        <div className="text-center">
+          <div className="text-2xl font-semibold text-gray-900">{total}%</div>
+          <div className="text-sm text-gray-600">Total Percentage</div>
         </div>
       </div>
     </div>
