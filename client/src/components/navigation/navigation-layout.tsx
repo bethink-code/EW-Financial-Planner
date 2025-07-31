@@ -3,6 +3,7 @@ import { useLocation } from "wouter";
 import { ConsolidatedNavigation } from "./consolidated-navigation";
 import { SectionTabs } from "./section-tabs";
 import { needs } from "@shared/navigation-config";
+import headerImage from "@assets/EW Header_1753945516780.png";
 
 interface NavigationLayoutProps {
   children: React.ReactNode;
@@ -69,7 +70,7 @@ export function NavigationLayout({ children }: NavigationLayoutProps) {
       {/* Client Header Image */}
       <div className="w-full">
         <img 
-          src="/attached_assets/EW Header_1753945516780.png" 
+          src={headerImage} 
           alt="Client Header - Donald Edward" 
           className="w-full h-auto"
         />
