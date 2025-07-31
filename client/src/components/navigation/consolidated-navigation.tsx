@@ -120,7 +120,7 @@ export function ConsolidatedNavigation({
               
               {/* Financial Plan name with edit button */}
               <div className="flex items-center gap-2">
-                <button className="flex items-center gap-2 pl-2 pr-1 text-sm font-medium transition-colors h-10 rounded-[6px] focus:outline-none focus:ring-0 focus:border-0 bg-[#F5F1E8] text-gray-700 border-0 hover:bg-[#F0EBE0]">
+                <button className="flex items-center gap-2 px-4 text-sm font-medium transition-colors h-10 rounded-[6px] focus:outline-none focus:ring-0 focus:border-0 bg-[#F5F1E8] text-gray-700 border-0 hover:bg-[#F0EBE0]">
                   <span title={planName}>
                     {planName}
                   </span>
@@ -155,7 +155,7 @@ export function ConsolidatedNavigation({
                 <DropdownMenu open={isNeedDropdownOpen} onOpenChange={setIsNeedDropdownOpen}>
                   <DropdownMenuTrigger asChild>
                     <Button 
-                      className="btn-need px-2 flex items-center gap-2 text-sm rounded-md h-10"
+                      className="btn-need px-4 flex items-center gap-2 text-sm rounded-md h-10"
                     >
                       {currentNeed.label}
                       <ChevronDown className="h-3.5 w-3.5" />
