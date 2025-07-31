@@ -311,20 +311,20 @@ th, td {
 
   /* SINGLE ROW HEADER STYLING - Height controlled at row level */
   .single-row-header {
-    height: 3.5rem !important;
-    min-height: 3.5rem !important;
-    max-height: 3.5rem !important;
+    height: 3rem !important;
+    min-height: 3rem !important;
+    max-height: 3rem !important;
   }
 
   .single-row-header th {
-    padding: 0.5rem !important;
+    padding: 0 0.5rem !important; /* Remove vertical padding, keep horizontal */
     font-size: 11px !important;
     font-weight: 600 !important;
     text-transform: uppercase !important;
     letter-spacing: 0.025em !important;
     color: #4b5563 !important;
     background-color: #f8fafc !important;
-    vertical-align: bottom !important;
+    vertical-align: middle !important; /* Center align text */
     line-height: 1.3rem !important;
     white-space: nowrap !important;
     overflow: hidden !important;
@@ -531,9 +531,9 @@ th, td {
 
   tfoot tr {
     border-top: 1px solid #d1d5db !important; /* Single border for section separation */
-    height: 3.5rem !important; /* Control height at row level */
-    min-height: 3.5rem !important;
-    max-height: 3.5rem !important;
+    height: 3rem !important; /* Control height at row level */
+    min-height: 3rem !important;
+    max-height: 3rem !important;
   }
 
   /* Remove only non-section borders from footer cells (but preserve tbody row borders) */
@@ -557,8 +557,8 @@ th, td {
     color: #374151 !important; /* text-neutral-700 */
     font-size: 0.875rem !important;
     font-weight: normal !important;
-    padding: 0.5rem !important; /* Consistent padding with values */
-    vertical-align: bottom !important;
+    padding: 0 0.5rem !important; /* Remove vertical padding, keep horizontal */
+    vertical-align: middle !important; /* Center align text */
     line-height: 1.3rem !important;
   }
 
@@ -568,8 +568,8 @@ th, td {
     font-weight: 600 !important;
     color: #374151 !important;
     font-size: 0.875rem !important;
-    padding: 0.5rem !important;
-    vertical-align: bottom !important;
+    padding: 0 0.5rem !important; /* Remove vertical padding, keep horizontal */
+    vertical-align: middle !important; /* Center align text */
     line-height: 1.3rem !important;
   }
   
