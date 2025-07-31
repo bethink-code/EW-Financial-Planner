@@ -1268,6 +1268,41 @@ th, td {
   opacity: 1 !important;
 }
 
+/* Dropdown Menu Content Styling - For navigation dropdowns */
+[data-radix-popper-content-wrapper] {
+  z-index: 50 !important;
+}
+
+.dropdown-menu-content {
+  background-color: white !important;
+  border: 1px solid #e5e7eb !important;
+  border-radius: 8px !important;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05) !important;
+  padding: 4px !important;
+  min-width: 200px !important;
+}
+
+.dropdown-menu-item {
+  display: flex !important;
+  align-items: center !important;
+  padding: 8px 12px !important;
+  font-size: 0.875rem !important;
+  color: #374151 !important;
+  cursor: pointer !important;
+  border-radius: 4px !important;
+  transition: background-color 0.15s ease !important;
+}
+
+.dropdown-menu-item:hover {
+  background-color: #f3f4f6 !important;
+  color: #111827 !important;
+}
+
+.dropdown-menu-item[data-highlighted] {
+  background-color: #f3f4f6 !important;
+  color: #111827 !important;
+}
+
 /* Action Button Styles - Simple and clean */
 
 

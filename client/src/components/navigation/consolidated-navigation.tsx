@@ -140,9 +140,9 @@ export function ConsolidatedNavigation({
                       <ChevronDown className="h-3.5 w-3.5" />
                     </Button>
                   </DropdownMenuTrigger>
-                  <DropdownMenuContent align="start" className="w-72">
+                  <DropdownMenuContent align="start" className="dropdown-menu-content w-72">
                     {needs.map((need) => (
-                      <DropdownMenuItem key={need.id} asChild>
+                      <DropdownMenuItem key={need.id} className="dropdown-menu-item" asChild>
                         <Link href={need.path} onClick={() => setIsNeedDropdownOpen(false)}>
                           <span className={cn(
                             need.hasContent ?"" :"text-gray-400",
@@ -192,9 +192,9 @@ export function ConsolidatedNavigation({
                           <ChevronDown className="h-3.5 w-3.5 ml-1" />
                         </button>
                       </DropdownMenuTrigger>
-                      <DropdownMenuContent align="start" className="w-72">
+                      <DropdownMenuContent align="start" className="dropdown-menu-content w-72">
                         {getDropdownContent(step.id).map((item) => (
-                          <DropdownMenuItem key={item.id} asChild>
+                          <DropdownMenuItem key={item.id} className="dropdown-menu-item" asChild>
                             <Link href={item.path} onClick={() => setStepDropdownOpen(null)}>
                               <span className={cn(
                                 item.hasContent ?"" :"text-gray-400",
