@@ -103,15 +103,15 @@ function ResidueTable({ viewMode, searchTerm }: ResidueTableProps) {
   const residueItem = residueItems[0] || { id: 1, entity: "Residue to registered charities", percentage: "0" };
 
   return (
-    <div className="max-w-md">
-      <table className="w-full border-collapse">
+    <div className="w-fit">
+      <table className="border-collapse">
         {/* Header */}
         <thead>
           <tr className="single-row-header">
-            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-left border-b border-neutral-200">
+            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-left border-b border-neutral-200" style={{width: '200px'}}>
               Entity
             </th>
-            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center border-b border-neutral-200 w-24">
+            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center border-b border-neutral-200" style={{width: '80px'}}>
               Percentage
             </th>
           </tr>
@@ -121,10 +121,10 @@ function ResidueTable({ viewMode, searchTerm }: ResidueTableProps) {
         <tbody>
           <SafeFragment key={`residue-${residueItem.id}`}>
             <tr>
-              <td className="p-2 text-left">
+              <td className="p-2 text-left" style={{width: '200px'}}>
                 <span className="text-gray-700">Residue to registered charities</span>
               </td>
-              <td className="p-2 text-center">
+              <td className="p-2 text-center" style={{width: '80px'}}>
                 <input
                   type="text"
                   className={`table-input ${getFieldClass('percentage')} ${getValueClass(residueItem.percentage, 'percentage')}`}
@@ -141,10 +141,10 @@ function ResidueTable({ viewMode, searchTerm }: ResidueTableProps) {
         {/* Footer - Total */}
         <tfoot>
           <tr className="bg-neutral-50 border-t border-neutral-300">
-            <td className="p-2 text-left font-semibold text-gray-700">
+            <td className="p-2 text-left font-semibold text-gray-700" style={{width: '200px'}}>
               Total
             </td>
-            <td className="p-2 text-center font-semibold text-gray-700">
+            <td className="p-2 text-center font-semibold text-gray-700" style={{width: '80px'}}>
               {totals.percentage}%
             </td>
           </tr>
