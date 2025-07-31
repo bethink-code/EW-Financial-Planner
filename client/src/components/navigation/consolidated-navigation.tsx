@@ -268,19 +268,7 @@ export function ConsolidatedNavigation({
               </div>
             </div>
             
-            {/* Right side with User image */}
-            <div className="flex items-start ml-auto">
-              <div>
-                <span className="text-xs text-gray-500 uppercase tracking-wider font-medium block mb-1">
-                  CLIENT
-                </span>
-                <img 
-                  src="/attached_assets/EW Header_1753945516780.png" 
-                  alt="Donald Edward" 
-                  className="h-10 rounded"
-                />
-              </div>
-            </div>
+
           </div>
         </div>
       </div>
