@@ -160,11 +160,11 @@ function LumpSumTable({ viewMode, searchTerm }: LumpSumTableProps) {
  }, [deleteMutation]);
 
  if (isLoading) {
- return <div className="flex justify-center py-8">Loading lump sum bequests...</div>;
+ return <div className="flex justify-center">Loading lump sum bequests...</div>;
  }
 
  if (error) {
- return <div className="text-red-600 py-8">Error loading lump sum bequests. Please try again.</div>;
+ return <div className="text-red-600">Error loading lump sum bequests. Please try again.</div>;
  }
 
  return (

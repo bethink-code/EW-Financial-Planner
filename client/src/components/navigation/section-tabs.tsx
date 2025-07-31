@@ -1,7 +1,7 @@
-import React from "react";
-import { Link, useLocation } from "wouter";
-import { cn } from "@/lib/utils";
-import { SafeFragment } from "@/lib/safe-fragment";
+import React from"react";
+import { Link, useLocation } from"wouter";
+import { cn } from"@/lib/utils";
+import { SafeFragment } from"@/lib/safe-fragment";
 
 interface TabItem {
   id: string;
@@ -14,33 +14,33 @@ interface TabItem {
 interface SectionTabsProps {
   tabs: TabItem[];
   activeTabId?: string;
-  variant?: "primary" | "secondary";
+  variant?:"primary" |"secondary";
 }
 
-export function SectionTabs({ tabs, activeTabId, variant = "primary" }: SectionTabsProps) {
+export function SectionTabs({ tabs, activeTabId, variant ="primary" }: SectionTabsProps) {
   const [location] = useLocation();
   
   const TabButton = ({ tab, isActive }: { tab: TabItem; isActive: boolean }) => {
-    const baseClasses = "px-4 py-2 font-medium transition-colors relative";
+    const baseClasses ="px-4 font-medium transition-colors relative";
     
     // Default design
-    const variantClasses = variant === "primary" 
+    const variantClasses = variant ==="primary" 
       ? cn(
           baseClasses,
-          "text-gray-600 hover:text-gray-900 pb-3",
-          isActive && "text-blue-600 border-b-2 border-blue-600"
+"text-gray-600 hover:text-gray-900 pb-3",
+          isActive &&"text-blue-600 border-b-2 border-blue-600"
         )
       : cn(
           baseClasses,
-          "text-sm rounded-md",
+"text-sm rounded-md",
           isActive 
-            ? "bg-blue-100 text-blue-700"
-            : "text-gray-600 hover:bg-gray-100"
+            ?"bg-blue-100 text-blue-700"
+            :"text-gray-600 hover:bg-gray-100"
         );
     
     if (!tab.hasContent) {
       return (
-        <span className={cn(variantClasses, "opacity-50 cursor-not-allowed")}>
+        <span className={cn(variantClasses,"opacity-50 cursor-not-allowed")}>
           {tab.label}
         </span>
       );
@@ -58,9 +58,9 @@ export function SectionTabs({ tabs, activeTabId, variant = "primary" }: SectionT
   return (
     <div>
       <div className={cn(
-        "flex items-center gap-1",
-        variant === "primary" && "border-b border-gray-200 px-6 py-0",
-        variant === "secondary" && "px-6 py-2"
+"flex items-center gap-1",
+        variant ==="primary" &&"border-b border-gray-200 px-6",
+        variant ==="secondary" &&"px-6"
       )}>
         {tabs.map((tab) => {
           const isActive = tab.path === location || 

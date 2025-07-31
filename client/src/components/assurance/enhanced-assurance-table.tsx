@@ -1,10 +1,10 @@
-import { useState, useCallback, useMemo, memo } from "react";
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { Plus, Trash2 } from "lucide-react";
-import { DeleteButton, AddButton } from "@/components/ui/action-buttons";
-import { getFieldClass, getFieldWidth } from "@/lib/design-tokens";
-import { apiRequest } from "@/lib/queryClient";
-import type { Assurance, InsertAssurance } from "@shared/schema";
+import { useState, useCallback, useMemo, memo } from"react";
+import { useQuery, useMutation, useQueryClient } from"@tanstack/react-query";
+import { Plus, Trash2 } from"lucide-react";
+import { DeleteButton, AddButton } from"@/components/ui/action-buttons";
+import { getFieldClass, getFieldWidth } from"@/lib/design-tokens";
+import { apiRequest } from"@/lib/queryClient";
+import type { Assurance, InsertAssurance } from"@shared/schema";
 
 interface AssuranceTableProps {
   searchTerm: string;
@@ -58,7 +58,7 @@ const OwnerRowManager = memo(({ policy, onUpdate, onDelete }: {
   }, [policy.id, additionalOwners, onUpdate]);
 
   const handleAddOwner = useCallback(() => {
-    const newOwners = [...additionalOwners, ""];
+    const newOwners = [...additionalOwners,""];
     onUpdate(policy.id, { additionalOwners: newOwners });
   }, [policy.id, additionalOwners, onUpdate]);
 
@@ -71,7 +71,7 @@ const OwnerRowManager = memo(({ policy, onUpdate, onDelete }: {
     <>
       {/* Main Owner Row */}
       <tr className="border-b border-neutral-200">
-        <td className="px-3 py-2">
+        <td className="px-3">
           <input
             key={`description-${policy.id}`}
             type="text"
@@ -81,7 +81,7 @@ const OwnerRowManager = memo(({ policy, onUpdate, onDelete }: {
             disabled={isUpdating}
           />
         </td>
-        <td className="px-3 py-2">
+        <td className="px-3">
           <input
             key={`owner-${policy.id}`}
             type="text"
@@ -94,7 +94,7 @@ const OwnerRowManager = memo(({ policy, onUpdate, onDelete }: {
             onClick={handleAddOwner}
           />
         </td>
-        <td className="px-3 py-2">
+        <td className="px-3">
           <input
             key={`lifeAssured-${policy.id}`}
             type="text"
@@ -104,7 +104,7 @@ const OwnerRowManager = memo(({ policy, onUpdate, onDelete }: {
             disabled={isUpdating}
           />
         </td>
-        <td className="px-3 py-2">
+        <td className="px-3">
           <input
             key={`deathBenefit-${policy.id}`}
             type="text"
@@ -118,7 +118,7 @@ const OwnerRowManager = memo(({ policy, onUpdate, onDelete }: {
             disabled={isUpdating}
           />
         </td>
-        <td className="px-3 py-2">
+        <td className="px-3">
           <input
             key={`beneficiary-${policy.id}`}
             type="text"
@@ -128,7 +128,7 @@ const OwnerRowManager = memo(({ policy, onUpdate, onDelete }: {
             disabled={isUpdating}
           />
         </td>
-        <td className="px-3 py-2">
+        <td className="px-3">
           <input
             key={`benefitSplit-${policy.id}`}
             type="text"
@@ -139,14 +139,14 @@ const OwnerRowManager = memo(({ policy, onUpdate, onDelete }: {
               const newAmount = ((parseFloat(policy.deathBenefit.replace(/[^\d.-]/g, '')) || 0) * (parseFloat(formattedValue.replace(/[^\d.-]/g, '')) || 0) / 100).toString();
               onUpdate(policy.id, { benefitSplit: formattedValue, amount: newAmount });
             }}
-            className="table-input w-20 px-2 py-1 text-sm text-right border border-neutral-300 rounded bg-primary/5 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+            className="table-input w-20 px-2 text-sm text-right border border-neutral-300 rounded bg-primary/5 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
             disabled={isUpdating}
           />
         </td>
-        <td className="px-3 py-2 text-sm text-neutral-700 text-right ">
+        <td className="px-3 text-sm text-neutral-700 text-right">
           {formatCurrencyValue(policy.amount, 'amount')}
         </td>
-        <td className="px-3 py-2">
+        <td className="px-3">
           <input
             key={`buySell-${policy.id}`}
             type="checkbox"
@@ -156,7 +156,7 @@ const OwnerRowManager = memo(({ policy, onUpdate, onDelete }: {
             disabled={isUpdating}
           />
         </td>
-        <td className="px-3 py-2">
+        <td className="px-3">
           <input
             key={`keyMan-${policy.id}`}
             type="checkbox"
@@ -166,7 +166,7 @@ const OwnerRowManager = memo(({ policy, onUpdate, onDelete }: {
             disabled={isUpdating}
           />
         </td>
-        <td className="px-3 py-2">
+        <td className="px-3">
           <input
             key={`excludedFromEstateDuty-${policy.id}`}
             type="checkbox"
@@ -176,7 +176,7 @@ const OwnerRowManager = memo(({ policy, onUpdate, onDelete }: {
             disabled={isUpdating}
           />
         </td>
-        <td className="px-3 py-2">
+        <td className="px-3">
           <input
             key={`excludedFromProvisions-${policy.id}`}
             type="checkbox"
@@ -186,7 +186,7 @@ const OwnerRowManager = memo(({ policy, onUpdate, onDelete }: {
             disabled={isUpdating}
           />
         </td>
-        <td className="px-3 py-2">
+        <td className="px-3">
           <input
             key={`premiumsByOthers-${policy.id}`}
             type="text"
@@ -200,7 +200,7 @@ const OwnerRowManager = memo(({ policy, onUpdate, onDelete }: {
             disabled={isUpdating}
           />
         </td>
-        <td className="px-3 py-2">
+        <td className="px-3">
           <input
             key={`collateralSession-${policy.id}`}
             type="text"
@@ -214,7 +214,7 @@ const OwnerRowManager = memo(({ policy, onUpdate, onDelete }: {
             disabled={isUpdating}
           />
         </td>
-        <td className="px-3 py-2">
+        <td className="px-3">
           <DeleteButton
             onClick={() => {
               if (confirm('Are you sure you want to delete this policy?')) {
@@ -228,8 +228,8 @@ const OwnerRowManager = memo(({ policy, onUpdate, onDelete }: {
       {/* Additional Owner Rows */}
       {additionalOwners.map((owner, index) => (
         <tr key={`additional-owner-${index}`} className="border-b border-neutral-200">
-          <td className="px-3 py-2 text-sm text-neutral-700"></td>
-          <td className="px-3 py-2">
+          <td className="px-3 text-sm text-neutral-700"></td>
+          <td className="px-3">
             <input
               key={`additional-owner-${policy.id}-${index}`}
               type="text"
@@ -242,14 +242,14 @@ const OwnerRowManager = memo(({ policy, onUpdate, onDelete }: {
               onClick={() => handleRemoveOwner(index)}
             />
           </td>
-          <td colSpan={11} className="px-3 py-2 text-sm text-neutral-700"></td>
+          <td colSpan={11} className="px-3 text-sm text-neutral-700"></td>
         </tr>
       ))}
     </>
   );
 });
 
-OwnerRowManager.displayName = "OwnerRowManager";
+OwnerRowManager.displayName ="OwnerRowManager";
 
 export function AssuranceTable({ searchTerm }: AssuranceTableProps) {
   const queryClient = useQueryClient();
@@ -259,7 +259,7 @@ export function AssuranceTable({ searchTerm }: AssuranceTableProps) {
   const { data: policies = [], isLoading } = useQuery({
     queryKey: ["/api/assurance", { search: searchTerm }],
     queryFn: async () => {
-      const response = await fetch("/api/assurance" + (searchTerm ? `?search=${encodeURIComponent(searchTerm)}` : ""));
+      const response = await fetch("/api/assurance" + (searchTerm ? `?search=${encodeURIComponent(searchTerm)}` :""));
       if (!response.ok) throw new Error('Failed to fetch assurance policies');
       return response.json() as Promise<Assurance[]>;
     }
@@ -269,24 +269,24 @@ export function AssuranceTable({ searchTerm }: AssuranceTableProps) {
   const addMutation = useMutation({
     mutationFn: () => {
       const newPolicy: InsertAssurance = {
-        description: "",
-        owner: "Donald Edwards",
+        description:"",
+        owner:"Donald Edwards",
         additionalOwners: [],
-        lifeAssured: "",
-        deathBenefit: "0",
-        beneficiary: "",
-        benefitSplit: "0",
+        lifeAssured:"",
+        deathBenefit:"0",
+        beneficiary:"",
+        benefitSplit:"0",
         additionalBeneficiaries: [],
         additionalBenefitSplits: [],
-        amount: "0",
+        amount:"0",
         buySell: false,
         keyMan: false,
-        premiumsByOthers: "0",
-        collateralSession: "0",
+        premiumsByOthers:"0",
+        collateralSession:"0",
         excludedFromEstateDuty: false,
         excludedFromProvisions: false
       };
-      return apiRequest("/api/assurance", "POST", newPolicy);
+      return apiRequest("/api/assurance","POST", newPolicy);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["/api/assurance"] });
@@ -296,7 +296,7 @@ export function AssuranceTable({ searchTerm }: AssuranceTableProps) {
   // Update policy mutation
   const updateMutation = useMutation({
     mutationFn: ({ id, updates }: { id: number; updates: Partial<Assurance> }) => {
-      return apiRequest(`/api/assurance/${id}`, "PATCH", updates);
+      return apiRequest(`/api/assurance/${id}`,"PATCH", updates);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["/api/assurance"] });
@@ -307,7 +307,7 @@ export function AssuranceTable({ searchTerm }: AssuranceTableProps) {
   // Delete policy mutation
   const deleteMutation = useMutation({
     mutationFn: (id: number) => {
-      return apiRequest(`/api/assurance/${id}`, "DELETE");
+      return apiRequest(`/api/assurance/${id}`,"DELETE");
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["/api/assurance"] });
@@ -359,29 +359,29 @@ export function AssuranceTable({ searchTerm }: AssuranceTableProps) {
           disabled={addMutation.isPending}
           size="default"
         >
-          {addMutation.isPending ? "Adding Policy..." : "Add Policy"}
+          {addMutation.isPending ?"Adding Policy..." :"Add Policy"}
         </AddButton>
       </div>
 
       {/* Table */}
       <div className="overflow-x-auto">
-        <table className="min-w-full  border border-neutral-200 ">
+        <table className="min-w-full  border border-neutral-200">
           <thead>
             <tr className="border-b border-neutral-200">
-              <th className="px-3 py-3 text-left text-xs font-medium text-neutral-600 uppercase tracking-wider">Description</th>
-              <th className="px-3 py-3 text-left text-xs font-medium text-neutral-600 uppercase tracking-wider">Owner</th>
-              <th className="px-3 py-3 text-left text-xs font-medium text-neutral-600 uppercase tracking-wider">Life Assured</th>
-              <th className="px-3 py-3 text-left text-xs font-medium text-neutral-600 uppercase tracking-wider">Death Benefit</th>
-              <th className="px-3 py-3 text-left text-xs font-medium text-neutral-600 uppercase tracking-wider">Beneficiary</th>
-              <th className="px-3 py-3 text-left text-xs font-medium text-neutral-600 uppercase tracking-wider">Benefit Split</th>
-              <th className="px-3 py-3 text-left text-xs font-medium text-neutral-600 uppercase tracking-wider">Amount</th>
-              <th className="px-3 py-3 text-center text-xs font-medium text-neutral-600 uppercase tracking-wider">Buy/Sell</th>
-              <th className="px-3 py-3 text-center text-xs font-medium text-neutral-600 uppercase tracking-wider">Key Man</th>
-              <th className="px-3 py-3 text-center text-xs font-medium text-neutral-600 uppercase tracking-wider">Excluded Estate Duty</th>
-              <th className="px-3 py-3 text-center text-xs font-medium text-neutral-600 uppercase tracking-wider">Excluded Provisions</th>
-              <th className="px-3 py-3 text-left text-xs font-medium text-neutral-600 uppercase tracking-wider">Premiums by Others</th>
-              <th className="px-3 py-3 text-left text-xs font-medium text-neutral-600 uppercase tracking-wider">Collateral Session</th>
-              <th className="px-3 py-3 text-center text-xs font-medium text-neutral-600 uppercase tracking-wider">Actions</th>
+              <th className="px-3 text-left text-xs font-medium text-neutral-600 uppercase tracking-wider">Description</th>
+              <th className="px-3 text-left text-xs font-medium text-neutral-600 uppercase tracking-wider">Owner</th>
+              <th className="px-3 text-left text-xs font-medium text-neutral-600 uppercase tracking-wider">Life Assured</th>
+              <th className="px-3 text-left text-xs font-medium text-neutral-600 uppercase tracking-wider">Death Benefit</th>
+              <th className="px-3 text-left text-xs font-medium text-neutral-600 uppercase tracking-wider">Beneficiary</th>
+              <th className="px-3 text-left text-xs font-medium text-neutral-600 uppercase tracking-wider">Benefit Split</th>
+              <th className="px-3 text-left text-xs font-medium text-neutral-600 uppercase tracking-wider">Amount</th>
+              <th className="px-3 text-center text-xs font-medium text-neutral-600 uppercase tracking-wider">Buy/Sell</th>
+              <th className="px-3 text-center text-xs font-medium text-neutral-600 uppercase tracking-wider">Key Man</th>
+              <th className="px-3 text-center text-xs font-medium text-neutral-600 uppercase tracking-wider">Excluded Estate Duty</th>
+              <th className="px-3 text-center text-xs font-medium text-neutral-600 uppercase tracking-wider">Excluded Provisions</th>
+              <th className="px-3 text-left text-xs font-medium text-neutral-600 uppercase tracking-wider">Premiums by Others</th>
+              <th className="px-3 text-left text-xs font-medium text-neutral-600 uppercase tracking-wider">Collateral Session</th>
+              <th className="px-3 text-center text-xs font-medium text-neutral-600 uppercase tracking-wider">Actions</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-neutral-200">
@@ -396,8 +396,8 @@ export function AssuranceTable({ searchTerm }: AssuranceTableProps) {
             
             {filteredPolicies.length === 0 && (
               <tr>
-                <td colSpan={14} className="px-3 py-8 text-center text-neutral-500">
-                  {searchTerm ? "No assurance policies found matching your search." : "No assurance policies found. Click 'Add Policy' to get started."}
+                <td colSpan={14} className="px-3 text-center text-neutral-500">
+                  {searchTerm ?"No assurance policies found matching your search." :"No assurance policies found. Click 'Add Policy' to get started."}
                 </td>
               </tr>
             )}

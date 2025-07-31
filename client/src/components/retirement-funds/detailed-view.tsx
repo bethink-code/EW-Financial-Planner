@@ -1,15 +1,15 @@
-import { useState, useCallback, memo, useMemo, useRef, useEffect } from "react";
-import { ChevronRight, ChevronDown, Edit, Plus } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Badge } from "@/components/ui/badge";
-import { BeneficiarySection } from "./beneficiary-section";
-import { FundActions } from "./fund-actions";
-import { parseBeneficiaries } from "@/lib/beneficiaries";
-import { getValueClass, isDefaultValue, handleDefaultValueFocus } from "@/lib/formatting";
-import type { RetirementFund, UpdateRetirementFund } from "@shared/schema";
+import { useState, useCallback, memo, useMemo, useRef, useEffect } from"react";
+import { ChevronRight, ChevronDown, Edit, Plus } from"lucide-react";
+import { Button } from"@/components/ui/button";
+import { Input } from"@/components/ui/input";
+import { Label } from"@/components/ui/label";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from"@/components/ui/select";
+import { Badge } from"@/components/ui/badge";
+import { BeneficiarySection } from"./beneficiary-section";
+import { FundActions } from"./fund-actions";
+import { parseBeneficiaries } from"@/lib/beneficiaries";
+import { getValueClass, isDefaultValue, handleDefaultValueFocus } from"@/lib/formatting";
+import type { RetirementFund, UpdateRetirementFund } from"@shared/schema";
 
 // Removed AutoSizeInput component - simplified for better performance
 
@@ -26,11 +26,11 @@ interface DetailedViewProps {
   columnVisibility: ColumnVisibility;
   onFieldUpdate: (id: number, field: keyof UpdateRetirementFund, value: string) => void;
   isUpdating: boolean;
-  tableMode?: "inputs" | "flows";
+  tableMode?:"inputs" |"flows";
   onAddFund: () => void;
 }
 
-export function DetailedView({ funds, columnVisibility, onFieldUpdate, isUpdating, tableMode = "inputs", onAddFund }: DetailedViewProps) {
+export function DetailedView({ funds, columnVisibility, onFieldUpdate, isUpdating, tableMode ="inputs", onAddFund }: DetailedViewProps) {
   const [selectedFundId, setSelectedFundId] = useState<number | null>(funds.length > 0 ? funds[0].id : null);
   
   const selectedFund = useMemo(() => {
@@ -105,8 +105,8 @@ export function DetailedView({ funds, columnVisibility, onFieldUpdate, isUpdatin
     }
   }, [selectedFund, onFieldUpdate, formatCurrencyValue]);
 
-  const owners = useMemo(() => ["Donald Edwards", "Betty Edwards"], []);
-  const getOwnerBadgeColor = useCallback(() => " border border-neutral-300", []);
+  const owners = useMemo(() => ["Donald Edwards","Betty Edwards"], []);
+  const getOwnerBadgeColor = useCallback(() =>" border border-neutral-300", []);
 
   // Helper function to get primary beneficiary display
   const getPrimaryBeneficiary = useCallback((fund: RetirementFund) => {
@@ -122,7 +122,7 @@ export function DetailedView({ funds, columnVisibility, onFieldUpdate, isUpdatin
     }
     
     // Fallback to the single beneficiaryName field
-    return fund.beneficiaryName || "No beneficiary";
+    return fund.beneficiaryName ||"No beneficiary";
   }, []);
 
   if (!selectedFund) {
@@ -195,15 +195,15 @@ export function DetailedView({ funds, columnVisibility, onFieldUpdate, isUpdatin
                   <Label className="text-xs text-neutral-600 mb-1 block h-8 flex items-end">Description</Label>
                   <input
                     key={`description-${selectedFund.id}`}
-                    defaultValue={selectedFund.description || "Enter here ..."} onFocus={handleDefaultValueFocus}
+                    defaultValue={selectedFund.description ||"Enter here ..."} onFocus={handleDefaultValueFocus}
                     onBlur={(e) => {
-                      const formattedValue = formatCurrencyValue(e.target.value, "description");
+                      const formattedValue = formatCurrencyValue(e.target.value,"description");
                       if (formattedValue !== e.target.value) {
                         e.target.value = formattedValue;
                       }
                       handleFieldChange("description", e.target.value);
                     }}
-                    className="h-9 px-3 py-2 text-sm  border border-neutral-200 rounded focus:border-primary focus:outline-none w-[200px]"
+                    className="h-9 px-3 text-sm  border border-neutral-200 rounded focus:border-primary focus:outline-none w-[200px]"
                     disabled={isUpdating}
                   />
                 </div>
@@ -243,15 +243,15 @@ export function DetailedView({ funds, columnVisibility, onFieldUpdate, isUpdatin
                 <Label className="text-xs text-neutral-600 mb-1 block">Cover Amount</Label>
                 <input
                   key={`coverAmount-${selectedFund.id}`}
-                  defaultValue={selectedFund.coverAmount || "Enter here ..."} onFocus={handleDefaultValueFocus}
+                  defaultValue={selectedFund.coverAmount ||"Enter here ..."} onFocus={handleDefaultValueFocus}
                   onBlur={(e) => {
-                    const formattedValue = formatCurrencyValue(e.target.value, "coverAmount");
+                    const formattedValue = formatCurrencyValue(e.target.value,"coverAmount");
                     if (formattedValue !== e.target.value) {
                       e.target.value = formattedValue;
                     }
                     handleFieldChange("coverAmount", e.target.value);
                   }}
-                  className="h-9 px-3 py-2 text-sm text-right  border border-neutral-200 rounded focus:border-primary focus:outline-none w-[140px]"
+                  className="h-9 px-3 text-sm text-right  border border-neutral-200 rounded focus:border-primary focus:outline-none w-[140px]"
                   disabled={isUpdating}
                   placeholder="R 0"
                 />
@@ -275,15 +275,15 @@ export function DetailedView({ funds, columnVisibility, onFieldUpdate, isUpdatin
                   <Label className="text-xs text-neutral-600 mb-1 block h-8 flex items-end">Monthly Income</Label>
                   <input
                     key={`monthlyIncome-${selectedFund.id}`}
-                    defaultValue={selectedFund.monthlyIncome || "Enter here ..."} onFocus={handleDefaultValueFocus}
+                    defaultValue={selectedFund.monthlyIncome ||"Enter here ..."} onFocus={handleDefaultValueFocus}
                     onBlur={(e) => {
-                      const formattedValue = formatCurrencyValue(e.target.value, "monthlyIncome");
+                      const formattedValue = formatCurrencyValue(e.target.value,"monthlyIncome");
                       if (formattedValue !== e.target.value) {
                         e.target.value = formattedValue;
                       }
                       handleFieldChange("monthlyIncome", e.target.value);
                     }}
-                    className="h-9 px-3 py-2 text-sm text-right  border border-neutral-200 rounded focus:border-primary focus:outline-none w-[140px]"
+                    className="h-9 px-3 text-sm text-right  border border-neutral-200 rounded focus:border-primary focus:outline-none w-[140px]"
                     disabled={isUpdating}
                     placeholder="R 0"
                   />
@@ -292,15 +292,15 @@ export function DetailedView({ funds, columnVisibility, onFieldUpdate, isUpdatin
                   <Label className="text-xs text-neutral-600 mb-1 block h-8 flex items-end">Term Years</Label>
                   <input
                     key={`termYears-${selectedFund.id}`}
-                    defaultValue={selectedFund.termYears || "Enter here ..."} onFocus={handleDefaultValueFocus}
+                    defaultValue={selectedFund.termYears ||"Enter here ..."} onFocus={handleDefaultValueFocus}
                     onBlur={(e) => {
-                      const formattedValue = formatCurrencyValue(e.target.value, "termYears");
+                      const formattedValue = formatCurrencyValue(e.target.value,"termYears");
                       if (formattedValue !== e.target.value) {
                         e.target.value = formattedValue;
                       }
                       handleFieldChange("termYears", e.target.value);
                     }}
-                    className="h-9 px-3 py-2 text-sm text-right  border border-neutral-200 rounded focus:border-primary focus:outline-none w-[80px]"
+                    className="h-9 px-3 text-sm text-right  border border-neutral-200 rounded focus:border-primary focus:outline-none w-[80px]"
                     disabled={isUpdating}
                   />
                 </div>
@@ -308,15 +308,15 @@ export function DetailedView({ funds, columnVisibility, onFieldUpdate, isUpdatin
                   <Label className="text-xs text-neutral-600 mb-1 block h-8 flex items-end">Increase %</Label>
                   <input
                     key={`increasePercentage-${selectedFund.id}`}
-                    defaultValue={selectedFund.increasePercentage || "Enter here ..."} onFocus={handleDefaultValueFocus}
+                    defaultValue={selectedFund.increasePercentage ||"Enter here ..."} onFocus={handleDefaultValueFocus}
                     onBlur={(e) => {
-                      const formattedValue = formatCurrencyValue(e.target.value, "increasePercentage");
+                      const formattedValue = formatCurrencyValue(e.target.value,"increasePercentage");
                       if (formattedValue !== e.target.value) {
                         e.target.value = formattedValue;
                       }
                       handleFieldChange("increasePercentage", e.target.value);
                     }}
-                    className="h-9 px-3 py-2 text-sm text-right  border border-neutral-200 rounded focus:border-primary focus:outline-none w-[80px]"
+                    className="h-9 px-3 text-sm text-right  border border-neutral-200 rounded focus:border-primary focus:outline-none w-[80px]"
                     disabled={isUpdating}
                     placeholder="5%"
                   />
@@ -325,15 +325,15 @@ export function DetailedView({ funds, columnVisibility, onFieldUpdate, isUpdatin
                   <Label className="text-xs text-neutral-600 mb-1 block h-8 flex items-end">Escalation Amount</Label>
                   <input
                     key={`escalationAmount-${selectedFund.id}`}
-                    defaultValue={selectedFund.approvedLifeCover || "Enter here ..."} onFocus={handleDefaultValueFocus}
+                    defaultValue={selectedFund.approvedLifeCover ||"Enter here ..."} onFocus={handleDefaultValueFocus}
                     onBlur={(e) => {
-                      const formattedValue = formatCurrencyValue(e.target.value, "approvedLifeCover");
+                      const formattedValue = formatCurrencyValue(e.target.value,"approvedLifeCover");
                       if (formattedValue !== e.target.value) {
                         e.target.value = formattedValue;
                       }
                       handleFieldChange("approvedLifeCover", e.target.value);
                     }}
-                    className="h-9 px-3 py-2 text-sm text-right  border border-neutral-200 rounded focus:border-primary focus:outline-none w-[140px]"
+                    className="h-9 px-3 text-sm text-right  border border-neutral-200 rounded focus:border-primary focus:outline-none w-[140px]"
                     disabled={isUpdating}
                     placeholder="R 0"
                   />
@@ -351,15 +351,15 @@ export function DetailedView({ funds, columnVisibility, onFieldUpdate, isUpdatin
                   <Label className="text-xs text-neutral-600 mb-1 block h-8 flex items-end">Approved Life Cover</Label>
                   <input
                     key={`approvedLifeCover-${selectedFund.id}`}
-                    defaultValue={selectedFund.approvedLifeCover || "Enter here ..."} onFocus={handleDefaultValueFocus}
+                    defaultValue={selectedFund.approvedLifeCover ||"Enter here ..."} onFocus={handleDefaultValueFocus}
                     onBlur={(e) => {
-                      const formattedValue = formatCurrencyValue(e.target.value, "approvedLifeCover");
+                      const formattedValue = formatCurrencyValue(e.target.value,"approvedLifeCover");
                       if (formattedValue !== e.target.value) {
                         e.target.value = formattedValue;
                       }
                       handleFieldChange("approvedLifeCover", e.target.value);
                     }}
-                    className="h-9 px-3 py-2 text-sm text-right  border border-neutral-200 rounded focus:border-primary focus:outline-none w-[140px]"
+                    className="h-9 px-3 text-sm text-right  border border-neutral-200 rounded focus:border-primary focus:outline-none w-[140px]"
                     disabled={isUpdating}
                     placeholder="R 0"
                   />
@@ -368,23 +368,23 @@ export function DetailedView({ funds, columnVisibility, onFieldUpdate, isUpdatin
                   <Label className="text-xs text-neutral-600 mb-1 block h-8 flex items-end">Fund Value</Label>
                   <input
                     key={`fundValue-${selectedFund.id}`}
-                    defaultValue={formatCurrencyValue(selectedFund.fundValue || "", "fundValue")}
+                    defaultValue={formatCurrencyValue(selectedFund.fundValue ||"","fundValue")}
                     onBlur={(e) => {
-                      const formattedValue = formatCurrencyValue(e.target.value, "fundValue");
+                      const formattedValue = formatCurrencyValue(e.target.value,"fundValue");
                       if (formattedValue !== e.target.value) {
                         e.target.value = formattedValue;
                       }
                       handleFieldChange("fundValue", e.target.value);
                     }}
-                    className="h-9 px-3 py-2 text-sm text-right  border border-neutral-200 rounded focus:border-primary focus:outline-none w-[140px]"
+                    className="h-9 px-3 text-sm text-right  border border-neutral-200 rounded focus:border-primary focus:outline-none w-[140px]"
                     disabled={isUpdating}
                     placeholder="R 0"
                   />
                 </div>
                 <div>
                   <Label className="text-xs text-neutral-600 mb-1 block h-8 flex items-end">Fund Value at Death</Label>
-                  <div className="h-9 px-3 py-2 text-sm text-right bg-neutral-50 border border-neutral-200 rounded w-[140px]">
-                    {selectedFund.fundValueAtDeath || "R 0"}
+                  <div className="h-9 px-3 text-sm text-right bg-neutral-50 border border-neutral-200 rounded w-[140px]">
+                    {selectedFund.fundValueAtDeath ||"R 0"}
                   </div>
                 </div>
               </div>
@@ -399,7 +399,7 @@ export function DetailedView({ funds, columnVisibility, onFieldUpdate, isUpdatin
                 <div>
                   <Label className="text-xs text-neutral-600 mb-1 block h-8 flex items-end">Beneficiary Name</Label>
                   <Select
-                    value={selectedFund.beneficiaryName || ""}
+                    value={selectedFund.beneficiaryName ||""}
                     onValueChange={(value) => handleFieldChange("beneficiaryName", value)}
                     disabled={isUpdating}
                   >
@@ -419,38 +419,38 @@ export function DetailedView({ funds, columnVisibility, onFieldUpdate, isUpdatin
                   <Label className="text-xs text-neutral-600 mb-1 block h-8 flex items-end">Percentage</Label>
                   <input
                     key={`beneficiaryPercentageSplit-${selectedFund.id}`}
-                    defaultValue={selectedFund.beneficiaryPercentageSplit || "Enter here ..."} onFocus={handleDefaultValueFocus}
+                    defaultValue={selectedFund.beneficiaryPercentageSplit ||"Enter here ..."} onFocus={handleDefaultValueFocus}
                     onBlur={(e) => {
-                      const formattedValue = formatCurrencyValue(e.target.value, "beneficiaryPercentageSplit");
+                      const formattedValue = formatCurrencyValue(e.target.value,"beneficiaryPercentageSplit");
                       if (formattedValue !== e.target.value) {
                         e.target.value = formattedValue;
                       }
                       handleFieldChange("beneficiaryPercentageSplit", e.target.value);
                     }}
-                    className="h-9 px-2 py-2 text-sm text-right  border border-neutral-200 rounded focus:border-primary focus:outline-none w-[70px]"
+                    className="h-9 px-2 text-sm text-right  border border-neutral-200 rounded focus:border-primary focus:outline-none w-[70px]"
                     disabled={isUpdating}
                     placeholder="0%"
                   />
                 </div>
                 <div>
                   <Label className="text-xs text-neutral-600 mb-1 block h-8 flex items-end">Amount (Read-only)</Label>
-                  <div className="h-9 px-3 py-2 text-sm text-right bg-neutral-50 border border-neutral-200 rounded w-[140px]">
-                    {selectedFund.amount || "R 0"}
+                  <div className="h-9 px-3 text-sm text-right bg-neutral-50 border border-neutral-200 rounded w-[140px]">
+                    {selectedFund.amount ||"R 0"}
                   </div>
                 </div>
                 <div>
                   <Label className="text-xs text-neutral-600 mb-1 block h-8 flex items-end">Lump Sum Taken</Label>
                   <input
                     key={`lumpSumTaken-${selectedFund.id}`}
-                    defaultValue={selectedFund.lumpSumTaken || "Enter here ..."} onFocus={handleDefaultValueFocus}
+                    defaultValue={selectedFund.lumpSumTaken ||"Enter here ..."} onFocus={handleDefaultValueFocus}
                     onBlur={(e) => {
-                      const formattedValue = formatCurrencyValue(e.target.value, "lumpSumTaken");
+                      const formattedValue = formatCurrencyValue(e.target.value,"lumpSumTaken");
                       if (formattedValue !== e.target.value) {
                         e.target.value = formattedValue;
                       }
                       handleFieldChange("lumpSumTaken", e.target.value);
                     }}
-                    className="h-9 px-3 py-2 text-sm text-right  border border-neutral-200 rounded focus:border-primary focus:outline-none w-[140px]"
+                    className="h-9 px-3 text-sm text-right  border border-neutral-200 rounded focus:border-primary focus:outline-none w-[140px]"
                     disabled={isUpdating}
                     placeholder="R 0"
                   />
@@ -459,38 +459,38 @@ export function DetailedView({ funds, columnVisibility, onFieldUpdate, isUpdatin
                   <Label className="text-xs text-neutral-600 mb-1 block h-8 flex items-end">Non-deductible Contribution</Label>
                   <input
                     key={`nondeductibleContribution-${selectedFund.id}`}
-                    defaultValue={selectedFund.nondeductibleContribution || "Enter here ..."} onFocus={handleDefaultValueFocus}
+                    defaultValue={selectedFund.nondeductibleContribution ||"Enter here ..."} onFocus={handleDefaultValueFocus}
                     onBlur={(e) => {
-                      const formattedValue = formatCurrencyValue(e.target.value, "nondeductibleContribution");
+                      const formattedValue = formatCurrencyValue(e.target.value,"nondeductibleContribution");
                       if (formattedValue !== e.target.value) {
                         e.target.value = formattedValue;
                       }
                       handleFieldChange("nondeductibleContribution", e.target.value);
                     }}
-                    className="h-9 px-3 py-2 text-sm text-right  border border-neutral-200 rounded focus:border-primary focus:outline-none w-[140px]"
+                    className="h-9 px-3 text-sm text-right  border border-neutral-200 rounded focus:border-primary focus:outline-none w-[140px]"
                     disabled={isUpdating}
                     placeholder="R 0"
                   />
                 </div>
                 <div>
                   <Label className="text-xs text-neutral-600 mb-1 block h-8 flex items-end">Living Annuity (Read-only)</Label>
-                  <div className="h-9 px-3 py-2 text-sm text-right bg-neutral-50 border border-neutral-200 rounded w-[140px]">
-                    {selectedFund.livingAnnuity || ""}
+                  <div className="h-9 px-3 text-sm text-right bg-neutral-50 border border-neutral-200 rounded w-[140px]">
+                    {selectedFund.livingAnnuity ||""}
                   </div>
                 </div>
                 <div>
                   <Label className="text-xs text-neutral-600 mb-1 block h-8 flex items-end">Income Term</Label>
                   <input
                     key={`incomeTerm-${selectedFund.id}`}
-                    defaultValue={selectedFund.incomeTerm || "Enter here ..."} onFocus={handleDefaultValueFocus}
+                    defaultValue={selectedFund.incomeTerm ||"Enter here ..."} onFocus={handleDefaultValueFocus}
                     onBlur={(e) => {
-                      const formattedValue = formatCurrencyValue(e.target.value, "incomeTerm");
+                      const formattedValue = formatCurrencyValue(e.target.value,"incomeTerm");
                       if (formattedValue !== e.target.value) {
                         e.target.value = formattedValue;
                       }
                       handleFieldChange("incomeTerm", e.target.value);
                     }}
-                    className="h-9 px-3 py-2 text-sm text-right  border border-neutral-200 rounded focus:border-primary focus:outline-none w-[100px]"
+                    className="h-9 px-3 text-sm text-right  border border-neutral-200 rounded focus:border-primary focus:outline-none w-[100px]"
                     disabled={isUpdating}
                     placeholder="Income term"
                   />

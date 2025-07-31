@@ -41,7 +41,7 @@ export function CategorySelector({ onAddLiability, isLoading = false }: Category
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="w-80">
-        <div className="px-3 py-2 text-sm font-medium text-neutral-600 border-b border-neutral-200">
+        <div className="px-3 text-sm font-medium text-neutral-600 border-b border-neutral-200">
           Select Liability Category
         </div>
         {categories.map((category) => (

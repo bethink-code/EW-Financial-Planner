@@ -21,15 +21,15 @@ function IncomeNeedsTable({ viewMode, searchTerm }: IncomeNeedsTableProps) {
   const addMutation = useMutation({
     mutationFn: async (): Promise<IncomeNeeds> => {
       const newIncomeNeed: InsertIncomeNeeds = {
-        description: "",
-        personName: "Enter details ...",
-        startDate: "Enter details ...",
-        termYears: "0",
-        increasePercentage: "0%",
+        description:"",
+        personName:"Enter details ...",
+        startDate:"Enter details ...",
+        termYears:"0",
+        increasePercentage:"0%",
         cpi: false,
-        frequency: "monthly",
-        amount: "R 0",
-        capitalisedAmount: "R 0",
+        frequency:"monthly",
+        amount:"R 0",
+        capitalisedAmount:"R 0",
       };
       
       const response = await fetch('/api/income-needs', {
@@ -152,11 +152,11 @@ function IncomeNeedsTable({ viewMode, searchTerm }: IncomeNeedsTableProps) {
   }, [deleteMutation]);
 
   if (isLoading) {
-    return <div className="flex justify-center py-8">Loading income needs...</div>;
+    return <div className="flex justify-center">Loading income needs...</div>;
   }
 
   if (error) {
-    return <div className="text-red-600 py-8">Error loading income needs. Please try again.</div>;
+    return <div className="text-red-600">Error loading income needs. Please try again.</div>;
   }
 
   return (

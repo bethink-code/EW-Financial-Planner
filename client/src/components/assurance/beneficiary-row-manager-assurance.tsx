@@ -1,8 +1,8 @@
-import { useState, useCallback, memo } from "react";
-import { Plus, Trash2 } from "lucide-react";
-import { DeleteButton, AddButton } from "@/components/ui/action-buttons";
-import { getFieldClass, getFieldWidth } from "@/lib/design-tokens";
-import { Assurance } from "@shared/schema";
+import { useState, useCallback, memo } from"react";
+import { Plus, Trash2 } from"lucide-react";
+import { DeleteButton, AddButton } from"@/components/ui/action-buttons";
+import { getFieldClass, getFieldWidth } from"@/lib/design-tokens";
+import { Assurance } from"@shared/schema";
 
 interface BeneficiaryRowManagerAssuranceProps {
   policy: Assurance;
@@ -81,8 +81,8 @@ export const BeneficiaryRowManagerAssurance = memo(({ policy, onUpdate }: Benefi
   }, [policy, additionalBeneficiaries, additionalBenefitSplits, calculateAmount, onUpdate]);
 
   const handleAddBeneficiary = useCallback(() => {
-    const newBeneficiaries = [...additionalBeneficiaries, ""];
-    const newSplits = [...additionalBenefitSplits, "0"];
+    const newBeneficiaries = [...additionalBeneficiaries,""];
+    const newSplits = [...additionalBenefitSplits,"0"];
     
     onUpdate(policy.id, {
       additionalBeneficiaries: newBeneficiaries,
@@ -120,11 +120,11 @@ export const BeneficiaryRowManagerAssurance = memo(({ policy, onUpdate }: Benefi
     <>
       {/* Main Beneficiary Row */}
       <tr className="hover:bg-neutral-50 border-b border-neutral-200">
-        <td className="px-3 py-2 text-sm text-neutral-700"></td>
-        <td className="px-3 py-2 text-sm text-neutral-700"></td>
-        <td className="px-3 py-2 text-sm text-neutral-700"></td>
-        <td className="px-3 py-2 text-sm text-neutral-700"></td>
-        <td className="px-3 py-2">
+        <td className="px-3 text-sm text-neutral-700"></td>
+        <td className="px-3 text-sm text-neutral-700"></td>
+        <td className="px-3 text-sm text-neutral-700"></td>
+        <td className="px-3 text-sm text-neutral-700"></td>
+        <td className="px-3">
           <input
             key={`beneficiary-${policy.id}`}
             type="text"
@@ -134,26 +134,26 @@ export const BeneficiaryRowManagerAssurance = memo(({ policy, onUpdate }: Benefi
             disabled={isUpdating}
           />
         </td>
-        <td className="px-3 py-2">
+        <td className="px-3">
           <input
             key={`benefitSplit-${policy.id}`}
             type="text"
             defaultValue={policy.benefitSplit}
             onBlur={(e) => handleInputBlur(e, 'benefitSplit')}
-            className="table-input w-20 px-2 py-1 text-sm text-right border border-neutral-300 rounded bg-primary/5 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+            className="table-input w-20 px-2 text-sm text-right border border-neutral-300 rounded bg-primary/5 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
             disabled={isUpdating}
           />
         </td>
-        <td className="px-3 py-2 text-sm text-neutral-700 text-right bg-neutral-100">
+        <td className="px-3 text-sm text-neutral-700 text-right bg-neutral-100">
           {formatCurrencyValue(policy.amount, 'amount')}
         </td>
-        <td className="px-3 py-2 text-sm text-neutral-700"></td>
-        <td className="px-3 py-2 text-sm text-neutral-700"></td>
-        <td className="px-3 py-2 text-sm text-neutral-700"></td>
-        <td className="px-3 py-2 text-sm text-neutral-700"></td>
-        <td className="px-3 py-2 text-sm text-neutral-700"></td>
-        <td className="px-3 py-2 text-sm text-neutral-700"></td>
-        <td className="px-3 py-2">
+        <td className="px-3 text-sm text-neutral-700"></td>
+        <td className="px-3 text-sm text-neutral-700"></td>
+        <td className="px-3 text-sm text-neutral-700"></td>
+        <td className="px-3 text-sm text-neutral-700"></td>
+        <td className="px-3 text-sm text-neutral-700"></td>
+        <td className="px-3 text-sm text-neutral-700"></td>
+        <td className="px-3">
           <AddButton
             onClick={handleAddBeneficiary}
           />
@@ -163,11 +163,11 @@ export const BeneficiaryRowManagerAssurance = memo(({ policy, onUpdate }: Benefi
       {/* Additional Beneficiary Rows */}
       {additionalBeneficiaries.map((beneficiary, index) => (
         <tr key={`additional-${index}`} className="hover:bg-neutral-50 border-b border-neutral-200">
-          <td className="px-3 py-2 text-sm text-neutral-700"></td>
-          <td className="px-3 py-2 text-sm text-neutral-700"></td>
-          <td className="px-3 py-2 text-sm text-neutral-700"></td>
-          <td className="px-3 py-2 text-sm text-neutral-700"></td>
-          <td className="px-3 py-2">
+          <td className="px-3 text-sm text-neutral-700"></td>
+          <td className="px-3 text-sm text-neutral-700"></td>
+          <td className="px-3 text-sm text-neutral-700"></td>
+          <td className="px-3 text-sm text-neutral-700"></td>
+          <td className="px-3">
             <input
               key={`additional-beneficiary-${policy.id}-${index}`}
               type="text"
@@ -177,30 +177,30 @@ export const BeneficiaryRowManagerAssurance = memo(({ policy, onUpdate }: Benefi
               disabled={isUpdating}
             />
           </td>
-          <td className="px-3 py-2">
+          <td className="px-3">
             <input
               key={`additional-split-${policy.id}-${index}`}
               type="text"
-              defaultValue={additionalBenefitSplits[index] || "0"}
+              defaultValue={additionalBenefitSplits[index] ||"0"}
               onBlur={(e) => handleInputBlur(e, 'additionalBenefitSplit', index)}
-              className="table-input w-20 px-2 py-1 text-sm text-right border border-neutral-300 rounded bg-primary/5 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+              className="table-input w-20 px-2 text-sm text-right border border-neutral-300 rounded bg-primary/5 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
               disabled={isUpdating}
             />
           </td>
-          <td className="px-3 py-2 text-sm text-neutral-700 text-right bg-neutral-100">
+          <td className="px-3 text-sm text-neutral-700 text-right bg-neutral-100">
             {formatCurrencyValue(
               ((parseFloat(policy.deathBenefit.replace(/[^\d.-]/g, '')) || 0) * 
-               (parseFloat((additionalBenefitSplits[index] || "0").replace(/[^\d.-]/g, '')) || 0) / 100).toString(),
+               (parseFloat((additionalBenefitSplits[index] ||"0").replace(/[^\d.-]/g, '')) || 0) / 100).toString(),
               'amount'
             )}
           </td>
-          <td className="px-3 py-2 text-sm text-neutral-700"></td>
-          <td className="px-3 py-2 text-sm text-neutral-700"></td>
-          <td className="px-3 py-2 text-sm text-neutral-700"></td>
-          <td className="px-3 py-2 text-sm text-neutral-700"></td>
-          <td className="px-3 py-2 text-sm text-neutral-700"></td>
-          <td className="px-3 py-2 text-sm text-neutral-700"></td>
-          <td className="px-3 py-2">
+          <td className="px-3 text-sm text-neutral-700"></td>
+          <td className="px-3 text-sm text-neutral-700"></td>
+          <td className="px-3 text-sm text-neutral-700"></td>
+          <td className="px-3 text-sm text-neutral-700"></td>
+          <td className="px-3 text-sm text-neutral-700"></td>
+          <td className="px-3 text-sm text-neutral-700"></td>
+          <td className="px-3">
             <DeleteButton
               onClick={() => handleRemoveBeneficiary(index)}
             />
@@ -211,6 +211,6 @@ export const BeneficiaryRowManagerAssurance = memo(({ policy, onUpdate }: Benefi
   );
 });
 
-BeneficiaryRowManagerAssurance.displayName = "BeneficiaryRowManagerAssurance";
+BeneficiaryRowManagerAssurance.displayName ="BeneficiaryRowManagerAssurance";
 
 export default BeneficiaryRowManagerAssurance;

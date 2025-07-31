@@ -1,13 +1,13 @@
-import { Table, Layout, List, Eye, EyeOff, ChevronDown, Settings, Plus } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { AddButton } from "@/components/ui/action-buttons";
-import { InputFlowSwitcher } from "@/components/ui/switcher";
+import { Table, Layout, List, Eye, EyeOff, ChevronDown, Settings, Plus } from"lucide-react";
+import { Button } from"@/components/ui/button";
+import { AddButton } from"@/components/ui/action-buttons";
+import { InputFlowSwitcher } from"@/components/ui/switcher";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuCheckboxItem,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+} from"@/components/ui/dropdown-menu";
 
 interface ColumnVisibility {
   overview: boolean;
@@ -18,10 +18,10 @@ interface ColumnVisibility {
 }
 
 interface NewTableControlsProps {
-  viewMode: "grouped" | "detailed";
-  onViewModeChange: (mode: "grouped" | "detailed") => void;
-  tableMode: "inputs" | "flows";
-  onTableModeChange: (mode: "inputs" | "flows") => void;
+  viewMode:"grouped" |"detailed";
+  onViewModeChange: (mode:"grouped" |"detailed") => void;
+  tableMode:"inputs" |"flows";
+  onTableModeChange: (mode:"inputs" |"flows") => void;
 
   columnVisibility: ColumnVisibility;
   onToggleColumnGroup: (group: keyof ColumnVisibility) => void;
@@ -48,7 +48,7 @@ export function NewTableControls({
         {/* Left section: Title, count, and Add Fund button */}
         <div className="flex items-center gap-3">
           <h1 className="text-xl font-semibold text-neutral-900">Retirement Funds</h1>
-          <span className="px-2 py-1  text-primary text-xs font-medium rounded">
+          <span className="px-2  text-primary text-xs font-medium rounded">
             {fundsCount} funds
           </span>
           <Button
@@ -58,7 +58,7 @@ export function NewTableControls({
             className="h-8 px-3 bg-white text-gray-700 border border-neutral-200 hover:bg-gray-50 hover:text-gray-900 font-normal"
           >
             <Plus className="h-4 w-4 mr-1" />
-            {isAddingFund ? "Adding..." : "Add Fund"}
+            {isAddingFund ?"Adding..." :"Add Fund"}
           </Button>
         </div>
 
@@ -67,7 +67,7 @@ export function NewTableControls({
           {/* View Mode Buttons */}
           <div className="flex border border-neutral-200 rounded overflow-hidden">
             <Button
-              variant={viewMode === "grouped" ? "default" : "ghost"}
+              variant={viewMode ==="grouped" ?"default" :"ghost"}
               size="sm"
               onClick={() => onViewModeChange("grouped")}
               className="rounded-none border-0 h-8 px-3"
@@ -77,7 +77,7 @@ export function NewTableControls({
             </Button>
 
             <Button
-              variant={viewMode === "detailed" ? "default" : "ghost"}
+              variant={viewMode ==="detailed" ?"default" :"ghost"}
               size="sm"
               onClick={() => onViewModeChange("detailed")}
               className="rounded-none border-0 border-l border-neutral-200 h-8 px-3"
@@ -88,10 +88,10 @@ export function NewTableControls({
           </div>
 
           {/* Table Mode Toggle - only show for grouped view */}
-          {viewMode === "grouped" && (
+          {viewMode ==="grouped" && (
             <InputFlowSwitcher
-              value={tableMode === "inputs" ? "input" : "flow"}
-              onChange={(value) => onTableModeChange(value === "input" ? "inputs" : "flows")}
+              value={tableMode ==="inputs" ?"input" :"flow"}
+              onChange={(value) => onTableModeChange(value ==="input" ?"inputs" :"flows")}
               size="sm"
             />
           )}

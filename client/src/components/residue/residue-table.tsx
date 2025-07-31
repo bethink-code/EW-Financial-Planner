@@ -21,17 +21,17 @@ function ResidueTable({ viewMode, searchTerm }: ResidueTableProps) {
   const addMutation = useMutation({
     mutationFn: async (): Promise<Residue> => {
       const newResidue: InsertResidue = {
-        description: "",
-        amount: "R 0",
-        increasePercentage: "0%",
-        category: "",
-        johnDoe: "0%",
-        janetteDoe: "0%",
-        doeJunior: "0%",
-        doeFamilyTrust: "0%",
-        estate: "R 0",
-        others: "R 0",
-        client: "R 0",
+        description:"",
+        amount:"R 0",
+        increasePercentage:"0%",
+        category:"",
+        johnDoe:"0%",
+        janetteDoe:"0%",
+        doeJunior:"0%",
+        doeFamilyTrust:"0%",
+        estate:"R 0",
+        others:"R 0",
+        client:"R 0",
       };
       
       const response = await fetch('/api/residue', {
@@ -175,51 +175,51 @@ function ResidueTable({ viewMode, searchTerm }: ResidueTableProps) {
   }, [deleteMutation]);
 
   if (isLoading) {
-    return <div className="flex justify-center py-8">Loading residue...</div>;
+    return <div className="flex justify-center">Loading residue...</div>;
   }
 
   if (error) {
-    return <div className="text-red-600 py-8">Error loading residue. Please try again.</div>;
+    return <div className="text-red-600">Error loading residue. Please try again.</div>;
   }
 
   return (
     <div className="space-y-6">
       <table>
         <thead>
-          <tr>
-            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center" rowSpan={2}>
+          <tr className="double-row-header-first">
+            <th className="section-start" rowSpan={2}>
               <AddButton onClick={() => addMutation.mutate()} disabled={isUpdating} />
             </th>
-            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center" colSpan={2}>Overview</th>
-            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center" colSpan={2}>Financial Details</th>
-            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center" colSpan={4}>Distribution Split</th>
-            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center" colSpan={3}>Beneficiaries</th>
+            <th className="" colSpan={2}>Overview</th>
+            <th className="" colSpan={2}>Financial Details</th>
+            <th className="" colSpan={4}>Distribution Split</th>
+            <th className="" colSpan={3}>Beneficiaries</th>
           </tr>
-          <tr>
-            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center">Category</th>
-            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center">Description</th>
-            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center">Amount</th>
-            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center">Increase %</th>
-            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center">John Doe</th>
-            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center">Janette Doe (Spouse)</th>
-            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center">Doe Junior</th>
-            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center">Doe family trust</th>
-            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center">Estate</th>
-            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center">Others</th>
-            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center">Client</th>
+          <tr className="double-row-header-second">
+            <th className="">Category</th>
+            <th className="">Description</th>
+            <th className="">Amount</th>
+            <th className="">Increase %</th>
+            <th className="">John Doe</th>
+            <th className="">Janette Doe (Spouse)</th>
+            <th className="">Doe Junior</th>
+            <th className="">Doe family trust</th>
+            <th className="">Estate</th>
+            <th className="">Others</th>
+            <th className="">Client</th>
           </tr>
         </thead>
         <tbody className="divide-y divide-neutral-200">
           {residues.map((residue: Residue, index) => (
             <tr key={residue.id} className="hover:bg-neutral-50">
-              <td className="table-actions-cell p-2 text-center">
+              <td className="table-actions-cell text-center">
                 <ActionButtonGroup>
                   <DuplicateButton onClick={() => addMutation.mutate()} disabled={isUpdating} />
                   <DeleteButton onClick={() => handleDeleteResidue(residue.id)} disabled={isUpdating} />
                 </ActionButtonGroup>
               </td>
               
-              <td className="p-2 text-left">
+              <td className="text-left">
                 <input
                   type="text"
                   defaultValue={formatTextValue(residue.category)}
@@ -230,7 +230,7 @@ function ResidueTable({ viewMode, searchTerm }: ResidueTableProps) {
                 />
               </td>
               
-              <td className="p-2 text-left">
+              <td className="text-left">
                 <input
                   type="text"
                   defaultValue={formatTextValue(residue.description)}
@@ -241,7 +241,7 @@ function ResidueTable({ viewMode, searchTerm }: ResidueTableProps) {
                 />
               </td>
               
-              <td className="p-2 text-right">
+              <td className="text-right">
                 <input
                   key={`amount-${residue.id}-${residue.amount}`}
                   type="text"
@@ -253,7 +253,7 @@ function ResidueTable({ viewMode, searchTerm }: ResidueTableProps) {
                 />
               </td>
               
-              <td className="p-2 text-center">
+              <td className="text-center">
                 <input
                   key={`increasePercentage-${residue.id}-${residue.increasePercentage}`}
                   type="text"
@@ -265,7 +265,7 @@ function ResidueTable({ viewMode, searchTerm }: ResidueTableProps) {
                 />
               </td>
               
-              <td className="p-2 text-center">
+              <td className="text-center">
                 <input
                   key={`johnDoe-${residue.id}-${residue.johnDoe}`}
                   type="text"
@@ -277,7 +277,7 @@ function ResidueTable({ viewMode, searchTerm }: ResidueTableProps) {
                 />
               </td>
               
-              <td className="p-2 text-center">
+              <td className="text-center">
                 <input
                   key={`janetteDoe-${residue.id}-${residue.janetteDoe}`}
                   type="text"
@@ -289,7 +289,7 @@ function ResidueTable({ viewMode, searchTerm }: ResidueTableProps) {
                 />
               </td>
               
-              <td className="p-2 text-center">
+              <td className="text-center">
                 <input
                   key={`doeJunior-${residue.id}-${residue.doeJunior}`}
                   type="text"
@@ -301,7 +301,7 @@ function ResidueTable({ viewMode, searchTerm }: ResidueTableProps) {
                 />
               </td>
               
-              <td className="p-2 text-center">
+              <td className="text-center">
                 <input
                   key={`doeFamilyTrust-${residue.id}-${residue.doeFamilyTrust}`}
                   type="text"
@@ -313,7 +313,7 @@ function ResidueTable({ viewMode, searchTerm }: ResidueTableProps) {
                 />
               </td>
               
-              <td className="p-2 text-right">
+              <td className="text-right">
                 <input
                   key={`estate-${residue.id}-${residue.estate}`}
                   type="text"
@@ -325,7 +325,7 @@ function ResidueTable({ viewMode, searchTerm }: ResidueTableProps) {
                 />
               </td>
               
-              <td className="p-2 text-right">
+              <td className="text-right">
                 <input
                   key={`others-${residue.id}-${residue.others}`}
                   type="text"
@@ -337,7 +337,7 @@ function ResidueTable({ viewMode, searchTerm }: ResidueTableProps) {
                 />
               </td>
               
-              <td className="p-2 text-right">
+              <td className="text-right">
                 <input
                   key={`client-${residue.id}-${residue.client}`}
                   type="text"

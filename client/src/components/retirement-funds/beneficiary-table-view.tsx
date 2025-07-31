@@ -1,11 +1,11 @@
-import React, { useMemo, useCallback } from "react";
-import { RetirementFund, UpdateRetirementFund, Beneficiary } from "@shared/schema";
-import { parseBeneficiaries } from "@/lib/beneficiaries";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Plus, Trash2 } from "lucide-react";
-import { AddButton, DeleteButton } from "@/components/ui/action-buttons";
-import { nanoid } from "nanoid";
+import React, { useMemo, useCallback } from"react";
+import { RetirementFund, UpdateRetirementFund, Beneficiary } from"@shared/schema";
+import { parseBeneficiaries } from"@/lib/beneficiaries";
+import { Button } from"@/components/ui/button";
+import { Input } from"@/components/ui/input";
+import { Plus, Trash2 } from"lucide-react";
+import { AddButton, DeleteButton } from"@/components/ui/action-buttons";
+import { nanoid } from"nanoid";
 
 interface BeneficiaryTableViewProps {
   funds: RetirementFund[];
@@ -70,9 +70,9 @@ export function BeneficiaryTableView({ funds, onFieldUpdate, isUpdating }: Benef
     const currentBeneficiaries = parseBeneficiaries(fund.beneficiaries);
     const newBeneficiary: Beneficiary = {
       id: nanoid(),
-      name: "",
+      name:"",
       percentage: 0,
-      coverSplit: "R 0"
+      coverSplit:"R 0"
     };
 
     const updatedBeneficiaries = [...currentBeneficiaries, newBeneficiary];
@@ -125,7 +125,7 @@ export function BeneficiaryTableView({ funds, onFieldUpdate, isUpdating }: Benef
           </thead>
           <tbody>
             {allBeneficiaryData.map((fundData, index) => (
-              <tr key={fundData.fundId} className={index % 2 === 0 ? "" : "bg-teal-50/30"}>
+              <tr key={fundData.fundId} className={index % 2 === 0 ?"" :"bg-teal-50/30"}>
                 <td className="p-2">{fundData.fundDescription}</td>
                 <td className="p-2 text-right font-medium">{fundData.coverAmount}</td>
                 
@@ -169,7 +169,7 @@ export function BeneficiaryTableView({ funds, onFieldUpdate, isUpdating }: Benef
                       {/* Cover Split */}
                       <td className="p-2">
                         {beneficiary ? (
-                          <div className="h-6 text-xs text-right px-2 py-1 bg-gray-50 border rounded">
+                          <div className="h-6 text-xs text-right px-2 bg-gray-50 border rounded">
                             {beneficiary.coverSplit}
                           </div>
                         ) : (

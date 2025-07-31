@@ -1,10 +1,10 @@
-import { useState, useCallback, useMemo } from "react";
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { Plus, Trash2 } from "lucide-react";
-import { DeleteButton, AddButton } from "@/components/ui/action-buttons";
-import { getFieldClass, getFieldWidth } from "@/lib/design-tokens";
-import { apiRequest } from "@/lib/queryClient";
-import type { Assurance, InsertAssurance } from "@shared/schema";
+import { useState, useCallback, useMemo } from"react";
+import { useQuery, useMutation, useQueryClient } from"@tanstack/react-query";
+import { Plus, Trash2 } from"lucide-react";
+import { DeleteButton, AddButton } from"@/components/ui/action-buttons";
+import { getFieldClass, getFieldWidth } from"@/lib/design-tokens";
+import { apiRequest } from"@/lib/queryClient";
+import type { Assurance, InsertAssurance } from"@shared/schema";
 
 interface AssuranceTableProps {
   searchTerm: string;
@@ -40,7 +40,7 @@ export function AssuranceTable({ searchTerm }: AssuranceTableProps) {
   const { data: policies = [], isLoading } = useQuery({
     queryKey: ["/api/assurance", { search: searchTerm }],
     queryFn: async () => {
-      const response = await fetch("/api/assurance" + (searchTerm ? `?search=${encodeURIComponent(searchTerm)}` : ""));
+      const response = await fetch("/api/assurance" + (searchTerm ? `?search=${encodeURIComponent(searchTerm)}` :""));
       if (!response.ok) throw new Error('Failed to fetch assurance policies');
       return response.json();
     }
@@ -51,24 +51,24 @@ export function AssuranceTable({ searchTerm }: AssuranceTableProps) {
     mutationFn: async () => {
       try {
         const newPolicy: InsertAssurance = {
-          description: "",
-          owner: "Donald Edwards",
+          description:"",
+          owner:"Donald Edwards",
           additionalOwners: [],
-          lifeAssured: "",
-          deathBenefit: "0",
-          beneficiary: "",
-          benefitSplit: "0",
+          lifeAssured:"",
+          deathBenefit:"0",
+          beneficiary:"",
+          benefitSplit:"0",
           additionalBeneficiaries: [],
           additionalBenefitSplits: [],
-          amount: "0",
+          amount:"0",
           buySell: false,
           keyMan: false,
-          premiumsByOthers: "0",
-          collateralSession: "0",
+          premiumsByOthers:"0",
+          collateralSession:"0",
           excludedFromEstateDuty: false,
           excludedFromProvisions: false
         };
-        const response = await apiRequest("POST", "/api/assurance", newPolicy);
+        const response = await apiRequest("POST","/api/assurance", newPolicy);
         return await response.json();
       } catch (error) {
         console.error('Add policy error:', error);
@@ -158,7 +158,7 @@ export function AssuranceTable({ searchTerm }: AssuranceTableProps) {
   const handleAddOwner = useCallback((id: number) => {
     const policy = policies.find((p: Assurance) => p.id === id);
     if (policy) {
-      const newOwners = [...(policy.additionalOwners || []), ""];
+      const newOwners = [...(policy.additionalOwners || []),""];
       updateMutation.mutate({ id, updates: { additionalOwners: newOwners } });
     }
   }, [policies, updateMutation]);
@@ -167,8 +167,8 @@ export function AssuranceTable({ searchTerm }: AssuranceTableProps) {
   const handleAddBeneficiary = useCallback((id: number) => {
     const policy = policies.find((p: Assurance) => p.id === id);
     if (policy) {
-      const newBeneficiaries = [...(policy.additionalBeneficiaries || []), ""];
-      const newSplits = [...(policy.additionalBenefitSplits || []), "0"];
+      const newBeneficiaries = [...(policy.additionalBeneficiaries || []),""];
+      const newSplits = [...(policy.additionalBenefitSplits || []),"0"];
       updateMutation.mutate({ 
         id, 
         updates: { 
@@ -209,35 +209,35 @@ export function AssuranceTable({ searchTerm }: AssuranceTableProps) {
           disabled={addMutation.isPending}
           size="default"
         >
-          {addMutation.isPending ? "Adding Policy..." : "Add Policy"}
+          {addMutation.isPending ?"Adding Policy..." :"Add Policy"}
         </AddButton>
       </div>
 
       {/* Table */}
       <div className="overflow-x-auto">
-        <table className="min-w-full  border border-neutral-200 ">
+        <table className="min-w-full  border border-neutral-200">
           <thead>
             <tr className="border-b border-neutral-200">
-              <th className="px-3 py-3 text-left text-xs font-medium text-neutral-600 uppercase tracking-wider">Description</th>
-              <th className="px-3 py-3 text-left text-xs font-medium text-neutral-600 uppercase tracking-wider">Owner</th>
-              <th className="px-3 py-3 text-left text-xs font-medium text-neutral-600 uppercase tracking-wider">Life Assured</th>
-              <th className="px-3 py-3 text-left text-xs font-medium text-neutral-600 uppercase tracking-wider">Death Benefit</th>
-              <th className="px-3 py-3 text-left text-xs font-medium text-neutral-600 uppercase tracking-wider">Beneficiary</th>
-              <th className="px-3 py-3 text-left text-xs font-medium text-neutral-600 uppercase tracking-wider">Benefit Split</th>
-              <th className="px-3 py-3 text-left text-xs font-medium text-neutral-600 uppercase tracking-wider">Amount</th>
-              <th className="px-3 py-3 text-center text-xs font-medium text-neutral-600 uppercase tracking-wider">Buy/Sell</th>
-              <th className="px-3 py-3 text-center text-xs font-medium text-neutral-600 uppercase tracking-wider">Key Man</th>
-              <th className="px-3 py-3 text-center text-xs font-medium text-neutral-600 uppercase tracking-wider">Excluded Estate Duty</th>
-              <th className="px-3 py-3 text-center text-xs font-medium text-neutral-600 uppercase tracking-wider">Excluded Provisions</th>
-              <th className="px-3 py-3 text-left text-xs font-medium text-neutral-600 uppercase tracking-wider">Premiums by Others</th>
-              <th className="px-3 py-3 text-left text-xs font-medium text-neutral-600 uppercase tracking-wider">Collateral Session</th>
-              <th className="px-3 py-3 text-center text-xs font-medium text-neutral-600 uppercase tracking-wider">Actions</th>
+              <th className="px-3 text-left text-xs font-medium text-neutral-600 uppercase tracking-wider">Description</th>
+              <th className="px-3 text-left text-xs font-medium text-neutral-600 uppercase tracking-wider">Owner</th>
+              <th className="px-3 text-left text-xs font-medium text-neutral-600 uppercase tracking-wider">Life Assured</th>
+              <th className="px-3 text-left text-xs font-medium text-neutral-600 uppercase tracking-wider">Death Benefit</th>
+              <th className="px-3 text-left text-xs font-medium text-neutral-600 uppercase tracking-wider">Beneficiary</th>
+              <th className="px-3 text-left text-xs font-medium text-neutral-600 uppercase tracking-wider">Benefit Split</th>
+              <th className="px-3 text-left text-xs font-medium text-neutral-600 uppercase tracking-wider">Amount</th>
+              <th className="px-3 text-center text-xs font-medium text-neutral-600 uppercase tracking-wider">Buy/Sell</th>
+              <th className="px-3 text-center text-xs font-medium text-neutral-600 uppercase tracking-wider">Key Man</th>
+              <th className="px-3 text-center text-xs font-medium text-neutral-600 uppercase tracking-wider">Excluded Estate Duty</th>
+              <th className="px-3 text-center text-xs font-medium text-neutral-600 uppercase tracking-wider">Excluded Provisions</th>
+              <th className="px-3 text-left text-xs font-medium text-neutral-600 uppercase tracking-wider">Premiums by Others</th>
+              <th className="px-3 text-left text-xs font-medium text-neutral-600 uppercase tracking-wider">Collateral Session</th>
+              <th className="px-3 text-center text-xs font-medium text-neutral-600 uppercase tracking-wider">Actions</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-neutral-200">
             {filteredPolicies.map((policy: Assurance) => (
               <tr key={policy.id} >
-                <td className="px-3 py-2">
+                <td className="px-3">
                   <input
                     type="text"
                     defaultValue={policy.description}
@@ -246,7 +246,7 @@ export function AssuranceTable({ searchTerm }: AssuranceTableProps) {
                     disabled={isUpdating}
                   />
                 </td>
-                <td className="px-3 py-2">
+                <td className="px-3">
                   <div className="flex items-center space-x-1">
                     <input
                       type="text"
@@ -260,7 +260,7 @@ export function AssuranceTable({ searchTerm }: AssuranceTableProps) {
                     />
                   </div>
                 </td>
-                <td className="px-3 py-2">
+                <td className="px-3">
                   <input
                     type="text"
                     defaultValue={policy.lifeAssured}
@@ -269,7 +269,7 @@ export function AssuranceTable({ searchTerm }: AssuranceTableProps) {
                     disabled={isUpdating}
                   />
                 </td>
-                <td className="px-3 py-2">
+                <td className="px-3">
                   <input
                     type="text"
                     defaultValue={policy.deathBenefit}
@@ -278,7 +278,7 @@ export function AssuranceTable({ searchTerm }: AssuranceTableProps) {
                     disabled={isUpdating}
                   />
                 </td>
-                <td className="px-3 py-2">
+                <td className="px-3">
                   <div className="flex items-center space-x-1">
                     <input
                       type="text"
@@ -292,10 +292,10 @@ export function AssuranceTable({ searchTerm }: AssuranceTableProps) {
                     />
                   </div>
                 </td>
-                <td className="px-3 py-2 text-sm text-neutral-700 text-right ">
+                <td className="px-3 text-sm text-neutral-700 text-right">
                   {formatCurrencyValue(policy.benefitSplit, 'percentage')}
                 </td>
-                <td className="px-3 py-2">
+                <td className="px-3">
                   <input
                     type="text"
                     defaultValue={policy.amount}
@@ -304,7 +304,7 @@ export function AssuranceTable({ searchTerm }: AssuranceTableProps) {
                     disabled={isUpdating}
                   />
                 </td>
-                <td className="px-3 py-2 text-center">
+                <td className="px-3 text-center">
                   <input
                     type="checkbox"
                     checked={policy.buySell}
@@ -313,7 +313,7 @@ export function AssuranceTable({ searchTerm }: AssuranceTableProps) {
                     disabled={isUpdating}
                   />
                 </td>
-                <td className="px-3 py-2 text-center">
+                <td className="px-3 text-center">
                   <input
                     type="checkbox"
                     checked={policy.keyMan}
@@ -322,7 +322,7 @@ export function AssuranceTable({ searchTerm }: AssuranceTableProps) {
                     disabled={isUpdating}
                   />
                 </td>
-                <td className="px-3 py-2 text-center">
+                <td className="px-3 text-center">
                   <input
                     type="checkbox"
                     checked={policy.excludedFromEstateDuty}
@@ -331,7 +331,7 @@ export function AssuranceTable({ searchTerm }: AssuranceTableProps) {
                     disabled={isUpdating}
                   />
                 </td>
-                <td className="px-3 py-2 text-center">
+                <td className="px-3 text-center">
                   <input
                     type="checkbox"
                     checked={policy.excludedFromProvisions}
@@ -340,7 +340,7 @@ export function AssuranceTable({ searchTerm }: AssuranceTableProps) {
                     disabled={isUpdating}
                   />
                 </td>
-                <td className="px-3 py-2">
+                <td className="px-3">
                   <input
                     type="text"
                     defaultValue={policy.premiumsByOthers}
@@ -349,7 +349,7 @@ export function AssuranceTable({ searchTerm }: AssuranceTableProps) {
                     disabled={isUpdating}
                   />
                 </td>
-                <td className="px-3 py-2">
+                <td className="px-3">
                   <input
                     type="text"
                     defaultValue={policy.collateralSession}
@@ -358,7 +358,7 @@ export function AssuranceTable({ searchTerm }: AssuranceTableProps) {
                     disabled={isUpdating}
                   />
                 </td>
-                <td className="px-3 py-2 text-center">
+                <td className="px-3 text-center">
                   <DeleteButton
                     onClick={() => handleDeletePolicy(policy.id)}
                   />
@@ -368,8 +368,8 @@ export function AssuranceTable({ searchTerm }: AssuranceTableProps) {
               {/* Additional Owner Rows */}
               {(policy.additionalOwners || []).map((owner, index) => (
                 <tr key={`owner-${policy.id}-${index}`} className="border-b border-neutral-200">
-                  <td className="px-3 py-2 text-sm text-neutral-700"></td>
-                  <td className="px-3 py-2">
+                  <td className="px-3 text-sm text-neutral-700"></td>
+                  <td className="px-3">
                     <input
                       type="text"
                       defaultValue={owner}
@@ -382,15 +382,15 @@ export function AssuranceTable({ searchTerm }: AssuranceTableProps) {
                       disabled={isUpdating}
                     />
                   </td>
-                  <td colSpan={12} className="px-3 py-2 text-sm text-neutral-700"></td>
+                  <td colSpan={12} className="px-3 text-sm text-neutral-700"></td>
                 </tr>
               ))}
               
               {/* Additional Beneficiary Rows */}
               {(policy.additionalBeneficiaries || []).map((beneficiary, index) => (
                 <tr key={`beneficiary-${policy.id}-${index}`} className="border-b border-neutral-200">
-                  <td colSpan={4} className="px-3 py-2 text-sm text-neutral-700"></td>
-                  <td className="px-3 py-2">
+                  <td colSpan={4} className="px-3 text-sm text-neutral-700"></td>
+                  <td className="px-3">
                     <input
                       type="text"
                       defaultValue={beneficiary}
@@ -403,20 +403,20 @@ export function AssuranceTable({ searchTerm }: AssuranceTableProps) {
                       disabled={isUpdating}
                     />
                   </td>
-                  <td className="px-3 py-2">
+                  <td className="px-3">
                     <input
                       type="text"
-                      defaultValue={(policy.additionalBenefitSplits || [])[index] || "0"}
+                      defaultValue={(policy.additionalBenefitSplits || [])[index] ||"0"}
                       onBlur={(e) => {
                         const newSplits = [...(policy.additionalBenefitSplits || [])];
                         newSplits[index] = e.target.value;
                         updateMutation.mutate({ id: policy.id, updates: { additionalBenefitSplits: newSplits } });
                       }}
-                      className="table-input w-20 px-2 py-1 text-sm text-right border border-neutral-300 rounded bg-primary/5 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                      className="table-input w-20 px-2 text-sm text-right border border-neutral-300 rounded bg-primary/5 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
                       disabled={isUpdating}
                     />
                   </td>
-                  <td colSpan={8} className="px-3 py-2 text-sm text-neutral-700"></td>
+                  <td colSpan={8} className="px-3 text-sm text-neutral-700"></td>
                 </tr>
               ))}
             )}
@@ -424,9 +424,9 @@ export function AssuranceTable({ searchTerm }: AssuranceTableProps) {
             {/* Total Row */}
             {filteredPolicies.length > 0 && (
               <tr className="border-t-2 border-neutral-300 font-bold">
-                <td className="px-3 py-2 text-sm font-bold text-neutral-800">Total</td>
-                <td colSpan={2} className="px-3 py-2"></td>
-                <td className="px-3 py-2 text-sm font-bold text-neutral-800 text-right">
+                <td className="px-3 text-sm font-bold text-neutral-800">Total</td>
+                <td colSpan={2} className="px-3"></td>
+                <td className="px-3 text-sm font-bold text-neutral-800 text-right">
                   {formatCurrencyValue(
                     filteredPolicies.reduce((sum, policy) => {
                       const value = parseFloat(policy.deathBenefit.replace(/[^\d.-]/g, '')) || 0;
@@ -435,8 +435,8 @@ export function AssuranceTable({ searchTerm }: AssuranceTableProps) {
                     'amount'
                   )}
                 </td>
-                <td colSpan={2} className="px-3 py-2"></td>
-                <td className="px-3 py-2 text-sm font-bold text-neutral-800 text-right">
+                <td colSpan={2} className="px-3"></td>
+                <td className="px-3 text-sm font-bold text-neutral-800 text-right">
                   {formatCurrencyValue(
                     filteredPolicies.reduce((sum, policy) => {
                       const value = parseFloat(policy.amount.replace(/[^\d.-]/g, '')) || 0;
@@ -445,8 +445,8 @@ export function AssuranceTable({ searchTerm }: AssuranceTableProps) {
                     'amount'
                   )}
                 </td>
-                <td colSpan={4} className="px-3 py-2"></td>
-                <td className="px-3 py-2 text-sm font-bold text-neutral-800 text-right">
+                <td colSpan={4} className="px-3"></td>
+                <td className="px-3 text-sm font-bold text-neutral-800 text-right">
                   {formatCurrencyValue(
                     filteredPolicies.reduce((sum, policy) => {
                       const value = parseFloat(policy.premiumsByOthers.replace(/[^\d.-]/g, '')) || 0;
@@ -455,7 +455,7 @@ export function AssuranceTable({ searchTerm }: AssuranceTableProps) {
                     'amount'
                   )}
                 </td>
-                <td className="px-3 py-2 text-sm font-bold text-neutral-800 text-right">
+                <td className="px-3 text-sm font-bold text-neutral-800 text-right">
                   {formatCurrencyValue(
                     filteredPolicies.reduce((sum, policy) => {
                       const value = parseFloat(policy.collateralSession.replace(/[^\d.-]/g, '')) || 0;
@@ -464,14 +464,14 @@ export function AssuranceTable({ searchTerm }: AssuranceTableProps) {
                     'amount'
                   )}
                 </td>
-                <td className="px-3 py-2"></td>
+                <td className="px-3"></td>
               </tr>
             )}
             
             {filteredPolicies.length === 0 && (
               <tr>
-                <td colSpan={14} className="px-3 py-8 text-center text-neutral-500">
-                  {searchTerm ? "No assurance policies found matching your search." : "No assurance policies found. Click 'Add Policy' to get started."}
+                <td colSpan={14} className="px-3 text-center text-neutral-500">
+                  {searchTerm ?"No assurance policies found matching your search." :"No assurance policies found. Click 'Add Policy' to get started."}
                 </td>
               </tr>
             )}

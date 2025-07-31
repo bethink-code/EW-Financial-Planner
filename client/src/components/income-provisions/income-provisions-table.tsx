@@ -132,11 +132,11 @@ function IncomeProvisionsTable({ viewMode, searchTerm }: IncomeProvisionsTablePr
  }, [deleteMutation]);
 
  if (isLoading) {
- return <div className="flex justify-center py-8">Loading income provisions...</div>;
+ return <div className="flex justify-center">Loading income provisions...</div>;
  }
 
  if (error) {
- return <div className="text-red-600 py-8">Error loading income provisions. Please try again.</div>;
+ return <div className="text-red-600">Error loading income provisions. Please try again.</div>;
  }
 
  return (

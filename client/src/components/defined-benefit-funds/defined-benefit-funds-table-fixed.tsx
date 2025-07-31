@@ -1,9 +1,9 @@
-import React, { useState, useCallback, useMemo } from "react";
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { AddButton, DeleteButton, DuplicateButton, ActionButtonGroup } from "@/components/ui/action-buttons";
-import { getFieldClass } from "@/lib/design-tokens";
-import { formatCurrencyValue, formatPercentageValue, getValueClass, isDefaultValue, handleDefaultValueFocus } from "@/lib/formatting";
-import type { DefinedBenefitFund, InsertDefinedBenefitFund } from "@shared/schema";
+import React, { useState, useCallback, useMemo } from"react";
+import { useQuery, useMutation, useQueryClient } from"@tanstack/react-query";
+import { AddButton, DeleteButton, DuplicateButton, ActionButtonGroup } from"@/components/ui/action-buttons";
+import { getFieldClass } from"@/lib/design-tokens";
+import { formatCurrencyValue, formatPercentageValue, getValueClass, isDefaultValue, handleDefaultValueFocus } from"@/lib/formatting";
+import type { DefinedBenefitFund, InsertDefinedBenefitFund } from"@shared/schema";
 
 export default function DefinedBenefitFundsTable() {
   const [isUpdating, setIsUpdating] = useState(false);
@@ -25,12 +25,12 @@ export default function DefinedBenefitFundsTable() {
   const addMutation = useMutation({
     mutationFn: async (): Promise<DefinedBenefitFund> => {
       const newFund: InsertDefinedBenefitFund = {
-        description: """,
-        owner: "Donald Edwards",
-        pensionIncome: "R 0",
-        pensionIncomeIncrease: "0%",
-        spouseIncome: "R 0",
-        spouseIncomeIncrease: "0%",
+        description:""",
+        owner:"Donald Edwards",
+        pensionIncome:"R 0",
+        pensionIncomeIncrease:"0%",
+        spouseIncome:"R 0",
+        spouseIncomeIncrease:"0%",
         additionalOwners: [],
       };
       
@@ -176,11 +176,11 @@ export default function DefinedBenefitFundsTable() {
   }, [queryClient]);
 
   if (isLoading) {
-    return <div className="flex justify-center py-8">Loading defined benefit funds...</div>;
+    return <div className="flex justify-center">Loading defined benefit funds...</div>;
   }
 
   if (error) {
-    return <div className="text-red-600 py-8">Error loading defined benefit funds. Please try again.</div>;
+    return <div className="text-red-600">Error loading defined benefit funds. Please try again.</div>;
   }
 
   return (
@@ -189,20 +189,20 @@ export default function DefinedBenefitFundsTable() {
       <table className="min-w-full border border-neutral-200">
         <thead>
           <tr className="border-b border-neutral-200">
-            <th className="px-3 py-2 text-center text-xs font-medium text-neutral-600 uppercase tracking-wider w-16">Actions</th>
-            <th className="px-3 py-2 text-left text-xs font-medium text-neutral-600 uppercase tracking-wider">Description</th>
-            <th className="px-3 py-2 text-left text-xs font-medium text-neutral-600 uppercase tracking-wider">Owner</th>
-            <th className="px-3 py-2 text-left text-xs font-medium text-neutral-600 uppercase tracking-wider" colSpan={2}>Pension Income</th>
-            <th className="px-3 py-2 text-left text-xs font-medium text-neutral-600 uppercase tracking-wider" colSpan={2}>Spouse Income</th>
+            <th className="px-3 text-center text-xs font-medium text-neutral-600 uppercase tracking-wider w-16">Actions</th>
+            <th className="px-3 text-left text-xs font-medium text-neutral-600 uppercase tracking-wider">Description</th>
+            <th className="px-3 text-left text-xs font-medium text-neutral-600 uppercase tracking-wider">Owner</th>
+            <th className="px-3 text-left text-xs font-medium text-neutral-600 uppercase tracking-wider" colSpan={2}>Pension Income</th>
+            <th className="px-3 text-left text-xs font-medium text-neutral-600 uppercase tracking-wider" colSpan={2}>Spouse Income</th>
           </tr>
           <tr className="border-b border-neutral-200">
             <th></th>
             <th></th>
             <th></th>
-            <th className="px-3 py-2 text-left text-xs font-medium text-neutral-600 uppercase tracking-wider">Amount</th>
-            <th className="px-3 py-2 text-left text-xs font-medium text-neutral-600 uppercase tracking-wider">Increase %</th>
-            <th className="px-3 py-2 text-left text-xs font-medium text-neutral-600 uppercase tracking-wider">Amount</th>
-            <th className="px-3 py-2 text-left text-xs font-medium text-neutral-600 uppercase tracking-wider">Increase %</th>
+            <th className="px-3 text-left text-xs font-medium text-neutral-600 uppercase tracking-wider">Amount</th>
+            <th className="px-3 text-left text-xs font-medium text-neutral-600 uppercase tracking-wider">Increase %</th>
+            <th className="px-3 text-left text-xs font-medium text-neutral-600 uppercase tracking-wider">Amount</th>
+            <th className="px-3 text-left text-xs font-medium text-neutral-600 uppercase tracking-wider">Increase %</th>
           </tr>
         </thead>
         <tbody className="divide-y divide-neutral-200">
@@ -220,7 +220,7 @@ export default function DefinedBenefitFundsTable() {
                   />
                 </ActionButtonGroup>
               </td>
-              <td className="px-3 py-2">
+              <td className="px-3">
                 <input
                   type="text"
                   defaultValue={fund.description}
@@ -230,7 +230,7 @@ export default function DefinedBenefitFundsTable() {
                   disabled={isUpdating}
                 />
               </td>
-              <td className="px-3 py-2">
+              <td className="px-3">
                 <select
                   value={fund.owner}
                   onChange={(e) => handleUpdateFund(fund.id, 'owner', e.target.value)}
@@ -241,7 +241,7 @@ export default function DefinedBenefitFundsTable() {
                   <option value="Betty Edwards">Betty Edwards</option>
                 </select>
               </td>
-              <td className="px-3 py-2">
+              <td className="px-3">
                 <input
                   key={`pensionIncome-${fund.id}-${fund.pensionIncome}`}
                   type="text"
@@ -252,21 +252,21 @@ export default function DefinedBenefitFundsTable() {
                   disabled={isUpdating}
                 />
               </td>
-              <td className="px-3 py-2">
+              <td className="px-3">
                 <input
                   key={`pensionIncomeIncrease-${fund.id}-${fund.pensionIncomeIncrease}`}
                   type="text"
-                  defaultValue={fund.pensionIncomeIncrease || "0%"}
+                  defaultValue={fund.pensionIncomeIncrease ||"0%"}
                   onFocus={handleDefaultValueFocus}
                   onBlur={(e) => createEnhancedBlurHandler(
                     (value) => handleInputBlur(fund.id, 'pensionIncomeIncrease', value, e.target),
                     'percentage'
                   )(e)}
-                  className={`table-input ${getFieldClass('percentage')} ${getValueClass(fund.pensionIncomeIncrease || "0%", 'percentage')}`}
+                  className={`table-input ${getFieldClass('percentage')} ${getValueClass(fund.pensionIncomeIncrease ||"0%", 'percentage')}`}
                   disabled={isUpdating}
                 />
               </td>
-              <td className="px-3 py-2">
+              <td className="px-3">
                 <input
                   key={`spouseIncome-${fund.id}-${fund.spouseIncome}`}
                   type="text"
@@ -277,17 +277,17 @@ export default function DefinedBenefitFundsTable() {
                   disabled={isUpdating}
                 />
               </td>
-              <td className="px-3 py-2">
+              <td className="px-3">
                 <input
                   key={`spouseIncomeIncrease-${fund.id}-${fund.spouseIncomeIncrease}`}
                   type="text"
-                  defaultValue={fund.spouseIncomeIncrease || "0%"}
+                  defaultValue={fund.spouseIncomeIncrease ||"0%"}
                   onFocus={handleDefaultValueFocus}
                   onBlur={(e) => createEnhancedBlurHandler(
                     (value) => handleInputBlur(fund.id, 'spouseIncomeIncrease', value, e.target),
                     'percentage'
                   )(e)}
-                  className={`table-input ${getFieldClass('percentage')} ${getValueClass(fund.spouseIncomeIncrease || "0%", 'percentage')}`}
+                  className={`table-input ${getFieldClass('percentage')} ${getValueClass(fund.spouseIncomeIncrease ||"0%", 'percentage')}`}
                   disabled={isUpdating}
                 />
               </td>
@@ -296,13 +296,13 @@ export default function DefinedBenefitFundsTable() {
           
           {/* Totals Row */}
           <tr className="table-total-row bg-neutral-100 font-bold">
-            <td className="px-3 py-2 text-center font-bold">TOTALS</td>
-            <td className="px-3 py-2 font-bold">-</td>
-            <td className="px-3 py-2 font-bold">-</td>
-            <td className="px-3 py-2 font-bold">R {totals.pensionIncome.toLocaleString()}</td>
-            <td className="px-3 py-2 font-bold">-</td>
-            <td className="px-3 py-2 font-bold">R {totals.spouseIncome.toLocaleString()}</td>
-            <td className="px-3 py-2 font-bold">-</td>
+            <td className="px-3 text-center font-bold">TOTALS</td>
+            <td className="px-3 font-bold">-</td>
+            <td className="px-3 font-bold">-</td>
+            <td className="px-3 font-bold">R {totals.pensionIncome.toLocaleString()}</td>
+            <td className="px-3 font-bold">-</td>
+            <td className="px-3 font-bold">R {totals.spouseIncome.toLocaleString()}</td>
+            <td className="px-3 font-bold">-</td>
           </tr>
         </tbody>
       </table>

@@ -1,9 +1,9 @@
-import React, { useState, useCallback, useMemo } from "react";
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { Plus, Trash2, Search, UserPlus, UserMinus } from "lucide-react";
-import { DeleteButton, AddButton } from "@/components/ui/action-buttons";
-import { getFieldClass, getFieldWidth } from "@/lib/design-tokens";
-import type { VoluntaryInvestment, InsertVoluntaryInvestment } from "@shared/schema";
+import React, { useState, useCallback, useMemo } from"react";
+import { useQuery, useMutation, useQueryClient } from"@tanstack/react-query";
+import { Plus, Trash2, Search, UserPlus, UserMinus } from"lucide-react";
+import { DeleteButton, AddButton } from"@/components/ui/action-buttons";
+import { getFieldClass, getFieldWidth } from"@/lib/design-tokens";
+import type { VoluntaryInvestment, InsertVoluntaryInvestment } from"@shared/schema";
 
 // Utility function for formatting currency values
 const formatCurrencyValue = (value: string, fieldType: string): string => {
@@ -52,14 +52,14 @@ export default function VoluntaryInvestmentsTable() {
   const addMutation = useMutation({
     mutationFn: async (): Promise<VoluntaryInvestment> => {
       const newInvestment: InsertVoluntaryInvestment = {
-        description: "",
+        description:"",
         owners: '["Donald Edwards"]',
         ownershipPercentages: '["100"]',
-        baseCost: "0",
-        marketValue: "0",
-        liquidationPercentage: "0",
-        spouse: "0",
-        others: "0",
+        baseCost:"0",
+        marketValue:"0",
+        liquidationPercentage:"0",
+        spouse:"0",
+        others:"0",
         excludedFromJointEstate: false,
         excludedFromEstateDuty: false,
         excludedFromCGT: false,
@@ -241,11 +241,11 @@ export default function VoluntaryInvestmentsTable() {
   }, [filteredInvestments, handleUpdateInvestment]);
 
   if (isLoading) {
-    return <div className="flex justify-center py-8">Loading voluntary investments...</div>;
+    return <div className="flex justify-center">Loading voluntary investments...</div>;
   }
 
   if (error) {
-    return <div className="text-red-600 py-8">Error loading voluntary investments. Please try again.</div>;
+    return <div className="text-red-600">Error loading voluntary investments. Please try again.</div>;
   }
 
   return (
@@ -259,7 +259,7 @@ export default function VoluntaryInvestmentsTable() {
             placeholder="Search voluntary investments..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="pl-10 pr-4 py-2 w-full border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+            className="pl-10 pr-4 w-full border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
           />
         </div>
       </div>
@@ -267,7 +267,7 @@ export default function VoluntaryInvestmentsTable() {
       {/* Summary Section */}
       {filteredInvestments.length > 0 && (
         <div className="border border-neutral-200 rounded-lg shadow-sm overflow-hidden mb-6">
-          <div className="bg-primary/10 px-4 py-3 border-b border-neutral-200">
+          <div className="bg-primary/10 px-4 border-b border-neutral-200">
             <h3 className="text-sm font-semibold text-neutral-700 uppercase tracking-wide">Summary</h3>
           </div>
           <div className="p-4">
@@ -311,25 +311,25 @@ export default function VoluntaryInvestmentsTable() {
         <table className="min-w-full  border border-neutral-200 rounded-lg shadow-sm">
           <thead>
             <tr className="bg-primary/10 border-b border-neutral-200">
-              <th className="px-3 py-2 text-left text-xs font-medium text-neutral-600 uppercase tracking-wider" colSpan={3}>Overview</th>
-              <th className="px-3 py-2 text-left text-xs font-medium text-neutral-600 uppercase tracking-wider" colSpan={5}>Bequeath To</th>
-              <th className="px-3 py-2 text-left text-xs font-medium text-neutral-600 uppercase tracking-wider" colSpan={4}>Exclusions</th>
-              <th className="px-3 py-2 text-center text-xs font-medium text-neutral-600 uppercase tracking-wider">Actions</th>
+              <th className="px-3 text-left text-xs font-medium text-neutral-600 uppercase tracking-wider" colSpan={3}>Overview</th>
+              <th className="px-3 text-left text-xs font-medium text-neutral-600 uppercase tracking-wider" colSpan={5}>Bequeath To</th>
+              <th className="px-3 text-left text-xs font-medium text-neutral-600 uppercase tracking-wider" colSpan={4}>Exclusions</th>
+              <th className="px-3 text-center text-xs font-medium text-neutral-600 uppercase tracking-wider">Actions</th>
             </tr>
             <tr className="bg-primary/10 border-b border-neutral-200">
-              <th className="px-3 py-2 text-left text-xs font-medium text-neutral-600 uppercase tracking-wider">Description</th>
-              <th className="px-3 py-2 text-left text-xs font-medium text-neutral-600 uppercase tracking-wider">Owner</th>
-              <th className="px-3 py-2 text-left text-xs font-medium text-neutral-600 uppercase tracking-wider">Percentage</th>
-              <th className="px-3 py-2 text-left text-xs font-medium text-neutral-600 uppercase tracking-wider">Base Cost</th>
-              <th className="px-3 py-2 text-left text-xs font-medium text-neutral-600 uppercase tracking-wider">Market Value</th>
-              <th className="px-3 py-2 text-left text-xs font-medium text-neutral-600 uppercase tracking-wider">Liquidation %</th>
-              <th className="px-3 py-2 text-left text-xs font-medium text-neutral-600 uppercase tracking-wider">Spouse</th>
-              <th className="px-3 py-2 text-left text-xs font-medium text-neutral-600 uppercase tracking-wider">Others</th>
-              <th className="px-3 py-2 text-center text-xs font-medium text-neutral-600 uppercase tracking-wider">Joint Estate</th>
-              <th className="px-3 py-2 text-center text-xs font-medium text-neutral-600 uppercase tracking-wider">Estate Duty</th>
-              <th className="px-3 py-2 text-center text-xs font-medium text-neutral-600 uppercase tracking-wider">CGT</th>
-              <th className="px-3 py-2 text-center text-xs font-medium text-neutral-600 uppercase tracking-wider">Executor's Fees</th>
-              <th className="px-3 py-2 text-center text-xs font-medium text-neutral-600 uppercase tracking-wider"></th>
+              <th className="px-3 text-left text-xs font-medium text-neutral-600 uppercase tracking-wider">Description</th>
+              <th className="px-3 text-left text-xs font-medium text-neutral-600 uppercase tracking-wider">Owner</th>
+              <th className="px-3 text-left text-xs font-medium text-neutral-600 uppercase tracking-wider">Percentage</th>
+              <th className="px-3 text-left text-xs font-medium text-neutral-600 uppercase tracking-wider">Base Cost</th>
+              <th className="px-3 text-left text-xs font-medium text-neutral-600 uppercase tracking-wider">Market Value</th>
+              <th className="px-3 text-left text-xs font-medium text-neutral-600 uppercase tracking-wider">Liquidation %</th>
+              <th className="px-3 text-left text-xs font-medium text-neutral-600 uppercase tracking-wider">Spouse</th>
+              <th className="px-3 text-left text-xs font-medium text-neutral-600 uppercase tracking-wider">Others</th>
+              <th className="px-3 text-center text-xs font-medium text-neutral-600 uppercase tracking-wider">Joint Estate</th>
+              <th className="px-3 text-center text-xs font-medium text-neutral-600 uppercase tracking-wider">Estate Duty</th>
+              <th className="px-3 text-center text-xs font-medium text-neutral-600 uppercase tracking-wider">CGT</th>
+              <th className="px-3 text-center text-xs font-medium text-neutral-600 uppercase tracking-wider">Executor's Fees</th>
+              <th className="px-3 text-center text-xs font-medium text-neutral-600 uppercase tracking-wider"></th>
             </tr>
           </thead>
           <tbody className="divide-y divide-neutral-200">
@@ -341,7 +341,7 @@ export default function VoluntaryInvestmentsTable() {
                 <tr key={`${investment.id}-${ownerIndex}`} className="hover:bg-neutral-50">
                   {ownerIndex === 0 && (
                     <>
-                      <td rowSpan={owners.length} className="px-3 py-2 border-r border-neutral-200">
+                      <td rowSpan={owners.length} className="px-3 border-r border-neutral-200">
                         <input
                           type="text"
                           defaultValue={investment.description}
@@ -352,12 +352,12 @@ export default function VoluntaryInvestmentsTable() {
                       </td>
                     </>
                   )}
-                  <td className="px-3 py-2">
+                  <td className="px-3">
                     <div className="flex items-center gap-2">
                       <select
                         value={owner}
                         onChange={(e) => handleOwnerChange(investment.id, ownerIndex, e.target.value)}
-                        className="table-input flex-1 px-2 py-1 text-sm border border-neutral-300 rounded bg-primary/5 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                        className="table-input flex-1 px-2 text-sm border border-neutral-300 rounded bg-primary/5 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
                         disabled={isUpdating}
                       >
                         <option value="Donald Edwards">Donald Edwards</option>
@@ -375,7 +375,7 @@ export default function VoluntaryInvestmentsTable() {
                       )}
                     </div>
                   </td>
-                  <td className="px-3 py-2">
+                  <td className="px-3">
                     <input
                       type="text"
                       defaultValue={percentages[ownerIndex] || '0'}
@@ -386,7 +386,7 @@ export default function VoluntaryInvestmentsTable() {
                   </td>
                   {ownerIndex === 0 && (
                     <>
-                      <td rowSpan={owners.length} className="px-3 py-2 border-l border-neutral-200">
+                      <td rowSpan={owners.length} className="px-3 border-l border-neutral-200">
                         <input
                           type="text"
                           defaultValue={investment.baseCost}
@@ -395,7 +395,7 @@ export default function VoluntaryInvestmentsTable() {
                           disabled={isUpdating}
                         />
                       </td>
-                      <td rowSpan={owners.length} className="px-3 py-2">
+                      <td rowSpan={owners.length} className="px-3">
                         <input
                           type="text"
                           defaultValue={investment.marketValue}
@@ -404,7 +404,7 @@ export default function VoluntaryInvestmentsTable() {
                           disabled={isUpdating}
                         />
                       </td>
-                      <td rowSpan={owners.length} className="px-3 py-2">
+                      <td rowSpan={owners.length} className="px-3">
                         <input
                           type="text"
                           defaultValue={investment.liquidationPercentage}
@@ -413,7 +413,7 @@ export default function VoluntaryInvestmentsTable() {
                           disabled={isUpdating}
                         />
                       </td>
-                      <td rowSpan={owners.length} className="px-3 py-2">
+                      <td rowSpan={owners.length} className="px-3">
                         <input
                           type="text"
                           defaultValue={investment.spouse}
@@ -422,7 +422,7 @@ export default function VoluntaryInvestmentsTable() {
                           disabled={isUpdating}
                         />
                       </td>
-                      <td rowSpan={owners.length} className="px-3 py-2 border-r border-neutral-200">
+                      <td rowSpan={owners.length} className="px-3 border-r border-neutral-200">
                         <input
                           type="text"
                           defaultValue={investment.others}
@@ -431,7 +431,7 @@ export default function VoluntaryInvestmentsTable() {
                           disabled={isUpdating}
                         />
                       </td>
-                      <td rowSpan={owners.length} className="px-3 py-2 text-center">
+                      <td rowSpan={owners.length} className="px-3 text-center">
                         <input
                           type="checkbox"
                           checked={investment.excludedFromJointEstate}
@@ -440,7 +440,7 @@ export default function VoluntaryInvestmentsTable() {
                           disabled={isUpdating}
                         />
                       </td>
-                      <td rowSpan={owners.length} className="px-3 py-2 text-center">
+                      <td rowSpan={owners.length} className="px-3 text-center">
                         <input
                           type="checkbox"
                           checked={investment.excludedFromEstateDuty}
@@ -449,7 +449,7 @@ export default function VoluntaryInvestmentsTable() {
                           disabled={isUpdating}
                         />
                       </td>
-                      <td rowSpan={owners.length} className="px-3 py-2 text-center">
+                      <td rowSpan={owners.length} className="px-3 text-center">
                         <input
                           type="checkbox"
                           checked={investment.excludedFromCGT}
@@ -458,7 +458,7 @@ export default function VoluntaryInvestmentsTable() {
                           disabled={isUpdating}
                         />
                       </td>
-                      <td rowSpan={owners.length} className="px-3 py-2 text-center">
+                      <td rowSpan={owners.length} className="px-3 text-center">
                         <input
                           type="checkbox"
                           checked={investment.excludedFromExecutorsFees}
@@ -467,7 +467,7 @@ export default function VoluntaryInvestmentsTable() {
                           disabled={isUpdating}
                         />
                       </td>
-                      <td rowSpan={owners.length} className="px-3 py-2 text-center">
+                      <td rowSpan={owners.length} className="px-3 text-center">
                         <DeleteButton
                           onClick={() => handleDeleteInvestment(investment.id)}
                         />
@@ -481,22 +481,22 @@ export default function VoluntaryInvestmentsTable() {
             {/* Total Row */}
             {filteredInvestments.length > 0 && (
               <tr className="bg-neutral-100 border-t-2 border-neutral-300 font-bold">
-                <td className="px-3 py-2 text-sm font-bold text-neutral-800">Total</td>
-                <td colSpan={2} className="px-3 py-2"></td>
-                <td className="px-3 py-2 text-sm font-bold text-neutral-800 text-right">
+                <td className="px-3 text-sm font-bold text-neutral-800">Total</td>
+                <td colSpan={2} className="px-3"></td>
+                <td className="px-3 text-sm font-bold text-neutral-800 text-right">
                   {formatCurrencyValue(totals.baseCost.toString(), 'baseCost')}
                 </td>
-                <td className="px-3 py-2 text-sm font-bold text-neutral-800 text-right">
+                <td className="px-3 text-sm font-bold text-neutral-800 text-right">
                   {formatCurrencyValue(totals.marketValue.toString(), 'marketValue')}
                 </td>
-                <td colSpan={8} className="px-3 py-2"></td>
+                <td colSpan={8} className="px-3"></td>
               </tr>
             )}
             
             {filteredInvestments.length === 0 && (
               <tr>
-                <td colSpan={13} className="px-3 py-8 text-center text-neutral-500">
-                  {searchTerm ? "No voluntary investments found matching your search." : "No voluntary investments found. Click 'Add Investment' to get started."}
+                <td colSpan={13} className="px-3 text-center text-neutral-500">
+                  {searchTerm ?"No voluntary investments found matching your search." :"No voluntary investments found. Click 'Add Investment' to get started."}
                 </td>
               </tr>
             )}

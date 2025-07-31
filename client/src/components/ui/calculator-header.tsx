@@ -1,6 +1,6 @@
-import { Plus } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { GraphTableSwitcher, InputFlowSwitcher } from "@/components/ui/switcher";
+import { Plus } from"lucide-react";
+import { Button } from"@/components/ui/button";
+import { GraphTableSwitcher, InputFlowSwitcher } from"@/components/ui/switcher";
 
 interface CalculatorHeaderProps {
   title: string;
@@ -9,11 +9,11 @@ interface CalculatorHeaderProps {
   onAddItem?: () => void;
   addButtonText?: string;
   isAddingItem?: boolean;
-  viewMode?: "table" | "hybrid";
-  onViewModeChange?: (mode: "table" | "hybrid") => void;
+  viewMode?:"table" |"hybrid";
+  onViewModeChange?: (mode:"table" |"hybrid") => void;
   showTableFlowsSwitcher?: boolean;
-  tableMode?: "inputs" | "flows";
-  onTableModeChange?: (mode: "inputs" | "flows") => void;
+  tableMode?:"inputs" |"flows";
+  onTableModeChange?: (mode:"inputs" |"flows") => void;
   additionalControls?: React.ReactNode;
   className?: string;
   children?: React.ReactNode;
@@ -22,17 +22,17 @@ interface CalculatorHeaderProps {
 export function CalculatorHeader({
   title,
   itemCount,
-  itemLabel = "items",
+  itemLabel ="items",
   onAddItem,
-  addButtonText = "Add Item",
+  addButtonText ="Add Item",
   isAddingItem = false,
-  viewMode = "table",
+  viewMode ="table",
   onViewModeChange,
   showTableFlowsSwitcher = false,
-  tableMode = "inputs",
+  tableMode ="inputs",
   onTableModeChange,
   additionalControls,
-  className = "",
+  className ="",
   children
 }: CalculatorHeaderProps) {
   return (
@@ -43,7 +43,7 @@ export function CalculatorHeader({
           <div className="flex items-center gap-4">
             <h1 className="text-2xl font-semibold text-neutral-900">{title}</h1>
             {itemCount !== undefined && (
-              <span className="px-3 py-1 bg-primary/10 text-primary text-sm font-medium rounded-full">
+              <span className="px-3 bg-primary/10 text-primary text-sm font-medium rounded-full">
                 {itemCount} {itemLabel}
               </span>
             )}
@@ -54,7 +54,7 @@ export function CalculatorHeader({
                 size="sm"
                 className="h-9 px-4 bg-white text-gray-700 border border-neutral-200 hover:bg-gray-50 hover:text-gray-900 font-normal"
               >
-                {isAddingItem ? "Adding..." : addButtonText}
+                {isAddingItem ?"Adding..." : addButtonText}
               </Button>
             )}
             
@@ -62,7 +62,7 @@ export function CalculatorHeader({
             {onViewModeChange && (
               <GraphTableSwitcher
                 value={viewMode}
-                onChange={(value) => onViewModeChange(value as "table" | "hybrid")}
+                onChange={(value) => onViewModeChange(value as"table" |"hybrid")}
                 size="sm"
               />
             )}
@@ -70,8 +70,8 @@ export function CalculatorHeader({
             {/* Table/Flows Switcher for retirement funds */}
             {showTableFlowsSwitcher && onTableModeChange && (
               <InputFlowSwitcher
-                value={tableMode === "inputs" ? "input" : "flow"}
-                onChange={(value) => onTableModeChange(value === "input" ? "inputs" : "flows")}
+                value={tableMode ==="inputs" ?"input" :"flow"}
+                onChange={(value) => onTableModeChange(value ==="input" ?"inputs" :"flows")}
                 size="sm"
               />
             )}

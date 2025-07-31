@@ -1,18 +1,18 @@
-import React, { useState, useCallback, useMemo, useRef } from "react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Plus, Trash2 } from "lucide-react";
-import { AddButton, DeleteButton } from "@/components/ui/action-buttons";
-import { Beneficiary } from "@shared/schema";
-import { nanoid } from "nanoid";
-import { formatPercentageValue, getValueClass, isDefaultValue, handleDefaultValueFocus } from "@/lib/formatting";
+import React, { useState, useCallback, useMemo, useRef } from"react";
+import { Button } from"@/components/ui/button";
+import { Input } from"@/components/ui/input";
+import { Plus, Trash2 } from"lucide-react";
+import { AddButton, DeleteButton } from"@/components/ui/action-buttons";
+import { Beneficiary } from"@shared/schema";
+import { nanoid } from"nanoid";
+import { formatPercentageValue, getValueClass, isDefaultValue, handleDefaultValueFocus } from"@/lib/formatting";
 
 interface BeneficiaryRowManagerProps {
   coverAmount: string;
   beneficiaries: Beneficiary[];
   onBeneficiariesChange: (beneficiaries: Beneficiary[]) => void;
   isUpdating: boolean;
-  layout?: "table" | "compact";
+  layout?:"table" |"compact";
 }
 
 export function BeneficiaryRowManager({ 
@@ -20,7 +20,7 @@ export function BeneficiaryRowManager({
   beneficiaries, 
   onBeneficiariesChange, 
   isUpdating,
-  layout = "table"
+  layout ="table"
 }: BeneficiaryRowManagerProps) {
   
   // Calculate cover amount as number for calculations
@@ -68,9 +68,9 @@ export function BeneficiaryRowManager({
   const handleAddBeneficiary = useCallback(() => {
     const newBeneficiary: Beneficiary = {
       id: nanoid(),
-      name: "",
+      name:"",
       percentage: 0,
-      coverSplit: "R 0"
+      coverSplit:"R 0"
     };
     
     const updatedBeneficiaries = [...beneficiaries, newBeneficiary];
@@ -107,11 +107,11 @@ export function BeneficiaryRowManager({
   const totalPercentage = beneficiaries.reduce((sum, b) => sum + b.percentage, 0);
   const isPercentageValid = Math.abs(totalPercentage - 100) < 0.01;
 
-  if (layout === "compact") {
+  if (layout ==="compact") {
     return (
       <div className="space-y-3 max-w-4xl">
         {/* Compact Header */}
-        <div className="flex items-center gap-4 px-3 py-2 bg-gray-50 rounded text-sm font-medium text-gray-700">
+        <div className="flex items-center gap-4 px-3 bg-gray-50 rounded text-sm font-medium text-gray-700">
           <div className="w-8"></div>
           <div className="flex-1 min-w-0">BENEFICIARY</div>
           <div className="w-16 text-center">%</div>
@@ -139,7 +139,7 @@ export function BeneficiaryRowManager({
                 onBlur={(e) => handleUpdateBeneficiary(beneficiary.id, 'name', e.target.value)}
                 placeholder="Enter beneficiary name"
                 disabled={isUpdating}
-                className="h-8 text-sm table-input w-full px-3 py-1 border rounded-md text-sm"
+                className="h-8 text-sm table-input w-full px-3 border rounded-md text-sm"
                 style={{ 
                   minWidth: '120px', 
                   maxWidth: '250px',
@@ -164,13 +164,13 @@ export function BeneficiaryRowManager({
                   handleUpdateBeneficiary(beneficiary.id, 'percentage', numericValue);
                 }}
                 disabled={isUpdating}
-                className={`h-8 text-sm text-center w-16 px-3 py-1 border rounded-md text-sm ${getValueClass(`${beneficiary.percentage}%`, 'percentage')}`}
+                className={`h-8 text-sm text-center w-16 px-3 border rounded-md text-sm ${getValueClass(`${beneficiary.percentage}%`, 'percentage')}`}
               />
             </div>
 
             {/* Cover Split (Read-only) */}
             <div className="w-32">
-              <div className="px-3 py-1 text-right text-sm font-medium text-gray-900 h-8 flex items-center justify-end">
+              <div className="px-3 text-right text-sm font-medium text-gray-900 h-8 flex items-center justify-end">
                 {beneficiary.coverSplit}
               </div>
             </div>
@@ -190,7 +190,7 @@ export function BeneficiaryRowManager({
 
           <div className="flex items-center gap-2">
             <span className="text-sm text-gray-600">Total:</span>
-            <span className={`text-sm font-medium px-2 py-1 rounded ${
+            <span className={`text-sm font-medium px-2 rounded ${
               isPercentageValid 
                 ? 'text-green-700 bg-green-100' 
                 : 'text-red-700 bg-red-100'
@@ -213,7 +213,7 @@ export function BeneficiaryRowManager({
   return (
     <div className="space-y-2">
       {/* Header Row */}
-      <div className="grid grid-cols-12 gap-2 px-3 py-2 bg-gray-50 rounded text-sm font-medium text-gray-700">
+      <div className="grid grid-cols-12 gap-2 px-3 bg-gray-50 rounded text-sm font-medium text-gray-700">
         <div className="col-span-1"></div>
         <div className="col-span-5">BENEFICIARY</div>
         <div className="col-span-2 text-center">%</div>
@@ -241,7 +241,7 @@ export function BeneficiaryRowManager({
               onBlur={(e) => handleUpdateBeneficiary(beneficiary.id, 'name', e.target.value)}
               placeholder="Enter beneficiary name"
               disabled={isUpdating}
-              className="text-right table-input w-full px-3 py-1 border rounded-md text-sm"
+              className="text-right table-input w-full px-3 border rounded-md text-sm"
             />
           </div>
 
@@ -260,13 +260,13 @@ export function BeneficiaryRowManager({
                 handleUpdateBeneficiary(beneficiary.id, 'percentage', numericValue);
               }}
               disabled={isUpdating}
-              className="text-center w-full px-3 py-1 border rounded-md text-sm"
+              className="text-center w-full px-3 border rounded-md text-sm"
             />
           </div>
 
           {/* Cover Split (Read-only) */}
           <div className="col-span-4">
-            <div className="px-3 py-2 text-right text-sm font-medium text-gray-900">
+            <div className="px-3 text-right text-sm font-medium text-gray-900">
               {beneficiary.coverSplit}
             </div>
           </div>
@@ -286,7 +286,7 @@ export function BeneficiaryRowManager({
         {/* Percentage Validation */}
         <div className="flex items-center gap-2">
           <span className="text-sm text-gray-600">Total:</span>
-          <span className={`text-sm font-medium px-2 py-1 rounded ${
+          <span className={`text-sm font-medium px-2 rounded ${
             isPercentageValid 
               ? 'text-green-700 bg-green-100' 
               : 'text-red-700 bg-red-100'

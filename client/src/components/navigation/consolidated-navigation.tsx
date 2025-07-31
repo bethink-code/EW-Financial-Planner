@@ -1,16 +1,16 @@
-import React, { useState } from "react";
-import { ChevronLeft, ChevronDown, Edit2, RefreshCw } from "lucide-react";
-import { Link, useLocation } from "wouter";
-import { Button } from "@/components/ui/button";
-import { getFinancialPlanName, needs } from "@shared/navigation-config";
+import React, { useState } from"react";
+import { ChevronLeft, ChevronDown, Edit2, RefreshCw } from"lucide-react";
+import { Link, useLocation } from"wouter";
+import { Button } from"@/components/ui/button";
+import { getFinancialPlanName, needs } from"@shared/navigation-config";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { cn } from "@/lib/utils";
-import { SafeFragment } from "@/lib/safe-fragment";
+} from"@/components/ui/dropdown-menu";
+import { cn } from"@/lib/utils";
+import { SafeFragment } from"@/lib/safe-fragment";
 
 interface ConsolidatedNavigationProps {
   currentNeed: any;
@@ -86,7 +86,7 @@ export function ConsolidatedNavigation({
 
   return (
     <div className="w-full px-6 pt-4 pb-2">
-      <div className="max-w-6xl bg-white rounded-lg shadow-sm border border-gray-200 px-4 py-3">
+      <div className="max-w-6xl bg-white rounded-lg shadow-sm border border-gray-200 px-4">
         <div>
           {/* First row: Financial Plan */}
           <div className="flex items-start gap-3 mb-2">
@@ -145,8 +145,8 @@ export function ConsolidatedNavigation({
                       <DropdownMenuItem key={need.id} asChild>
                         <Link href={need.path} onClick={() => setIsNeedDropdownOpen(false)}>
                           <span className={cn(
-                            need.hasContent ? "" : "text-gray-400",
-                            need.id === currentNeed.id && "text-[#F97415] font-medium"
+                            need.hasContent ?"" :"text-gray-400",
+                            need.id === currentNeed.id &&"text-[#F97415] font-medium"
                           )}>
                             {need.label}
                           </span>
@@ -172,19 +172,19 @@ export function ConsolidatedNavigation({
                       <DropdownMenuTrigger asChild>
                         <button
                           className={cn(
-                            "flex items-center gap-2 pl-1 pr-2 text-sm font-medium transition-colors h-10",
-                            "rounded-[6px] focus:outline-none focus:ring-0 focus:border-0",
+"flex items-center gap-2 pl-1 pr-2 text-sm font-medium transition-colors h-10",
+"rounded-[6px] focus:outline-none focus:ring-0 focus:border-0",
                             isActive
-                              ? "bg-[#F97415] text-white border-0"
-                              : "bg-[#F5F1E8] text-gray-700 border-0 hover:bg-[#F0EBE0]"
+                              ?"bg-[#F97415] text-white border-0"
+                              :"bg-[#F5F1E8] text-gray-700 border-0 hover:bg-[#F0EBE0]"
                           )}
                           disabled={!step.hasContent}
                         >
                           <span className={cn(
-                            "flex items-center justify-center h-8 w-8 rounded text-sm font-semibold",
+"flex items-center justify-center h-8 w-8 rounded text-sm font-semibold",
                             isActive 
-                              ? "bg-white/20 text-white"
-                              : "bg-white text-[#F97415]"
+                              ?"bg-white/20 text-white"
+                              :"bg-white text-[#F97415]"
                           )}>
                             {step.number}
                           </span>
@@ -197,8 +197,8 @@ export function ConsolidatedNavigation({
                           <DropdownMenuItem key={item.id} asChild>
                             <Link href={item.path} onClick={() => setStepDropdownOpen(null)}>
                               <span className={cn(
-                                item.hasContent ? "" : "text-gray-400",
-                                location.includes(item.path) && "text-[#F97415] font-medium"
+                                item.hasContent ?"" :"text-gray-400",
+                                location.includes(item.path) &&"text-[#F97415] font-medium"
                               )}>
                                 {item.label}
                               </span>
@@ -211,19 +211,19 @@ export function ConsolidatedNavigation({
                     <button
                       onClick={() => setLocation(step.path)}
                       className={cn(
-                        "flex items-center gap-2 pl-1 pr-2 text-sm font-medium transition-colors h-10",
-                        "rounded-[6px] focus:outline-none focus:ring-0 focus:border-0",
+"flex items-center gap-2 pl-1 pr-2 text-sm font-medium transition-colors h-10",
+"rounded-[6px] focus:outline-none focus:ring-0 focus:border-0",
                         isActive
-                          ? "bg-[#F97415] text-white border-0"
-                          : "bg-[#F5F1E8] text-gray-700 border-0 hover:bg-[#F0EBE0]"
+                          ?"bg-[#F97415] text-white border-0"
+                          :"bg-[#F5F1E8] text-gray-700 border-0 hover:bg-[#F0EBE0]"
                       )}
                       disabled={!step.hasContent}
                     >
                       <span className={cn(
-                        "flex items-center justify-center h-8 w-8 rounded text-sm font-semibold",
+"flex items-center justify-center h-8 w-8 rounded text-sm font-semibold",
                         isActive 
-                          ? "bg-white/20 text-white"
-                          : "bg-white text-[#F97415]"
+                          ?"bg-white/20 text-white"
+                          :"bg-white text-[#F97415]"
                       )}>
                         {step.number}
                       </span>

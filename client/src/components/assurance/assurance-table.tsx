@@ -139,11 +139,11 @@ function AssuranceTable({ viewMode, searchTerm }: AssuranceTableProps) {
  }, [deleteMutation]);
 
  if (isLoading) {
- return <div className="flex justify-center py-8">Loading assurance...</div>;
+ return <div className="flex justify-center">Loading assurance...</div>;
  }
 
  if (error) {
- return <div className="text-red-600 py-8">Error loading assurance. Please try again.</div>;
+ return <div className="text-red-600">Error loading assurance. Please try again.</div>;
  }
 
  return (
@@ -151,17 +151,17 @@ function AssuranceTable({ viewMode, searchTerm }: AssuranceTableProps) {
  <table>
  <thead>
  <tr>
- <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start" rowSpan={2}>
+ <th className="px-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start" rowSpan={2}>
  <AddButton onClick={() => addMutation.mutate()} disabled={isUpdating} />
  </th>
- <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start" colSpan={2}>Overview</th>
- <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start" colSpan={2}>Financial Details</th>
+ <th className="px-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start" colSpan={2}>Overview</th>
+ <th className="px-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start" colSpan={2}>Financial Details</th>
  </tr>
  <tr>
- <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start">Description</th>
- <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center">Owner</th>
- <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start">Amount</th>
- <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center">Increase %</th>
+ <th className="px-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start">Description</th>
+ <th className="px-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center">Owner</th>
+ <th className="px-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start">Amount</th>
+ <th className="px-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center">Increase %</th>
  </tr>
  </thead>
  <tbody className="divide-y divide-neutral-200">
@@ -188,8 +188,8 @@ function AssuranceTable({ viewMode, searchTerm }: AssuranceTableProps) {
  <td className="p-2">
  <input
  type="text"
- defaultValue={assurance.owners[0] || "Donald Edwards"}
- className={`table-input ${getFieldClass('text')} ${getValueClass(assurance.owners[0] || "", 'text')}`}
+ defaultValue={assurance.owners[0] ||"Donald Edwards"}
+ className={`table-input ${getFieldClass('text')} ${getValueClass(assurance.owners[0] ||"", 'text')}`}
  onFocus={handleDefaultValueFocus}
  onBlur={(e) => handleInputBlur(assurance.id, 'owners', [e.target.value])}
  disabled={isUpdating}

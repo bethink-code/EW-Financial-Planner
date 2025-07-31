@@ -235,11 +235,11 @@ export default function DefinedBenefitFundsTable() {
  }, [queryClient]);
 
  if (isLoading) {
- return <div className="flex justify-center py-8">Loading defined benefit funds...</div>;
+ return <div className="flex justify-center">Loading defined benefit funds...</div>;
  }
 
  if (error) {
- return <div className="text-red-600 py-8">Error loading defined benefit funds. Please try again.</div>;
+ return <div className="text-red-600">Error loading defined benefit funds. Please try again.</div>;
  }
 
  return (
@@ -248,22 +248,22 @@ export default function DefinedBenefitFundsTable() {
  <thead>
  {/* First Header Row - Section Groups */}
  <tr className="border-b border-border">
- <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start" rowSpan={2}>Actions</th>
- <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start" colSpan={3}>Overview</th>
- <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start" colSpan={4}>Fund Details</th>
- <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start" colSpan={2}>Pension Income at Death</th>
+ <th className="px-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start" rowSpan={2}>Actions</th>
+ <th className="px-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start" colSpan={3}>Overview</th>
+ <th className="px-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start" colSpan={4}>Fund Details</th>
+ <th className="px-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start" colSpan={2}>Pension Income at Death</th>
  </tr>
  {/* Second Header Row - Individual Fields */}
  <tr className="border-b border-border">
- <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start">Description</th>
- <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center">Owner Name</th>
- <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center">Ownership %</th>
- <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start">Years of Service</th>
- <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center">Final Monthly Salary</th>
- <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center">Death Lump Sum</th>
- <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center">Additional Tax Free Amount</th>
- <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start">Amount</th>
- <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center">Increase</th>
+ <th className="px-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start">Description</th>
+ <th className="px-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center">Owner Name</th>
+ <th className="px-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center">Ownership %</th>
+ <th className="px-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start">Years of Service</th>
+ <th className="px-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center">Final Monthly Salary</th>
+ <th className="px-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center">Death Lump Sum</th>
+ <th className="px-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center">Additional Tax Free Amount</th>
+ <th className="px-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start">Amount</th>
+ <th className="px-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center">Increase</th>
  </tr>
  </thead>
  <tbody className="divide-y divide-neutral-200">

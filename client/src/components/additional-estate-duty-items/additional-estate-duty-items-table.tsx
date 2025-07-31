@@ -173,38 +173,38 @@ function AdditionalEstateDutyItemsTable({ viewMode, searchTerm }: AdditionalEsta
  }, [deleteMutation]);
 
  if (isLoading) {
- return <div className="flex justify-center py-8">Loading additional estate duty items...</div>;
+ return <div className="flex justify-center">Loading additional estate duty items...</div>;
  }
 
  if (error) {
- return <div className="text-red-600 py-8">Error loading additional estate duty items. Please try again.</div>;
+ return <div className="text-red-600">Error loading additional estate duty items. Please try again.</div>;
  }
 
  return (
  <div className="space-y-6">
  <table>
  <thead>
- <tr>
- <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start" rowSpan={2}>
+ <tr className="double-row-header-first">
+ <th className="section-start" rowSpan={2}>
  <AddButton onClick={() => addMutation.mutate()} disabled={isUpdating} />
  </th>
- <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center" colSpan={2}>Overview</th>
- <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center" colSpan={2}>Financial Details</th>
- <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center" colSpan={4}>Distribution Split</th>
- <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center" colSpan={3}>Beneficiaries</th>
+ <th className="" colSpan={2}>Overview</th>
+ <th className="" colSpan={2}>Financial Details</th>
+ <th className="" colSpan={4}>Distribution Split</th>
+ <th className="" colSpan={3}>Beneficiaries</th>
  </tr>
- <tr>
- <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center">Category</th>
- <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center">Description</th>
- <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center">Amount</th>
- <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center">Increase %</th>
- <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center">John Doe</th>
- <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center">Janette Doe (Spouse)</th>
- <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center">Doe Junior</th>
- <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center">Doe family trust</th>
- <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center">Estate</th>
- <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center">Others</th>
- <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center">Client</th>
+ <tr className="double-row-header-second">
+ <th className="">Category</th>
+ <th className="">Description</th>
+ <th className="">Amount</th>
+ <th className="">Increase %</th>
+ <th className="">John Doe</th>
+ <th className="">Janette Doe (Spouse)</th>
+ <th className="">Doe Junior</th>
+ <th className="">Doe family trust</th>
+ <th className="">Estate</th>
+ <th className="">Others</th>
+ <th className="">Client</th>
  </tr>
  </thead>
  <tbody className="divide-y divide-neutral-200">

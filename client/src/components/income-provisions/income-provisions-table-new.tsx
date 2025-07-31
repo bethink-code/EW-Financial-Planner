@@ -174,11 +174,11 @@ export default function IncomeProvisionsTable({ viewMode, searchTerm }: IncomePr
  }, [provisions, searchTerm]);
 
  if (isLoading) {
- return <div className="flex justify-center py-8">Loading income provisions...</div>;
+ return <div className="flex justify-center">Loading income provisions...</div>;
  }
 
  if (error) {
- return <div className="text-red-600 py-8">Error loading income provisions. Please try again.</div>;
+ return <div className="text-red-600">Error loading income provisions. Please try again.</div>;
  }
 
  return (
@@ -187,23 +187,23 @@ export default function IncomeProvisionsTable({ viewMode, searchTerm }: IncomePr
  <table className="min-w-full border border-neutral-200">
  <thead>
  <tr className="border-b border-border">
- <th className="px-3 py-3 text-center text-xs font-medium text-neutral-600 uppercase tracking-wider w-16">Actions</th>
- <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start" colSpan={2}>Overview</th>
- <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start" colSpan={9}>Income Provision Details</th>
+ <th className="px-3 text-center text-xs font-medium text-neutral-600 uppercase tracking-wider w-16">Actions</th>
+ <th className="px-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start" colSpan={2}>Overview</th>
+ <th className="px-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start" colSpan={9}>Income Provision Details</th>
  </tr>
  <tr className="border-b border-border">
- <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center border-b border-neutral-200"></th>
- <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start border-b border-neutral-200">Description</th>
- <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center border-b border-neutral-200">Entity</th>
- <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start border-b border-neutral-200">Amount</th>
- <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center border-b border-neutral-200">Start</th>
- <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center border-b border-neutral-200">Term (years)</th>
- <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center border-b border-neutral-200">Increase %</th>
- <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center border-b border-neutral-200">CPI</th>
- <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center border-b border-neutral-200">Frequency</th>
- <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center border-b border-neutral-200">Tax %</th>
- <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center border-b border-neutral-200">Tax Rate</th>
- <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center border-b border-neutral-200">Capitalised Amount</th>
+ <th className="px-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center border-b border-neutral-200"></th>
+ <th className="px-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start border-b border-neutral-200">Description</th>
+ <th className="px-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center border-b border-neutral-200">Entity</th>
+ <th className="px-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start border-b border-neutral-200">Amount</th>
+ <th className="px-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center border-b border-neutral-200">Start</th>
+ <th className="px-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center border-b border-neutral-200">Term (years)</th>
+ <th className="px-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center border-b border-neutral-200">Increase %</th>
+ <th className="px-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center border-b border-neutral-200">CPI</th>
+ <th className="px-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center border-b border-neutral-200">Frequency</th>
+ <th className="px-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center border-b border-neutral-200">Tax %</th>
+ <th className="px-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center border-b border-neutral-200">Tax Rate</th>
+ <th className="px-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center border-b border-neutral-200">Capitalised Amount</th>
  </tr>
  </thead>
  <tbody className="divide-y divide-neutral-200">

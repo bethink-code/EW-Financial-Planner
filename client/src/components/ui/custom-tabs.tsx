@@ -1,6 +1,6 @@
-import React from "react";
-import { Link, useLocation } from "wouter";
-import { cn } from "@/lib/utils";
+import React from"react";
+import { Link, useLocation } from"wouter";
+import { cn } from"@/lib/utils";
 
 interface Tab {
   id: string;
@@ -38,19 +38,19 @@ export function CustomTabs({ tabs, activeTab, onTabChange, className, useLinks =
                   <Link key={tab.id} href={tab.href}>
                     <button
                       className={cn(
-                        "py-4 px-1 border-b-2 font-medium text-sm transition-colors relative",
+"px-1 border-b-2 font-medium text-sm transition-colors relative",
                         isActive
-                          ? "border-primary text-primary dark:border-primary dark:text-primary"
-                          : "border-transparent text-neutral-500 hover:text-neutral-700 hover:border-neutral-300 dark:text-neutral-400 dark:hover:text-neutral-300"
+                          ?"border-primary text-primary dark:border-primary dark:text-primary"
+                          :"border-transparent text-neutral-500 hover:text-neutral-700 hover:border-neutral-300 dark:text-neutral-400 dark:hover:text-neutral-300"
                       )}
                     >
                       {tab.label}
                       {tab.badge && (
                         <span className={cn(
-                          "ml-2 inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none rounded-full",
+"ml-2 inline-flex items-center justify-center px-2 text-xs font-bold leading-none rounded-full",
                           isActive
-                            ? "bg-primary text-primary-foreground"
-                            : "bg-neutral-200 text-neutral-600 dark:bg-neutral-700 dark:text-neutral-300"
+                            ?"bg-primary text-primary-foreground"
+                            :"bg-neutral-200 text-neutral-600 dark:bg-neutral-700 dark:text-neutral-300"
                         )}>
                           {tab.badge}
                         </span>
@@ -65,19 +65,19 @@ export function CustomTabs({ tabs, activeTab, onTabChange, className, useLinks =
                   key={tab.id}
                   onClick={() => onTabChange?.(tab.id)}
                   className={cn(
-                    "py-4 px-1 border-b-2 font-medium text-sm transition-colors relative",
+"px-1 border-b-2 font-medium text-sm transition-colors relative",
                     isActive
-                      ? "border-primary text-primary dark:border-primary dark:text-primary"
-                      : "border-transparent text-neutral-500 hover:text-neutral-700 hover:border-neutral-300 dark:text-neutral-400 dark:hover:text-neutral-300"
+                      ?"border-primary text-primary dark:border-primary dark:text-primary"
+                      :"border-transparent text-neutral-500 hover:text-neutral-700 hover:border-neutral-300 dark:text-neutral-400 dark:hover:text-neutral-300"
                   )}
                 >
                   {tab.label}
                   {tab.badge && (
                     <span className={cn(
-                      "ml-2 inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none rounded-full",
+"ml-2 inline-flex items-center justify-center px-2 text-xs font-bold leading-none rounded-full",
                       isActive
-                        ? "bg-primary text-primary-foreground"
-                        : "bg-neutral-200 text-neutral-600 dark:bg-neutral-700 dark:text-neutral-300"
+                        ?"bg-primary text-primary-foreground"
+                        :"bg-neutral-200 text-neutral-600 dark:bg-neutral-700 dark:text-neutral-300"
                     )}>
                       {tab.badge}
                     </span>

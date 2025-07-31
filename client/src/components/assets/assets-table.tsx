@@ -25,16 +25,16 @@ function AssetsTable({ viewMode, searchTerm, onShowCategoryDialog }: AssetsTable
   const addMutation = useMutation({
     mutationFn: async (): Promise<Assets> => {
       const newAsset: InsertAssets = {
-        description: "",
-        marketValue: "R 0",
-        johnDoe: "0%",
-        janetteDoe: "0%",
-        doeJunior: "0%",
-        doeFamilyTrust: "0%",
-        estate: "R 0",
-        others: "R 0",
-        client: "R 0",
-        section: "PROPERTY",
+        description:"",
+        marketValue:"R 0",
+        johnDoe:"0%",
+        janetteDoe:"0%",
+        doeJunior:"0%",
+        doeFamilyTrust:"0%",
+        estate:"R 0",
+        others:"R 0",
+        client:"R 0",
+        section:"PROPERTY",
         included: true,
       };
       
@@ -171,11 +171,11 @@ function AssetsTable({ viewMode, searchTerm, onShowCategoryDialog }: AssetsTable
   }, [deleteMutation]);
 
   if (isLoading) {
-    return <div className="flex justify-center py-8">Loading assets and liabilities...</div>;
+    return <div className="flex justify-center">Loading assets and liabilities...</div>;
   }
 
   if (error) {
-    return <div className="text-red-600 py-8">Error loading assets and liabilities. Please try again.</div>;
+    return <div className="text-red-600">Error loading assets and liabilities. Please try again.</div>;
   }
 
   return (
@@ -218,7 +218,7 @@ function AssetsTable({ viewMode, searchTerm, onShowCategoryDialog }: AssetsTable
             return Object.entries(groupedAssets).map(([sectionName, sectionAssets]) => [
               // Section Header
               <tr key={`section-${sectionName}`} className="bg-blue-50">
-                <td colSpan={11} className="px-4 py-2 text-sm font-medium text-neutral-700 uppercase tracking-wider">
+                <td colSpan={11} className="px-4 text-sm font-medium text-neutral-700 uppercase tracking-wider">
                   {sectionName.replace('_', ' ')}
                 </td>
               </tr>,

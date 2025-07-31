@@ -1,5 +1,5 @@
-import React from "react";
-import { cn } from "@/lib/utils";
+import React from"react";
+import { cn } from"@/lib/utils";
 
 interface SwitcherOption {
   value: string;
@@ -11,7 +11,7 @@ interface SwitcherProps {
   value: string;
   onChange: (value: string) => void;
   className?: string;
-  size?: "sm" | "md" | "lg";
+  size?:"sm" |"md" |"lg";
 }
 
 /**
@@ -23,24 +23,24 @@ export function Switcher({
   value, 
   onChange, 
   className,
-  size = "md"
+  size ="md"
 }: SwitcherProps) {
   const sizeClasses = {
-    sm: "text-sm h-8 px-3 min-w-[80px]",
-    md: "text-sm h-8 px-4 min-w-[100px]", 
-    lg: "text-base h-9 px-5 min-w-[120px]"
+    sm:"text-sm h-8 px-3 min-w-[80px]",
+    md:"text-sm h-8 px-4 min-w-[100px]", 
+    lg:"text-base h-9 px-5 min-w-[120px]"
   };
 
   const containerClasses = {
-    sm: "px-1.5 py-1",
-    md: "px-1.5 py-1",
-    lg: "px-1.5 py-1"
+    sm:"px-1.5",
+    md:"px-1.5",
+    lg:"px-1.5"
   };
 
   return (
     <div 
       className={cn(
-        "inline-flex bg-[#EDF4F9] rounded-lg",
+"inline-flex bg-[#EDF4F9] rounded-lg",
         containerClasses[size],
         className
       )}
@@ -53,11 +53,11 @@ export function Switcher({
             key={option.value}
             onClick={() => onChange(option.value)}
             className={cn(
-              "relative flex items-center justify-center font-medium transition-all duration-200 ease-in-out",
+"relative flex items-center justify-center font-medium transition-all duration-200 ease-in-out",
               sizeClasses[size],
               isSelected
-                ? "bg-white text-[#016991] font-semibold rounded-lg"
-                : "text-[#6B7280] hover:text-gray-700 rounded-md"
+                ?"bg-white text-[#016991] font-semibold rounded-lg"
+                :"text-[#6B7280] hover:text-gray-700 rounded-md"
             )}
           >
             {option.label}
@@ -75,11 +75,11 @@ export function GraphTableSwitcher({
   value, 
   onChange, 
   className,
-  size = "md"
+  size ="md"
 }: Omit<SwitcherProps, 'options'>) {
   const options = [
-    { value: "table", label: "Table" },
-    { value: "hybrid", label: "Hybrid" }
+    { value:"table", label:"Table" },
+    { value:"hybrid", label:"Hybrid" }
   ];
 
   return (
@@ -100,11 +100,11 @@ export function InputFlowSwitcher({
   value, 
   onChange, 
   className,
-  size = "md"
+  size ="md"
 }: Omit<SwitcherProps, 'options'>) {
   const options = [
-    { value: "input", label: "Inputs" },
-    { value: "flow", label: "Flows" }
+    { value:"input", label:"Inputs" },
+    { value:"flow", label:"Flows" }
   ];
 
   return (

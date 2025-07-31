@@ -24,14 +24,14 @@ function VoluntaryInvestmentsTable({ viewMode, searchTerm }: VoluntaryInvestment
   const addMutation = useMutation({
     mutationFn: async (): Promise<VoluntaryInvestment> => {
       const newInvestment: InsertVoluntaryInvestment = {
-        description: "",
+        description:"",
         owners: ["Enter details ..."],
         ownershipPercentages: ["100%"],
-        baseCost: "R 0",
-        marketValue: "R 0",
-        liquidationPercentage: "0%",
-        spouse: "R 0",
-        others: "R 0",
+        baseCost:"R 0",
+        marketValue:"R 0",
+        liquidationPercentage:"0%",
+        spouse:"R 0",
+        others:"R 0",
         excludedFromJointEstate: false,
         excludedFromEstateDuty: false,
         excludedFromCGT: false,
@@ -166,8 +166,8 @@ function VoluntaryInvestmentsTable({ viewMode, searchTerm }: VoluntaryInvestment
     const investment = investments.find(inv => inv.id === id);
     if (!investment) return;
     
-    const newOwners = [...investment.owners, ""];
-    const newPercentages = [...investment.ownershipPercentages, "0%"];
+    const newOwners = [...investment.owners,""];
+    const newPercentages = [...investment.ownershipPercentages,"0%"];
     
     // Update both arrays in a single call to prevent race conditions
     setIsUpdating(true);
@@ -222,11 +222,11 @@ function VoluntaryInvestmentsTable({ viewMode, searchTerm }: VoluntaryInvestment
   }, [handleUpdateInvestment, investments]);
 
   if (isLoading) {
-    return <div className="flex justify-center py-8">Loading voluntary investments...</div>;
+    return <div className="flex justify-center">Loading voluntary investments...</div>;
   }
 
   if (error) {
-    return <div className="text-red-600 py-8">Error loading voluntary investments. Please try again.</div>;
+    return <div className="text-red-600">Error loading voluntary investments. Please try again.</div>;
   }
 
   return (
@@ -329,8 +329,8 @@ function VoluntaryInvestmentsTable({ viewMode, searchTerm }: VoluntaryInvestment
                   {ownerIndex < investment.owners.length && (
                     <input
                       type="text"
-                      defaultValue={formatPercentageValue(investment.ownershipPercentages?.[ownerIndex] || "0%")}
-                      className={`table-input ${getFieldClass('percentage')} ${getValueClass(investment.ownershipPercentages?.[ownerIndex] || "0%", 'percentage')}`}
+                      defaultValue={formatPercentageValue(investment.ownershipPercentages?.[ownerIndex] ||"0%")}
+                      className={`table-input ${getFieldClass('percentage')} ${getValueClass(investment.ownershipPercentages?.[ownerIndex] ||"0%", 'percentage')}`}
                       onFocus={handleDefaultValueFocus}
                       onBlur={(e) => handleOwnershipPercentageChange(investment.id, ownerIndex, e.target.value)}
                     />

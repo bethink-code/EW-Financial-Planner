@@ -1,12 +1,12 @@
 import React, { useCallback, useMemo, useState } from 'react';
 import { RetirementFund } from '@shared/schema';
 import { Plus, UserPlus, UserMinus, Trash2, Copy } from 'lucide-react';
-import { formatCurrencyValue, formatPercentageValue, formatTextValue, cleanTextValue, formatYearsValue, getValueClass, isDefaultValue, handleDefaultValueFocus } from "@/lib/formatting";
-import { createOwnerManager, createComplexBeneficiaryManager } from "@/lib/array-management";
-import { getFieldClass, getCellClass } from "@/lib/field-types";
-import { ActionButtonGroup, DuplicateButton, DeleteButton, AddButton } from "@/components/ui/action-buttons";
+import { formatCurrencyValue, formatPercentageValue, formatTextValue, cleanTextValue, formatYearsValue, getValueClass, isDefaultValue, handleDefaultValueFocus } from"@/lib/formatting";
+import { createOwnerManager, createComplexBeneficiaryManager } from"@/lib/array-management";
+import { getFieldClass, getCellClass } from"@/lib/field-types";
+import { ActionButtonGroup, DuplicateButton, DeleteButton, AddButton } from"@/components/ui/action-buttons";
 
-import { useDebouncedUpdate } from "@/hooks/use-debounced-update";
+import { useDebouncedUpdate } from"@/hooks/use-debounced-update";
 
 interface NewRetirementTableProps {
  funds: RetirementFund[];
@@ -18,12 +18,12 @@ interface NewRetirementTableProps {
 
 // Format currency value with R prefix and proper formatting - matches Assurance pattern
 const formatCurrency = (value: string, fieldType: string): string => {
-  if (!value?.trim()) return "R 0";
+  if (!value?.trim()) return"R 0";
   
   // Remove existing formatting
   const cleanValue = value.replace(/[^\d.-]/g, '');
-  if (!cleanValue) return "R 0";
-  if (isNaN(parseFloat(cleanValue))) return "R 0";
+  if (!cleanValue) return"R 0";
+  if (isNaN(parseFloat(cleanValue))) return"R 0";
   
   const numValue = parseFloat(cleanValue);
   
@@ -36,7 +36,7 @@ const formatCurrency = (value: string, fieldType: string): string => {
     return `R ${numValue.toLocaleString()}`;
   }
   
-  return "R 0";
+  return"R 0";
 };
 
 export function NewRetirementTable({ 
@@ -107,7 +107,7 @@ export function NewRetirementTable({
  const handleAddOwner = useCallback((fundId: number) => {
    const fund = funds.find((f: RetirementFund) => f.id === fundId);
    if (fund) {
-     const newOwners = [...fund.owners, ""];
+     const newOwners = [...fund.owners,""];
      handleUpdateFund(fundId, 'owners', newOwners);
    }
  }, [funds, handleUpdateFund]);
@@ -134,9 +134,9 @@ export function NewRetirementTable({
  const handleAddUnapprovedBeneficiary = useCallback((fundId: number) => {
    const fund = funds.find((f: RetirementFund) => f.id === fundId);
    if (fund) {
-     const newBeneficiaries = [...(fund.unapprovedBeneficiaries || []), ""];
-     const newPercentages = [...(fund.unapprovedPercentageSplits || []), "0%"];
-     const newCoverSplits = [...(fund.unapprovedCoverSplits || []), "R 0"];
+     const newBeneficiaries = [...(fund.unapprovedBeneficiaries || []),""];
+     const newPercentages = [...(fund.unapprovedPercentageSplits || []),"0%"];
+     const newCoverSplits = [...(fund.unapprovedCoverSplits || []),"R 0"];
      
      handleUpdateFund(fundId, 'unapprovedBeneficiaries', newBeneficiaries);
      handleUpdateFund(fundId, 'unapprovedPercentageSplits', newPercentages);
@@ -165,9 +165,9 @@ export function NewRetirementTable({
  const handleAddFundValueBeneficiary = useCallback((fundId: number) => {
    const fund = funds.find((f: RetirementFund) => f.id === fundId);
    if (fund) {
-     const newBeneficiaries = [...(fund.fundValueBeneficiaries || []), ""];
-     const newPercentages = [...(fund.fundValuePercentageSplits || []), "0%"];
-     const newCoverSplits = [...(fund.fundValueCoverSplits || []), "R 0"];
+     const newBeneficiaries = [...(fund.fundValueBeneficiaries || []),""];
+     const newPercentages = [...(fund.fundValuePercentageSplits || []),"0%"];
+     const newCoverSplits = [...(fund.fundValueCoverSplits || []),"R 0"];
      
      handleUpdateFund(fundId, 'fundValueBeneficiaries', newBeneficiaries);
      handleUpdateFund(fundId, 'fundValuePercentageSplits', newPercentages);
@@ -343,7 +343,7 @@ export function NewRetirementTable({
  key={`desc-${fund.id}`}
  type="text"
  defaultValue={formatTextValue(fund.description ||"")}
- className={`table-input ${getFieldClass('text')} ${getValueClass(fund.description || "", 'text')}`}
+ className={`table-input ${getFieldClass('text')} ${getValueClass(fund.description ||"", 'text')}`}
  onFocus={handleDefaultValueFocus}
  onBlur={(e) => {
  const value = cleanTextValue(e.target.value);
@@ -406,8 +406,8 @@ export function NewRetirementTable({
  <input
  key={`unapproved-benef-${fund.id}-${rowIndex}`}
  type="text"
- defaultValue={formatTextValue(fund.unapprovedBeneficiaries?.[rowIndex] || "")}
- className={`table-input ${getFieldClass('text')} flex-1 ${getValueClass(fund.unapprovedBeneficiaries?.[rowIndex] || "", 'text')}`}
+ defaultValue={formatTextValue(fund.unapprovedBeneficiaries?.[rowIndex] ||"")}
+ className={`table-input ${getFieldClass('text')} flex-1 ${getValueClass(fund.unapprovedBeneficiaries?.[rowIndex] ||"", 'text')}`}
  onFocus={handleDefaultValueFocus}
  onBlur={(e) => {
  handleUnapprovedBeneficiaryChange(fund.id, rowIndex, e.target.value);
@@ -575,8 +575,8 @@ export function NewRetirementTable({
  <input
  key={`fundvalue-benef-${fund.id}-${rowIndex}`}
  type="text"
- defaultValue={formatTextValue(fund.fundValueBeneficiaries?.[rowIndex] || "")}
- className={`table-input ${getFieldClass('text')} flex-1 ${getValueClass(fund.fundValueBeneficiaries?.[rowIndex] || "", 'text')}`}
+ defaultValue={formatTextValue(fund.fundValueBeneficiaries?.[rowIndex] ||"")}
+ className={`table-input ${getFieldClass('text')} flex-1 ${getValueClass(fund.fundValueBeneficiaries?.[rowIndex] ||"", 'text')}`}
  onFocus={handleDefaultValueFocus}
  onBlur={(e) => {
  handleFundValueBeneficiaryChange(fund.id, rowIndex, e.target.value);

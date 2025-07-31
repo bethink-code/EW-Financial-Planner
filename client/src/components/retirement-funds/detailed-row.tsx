@@ -1,11 +1,11 @@
-import { useState, useCallback, memo, useMemo, useRef, useEffect } from "react";
-import { ChevronRight, ChevronDown, Edit } from "lucide-react";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Badge } from "@/components/ui/badge";
-import { BeneficiarySection } from "./beneficiary-section";
-import type { RetirementFund, UpdateRetirementFund } from "@shared/schema";
+import { useState, useCallback, memo, useMemo, useRef, useEffect } from"react";
+import { ChevronRight, ChevronDown, Edit } from"lucide-react";
+import { Input } from"@/components/ui/input";
+import { Label } from"@/components/ui/label";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from"@/components/ui/select";
+import { Badge } from"@/components/ui/badge";
+import { BeneficiarySection } from"./beneficiary-section";
+import type { RetirementFund, UpdateRetirementFund } from"@shared/schema";
 
 // Removed AutoSizeInput - optimized for better performance
 
@@ -31,11 +31,11 @@ export const DetailedRow = memo(function DetailedRow({ fund, columnVisibility, o
     onFieldUpdate(fund.id, field, value);
   }, [fund.id, onFieldUpdate]);
 
-  const owners = useMemo(() => ["Donald Edwards", "Betty Edwards"], []);
-  const getOwnerBadgeColor = useCallback(() => " border border-neutral-300", []);
+  const owners = useMemo(() => ["Donald Edwards","Betty Edwards"], []);
+  const getOwnerBadgeColor = useCallback(() =>" border border-neutral-300", []);
 
   return (
-    <div className="border border-neutral-200 rounded-lg ">
+    <div className="border border-neutral-200 rounded-lg">
       <div 
         className="p-4 cursor-pointer hover:bg-gray-50 flex items-center justify-between"
         onClick={() => setIsExpanded(!isExpanded)}
@@ -219,8 +219,8 @@ export const DetailedRow = memo(function DetailedRow({ fund, columnVisibility, o
                 </div>
                 <div>
                   <Label className="text-xs text-neutral-600 mb-1 block">Fund Value at Death</Label>
-                  <div className="h-9 px-3 py-2 text-sm text-right bg-neutral-50 border border-neutral-200 rounded">
-                    {fund.fundValueAtDeath || "R 0"}
+                  <div className="h-9 px-3 text-sm text-right bg-neutral-50 border border-neutral-200 rounded">
+                    {fund.fundValueAtDeath ||"R 0"}
                   </div>
                 </div>
               </div>
@@ -237,7 +237,7 @@ export const DetailedRow = memo(function DetailedRow({ fund, columnVisibility, o
                   <div>
                     <Label className="text-xs text-neutral-600 mb-1 block">Beneficiary Name</Label>
                     <Select
-                      value={fund.beneficiaryName || ""}
+                      value={fund.beneficiaryName ||""}
                       onValueChange={(value) => handleFieldChange("beneficiaryName", value)}
                       disabled={isUpdating}
                     >
@@ -266,8 +266,8 @@ export const DetailedRow = memo(function DetailedRow({ fund, columnVisibility, o
                   </div>
                   <div>
                     <Label className="text-xs text-neutral-600 mb-1 block">Amount (Read-only)</Label>
-                    <div className="h-9 px-3 py-2 text-sm text-right bg-neutral-50 border border-neutral-200 rounded">
-                      {fund.amount || "R 0"}
+                    <div className="h-9 px-3 text-sm text-right bg-neutral-50 border border-neutral-200 rounded">
+                      {fund.amount ||"R 0"}
                     </div>
                   </div>
                 </div>
@@ -298,8 +298,8 @@ export const DetailedRow = memo(function DetailedRow({ fund, columnVisibility, o
                   </div>
                   <div>
                     <Label className="text-xs text-neutral-600 mb-1 block">Living Annuity (Read-only)</Label>
-                    <div className="h-9 px-3 py-2 text-sm text-right bg-neutral-50 border border-neutral-200 rounded">
-                      {fund.livingAnnuity || ""}
+                    <div className="h-9 px-3 text-sm text-right bg-neutral-50 border border-neutral-200 rounded">
+                      {fund.livingAnnuity ||""}
                     </div>
                   </div>
                   <div>

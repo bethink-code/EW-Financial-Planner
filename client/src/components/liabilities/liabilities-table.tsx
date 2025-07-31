@@ -24,16 +24,16 @@ function LiabilitiesTable({ viewMode, searchTerm, onShowCategoryDialog }: Liabil
   const addMutation = useMutation({
     mutationFn: async (): Promise<Liabilities> => {
       const newLiability: InsertLiabilities = {
-        description: "",
-        debtAmount: "R 0",
-        peterLambie: "0%",
-        victoriaLambie: "0%",
-        juniorLambie: "0%",
-        lambiesFamilyTrust: "0%",
-        estate: "R 0",
-        others: "R 0",
-        client: "R 0",
-        section: "BONDS",
+        description:"",
+        debtAmount:"R 0",
+        peterLambie:"0%",
+        victoriaLambie:"0%",
+        juniorLambie:"0%",
+        lambiesFamilyTrust:"0%",
+        estate:"R 0",
+        others:"R 0",
+        client:"R 0",
+        section:"BONDS",
         included: true,
       };
       
@@ -163,11 +163,11 @@ function LiabilitiesTable({ viewMode, searchTerm, onShowCategoryDialog }: Liabil
   }, [deleteMutation]);
 
   if (isLoading) {
-    return <div className="flex justify-center py-8">Loading liabilities...</div>;
+    return <div className="flex justify-center">Loading liabilities...</div>;
   }
 
   if (error) {
-    return <div className="text-red-600 py-8">Error loading liabilities. Please try again.</div>;
+    return <div className="text-red-600">Error loading liabilities. Please try again.</div>;
   }
 
   return (
@@ -210,7 +210,7 @@ function LiabilitiesTable({ viewMode, searchTerm, onShowCategoryDialog }: Liabil
             return Object.entries(groupedLiabilities).map(([sectionName, sectionLiabilities]) => [
               // Section Header
               <tr key={`section-${sectionName}`} className="bg-blue-50">
-                <td colSpan={10} className="px-4 py-2 text-sm font-medium text-neutral-700 uppercase tracking-wider">
+                <td colSpan={10} className="px-4 text-sm font-medium text-neutral-700 uppercase tracking-wider">
                   {sectionName.replace('_', ' ')}
                 </td>
               </tr>,

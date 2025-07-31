@@ -1,15 +1,15 @@
-import React, { useRef, useEffect, useMemo, useCallback } from "react";
-import { RetirementFund, UpdateRetirementFund, Beneficiary } from "@shared/schema";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Edit3, Plus, Trash2 } from "lucide-react";
-import { AddButton, DeleteButton, DuplicateButton, ActionButtonGroup } from "@/components/ui/action-buttons";
-import { parseBeneficiaries } from "@/lib/beneficiaries";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { FundActions } from "./fund-actions";
-import { nanoid } from "nanoid";
-import { getFieldClass } from "@/lib/design-tokens";
-import { formatPercentageValue, getValueClass, isDefaultValue, handleDefaultValueFocus } from "@/lib/formatting";
+import React, { useRef, useEffect, useMemo, useCallback } from"react";
+import { RetirementFund, UpdateRetirementFund, Beneficiary } from"@shared/schema";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from"@/components/ui/select";
+import { Edit3, Plus, Trash2 } from"lucide-react";
+import { AddButton, DeleteButton, DuplicateButton, ActionButtonGroup } from"@/components/ui/action-buttons";
+import { parseBeneficiaries } from"@/lib/beneficiaries";
+import { Input } from"@/components/ui/input";
+import { Button } from"@/components/ui/button";
+import { FundActions } from"./fund-actions";
+import { nanoid } from"nanoid";
+import { getFieldClass } from"@/lib/design-tokens";
+import { formatPercentageValue, getValueClass, isDefaultValue, handleDefaultValueFocus } from"@/lib/formatting";
 interface ColumnVisibility {
   overview: boolean;
   unapprovedLifeCover: boolean;
@@ -20,7 +20,7 @@ interface ColumnVisibility {
 interface NewGroupedTableViewProps {
   funds: RetirementFund[];
   columnVisibility: ColumnVisibility;
-  tableMode: "inputs" | "flows";
+  tableMode:"inputs" |"flows";
   onFieldUpdate: (id: number, field: keyof UpdateRetirementFund, value: string) => void;
   isUpdating: boolean;
 }
@@ -37,11 +37,11 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
     
     funds.forEach(fund => {
       // Parse Estate value
-      const estateValue = parseFloat((fund.lumpSumProvisionEstate || "0").replace(/[R\s,]/g, '').replace(/[^\d.-]/g, '')) || 0;
+      const estateValue = parseFloat((fund.lumpSumProvisionEstate ||"0").replace(/[R\s,]/g, '').replace(/[^\d.-]/g, '')) || 0;
       // Parse Spouse value  
-      const spouseValue = parseFloat((fund.lumpSumProvisionSpouse || "0").replace(/[R\s,]/g, '').replace(/[^\d.-]/g, '')) || 0;
+      const spouseValue = parseFloat((fund.lumpSumProvisionSpouse ||"0").replace(/[R\s,]/g, '').replace(/[^\d.-]/g, '')) || 0;
       // Parse Other value
-      const otherValue = parseFloat((fund.lumpSumProvisionOther || "0").replace(/[R\s,]/g, '').replace(/[^\d.-]/g, '')) || 0;
+      const otherValue = parseFloat((fund.lumpSumProvisionOther ||"0").replace(/[R\s,]/g, '').replace(/[^\d.-]/g, '')) || 0;
       
       totals.estate += estateValue;
       totals.spouse += spouseValue; 
@@ -135,9 +135,9 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
     const currentBeneficiaries = parseBeneficiaries(fund.beneficiaries);
     const newBeneficiary: Beneficiary = {
       id: nanoid(),
-      name: "",
+      name:"",
       percentage: 0,
-      coverSplit: "R 0"
+      coverSplit:"R 0"
     };
     const updatedBeneficiaries = [...currentBeneficiaries, newBeneficiary];
     onFieldUpdate(fundId, 'beneficiaries', JSON.stringify(updatedBeneficiaries));
@@ -162,9 +162,9 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
     }
     onFieldUpdate(fundId, 'beneficiaries', JSON.stringify(updatedBeneficiaries));
   }, [funds, onFieldUpdate]);
-  const owners = useMemo(() => ["Donald Edwards", "Betty Edwards"], []);
+  const owners = useMemo(() => ["Donald Edwards","Betty Edwards"], []);
   // Memoized editable cell renderer
-  const renderEditableCell = useCallback((value: string, onChange: (value: string) => void, className = "", field = "") => {
+  const renderEditableCell = useCallback((value: string, onChange: (value: string) => void, className ="", field ="") => {
     return (
       <input
         defaultValue={value}
@@ -182,7 +182,7 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
     );
   }, [isUpdating, formatCurrencyValue]);
   // Flows table structure - removed temporarily to fix JSX syntax error
-  if (tableMode === "flows") {
+  if (tableMode ==="flows") {
     // Render flows table only
     return (
       <div>
@@ -195,7 +195,7 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
                   <th className="p-2 text-center font-medium text-neutral-600 uppercase tracking-wider text-xs">
                     {/* Description column - standalone */}
                   </th>
-                  <th className="p-2 text-center font-medium text-neutral-600 uppercase tracking-wider text-xs " colSpan={3}>
+                  <th className="p-2 text-center font-medium text-neutral-600 uppercase tracking-wider text-xs" colSpan={3}>
                     Lump sum life cover available as provision to
                   </th>
                 </>
@@ -226,7 +226,7 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
               )}
               {columnVisibility.overview && (
                 <>
-                  <th className="p-2 text-center font-medium text-neutral-600 uppercase tracking-wider text-xs ">
+                  <th className="p-2 text-center font-medium text-neutral-600 uppercase tracking-wider text-xs">
                     Estate
                   </th>
                   <th className="p-2 text-center font-medium text-neutral-600 uppercase tracking-wider text-xs">
@@ -287,7 +287,7 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
           <tbody className="divide-y divide-neutral-200">
             {/* Flows data rows */}
             {funds.map((fund, index) => (
-              <tr key={fund.id} className={index % 2 === 0 ? "" : "bg-teal-50/30"}>
+              <tr key={fund.id} className={index % 2 === 0 ?"" :"bg-teal-50/30"}>
                 {columnVisibility.overview && (
                   <td className="p-2 table-text-14 text-neutral-900" style={{ minWidth: '200px', width: '200px' }}>
                     {fund.description}
@@ -295,45 +295,45 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
                 )}
                 {columnVisibility.overview && (
                   <>
-                    <td className="p-2 text-right ">
+                    <td className="p-2 text-right">
                       <input
-                        defaultValue={fund.lumpSumProvisionEstate || "0"}
+                        defaultValue={fund.lumpSumProvisionEstate ||"0"}
                         onBlur={(e) => {
-                          const formattedValue = formatCurrencyValue(e.target.value, "lumpSumProvisionEstate");
+                          const formattedValue = formatCurrencyValue(e.target.value,"lumpSumProvisionEstate");
                           if (formattedValue !== e.target.value) {
                             e.target.value = formattedValue;
                           }
-                          handleInputBlur(fund.id, "lumpSumProvisionEstate", e.target.value);
+                          handleInputBlur(fund.id,"lumpSumProvisionEstate", e.target.value);
                         }}
                         className="table-input"
                         style={{ textAlign: 'right', minWidth: '60px' }}
                         disabled={isUpdating}
                       />
                     </td>
-                    <td className="p-2 text-right ">
+                    <td className="p-2 text-right">
                       <input
-                        defaultValue={fund.lumpSumProvisionSpouse || "0"}
+                        defaultValue={fund.lumpSumProvisionSpouse ||"0"}
                         onBlur={(e) => {
-                          const formattedValue = formatCurrencyValue(e.target.value, "lumpSumProvisionSpouse");
+                          const formattedValue = formatCurrencyValue(e.target.value,"lumpSumProvisionSpouse");
                           if (formattedValue !== e.target.value) {
                             e.target.value = formattedValue;
                           }
-                          handleInputBlur(fund.id, "lumpSumProvisionSpouse", e.target.value);
+                          handleInputBlur(fund.id,"lumpSumProvisionSpouse", e.target.value);
                         }}
                         className="table-input"
                         style={{ textAlign: 'right', minWidth: '60px' }}
                         disabled={isUpdating}
                       />
                     </td>
-                    <td className="p-2 text-right ">
+                    <td className="p-2 text-right">
                       <input
-                        defaultValue={fund.lumpSumProvisionOther || "0"}
+                        defaultValue={fund.lumpSumProvisionOther ||"0"}
                         onBlur={(e) => {
-                          const formattedValue = formatCurrencyValue(e.target.value, "lumpSumProvisionOther");
+                          const formattedValue = formatCurrencyValue(e.target.value,"lumpSumProvisionOther");
                           if (formattedValue !== e.target.value) {
                             e.target.value = formattedValue;
                           }
-                          handleInputBlur(fund.id, "lumpSumProvisionOther", e.target.value);
+                          handleInputBlur(fund.id,"lumpSumProvisionOther", e.target.value);
                         }}
                         className="table-input"
                         style={{ textAlign: 'right', minWidth: '60px' }}
@@ -346,44 +346,44 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
                   <>
                     <td className="p-2 text-right border-l border-neutral-300">
                       <input
-                        defaultValue={fund.currentAnnualIncome || "0"}
+                        defaultValue={fund.currentAnnualIncome ||"0"}
                         onBlur={(e) => {
-                          const formattedValue = formatCurrencyValue(e.target.value, "currentAnnualIncome");
+                          const formattedValue = formatCurrencyValue(e.target.value,"currentAnnualIncome");
                           if (formattedValue !== e.target.value) {
                             e.target.value = formattedValue;
                           }
-                          handleInputBlur(fund.id, "currentAnnualIncome", e.target.value);
+                          handleInputBlur(fund.id,"currentAnnualIncome", e.target.value);
                         }}
-                        className="table-input" style={{ textAlign: "right" }}
+                        className="table-input" style={{ textAlign:"right" }}
                         disabled={isUpdating}
                       />
                     </td>
-                    <td className="p-2 text-right ">
+                    <td className="p-2 text-right">
                       <input
-                        defaultValue={fund.termYears || "0"}
+                        defaultValue={fund.termYears ||"0"}
                         onBlur={(e) => {
-                          const formattedValue = formatCurrencyValue(e.target.value, "termYears");
+                          const formattedValue = formatCurrencyValue(e.target.value,"termYears");
                           if (formattedValue !== e.target.value) {
                             e.target.value = formattedValue;
                           }
-                          handleInputBlur(fund.id, "termYears", e.target.value);
+                          handleInputBlur(fund.id,"termYears", e.target.value);
                         }}
-                        className="table-input" style={{ textAlign: "right" }}
+                        className="table-input" style={{ textAlign:"right" }}
                         disabled={isUpdating}
                       />
                     </td>
-                    <td className="p-2 text-right ">
+                    <td className="p-2 text-right">
                       <input
-                        defaultValue={fund.increasePercentage || "0%"}
+                        defaultValue={fund.increasePercentage ||"0%"}
                         onFocus={handleDefaultValueFocus}
                         onBlur={(e) => {
                           const formattedValue = formatPercentageValue(e.target.value);
                           if (formattedValue !== e.target.value) {
                             e.target.value = formattedValue;
                           }
-                          handleInputBlur(fund.id, "increasePercentage", e.target.value);
+                          handleInputBlur(fund.id,"increasePercentage", e.target.value);
                         }}
-                        className={`${getFieldClass('percentage')} table-input text-right ${getValueClass(fund.increasePercentage || "0%", 'percentage')}`}
+                        className={`${getFieldClass('percentage')} table-input text-right ${getValueClass(fund.increasePercentage ||"0%", 'percentage')}`}
                         disabled={isUpdating}
                       />
                     </td>
@@ -393,43 +393,43 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
                   <>
                     <td className="p-2 text-right border-l border-neutral-300">
                       <input
-                        defaultValue={fund.monthlyProvisionOffered || "0"}
+                        defaultValue={fund.monthlyProvisionOffered ||"0"}
                         onBlur={(e) => {
-                          const formattedValue = formatCurrencyValue(e.target.value, "monthlyProvisionOffered");
+                          const formattedValue = formatCurrencyValue(e.target.value,"monthlyProvisionOffered");
                           if (formattedValue !== e.target.value) {
                             e.target.value = formattedValue;
                           }
-                          handleInputBlur(fund.id, "monthlyProvisionOffered", e.target.value);
+                          handleInputBlur(fund.id,"monthlyProvisionOffered", e.target.value);
                         }}
-                        className="table-input" style={{ textAlign: "right" }}
+                        className="table-input" style={{ textAlign:"right" }}
                         disabled={isUpdating}
                       />
                     </td>
-                    <td className="p-2 text-right ">
+                    <td className="p-2 text-right">
                       <input
-                        defaultValue={fund.incomeTerm || "0"}
+                        defaultValue={fund.incomeTerm ||"0"}
                         onBlur={(e) => {
-                          const formattedValue = formatCurrencyValue(e.target.value, "incomeTerm");
+                          const formattedValue = formatCurrencyValue(e.target.value,"incomeTerm");
                           if (formattedValue !== e.target.value) {
                             e.target.value = formattedValue;
                           }
-                          handleInputBlur(fund.id, "incomeTerm", e.target.value);
+                          handleInputBlur(fund.id,"incomeTerm", e.target.value);
                         }}
-                        className="table-input" style={{ textAlign: "right" }}
+                        className="table-input" style={{ textAlign:"right" }}
                         disabled={isUpdating}
                       />
                     </td>
-                    <td className="p-2 text-right ">
+                    <td className="p-2 text-right">
                       <input
-                        defaultValue={fund.incomeEscalation || "0%"}
+                        defaultValue={fund.incomeEscalation ||"0%"}
                         onBlur={(e) => {
-                          const formattedValue = formatCurrencyValue(e.target.value, "incomeEscalation");
+                          const formattedValue = formatCurrencyValue(e.target.value,"incomeEscalation");
                           if (formattedValue !== e.target.value) {
                             e.target.value = formattedValue;
                           }
-                          handleInputBlur(fund.id, "incomeEscalation", e.target.value);
+                          handleInputBlur(fund.id,"incomeEscalation", e.target.value);
                         }}
-                        className="table-input" style={{ textAlign: "right" }}
+                        className="table-input" style={{ textAlign:"right" }}
                         disabled={isUpdating}
                       />
                     </td>
@@ -439,43 +439,43 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
                   <>
                     <td className="p-2 text-right border-l border-neutral-300">
                       <input
-                        defaultValue={fund.estateDutyPoliciesOnLife || "0%"}
+                        defaultValue={fund.estateDutyPoliciesOnLife ||"0%"}
                         onBlur={(e) => {
-                          const formattedValue = formatCurrencyValue(e.target.value, "estateDutyPoliciesOnLife");
+                          const formattedValue = formatCurrencyValue(e.target.value,"estateDutyPoliciesOnLife");
                           if (formattedValue !== e.target.value) {
                             e.target.value = formattedValue;
                           }
-                          handleInputBlur(fund.id, "estateDutyPoliciesOnLife", e.target.value);
+                          handleInputBlur(fund.id,"estateDutyPoliciesOnLife", e.target.value);
                         }}
                         className="table-input" 
                         placeholder="0%"
                         disabled={isUpdating}
                       />
                     </td>
-                    <td className="p-2 text-right ">
+                    <td className="p-2 text-right">
                       <input
-                        defaultValue={fund.estateDutyToSpouse || "0%"}
+                        defaultValue={fund.estateDutyToSpouse ||"0%"}
                         onBlur={(e) => {
-                          const formattedValue = formatCurrencyValue(e.target.value, "estateDutyToSpouse");
+                          const formattedValue = formatCurrencyValue(e.target.value,"estateDutyToSpouse");
                           if (formattedValue !== e.target.value) {
                             e.target.value = formattedValue;
                           }
-                          handleInputBlur(fund.id, "estateDutyToSpouse", e.target.value);
+                          handleInputBlur(fund.id,"estateDutyToSpouse", e.target.value);
                         }}
-                        className="table-input" style={{ textAlign: "right" }}
+                        className="table-input" style={{ textAlign:"right" }}
                         placeholder="0%"
                         disabled={isUpdating}
                       />
                     </td>
-                    <td className="p-2 text-right ">
+                    <td className="p-2 text-right">
                       <input
-                        defaultValue={fund.estateDutyToOthers || "0%"}
+                        defaultValue={fund.estateDutyToOthers ||"0%"}
                         onBlur={(e) => {
-                          const formattedValue = formatCurrencyValue(e.target.value, "estateDutyToOthers");
+                          const formattedValue = formatCurrencyValue(e.target.value,"estateDutyToOthers");
                           if (formattedValue !== e.target.value) {
                             e.target.value = formattedValue;
                           }
-                          handleInputBlur(fund.id, "estateDutyToOthers", e.target.value);
+                          handleInputBlur(fund.id,"estateDutyToOthers", e.target.value);
                         }}
                         className="table-input"
                         placeholder="0%"
@@ -484,13 +484,13 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
                     </td>
                     <td className="p-2 text-right">
                       <input
-                        defaultValue={fund.executorsFee || "0%"}
+                        defaultValue={fund.executorsFee ||"0%"}
                         onBlur={(e) => {
-                          const formattedValue = formatCurrencyValue(e.target.value, "executorsFee");
+                          const formattedValue = formatCurrencyValue(e.target.value,"executorsFee");
                           if (formattedValue !== e.target.value) {
                             e.target.value = formattedValue;
                           }
-                          handleInputBlur(fund.id, "executorsFee", e.target.value);
+                          handleInputBlur(fund.id,"executorsFee", e.target.value);
                         }}
                         className="table-input"
                         placeholder="0%"
@@ -499,13 +499,13 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
                     </td>
                     <td className="p-2 text-right">
                       <input
-                        defaultValue={fund.mastersFee || "0%"}
+                        defaultValue={fund.mastersFee ||"0%"}
                         onBlur={(e) => {
-                          const formattedValue = formatCurrencyValue(e.target.value, "mastersFee");
+                          const formattedValue = formatCurrencyValue(e.target.value,"mastersFee");
                           if (formattedValue !== e.target.value) {
                             e.target.value = formattedValue;
                           }
-                          handleInputBlur(fund.id, "mastersFee", e.target.value);
+                          handleInputBlur(fund.id,"mastersFee", e.target.value);
                         }}
                         className="table-input"
                         placeholder="0%"
@@ -547,10 +547,10 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
                   <td className="p-2 text-right border-l border-neutral-300">
                     {/* Empty - no totals for this section */}
                   </td>
-                  <td className="p-2 text-right ">
+                  <td className="p-2 text-right">
                     {/* Empty - no totals for this section */}
                   </td>
-                  <td className="p-2 text-right ">
+                  <td className="p-2 text-right">
                     {/* Empty - no totals for this section */}
                   </td>
                 </>
@@ -560,7 +560,7 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
                   <td className="p-2 text-right border-l border-neutral-300">
                     {/* Empty - no totals for this section */}
                   </td>
-                  <td className="p-2 text-right ">
+                  <td className="p-2 text-right">
                     {/* Empty - no totals for this section */}
                   </td>
                   <td className="p-2 text-right">
@@ -576,22 +576,22 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
                   </td>
                   
                   {/* Estate Duty (To spouse) */}
-                  <td className="p-2 text-right ">
+                  <td className="p-2 text-right">
                     {/* Empty - no totals for this section */}
                   </td>
                   
                   {/* Estate Duty (To others) */}
-                  <td className="p-2 text-right ">
+                  <td className="p-2 text-right">
                     {/* Empty - no totals for this section */}
                   </td>
                   
                   {/* Executor's fee */}
-                  <td className="p-2 text-right ">
+                  <td className="p-2 text-right">
                     {/* Empty - no totals for this section */}
                   </td>
                   
                   {/* Master's fee */}
-                  <td className="p-2 text-right ">
+                  <td className="p-2 text-right">
                     {/* Empty - no totals for this section */}
                   </td>
                 </>
@@ -738,8 +738,8 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
                       {/* Description */}
                       <td className="table-cell whitespace-nowrap table-text-14 text-neutral-900 align-top" rowSpan={beneficiaries.length + 1}>
                         <input
-                          defaultValue={fund.description || "Enter details ..."} onFocus={handleDefaultValueFocus}
-                          onBlur={(e) => handleInputBlur(fund.id, "description", e.target.value)}
+                          defaultValue={fund.description ||"Enter details ..."} onFocus={handleDefaultValueFocus}
+                          onBlur={(e) => handleInputBlur(fund.id,"description", e.target.value)}
                           className="border-0 focus: focus:border focus:border-primary  text-left font-medium table-input"
                           placeholder="Fund description"
                           disabled={isUpdating}
@@ -749,8 +749,8 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
                       {/* Owner */}
                       <td className="p-2 text-right align-top" rowSpan={beneficiaries.length + 1}>
                         <Select
-                          value={fund.owner || "John Doe"}
-                          onValueChange={(value) => handleInputBlur(fund.id, "owner", value)}
+                          value={fund.owner ||"John Doe"}
+                          onValueChange={(value) => handleInputBlur(fund.id,"owner", value)}
                           disabled={isUpdating}
                         >
                           <SelectTrigger className="compact-input border-0 focus: focus:border focus:border-primary  transition-colors duration-200 group">
@@ -773,13 +773,13 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
                     <>
                       <td className="p-2 text-right border-l border-neutral-300 bg-teal-50 align-top" rowSpan={beneficiaries.length + 1}>
                         <input
-                          defaultValue={fund.coverAmount || "Enter details ..."} onFocus={handleDefaultValueFocus}
+                          defaultValue={fund.coverAmount ||"Enter details ..."} onFocus={handleDefaultValueFocus}
                           onBlur={(e) => {
-                            const formattedValue = formatCurrencyValue(e.target.value, "coverAmount");
+                            const formattedValue = formatCurrencyValue(e.target.value,"coverAmount");
                             if (formattedValue !== e.target.value) {
                               e.target.value = formattedValue;
                             }
-                            handleInputBlur(fund.id, "coverAmount", e.target.value);
+                            handleInputBlur(fund.id,"coverAmount", e.target.value);
                             
                             // Recalculate cover splits for all beneficiaries
                             const beneficiaries = parseBeneficiaries(fund.beneficiaries);
@@ -792,7 +792,7 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
                               handleInputBlur(fund.id, 'beneficiaries', JSON.stringify(updatedBeneficiaries));
                             }
                           }}
-                          className="table-input" style={{ textAlign: "right" }}
+                          className="table-input" style={{ textAlign:"right" }}
                           placeholder="R 0"
                           disabled={isUpdating}
                         />
@@ -840,7 +840,7 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
                             onBlur={(e) => handleBeneficiaryUpdate(fund.id, index, 'name', e.target.value)}
                             placeholder="Beneficiary name"
                             disabled={isUpdating}
-                            className="h-6 text-xs text-left bg-[#F2F7FB] border-none focus: focus:border focus:border-primary w-full px-2 py-1 rounded"
+                            className="h-6 text-xs text-left bg-[#F2F7FB] border-none focus: focus:border focus:border-primary w-full px-2 rounded"
                           />
                         </td>
                         
@@ -850,7 +850,7 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
                             type="text"
                             defaultValue={`${beneficiary.percentage}%`}
                             onBlur={(e) => {
-                              const formattedValue = formatCurrencyValue(e.target.value, "percentage");
+                              const formattedValue = formatCurrencyValue(e.target.value,"percentage");
                               if (formattedValue !== e.target.value) {
                                 e.target.value = formattedValue;
                               }
@@ -859,13 +859,13 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
                               handleBeneficiaryUpdate(fund.id, index, 'percentage', numericValue);
                             }}
                             disabled={isUpdating}
-                            className="h-6 text-xs text-center bg-[#F2F7FB] border-none focus: focus:border focus:border-primary w-full px-2 py-1 rounded"
+                            className="h-6 text-xs text-center bg-[#F2F7FB] border-none focus: focus:border focus:border-primary w-full px-2 rounded"
                           />
                         </td>
                         
                         {/* Cover Split */}
                         <td className="p-2 text-right">
-                          <div className="h-6 text-xs text-right px-2 py-1 bg-gray-50 border rounded text-neutral-600">
+                          <div className="h-6 text-xs text-right px-2 bg-gray-50 border rounded text-neutral-600">
                             {beneficiary.coverSplit}
                           </div>
                         </td>

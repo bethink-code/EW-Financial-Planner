@@ -55,8 +55,8 @@ export default function RoughTableDemo() {
           <tr>
             {/* Actions */}
             <td className="border border-gray-300 p-1">
-              <button className="text-xs bg-blue-500 text-white px-1 py-0.5 mr-1">Duplicate</button>
-              <button className="text-xs bg-red-500 text-white px-1 py-0.5">Delete</button>
+              <button className="text-xs bg-blue-500 text-white px-1 .5 mr-1">Duplicate</button>
+              <button className="text-xs bg-red-500 text-white px-1 .5">Delete</button>
             </td>
             
             {/* Overview */}

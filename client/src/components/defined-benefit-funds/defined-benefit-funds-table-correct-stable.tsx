@@ -1,12 +1,12 @@
-import React, { useState, useCallback, useMemo } from "react";
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { AddButton, DeleteButton, DuplicateButton, ActionButtonGroup } from "@/components/ui/action-buttons";
-import { getFieldClass } from "@/lib/design-tokens";
-import { getCellClass } from "@/lib/field-types";
-import { formatCurrencyValue, formatPercentageValue, formatYearsValue, formatTextValue, getValueClass, isDefaultValue, handleDefaultValueFocus } from "@/lib/formatting";
-import { useDebouncedUpdate } from "@/hooks/use-debounced-update";
-import { SafeFragment } from "@/lib/safe-fragment";
-import type { DefinedBenefitFund, InsertDefinedBenefitFund } from "@shared/schema";
+import React, { useState, useCallback, useMemo } from"react";
+import { useQuery, useMutation, useQueryClient } from"@tanstack/react-query";
+import { AddButton, DeleteButton, DuplicateButton, ActionButtonGroup } from"@/components/ui/action-buttons";
+import { getFieldClass } from"@/lib/design-tokens";
+import { getCellClass } from"@/lib/field-types";
+import { formatCurrencyValue, formatPercentageValue, formatYearsValue, formatTextValue, getValueClass, isDefaultValue, handleDefaultValueFocus } from"@/lib/formatting";
+import { useDebouncedUpdate } from"@/hooks/use-debounced-update";
+import { SafeFragment } from"@/lib/safe-fragment";
+import type { DefinedBenefitFund, InsertDefinedBenefitFund } from"@shared/schema";
 
 export default function DefinedBenefitFundsTable() {
   const [isUpdating, setIsUpdating] = useState(false);
@@ -28,15 +28,15 @@ export default function DefinedBenefitFundsTable() {
   const addMutation = useMutation({
     mutationFn: async (): Promise<DefinedBenefitFund> => {
       const newFund: InsertDefinedBenefitFund = {
-        description: "",
+        description:"",
         owners: ["Donald Edwards"],
         ownershipPercentages: ["100%"],
-        yearsOfService: "0 years",
-        finalMonthlySalary: "R 0",
-        deathLumpSum: "R 0",
-        additionalTaxFreeAmount: "R 0",
-        pensionIncomeAmount: "R 0",
-        pensionIncomeIncrease: "0%",
+        yearsOfService:"0 years",
+        finalMonthlySalary:"R 0",
+        deathLumpSum:"R 0",
+        additionalTaxFreeAmount:"R 0",
+        pensionIncomeAmount:"R 0",
+        pensionIncomeIncrease:"0%",
       };
       
       const response = await fetch('/api/defined-benefit-funds', {
@@ -137,8 +137,8 @@ export default function DefinedBenefitFundsTable() {
     const fund = funds.find(f => f.id === fundId);
     if (!fund) return;
     
-    const newOwners = [...fund.owners, "Donald Edwards"];
-    const newPercentages = [...fund.ownershipPercentages, "0%"];
+    const newOwners = [...fund.owners,"Donald Edwards"];
+    const newPercentages = [...fund.ownershipPercentages,"0%"];
     
     handleUpdateFund(fundId, { 
       owners: newOwners,
@@ -244,11 +244,11 @@ export default function DefinedBenefitFundsTable() {
   }, [queryClient]);
 
   if (isLoading) {
-    return <div className="flex justify-center py-8">Loading defined benefit funds...</div>;
+    return <div className="flex justify-center">Loading defined benefit funds...</div>;
   }
 
   if (error) {
-    return <div className="text-red-600 py-8">Error loading defined benefit funds. Please try again.</div>;
+    return <div className="text-red-600">Error loading defined benefit funds. Please try again.</div>;
   }
 
   return (
@@ -308,7 +308,7 @@ export default function DefinedBenefitFundsTable() {
                           className={`table-input ${getFieldClass('text')} ${getValueClass(fund.description, 'text')}`}
                           onFocus={handleDefaultValueFocus}
                           onBlur={(e) => {
-                            const formattedValue = e.target.value === "Enter details ..." ? "" : e.target.value;
+                            const formattedValue = e.target.value ==="Enter details ..." ?"" : e.target.value;
                             handleInputBlur(fund.id, 'description', formattedValue);
                           }}
                           disabled={isUpdating}
@@ -348,14 +348,14 @@ export default function DefinedBenefitFundsTable() {
                       <input
                         key={`percentage-${fund.id}-${rowIndex}-${fund.ownershipPercentages[rowIndex]}`}
                         type="text"
-                        defaultValue={fund.ownershipPercentages[rowIndex] || "0%"}
+                        defaultValue={fund.ownershipPercentages[rowIndex] ||"0%"}
                         onFocus={handleDefaultValueFocus}
                         onBlur={(e) => {
                           const formattedValue = formatPercentageValue(e.target.value);
                           handleOwnerUpdate(fund.id, rowIndex, 'percentage', formattedValue);
                           e.target.value = formattedValue;
                         }}
-                        className={`table-input ${getFieldClass('percentage')} ${getValueClass(fund.ownershipPercentages[rowIndex] || "0%", 'percentage')}`}
+                        className={`table-input ${getFieldClass('percentage')} ${getValueClass(fund.ownershipPercentages[rowIndex] ||"0%", 'percentage')}`}
                         disabled={isUpdating}
                       />
                     </td>
@@ -433,10 +433,10 @@ export default function DefinedBenefitFundsTable() {
                         <input
                           key={`pensionIncomeIncrease-${fund.id}-${fund.pensionIncomeIncrease}`}
                           type="text"
-                          defaultValue={fund.pensionIncomeIncrease || "0%"}
+                          defaultValue={fund.pensionIncomeIncrease ||"0%"}
                           onFocus={handleDefaultValueFocus}
                           onBlur={(e) => handleInputBlur(fund.id, 'pensionIncomeIncrease', e.target.value, e.target)}
-                          className={`table-input ${getFieldClass('percentage')} ${getValueClass(fund.pensionIncomeIncrease || "0%", 'percentage')}`}
+                          className={`table-input ${getFieldClass('percentage')} ${getValueClass(fund.pensionIncomeIncrease ||"0%", 'percentage')}`}
                           disabled={isUpdating}
                         />
                       </td>

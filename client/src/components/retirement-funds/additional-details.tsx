@@ -1,5 +1,5 @@
-import React, { useCallback, useMemo } from "react";
-import { RetirementFund, UpdateRetirementFund } from "@shared/schema";
+import React, { useCallback, useMemo } from"react";
+import { RetirementFund, UpdateRetirementFund } from"@shared/schema";
 
 interface AdditionalDetailsProps {
   funds: RetirementFund[];
@@ -29,11 +29,11 @@ export function AdditionalDetails({ funds, onFieldUpdate, isUpdating }: Addition
     
     if (!currencyFields.includes(field)) return value;
     
-    // If value is just "0" or empty, return "R 0"
-    if (!value || value === "0") return "R 0";
+    // If value is just"0" or empty, return"R 0"
+    if (!value || value ==="0") return"R 0";
     
     // If already formatted correctly, return as is
-    if (value.startsWith("R ")) return value;
+    if (value.startsWith("R")) return value;
     
     // Otherwise, format it
     return formatCurrencyValue(value, field);
@@ -121,7 +121,7 @@ export function AdditionalDetails({ funds, onFieldUpdate, isUpdating }: Addition
                         handleInputBlur(fund.id, 'lumpSumDeath', e.target.value);
                       }}
                       disabled={isUpdating}
-                      className="table-input h-7 text-sm  border-gray-200 focus:border-primary px-3 py-1 border rounded-md text-sm"
+                      className="table-input h-7 text-sm  border-gray-200 focus:border-primary px-3 border rounded-md text-sm"
                       style={{ textAlign: 'right', width: '120px' }}
                       placeholder="R 0"
                     />
@@ -139,7 +139,7 @@ export function AdditionalDetails({ funds, onFieldUpdate, isUpdating }: Addition
                         handleInputBlur(fund.id, 'previousLumpSums', e.target.value);
                       }}
                       disabled={isUpdating}
-                      className="table-input h-7 text-sm  border-gray-200 focus:border-primary px-3 py-1 border rounded-md text-sm"
+                      className="table-input h-7 text-sm  border-gray-200 focus:border-primary px-3 border rounded-md text-sm"
                       style={{ textAlign: 'right', width: '120px' }}
                       placeholder="R 0"
                     />
@@ -157,7 +157,7 @@ export function AdditionalDetails({ funds, onFieldUpdate, isUpdating }: Addition
                         handleInputBlur(fund.id, 'additionalTaxFreeAmount', e.target.value);
                       }}
                       disabled={isUpdating}
-                      className="table-input h-7 text-sm  border-gray-200 focus:border-primary px-3 py-1 border rounded-md text-sm"
+                      className="table-input h-7 text-sm  border-gray-200 focus:border-primary px-3 border rounded-md text-sm"
                       style={{ textAlign: 'right', width: '160px' }}
                       placeholder="R 0"
                     />
