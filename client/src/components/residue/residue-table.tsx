@@ -103,7 +103,7 @@ function ResidueTable({ viewMode, searchTerm }: ResidueTableProps) {
   const residueItem = residueItems[0] || { id: 1, entity: "Residue to registered charities", percentage: "0" };
 
   return (
-    <div className="max-w-md mx-auto">
+    <div className="max-w-md">
       <table className="w-full border-collapse">
         {/* Header */}
         <thead>
