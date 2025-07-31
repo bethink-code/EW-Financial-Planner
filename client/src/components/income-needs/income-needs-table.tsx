@@ -163,23 +163,23 @@ function IncomeNeedsTable({ viewMode, searchTerm }: IncomeNeedsTableProps) {
     <div className="space-y-6">
       <table>
         <thead>
-          <tr>
-            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start" rowSpan={2}>
+          <tr className="double-row-header-first">
+            <th className="section-start" rowSpan={2}>
               <AddButton onClick={() => addMutation.mutate()} disabled={isUpdating} />
             </th>
-            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start" colSpan={2}>Overview</th>
-            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start" colSpan={7}>Income Need Details</th>
+            <th className="section-start" colSpan={2}>Overview</th>
+            <th className="section-start" colSpan={7}>Income Need Details</th>
           </tr>
-          <tr>
-            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start">Description</th>
-            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center">Entity</th>
-            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start">Amount</th>
-            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center">Start Date</th>
-            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center">Term Years</th>
-            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center">Increase %</th>
-            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center">CPI</th>
-            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center">Frequency</th>
-            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center">Capitalised Amount</th>
+          <tr className="double-row-header-second">
+            <th className="section-start">Description</th>
+            <th>Entity</th>
+            <th className="section-start">Amount</th>
+            <th>Start Date</th>
+            <th>Term Years</th>
+            <th>Increase %</th>
+            <th>CPI</th>
+            <th>Frequency</th>
+            <th>Capitalised Amount</th>
           </tr>
         </thead>
         <tbody className="divide-y divide-neutral-200">
