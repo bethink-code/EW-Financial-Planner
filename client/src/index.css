@@ -263,6 +263,12 @@ th, td {
     min-width: max-content;
   }
   
+  /* Force calculator title to use primary blue color */
+  .text-primary,
+  h1.text-primary {
+    color: hsl(var(--primary)) !important;
+  }
+  
   /* GLOBAL TABLE STYLING - Ultra Clean with Section Borders Only */
   table {
     min-width: 1200px !important;
