@@ -346,7 +346,7 @@ th, td {
     white-space: nowrap !important;
     overflow: hidden !important;
     text-overflow: ellipsis !important;
-    border-bottom: 1px solid #d1d5db !important;
+    border-bottom: none !important; /* Remove horizontal border */
   }
 
   .double-row-header-first {
