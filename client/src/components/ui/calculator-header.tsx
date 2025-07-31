@@ -78,15 +78,13 @@ export function CalculatorHeader({
 
             {/* Refresh Button */}
             {onRefresh && (
-              <Button
+              <button
                 onClick={onRefresh}
                 disabled={isRefreshing}
-                size="sm"
-                variant="outline"
-                className="h-10 w-10 p-0"
+                className="btn-icon-white"
               >
                 <RefreshCw className={`h-4 w-4 ${isRefreshing ? 'animate-spin' : ''}`} />
-              </Button>
+              </button>
             )}
           </div>
 
