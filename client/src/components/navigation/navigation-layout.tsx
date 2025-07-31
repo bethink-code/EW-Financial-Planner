@@ -66,6 +66,28 @@ export function NavigationLayout({ children }: NavigationLayoutProps) {
   
   return (
     <>
+      {/* Placeholder for unbuilt section */}
+      <div className="w-full bg-gray-100 border-b border-gray-200 p-4">
+        <div className="max-w-6xl mx-auto">
+          <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+            <div className="flex items-center justify-center space-x-4">
+              <div className="h-8 w-8 bg-blue-500 rounded-full flex items-center justify-center">
+                <span className="text-white text-sm font-medium">?</span>
+              </div>
+              <div className="text-gray-600">
+                <h3 className="text-lg font-medium text-gray-900">Financial Planning Dashboard</h3>
+                <p className="text-sm text-gray-500">This section will contain client overview, progress tracking, and summary metrics</p>
+              </div>
+              <div className="ml-auto">
+                <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-800">
+                  Coming Soon
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
       <ConsolidatedNavigation 
         currentNeed={currentNeed}
         currentStep={currentStep}
