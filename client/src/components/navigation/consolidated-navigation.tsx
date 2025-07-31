@@ -86,7 +86,7 @@ export function ConsolidatedNavigation({
 
   return (
     <div className="w-full px-6 pt-4 pb-2">
-      <div className="max-w-6xl bg-white rounded-lg shadow-sm border border-gray-200 px-4">
+      <div className="max-w-6xl bg-white rounded-lg shadow-sm border border-gray-200 px-6 py-4">
         <div>
           {/* First row: Financial Plan */}
           <div className="flex items-start gap-3 mb-2">
