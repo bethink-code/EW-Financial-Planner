@@ -2,7 +2,7 @@ import { useState, useCallback } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { apiRequest } from "@/lib/queryClient";
 import { ClientDetails, InsertClientDetails } from "@shared/schema";
-import { NavigationLayout } from "@/components/navigation/navigation-layout";
+
 import { CalculatorHeader } from "@/components/ui/calculator-header";
 import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
@@ -88,16 +88,13 @@ function ClientDetailsTable() {
 
   if (isLoading) {
     return (
-      <NavigationLayout>
-        <div className="p-6">
-          <div className="text-center">Loading client details...</div>
-        </div>
-      </NavigationLayout>
+      <div className="p-6">
+        <div className="text-center">Loading client details...</div>
+      </div>
     );
   }
 
   return (
-    <NavigationLayout>
       <div className="px-6 py-6 bg-gray-50 min-h-screen">
         <CalculatorHeader 
           title="Client Details"
@@ -279,7 +276,6 @@ function ClientDetailsTable() {
           </table>
         </div>
       </div>
-    </NavigationLayout>
   );
 }
 
