@@ -8,10 +8,10 @@ import { formatCurrencyValue, formatTextValue, getValueClass, handleDefaultValue
 import { SafeFragment } from '@/lib/safe-fragment';
 
 interface AdditionalEstateDutyItemsTableProps {
-  viewMode: 'table' | 'hybrid';
+  viewMode?: 'table' | 'hybrid';
 }
 
-function AdditionalEstateDutyItemsTable({ viewMode }: AdditionalEstateDutyItemsTableProps) {
+function AdditionalEstateDutyItemsTable({ viewMode = 'table' }: AdditionalEstateDutyItemsTableProps) {
   const [isUpdating, setIsUpdating] = useState(false);
 
   const { data: items = [], isLoading, error } = useQuery<AdditionalEstateDutyItems[]>({
