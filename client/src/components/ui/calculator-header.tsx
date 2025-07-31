@@ -41,7 +41,7 @@ export function CalculatorHeader({
         <div className="flex items-center justify-between w-full max-w-6xl">
           {/* Left section: Title, count, Add button, and switchers */}
           <div className="flex items-center gap-4">
-            <h1 className="text-2xl font-semibold text-primary-600">{title}</h1>
+            <h1 className="text-2xl font-semibold text-primary">{title}</h1>
 
             {onAddItem && (
               <Button
