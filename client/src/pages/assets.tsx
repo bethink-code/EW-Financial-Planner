@@ -73,6 +73,7 @@ export function AssetsPage() {
             <AssetsTable 
               viewMode={viewMode} 
               onShowCategoryDialog={() => setShowCategoryDialog(true)}
+              onAddAsset={handleAddAsset}
             />
           </div>
         </CalculatorHeader>

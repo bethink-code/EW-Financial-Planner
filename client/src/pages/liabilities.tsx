@@ -73,6 +73,7 @@ export default function LiabilitiesPage() {
             <LiabilitiesTable 
               viewMode={viewMode} 
               onShowCategoryDialog={() => setShowCategoryDialog(true)}
+              onAddLiability={handleAddLiability}
             />
           </div>
         </CalculatorHeader>

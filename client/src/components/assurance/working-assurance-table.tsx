@@ -6,10 +6,13 @@ import { getCellClass } from "@/lib/field-types";
 import { formatTextValue, getValueClass, isDefaultValue, handleDefaultValueFocus } from "@/lib/formatting";
 import { apiRequest } from "@/lib/queryClient";
 import { AddButton, DuplicateButton, DeleteButton, ActionButtonGroup } from "@/components/ui/action-buttons";
+import { TableHeaderAddButton } from "@/components/ui/table-header-add-button";
 import { useDebouncedUpdate } from "@/hooks/use-debounced-update";
 import type { Assurance, InsertAssurance } from "@shared/schema";
 
-interface AssuranceTableProps {}
+interface AssuranceTableProps {
+  onAddPolicy?: () => void;
+}
 
 // Format currency value with R prefix and proper formatting
 const formatCurrencyValue = (value: string, fieldType: string): string => {
@@ -34,7 +37,7 @@ const formatCurrencyValue = (value: string, fieldType: string): string => {
   return "R 0";
 };
 
-export function AssuranceTable({}: AssuranceTableProps) {
+export function AssuranceTable({ onAddPolicy }: AssuranceTableProps) {
   const queryClient = useQueryClient();
   const [isUpdating, setIsUpdating] = useState(false);
 
@@ -266,7 +269,14 @@ export function AssuranceTable({}: AssuranceTableProps) {
       <table >
           <thead>
             <tr className="single-row-header">
-              <th>Actions</th>
+              <th className="table-actions-cell">
+                {onAddPolicy && (
+                  <TableHeaderAddButton
+                    onClick={onAddPolicy}
+                    title="Add new policy"
+                  />
+                )}
+              </th>
               <th>Description</th>
               <th>Owner</th>
               <th>Life Assured</th>

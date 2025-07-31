@@ -3,6 +3,7 @@ import { useQuery, useMutation } from '@tanstack/react-query';
 import { queryClient } from '@/lib/queryClient';
 import { VoluntaryInvestment, InsertVoluntaryInvestment } from '@shared/schema';
 import { AddButton, ActionButtonGroup, DuplicateButton, DeleteButton } from '@/components/ui/action-buttons';
+import { TableHeaderAddButton } from '@/components/ui/table-header-add-button';
 
 import { getFieldClass, getCellClass } from '@/lib/field-types';
 import { formatCurrencyValue, formatPercentageValue, formatTextValue, getValueClass, handleDefaultValueFocus } from '@/lib/formatting';
@@ -10,9 +11,10 @@ import { formatCurrencyValue, formatPercentageValue, formatTextValue, getValueCl
 interface VoluntaryInvestmentsTableProps {
   viewMode: 'table' | 'hybrid';
   searchTerm?: string;
+  onAddInvestment?: () => void;
 }
 
-function VoluntaryInvestmentsTable({ viewMode, searchTerm }: VoluntaryInvestmentsTableProps) {
+function VoluntaryInvestmentsTable({ viewMode, searchTerm, onAddInvestment }: VoluntaryInvestmentsTableProps) {
   const [isUpdating, setIsUpdating] = useState(false);
 
   // Query for voluntary investments
@@ -234,8 +236,13 @@ function VoluntaryInvestmentsTable({ viewMode, searchTerm }: VoluntaryInvestment
       <table>
         <thead>
           <tr className="double-row-header-first">
-            <th className="section-start" rowSpan={2}>
-              <AddButton onClick={() => addMutation.mutate()} disabled={isUpdating} />
+            <th className="section-start table-actions-cell" rowSpan={2}>
+              {onAddInvestment && (
+                <TableHeaderAddButton
+                  onClick={onAddInvestment}
+                  title="Add new investment"
+                />
+              )}
             </th>
             <th className="section-start" colSpan={3}>Overview</th>
             <th className="section-start" colSpan={3}>Investment Details</th>
@@ -311,14 +318,12 @@ function VoluntaryInvestmentsTable({ viewMode, searchTerm }: VoluntaryInvestment
                           onClick={() => handleAddOwner(investment.id)}
                           disabled={isUpdating}
                           size="sm"
-                          type="button"
                         />
                       ) : (
                         <DeleteButton
                           onClick={() => handleRemoveOwner(investment.id, ownerIndex)}
                           disabled={isUpdating}
                           size="sm"
-                          type="button"
                         />
                       )}
                     </div>

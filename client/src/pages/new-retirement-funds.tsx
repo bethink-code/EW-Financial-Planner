@@ -173,6 +173,7 @@ export default function NewRetirementFunds() {
                 onFieldUpdate={handleFieldUpdate}
                 onRemoveFund={handleRemoveFund}
                 onDuplicateFund={handleDuplicateFund}
+                onAddFund={handleAddFund}
                 isUpdating={updateMutation.isPending}
               />
             )}
@@ -184,6 +185,7 @@ export default function NewRetirementFunds() {
                 onFieldUpdate={handleFieldUpdate}
                 onRemoveFund={handleRemoveFund}
                 onDuplicateFund={handleDuplicateFund}
+                onAddFund={handleAddFund}
                 isUpdating={updateMutation.isPending}
               />
             )}

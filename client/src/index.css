@@ -874,6 +874,50 @@ th, td {
     color: #374151 !important;
   }
 
+  /* CENTRALIZED TABLE HEADER ADD BUTTON STYLING */
+  .table-header-add-button {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: 24px !important;
+    height: 24px !important;
+    background-color: #016991 !important; /* Primary blue */
+    color: white !important;
+    border: none !important;
+    border-radius: 4px !important;
+    cursor: pointer !important;
+    font-size: 14px !important;
+    font-weight: 500 !important;
+    transition: background-color 0.2s ease !important;
+    outline: none !important;
+    box-shadow: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    line-height: 1 !important;
+  }
+
+  .table-header-add-button:hover {
+    background-color: #014a66 !important; /* Darker blue on hover */
+    opacity: 0.9 !important;
+  }
+
+  .table-header-add-button:focus {
+    background-color: #014a66 !important;
+    box-shadow: 0 0 0 2px rgba(1, 105, 145, 0.2) !important;
+  }
+
+  .table-header-add-button:active {
+    background-color: #013849 !important;
+    transform: translateY(1px) !important;
+  }
+
+  /* Icon styling within the button */
+  .table-header-add-button svg {
+    width: 12px !important;
+    height: 12px !important;
+    stroke-width: 2 !important;
+  }
+
   /* GLOBAL NUMERIC FIELD CELL ALIGNMENT */
   /* Ensure all table cells containing numeric fields are right-aligned */
   td.text-right,

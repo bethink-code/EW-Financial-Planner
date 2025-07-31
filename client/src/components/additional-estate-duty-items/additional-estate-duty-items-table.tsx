@@ -3,6 +3,7 @@ import { useQuery, useMutation } from '@tanstack/react-query';
 import { queryClient } from '@/lib/queryClient';
 import { AdditionalEstateDutyItems, InsertAdditionalEstateDutyItems } from '@shared/schema';
 import { AddButton, ActionButtonGroup, DuplicateButton, DeleteButton } from '@/components/ui/action-buttons';
+import { TableHeaderAddButton } from '@/components/ui/table-header-add-button';
 import { getFieldClass } from '@/lib/field-types';
 import { formatCurrencyValue, formatTextValue, getValueClass, handleDefaultValueFocus, createEnhancedBlurHandler } from '@/lib/formatting';
 import { SafeFragment } from '@/lib/safe-fragment';
@@ -166,10 +167,10 @@ function AdditionalEstateDutyItemsTable({ viewMode = 'table' }: AdditionalEstate
           <thead>
             <tr>
               <th className="table-actions-cell section-start">
-                <AddButton
+                <TableHeaderAddButton
                   onClick={() => addMutation.mutate()}
                   disabled={addMutation.isPending}
-                  size="sm"
+                  title="Add new item"
                 />
               </th>
               <th className="p-2 text-left text-xs font-medium text-neutral-600 uppercase tracking-wider">

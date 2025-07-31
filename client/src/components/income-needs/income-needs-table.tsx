@@ -3,15 +3,17 @@ import { useQuery, useMutation } from '@tanstack/react-query';
 import { queryClient } from '@/lib/queryClient';
 import { IncomeNeeds, InsertIncomeNeeds } from '@shared/schema';
 import { AddButton, ActionButtonGroup, DuplicateButton, DeleteButton } from '@/components/ui/action-buttons';
+import { TableHeaderAddButton } from '@/components/ui/table-header-add-button';
 import { getFieldClass, getCellClass } from '@/lib/field-types';
 import { formatCurrencyValue, formatPercentageValue, formatYearsValue, formatTextValue, getValueClass, handleDefaultValueFocus } from '@/lib/formatting';
 
 interface IncomeNeedsTableProps {
   viewMode: 'table' | 'hybrid';
   searchTerm?: string;
+  onAddIncomeNeed?: () => void;
 }
 
-function IncomeNeedsTable({ viewMode, searchTerm }: IncomeNeedsTableProps) {
+function IncomeNeedsTable({ viewMode, searchTerm, onAddIncomeNeed }: IncomeNeedsTableProps) {
   const [isUpdating, setIsUpdating] = useState(false);
 
   const { data: incomeNeeds = [], isLoading, error } = useQuery<IncomeNeeds[]>({
@@ -164,8 +166,13 @@ function IncomeNeedsTable({ viewMode, searchTerm }: IncomeNeedsTableProps) {
       <table>
         <thead>
           <tr className="double-row-header-first">
-            <th className="section-start" rowSpan={2}>
-              <AddButton onClick={() => addMutation.mutate()} disabled={isUpdating} />
+            <th className="section-start table-actions-cell" rowSpan={2}>
+              {onAddIncomeNeed && (
+                <TableHeaderAddButton
+                  onClick={onAddIncomeNeed}
+                  title="Add new income need"
+                />
+              )}
             </th>
             <th className="section-start" colSpan={2}>Overview</th>
             <th className="section-start" colSpan={7}>Income Need Details</th>

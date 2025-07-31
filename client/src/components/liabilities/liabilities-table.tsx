@@ -3,6 +3,7 @@ import { useQuery, useMutation } from '@tanstack/react-query';
 import { queryClient } from '@/lib/queryClient';
 import { Liabilities, InsertLiabilities } from '@shared/schema';
 import { AddButton, ActionButtonGroup, DuplicateButton, DeleteButton } from '@/components/ui/action-buttons';
+import { TableHeaderAddButton } from '@/components/ui/table-header-add-button';
 import { getFieldClass, getCellClass } from '@/lib/field-types';
 import { formatCurrencyValue, formatPercentageValue, getValueClass, handleDefaultValueFocus, formatTextValue } from '@/lib/formatting';
 
@@ -10,9 +11,10 @@ interface LiabilitiesTableProps {
   viewMode: 'table' | 'hybrid';
   searchTerm?: string;
   onShowCategoryDialog?: () => void;
+  onAddLiability?: () => void;
 }
 
-function LiabilitiesTable({ viewMode, searchTerm, onShowCategoryDialog }: LiabilitiesTableProps) {
+function LiabilitiesTable({ viewMode, searchTerm, onShowCategoryDialog, onAddLiability }: LiabilitiesTableProps) {
   const [isUpdating, setIsUpdating] = useState(false);
 
   // Query for liabilities
@@ -175,8 +177,13 @@ function LiabilitiesTable({ viewMode, searchTerm, onShowCategoryDialog }: Liabil
       <table>
         <thead>
           <tr className="double-row-header-first">
-            <th className="section-start" rowSpan={2}>
-              <AddButton onClick={onShowCategoryDialog || (() => addMutation.mutate())} disabled={isUpdating} />
+            <th className="section-start table-actions-cell" rowSpan={2}>
+              {onAddLiability && (
+                <TableHeaderAddButton
+                  onClick={onAddLiability}
+                  title="Add new liability"
+                />
+              )}
             </th>
             <th className="section-start" colSpan={1}>Overview</th>
             <th className="section-start" colSpan={1}>Liability Details</th>

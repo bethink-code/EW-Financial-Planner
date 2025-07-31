@@ -68,7 +68,7 @@ export default function LumpSumBequests() {
           
           {/* Table with full width and margin */}
           <div className="table-container-wrapper">
-            <LumpSumTable viewMode={viewMode} />
+            <LumpSumTable viewMode={viewMode} onAddBequest={handleAddBequest} />
           </div>
         </CalculatorHeader>
       </div>

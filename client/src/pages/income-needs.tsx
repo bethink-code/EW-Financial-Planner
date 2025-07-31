@@ -60,7 +60,7 @@ export default function IncomeNeeds() {
           
           {/* Table with full width and margin */}
           <div className="table-container-wrapper">
-            <IncomeNeedsTable viewMode={viewMode} />
+            <IncomeNeedsTable viewMode={viewMode} onAddIncomeNeed={handleAddNeed} />
           </div>
         </CalculatorHeader>
       </div>

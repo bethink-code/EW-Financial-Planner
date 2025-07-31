@@ -1,6 +1,7 @@
 import React, { useState, useCallback, useMemo } from"react";
 import { useQuery, useMutation, useQueryClient } from"@tanstack/react-query";
 import { AddButton, DeleteButton, DuplicateButton, ActionButtonGroup } from"@/components/ui/action-buttons";
+import { TableHeaderAddButton } from "@/components/ui/table-header-add-button";
 import { getFieldClass } from"@/lib/design-tokens";
 import { getCellClass } from"@/lib/field-types";
 import { formatCurrencyValue, formatPercentageValue, formatYearsValue, formatTextValue, getValueClass, isDefaultValue, handleDefaultValueFocus } from"@/lib/formatting";
@@ -8,7 +9,11 @@ import { useDebouncedUpdate } from"@/hooks/use-debounced-update";
 import { SafeFragment } from"@/lib/safe-fragment";
 import type { DefinedBenefitFund, InsertDefinedBenefitFund } from"@shared/schema";
 
-export default function DefinedBenefitFundsTable() {
+interface DefinedBenefitFundsTableProps {
+  onAddFund?: () => void;
+}
+
+export default function DefinedBenefitFundsTable({ onAddFund }: DefinedBenefitFundsTableProps) {
   const [isUpdating, setIsUpdating] = useState(false);
   const queryClient = useQueryClient();
 
@@ -257,7 +262,14 @@ export default function DefinedBenefitFundsTable() {
         <thead>
           {/* First Header Row - Section Groups */}
           <tr className="double-row-header-first">
-            <th className="section-start" rowSpan={2}>Actions</th>
+            <th className="section-start table-actions-cell" rowSpan={2}>
+              {onAddFund && (
+                <TableHeaderAddButton
+                  onClick={onAddFund}
+                  title="Add new fund"
+                />
+              )}
+            </th>
             <th className="section-start" colSpan={3}>Overview</th>
             <th className="section-start" colSpan={4}>Fund Details</th>
             <th className="section-start" colSpan={2}>Pension Income at Death</th>

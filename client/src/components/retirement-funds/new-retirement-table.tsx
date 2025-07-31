@@ -5,6 +5,7 @@ import { formatCurrencyValue, formatPercentageValue, formatTextValue, cleanTextV
 import { createOwnerManager, createComplexBeneficiaryManager } from"@/lib/array-management";
 import { getFieldClass, getCellClass } from"@/lib/field-types";
 import { ActionButtonGroup, DuplicateButton, DeleteButton, AddButton } from"@/components/ui/action-buttons";
+import { TableHeaderAddButton } from "@/components/ui/table-header-add-button";
 
 import { useDebouncedUpdate } from"@/hooks/use-debounced-update";
 
@@ -13,6 +14,7 @@ interface NewRetirementTableProps {
  onFieldUpdate: (fundId: number, field: string, value: any) => void;
  onRemoveFund: (id: number) => void;
  onDuplicateFund: (fund: RetirementFund) => void;
+ onAddFund?: () => void;
  isUpdating?: boolean;
 }
 
@@ -44,6 +46,7 @@ export function NewRetirementTable({
  onFieldUpdate, 
  onRemoveFund, 
  onDuplicateFund, 
+ onAddFund,
  isUpdating 
 }: NewRetirementTableProps) {
 
@@ -276,7 +279,14 @@ export function NewRetirementTable({
  <thead>
  {/* Main section headers */}
  <tr className="double-row-header-first">
- <th className="section-start" rowSpan={2}>Actions</th>
+ <th className="section-start table-actions-cell" rowSpan={2}>
+   {onAddFund && (
+     <TableHeaderAddButton
+       onClick={onAddFund}
+       title="Add new fund"
+     />
+   )}
+ </th>
  <th className="section-start" colSpan={2}>Overview</th>
  <th className="section-start" colSpan={4}>Unapproved Life Cover</th>
  <th className="section-start" colSpan={4}>Monthly Death Benefit</th>

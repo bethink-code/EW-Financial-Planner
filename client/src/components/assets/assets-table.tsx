@@ -3,6 +3,7 @@ import { useQuery, useMutation } from '@tanstack/react-query';
 import { queryClient } from '@/lib/queryClient';
 import { Assets, InsertAssets } from '@shared/assets-schema';
 import { AddButton, ActionButtonGroup, DuplicateButton, DeleteButton } from '@/components/ui/action-buttons';
+import { TableHeaderAddButton } from '@/components/ui/table-header-add-button';
 import { getFieldClass, getFieldWidth, getCellClass } from '@/lib/field-types';
 import { formatCurrencyValue, formatPercentageValue, isDefaultValue, getValueClass, formatTextValue, handleDefaultValueFocus } from '@/lib/formatting';
 import { useDebouncedUpdate } from '@/hooks/use-debounced-update';
@@ -11,9 +12,10 @@ interface AssetsTableProps {
   viewMode: 'table' | 'hybrid';
   searchTerm?: string;
   onShowCategoryDialog?: () => void;
+  onAddAsset?: () => void;
 }
 
-function AssetsTable({ viewMode, searchTerm, onShowCategoryDialog }: AssetsTableProps) {
+function AssetsTable({ viewMode, searchTerm, onShowCategoryDialog, onAddAsset }: AssetsTableProps) {
   const [isUpdating, setIsUpdating] = useState(false);
 
   // Query for assets
@@ -183,8 +185,13 @@ function AssetsTable({ viewMode, searchTerm, onShowCategoryDialog }: AssetsTable
       <table>
         <thead>
           <tr className="double-row-header-first">
-            <th className="section-start" rowSpan={2}>
-              <AddButton onClick={onShowCategoryDialog || (() => addMutation.mutate())} disabled={isUpdating} />
+            <th className="section-start table-actions-cell" rowSpan={2}>
+              {onAddAsset && (
+                <TableHeaderAddButton
+                  onClick={onAddAsset}
+                  title="Add new asset"
+                />
+              )}
             </th>
             <th className="section-start" colSpan={1}>Overview</th>
             <th className="section-start" colSpan={1}>Asset Details</th>

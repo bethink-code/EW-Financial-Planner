@@ -72,7 +72,7 @@ export default function Assurance() {
           
           {/* Table with full width and margin */}
           <div className="table-container-wrapper">
-            <AssuranceTable />
+            <AssuranceTable onAddPolicy={handleAddPolicy} />
           </div>
         </CalculatorHeader>
       </div>

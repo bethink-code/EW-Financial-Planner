@@ -3,15 +3,17 @@ import { useQuery, useMutation } from '@tanstack/react-query';
 import { queryClient } from '@/lib/queryClient';
 import { IncomeProvisions, InsertIncomeProvisions } from '@shared/schema';
 import { ActionButtonGroup, DuplicateButton, DeleteButton, AddButton } from '@/components/ui/action-buttons';
+import { TableHeaderAddButton } from '@/components/ui/table-header-add-button';
 import { getFieldClass, getCellClass } from '@/lib/field-types';
 import { formatCurrencyValue, formatPercentageValue, formatTextValue, formatNumberValue, isDefaultValue, getValueClass, parseCurrencyValue, handleDefaultValueFocus } from '@/lib/formatting';
 
 interface IncomeProvisionsTableProps {
  viewMode: 'table' | 'hybrid';
  searchTerm?: string;
+ onAddProvision?: () => void;
 }
 
-export default function IncomeProvisionsTable({ viewMode, searchTerm }: IncomeProvisionsTableProps) {
+export default function IncomeProvisionsTable({ viewMode, searchTerm, onAddProvision }: IncomeProvisionsTableProps) {
  const [isUpdating, setIsUpdating] = useState(false);
 
  // Calculate capitalised amount for a single income provision
@@ -187,7 +189,14 @@ export default function IncomeProvisionsTable({ viewMode, searchTerm }: IncomePr
  <table className="min-w-full border border-neutral-200">
  <thead>
  <tr className="double-row-header-first">
- <th className="section-start" rowSpan={2}></th>
+ <th className="section-start table-actions-cell" rowSpan={2}>
+   {onAddProvision && (
+     <TableHeaderAddButton
+       onClick={onAddProvision}
+       title="Add new provision"
+     />
+   )}
+ </th>
  <th className="section-start" colSpan={2}>Overview</th>
  <th className="section-start" colSpan={9}>Income Provision Details</th>
  </tr>

@@ -3,15 +3,17 @@ import { useQuery, useMutation } from '@tanstack/react-query';
 import { queryClient } from '@/lib/queryClient';
 import { LumpSumBequest, InsertLumpSumBequest } from '@shared/schema';
 import { AddButton, ActionButtonGroup, DuplicateButton, DeleteButton } from '@/components/ui/action-buttons';
+import { TableHeaderAddButton } from '@/components/ui/table-header-add-button';
 import { getFieldClass, getCellClass } from '@/lib/field-types';
 import { formatCurrencyValue, formatPercentageValue, formatTextValue, getValueClass, handleDefaultValueFocus } from '@/lib/formatting';
 
 interface LumpSumTableProps {
  viewMode: 'table' | 'hybrid';
  searchTerm?: string;
+ onAddBequest?: () => void;
 }
 
-function LumpSumTable({ viewMode, searchTerm }: LumpSumTableProps) {
+function LumpSumTable({ viewMode, searchTerm, onAddBequest }: LumpSumTableProps) {
  const [isUpdating, setIsUpdating] = useState(false);
 
  // Query for lump sum bequests
@@ -172,8 +174,13 @@ function LumpSumTable({ viewMode, searchTerm }: LumpSumTableProps) {
  <table>
  <thead>
  <tr className="double-row-header-first">
- <th className="section-start" rowSpan={2}>
- <AddButton onClick={() => addMutation.mutate()} disabled={isUpdating} />
+ <th className="section-start table-actions-cell" rowSpan={2}>
+ {onAddBequest && (
+   <TableHeaderAddButton
+     onClick={onAddBequest}
+     title="Add new bequest"
+   />
+ )}
  </th>
  <th className="section-start" colSpan={2}>Overview</th>
  <th className="section-start" colSpan={4}>Need Details</th>

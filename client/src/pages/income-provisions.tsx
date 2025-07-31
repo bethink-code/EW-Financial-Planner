@@ -61,7 +61,7 @@ export default function IncomeProvisions() {
           
           {/* Table with full width and margin */}
           <div className="table-container-wrapper">
-            <IncomeProvisionsTable viewMode={viewMode} searchTerm={searchTerm} />
+            <IncomeProvisionsTable viewMode={viewMode} searchTerm={searchTerm} onAddProvision={handleAddProvision} />
           </div>
         </CalculatorHeader>
       </div>

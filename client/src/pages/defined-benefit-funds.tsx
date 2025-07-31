@@ -70,7 +70,7 @@ export default function DefinedBenefitFunds() {
           
           {/* Table with full width and margin */}
           <div className="table-container-wrapper">
-            <DefinedBenefitFundsTable />
+            <DefinedBenefitFundsTable onAddFund={handleAddFund} />
           </div>
         </CalculatorHeader>
       </div>
