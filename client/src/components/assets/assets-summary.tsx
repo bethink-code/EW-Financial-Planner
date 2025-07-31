@@ -7,64 +7,45 @@ export function AssetsSummary() {
     queryKey: ['/api/assets'],
   });
 
-  // Calculate summary totals
+  // Calculate summary by category groups
   const summary = React.useMemo(() => {
-    const totalMarketValue = assets.reduce((sum: number, asset: Assets) => {
-      const amount = parseFloat(asset.marketValue?.replace(/[^\d.-]/g, '') || '0') || 0;
-      return sum + amount;
-    }, 0);
+    // Group assets by section
+    const groupedAssets = assets.reduce((groups, asset) => {
+      const section = asset.section || 'Other';
+      if (!groups[section]) {
+        groups[section] = [];
+      }
+      groups[section].push(asset);
+      return groups;
+    }, {} as Record<string, Assets[]>);
 
-    const totalEstate = assets.reduce((sum: number, asset: Assets) => {
-      const amount = parseFloat(asset.estate?.replace(/[^\d.-]/g, '') || '0') || 0;
-      return sum + amount;
-    }, 0);
+    // Calculate totals by section
+    const sectionTotals = Object.entries(groupedAssets).map(([sectionName, sectionAssets]) => {
+      const marketValue = sectionAssets.reduce((sum: number, asset: Assets) => {
+        const amount = parseFloat(asset.marketValue?.replace(/[^\d.-]/g, '') || '0') || 0;
+        return sum + amount;
+      }, 0);
 
-    const totalOthers = assets.reduce((sum: number, asset: Assets) => {
-      const amount = parseFloat(asset.others?.replace(/[^\d.-]/g, '') || '0') || 0;
-      return sum + amount;
-    }, 0);
+      return {
+        name: sectionName.replace('_', ' '),
+        count: sectionAssets.length,
+        marketValue: `R ${marketValue.toLocaleString()}`,
+      };
+    });
 
-    const totalClient = assets.reduce((sum: number, asset: Assets) => {
-      const amount = parseFloat(asset.client?.replace(/[^\d.-]/g, '') || '0') || 0;
-      return sum + amount;
-    }, 0);
-
-    return {
-      totalAssets: assets.length,
-      totalMarketValue: `R ${totalMarketValue.toLocaleString()}`,
-      totalEstate: `R ${totalEstate.toLocaleString()}`,
-      totalOthers: `R ${totalOthers.toLocaleString()}`,
-      totalClient: `R ${totalClient.toLocaleString()}`,
-    };
+    return sectionTotals;
   }, [assets]);
 
   return (
     <div className="px-5 pb-5">
-      <div className="grid grid-cols-2 md:grid-cols-5 gap-6">
-        <div className="summary-card">
-          <div className="text-sm font-medium text-neutral-600">Total Assets</div>
-          <div className="text-2xl font-bold text-neutral-900">{summary.totalAssets}</div>
-        </div>
-        
-        <div className="summary-card">
-          <div className="text-sm font-medium text-neutral-600">Market Value</div>
-          <div className="text-lg font-semibold text-neutral-900">{summary.totalMarketValue}</div>
-        </div>
-        
-        <div className="summary-card">
-          <div className="text-sm font-medium text-neutral-600">Estate</div>
-          <div className="text-lg font-semibold text-neutral-900">{summary.totalEstate}</div>
-        </div>
-        
-        <div className="summary-card">
-          <div className="text-sm font-medium text-neutral-600">Others</div>
-          <div className="text-lg font-semibold text-neutral-900">{summary.totalOthers}</div>
-        </div>
-        
-        <div className="summary-card">
-          <div className="text-sm font-medium text-neutral-600">Client</div>
-          <div className="text-lg font-semibold text-neutral-900">{summary.totalClient}</div>
-        </div>
+      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
+        {summary.map((section) => (
+          <div key={section.name} className="summary-card">
+            <div className="text-sm font-medium text-neutral-600">{section.name}</div>
+            <div className="text-lg font-semibold text-neutral-900">{section.marketValue}</div>
+            <div className="text-xs text-neutral-500">{section.count} asset{section.count !== 1 ? 's' : ''}</div>
+          </div>
+        ))}
       </div>
     </div>
   );
