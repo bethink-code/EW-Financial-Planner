@@ -17,18 +17,20 @@ export default function Residue() {
   return (
     <div className="">
       <div className="w-full px-6 py-6">
-        {/* Header and Table without Summary */}
-        <CalculatorHeader
-          title="Residue"
-          viewMode={viewMode}
-          onViewModeChange={handleViewModeChange}
-          className="mb-6"
-        >          
-          {/* Table with full width and margin */}
-          <div className="table-container-wrapper">
-            <ResidueTable viewMode={viewMode} />
-          </div>
-        </CalculatorHeader>
+        {/* Header and Table without Summary - Compact Card */}
+        <div className="w-fit">
+          <CalculatorHeader
+            title="Residue"
+            viewMode={viewMode}
+            onViewModeChange={handleViewModeChange}
+            className="mb-6"
+          >          
+            {/* Table with compact layout */}
+            <div className="table-container-wrapper">
+              <ResidueTable viewMode={viewMode} />
+            </div>
+          </CalculatorHeader>
+        </div>
       </div>
     </div>
   );
