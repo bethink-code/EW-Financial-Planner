@@ -109,8 +109,8 @@ export function ConsolidatedNavigation({
     <div className="w-full px-6 pt-4 pb-2">
       <div className="max-w-6xl bg-white rounded-lg shadow-sm border border-gray-200 px-6 py-4">
         <div>
-          {/* First row: Financial Plan */}
-          <div className="flex items-start gap-3 mb-2">
+          {/* Single row: Financial Plan, Need, and Steps */}
+          <div className="flex items-start gap-6">
             {/* Financial Plan section */}
             <div>
               {/* FINANCIAL PLAN label */}
@@ -139,47 +139,50 @@ export function ConsolidatedNavigation({
                 </Button>
               </div>
             </div>
-          </div>
-          
-          {/* Second row: Need, Steps, and Right side items */}
-          <div className="flex items-end justify-between">
-            <div className="flex items-end gap-3">
-              {/* Need section */}
+
+            {/* Need section */}
+            <div>
+              {/* NEED label */}
+              <span className="text-xs text-gray-500 uppercase tracking-wider font-medium block mb-1">
+                NEED
+              </span>
+              
+              {/* Need dropdown */}
+              <DropdownMenu open={isNeedDropdownOpen} onOpenChange={setIsNeedDropdownOpen}>
+                <DropdownMenuTrigger asChild>
+                  <Button 
+                    className="btn-need px-4 flex items-center gap-2 text-sm rounded-md h-10"
+                  >
+                    {currentNeed.label}
+                    <ChevronDown className="h-3.5 w-3.5" />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="start" className="dropdown-menu-content w-72">
+                  {needs.map((need) => (
+                    <DropdownMenuItem key={need.id} className="dropdown-menu-item" asChild>
+                      <Link href={need.path} onClick={() => setIsNeedDropdownOpen(false)}>
+                        <span className={cn(
+                          need.hasContent ?"" :"text-gray-400",
+                          need.id === currentNeed.id &&"text-[#F97415] font-medium"
+                        )}>
+                          {need.label}
+                        </span>
+                      </Link>
+                    </DropdownMenuItem>
+                  ))}
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </div>
+
+            {/* Step navigation */}
+            <div className="flex items-start gap-3">
               <div>
-                {/* NEED label */}
+                {/* STEPS label */}
                 <span className="text-xs text-gray-500 uppercase tracking-wider font-medium block mb-1">
-                  NEED
+                  STEPS
                 </span>
                 
-                {/* Need dropdown */}
-                <DropdownMenu open={isNeedDropdownOpen} onOpenChange={setIsNeedDropdownOpen}>
-                  <DropdownMenuTrigger asChild>
-                    <Button 
-                      className="btn-need px-4 flex items-center gap-2 text-sm rounded-md h-10"
-                    >
-                      {currentNeed.label}
-                      <ChevronDown className="h-3.5 w-3.5" />
-                    </Button>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent align="start" className="dropdown-menu-content w-72">
-                    {needs.map((need) => (
-                      <DropdownMenuItem key={need.id} className="dropdown-menu-item" asChild>
-                        <Link href={need.path} onClick={() => setIsNeedDropdownOpen(false)}>
-                          <span className={cn(
-                            need.hasContent ?"" :"text-gray-400",
-                            need.id === currentNeed.id &&"text-[#F97415] font-medium"
-                          )}>
-                            {need.label}
-                          </span>
-                        </Link>
-                      </DropdownMenuItem>
-                    ))}
-                  </DropdownMenuContent>
-                </DropdownMenu>
-              </div>
-
-              {/* Step navigation */}
-              <div className="flex items-center gap-2 ml-6">
+                <div className="flex items-center gap-2">
                 {stepsWithStatus.map((step, index) => {
               const isActive = step.id === currentStep.id;
               
@@ -261,14 +264,22 @@ export function ConsolidatedNavigation({
                 </SafeFragment>
               );
             })}
+                </div>
               </div>
             </div>
             
-            {/* Right side */}
-            <div className="flex items-center gap-2">
-              <button className="inline-flex items-center justify-center w-10 h-10 flex-shrink-0 rounded border border-gray-300 bg-white text-gray-600 focus:outline-none focus:ring-0 focus:border-0 hover:bg-gray-50">
-                <RefreshCw className="h-3.5 w-3.5 flex-shrink-0" />
-              </button>
+            {/* Right side with User image */}
+            <div className="flex items-start ml-auto">
+              <div>
+                <span className="text-xs text-gray-500 uppercase tracking-wider font-medium block mb-1">
+                  CLIENT
+                </span>
+                <img 
+                  src="/attached_assets/EW Header_1753945516780.png" 
+                  alt="Donald Edward" 
+                  className="h-10 rounded"
+                />
+              </div>
             </div>
           </div>
         </div>
