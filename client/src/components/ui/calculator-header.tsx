@@ -48,7 +48,7 @@ export function CalculatorHeader({
                 onClick={onAddItem}
                 disabled={isAddingItem}
                 size="sm"
-                className="h-9 px-4 bg-white text-gray-700 border border-neutral-200 hover:bg-gray-50 hover:text-gray-900 font-normal"
+                className="h-10 px-4 bg-white text-gray-700 border border-neutral-200 hover:bg-gray-50 hover:text-gray-900 font-normal"
               >
                 {isAddingItem ?"Adding..." : addButtonText}
               </Button>

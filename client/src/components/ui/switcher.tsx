@@ -26,9 +26,9 @@ export function Switcher({
   size ="md"
 }: SwitcherProps) {
   const sizeClasses = {
-    sm:"text-sm h-9 px-3 min-w-[80px]",
-    md:"text-sm h-9 px-4 min-w-[100px]", 
-    lg:"text-base h-9 px-5 min-w-[120px]"
+    sm:"text-sm h-10 px-3 min-w-[80px]",
+    md:"text-sm h-10 px-4 min-w-[100px]", 
+    lg:"text-base h-10 px-5 min-w-[120px]"
   };
 
   const containerClasses = {
@@ -44,6 +44,7 @@ export function Switcher({
         containerClasses[size],
         className
       )}
+      data-switcher="true"
     >
       {options.map((option) => {
         const isSelected = value === option.value;

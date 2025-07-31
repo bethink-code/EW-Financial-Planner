@@ -270,6 +270,13 @@ th, td {
     font-weight: 500 !important;
   }
   
+  /* Force switcher buttons to match other button heights (40px) */
+  .switcher-button,
+  [data-switcher="true"] button {
+    height: 2.5rem !important; /* 40px equivalent */
+    min-height: 2.5rem !important;
+  }
+  
   /* GLOBAL TABLE STYLING - Ultra Clean with Section Borders Only */
   table {
     min-width: 1200px !important;
