@@ -309,9 +309,15 @@ th, td {
     min-height: 2.7rem; /* Match body cell height */
   }
 
-  /* SINGLE ROW HEADER STYLING - Using footer settings */
+  /* SINGLE ROW HEADER STYLING - Height controlled at row level */
+  .single-row-header {
+    height: 2.3rem !important;
+    min-height: 2.3rem !important;
+    max-height: 2.3rem !important;
+  }
+
   .single-row-header th {
-    padding: 0.5rem !important; /* Match footer totals-cell-value padding */
+    padding: 0.5rem !important;
     font-size: 11px !important;
     font-weight: 600 !important;
     text-transform: uppercase !important;
@@ -319,20 +325,11 @@ th, td {
     color: #4b5563 !important;
     background-color: #f8fafc !important;
     vertical-align: bottom !important;
-    line-height: 1.3rem !important; /* Match footer line-height */
-    height: 2.3rem !important; /* Match footer height */
-    min-height: 2.3rem !important;
-    max-height: 2.3rem !important;
+    line-height: 1.3rem !important;
     white-space: nowrap !important;
     overflow: hidden !important;
     text-overflow: ellipsis !important;
     border-bottom: 2px solid #9ca3af !important;
-  }
-
-  .single-row-header {
-    height: 2.3rem !important; /* Match footer height */
-    min-height: 2.3rem !important;
-    max-height: 2.3rem !important;
   }
 
   /* DOUBLE ROW HEADER STYLING */
@@ -534,6 +531,9 @@ th, td {
 
   tfoot tr {
     border-top: 1px solid #d1d5db !important; /* Single border for section separation */
+    height: 2.3rem !important; /* Control height at row level */
+    min-height: 2.3rem !important;
+    max-height: 2.3rem !important;
   }
 
   /* Remove only non-section borders from footer cells (but preserve tbody row borders) */
@@ -557,7 +557,9 @@ th, td {
     color: #374151 !important; /* text-neutral-700 */
     font-size: 0.875rem !important;
     font-weight: normal !important;
-    padding: 1rem 0.5rem !important; /* Match input field padding for alignment */
+    padding: 0.5rem !important; /* Consistent padding with values */
+    vertical-align: bottom !important;
+    line-height: 1.3rem !important;
   }
 
   .totals-cell-value {
@@ -567,7 +569,7 @@ th, td {
     color: #374151 !important;
     font-size: 0.875rem !important;
     padding: 0.5rem !important;
-    height: 2.3rem !important;
+    vertical-align: bottom !important;
     line-height: 1.3rem !important;
   }
   
