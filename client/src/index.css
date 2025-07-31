@@ -309,41 +309,101 @@ th, td {
     min-height: 2.7rem; /* Match body cell height */
   }
 
-  /* OPTIMIZED COMPACT TABLE HEADERS - Text closer to bottom border */
-  /* Force compact header styling with proper hierarchy */
-  table thead th {
-    padding: 0.25rem 0.6rem 0.4rem 0.6rem !important; /* Reduced top padding, smaller bottom padding */
+  /* SINGLE ROW HEADER STYLING */
+  .single-row-header th {
+    padding: 0.25rem 0.6rem 0.4rem 0.6rem !important;
     font-size: 11px !important;
     font-weight: 600 !important;
     text-transform: uppercase !important;
     letter-spacing: 0.025em !important;
     color: #4b5563 !important;
     background-color: #f8fafc !important;
-    vertical-align: bottom !important; /* Changed to bottom alignment */
+    vertical-align: bottom !important;
     line-height: 1.2 !important;
-    height: 2.5rem !important; /* Slightly reduced height */
+    height: 2.5rem !important;
+    min-height: 2.5rem !important;
+    max-height: 2.5rem !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    border-bottom: 2px solid #9ca3af !important;
+  }
+
+  .single-row-header {
+    height: 2.5rem !important;
+    min-height: 2.5rem !important;
+    max-height: 2.5rem !important;
+  }
+
+  /* DOUBLE ROW HEADER STYLING */
+  .double-row-header-first th {
+    padding: 0.3rem 0.6rem 0.2rem 0.6rem !important;
+    font-size: 11px !important;
+    font-weight: 600 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.025em !important;
+    color: #4b5563 !important;
+    background-color: #f8fafc !important;
+    vertical-align: bottom !important;
+    line-height: 1.2 !important;
+    height: 2.2rem !important;
+    min-height: 2.2rem !important;
+    max-height: 2.2rem !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    border-bottom: 1px solid #d1d5db !important;
+  }
+
+  .double-row-header-first {
+    height: 2.2rem !important;
+    min-height: 2.2rem !important;
+    max-height: 2.2rem !important;
+  }
+
+  .double-row-header-second th {
+    padding: 0.2rem 0.6rem 0.4rem 0.6rem !important;
+    font-size: 10px !important;
+    font-weight: 500 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.025em !important;
+    color: #6b7280 !important;
+    background-color: #f8fafc !important;
+    vertical-align: bottom !important;
+    line-height: 1.2 !important;
+    height: 2.2rem !important;
+    min-height: 2.2rem !important;
+    max-height: 2.2rem !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    border-bottom: 2px solid #9ca3af !important;
+  }
+
+  .double-row-header-second {
+    height: 2.2rem !important;
+    min-height: 2.2rem !important;
+    max-height: 2.2rem !important;
+  }
+
+  /* Fallback for existing tables without specific classes */
+  table thead th {
+    padding: 0.25rem 0.6rem 0.4rem 0.6rem !important;
+    font-size: 11px !important;
+    font-weight: 600 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.025em !important;
+    color: #4b5563 !important;
+    background-color: #f8fafc !important;
+    vertical-align: bottom !important;
+    line-height: 1.2 !important;
+    height: 2.5rem !important;
     min-height: 2.5rem !important;
     max-height: 2.5rem !important;
     white-space: nowrap !important;
     overflow: hidden !important;
     text-overflow: ellipsis !important;
     border-bottom: 1px solid #e5e7eb !important;
-  }
-
-  /* Ensure header row heights are consistent - reduced for closer text */
-  table thead tr {
-    height: 2.5rem !important;
-    min-height: 2.5rem !important;
-    max-height: 2.5rem !important;
-  }
-
-  /* For multi-row headers, keep consistent spacing */
-  table thead tr:first-child th {
-    border-bottom: 1px solid #d1d5db !important;
-  }
-  
-  table thead tr:last-child th {
-    border-bottom: 2px solid #9ca3af !important;
   }
 
   table thead tr + tr th {

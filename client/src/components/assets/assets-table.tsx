@@ -182,25 +182,25 @@ function AssetsTable({ viewMode, searchTerm, onShowCategoryDialog }: AssetsTable
     <div className="space-y-6">
       <table>
         <thead>
-          <tr>
-            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start" rowSpan={2}>
+          <tr className="double-row-header-first">
+            <th className="section-start" rowSpan={2}>
               <AddButton onClick={onShowCategoryDialog || (() => addMutation.mutate())} disabled={isUpdating} />
             </th>
-            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start" colSpan={1}>Overview</th>
-            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start" colSpan={1}>Asset Details</th>
-            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start" colSpan={4}>Ownership Split</th>
-            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start" colSpan={3}>Distribution</th>
+            <th className="section-start" colSpan={1}>Overview</th>
+            <th className="section-start" colSpan={1}>Asset Details</th>
+            <th className="section-start" colSpan={4}>Ownership Split</th>
+            <th className="section-start" colSpan={3}>Distribution</th>
           </tr>
-          <tr>
-            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start">Description</th>
-            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start">Market Value</th>
-            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start">John Doe</th>
-            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center">Janette Doe (Spouse)</th>
-            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center">Doe Junior</th>
-            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center">Doe family trust</th>
-            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start">Estate</th>
-            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center">Others</th>
-            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center">Client</th>
+          <tr className="double-row-header-second">
+            <th className="section-start">Description</th>
+            <th className="section-start">Market Value</th>
+            <th className="section-start">John Doe</th>
+            <th>Janette Doe (Spouse)</th>
+            <th>Doe Junior</th>
+            <th>Doe family trust</th>
+            <th className="section-start">Estate</th>
+            <th>Others</th>
+            <th>Client</th>
           </tr>
         </thead>
         <tbody className="divide-y divide-neutral-200">

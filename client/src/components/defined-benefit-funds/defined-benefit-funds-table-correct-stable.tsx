@@ -256,23 +256,23 @@ export default function DefinedBenefitFundsTable() {
       <table>
         <thead>
           {/* First Header Row - Section Groups */}
-          <tr className="border-b border-neutral-200">
-            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center bg-neutral-50 section-start" rowSpan={2}>Actions</th>
-            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center bg-neutral-50 section-start" colSpan={3}>Overview</th>
-            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center bg-neutral-50 section-start" colSpan={4}>Fund Details</th>
-            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center bg-neutral-50 section-start" colSpan={2}>Pension Income at Death</th>
+          <tr className="double-row-header-first">
+            <th className="section-start" rowSpan={2}>Actions</th>
+            <th className="section-start" colSpan={3}>Overview</th>
+            <th className="section-start" colSpan={4}>Fund Details</th>
+            <th className="section-start" colSpan={2}>Pension Income at Death</th>
           </tr>
           {/* Second Header Row - Individual Fields */}
-          <tr className="border-b border-neutral-200">
-            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center bg-neutral-50 section-start">Description</th>
-            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center bg-neutral-50">Owner Name</th>
-            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center bg-neutral-50">Ownership %</th>
-            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center bg-neutral-50 section-start">Years of Service</th>
-            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center bg-neutral-50">Final Monthly Salary</th>
-            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center bg-neutral-50">Death Lump Sum</th>
-            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center bg-neutral-50">Additional Tax Free Amount</th>
-            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center bg-neutral-50 section-start">Amount</th>
-            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center bg-neutral-50">Increase</th>
+          <tr className="double-row-header-second">
+            <th className="section-start">Description</th>
+            <th>Owner Name</th>
+            <th>Ownership %</th>
+            <th className="section-start">Years of Service</th>
+            <th>Final Monthly Salary</th>
+            <th>Death Lump Sum</th>
+            <th>Additional Tax Free Amount</th>
+            <th className="section-start">Amount</th>
+            <th>Increase</th>
           </tr>
         </thead>
         <tbody className="divide-y divide-neutral-200">

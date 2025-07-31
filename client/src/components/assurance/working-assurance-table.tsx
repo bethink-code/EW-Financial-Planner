@@ -265,22 +265,22 @@ export function AssuranceTable({}: AssuranceTableProps) {
       {/* Table */}
       <table >
           <thead>
-            <tr className="border-b border-neutral-200">
-              <th className="px-3 py-3 text-center text-xs font-medium text-neutral-600 uppercase tracking-wider bg-neutral-50">Actions</th>
-              <th className="px-3 py-3 text-center text-xs font-medium text-neutral-600 uppercase tracking-wider bg-neutral-50">Description</th>
-              <th className="px-3 py-3 text-center text-xs font-medium text-neutral-600 uppercase tracking-wider bg-neutral-50">Owner</th>
-              <th className="px-3 py-3 text-center text-xs font-medium text-neutral-600 uppercase tracking-wider bg-neutral-50">Life Assured</th>
-              <th className="px-3 py-3 text-center text-xs font-medium text-neutral-600 uppercase tracking-wider bg-neutral-50">Death Benefit</th>
-              <th className="px-3 py-3 text-center text-xs font-medium text-neutral-600 uppercase tracking-wider bg-neutral-50">Beneficiary</th>
-              <th className="px-3 py-3 text-center text-xs font-medium text-neutral-600 uppercase tracking-wider bg-neutral-50">Additional Info</th>
-              <th className="px-3 py-3 text-center text-xs font-medium text-neutral-600 uppercase tracking-wider bg-neutral-50">Benefit Split</th>
-              <th className="px-3 py-3 text-center text-xs font-medium text-neutral-600 uppercase tracking-wider bg-neutral-50">Amount</th>
-              <th className="px-3 py-3 text-center text-xs font-medium text-neutral-600 uppercase tracking-wider bg-neutral-50">Buy/Sell</th>
-              <th className="px-3 py-3 text-center text-xs font-medium text-neutral-600 uppercase tracking-wider bg-neutral-50">Key Man</th>
-              <th className="px-3 py-3 text-center text-xs font-medium text-neutral-600 uppercase tracking-wider bg-neutral-50">Excluded Estate Duty</th>
-              <th className="px-3 py-3 text-center text-xs font-medium text-neutral-600 uppercase tracking-wider bg-neutral-50">Excluded Provisions</th>
-              <th className="px-3 py-3 text-center text-xs font-medium text-neutral-600 uppercase tracking-wider bg-neutral-50">Premiums by Others</th>
-              <th className="px-3 py-3 text-center text-xs font-medium text-neutral-600 uppercase tracking-wider bg-neutral-50">Collateral Session</th>
+            <tr className="single-row-header">
+              <th>Actions</th>
+              <th>Description</th>
+              <th>Owner</th>
+              <th>Life Assured</th>
+              <th>Death Benefit</th>
+              <th>Beneficiary</th>
+              <th>Additional Info</th>
+              <th>Benefit Split</th>
+              <th>Amount</th>
+              <th>Buy/Sell</th>
+              <th>Key Man</th>
+              <th>Excluded Estate Duty</th>
+              <th>Excluded Provisions</th>
+              <th>Premiums by Others</th>
+              <th>Collateral Session</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-neutral-200">
