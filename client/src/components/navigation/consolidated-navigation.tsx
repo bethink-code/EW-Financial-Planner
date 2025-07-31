@@ -118,8 +118,8 @@ export function ConsolidatedNavigation({
                 FINANCIAL PLAN
               </span>
               
-              {/* Financial Plan name with edit button */}
-              <div className="flex flex-col gap-2">
+              {/* Financial Plan name with edit button and back button on same row */}
+              <div className="flex items-center gap-2">
                 <button className="flex items-center pl-4 pr-1 text-sm font-medium transition-colors h-10 rounded-[6px] focus:outline-none focus:ring-0 focus:border-0 bg-[#F5F1E8] text-gray-700 border-0 hover:bg-[#F0EBE0]">
                   <span title={planName} className="flex-1">
                     {planName}
@@ -133,7 +133,7 @@ export function ConsolidatedNavigation({
                 <Button
                   variant="ghost"
                   onClick={handleBack}
-                  className="btn-ghost px-2 text-sm h-10 self-start"
+                  className="btn-ghost px-2 text-sm h-10"
                 >
                   Back to all plans
                 </Button>
