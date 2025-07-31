@@ -159,14 +159,14 @@ function IncomeProvisionsTable({ viewMode, searchTerm }: IncomeProvisionsTablePr
  <tbody className="divide-y divide-neutral-200">
  {incomeProvisions.map((incomeProvision: IncomeProvisions, index) => (
  <tr key={incomeProvision.id} className="hover:bg-neutral-50">
- <td className="table-actions-cell p-1 text-center section-start">
+ <td className="table-actions-cell section-start">
  <ActionButtonGroup>
  <DuplicateButton onClick={() => addMutation.mutate()} disabled={isUpdating} />
  <DeleteButton onClick={() => handleDeleteIncomeProvision(incomeProvision.id)} disabled={isUpdating} />
  </ActionButtonGroup>
  </td>
  
- <td className="p-1 section-start">
+ <td className="section-start">
  <input
  type="text"
  defaultValue={incomeProvision.description}
@@ -177,7 +177,7 @@ function IncomeProvisionsTable({ viewMode, searchTerm }: IncomeProvisionsTablePr
  />
  </td>
  
- <td className="p-1">
+ <td className="">
  <input
  type="text"
  defaultValue={incomeProvision.beneficiary}
@@ -188,7 +188,7 @@ function IncomeProvisionsTable({ viewMode, searchTerm }: IncomeProvisionsTablePr
  />
  </td>
  
- <td className="p-1 section-start">
+ <td className="section-start">
  <input
  key={`monthlyAmount-${incomeProvision.id}-${incomeProvision.monthlyAmount}`}
  type="text"
@@ -205,7 +205,7 @@ function IncomeProvisionsTable({ viewMode, searchTerm }: IncomeProvisionsTablePr
  
  <tfoot>
  <tr>
- <td className="totals-cell-label text-right section-start" colSpan={2}>Totals</td>
+ <td className="totals-cell-label section-start" colSpan={2}>Totals</td>
  <td className="totals-cell-value section-start">R {totals.monthlyAmount.toLocaleString()}</td>
  </tr>
  </tfoot>

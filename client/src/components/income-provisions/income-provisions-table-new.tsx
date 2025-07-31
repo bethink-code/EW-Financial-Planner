@@ -186,24 +186,23 @@ export default function IncomeProvisionsTable({ viewMode, searchTerm }: IncomePr
  {/* Table */}
  <table className="min-w-full border border-neutral-200">
  <thead>
- <tr className="border-b border-border">
- <th className="px-3 text-center text-xs font-medium text-neutral-600 uppercase tracking-wider w-16">Actions</th>
- <th className="px-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start" colSpan={2}>Overview</th>
- <th className="px-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start" colSpan={9}>Income Provision Details</th>
+ <tr className="double-row-header-first">
+ <th className="section-start" rowSpan={2}></th>
+ <th className="section-start" colSpan={2}>Overview</th>
+ <th className="section-start" colSpan={9}>Income Provision Details</th>
  </tr>
- <tr className="border-b border-border">
- <th className="px-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center border-b border-neutral-200"></th>
- <th className="px-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start border-b border-neutral-200">Description</th>
- <th className="px-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center border-b border-neutral-200">Entity</th>
- <th className="px-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start border-b border-neutral-200">Amount</th>
- <th className="px-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center border-b border-neutral-200">Start</th>
- <th className="px-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center border-b border-neutral-200">Term (years)</th>
- <th className="px-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center border-b border-neutral-200">Increase %</th>
- <th className="px-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center border-b border-neutral-200">CPI</th>
- <th className="px-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center border-b border-neutral-200">Frequency</th>
- <th className="px-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center border-b border-neutral-200">Tax %</th>
- <th className="px-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center border-b border-neutral-200">Tax Rate</th>
- <th className="px-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center border-b border-neutral-200">Capitalised Amount</th>
+ <tr className="double-row-header-second">
+ <th className="section-start">Description</th>
+ <th>Entity</th>
+ <th className="section-start">Amount</th>
+ <th>Start</th>
+ <th>Term (years)</th>
+ <th>Increase %</th>
+ <th>CPI</th>
+ <th>Frequency</th>
+ <th>Tax %</th>
+ <th>Tax Rate</th>
+ <th>Capitalised Amount</th>
  </tr>
  </thead>
  <tbody className="divide-y divide-neutral-200">
