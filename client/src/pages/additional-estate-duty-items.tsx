@@ -46,8 +46,6 @@ export default function AdditionalEstateDutyItems() {
         {/* Combined Header, Summary and Table */}
         <CalculatorHeader
           title="Additional Estate Duty Items"
-          itemCount={items.length}
-          itemLabel="items"
           onAddItem={handleAddItem}
           addButtonText="Add Item"
           isAddingItem={addMutation.isPending}

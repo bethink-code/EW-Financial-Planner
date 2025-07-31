@@ -149,8 +149,6 @@ export default function NewRetirementFunds() {
         {/* Combined Header, Summary and Table */}
         <CalculatorHeader
           title="Retirement Funds"
-          itemCount={funds.length}
-          itemLabel="funds"
           onAddItem={handleAddFund}
           addButtonText="Add Fund"
           isAddingItem={addMutation.isPending}

@@ -46,8 +46,6 @@ export default function Assurance() {
         {/* Combined Header, Summary and Table */}
         <CalculatorHeader
           title="Assurance"
-          itemCount={policies.length}
-          itemLabel="policies"
           onAddItem={handleAddPolicy}
           addButtonText="Add Policy"
           isAddingItem={addMutation.isPending}

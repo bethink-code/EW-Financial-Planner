@@ -56,8 +56,6 @@ export default function DefinedBenefitFunds() {
         {/* Combined Header, Summary and Table */}
         <CalculatorHeader
           title="Defined Benefit Funds"
-          itemCount={funds.length}
-          itemLabel="funds"
           onAddItem={handleAddFund}
           addButtonText="Add Fund"
           isAddingItem={addMutation.isPending}

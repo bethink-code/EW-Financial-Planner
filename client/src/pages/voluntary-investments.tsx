@@ -46,8 +46,6 @@ export default function VoluntaryInvestments() {
         {/* Combined Header, Summary and Table */}
         <CalculatorHeader
           title="Voluntary Investments"
-          itemCount={investments.length}
-          itemLabel="investments"
           onAddItem={handleAddInvestment}
           addButtonText="Add Investment"
           isAddingItem={addMutation.isPending}

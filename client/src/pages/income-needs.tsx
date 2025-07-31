@@ -46,8 +46,6 @@ export default function IncomeNeeds() {
         {/* Combined Header, Summary and Table */}
         <CalculatorHeader
           title="Income Needs"
-          itemCount={needs.length}
-          itemLabel="needs"
           onAddItem={handleAddNeed}
           addButtonText="Add Need"
           isAddingItem={addMutation.isPending}

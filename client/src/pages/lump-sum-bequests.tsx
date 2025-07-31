@@ -54,8 +54,6 @@ export default function LumpSumBequests() {
         {/* Combined Header, Summary and Table */}
         <CalculatorHeader
           title="Lump Sum Needs and Cash Bequests"
-          itemCount={bequests.length}
-          itemLabel="bequests"
           onAddItem={handleAddBequest}
           addButtonText="Add Bequest"
           isAddingItem={addMutation.isPending}

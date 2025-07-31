@@ -56,8 +56,6 @@ export function AssetsPage() {
         {/* Combined Header, Summary and Table */}
         <CalculatorHeader
           title="Assets"
-          itemCount={assets.length}
-          itemLabel="assets"
           onAddItem={handleAddAsset}
           addButtonText="Add Asset"
           isAddingItem={addMutation.isPending}

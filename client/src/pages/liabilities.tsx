@@ -56,8 +56,6 @@ export default function LiabilitiesPage() {
         {/* Combined Header, Summary and Table */}
         <CalculatorHeader
           title="Liabilities"
-          itemCount={liabilities.length}
-          itemLabel="liabilities"
           onAddItem={handleAddLiability}
           addButtonText="Add Liability"
           isAddingItem={addMutation.isPending}

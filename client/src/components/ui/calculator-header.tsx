@@ -42,11 +42,7 @@ export function CalculatorHeader({
           {/* Left section: Title, count, Add button, and switchers */}
           <div className="flex items-center gap-4">
             <h1 className="text-2xl font-semibold text-neutral-900">{title}</h1>
-            {itemCount !== undefined && (
-              <span className="px-3 bg-primary/10 text-primary text-sm font-medium rounded-full">
-                {itemCount} {itemLabel}
-              </span>
-            )}
+
             {onAddItem && (
               <Button
                 onClick={onAddItem}

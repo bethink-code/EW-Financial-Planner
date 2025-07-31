@@ -50,8 +50,6 @@ export default function Residue() {
         {/* Combined Header, Summary and Table */}
         <CalculatorHeader
           title="Residue"
-          itemCount={residues.length}
-          itemLabel="entries"
           onAddItem={handleAddResidue}
           addButtonText="Add Entry"
           isAddingItem={addMutation.isPending}

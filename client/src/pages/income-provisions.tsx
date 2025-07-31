@@ -47,8 +47,6 @@ export default function IncomeProvisions() {
         {/* Combined Header, Summary and Table */}
         <CalculatorHeader
           title="Income Provisions"
-          itemCount={provisions.length}
-          itemLabel="provisions"
           onAddItem={handleAddProvision}
           addButtonText="Add Provision"
           isAddingItem={addMutation.isPending}
