@@ -442,11 +442,11 @@ th, td {
 
   /* Centralized summary card styling */
   .summary-card {
-    background-color: #EDF4F9 !important; /* Same as switcher background */
+    background-color: #EDF4F9; /* Default background - can be overridden */
     border-radius: 0.5rem !important;
     padding: 1rem !important;
     text-align: center !important;
-    border: none !important; /* Remove border */
+    border: 1px solid #D1E7F0; /* Default border - can be overridden */
     display: flex !important;
     flex-direction: column !important;
     justify-content: flex-end !important; /* Align content to bottom */
