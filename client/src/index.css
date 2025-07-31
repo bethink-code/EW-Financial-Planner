@@ -557,7 +557,12 @@ th, td {
     color: #374151 !important; /* text-neutral-700 */
     font-size: 0.875rem !important;
     font-weight: normal !important;
-    padding: 1rem 0.5rem !important; /* Match input field padding for alignment */
+    padding: 0.25rem 0.6rem 0.4rem 0.6rem !important; /* Match header padding */
+    height: 2.5rem !important; /* Match single-row header height */
+    min-height: 2.5rem !important;
+    max-height: 2.5rem !important;
+    vertical-align: bottom !important; /* Match header alignment */
+    line-height: 1.2 !important; /* Match header line-height */
   }
 
   .totals-cell-value {
@@ -566,9 +571,12 @@ th, td {
     font-weight: 600 !important;
     color: #374151 !important;
     font-size: 0.875rem !important;
-    padding: 0.5rem !important;
-    height: 2.3rem !important;
-    line-height: 1.3rem !important;
+    padding: 0.25rem 0.6rem 0.4rem 0.6rem !important; /* Match header padding */
+    height: 2.5rem !important; /* Match single-row header height */
+    min-height: 2.5rem !important;
+    max-height: 2.5rem !important;
+    vertical-align: bottom !important; /* Match header alignment */
+    line-height: 1.2 !important; /* Match header line-height */
   }
   
   /* Special padding for currency alignment */
