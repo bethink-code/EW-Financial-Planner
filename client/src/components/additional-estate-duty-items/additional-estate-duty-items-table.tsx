@@ -1,374 +1,335 @@
-import { useState, useCallback, useMemo } from 'react';
+import { useState, useCallback } from 'react';
 import { useQuery, useMutation } from '@tanstack/react-query';
 import { queryClient } from '@/lib/queryClient';
 import { AdditionalEstateDutyItems, InsertAdditionalEstateDutyItems } from '@shared/schema';
 import { AddButton, ActionButtonGroup, DuplicateButton, DeleteButton } from '@/components/ui/action-buttons';
-import { getFieldClass, getCellClass } from '@/lib/field-types';
-import { formatCurrencyValue, formatPercentageValue, formatTextValue, getValueClass, handleDefaultValueFocus } from '@/lib/formatting';
+import { getFieldClass } from '@/lib/field-types';
+import { formatCurrencyValue, formatTextValue, getValueClass, handleDefaultValueFocus, createEnhancedBlurHandler } from '@/lib/formatting';
+import { SafeFragment } from '@/lib/safe-fragment';
 
 interface AdditionalEstateDutyItemsTableProps {
- viewMode: 'table' | 'hybrid';
- searchTerm?: string;
+  viewMode: 'table' | 'hybrid';
 }
 
-function AdditionalEstateDutyItemsTable({ viewMode, searchTerm }: AdditionalEstateDutyItemsTableProps) {
- const [isUpdating, setIsUpdating] = useState(false);
+function AdditionalEstateDutyItemsTable({ viewMode }: AdditionalEstateDutyItemsTableProps) {
+  const [isUpdating, setIsUpdating] = useState(false);
 
- const { data: items = [], isLoading, error } = useQuery<AdditionalEstateDutyItems[]>({
- queryKey: ['/api/additional-estate-duty-items'],
- });
+  const { data: items = [], isLoading, error } = useQuery<AdditionalEstateDutyItems[]>({
+    queryKey: ['/api/additional-estate-duty-items'],
+  });
 
- const addMutation = useMutation({
- mutationFn: async (): Promise<AdditionalEstateDutyItems> => {
- const newItem: InsertAdditionalEstateDutyItems = {
- category:"",
- description:"",
- amount:"R 0",
- increasePercentage:"0%",
- johnDoe:"0%",
- janetteDoe:"0%",
- doeJunior:"0%",
- doeFamilyTrust:"0%",
- estate:"R 0",
- others:"R 0",
- client:"R 0",
- };
- 
- const response = await fetch('/api/additional-estate-duty-items', {
- method: 'POST',
- headers: {
- 'Content-Type': 'application/json',
- },
- body: JSON.stringify(newItem),
- });
- 
- if (!response.ok) {
- throw new Error('Failed to add additional estate duty item');
- }
- 
- return response.json();
- },
- onSuccess: () => {
- queryClient.invalidateQueries({ queryKey: ['/api/additional-estate-duty-items'] });
- setIsUpdating(false);
- },
- onError: (error) => {
- console.error('Failed to add additional estate duty item:', error);
- setIsUpdating(false);
- }
- });
+  const addMutation = useMutation({
+    mutationFn: async (): Promise<AdditionalEstateDutyItems> => {
+      const newItem = {}; // Send empty object to use database defaults
+      
+      const response = await fetch('/api/additional-estate-duty-items', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(newItem),
+      });
+      
+      if (!response.ok) {
+        throw new Error('Failed to add additional estate duty item');
+      }
+      
+      return response.json();
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['/api/additional-estate-duty-items'] });
+      setIsUpdating(false);
+    },
+    onError: (error) => {
+      console.error('Failed to add additional estate duty item:', error);
+      setIsUpdating(false);
+    }
+  });
 
- const updateMutation = useMutation({
- mutationFn: async ({ id, updates }: { id: number; updates: Partial<AdditionalEstateDutyItems> }) => {
- const response = await fetch(`/api/additional-estate-duty-items/${id}`, {
- method: 'PATCH',
- headers: {
- 'Content-Type': 'application/json',
- },
- body: JSON.stringify(updates),
- });
- 
- if (!response.ok) {
- throw new Error('Failed to update additional estate duty item');
- }
- 
- return response.json();
- },
- onSuccess: () => {
- queryClient.invalidateQueries({ queryKey: ['/api/additional-estate-duty-items'] });
- setIsUpdating(false);
- },
- onError: (error) => {
- console.error('Failed to update additional estate duty item:', error);
- setIsUpdating(false);
- }
- });
+  const updateMutation = useMutation({
+    mutationFn: async ({ id, updates }: { id: number; updates: Partial<AdditionalEstateDutyItems> }) => {
+      const response = await fetch(`/api/additional-estate-duty-items/${id}`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(updates),
+      });
+      
+      if (!response.ok) {
+        throw new Error('Failed to update additional estate duty item');
+      }
+      
+      return response.json();
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['/api/additional-estate-duty-items'] });
+      setIsUpdating(false);
+    },
+    onError: (error) => {
+      console.error('Failed to update additional estate duty item:', error);
+      setIsUpdating(false);
+    }
+  });
 
- const deleteMutation = useMutation({
- mutationFn: async (id: number) => {
- const response = await fetch(`/api/additional-estate-duty-items/${id}`, {
- method: 'DELETE',
- });
- 
- if (!response.ok) {
- throw new Error('Failed to delete additional estate duty item');
- }
- },
- onSuccess: () => {
- queryClient.invalidateQueries({ queryKey: ['/api/additional-estate-duty-items'] });
- }
- });
+  const deleteMutation = useMutation({
+    mutationFn: async (id: number) => {
+      const response = await fetch(`/api/additional-estate-duty-items/${id}`, {
+        method: 'DELETE',
+      });
+      
+      if (!response.ok) {
+        throw new Error('Failed to delete additional estate duty item');
+      }
+      
+      return response.json();
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['/api/additional-estate-duty-items'] });
+    },
+    onError: (error) => {
+      console.error('Failed to delete additional estate duty item:', error);
+    }
+  });
 
- const totals = useMemo(() => {
- return {
- count: items.length,
- amount: items.reduce((sum: number, item: AdditionalEstateDutyItems) => {
- const value = parseFloat((item.amount || '').replace(/[^\d.-]/g, '')) || 0;
- return sum + value;
- }, 0),
- increasePercentage: items.reduce((sum: number, item: AdditionalEstateDutyItems) => {
- const value = parseFloat((item.increasePercentage || '').replace(/[^\d.-]/g, '')) || 0;
- return sum + value;
- }, 0),
- johnDoe: items.reduce((sum: number, item: AdditionalEstateDutyItems) => {
- const value = parseFloat((item.johnDoe || '').replace(/[^\d.-]/g, '')) || 0;
- return sum + value;
- }, 0),
- janetteDoe: items.reduce((sum: number, item: AdditionalEstateDutyItems) => {
- const value = parseFloat((item.janetteDoe || '').replace(/[^\d.-]/g, '')) || 0;
- return sum + value;
- }, 0),
- doeJunior: items.reduce((sum: number, item: AdditionalEstateDutyItems) => {
- const value = parseFloat((item.doeJunior || '').replace(/[^\d.-]/g, '')) || 0;
- return sum + value;
- }, 0),
- doeFamilyTrust: items.reduce((sum: number, item: AdditionalEstateDutyItems) => {
- const value = parseFloat((item.doeFamilyTrust || '').replace(/[^\d.-]/g, '')) || 0;
- return sum + value;
- }, 0),
- estate: items.reduce((sum: number, item: AdditionalEstateDutyItems) => {
- const value = parseFloat((item.estate || '').replace(/[^\d.-]/g, '')) || 0;
- return sum + value;
- }, 0),
- others: items.reduce((sum: number, item: AdditionalEstateDutyItems) => {
- const value = parseFloat((item.others || '').replace(/[^\d.-]/g, '')) || 0;
- return sum + value;
- }, 0),
- client: items.reduce((sum: number, item: AdditionalEstateDutyItems) => {
- const value = parseFloat((item.client || '').replace(/[^\d.-]/g, '')) || 0;
- return sum + value;
- }, 0),
- };
- }, [items]);
+  const handleUpdateItem = useCallback((id: number, updates: Partial<AdditionalEstateDutyItems>) => {
+    updateMutation.mutate({ id, updates });
+  }, [updateMutation]);
 
- const handleUpdateItem = useCallback((id: number, field: keyof AdditionalEstateDutyItems, value: string | string[]) => {
- setIsUpdating(true);
- const updates = { [field]: value };
- updateMutation.mutate({ id, updates });
- }, [updateMutation]);
+  const handleInputBlur = useCallback((id: number, field: keyof AdditionalEstateDutyItems, value: string) => {
+    let formattedValue: string;
+    if (field === 'amount') {
+      formattedValue = formatCurrencyValue(value);
+    } else {
+      formattedValue = formatTextValue(value);
+    }
+    handleUpdateItem(id, { [field]: formattedValue });
+    
+    // Update the input field display
+    const target = document.activeElement as HTMLInputElement;
+    if (target && formattedValue !== value) {
+      setTimeout(() => {
+        target.value = formattedValue;
+      }, 0);
+    }
+  }, [handleUpdateItem]);
 
- const handleInputBlur = useCallback((id: number, field: keyof AdditionalEstateDutyItems, value: string) => {
- let formattedValue: string;
- if (field === 'amount' || field === 'estate' || field === 'others' || field === 'client') {
- formattedValue = formatCurrencyValue(value);
- } else if (field === 'increasePercentage' || field === 'johnDoe' || field === 'janetteDoe' || field === 'doeJunior' || field === 'doeFamilyTrust') {
- formattedValue = formatPercentageValue(value);
- } else {
- formattedValue = formatTextValue(value);
- }
- handleUpdateItem(id, field, formattedValue);
- 
- const target = document.activeElement as HTMLInputElement;
- if (target && formattedValue !== value) {
- setTimeout(() => {
- target.value = formattedValue;
- }, 0);
- }
- }, [handleUpdateItem]);
+  const handleCheckboxChange = useCallback((id: number, field: keyof AdditionalEstateDutyItems, checked: boolean) => {
+    handleUpdateItem(id, { [field]: checked });
+  }, [handleUpdateItem]);
 
- const handleDeleteItem = useCallback((id: number) => {
- if (window.confirm('Are you sure you want to delete this additional estate duty item?')) {
- deleteMutation.mutate(id);
- }
- }, [deleteMutation]);
+  const handleDeleteItem = useCallback((id: number) => {
+    if (window.confirm('Are you sure you want to delete this additional estate duty item?')) {
+      deleteMutation.mutate(id);
+    }
+  }, [deleteMutation]);
 
- if (isLoading) {
- return <div className="flex justify-center">Loading additional estate duty items...</div>;
- }
+  const handleDuplicateItem = useCallback((item: AdditionalEstateDutyItems) => {
+    const newItem: InsertAdditionalEstateDutyItems = {
+      description: item.description || "",
+      amount: item.amount || "R 0",
+      deduction: item.deduction || false,
+      excludeFromJointEstate: item.excludeFromJointEstate || false,
+    };
+    
+    const response = fetch('/api/additional-estate-duty-items', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(newItem),
+    }).then(res => res.json());
+    
+    response.then(() => {
+      queryClient.invalidateQueries({ queryKey: ['/api/additional-estate-duty-items'] });
+    });
+  }, []);
 
- if (error) {
- return <div className="text-red-600">Error loading additional estate duty items. Please try again.</div>;
- }
+  if (isLoading) {
+    return <div className="flex justify-center">Loading additional estate duty items...</div>;
+  }
 
- return (
- <div className="space-y-6">
- <table>
- <thead>
- <tr className="double-row-header-first">
- <th className="section-start" rowSpan={2}>
- <AddButton onClick={() => addMutation.mutate()} disabled={isUpdating} />
- </th>
- <th className="" colSpan={2}>Overview</th>
- <th className="" colSpan={2}>Financial Details</th>
- <th className="" colSpan={4}>Distribution Split</th>
- <th className="" colSpan={3}>Beneficiaries</th>
- </tr>
- <tr className="double-row-header-second">
- <th className="">Category</th>
- <th className="">Description</th>
- <th className="">Amount</th>
- <th className="">Increase %</th>
- <th className="">John Doe</th>
- <th className="">Janette Doe (Spouse)</th>
- <th className="">Doe Junior</th>
- <th className="">Doe family trust</th>
- <th className="">Estate</th>
- <th className="">Others</th>
- <th className="">Client</th>
- </tr>
- </thead>
- <tbody className="divide-y divide-neutral-200">
- {items.map((item: AdditionalEstateDutyItems, index) => (
- <tr key={item.id} className="hover:bg-neutral-50">
- <td className="table-actions-cell p-1 text-center section-start">
- <ActionButtonGroup>
- <DuplicateButton onClick={() => addMutation.mutate()} disabled={isUpdating} />
- <DeleteButton onClick={() => handleDeleteItem(item.id)} disabled={isUpdating} />
- </ActionButtonGroup>
- </td>
- 
- <td className="p-2 text-left">
- <input
- type="text"
- defaultValue={formatTextValue(item.category)}
- placeholder="Enter details ..."
- className={`table-input ${getFieldClass('text')} ${getValueClass(item.category, 'text')}`}
- onFocus={handleDefaultValueFocus}
- onBlur={(e) => handleInputBlur(item.id, 'category', e.target.value)}
- disabled={isUpdating}
- />
- </td>
- 
- <td className="p-2 text-left">
- <input
- type="text"
- defaultValue={formatTextValue(item.description)}
- placeholder="Enter details ..."
- className={`table-input ${getFieldClass('text')} ${getValueClass(item.description, 'text')}`}
- onFocus={handleDefaultValueFocus}
- onBlur={(e) => handleInputBlur(item.id, 'description', e.target.value)}
- disabled={isUpdating}
- />
- </td>
- 
- <td className="p-2 text-right">
- <input
- key={`amount-${item.id}-${item.amount}`}
- type="text"
- defaultValue={item.amount}
- className={`table-input ${getFieldClass('currency')} ${getValueClass(item.amount, 'currency')}`}
- onFocus={handleDefaultValueFocus}
- onBlur={(e) => handleInputBlur(item.id, 'amount', e.target.value)}
- disabled={isUpdating}
- />
- </td>
- 
- <td className="p-2 text-center">
- <input
- key={`increasePercentage-${item.id}-${item.increasePercentage}`}
- type="text"
- defaultValue={item.increasePercentage}
- className={`table-input ${getFieldClass('percentage')} ${getValueClass(item.increasePercentage, 'percentage')}`}
- onFocus={handleDefaultValueFocus}
- onBlur={(e) => handleInputBlur(item.id, 'increasePercentage', e.target.value)}
- disabled={isUpdating}
- />
- </td>
- 
- <td className="p-2 text-center">
- <input
- key={`johnDoe-${item.id}-${item.johnDoe}`}
- type="text"
- defaultValue={item.johnDoe}
- className={`table-input ${getFieldClass('percentage')} ${getValueClass(item.johnDoe, 'percentage')}`}
- onFocus={handleDefaultValueFocus}
- onBlur={(e) => handleInputBlur(item.id, 'johnDoe', e.target.value)}
- disabled={isUpdating}
- />
- </td>
- 
- <td className="p-2 text-center">
- <input
- key={`janetteDoe-${item.id}-${item.janetteDoe}`}
- type="text"
- defaultValue={item.janetteDoe}
- className={`table-input ${getFieldClass('percentage')} ${getValueClass(item.janetteDoe, 'percentage')}`}
- onFocus={handleDefaultValueFocus}
- onBlur={(e) => handleInputBlur(item.id, 'janetteDoe', e.target.value)}
- disabled={isUpdating}
- />
- </td>
- 
- <td className="p-2 text-center">
- <input
- key={`doeJunior-${item.id}-${item.doeJunior}`}
- type="text"
- defaultValue={item.doeJunior}
- className={`table-input ${getFieldClass('percentage')} ${getValueClass(item.doeJunior, 'percentage')}`}
- onFocus={handleDefaultValueFocus}
- onBlur={(e) => handleInputBlur(item.id, 'doeJunior', e.target.value)}
- disabled={isUpdating}
- />
- </td>
- 
- <td className="p-2 text-center">
- <input
- key={`doeFamilyTrust-${item.id}-${item.doeFamilyTrust}`}
- type="text"
- defaultValue={item.doeFamilyTrust}
- className={`table-input ${getFieldClass('percentage')} ${getValueClass(item.doeFamilyTrust, 'percentage')}`}
- onFocus={handleDefaultValueFocus}
- onBlur={(e) => handleInputBlur(item.id, 'doeFamilyTrust', e.target.value)}
- disabled={isUpdating}
- />
- </td>
- 
- <td className="p-2 text-right">
- <input
- key={`estate-${item.id}-${item.estate}`}
- type="text"
- defaultValue={item.estate}
- className={`table-input ${getFieldClass('currency')} ${getValueClass(item.estate, 'currency')}`}
- onFocus={handleDefaultValueFocus}
- onBlur={(e) => handleInputBlur(item.id, 'estate', e.target.value)}
- disabled={isUpdating}
- />
- </td>
- 
- <td className="p-2 text-right">
- <input
- key={`others-${item.id}-${item.others}`}
- type="text"
- defaultValue={item.others}
- className={`table-input ${getFieldClass('currency')} ${getValueClass(item.others, 'currency')}`}
- onFocus={handleDefaultValueFocus}
- onBlur={(e) => handleInputBlur(item.id, 'others', e.target.value)}
- disabled={isUpdating}
- />
- </td>
- 
- <td className="p-2 text-right">
- <input
- key={`client-${item.id}-${item.client}`}
- type="text"
- defaultValue={item.client}
- className={`table-input ${getFieldClass('currency')} ${getValueClass(item.client, 'currency')}`}
- onFocus={handleDefaultValueFocus}
- onBlur={(e) => handleInputBlur(item.id, 'client', e.target.value)}
- disabled={isUpdating}
- />
- </td>
- </tr>
- ))}
- </tbody>
- 
- <tfoot>
- <tr>
- <td className="totals-cell-label text-right section-start" colSpan={3}>Totals</td>
- <td className="totals-cell-value">R {totals.amount.toLocaleString()}</td>
- <td className="totals-cell-value">{totals.increasePercentage}%</td>
- <td className="totals-cell-value">{totals.johnDoe}%</td>
- <td className="totals-cell-value">{totals.janetteDoe}%</td>
- <td className="totals-cell-value">{totals.doeJunior}%</td>
- <td className="totals-cell-value">{totals.doeFamilyTrust}%</td>
- <td className="totals-cell-value">R {totals.estate.toLocaleString()}</td>
- <td className="totals-cell-value">R {totals.others.toLocaleString()}</td>
- <td className="totals-cell-value">R {totals.client.toLocaleString()}</td>
- </tr>
- </tfoot>
- </table>
- </div>
- );
+  if (error) {
+    return <div className="text-red-600">Error loading additional estate duty items. Please try again.</div>;
+  }
+
+  // Calculate totals
+  const totalAmount = items.reduce((sum, item) => {
+    const amount = parseFloat(item.amount?.replace(/[R\s,]/g, '') || '0');
+    return sum + amount;
+  }, 0);
+
+  if (viewMode === "table") {
+    return (
+      <div className="table-container-wrapper">
+        <table className="table">
+          <thead>
+            <tr>
+              <th className="table-actions-cell section-start">
+                <AddButton
+                  onClick={() => addMutation.mutate()}
+                  disabled={addMutation.isPending}
+                  size="sm"
+                />
+              </th>
+              <th className="p-2 text-left text-xs font-medium text-neutral-600 uppercase tracking-wider">
+                Description
+              </th>
+              <th className="p-2 text-center text-xs font-medium text-neutral-600 uppercase tracking-wider">
+                Amount
+              </th>
+              <th className="p-2 text-center text-xs font-medium text-neutral-600 uppercase tracking-wider">
+                Deduction?
+              </th>
+              <th className="p-2 text-center text-xs font-medium text-neutral-600 uppercase tracking-wider">
+                Exclude from joint estate for 'In community'?
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            {items.map((item) => (
+              <SafeFragment key={`item-${item.id}`}>
+                <tr>
+                  <td className="table-actions-cell section-start">
+                    <ActionButtonGroup>
+                      <DuplicateButton
+                        onClick={() => handleDuplicateItem(item)}
+                        size="sm"
+                      />
+                      <DeleteButton
+                        onClick={() => handleDeleteItem(item.id)}
+                        size="sm"
+                      />
+                    </ActionButtonGroup>
+                  </td>
+                  <td className="p-2 text-left">
+                    <input
+                      type="text"
+                      className={`table-input ${getFieldClass('text')} ${getValueClass(item.description, 'text')}`}
+                      defaultValue={formatTextValue(item.description || "")}
+                      onFocus={handleDefaultValueFocus}
+                      onBlur={(e) => handleInputBlur(item.id, 'description', e.target.value)}
+                    />
+                  </td>
+                  <td className="p-2 text-right">
+                    <input
+                      type="text"
+                      className={`table-input ${getFieldClass('currency')} ${getValueClass(item.amount, 'currency')}`}
+                      defaultValue={item.amount || "R 0"}
+                      onFocus={(e) => createEnhancedBlurHandler('currency')(e)}
+                      onBlur={(e) => handleInputBlur(item.id, 'amount', e.target.value)}
+                    />
+                  </td>
+                  <td className="p-2 text-center">
+                    <input
+                      type="checkbox"
+                      className="w-4 h-4"
+                      checked={item.deduction || false}
+                      onChange={(e) => handleCheckboxChange(item.id, 'deduction', e.target.checked)}
+                    />
+                  </td>
+                  <td className="p-2 text-center">
+                    <input
+                      type="checkbox"
+                      className="w-4 h-4"
+                      checked={item.excludeFromJointEstate || false}
+                      onChange={(e) => handleCheckboxChange(item.id, 'excludeFromJointEstate', e.target.checked)}
+                    />
+                  </td>
+                </tr>
+              </SafeFragment>
+            ))}
+          </tbody>
+          <tfoot>
+            <tr className="bg-neutral-50 border-t border-neutral-300">
+              <td className="section-start p-2 text-sm font-semibold text-neutral-700"></td>
+              <td className="p-2 text-sm font-normal text-neutral-700">Totals</td>
+              <td className="p-2 text-right text-sm font-semibold text-neutral-700">
+                R {totalAmount.toLocaleString()}
+              </td>
+              <td className="p-2"></td>
+              <td className="p-2"></td>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+    );
+  }
+
+  // Hybrid view - simplified card layout
+  return (
+    <div className="space-y-4">
+      {items.map((item) => (
+        <div key={item.id} className="bg-white rounded-lg border border-neutral-200 p-4">
+          <div className="flex justify-between items-start mb-4">
+            <h3 className="text-lg font-medium">Additional Estate Duty Item #{item.id}</h3>
+            <ActionButtonGroup>
+              <DuplicateButton
+                onClick={() => handleDuplicateItem(item)}
+                size="sm"
+              />
+              <DeleteButton
+                onClick={() => handleDeleteItem(item.id)}
+                size="sm"
+              />
+            </ActionButtonGroup>
+          </div>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label className="block text-sm font-medium text-neutral-700 mb-1">
+                Description
+              </label>
+              <input
+                type="text"
+                className={`table-input ${getFieldClass('text')} w-full ${getValueClass(item.description, 'text')}`}
+                defaultValue={formatTextValue(item.description || "")}
+                onFocus={handleDefaultValueFocus}
+                onBlur={(e) => handleInputBlur(item.id, 'description', e.target.value)}
+              />
+            </div>
+            
+            <div>
+              <label className="block text-sm font-medium text-neutral-700 mb-1">
+                Amount
+              </label>
+              <input
+                type="text"
+                className={`table-input ${getFieldClass('currency')} w-full ${getValueClass(item.amount, 'currency')}`}
+                defaultValue={item.amount || "R 0"}
+                onFocus={(e) => createEnhancedBlurHandler('currency')(e)}
+                onBlur={(e) => handleInputBlur(item.id, 'amount', e.target.value)}
+              />
+            </div>
+            
+            <div className="flex items-center">
+              <input
+                type="checkbox"
+                className="w-4 h-4 mr-2"
+                checked={item.deduction || false}
+                onChange={(e) => handleCheckboxChange(item.id, 'deduction', e.target.checked)}
+              />
+              <label className="text-sm font-medium text-neutral-700">
+                Deduction?
+              </label>
+            </div>
+            
+            <div className="flex items-center">
+              <input
+                type="checkbox"
+                className="w-4 h-4 mr-2"
+                checked={item.excludeFromJointEstate || false}
+                onChange={(e) => handleCheckboxChange(item.id, 'excludeFromJointEstate', e.target.checked)}
+              />
+              <label className="text-sm font-medium text-neutral-700">
+                Exclude from joint estate for 'In community'?
+              </label>
+            </div>
+          </div>
+        </div>
+      ))}
+    </div>
+  );
 }
 
 export default AdditionalEstateDutyItemsTable;

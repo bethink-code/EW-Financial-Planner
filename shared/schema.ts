@@ -306,28 +306,21 @@ export type Residue = typeof residue.$inferSelect;
 export type InsertResidue = z.infer<typeof insertResidueSchema>;
 export type UpdateResidue = z.infer<typeof updateResidueSchema>;
 
-// Additional Estate Duty Items table schema - Comprehensive structure matching other tables
+// Additional Estate Duty Items table schema - Simple 4-field structure
 export const additionalEstateDutyItems = pgTable("additional_estate_duty_items", {
   id: serial("id").primaryKey(),
   
-  // Overview Section
-  category: text("category").notNull().default(""),
+  // Description field
   description: text("description").notNull().default(""),
   
-  // Financial Details Section
+  // Amount field
   amount: text("amount").notNull().default("R 0"),
-  increasePercentage: text("increase_percentage").notNull().default("0%"),
   
-  // Distribution Split Section
-  johnDoe: text("john_doe").notNull().default("0%"),
-  janetteDoe: text("janette_doe").notNull().default("0%"),
-  doeJunior: text("doe_junior").notNull().default("0%"),
-  doeFamilyTrust: text("doe_family_trust").notNull().default("0%"),
+  // Deduction checkbox
+  deduction: boolean("deduction").notNull().default(false),
   
-  // Beneficiaries Section
-  estate: text("estate").notNull().default("R 0"),
-  others: text("others").notNull().default("R 0"),
-  client: text("client").notNull().default("R 0"),
+  // Exclude from joint estate checkbox
+  excludeFromJointEstate: boolean("exclude_from_joint_estate").notNull().default(false),
 });
 
 export const insertAdditionalEstateDutyItemsSchema = createInsertSchema(additionalEstateDutyItems).omit({
