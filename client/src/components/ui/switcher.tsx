@@ -32,9 +32,9 @@ export function Switcher({
   };
 
   const containerClasses = {
-    sm:"px-1.5",
-    md:"px-1.5",
-    lg:"px-1.5"
+    sm:"p-1",
+    md:"p-1",
+    lg:"p-1"
   };
 
   return (
@@ -57,8 +57,8 @@ export function Switcher({
 "relative flex items-center justify-center font-medium transition-all duration-200 ease-in-out",
               sizeClasses[size],
               isSelected
-                ?"bg-white text-[#016991] font-semibold rounded-lg"
-                :"text-[#6B7280] hover:text-gray-700 rounded-md"
+                ?"bg-white text-[#016991] font-semibold rounded-md mx-0.5"
+                :"text-[#6B7280] hover:text-gray-700 rounded-md mx-0.5"
             )}
           >
             {option.label}
