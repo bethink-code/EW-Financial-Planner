@@ -267,6 +267,7 @@ th, td {
   .text-primary,
   h1.text-primary {
     color: hsl(var(--primary)) !important;
+    font-weight: 500 !important;
   }
   
   /* GLOBAL TABLE STYLING - Ultra Clean with Section Borders Only */
