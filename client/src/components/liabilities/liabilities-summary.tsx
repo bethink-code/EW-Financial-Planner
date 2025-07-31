@@ -68,7 +68,7 @@ export function LiabilitiesSummary() {
     <div className="px-5 pb-5">
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
         {summary.map((section) => (
-          <div key={section.name} className={`summary-card ${(section as any).isNetCard ? 'bg-orange-50 !border-none' : ''}`}>
+          <div key={section.name} className={`summary-card ${(section as any).isNetCard ? 'bg-orange-50 !border-none net-assets-card' : ''}`}>
             <div className={`text-sm font-medium ${(section as any).isNetCard ? 'text-neutral-700' : 'text-neutral-600'}`}>{section.name}</div>
             <div className={`text-lg font-semibold ${(section as any).isNetCard ? 'text-neutral-800' : 'text-neutral-900'}`}>{section.debtAmount}</div>
             {!(section as any).isNetCard && (

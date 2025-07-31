@@ -473,6 +473,16 @@ th, td {
     margin: 0 !important;
   }
 
+  /* NET Assets card specific styling - overrides default summary card colors */
+  .net-assets-card .text-sm,
+  .net-assets-card .text-xs {
+    color: #374151 !important; /* text-neutral-700 */
+  }
+
+  .net-assets-card .text-lg {
+    color: #1f2937 !important; /* text-neutral-800 */
+  }
+
   /* Standardized header styling - clean appearance with light grey background */
   thead {
     background-color: #f9fafb !important; /* bg-neutral-50 - same as footer */
