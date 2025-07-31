@@ -1280,7 +1280,7 @@ th, td {
   border: 1px solid #d1d5db;
   padding: 1rem;
   max-width: 72rem; /* max-w-6xl */
-  margin: 0 auto;
+  margin: 0; /* Remove auto centering */
 }
 
 /* Financial Plan Section */
