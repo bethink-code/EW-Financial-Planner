@@ -476,11 +476,11 @@ th, td {
   /* NET Assets card specific styling - overrides default summary card colors */
   .net-assets-card .text-sm,
   .net-assets-card .text-xs {
-    color: #6b7280 !important; /* text-neutral-500 - lighter grey */
+    color: #4b5563 !important; /* text-neutral-600 - medium grey */
   }
 
   .net-assets-card .text-lg {
-    color: #9ca3af !important; /* text-neutral-400 - lighter grey */
+    color: #374151 !important; /* text-neutral-700 - darker medium grey */
   }
 
   /* Standardized header styling - clean appearance with light grey background */
