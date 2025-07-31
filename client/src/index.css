@@ -333,7 +333,7 @@ th, td {
   }
 
   /* DOUBLE ROW HEADER STYLING */
-  .double-row-header-first th {
+  table thead tr.double-row-header-first th {
     padding: 0 0.5rem !important; /* Remove vertical padding, keep horizontal */
     font-size: 11px !important;
     font-weight: 600 !important;
@@ -355,7 +355,7 @@ th, td {
     max-height: 1.5rem !important;
   }
 
-  .double-row-header-second th {
+  table thead tr.double-row-header-second th {
     padding: 0 0.5rem !important; /* Remove vertical padding, keep horizontal */
     font-size: 10px !important;
     font-weight: 500 !important;
