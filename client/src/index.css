@@ -459,7 +459,7 @@ th, td {
   .summary-card .text-xs {
     font-size: 0.9rem !important; /* 14.4px - nice balance between readability and size */
     font-weight: 400 !important; /* Normal weight for cleaner appearance */
-    color: #0369a1 !important; /* Blue color for visual distinction */
+    color: #0369a1; /* Blue color for visual distinction - can be overridden */
     margin-bottom: 0.5rem !important;
     line-height: 1.25 !important; /* Better line spacing for wrapped text */
   }
@@ -469,7 +469,7 @@ th, td {
   .summary-card .text-xl {
     font-size: 1.5rem !important;
     font-weight: 700 !important;
-    color: #1f2937 !important;
+    color: #1f2937; /* Default color - can be overridden */
     margin: 0 !important;
   }
 
