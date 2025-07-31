@@ -7,6 +7,7 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from"@/components/ui/dropdown-menu";
 import { cn } from"@/lib/utils";
@@ -170,6 +171,14 @@ export function ConsolidatedNavigation({
                       </Link>
                     </DropdownMenuItem>
                   ))}
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem className="dropdown-menu-item" asChild>
+                    <Link href="/manage-needs" onClick={() => setIsNeedDropdownOpen(false)}>
+                      <span className="text-gray-700">
+                        Manage needs in this plan
+                      </span>
+                    </Link>
+                  </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
             </div>
