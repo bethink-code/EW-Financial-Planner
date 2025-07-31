@@ -103,52 +103,54 @@ function ResidueTable({ viewMode, searchTerm }: ResidueTableProps) {
   const residueItem = residueItems[0] || { id: 1, entity: "Residue to registered charities", percentage: "0" };
 
   return (
-    <table className="w-full border-collapse">
-      {/* Header */}
-      <thead>
-        <tr className="single-row-header">
-          <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-left border-b border-neutral-200">
-            Entity
-          </th>
-          <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center border-b border-neutral-200">
-            Percentage
-          </th>
-        </tr>
-      </thead>
-      
-      {/* Body */}
-      <tbody>
-        <SafeFragment key={`residue-${residueItem.id}`}>
-          <tr>
-            <td className="p-2 text-left">
-              <span className="text-gray-700">Residue to registered charities</span>
+    <div className="max-w-md mx-auto">
+      <table className="w-full border-collapse">
+        {/* Header */}
+        <thead>
+          <tr className="single-row-header">
+            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-left border-b border-neutral-200">
+              Entity
+            </th>
+            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center border-b border-neutral-200 w-24">
+              Percentage
+            </th>
+          </tr>
+        </thead>
+        
+        {/* Body */}
+        <tbody>
+          <SafeFragment key={`residue-${residueItem.id}`}>
+            <tr>
+              <td className="p-2 text-left">
+                <span className="text-gray-700">Residue to registered charities</span>
+              </td>
+              <td className="p-2 text-center">
+                <input
+                  type="text"
+                  className={`table-input ${getFieldClass('percentage')} ${getValueClass(residueItem.percentage, 'percentage')}`}
+                  defaultValue={formatPercentageValue(residueItem.percentage)}
+                  onFocus={handleDefaultValueFocus}
+                  onBlur={createEnhancedBlurHandler(residueItem.id, 'percentage', handleInputBlur)}
+                  disabled={isUpdating}
+                />
+              </td>
+            </tr>
+          </SafeFragment>
+        </tbody>
+        
+        {/* Footer - Total */}
+        <tfoot>
+          <tr className="bg-neutral-50 border-t border-neutral-300">
+            <td className="p-2 text-left font-semibold text-gray-700">
+              Total
             </td>
-            <td className="p-2 text-center">
-              <input
-                type="text"
-                className={`table-input ${getFieldClass('percentage')} ${getValueClass(residueItem.percentage, 'percentage')}`}
-                defaultValue={formatPercentageValue(residueItem.percentage)}
-                onFocus={handleDefaultValueFocus}
-                onBlur={createEnhancedBlurHandler(residueItem.id, 'percentage', handleInputBlur)}
-                disabled={isUpdating}
-              />
+            <td className="p-2 text-center font-semibold text-gray-700">
+              {totals.percentage}%
             </td>
           </tr>
-        </SafeFragment>
-      </tbody>
-      
-      {/* Footer - Total */}
-      <tfoot>
-        <tr className="bg-neutral-50 border-t border-neutral-300">
-          <td className="p-2 text-left font-semibold text-gray-700">
-            Total
-          </td>
-          <td className="p-2 text-center font-semibold text-gray-700">
-            {totals.percentage}%
-          </td>
-        </tr>
-      </tfoot>
-    </table>
+        </tfoot>
+      </table>
+    </div>
   );
 }
 
