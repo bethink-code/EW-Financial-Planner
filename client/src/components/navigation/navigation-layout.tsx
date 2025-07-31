@@ -20,13 +20,27 @@ export function NavigationLayout({ children }: NavigationLayoutProps) {
   }
   
   // Determine current step based on URL
-  const currentStep = currentNeed.steps.find(step => 
-    location.includes(step.path) || 
-    step.sections?.some(section => 
-      location.includes(section.path) ||
-      section.children?.some(child => location.includes(child.path))
-    )
-  ) || currentNeed.steps[1]; // Default to Build step
+  const currentStep = currentNeed.steps.find(step => {
+    // Direct path match
+    if (location.includes(step.path)) return true;
+    
+    // Check sections
+    if (step.sections?.some(section => {
+      if (location.includes(section.path)) return true;
+      // Check children
+      if (section.children?.some(child => location.includes(child.path))) return true;
+      return false;
+    })) return true;
+    
+    // Special case for setup step - check if we're on any setup-related pages
+    if (step.id === 'setup' && (
+      location === '/client-details' || 
+      location.includes('/residue') || 
+      location.includes('/additional-estate-duty-items')
+    )) return true;
+    
+    return false;
+  }) || currentNeed.steps[1]; // Default to Build step
   
   // Get sections for current step
   const sections = currentStep.sections || [];
