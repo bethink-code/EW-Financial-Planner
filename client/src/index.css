@@ -341,7 +341,7 @@ th, td {
     letter-spacing: 0.025em !important;
     color: #9ca3af !important; /* Lighter grey from design system */
     background-color: #f8fafc !important;
-    vertical-align: middle !important; /* Center align text */
+    vertical-align: bottom !important; /* Align text closer to separator border */
     line-height: 1.3rem !important;
     white-space: nowrap !important;
     overflow: hidden !important;
