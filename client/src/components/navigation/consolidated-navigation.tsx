@@ -62,6 +62,25 @@ export function ConsolidatedNavigation({
         { id: 'additional-estate-duty', label: 'Additional estate duty items', path: '/additional-estate-duty-items', hasContent: true }
       );
     }
+    // For Project step, show specific project sections
+    else if (step.id === 'project') {
+      items.push(
+        { id: 'overview', label: 'Overview', path: '/project/overview', hasContent: false },
+        { id: 'estate-position', label: 'Estate position', path: '/project/estate-position', hasContent: false },
+        { id: 'dependents-positions', label: 'Dependents positions', path: '/project/dependents-positions', hasContent: false },
+        { id: 'total-capital-position', label: 'Total capital position', path: '/project/total-capital-position', hasContent: false },
+        { id: 'income-position', label: 'Income position', path: '/project/income-position', hasContent: false }
+      );
+    }
+    // For Implement step, show implementation options
+    else if (step.id === 'implement') {
+      items.push(
+        { id: 'option-1', label: 'Option 1', path: '/implement/option-1', hasContent: false },
+        { id: 'option-2', label: 'Option 2', path: '/implement/option-2', hasContent: false },
+        { id: 'option-3', label: 'Option 3', path: '/implement/option-3', hasContent: false },
+        { id: 'option-4', label: 'Option 4', path: '/implement/option-4', hasContent: false }
+      );
+    }
     // For other steps, use original logic
     else {
       step.sections.forEach((section: any) => {
