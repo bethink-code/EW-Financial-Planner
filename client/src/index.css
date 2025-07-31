@@ -334,18 +334,15 @@ th, td {
 
   /* DOUBLE ROW HEADER STYLING */
   .double-row-header-first th {
-    padding: 0.3rem 0.6rem 0.2rem 0.6rem !important;
+    padding: 0 0.5rem !important; /* Remove vertical padding, keep horizontal */
     font-size: 11px !important;
     font-weight: 600 !important;
     text-transform: uppercase !important;
     letter-spacing: 0.025em !important;
-    color: #4b5563 !important;
+    color: #9ca3af !important; /* Lighter grey from design system */
     background-color: #f8fafc !important;
-    vertical-align: bottom !important;
-    line-height: 1.2 !important;
-    height: 2.2rem !important;
-    min-height: 2.2rem !important;
-    max-height: 2.2rem !important;
+    vertical-align: middle !important; /* Center align text */
+    line-height: 1.3rem !important;
     white-space: nowrap !important;
     overflow: hidden !important;
     text-overflow: ellipsis !important;
@@ -353,24 +350,21 @@ th, td {
   }
 
   .double-row-header-first {
-    height: 2.2rem !important;
-    min-height: 2.2rem !important;
-    max-height: 2.2rem !important;
+    height: 1.5rem !important; /* Half of 3rem total */
+    min-height: 1.5rem !important;
+    max-height: 1.5rem !important;
   }
 
   .double-row-header-second th {
-    padding: 0.2rem 0.6rem 0.4rem 0.6rem !important;
+    padding: 0 0.5rem !important; /* Remove vertical padding, keep horizontal */
     font-size: 10px !important;
     font-weight: 500 !important;
     text-transform: uppercase !important;
     letter-spacing: 0.025em !important;
-    color: #6b7280 !important;
+    color: #9ca3af !important; /* Lighter grey from design system */
     background-color: #f8fafc !important;
-    vertical-align: bottom !important;
-    line-height: 1.2 !important;
-    height: 2.2rem !important;
-    min-height: 2.2rem !important;
-    max-height: 2.2rem !important;
+    vertical-align: middle !important; /* Center align text */
+    line-height: 1.3rem !important;
     white-space: nowrap !important;
     overflow: hidden !important;
     text-overflow: ellipsis !important;
@@ -378,9 +372,9 @@ th, td {
   }
 
   .double-row-header-second {
-    height: 2.2rem !important;
-    min-height: 2.2rem !important;
-    max-height: 2.2rem !important;
+    height: 1.5rem !important; /* Half of 3rem total */
+    min-height: 1.5rem !important;
+    max-height: 1.5rem !important;
   }
 
   /* Fallback for existing tables without specific classes */
