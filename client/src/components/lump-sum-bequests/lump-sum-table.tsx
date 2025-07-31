@@ -288,12 +288,12 @@ function LumpSumTable({ viewMode, searchTerm }: LumpSumTableProps) {
  
  {/* Totals Footer */}
  <tfoot>
- <tr>
- <td className="totals-cell-label text-right" colSpan={4}>Totals</td>
- <td className="totals-cell-value" style={{paddingRight: '1.5rem'}}>R {totals.amount.toLocaleString()}</td>
- <td className="totals-cell-value" style={{textAlign: 'center'}}>{totals.increasePercentage}%</td>
- <td className="totals-cell-value"></td>
- <td className="totals-cell-value section-start" style={{paddingRight: '1.5rem'}}>R {totals.valueAtDeath.toLocaleString()}</td>
+ <tr className="bg-neutral-50 border-t border-neutral-300">
+ <td className="p-2 text-right font-semibold text-neutral-700 text-sm" colSpan={4}>Totals</td>
+ <td className="p-2 text-right font-semibold text-neutral-700 text-sm">R {totals.amount.toLocaleString()}</td>
+ <td className="p-2 text-right font-semibold text-neutral-700 text-sm">{totals.increasePercentage}%</td>
+ <td className="p-2 text-center font-semibold text-neutral-700 text-sm"></td>
+ <td className="p-2 text-right font-semibold text-neutral-700 text-sm section-start">R {totals.valueAtDeath.toLocaleString()}</td>
  </tr>
  </tfoot>
  </table>
