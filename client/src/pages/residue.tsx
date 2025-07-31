@@ -24,8 +24,8 @@ export default function Residue() {
           onViewModeChange={handleViewModeChange}
           className="mb-6"
         >          
-          {/* Table with content-fitted width */}
-          <div className="w-fit">
+          {/* Table with full width and margin */}
+          <div className="table-container-wrapper">
             <ResidueTable viewMode={viewMode} />
           </div>
         </CalculatorHeader>
