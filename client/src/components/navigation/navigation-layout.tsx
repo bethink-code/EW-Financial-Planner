@@ -66,24 +66,63 @@ export function NavigationLayout({ children }: NavigationLayoutProps) {
   
   return (
     <>
-      {/* Placeholder for unbuilt section */}
-      <div className="w-full bg-gray-100 border-b border-gray-200 p-4">
-        <div className="max-w-6xl mx-auto">
-          <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-            <div className="flex items-center justify-center space-x-4">
-              <div className="h-8 w-8 bg-blue-500 rounded-full flex items-center justify-center">
-                <span className="text-white text-sm font-medium">?</span>
-              </div>
-              <div className="text-gray-600">
-                <h3 className="text-lg font-medium text-gray-900">Financial Planning Dashboard</h3>
-                <p className="text-sm text-gray-500">This section will contain client overview, progress tracking, and summary metrics</p>
-              </div>
-              <div className="ml-auto">
-                <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-800">
-                  Coming Soon
-                </span>
+      {/* Client Header Section */}
+      <div className="w-full bg-[#B8D4E3] border-b border-gray-200">
+        <div className="px-4 py-3">
+          {/* Client Info Row */}
+          <div className="flex items-center justify-between mb-3">
+            <div className="flex items-center space-x-4">
+              <div className="flex items-center space-x-2">
+                <div className="h-6 w-6 bg-blue-600 rounded flex items-center justify-center">
+                  <span className="text-white text-xs">📊</span>
+                </div>
+                <div>
+                  <h1 className="text-lg font-semibold text-gray-900">Donald Edward</h1>
+                  <div className="flex items-center space-x-2 text-xs text-gray-600">
+                    <span>Demo/112345</span>
+                    <span>/</span>
+                    <span>Client</span>
+                    <span>/</span>
+                    <span>Client's company</span>
+                  </div>
+                </div>
               </div>
             </div>
+            <div className="flex items-center space-x-3">
+              <div className="text-sm text-gray-700">
+                52 years old / Married ANC with accrual
+              </div>
+              <button className="flex items-center space-x-1 text-sm text-blue-600 hover:text-blue-800">
+                <span>Related entities</span>
+                <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                </svg>
+              </button>
+              <button className="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded text-sm">
+                Choose another client
+              </button>
+              <button className="bg-gray-200 hover:bg-gray-300 text-gray-700 px-3 py-1 rounded text-sm">
+                New client
+              </button>
+              <button className="text-gray-500 hover:text-gray-700 p-1">
+                <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zM12 13a1 1 0 110-2 1 1 0 010 2zM12 20a1 1 0 110-2 1 1 0 010 2z" />
+                </svg>
+              </button>
+            </div>
+          </div>
+          
+          {/* Navigation Tabs Row */}
+          <div className="flex space-x-6 text-sm">
+            <a href="#" className="text-blue-600 hover:text-blue-800 pb-1">Home</a>
+            <a href="#" className="text-blue-600 hover:text-blue-800 pb-1">Activity dashboard</a>
+            <a href="#" className="text-blue-600 hover:text-blue-800 pb-1">Work portal</a>
+            <a href="#" className="text-blue-600 hover:text-blue-800 pb-1">Client info</a>
+            <a href="#" className="text-blue-600 hover:text-blue-800 pb-1">Portfolio</a>
+            <a href="#" className="text-blue-600 hover:text-blue-800 pb-1">Assets and liabilities</a>
+            <a href="#" className="text-blue-600 hover:text-blue-800 pb-1">Budget</a>
+            <a href="#" className="text-blue-600 hover:text-blue-800 pb-1 border-b-2 border-blue-600 font-medium">Financial planning</a>
+            <a href="#" className="text-blue-600 hover:text-blue-800 pb-1">Bna</a>
           </div>
         </div>
       </div>
