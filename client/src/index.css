@@ -1276,7 +1276,7 @@ th, td {
 .top-navigation-card {
   background-color: white;
   border-radius: 0.5rem;
-  border: 1px solid #d1d5db;
+  border: none !important;
   padding: 1rem;
   max-width: 72rem; /* max-w-6xl */
   margin: 0; /* Remove auto centering */
