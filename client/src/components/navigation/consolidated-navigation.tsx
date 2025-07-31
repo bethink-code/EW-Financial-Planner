@@ -106,8 +106,8 @@ export function ConsolidatedNavigation({
   };
 
   return (
-    <div className="w-full px-6 pt-4 pb-2">
-      <div className="w-full bg-white rounded-lg shadow-sm border border-gray-200 px-6 py-4">
+    <div className="w-full">
+      <div className="w-full bg-white shadow-sm border-b border-gray-200 px-6 py-4">
         <div>
           {/* Single row: Financial Plan, Need, and Steps */}
           <div className="flex items-start gap-6">
