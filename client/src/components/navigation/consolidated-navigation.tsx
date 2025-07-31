@@ -213,15 +213,21 @@ export function ConsolidatedNavigation({
                       </DropdownMenuTrigger>
                       <DropdownMenuContent align="start" className="dropdown-menu-content w-72">
                         {getDropdownContent(step.id).map((item) => (
-                          <DropdownMenuItem key={item.id} className="dropdown-menu-item" asChild>
-                            <Link href={item.path} onClick={() => setStepDropdownOpen(null)}>
-                              <span className={cn(
-                                item.hasContent ?"" :"text-gray-400",
-                                location.includes(item.path) &&"text-[#F97415] font-medium"
-                              )}>
+                          <DropdownMenuItem key={item.id} className="dropdown-menu-item" asChild={item.hasContent}>
+                            {item.hasContent ? (
+                              <Link href={item.path} onClick={() => setStepDropdownOpen(null)}>
+                                <span className={cn(
+                                  item.hasContent ?"" :"text-gray-400",
+                                  location.includes(item.path) &&"text-[#F97415] font-medium"
+                                )}>
+                                  {item.label}
+                                </span>
+                              </Link>
+                            ) : (
+                              <span className="text-gray-400 cursor-default">
                                 {item.label}
                               </span>
-                            </Link>
+                            )}
                           </DropdownMenuItem>
                         ))}
                       </DropdownMenuContent>
