@@ -120,7 +120,7 @@ export function ConsolidatedNavigation({
               
               {/* Financial Plan name with edit button */}
               <div className="flex items-center gap-2">
-                <button className="flex items-center gap-2 px-4 text-sm font-medium transition-colors h-10 rounded-[6px] focus:outline-none focus:ring-0 focus:border-0 bg-[#F5F1E8] text-gray-700 border-0 hover:bg-[#F0EBE0]">
+                <button className="flex items-center justify-between pl-4 pr-1 text-sm font-medium transition-colors h-10 rounded-[6px] focus:outline-none focus:ring-0 focus:border-0 bg-[#F5F1E8] text-gray-700 border-0 hover:bg-[#F0EBE0]">
                   <span title={planName}>
                     {planName}
                   </span>
