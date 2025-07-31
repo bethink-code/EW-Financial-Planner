@@ -273,8 +273,10 @@ th, td {
   /* Force switcher buttons to match other button heights (40px) */
   .switcher-button,
   [data-switcher="true"] button {
-    height: 2.5rem !important; /* 40px equivalent */
-    min-height: 2.5rem !important;
+    height: 2rem !important; /* 32px equivalent for interior buttons */
+    min-height: 2rem !important;
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
   }
   
   /* GLOBAL TABLE STYLING - Ultra Clean with Section Borders Only */
