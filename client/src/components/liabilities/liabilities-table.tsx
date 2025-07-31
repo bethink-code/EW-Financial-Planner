@@ -174,25 +174,25 @@ function LiabilitiesTable({ viewMode, searchTerm, onShowCategoryDialog }: Liabil
     <div className="space-y-6">
       <table>
         <thead>
-          <tr>
-            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start" rowSpan={2}>
+          <tr className="double-row-header-first">
+            <th className="section-start" rowSpan={2}>
               <AddButton onClick={onShowCategoryDialog || (() => addMutation.mutate())} disabled={isUpdating} />
             </th>
-            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start" colSpan={1}>Overview</th>
-            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start" colSpan={1}>Liability Details</th>
-            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start" colSpan={4}>Ownership Split</th>
-            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start" colSpan={3}>Settlement</th>
+            <th className="section-start" colSpan={1}>Overview</th>
+            <th className="section-start" colSpan={1}>Liability Details</th>
+            <th className="section-start" colSpan={4}>Ownership Split</th>
+            <th className="section-start" colSpan={3}>Settlement</th>
           </tr>
-          <tr>
-            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start">Description</th>
-            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start">Debt Amount</th>
-            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start">Peter Lambie</th>
-            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center">Victoria Lambie (Spouse)</th>
-            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center">Junior Lambie</th>
-            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center">Lambies Family Trust</th>
-            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center section-start">Estate Duty</th>
-            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center">Others</th>
-            <th className="px-3 py-3 text-xs font-medium text-neutral-600 uppercase tracking-wider text-center">Client</th>
+          <tr className="double-row-header-second">
+            <th className="section-start">Description</th>
+            <th className="section-start">Debt Amount</th>
+            <th className="section-start">Peter Lambie</th>
+            <th>Victoria Lambie (Spouse)</th>
+            <th>Junior Lambie</th>
+            <th>Lambies Family Trust</th>
+            <th className="section-start">Estate Duty</th>
+            <th>Others</th>
+            <th>Client</th>
           </tr>
         </thead>
         <tbody className="divide-y divide-neutral-200">
