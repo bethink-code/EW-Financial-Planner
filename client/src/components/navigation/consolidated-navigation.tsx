@@ -86,56 +86,59 @@ export function ConsolidatedNavigation({
 
   return (
     <div className="w-full px-6 pt-4 pb-2">
-      <div className="top-navigation-card">
+      <div className="max-w-6xl bg-white rounded-lg shadow-sm border border-gray-200 px-4">
         <div>
           {/* First row: Financial Plan */}
-          <div className="first-row">
+          <div className="flex items-start gap-3 mb-2">
             {/* Financial Plan section */}
             <div>
               {/* FINANCIAL PLAN label */}
-              <span className="financial-plan-label">
+              <span className="text-xs text-gray-500 uppercase tracking-wider font-medium block mb-1">
                 FINANCIAL PLAN
               </span>
               
               {/* Financial Plan name with edit button */}
               <div className="flex items-center gap-2">
-                <button className="financial-plan-button">
+                <button className="flex items-center gap-2 pl-2 pr-1 text-sm font-medium transition-colors h-10 rounded-[6px] focus:outline-none focus:ring-0 focus:border-0 bg-[#F5F1E8] text-gray-700 border-0 hover:bg-[#F0EBE0]">
                   <span title={planName}>
                     {planName}
                   </span>
-                  <span className="edit-icon">
+                  <span className="flex items-center justify-center h-8 w-8 rounded text-sm font-semibold bg-white text-[#F97415]">
                     <Edit2 className="h-3 w-3" />
                   </span>
                 </button>
                 
                 {/* Back to all plans button */}
-                <button
+                <Button
+                  variant="ghost"
                   onClick={handleBack}
-                  className="back-button"
+                  className="btn-ghost px-2 text-sm h-10"
                 >
                   Back to all plans
-                </button>
+                </Button>
               </div>
             </div>
           </div>
           
           {/* Second row: Need, Steps, and Right side items */}
-          <div className="second-row">
-            <div className="left-section">
+          <div className="flex items-end justify-between">
+            <div className="flex items-end gap-3">
               {/* Need section */}
               <div>
                 {/* NEED label */}
-                <span className="need-label">
+                <span className="text-xs text-gray-500 uppercase tracking-wider font-medium block mb-1">
                   NEED
                 </span>
                 
                 {/* Need dropdown */}
                 <DropdownMenu open={isNeedDropdownOpen} onOpenChange={setIsNeedDropdownOpen}>
                   <DropdownMenuTrigger asChild>
-                    <button className="need-button">
+                    <Button 
+                      className="btn-need px-2 flex items-center gap-2 text-sm rounded-md h-10"
+                    >
                       {currentNeed.label}
                       <ChevronDown className="h-3.5 w-3.5" />
-                    </button>
+                    </Button>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent align="start" className="w-72">
                     {needs.map((need) => (
@@ -155,7 +158,7 @@ export function ConsolidatedNavigation({
               </div>
 
               {/* Step navigation */}
-              <div className="step-navigation">
+              <div className="flex items-center gap-2 ml-6">
                 {stepsWithStatus.map((step, index) => {
               const isActive = step.id === currentStep.id;
               
@@ -168,10 +171,21 @@ export function ConsolidatedNavigation({
                     >
                       <DropdownMenuTrigger asChild>
                         <button
-                          className={isActive ? "step-button-active" : "step-button-inactive"}
+                          className={cn(
+"flex items-center gap-2 pl-1 pr-2 text-sm font-medium transition-colors h-10",
+"rounded-[6px] focus:outline-none focus:ring-0 focus:border-0",
+                            isActive
+                              ?"bg-[#F97415] text-white border-0"
+                              :"bg-[#F5F1E8] text-gray-700 border-0 hover:bg-[#F0EBE0]"
+                          )}
                           disabled={!step.hasContent}
                         >
-                          <span className="step-number">
+                          <span className={cn(
+"flex items-center justify-center h-8 w-8 rounded text-sm font-semibold",
+                            isActive 
+                              ?"bg-white/20 text-white"
+                              :"bg-white text-[#F97415]"
+                          )}>
                             {step.number}
                           </span>
                           <span>{step.label}</span>
@@ -196,13 +210,25 @@ export function ConsolidatedNavigation({
                   ) : (
                     <button
                       onClick={() => setLocation(step.path)}
-                      className={isActive ? "step-button-active" : "step-button-inactive"}
+                      className={cn(
+"flex items-center gap-2 pl-1 pr-2 text-sm font-medium transition-colors h-10",
+"rounded-[6px] focus:outline-none focus:ring-0 focus:border-0",
+                        isActive
+                          ?"bg-[#F97415] text-white border-0"
+                          :"bg-[#F5F1E8] text-gray-700 border-0 hover:bg-[#F0EBE0]"
+                      )}
                       disabled={!step.hasContent}
                     >
-                      <span className="step-number">
+                      <span className={cn(
+"flex items-center justify-center h-8 w-8 rounded text-sm font-semibold",
+                        isActive 
+                          ?"bg-white/20 text-white"
+                          :"bg-white text-[#F97415]"
+                      )}>
                         {step.number}
                       </span>
                       <span>{step.label}</span>
+                      <ChevronDown className="h-3.5 w-3.5 ml-1" />
                     </button>
                   )}
                 </SafeFragment>
