@@ -25,12 +25,12 @@ export default function DefinedBenefitFundsTable() {
   const addMutation = useMutation({
     mutationFn: async (): Promise<DefinedBenefitFund> => {
       const newFund: InsertDefinedBenefitFund = {
-        description:""",
-        owner:"Donald Edwards",
-        pensionIncome:"R 0",
-        pensionIncomeIncrease:"0%",
-        spouseIncome:"R 0",
-        spouseIncomeIncrease:"0%",
+        description: "",
+        owner: "Donald Edwards",
+        pensionIncome: "R 0",
+        pensionIncomeIncrease: "0%",
+        spouseIncome: "R 0",
+        spouseIncomeIncrease: "0%",
         additionalOwners: [],
       };
       
