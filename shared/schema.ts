@@ -283,28 +283,15 @@ export type IncomeProvisions = typeof incomeProvisions.$inferSelect;
 export type InsertIncomeProvisions = z.infer<typeof insertIncomeProvisionsSchema>;
 export type UpdateIncomeProvisions = z.infer<typeof updateIncomeProvisionsSchema>;
 
-// Residue table schema
+// Residue table schema - simplified for entity and percentage only
 export const residue = pgTable("residue", {
   id: serial("id").primaryKey(),
   
-  // Basic information
-  category: text("category").notNull().default(""),
-  description: text("description").notNull().default(""),
+  // Entity name (fixed as "Residue to registered charities")
+  entity: text("entity").notNull().default("Residue to registered charities"),
   
-  // Financial details
-  amount: text("amount").notNull().default("R 0"),
-  increasePercentage: text("increase_percentage").notNull().default("0%"),
-  
-  // Distribution split
-  johnDoe: text("john_doe").notNull().default("0%"),
-  janetteDoe: text("janette_doe").notNull().default("0%"),
-  doeJunior: text("doe_junior").notNull().default("0%"),
-  doeFamilyTrust: text("doe_family_trust").notNull().default("0%"),
-  
-  // Beneficiaries
-  estate: text("estate").notNull().default("R 0"),
-  others: text("others").notNull().default("R 0"),
-  client: text("client").notNull().default("R 0"),
+  // Percentage allocation
+  percentage: text("percentage").notNull().default("0"),
 });
 
 export const insertResidueSchema = createInsertSchema(residue).omit({
