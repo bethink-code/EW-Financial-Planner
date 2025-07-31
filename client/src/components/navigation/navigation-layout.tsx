@@ -68,11 +68,12 @@ export function NavigationLayout({ children }: NavigationLayoutProps) {
   return (
     <>
       {/* Client Header Image */}
-      <div className="w-full">
+      <div className="w-full overflow-x-auto">
         <img 
           src={headerImage} 
           alt="Client Header - Donald Edward" 
-          className="w-full h-auto"
+          className="block"
+          style={{ width: 'auto', height: 'auto' }}
         />
       </div>
       
