@@ -9,6 +9,7 @@ import {
   residue,
   additionalEstateDutyItems,
   liabilities,
+  clientDetails,
   type RetirementFund,
   type InsertRetirementFund,
   type UpdateRetirementFund,
@@ -38,6 +39,9 @@ import {
   type Liabilities,
   type InsertLiabilities,
   type UpdateLiabilities,
+  type ClientDetails,
+  type InsertClientDetails,
+  type UpdateClientDetails,
 } from "@shared/schema";
 import { assets, type Assets, type InsertAssets } from "@shared/assets-schema";
 import { drizzle } from "drizzle-orm/node-postgres";
@@ -177,6 +181,17 @@ export interface IStorage {
   ): Promise<Assets | undefined>;
   deleteAsset(id: number): Promise<boolean>;
   searchAssets(query: string): Promise<Assets[]>;
+
+  // Client Details
+  getClientDetails(): Promise<ClientDetails[]>;
+  getClientDetail(id: number): Promise<ClientDetails | undefined>;
+  createClientDetail(clientDetail: InsertClientDetails): Promise<ClientDetails>;
+  updateClientDetail(
+    id: number,
+    updates: UpdateClientDetails,
+  ): Promise<ClientDetails | undefined>;
+  deleteClientDetail(id: number): Promise<boolean>;
+  searchClientDetails(query: string): Promise<ClientDetails[]>;
 }
 
 export class MemStorage implements IStorage {
@@ -191,6 +206,7 @@ export class MemStorage implements IStorage {
   private additionalEstateDutyItems: Map<number, AdditionalEstateDutyItems>;
   private liabilities: Map<number, Liabilities>;
   private assets: Map<number, Assets>;
+  private clientDetails: Map<number, ClientDetails>;
 
   private currentFundId: number;
   private currentBequestId: number;
@@ -203,6 +219,7 @@ export class MemStorage implements IStorage {
   private currentAdditionalEstateDutyItemId: number;
   private currentLiabilityId: number;
   private currentAssetId: number;
+  private currentClientDetailId: number;
 
   constructor() {
     this.retirementFunds = new Map();
@@ -216,6 +233,7 @@ export class MemStorage implements IStorage {
     this.additionalEstateDutyItems = new Map();
     this.liabilities = new Map();
     this.assets = new Map();
+    this.clientDetails = new Map();
 
     this.currentFundId = 1;
     this.currentBequestId = 1;
@@ -228,6 +246,7 @@ export class MemStorage implements IStorage {
     this.currentAdditionalEstateDutyItemId = 1;
     this.currentLiabilityId = 1;
     this.currentAssetId = 1;
+    this.currentClientDetailId = 1;
   }
 
   // Retirement Funds methods
@@ -874,6 +893,64 @@ export class MemStorage implements IStorage {
       asset.description.toLowerCase().includes(lowerQuery),
     );
   }
+
+  // Client Details methods
+  async getClientDetails(): Promise<ClientDetails[]> {
+    return Array.from(this.clientDetails.values()).sort((a, b) => a.id - b.id);
+  }
+
+  async getClientDetail(id: number): Promise<ClientDetails | undefined> {
+    return this.clientDetails.get(id);
+  }
+
+  async createClientDetail(
+    clientDetail: InsertClientDetails,
+  ): Promise<ClientDetails> {
+    const newClientDetail: ClientDetails = {
+      id: this.currentClientDetailId++,
+      entityName: clientDetail.entityName || "",
+      entityType: clientDetail.entityType || "Primary entity",
+      dateOfBirth: clientDetail.dateOfBirth || "",
+      age: clientDetail.age || "0",
+      taxRate: clientDetail.taxRate || "South Africa",
+      marginalTaxRate: clientDetail.marginalTaxRate || "0%",
+      maritalStatus: clientDetail.maritalStatus || "",
+      maritalRegime: clientDetail.maritalRegime || "",
+      maritalDate: clientDetail.maritalDate || "",
+      accrualInception: clientDetail.accrualInception || "0",
+    };
+
+    this.clientDetails.set(newClientDetail.id, newClientDetail);
+    return newClientDetail;
+  }
+
+  async updateClientDetail(
+    id: number,
+    updates: UpdateClientDetails,
+  ): Promise<ClientDetails | undefined> {
+    const existing = this.clientDetails.get(id);
+    if (!existing) return undefined;
+
+    const updated: ClientDetails = { ...existing, ...updates };
+    this.clientDetails.set(id, updated);
+    return updated;
+  }
+
+  async deleteClientDetail(id: number): Promise<boolean> {
+    return this.clientDetails.delete(id);
+  }
+
+  async searchClientDetails(query: string): Promise<ClientDetails[]> {
+    const allClientDetails = Array.from(this.clientDetails.values());
+    if (!query.trim()) return allClientDetails;
+
+    const lowerQuery = query.toLowerCase();
+    return allClientDetails.filter(
+      (client) =>
+        client.entityName.toLowerCase().includes(lowerQuery) ||
+        client.entityType.toLowerCase().includes(lowerQuery)
+    );
+  }
 }
 
 // Database storage class
@@ -1475,6 +1552,64 @@ export class DbStorage {
       .from(assets)
       .where(ilike(assets.description, `%${query}%`))
       .orderBy(asc(assets.id));
+  }
+
+  // Client Details methods
+  async getClientDetails(): Promise<ClientDetails[]> {
+    return await this.db
+      .select()
+      .from(clientDetails)
+      .orderBy(asc(clientDetails.id));
+  }
+
+  async getClientDetail(id: number): Promise<ClientDetails | undefined> {
+    const result = await this.db
+      .select()
+      .from(clientDetails)
+      .where(eq(clientDetails.id, id));
+    return result[0];
+  }
+
+  async createClientDetail(
+    clientDetail: InsertClientDetails,
+  ): Promise<ClientDetails> {
+    const result = await this.db
+      .insert(clientDetails)
+      .values(clientDetail)
+      .returning();
+    return result[0];
+  }
+
+  async updateClientDetail(
+    id: number,
+    updates: UpdateClientDetails,
+  ): Promise<ClientDetails | undefined> {
+    const result = await this.db
+      .update(clientDetails)
+      .set(updates)
+      .where(eq(clientDetails.id, id))
+      .returning();
+    return result[0];
+  }
+
+  async deleteClientDetail(id: number): Promise<boolean> {
+    const result = await this.db
+      .delete(clientDetails)
+      .where(eq(clientDetails.id, id));
+    return (result.rowCount || 0) > 0;
+  }
+
+  async searchClientDetails(query: string): Promise<ClientDetails[]> {
+    return await this.db
+      .select()
+      .from(clientDetails)
+      .where(
+        or(
+          ilike(clientDetails.entityName, `%${query}%`),
+          ilike(clientDetails.entityType, `%${query}%`)
+        )
+      )
+      .orderBy(asc(clientDetails.id));
   }
 }
 

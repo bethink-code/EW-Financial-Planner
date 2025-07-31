@@ -77,6 +77,41 @@ export type LumpSumBequest = typeof lumpSumBequests.$inferSelect;
 export type InsertLumpSumBequest = z.infer<typeof insertLumpSumBequestSchema>;
 export type UpdateLumpSumBequest = z.infer<typeof updateLumpSumBequestSchema>;
 
+// Client Details table
+export const clientDetails = pgTable("client_details", {
+  id: serial("id").primaryKey(),
+  
+  // Entity Information
+  entityName: text("entity_name").notNull().default(""),
+  entityType: text("entity_type").notNull().default("Primary entity"), // Primary entity, Spouse, Dependants, Others
+  
+  // Personal Information
+  dateOfBirth: text("date_of_birth").notNull().default(""), // Date field
+  age: text("age").notNull().default("0"), // Calculated field
+  
+  // Tax Information
+  taxRate: text("tax_rate").notNull().default("South Africa"), // Dropdown
+  marginalTaxRate: text("marginal_tax_rate").notNull().default("0%"), // Percentage
+  
+  // Marital Information
+  maritalStatus: text("marital_status").notNull().default(""), // Dropdown
+  maritalRegime: text("marital_regime").notNull().default(""), // Dropdown
+  maritalDate: text("marital_date").notNull().default(""), // Date field
+  accrualInception: text("accrual_inception").notNull().default("0"), // Number field
+});
+
+export const insertClientDetailsSchema = createInsertSchema(clientDetails).omit({
+  id: true,
+});
+
+export const updateClientDetailsSchema = createInsertSchema(clientDetails).omit({
+  id: true,
+}).partial();
+
+export type ClientDetails = typeof clientDetails.$inferSelect;
+export type InsertClientDetails = z.infer<typeof insertClientDetailsSchema>;
+export type UpdateClientDetails = z.infer<typeof updateClientDetailsSchema>;
+
 // Assurance table
 export const assurance = pgTable("assurance", {
   id: serial("id").primaryKey(),

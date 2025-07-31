@@ -59,7 +59,7 @@ export function ConsolidatedNavigation({
     // For Setup step, show the actual pages
     else if (step.id === 'setup') {
       items.push(
-        { id: 'client-details', label: 'Client details', path: '/setup/client-details', hasContent: false },
+        { id: 'client-details', label: 'Client details', path: '/client-details', hasContent: true },
         { id: 'parameters', label: 'Parameters', path: '/setup/parameters', hasContent: false },
         { id: 'residue', label: 'Residue', path: '/residue', hasContent: true },
         { id: 'additional-estate-duty', label: 'Additional estate duty items', path: '/additional-estate-duty-items', hasContent: true }

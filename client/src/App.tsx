@@ -20,6 +20,7 @@ import DefinedBenefitFunds from "@/pages/defined-benefit-funds";
 import VoluntaryInvestments from "@/pages/voluntary-investments";
 import Residue from "@/pages/residue";
 import AdditionalEstateDutyItems from "@/pages/additional-estate-duty-items";
+import ClientDetailsPage from "@/pages/client-details";
 
 // Placeholder need pages
 import DeathNeed from "@/pages/needs/death";
@@ -136,6 +137,13 @@ function Router() {
             {() => (
               <NavigationLayout>
                 <AdditionalEstateDutyItems />
+              </NavigationLayout>
+            )}
+          </Route>
+          <Route path="/client-details">
+            {() => (
+              <NavigationLayout>
+                <ClientDetailsPage />
               </NavigationLayout>
             )}
           </Route>
