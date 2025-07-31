@@ -192,7 +192,7 @@ function LumpSumTable({ viewMode, searchTerm }: LumpSumTableProps) {
  <tbody className="divide-y divide-neutral-200">
  {bequests.map((bequest: LumpSumBequest, index) => (
  <tr key={bequest.id} className="hover:bg-neutral-50">
- <td className="table-actions-cell p-1 text-center section-start">
+ <td className="table-actions-cell text-center section-start">
  <ActionButtonGroup>
  <DuplicateButton
  onClick={() => addMutation.mutate()}
@@ -205,7 +205,7 @@ function LumpSumTable({ viewMode, searchTerm }: LumpSumTableProps) {
  </ActionButtonGroup>
  </td>
  
- <td className="p-2 text-left section-start">
+ <td className="text-left section-start">
  <input
  type="text"
  defaultValue={formatTextValue(bequest.description)}
@@ -216,7 +216,7 @@ function LumpSumTable({ viewMode, searchTerm }: LumpSumTableProps) {
  />
  </td>
  
- <td className="p-2 text-left">
+ <td className="text-left">
  <input
  type="text"
  defaultValue={formatTextValue(bequest.entity)}
@@ -227,7 +227,7 @@ function LumpSumTable({ viewMode, searchTerm }: LumpSumTableProps) {
  />
  </td>
  
- <td className="p-2 text-left section-start">
+ <td className="text-left section-start">
  <input
  type="text"
  defaultValue={formatTextValue(bequest.start)}
@@ -238,7 +238,7 @@ function LumpSumTable({ viewMode, searchTerm }: LumpSumTableProps) {
  />
  </td>
  
- <td className="p-2 text-right">
+ <td className="text-right">
  <input
  key={`amount-${bequest.id}-${bequest.amount}`}
  type="text"
@@ -250,7 +250,7 @@ function LumpSumTable({ viewMode, searchTerm }: LumpSumTableProps) {
  />
  </td>
  
- <td className="p-2 text-center">
+ <td className="text-center">
  <input
  key={`increasePercentage-${bequest.id}-${bequest.increasePercentage}`}
  type="text"
@@ -262,7 +262,7 @@ function LumpSumTable({ viewMode, searchTerm }: LumpSumTableProps) {
  />
  </td>
  
- <td className="p-2 text-center">
+ <td className="text-center">
  <input
  type="checkbox"
  defaultChecked={bequest.cpi}
@@ -272,7 +272,7 @@ function LumpSumTable({ viewMode, searchTerm }: LumpSumTableProps) {
  />
  </td>
  
- <td className="p-2 text-right section-start">
+ <td className="text-right section-start">
  <input
  key={`valueAtDeath-${bequest.id}-${bequest.valueAtDeath}`}
  type="text"
@@ -289,11 +289,11 @@ function LumpSumTable({ viewMode, searchTerm }: LumpSumTableProps) {
  {/* Totals Footer */}
  <tfoot>
  <tr className="bg-neutral-50 border-t border-neutral-300">
- <td className="p-2 text-right font-semibold text-neutral-700 text-sm" colSpan={4}>Totals</td>
- <td className="p-2 text-right font-semibold text-neutral-700 text-sm">R {totals.amount.toLocaleString()}</td>
- <td className="p-2 text-right font-semibold text-neutral-700 text-sm">{totals.increasePercentage}%</td>
- <td className="p-2 text-center font-semibold text-neutral-700 text-sm"></td>
- <td className="p-2 text-right font-semibold text-neutral-700 text-sm section-start">R {totals.valueAtDeath.toLocaleString()}</td>
+ <td className="text-right font-semibold text-neutral-700 text-sm" colSpan={4}>Totals</td>
+ <td className="text-right font-semibold text-neutral-700 text-sm">R {totals.amount.toLocaleString()}</td>
+ <td className="text-right font-semibold text-neutral-700 text-sm">{totals.increasePercentage}%</td>
+ <td className="text-center font-semibold text-neutral-700 text-sm"></td>
+ <td className="text-right font-semibold text-neutral-700 text-sm section-start">R {totals.valueAtDeath.toLocaleString()}</td>
  </tr>
  </tfoot>
  </table>
