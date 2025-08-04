@@ -39,11 +39,14 @@ export function SequentialNavigationBar({ className }: SequentialNavigationBarPr
   };
   
   return (
-    <div className={cn(
-      "fixed bottom-0 left-0 right-0 bg-white dark:bg-gray-900 border-t border-gray-200 dark:border-gray-700 z-50",
-      "shadow-[0_-8px_25px_-8px_rgba(0,_0,_0,_0.25)]",
-      className
-    )}>
+    <div 
+      className={cn(
+        "fixed bottom-0 left-0 right-0 border-t border-gray-200 dark:border-gray-700 z-50",
+        "shadow-[0_-8px_25px_-8px_rgba(0,_0,_0,_0.25)]",
+        className
+      )}
+      style={{ backgroundColor: '#EDF4F9' }}
+    >
       <div className="max-w-7xl mx-auto px-4 py-3">
         <div className="flex items-center justify-between gap-4">
           {/* Previous Button */}
