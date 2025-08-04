@@ -56,9 +56,20 @@ export function SequentialNavigationBar({ className }: SequentialNavigationBarPr
             className={cn(
               "flex items-center gap-2 px-3 py-2 rounded-md font-medium transition-colors text-sm",
               previousItem
-                ? "bg-primary hover:bg-primary/90 text-primary-foreground"
+                ? "text-white"
                 : "bg-gray-100 text-gray-400 cursor-not-allowed dark:bg-gray-800 dark:text-gray-600"
             )}
+            style={previousItem ? { backgroundColor: '#016991' } : {}}
+            onMouseEnter={(e) => {
+              if (previousItem) {
+                e.currentTarget.style.backgroundColor = '#014a66';
+              }
+            }}
+            onMouseLeave={(e) => {
+              if (previousItem) {
+                e.currentTarget.style.backgroundColor = '#016991';
+              }
+            }}
           >
             <ChevronLeft className="h-4 w-4" />
             <span className="hidden sm:inline">Previous</span>
@@ -75,8 +86,11 @@ export function SequentialNavigationBar({ className }: SequentialNavigationBarPr
               {/* Bottom row: Progress Bar */}
               <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-1.5 max-w-md mx-auto">
                 <div 
-                  className="bg-primary h-1.5 rounded-full transition-all duration-300"
-                  style={{ width: `${(progress.current / progress.total) * 100}%` }}
+                  className="h-1.5 rounded-full transition-all duration-300"
+                  style={{ 
+                    width: `${(progress.current / progress.total) * 100}%`,
+                    backgroundColor: '#016991'
+                  }}
                 />
               </div>
             </div>
@@ -89,9 +103,20 @@ export function SequentialNavigationBar({ className }: SequentialNavigationBarPr
             className={cn(
               "flex items-center gap-2 px-3 py-2 rounded-md font-medium transition-colors text-sm",
               nextItem
-                ? "bg-primary hover:bg-primary/90 text-primary-foreground"
+                ? "text-white"
                 : "bg-gray-100 text-gray-400 cursor-not-allowed dark:bg-gray-800 dark:text-gray-600"
             )}
+            style={nextItem ? { backgroundColor: '#016991' } : {}}
+            onMouseEnter={(e) => {
+              if (nextItem) {
+                e.currentTarget.style.backgroundColor = '#014a66';
+              }
+            }}
+            onMouseLeave={(e) => {
+              if (nextItem) {
+                e.currentTarget.style.backgroundColor = '#016991';
+              }
+            }}
             title={nextItem ? `Next: ${nextItem.label}` : undefined}
           >
             <span className="hidden sm:inline">Next</span>
