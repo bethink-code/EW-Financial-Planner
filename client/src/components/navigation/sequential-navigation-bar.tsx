@@ -63,17 +63,9 @@ export function SequentialNavigationBar({ className }: SequentialNavigationBarPr
           {/* Progress & Breadcrumb */}
           <div className="flex-1 mx-2 min-w-0">
             <div className="flex flex-col items-center gap-1">
-              {/* Top row: Progress and Breadcrumb */}
-              <div className="flex items-center justify-center gap-3 w-full">
-                {/* Progress Indicator */}
-                <div className="text-xs text-gray-500 dark:text-gray-400 whitespace-nowrap">
-                  {progress.current}/{progress.total}
-                </div>
-                
-                {/* Full Breadcrumb - no truncation */}
-                <div className="text-xs font-medium text-gray-700 dark:text-gray-300 text-center flex-1 min-w-0">
-                  (Step {progress.current} of {progress.total}) - {currentItem.breadcrumb}
-                </div>
+              {/* Full Breadcrumb - no truncation */}
+              <div className="text-xs font-medium text-gray-700 dark:text-gray-300 text-center w-full">
+                (Step {progress.current} of {progress.total}) - {currentItem.breadcrumb}
               </div>
               
               {/* Bottom row: Progress Bar */}
