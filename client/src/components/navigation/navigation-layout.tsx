@@ -102,7 +102,7 @@ export function NavigationLayout({ children }: NavigationLayoutProps) {
       />
       
       {/* Main content with bottom padding to avoid overlap with fixed navigation bar */}
-      <div style={{ paddingBottom: '120px' }}>
+      <div style={{ paddingBottom: '80px' }}>
         {children}
       </div>
       
