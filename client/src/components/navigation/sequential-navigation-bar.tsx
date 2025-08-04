@@ -40,7 +40,8 @@ export function SequentialNavigationBar({ className }: SequentialNavigationBarPr
   
   return (
     <div className={cn(
-      "fixed bottom-0 left-0 right-0 bg-white dark:bg-gray-900 border-t border-gray-200 dark:border-gray-700 shadow-lg z-50",
+      "fixed bottom-0 left-0 right-0 bg-white dark:bg-gray-900 border-t border-gray-200 dark:border-gray-700 z-50",
+      "shadow-[0_-8px_25px_-8px_rgba(0,_0,_0,_0.25)]",
       className
     )}>
       <div className="max-w-7xl mx-auto px-4 py-3">
