@@ -47,8 +47,8 @@ export const needs: Need[] = [
           {
             id: "client-details",
             label: "Client details",
-            path: "/needs/death-estate-liquidity/setup/client-details",
-            hasContent: false
+            path: "/client-details",
+            hasContent: true
           },
           {
             id: "parameters",
