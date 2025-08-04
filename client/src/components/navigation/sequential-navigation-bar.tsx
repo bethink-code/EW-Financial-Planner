@@ -72,7 +72,7 @@ export function SequentialNavigationBar({ className }: SequentialNavigationBarPr
                 
                 {/* Full Breadcrumb - no truncation */}
                 <div className="text-xs font-medium text-gray-700 dark:text-gray-300 text-center flex-1 min-w-0">
-                  {currentItem.breadcrumb}
+                  (Step {progress.current} of {progress.total}) - {currentItem.breadcrumb}
                 </div>
               </div>
               
