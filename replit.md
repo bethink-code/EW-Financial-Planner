@@ -1,522 +1,70 @@
 # Retirement Funds Management System
 
 ## Overview
+This is a full-stack web application designed for managing retirement funds. It offers a modern React frontend and an Express.js backend, providing robust capabilities for viewing, editing, and searching retirement fund data. The system supports multiple viewing modes, including grouped table, cards, and detailed views, with real-time editing and search functionalities. The project's vision is to provide a comprehensive and intuitive platform for financial planning, with high market potential in personal and professional financial management.
 
-This is a full-stack web application for managing retirement funds with a modern React frontend and Express.js backend. The system provides multiple viewing modes (grouped table, cards, detailed) for retirement fund data with real-time editing capabilities and search functionality.
+## User Preferences
+Preferred communication style: Simple, everyday language.
 
 ## System Architecture
-
-The application follows a monorepo structure with clear separation between client, server, and shared components:
-
-- **Frontend**: React with TypeScript, Vite build system
-- **Backend**: Express.js with TypeScript
-- **Database**: PostgreSQL with Drizzle ORM
-- **UI Framework**: Shadcn/ui components with Tailwind CSS
-- **State Management**: TanStack Query for server state
-
-## Key Components
+The application is structured as a monorepo, separating client, server, and shared components.
 
 ### Frontend Architecture
-- **Component Structure**: Modern React with TypeScript using functional components and hooks
-- **UI System**: Shadcn/ui component library providing consistent design patterns
-- **Styling**: Tailwind CSS with custom design tokens and responsive design
-- **Routing**: Wouter for lightweight client-side routing
-- **State Management**: TanStack Query for server state, local React state for UI state
+- **Framework & Language**: React with TypeScript.
+- **Build System**: Vite.
+- **UI Framework**: Shadcn/ui components for consistent design, styled with Tailwind CSS (including custom design tokens and responsive design).
+- **Routing**: Wouter for lightweight client-side routing.
+- **State Management**: TanStack Query for server state; local React state for UI state.
+- **Component Structure**: Functional components and hooks, optimized for performance with `React.memo`, `useCallback`, and `useMemo`.
 
 ### Backend Architecture
-- **API Structure**: RESTful Express.js server with TypeScript
-- **Database Layer**: Drizzle ORM with PostgreSQL dialect
-- **Data Storage**: Database-first architecture using PostgreSQL with automatic fallback to MemStorage for development
-- **Middleware**: Custom logging, error handling, and request parsing
-- **Database Connectivity**: Standard PostgreSQL driver with connection pooling for reliable data persistence
+- **API**: RESTful Express.js server with TypeScript.
+- **Database**: PostgreSQL with Drizzle ORM.
+- **Data Storage**: Database-first architecture; falls back to in-memory storage (`MemStorage`) for development.
+- **Middleware**: Custom logging, error handling, and request parsing.
+- **Database Connectivity**: Standard PostgreSQL driver with connection pooling.
 
 ### Database Schema
-- **Primary Entity**: `retirement_funds` table with comprehensive financial fields
-- **Field Types**: Mixed string and decimal fields for financial data
-- **Validation**: Zod schemas for runtime type checking
-- **Migrations**: Drizzle migrations system for schema management
+- **Primary Entity**: `retirement_funds` table with comprehensive financial fields.
+- **Field Types**: Mixed string and decimal fields, validated using Zod schemas for runtime type checking.
+- **Migrations**: Drizzle migrations system for schema management. Arrays in the database schema (e.g., `owners`, `beneficiaries`, `ownershipPercentages`) are configured with default values to ensure proper functionality of action buttons and prevent data corruption.
 
-## Data Flow
+### Data Flow
+Client requests data via TanStack Query hooks. Express routes handle CRUD operations, validating data with Zod schemas. Data is stored via an abstracted storage interface. Real-time updates utilize optimistic updates with query invalidation.
 
-1. **Client Requests**: React components use TanStack Query hooks to fetch data
-2. **API Routing**: Express routes handle CRUD operations for retirement funds
-3. **Data Validation**: Zod schemas validate incoming data before processing
-4. **Storage Layer**: Abstracted storage interface supports both memory and database backends
-5. **Real-time Updates**: Optimistic updates with automatic query invalidation
+### UI/UX Decisions
+- **Color Scheme**: Consistent use of a design system with specific colors for primary actions, accents, and backgrounds (e.g., orange for active navigation, light blue for summary cards, light grey for page background).
+- **Layout**: Unified single-row navigation system at the top. Dual view system (Table and Hybrid) with smooth transitions. Responsive grid system (1/2/4/6 columns) for adaptable layouts.
+- **Typography**: Standardized font sizes, weights, and uppercase formatting for headers and labels.
+- **Input Fields**: Uncontrolled HTML inputs with `defaultValue` and `onBlur` for consistent text capture and formatting (currency, percentage, years).
+- **Table Design**: Compact cell spacing, bold totals, standardized headers (single and double row) with vertical alignment, ultra-clean section borders (1px solid grey vertical lines) and horizontal row borders (1px solid grey).
+- **Calculated Fields**: Transparent background, no borders, non-selectable text for calculated values, using a global `.calculated-field` class.
+- **Default Values**: Grey styling for default text (e.g., "Enter details...", "0%", "R 0") to visually distinguish from user-entered data.
+
+### Feature Specifications
+- **Dual View System**: Table and Hybrid views.
+- **Search Functionality**: Memoized real-time fund search across multiple fields.
+- **Real-time Updates**: Optimistic updates with TanStack Query.
+- **Multi-Level Navigation**: Hierarchical navigation structure (Financial Plan > Needs > Steps > Calculators/Sections) with consolidated header bar.
+- **Multiple Owners/Beneficiaries**: Support for multiple owners and beneficiaries with CRUD operations and percentage splits.
+- **Comprehensive Formatting**: System-wide consistent formatting for currency (R prefix, thousands separators), percentages (% suffix), and years.
+- **Table Stability**: Implementation of patterns like `React.Fragment` with stable keys, debounced updates for text fields, immediate updates for array operations, and proper `rowSpan` usage to prevent jumping/flickering.
 
 ## External Dependencies
 
-### Core Dependencies
-- **@neondatabase/serverless**: Serverless PostgreSQL driver
-- **drizzle-orm**: Type-safe ORM with PostgreSQL support
-- **@tanstack/react-query**: Server state management
-- **@radix-ui/***: Accessible UI primitives
-- **wouter**: Lightweight React router
+### Core Libraries
+- **@neondatabase/serverless**: (Used during development for serverless PostgreSQL, but now standard PostgreSQL driver is used)
+- **drizzle-orm**: Type-safe ORM for PostgreSQL.
+- **@tanstack/react-query**: Server state management library.
+- **@radix-ui/**: Accessible UI primitives.
+- **wouter**: Lightweight React router.
+
+### UI/Styling
+- **Tailwind CSS**: Utility-first CSS framework.
+- **Shadcn/ui**: Component library built on Radix UI and Tailwind CSS.
 
 ### Development Tools
-- **Vite**: Fast build tool with HMR support
-- **TypeScript**: Type safety across the stack
-- **Tailwind CSS**: Utility-first CSS framework
-- **ESBuild**: Fast JavaScript bundler for production
-
-## Deployment Strategy
-
-### Development
-- **Hot Reload**: Vite dev server with Express middleware integration
-- **Type Checking**: Continuous TypeScript compilation
-- **Memory Storage**: In-memory data store for rapid development
-
-### Production
-- **Build Process**: Vite builds frontend, ESBuild bundles backend
-- **Static Serving**: Express serves built frontend assets
-- **Database**: PostgreSQL with connection pooling
-- **Environment**: NODE_ENV-based configuration switching
-
-### Configuration
-- **Database**: Environment variable-based DATABASE_URL configuration
-- **Build Outputs**: Separate dist directories for client and server
-- **Asset Handling**: Vite handles asset optimization and bundling
-
-## User Preferences
-
-Preferred communication style: Simple, everyday language.
-
-## Current State (Checkpoint - July 31, 2025)
-
-The application has been comprehensively optimized with a unified single-row navigation system and is ready for table optimization work. The system features a complete navigation overhaul and operates with two primary view modes optimized for performance and maintainability:
-
-1. **Grouped Table View**: High-performance table interface with optimized rendering
-2. **Detailed (Hybrid) View**: Accordion-style interface with memoized components
-
-### Navigation System (July 31, 2025):
-- **Unified Single-Row Layout**: All navigation elements consolidated into one horizontal row
-- **Proper Label Hierarchy**: FINANCIAL PLAN, NEED, STEPS labels above respective sections
-- **Streamlined Controls**: Financial Plan button with edit icon, Need dropdown (orange), numbered step buttons
-- **Design System Compliance**: All buttons maintain 40px height with consistent styling
-- **Refresh Integration**: Refresh button properly positioned in CalculatorHeader after switchers
-
-### Key Features Implemented:
-- **Dual View System**: Table and Hybrid views with smooth transitions
-- **Column Visibility Controls**: Optimized toggle system for data sections
-- **Table/Flows Mode Toggle**: Efficient switching between input and flow calculations
-- **Flows Table**: Complete flows table with real-time totals calculation
-- **Search Functionality**: Memoized real-time fund search across multiple fields
-- **Consistent Styling**: Unified design system with optimized CSS
-- **Responsive Design**: Mobile-optimized interface with adaptive layouts
-- **Real-time Updates**: Optimistic updates with TanStack Query
-- **Performance Optimization**: Comprehensive React.memo, useCallback, useMemo implementation
-- **Clean Architecture**: Streamlined codebase with minimal redundancy
-
-### Architecture Highlights:
-- **Optimized Component Structure**: Memoized components with efficient re-rendering
-- **Type Safety**: Complete TypeScript coverage with Zod validation
-- **Modern Tech Stack**: React 18, Vite, Tailwind CSS, Shadcn/ui
-- **Efficient State Management**: TanStack Query with comprehensive memoization
-- **Database Ready**: PostgreSQL schema with Drizzle ORM
-- **Production Optimized**: Minimized bundle size, optimized animations, clean CSS
-- **Responsive Layout**: Adaptive grid system for all devices
-
-## Optimization Summary (July 07, 2025):
-
-### Performance Enhancements:
-- **React.memo**: Applied to DetailedRow component for optimal re-rendering
-- **useCallback**: Memoized event handlers and field update functions
-- **useMemo**: Optimized search filtering and data computations
-- **Component Optimization**: Reduced unnecessary re-renders across view transitions
-
-### Layout Improvements:
-- **Responsive Grid System**: Dynamic column layout (1/2/4/6 columns)
-- **Space Efficiency**: Maximized screen real estate utilization
-- **Mobile Optimization**: Improved stacked layout for small screens
-- **Adaptive Spacing**: Responsive padding and gaps
-
-### Code Quality:
-- **Clean Architecture**: Streamlined component structure
-- **Type Safety**: Enhanced TypeScript coverage
-- **Import Optimization**: Removed unused dependencies
-- **Performance Monitoring**: Added memoization where beneficial
-
-## Removed Components (Cleanup):
-- Cards view system (cards-view.tsx, fund-card.tsx)
-- Legacy table components with interface conflicts
-- Unused imports and deprecated code paths
-
-## TABLE STABILITY REFERENCE PATTERNS
-
-### CRITICAL: Use These Patterns to Fix Table Jumping/Flickering Issues
-
-**When to Use:** If any table exhibits jumping, flickering, or unstable behavior when adding/removing rows, updating fields, or managing arrays (owners, beneficiaries)
-
-**Reference Files:**
-- `client/src/components/assurance/working-assurance-table.tsx` (Master reference)
-- `client/src/components/retirement-funds/new-retirement-table.tsx` (Applied pattern)
-- `client/src/components/defined-benefit-funds/defined-benefit-funds-table-correct-stable.tsx` (Applied pattern)
-- `client/src/hooks/use-debounced-update.ts` (Debounced updates hook)
-- `client/src/lib/array-management.ts` (Array management utilities)
-
-### 1. REACT.FRAGMENT WRAPPING WITH STABLE KEYS
-```tsx
-// ✅ CORRECT: Wrap each item in React.Fragment with stable key
-{items.map((item) => (
-  <React.Fragment key={`item-${item.id}`}>
-    {/* All table rows for this item */}
-  </React.Fragment>
-))}
-
-// ❌ WRONG: Flattened array approach
-{items.flatMap((item, index) => [
-  <tr key={`${item.id}-main`}>...</tr>,
-  <tr key={`${item.id}-additional`}>...</tr>
-])}
+- **Vite**: Fast build tool with HMR support.
+- **TypeScript**: For type safety across the stack.
+- **ESBuild**: Fast JavaScript bundler for backend production builds.
 ```
-
-### 2. DEBOUNCED UPDATES FOR TEXT FIELDS
-```tsx
-// ✅ CORRECT: Use debounced updates for text/currency fields
-const debouncedUpdate = useDebouncedUpdate(300);
-
-const handleInputBlur = useCallback((id: number, field: string, value: string) => {
-  debouncedUpdate(() => {
-    handleUpdateItem(id, { [field]: value });
-  });
-}, [debouncedUpdate, handleUpdateItem]);
-
-// Usage in JSX
-<input
-  defaultValue={item.description || "Enter details ..."}
-  onBlur={(e) => handleInputBlur(item.id, 'description', e.target.value)}
-/>
-```
-
-### 3. IMMEDIATE UPDATES FOR ARRAY OPERATIONS
-```tsx
-// ✅ CORRECT: Immediate updates for array operations
-const handleAddOwner = useCallback((itemId: number) => {
-  const item = items.find(i => i.id === itemId);
-  if (!item) return;
-  
-  const newOwners = [...item.owners, ""];
-  const newPercentages = [...item.ownershipPercentages, "0%"];
-  
-  // Immediate update, no debouncing
-  handleUpdateItem(itemId, { 
-    owners: newOwners,
-    ownershipPercentages: newPercentages
-  });
-}, [items, handleUpdateItem]);
-```
-
-### 4. PROPER EVENT HANDLING FOR ACTION BUTTONS
-```tsx
-// ✅ CORRECT: Action buttons with proper event handling
-<AddButton
-  onClick={() => handleAddOwner(item.id)}  // No event parameter needed
-  disabled={isUpdating}
-  size="sm"
-/>
-
-<DeleteButton
-  onClick={() => handleRemoveOwner(item.id, ownerIndex)}  // No event parameter
-  disabled={isUpdating}
-  size="sm"
-/>
-
-// ✅ CORRECT: Event handler functions without event parameters
-const handleRemoveOwner = useCallback((itemId: number, ownerIndex: number) => {
-  // No event.preventDefault() needed here
-  const item = items.find(i => i.id === itemId);
-  if (!item || item.owners.length <= 1) return;
-  
-  const newOwners = [...item.owners];
-  const newPercentages = [...item.ownershipPercentages];
-  
-  newOwners.splice(ownerIndex, 1);
-  newPercentages.splice(ownerIndex, 1);
-  
-  handleUpdateItem(itemId, { 
-    owners: newOwners,
-    ownershipPercentages: newPercentages
-  });
-}, [items, handleUpdateItem]);
-```
-
-### 5. ROWSPAN IMPLEMENTATION FOR STABILITY
-```tsx
-// ✅ CORRECT: RowSpan for single-instance cells
-<td rowSpan={maxRows} className="p-2 text-center border-l border-gray-200">
-  {/* Single-instance content */}
-</td>
-
-// ✅ CORRECT: Calculate maxRows based on array lengths
-const maxRows = Math.max(
-  item.owners?.length || 1,
-  item.beneficiaries?.length || 1,
-  1
-);
-```
-
-### 6. SAFEFRAGMENT FOR METADATA WARNINGS
-```tsx
-import { SafeFragment } from "@/lib/safe-fragment";
-
-// ✅ CORRECT: Use SafeFragment to prevent React metadata warnings
-<SafeFragment key={`item-${item.id}`}>
-  {/* Table rows */}
-</SafeFragment>
-```
-
-### 7. STABLE REACT KEYS
-```tsx
-// ✅ CORRECT: Use stable IDs for keys, not array lengths
-key={`item-${item.id}`}  // Stable
-key={`owner-${item.id}-${ownerIndex}`}  // Stable
-
-// ❌ WRONG: Keys that change when arrays change
-key={`item-${item.id}-${item.owners.length}`}  // Unstable
-```
-
-### 8. UNIFIED UPDATE PATTERN
-```tsx
-// ✅ CORRECT: Single update function pattern
-const handleUpdateItem = useCallback((id: number, updates: Partial<ItemType>) => {
-  updateMutation.mutate({ id, ...updates });
-}, [updateMutation]);
-
-// ✅ CORRECT: Use unified pattern for all field updates
-const handleOwnerUpdate = useCallback((itemId: number, ownerIndex: number, field: string, value: string) => {
-  const item = items.find(i => i.id === itemId);
-  if (!item) return;
-  
-  const newOwners = [...item.owners];
-  newOwners[ownerIndex] = value;
-  
-  handleUpdateItem(itemId, { owners: newOwners });
-}, [items, handleUpdateItem]);
-```
-
-### 9. DATABASE SCHEMA REQUIREMENTS
-```sql
--- ✅ CRITICAL: Arrays must have default values to ensure action buttons appear
-owners text[] DEFAULT ARRAY['Donald Edwards'],
-beneficiaries text[] DEFAULT ARRAY[''],
-ownershipPercentages text[] DEFAULT ARRAY['100%'],
-```
-
-### 10. ARRAY SYNCHRONIZATION PROTECTION
-```tsx
-// ✅ CORRECT: Always maintain array synchronization
-const handleRemoveOwner = useCallback((itemId: number, ownerIndex: number) => {
-  const item = items.find(i => i.id === itemId);
-  if (!item || item.owners.length <= 1) return; // Protect minimum length
-  
-  // Update ALL related arrays simultaneously
-  const newOwners = [...item.owners];
-  const newPercentages = [...item.ownershipPercentages];
-  
-  newOwners.splice(ownerIndex, 1);
-  newPercentages.splice(ownerIndex, 1);
-  
-  // Single atomic update
-  handleUpdateItem(itemId, { 
-    owners: newOwners,
-    ownershipPercentages: newPercentages
-  });
-}, [items, handleUpdateItem]);
-```
-
-**SUCCESS INDICATORS:**
-- No jumping/flickering when adding/removing items
-- Smooth transitions between different row states
-- Action buttons appear consistently
-- Text editing works without interface conflicts
-- Array operations complete without data corruption
-
-- July 31, 2025: **MAJOR CHECKPOINT - COMPREHENSIVE TABLE HEADER STANDARDIZATION & VERTICAL ALIGNMENT COMPLETE** - Successfully completed comprehensive standardization of ALL table headers across the entire financial planning application with perfect vertical alignment system. Key achievements: (1) **Centralized CSS Class System**: Created unified .single-row-header, .double-row-header-first, and .double-row-header-second CSS classes in index.css controlling all header styling globally, (2) **Perfect Vertical Alignment**: Fixed global double-row header vertical alignment with first row using `vertical-align: bottom !important` and second row using `vertical-align: top !important` for proper text positioning, (3) **Consistent Header Heights**: Single row headers use 3rem total height, double row headers use 1.5rem each (3rem total), (4) **Unified Text Styling**: All headers use lighter grey color (#9ca3af), proper font sizes (11px first row, 10px second row), uppercase formatting, and consistent spacing, (5) **Complete Individual Override Removal**: Systematically eliminated ALL individual cell-level padding overrides (`px-3 py-3`, `p-1`, `p-2`) from table headers across every calculator module, ensuring pure centralized CSS control, (6) **Enhanced CSS Specificity**: Updated double row header selectors to `table thead tr.double-row-header-first th` and `table thead tr.double-row-header-second th` ensuring proper override of fallback styles, (7) **Complete Table Coverage**: Standardized headers across ALL calculator modules including Assurance (single row), Retirement Funds, Defined Benefit Funds, Voluntary Investments, Assets, Liabilities, Income Needs, Lump Sum Bequests, Income Provisions, Residue, and Additional Estate Duty Items (all double row), (8) **Global Cell Override Cleanup**: Removed individual text alignment and padding overrides from Income Provisions and other tables, letting row-level CSS handle all formatting, (9) **Visual Consistency**: All tables now have identical header appearance with proper vertical alignment (bottom-aligned first row, top-aligned second row), no vertical padding overrides, and section borders where appropriate. System provides single point of control for all table header styling across 12+ calculator modules ensuring complete design consistency, perfect vertical alignment, and maintainability.
-
-- July 31, 2025: **ITEM COUNT REMOVAL FROM ALL CALCULATOR HEADERS** - Removed item count displays (e.g., "2 policies", "3 funds") from ALL calculator headers across the entire application. Updated CalculatorHeader component to eliminate itemCount rendering and removed itemCount/itemLabel props from all 12+ calculator pages including Assurance, Retirement Funds, Defined Benefit Funds, Voluntary Investments, Assets, Liabilities, Income Needs, Income Provisions, Residue, Additional Estate Duty Items, and Lump Sum Bequests. Headers now display clean titles without count badges for simplified, professional appearance. This change creates cleaner visual hierarchy and removes unnecessary information clutter from the user interface.
-
-- July 31, 2025: **NAVIGATION MENU ENHANCEMENT - MANAGE NEEDS ITEM ADDED** - Successfully added "Manage needs in this plan" menu item to the bottom of the needs dropdown navigation with visual separator. Implementation includes: (1) Added DropdownMenuSeparator import to consolidated-navigation.tsx component, (2) Added visual separator line before the new menu item for clear organization, (3) Added "Manage needs in this plan" menu item linking to /manage-needs route, (4) Applied consistent styling with existing menu items using dropdown-menu-item class, (5) Implemented proper click handling to close dropdown when item is selected. Navigation menu now provides clear access to plan management functionality while maintaining visual hierarchy and professional appearance. Critical application stability restored with successful removal of corrupted storage-broken.ts file that was causing 540+ TypeScript compilation errors.
-
-- July 31, 2025: **[+] ICON HEADER STANDARDIZATION COMPLETION** - Successfully completed the comprehensive standardization of [+] icon buttons across ALL remaining calculator table components. Key achievements: (1) **TableHeaderAddButton Implementation**: Updated Assets Table, Liabilities Table, and Income Provisions Table components to use standardized TableHeaderAddButton component, replacing inconsistent AddButton implementations, (2) **Component Interface Updates**: Added proper TypeScript props (onAddAsset, onAddLiability, onAddProvision) to table component interfaces ensuring type safety, (3) **Page Component Integration**: Updated corresponding page components (assets.tsx, liabilities.tsx, income-provisions.tsx) to pass proper onAdd callback functions to table components, (4) **Event Handler Consistency**: Fixed Income Needs and Lump Sum Bequests pages to properly pass onAdd props maintaining consistent event handling patterns, (5) **Centralized CSS Control**: All [+] icon buttons now use .table-header-add-btn CSS class ensuring uniform styling and maintainability across 13+ calculator modules. System now provides complete consistency with TableHeaderAddButton component handling all table header [+] icon functionality throughout the entire financial planning application. All TypeScript interfaces properly defined and event handling standardized across the platform.
-
-- July 31, 2025: **NET ASSETS SUMMARY CARD ENHANCEMENT** - Added comprehensive NET assets summary card as the first card in both Assets and Liabilities summary sections. Key features: (1) **Cross-Table Calculation**: Fetches data from both assets and liabilities tables to calculate NET assets (Total Assets - Total Liabilities), (2) **Custom Styling**: Light orange background (bg-orange-50) with no border and dark grey text colors from design system for visual distinction, (3) **Real-time Updates**: Automatically recalculates when data changes in either table using React Query, (4) **Consistent Implementation**: Same calculation logic applied to both Assets and Liabilities summary components, (5) **CSS Override Fix**: Removed !important declarations from summary card CSS to allow Tailwind class overrides for specialized styling. NET assets card provides immediate financial position overview with professional styling that stands out from category-specific summary cards.
-
-- July 31, 2025: **CHECKPOINT - ADDITIONAL ESTATE DUTY ITEMS SIMPLIFICATION & COMPACT LAYOUT COMPLETE** - Successfully completed comprehensive simplification and layout optimization of Additional Estate Duty Items module. Key achievements: (1) **Database Schema Restructure**: Completely rebuilt table structure from 12+ complex fields to simple 4-field design (Description, Amount, Deduction checkbox, Exclude from joint estate checkbox), (2) **Table Drop and Recreate**: Successfully resolved PostgreSQL schema conflicts by manually dropping old complex table structure and rebuilding with new simplified schema using ALTER TABLE commands, (3) **Compact Container Layout**: Implemented w-fit container pattern matching residue table for content-driven width instead of full-screen stretching, (4) **CRUD Operations**: Full create, read, update, delete functionality with proper totals calculation and currency formatting, (5) **Field Types**: Description (text with "Enter details..." placeholder), Amount (currency with R prefix and thousands separators), Deduction (boolean checkbox), Exclude from joint estate (boolean checkbox) with proper validation, (6) **Database Compatibility**: Fixed all column existence errors and schema mismatches ensuring proper API functionality across table and hybrid view modes, (7) **UI Consistency**: Applied standardized styling patterns with section borders, compact table design, and consistent action button placement, (8) **TypeScript Resolution**: Fixed import errors and prop type issues for proper component integration. Module now provides streamlined estate duty planning with simplified data entry, compact professional appearance, and content-fitted layout that doesn't waste screen space. Database storage working perfectly with PostgreSQL backend.
-
-- July 31, 2025: **MAJOR CHECKPOINT - UNIFIED SINGLE-ROW NAVIGATION SYSTEM COMPLETE** - Successfully implemented comprehensive single-row navigation system with consolidated design matching precise mockup specifications. Key achievements: (1) **Unified Navigation Layout**: Moved all navigation elements to single horizontal row including Financial Plan section, Need dropdown, and Steps navigation, (2) **Proper Label Hierarchy**: Added consistent labels above each section (FINANCIAL PLAN, NEED, STEPS) with standardized typography and spacing, (3) **Enhanced Financial Plan Section**: Restructured with main plan button and "Back to all plans" button positioned below, (4) **Streamlined Design**: Removed CLIENT section as requested, creating cleaner focused navigation, (5) **Refresh Button Implementation**: Successfully moved refresh functionality from navigation to CalculatorHeader component positioned after Table/Hybrid switcher, following design system specifications with btn-icon-white styling (40px square, white background, gray icon), (6) **Design System Compliance**: All buttons maintain consistent 40px height, proper spacing, and established color schemes throughout navigation and content areas, (7) **Functional Integration**: Complete refresh functionality implemented in Assurance page with proper loading states and spin animation. Navigation system now provides unified single-row layout with all essential controls properly organized and styled according to design specifications, ready for table work phase.
-
-## Changelog
-
-Changelog:
-- July 01, 2025: Initial setup
-- July 02, 2025: Updated all input field content to right-align text across all view modes for consistent data presentation  
-- July 04, 2025: **CHECKPOINT** - Removed Cards view entirely, applied consistent teal styling to all hybrid view sections, cleaned up codebase for production readiness
-- July 07, 2025: **CHECKPOINT** - Optimized hybrid view layout with responsive grid (1/2/4/6 columns), enhanced performance with React.memo and useCallback, improved code structure and maintainability
-- July 08, 2025: **FLOWS TABLE** - Added complete flows table for table view only, follows exact patterns and styles of inputs table with dedicated summary section
-- July 08, 2025: **COMPACT STYLING & BOLD TOTALS** - Implemented compact cell spacing matching dropdown heights, applied proper bold styling (font-weight: 700) to total rows with explicit font family overrides
-- July 09, 2025: **MAJOR CLEANUP & OPTIMIZATION** - Comprehensive code cleanup with performance optimizations including React.memo, useCallback, useMemo for enhanced rendering efficiency, removed unused CSS classes, streamlined component structure
-- July 09, 2025: **INPUT FIELD SIZING OPTIMIZATION** - Fixed AutoSizeInput component with Canvas API text measurement for accurate content-based sizing, eliminated text truncation issues, maintained 80px percentage column width
-- July 09, 2025: **ACTIONS COLUMN OPTIMIZATION** - Restricted Actions column to only appear in Unapproved Life Cover section, removed from Monthly Death Benefit, Fund Value, and Fund Value Beneficiaries sections for cleaner table layout
-- July 09, 2025: **OVERVIEW STYLING FIX** - Fixed AutoSizeInput component to properly apply background styling, enhanced table-input CSS with hover/focus states, fixed Owner field width to prevent truncation with min-width 120px
-- July 09, 2025: **BENEFICIARY FONT SIZE FIX** - Standardized all beneficiary name fields to use table-input class ensuring consistent font size (0.875rem) across main and additional beneficiary rows
-- July 09, 2025: **ACTION ICON COLORS** - Updated action icon colors to #1B5C82 for add (+) buttons and #4F4F4F for delete (trash) buttons with matching hover states
-- July 09, 2025: **FLOWS TABLE RESTORATION** - Fixed JSX structure errors in flows table, restored proper table mode switching between SimpleTableWithBeneficiaries (inputs) and NewGroupedTableView (flows), confirmed working table mode toggle functionality
-- July 09, 2025: **HYBRID VIEW LAYOUT OPTIMIZATION** - Redesigned hybrid view card layout with better field organization, limited grid widths with max-width constraints, improved spacing with proper grouping, replaced confusing full-width stretching with organized sections (2-4 columns max), enhanced readability with better label positioning
-- July 09, 2025: **HYBRID VIEW AUTOSIZING** - Added AutoSizeInput component to hybrid view fields using Canvas API for accurate text measurement, fields now automatically size to fit content with 120px minimum and 300px maximum width constraints, improved field organization and visual consistency
-- July 09, 2025: **COMPACT BENEFICIARY LAYOUT** - Created compact layout mode for beneficiary sections in hybrid view, replaced full-width grid with flexible layout using fixed widths for better space utilization, maintained all functionality while preventing confusing stretching
-- July 09, 2025: **SPLIT-PANE HYBRID VIEW** - Redesigned hybrid view with split-pane layout: left sidebar shows fund list with key info, right panel shows detailed sections for selected fund, eliminates scrolling issues with many funds, more efficient screen space usage
-- July 09, 2025: **HYBRID VIEW SCROLL FIX** - Removed scrollable containers in hybrid view, implemented sticky headers for fund list and detail panel, allows natural page scrolling for better user experience
-- July 09, 2025: **UNIFIED COLUMN LAYOUT** - Standardized all hybrid view sections to consistent responsive grid: 1 column mobile, 4 columns tablet, 8 columns desktop, filling from left, removed max-width constraints for full utilization
-- July 09, 2025: **FUND VALUE BENEFICIARIES SINGLE ROW** - Combined Fund Value Beneficiaries section into single row with 7 fields (Beneficiary Name, Percentage, Amount, Lump Sum Taken, Non-deductible Contribution, Living Annuity, Income Term) using full 8-column grid
-- July 09, 2025: **FIELD ALIGNMENT FIX** - Fixed input field alignment across all hybrid view sections by adding fixed label height (32px) and items-end grid alignment, ensures all input fields align horizontally regardless of label text wrapping
-- July 10, 2025: **PERFORMANCE OPTIMIZATION** - Fixed slow field editing by implementing 300ms debounced API calls and 100ms debounced canvas calculations in AutoSizeInput component, preventing excessive server requests and UI lag during typing
-- July 10, 2025: **CRITICAL INPUT FIX** - Completely removed all canvas text measurement logic from AutoSizeInput components across all views (detailed-view, detailed-row, new-grouped-table-view, simple-table-with-beneficiaries) to fix text truncation issue where only first character was being captured, simplified beneficiary update handlers to prevent input interference
-- July 10, 2025: **UNCONTROLLED INPUTS SOLUTION** - Resolved critical input field truncation issue by converting all controlled React inputs to uncontrolled HTML inputs using defaultValue and onBlur events, preventing React state conflicts and optimistic update race conditions, ensuring complete text capture across all table views
-- July 10, 2025: **COMPREHENSIVE INPUT FIELD FIX** - Systematically converted ALL input fields across the entire system from React controlled inputs to native HTML inputs with defaultValue + onBlur pattern, fixed beneficiary name fields, percentage fields, and all editable inputs in Table, Hybrid, and Flows views, resolved text truncation issue completely
-- July 10, 2025: **CURRENCY FORMATTING RESTORATION** - Added automatic currency formatting with R prefix and thousands separators that applies when fields lose focus (onBlur), removed problematic key props that made fields uneditable while preserving necessary row keys for React lists, applied consistently across all views
-- July 10, 2025: **CURRENCY FORMATTING FINAL FIX** - Resolved currency field formatting display issue by implementing direct DOM value updates on blur events, ensuring immediate visual feedback when fields are formatted (e.g., "750000" becomes "R 750,000"), maintained full editing functionality with uncontrolled inputs
-- July 10, 2025: **SYSTEM-WIDE FORMATTING COMPLETION** - Successfully applied currency formatting fix to ALL components across the entire system: simple-table-with-beneficiaries.tsx, new-grouped-table-view.tsx (flows table), detailed-view.tsx (hybrid view), and beneficiary-row-manager.tsx, ensuring consistent formatting behavior with uncontrolled inputs and direct DOM formatting updates
-- July 10, 2025: **CRITICAL ERROR RESOLUTION** - Fixed all remaining handleInputChange reference errors across the entire codebase, systematically replaced with handleInputBlur functions, resolved JavaScript runtime errors preventing proper field editing, confirmed currency formatting working correctly across all views
-- July 10, 2025: **COMPREHENSIVE FIELD FORMATTING** - Enhanced formatting system to support three data types: currency fields (R prefix), percentage fields (% suffix), and years fields (years suffix), applied consistently across all views and components for complete data presentation standardization
-- July 10, 2025: **MAJOR CHECKPOINT & OPTIMIZATION** - Comprehensive system-wide optimization and cleanup: fixed React key warnings in flows table, removed all AutoSizeInput components for better performance, standardized input field handling across all components, eliminated redundant code patterns, ensured consistent percentage formatting (%) in all beneficiary fields including main and additional beneficiary rows, complete code consolidation for production readiness
-- July 10, 2025: **HYBRID VIEW DISPLAY FIX** - Resolved critical display issue in hybrid view where input fields weren't showing actual fund data values, fixed by adding unique key props (field-${fundId}) to all input fields forcing proper React re-rendering when switching between funds, all hybrid view sections now display correct data values
-- July 10, 2025: **HYBRID VIEW STYLING OPTIMIZATION** - Fixed overlapping input fields issue in Fund Value Beneficiaries section by adjusting grid layout to 7 columns with proper spacing, replaced table-input class with explicit white background and border styling across all hybrid view sections for consistent appearance, optimized field widths to match content (70px for percentages, 90px for years/amounts, 120-180px for currency fields), eliminating oversized input fields while maintaining editing functionality
-- July 11, 2025: **ADDITIONAL DETAILS COMPONENT** - Added new "Additional Details" component below all views (Table, Flows, Hybrid) with three currency fields: Lump Sum Death, Previous Lump Sums, Additional Tax Free Amount, features compact table layout with proper column sizing (250px for description, 140-180px for currency fields), uses same styling as main tables with table-input class, 1px border totals row, and auto-sizing container that fits content width
-- July 11, 2025: **MAIN TABLE HEADERS** - Added "Details" heading above main table in both Table and Hybrid view modes to match Additional Details table structure, provides consistent labeling across all table sections
-- July 11, 2025: **FLOWS TABLE OPTIMIZATION** - Removed scrollable container from flows table enabling natural page scrolling for better user experience
-- July 11, 2025: **VISIBILITY CONTROLS HIDDEN** - Hidden column visibility dropdown while preserving code for future restoration, cleaned interface shows only essential controls
-- July 11, 2025: **PRODUCTION RELEASE REVIEW** - Comprehensive codebase review completed, all components optimized, zero critical issues found, system ready for production deployment with 100% feature completeness and performance optimization
-- July 22, 2025: **COMPREHENSIVE TAB SYSTEM** - Updated Death with Estate Liquidity calculator to include all 10 required tabs in proper sequence: Assurance (first), Retirement Funds, Defined Benefit Funds, Voluntary Investments, Assets and Liabilities, Income Needs, Income Provisions, Residue, Lump Sum Needs and Cash Bequests, Additional Estate Duty Items. Fixed assurance table React Fragment key issues, implemented working + buttons for owners/beneficiaries with proper additional row display, added missing "Additional Info" column, made benefit split fields non-editable (display only), ensured amount fields are fully editable with currency formatting, added comprehensive total row calculations for Death Benefit, Amount, Premiums by Others, and Collateral Session columns
-- July 23, 2025: **GLOBAL DESIGN SYSTEM OPTIMIZATION** - Implemented comprehensive design system with centralized formatting utilities (client/src/lib/formatting.ts), consistent UI components (custom-tabs.tsx, table-input.tsx, table-wrapper.tsx, action-buttons.tsx), and design tokens (design-tokens.ts). Optimized main estate liquidity page to use new CustomTabs component eliminating hardcoded colors (#016991), updated CSS to use HSL color variables for primary/secondary colors, created SafeFragment utility to prevent React metadata warnings, and established unified styling patterns across all calculator components. This enables consistent styling changes across the entire application without editing individual calculators.
-- July 23, 2025: **STANDARDIZED ACTION BUTTONS & SWITCHER PATTERNS** - Created centralized AddButton component with Primary Blue styling (#016991) and consistent hover effects (90% opacity). Updated all action buttons across Assurance, Retirement Funds, Defined Benefit Funds, and Beneficiary components to use standardized styling. Implemented new Switcher component based on Graph/Table pattern with rounded design and blue accent color, including GraphTableSwitcher and InputFlowSwitcher variants. Updated retirement funds Table/Flows toggle to use new switcher component for consistent UI patterns across all calculators.
-- July 23, 2025: **ACTION BUTTON REFINEMENT** - Moved "Add Fund" button to header location in retirement funds module with Primary Blue styling. Updated small action buttons (+, trash) in table rows to use Secondary styling (white background, primary border, primary text) for professional appearance. Reduced button size from h-7 w-7 to h-6 w-6 with h-3 w-3 icons for better table proportions. Applied consistent styling across all beneficiary management components.
-- July 23, 2025: **MULTIPLE OWNERS & BENEFICIARIES COMPLETION** - Successfully implemented complete multiple owners and multiple beneficiaries functionality for retirement funds following Voluntary Investments pattern. Each fund now supports multiple owners with individual percentage splits using UserPlus/UserMinus icons. Multiple beneficiaries display as additional rows below main fund row with full CRUD operations. Fixed table structure issues including duplicate column headers, restored all missing data sections (Monthly Death Benefit, Fund Value, Fund Value Beneficiaries), and resolved TypeScript errors. Table now fully functional with proper column alignment, currency/percentage formatting, and comprehensive data management across all sections.
-- July 23, 2025: **ASSURANCE TABLE RESTRUCTURE** - Completely restructured assurance table to properly separate owners and beneficiaries as independent entities. Implemented maxRows calculation based on maximum of owners/beneficiaries arrays, fixed rowSpan attributes to use maxRows for proper alignment, added visual indicators (blue ↳ for owners, green ↳ for beneficiaries), and resolved deletion functionality to target specific array items without affecting entire policies. Added additionalInfo field to database schema and confirmed proper delete button conditioning to prevent invalid operations.
-- July 23, 2025: **GLOBAL FIELD TYPES SYSTEM** - Created comprehensive field types system (client/src/lib/field-types.ts) to control default widths, behaviors, formatting, and validation consistently across all tables in the application. Includes standardized configurations for text, currency, percentage, years, number, checkbox, and textarea fields with predefined minWidth/maxWidth constraints. Integrated with design tokens system (design-tokens.ts) for centralized table column width standards and field utility functions. This enables consistent field behavior across all calculator modules without individual table customization.
-- July 24, 2025: **FIELD WIDTH STANDARDIZATION MIGRATION COMPLETE** - Successfully completed comprehensive field types system migration across all table components. Migrated from 57 to 0 instances of `w-full` classes, replacing with standardized field widths using getFieldClass() and getFieldWidth() functions. Updated all major components including assets-and-liabilities, income-needs, income-provisions, residue, additional-estate-duty-items, voluntary-investments, assurance (enhanced, simplified, working), and retirement-funds tables. Field types now consistently applied throughout: text (150-300px), currency (90-180px), percentage (60-90px), years (80-100px), providing uniform table appearance and behavior across the entire application.
-- July 24, 2025: **CENTRALIZED TEXT ALIGNMENT CONTROL** - Updated table-input CSS class to use left-alignment for all text fields, providing single point of control for text alignment across the entire application rather than scattered field-level configurations.
-- July 24, 2025: **COMPREHENSIVE CURRENCY FIELD OPTIMIZATION** - Systematically fixed currency field formatting issues across all calculator components by removing style overrides (getFieldWidth) and adding proper React key props for re-rendering. Updated Defined Benefit Funds, Income Needs, Income Provisions, Voluntary Investments, Assets and Liabilities, and Additional Estate Duty Items tables. Added unique key props (field-${id}-${value}) to force React re-rendering when data changes, ensuring proper currency display formatting. Reduced currency field style override issues from numerous instances to minimal remaining cases. All currency fields now consistently use field types system for uniform behavior and appearance.
-- July 24, 2025: **CURRENCY FIELD WIDTH STANDARDIZATION** - Updated all currency field widths to tighter range (80px-110px) for more compact tables. Modified CSS .field-currency class and all currency field types (amount, deathBenefit, fundValue, premiums, lumpSum) in field-types.ts. Applied consistent width standards across all calculator components through centralized field types system, providing uniform compact appearance while maintaining readability for currency values.
-- July 24, 2025: **PERCENTAGE FIELD WIDTH STANDARDIZATION** - Updated all percentage field widths to ultra-compact range (40px-50px) for maximum table efficiency. Modified CSS .field-percentage class and all percentage field types (percentage, benefitSplit) in field-types.ts. Applied consistent width standards across all calculator components through centralized field types system, providing uniform compact appearance for percentage values throughout the application.
-- July 24, 2025: **PERCENTAGE FIELD DEFAULT VALUE CONSISTENCY** - Fixed percentage field default values across the platform to consistently show "0%" instead of empty values. Updated field types system and retirement funds table components to ensure all percentage inputs display "0%" by default, providing immediate visual clarity that these are percentage fields. Applied to increasePercentage, beneficiary percentages, and ownership percentages throughout the application.
-- July 24, 2025: **DEFINED BENEFIT FUNDS PERCENTAGE FIX** - Fixed pensionIncomeIncrease field in defined benefit funds table to display "0%" instead of "R 0" currency format. Updated both default values for new funds and existing field defaultValue fallback to ensure consistent percentage formatting across all calculator modules.
-- July 24, 2025: **RETIREMENT FUNDS FLOWS TABLE PERCENTAGE STANDARDIZATION** - Fixed increasePercentage field width inconsistency in retirement funds flows table by replacing hardcoded table-input class with standardized getFieldClass('percentage') implementation. Imported design-tokens module and applied ultra-compact 40px-50px percentage field width for consistent appearance across all calculator modules.
-- July 24, 2025: **LUMP SUM BEQUESTS PERCENTAGE FIELD STANDARDIZATION** - Removed number input arrow controls from increasePercentage field in lump sum bequests table by changing type="number" to type="text". Applied standardized getFieldClass('percentage') for consistent ultra-compact 40px-50px width. Updated defaultValue logic to ensure proper "%" suffix display. All percentage fields now consistently use text inputs without spinner controls across the platform.
-- July 24, 2025: **COMPREHENSIVE FORMATTING SYSTEM OVERHAUL** - Created centralized formatting utilities system with separate functions for each data type (formatCurrencyValue, formatPercentageValue, formatYearsValue, formatTextValue, formatNumberValue). Replaced mixed currency/percentage formatting function with dedicated type-specific formatters. Updated lump sum bequests table to import and use centralized formatting functions. Eliminated confusing multi-purpose formatting logic ensuring consistent behavior across all field types throughout the application.
-- July 24, 2025: **DATABASE STORAGE IMPLEMENTATION** - Successfully migrated from MemStorage to DbStorage for production readiness. Fixed critical percentage field display issue by implementing proper database connectivity using PostgreSQL driver instead of Neon serverless. Added comprehensive database schema with separate CPI boolean field for Lump Sum Bequests module. Database now properly stores and serves percentage values (5%, 8%) instead of "CPI" text. API endpoints correctly use database storage with proper CRUD operations. Fixed WebSocket connectivity issues and established stable database connection for reliable data persistence.
-- July 24, 2025: **GLOBAL PERCENTAGE FIELD BEHAVIOR COMPLETION** - Completed comprehensive implementation of enhanced focus/blur handlers across ALL calculator modules ensuring truly global percentage field behavior. Fixed Income Provisions, Lump Sum Bequests, Retirement Funds (Table and Flows), Voluntary Investments, Assets and Liabilities, and Defined Benefit Funds tables. All percentage fields now consistently support auto-selection on focus (using handleDefaultValueFocus), proper formatting on blur (using createEnhancedBlurHandler), and grey styling for default values. Resolved issues where "CPI" text was showing instead of percentage values, eliminated hardcoded percentage formatting in favor of centralized system, and ensured clicking any percentage field selects all text for immediate replacement. Global percentage field behavior now works uniformly across the entire platform.
-- July 24, 2025: **DEFAULT VALUE GREY STYLING SYSTEM** - Implemented comprehensive grey styling system for default values across the entire platform. Added CSS classes (.default-value, .entered-value) and utility functions (isDefaultValue, getValueClass) to visually distinguish default values from user-entered values. Default values display in plain grey text (no italics) while user-entered values display in normal black text. Applied to major calculator components including Defined Benefit Funds, Income Provisions, Lump Sum Bequests, Income Needs, Assets and Liabilities, and Voluntary Investments tables. System automatically detects field types and applies appropriate styling based on value content.
-- July 24, 2025: **TEXT FIELD DEFAULT "ENTER HERE ..." IMPLEMENTATION** - Updated all text input fields system-wide to use "Enter here ..." as default placeholder text instead of empty values. Modified formatTextValue function in formatting.ts to return "Enter here ..." for empty values, updated isDefaultValue function to recognize this as a default value for grey styling, and applied changes across all calculator modules including Assurance, Retirement Funds, Lump Sum Bequests, and other components. Text fields now consistently show "Enter here ..." in grey when empty, providing clear user guidance while maintaining professional appearance.
-- July 24, 2025: **PERCENTAGE FIELD WIDTH ENFORCEMENT FIX** - Fixed percentage field width inconsistency in Assets and Liabilities module by adding !important declarations to .field-percentage CSS class. Updated CSS to enforce ultra-compact 40px-50px width with explicit width: 50px !important to override any conflicting styles. This ensures all percentage fields across the platform consistently follow the standardized ultra-compact width settings regardless of CSS specificity conflicts.
-- July 24, 2025: **GLOBAL PERCENTAGE FIELD BEHAVIOR COMPLETION** - Completed comprehensive implementation of enhanced focus/blur handlers across ALL calculator modules ensuring truly global percentage field behavior. Fixed Income Provisions, Lump Sum Bequests, Retirement Funds (Table and Flows), Voluntary Investments, Assets and Liabilities, and Defined Benefit Funds tables. All percentage fields now consistently support auto-selection on focus (using handleDefaultValueFocus), proper formatting on blur (using createEnhancedBlurHandler), and grey styling for default values. Resolved issues where "CPI" text was showing instead of percentage values, eliminated hardcoded percentage formatting in favor of centralized system, and ensured clicking any percentage field selects all text for immediate replacement. Global percentage field behavior now works uniformly across the entire platform.- July 24, 2025: **STANDARDIZED CALCULATOR HEADERS SYSTEM-WIDE** - Implemented standardized CalculatorHeader component pattern across ALL calculator modules. Updated Assurance, Defined Benefit Funds, Voluntary Investments, Assets and Liabilities, Income Needs, Income Provisions, Residue, Additional Estate Duty Items, and Lump Sum Bequests pages to use consistent header design. Each header includes: module title, item count with appropriate labels (policies, funds, investments, etc.), "Add [Item]" button with Primary Blue styling (#016991), Table/Hybrid view switcher, and unified layout/spacing. Retirement Funds already had standardized header. Removed search functionality from headers for clean, focused interface. All calculator modules now follow identical header pattern for professional consistency throughout the application.
-- July 25, 2025: **INCOME NEEDS MODULE COMPLETION** - Successfully completed Income Needs module with exact same pattern as Assurance and Retirement Funds tables. Implemented 3-section structure: Actions (Duplicate/Delete), Overview (Description, Entity), and Income Need Details (Amount, Start Date, Term Years, Increase %, CPI checkbox, Frequency dropdown, Capitalised Amount). Fixed frequency dropdown display issue by adding specific CSS rule for select.table-input elements, overriding problematic height (1.25rem), padding (1.2rem), and color properties that were hiding dropdown text. Applied consistent field formatting, validation, and currency/percentage handling throughout. Module features multiple income needs support with add/delete functionality and comprehensive totals following exact technical and visual patterns as other working calculator modules.
-- July 25, 2025: **INCOME PROVISIONS MODULE COMPLETION** - Successfully completed Income Provisions module by extending Income Needs structure with additional tax planning fields. Implemented same 3-section pattern with extended Income Provision Details section including Tax % and Tax Rate columns after Amount and before Capitalised Amount. Fixed routing by adding /income-provisions route to App.tsx, resolved database schema issues by manually adding tax_rate column, and corrected capitalised amount calculation to show gross present value before taxes (removing tax effects from calculation). Module features real present value calculations using 6% CPI-linked or 8% standard discount rates with proper growing annuity formulas. Tax fields remain available for separate tax planning considerations while capitalised amount displays the gross capital requirement.
-- July 25, 2025: **GLOBAL CALCULATED FIELD STYLING SYSTEM** - Created comprehensive global CSS class (.calculated-field) for all calculated/readonly fields throughout the application. Provides transparent background, no borders, non-selectable text, same font color as entered values, and proper dimensions matching table-input fields. Applied to Income Needs (Capitalised Amount) and Lump Sum Bequests (Value at Death) modules with simple className="calculated-field" implementation. System prevents any background colors, borders, or interactive states while maintaining consistent appearance. All calculated fields now use single global class instead of scattered local styling overrides.
-- July 25, 2025: **GLOBAL DROPDOWN STYLING SYSTEM** - Created comprehensive global CSS solution for ALL dropdown styling issues across the entire platform. Added universal selectors (select.table-input, .table-dropdown, select[class*="table"]) with definitive styling: height 2.3rem, padding 0 10px, proper color matching, background consistency, and hover/focus states. This prevents any future dropdown styling issues and ensures consistent appearance across all calculator modules without individual component customization. NEVER modify these dropdown styles again - they are the final solution.
-- July 25, 2025: **CRITICAL DELETION FUNCTIONALITY FIX - COMPREHENSIVE SOLUTION** - Successfully resolved persistent deletion issues in retirement funds table that had broken 5+ times. Root cause was combination of React re-rendering problems and optimistic update race conditions. Complete solution includes: (1) Removed optimistic updates causing array synchronization race conditions, replaced with clean onSuccess + invalidateQueries pattern, (2) Fixed React key props to include ALL array lengths (owners, unapproved beneficiaries, fund value beneficiaries) forcing proper re-rendering when arrays change, (3) Standardized all deletion functions to use splice() method instead of filter() for consistent array handling, (4) Added event protection (preventDefault, stopPropagation, type="button") to prevent double-clicks and event bubbling triggering add functions during deletion, (5) Added debugging console.log to track inappropriate function calls. This definitive solution ensures clean deletion without "Enter details..." placeholder rows, checkbox artifacts, or wrong items being deleted. Backend deletion confirmed working correctly throughout - issue was purely frontend array synchronization and React rendering.
-- July 24, 2025: **FULL-WIDTH PAGE-LEVEL HORIZONTAL SCROLLING IMPLEMENTATION** - Completed comprehensive layout transformation to implement full-width application design with page-level horizontal scrolling. Removed all max-w-7xl mx-auto container constraints from all 10+ calculator pages (death-with-estate-liquidity, assurance, retirement-funds, assets-and-liabilities, income-needs, income-provisions, defined-benefit-funds, voluntary-investments, lump-sum-bequests, residue, additional-estate-duty-items). Systematically removed overflow-x-auto div wrappers from all table components across the entire application, including main calculator tables, flows tables, and additional details tables. Updated index.css to handle horizontal scrolling at page level with min-width constraints on #root element. Application now uses unified page-level horizontal scrolling approach instead of individual component-level scrolling, providing seamless full-width table experience across all calculator modules.
-- July 24, 2025: **OPTIMIZED VERTICAL LAYOUT BEHAVIOR** - Eliminated unnecessary vertical space reservation by removing forced minimum height constraints (min-height: 100vh) from html, body, and #root elements. Pages now only occupy the vertical space required by their actual content, eliminating unwanted vertical scrolling on shorter pages like Income Needs and Income Provisions. Maintained horizontal scrollbar functionality at browser window bottom while ensuring natural, content-based vertical layout behavior across all calculator modules.
-- July 24, 2025: **COMPLETE LAYOUT OPTIMIZATION SUCCESS** - Successfully resolved all vertical space reservation issues by removing min-h-screen classes from ALL calculator pages (Income Needs, Income Provisions, Assets and Liabilities, Voluntary Investments, Defined Benefit Funds, Assurance, New Retirement Funds, Additional Estate Duty Items, Residue, Lump Sum Bequests). Application now uses natural content-based vertical sizing without excessive padding or forced viewport heights. Horizontal scrolling works perfectly at browser window level, appearing immediately when table content exceeds viewport width. Achieved optimal layout behavior with pages only occupying space needed for actual content.
-- July 24, 2025: **HEADER LAYOUT STANDARDIZATION COMPLETION** - Applied max-width constraints (max-w-6xl) to header/summary sections across ALL calculator modules with left-aligned positioning. Removed inconsistent background elements including extra bg-[#eff2f5] layer from Additional Estate Duty Items page. Updated tab navigation component to use consistent left-aligned max-width container. All calculator pages now feature uniform header layout: left-aligned, maximum width constrained, consistent styling with main gray background (bg-neutral-50) and white header cards (bg-white). Achieved complete design consistency across the entire application.
-- July 24, 2025: **COMPREHENSIVE BACKGROUND ELEMENT CLEANUP** - Systematically removed ALL hardcoded background colors from calculator table components including bg-white, bg-primary/10, bg-neutral-100, and hover:bg-neutral-50 classes across Income Needs, Income Provisions, Assets and Liabilities, and all other calculator tables. Tables now inherit proper background styling from parent containers instead of forcing individual background colors. Eliminated duplicate background elements that were causing visual inconsistencies and layering issues throughout the application.
-- July 24, 2025: **COMPLETE BACKGROUND STYLING ELIMINATION** - Removed the root cause of grey background overlay issues by eliminating background-color: #EFF2F5 from html/body CSS rules and iframe styling. Removed bg-neutral-50 classes from all page components and summary card background styling. Application now uses clean white background throughout without any grey overlays or background element conflicts.
-- July 24, 2025: **CONSISTENT LIGHT GREY BACKGROUND IMPLEMENTATION** - Added consistent light grey background (#f8f9fa) to html/body elements and main page container (death-with-estate-liquidity.tsx) with bg-gray-50 min-h-screen classes. Provides uniform light grey background across all calculator modules while maintaining clean content presentation without conflicting overlays.
-- July 24, 2025: **WHITE CONTAINER LAYERED DESIGN** - Added white backgrounds back to table containers and header elements to create professional layered design. Tables now have bg-white rounded-lg shadow-sm styling, CalculatorHeader has white background with border and shadow, and summary cards have white backgrounds with borders. Creates clean content areas that stand out against the light grey page background.
-- July 24, 2025: **CENTRALIZED TABLE STYLING SYSTEM** - Created centralized table CSS class in index.css that controls all table styling including white background, rounded corners, shadows, and borders. Removed scattered bg-white className overrides from individual table components. All tables now inherit consistent styling from the root table CSS rule, eliminating the need for component-level background overrides and ensuring uniform appearance across the application.
-- July 24, 2025: **LIGHT BLUE SUMMARY CARDS** - Updated all summary cards across calculator modules to use light blue background (bg-blue-50) with blue borders (border-blue-200) instead of white backgrounds. This creates better visual distinction between summary cards and main content areas while maintaining the layered design approach with light grey page background.
-- July 24, 2025: **CENTRALIZED SUMMARY CARD STYLING** - Created centralized .summary-card CSS class in index.css that controls all summary card styling including light blue background, rounded corners, padding, borders, and shadows. Replaced scattered className attributes with single summary-card class across all calculator modules. All summary cards now inherit consistent styling from the root CSS rule, eliminating component-level style overrides.
-- July 24, 2025: **CUSTOM BLUE COLOR IMPLEMENTATION** - Updated summary card background color to custom blue shade (#EDF4F9) with matching border color (#D1E7F0) as requested. Applied consistently across all calculator modules through centralized .summary-card CSS class.
-- July 24, 2025: **HEADER MAX-WIDTH CONSTRAINT** - Applied max-width of 1024px to calculator header sections while maintaining full-width tables for horizontal scrolling. Updated CalculatorHeader component to constrain top elements without affecting table display width.
-- July 24, 2025: **TEXT DEFAULT VALUE UPDATE** - Changed default text placeholder from "Enter here ..." to "Enter details ..." across the entire application. Updated formatTextValue function, isDefaultValue function, and handleDefaultValueFocus function in formatting.ts to recognize the new default text pattern consistently throughout all calculator modules.
-- July 25, 2025: **RETIREMENT FUNDS TABLE HEADERS RESTORATION** - Fixed missing 2-level table header structure in retirement funds table by implementing proper grouped headers with colSpan and rowSpan attributes. First header row shows section groupings (Overview, Monthly Death Benefit, Fund Value, Fund Value Beneficiaries, Unapproved Life Cover), second header row shows individual column names. Removed duplicate header content that was causing build errors.
-- July 25, 2025: **RETIREMENT FUNDS TABLE HEADER BORDERS** - Added missing bottom borders (border-b border-neutral-200) to all individual column headers in the second header row to properly separate header content from data rows, creating clear visual hierarchy in the 2-level header structure.
-- July 25, 2025: **GLOBAL TOTALS STYLING STANDARDIZATION** - Successfully applied consistent totals row styling across ALL calculator modules including Assurance following Income Needs/Provisions pattern. Converted table-total-row styling to standardized tfoot format using: bg-neutral-50 background, border-t border-neutral-300 separator, semi-bold values (font-weight: 600), normal weight descriptors, consistent font sizes (0.875rem), #374151 color, right-aligned text, proper padding (0.6rem 0.8rem), and colSpan for descriptor columns. Applied to Assurance, Voluntary Investments, Defined Benefit Funds, Assets and Liabilities, Lump Sum Bequests, Residue, and Additional Details tables. Eliminated double borders using single thin border approach. All totals now use identical visual and technical patterns ensuring complete consistency across the entire application.
-- July 24, 2025: **ACTION BUTTON STYLING OPTIMIZATION** - Updated AddButton component to use white background with blue border and blue icon styling (matching DuplicateButton pattern) instead of solid blue background. This provides better visibility and consistency across all table action buttons. Applied to all + buttons in assurance table owner/beneficiary sections and throughout the application for improved user interface clarity.
-- July 24, 2025: **COMPREHENSIVE PAGE TEMPLATE STANDARDIZATION** - Applied improved CalculatorHeader template to ALL calculator pages with enhanced visual hierarchy and consistent spacing. Updated all pages to use py-6 margins, text-2xl header titles, improved button sizing (h-9 px-4), rounded-full count badges, and cleaner comment styling. Fixed TypeScript errors in page templates by correcting insert schema property names across all calculator modules. Removed all remaining search functionality references from table components including LumpSumSummary and LumpSumTable. Achieved complete design consistency with the Assurance page as the clean template standard across all calculator modules in the application.
-- July 25, 2025: **VOLUNTARY INVESTMENTS MODULE COMPLETION** - Successfully completed comprehensive Voluntary Investments module with exact same pattern as Assurance and Retirement Funds tables. Implemented 5-section structure: Actions (Duplicate/Delete), Overview (Description, Owner, Ownership %), Investment Details (Base cost, Market value, Liquidation %), Bequeath To (Spouse, Others), and Exclusions (multiple checkboxes). Features multiple owners support with add/delete functionality, proper field alignment, and comprehensive totals. Applied global CSS action button alignment (0.25rem margin-top) ensuring consistent positioning across ALL calculator modules without inline styling.
-- July 24, 2025: **UNIFIED HEADER-SUMMARY PATTERN COMPLETION** - Successfully implemented unified header-summary design pattern across ALL calculator modules where header controls and summary cards appear as one cohesive element within the same white container. Enhanced CalculatorHeader component to accept children prop for summary integration. Created standardized summary components for Income Needs, Income Provisions, Defined Benefit Funds, Voluntary Investments, Assets and Liabilities, Residue, and Additional Estate Duty Items. Applied consistent pb-6 spacing between header section and summary cards. Fixed all TypeScript errors and import issues across summary components. All calculator pages now follow identical unified design pattern providing consistent visual hierarchy and professional appearance throughout the application.
-- July 24, 2025: **ACTION BUTTON VERTICAL ALIGNMENT OPTIMIZATION** - Fixed action button vertical alignment across all calculator modules using top-aligned approach with margin offset instead of vertical centering. Created .table-actions-cell CSS class with vertical-align: top and 10px margin-top to properly align action buttons with input field centers in extended rows (multiple owners/beneficiaries). Updated all calculator tables including Assurance, Retirement Funds, Defined Benefit Funds, Assets and Liabilities, Income Needs, Income Provisions, Voluntary Investments, Residue, Additional Estate Duty Items, and Lump Sum Bequests. This approach works consistently for both single and multi-row entries, providing proper visual alignment regardless of row extension patterns.
-- July 28, 2025: **ASSETS & LIABILITIES TABLE STANDARDIZATION** - Completely standardized Assets and Liabilities tables to have identical patterns, structure, styling, and functionality. Both tables now use: same header structure (Actions, Overview, Asset/Liability Details, Ownership Split, Distribution), identical column headers ("John Doe", "Janette Doe (Spouse)", "Doe Junior", "Doe family trust"), consistent field types and alignment (getCellClass, getFieldClass), uniform action button patterns (duplicate/delete with gap-2 spacing), identical section grouping with bg-neutral-50 headers, matching totals footer structure with font-semibold values, same input handling patterns (handleInputBlur, createEnhancedBlurHandler), consistent SafeFragment usage and proper React keys. Changes to one table structure/styling now automatically apply to the other through shared utility functions and consistent component patterns.
-- July 28, 2025: **ASSETS & LIABILITIES PAGE STANDARDIZATION** - Updated Assets and Liabilities pages to use consistent summary card pattern and standardized table header styling matching rest of application. Both pages now use: unified header-summary design pattern with CalculatorHeader component accepting children prop for summary integration, consistent page structure with max-w-6xl header containers and px-6 py-6 spacing, standardized Add button functionality integrated into page-level mutations, proper view mode switching (table/hybrid) with useCallback handlers, matching table header styling with px-3 py-3 padding, text-xs font-medium text-neutral-600 uppercase tracking-wider classes, section-start/section-end border styling, border-b border-border structure for grouped headers. Assets and Liabilities now follow identical design patterns as all other calculator modules in the application.
-- July 28, 2025: **[+] ICON HEADER STANDARDIZATION COMPLETE** - Successfully implemented [+] icon in header row for ALL 13 tables replacing "Actions" text. Fixed Assurance and Retirement Funds tables to include AddButton components in headers. Confirmed all other tables already had correct implementation. Removed "Death with Estate Liquidity (all tabs view)" from navigation dropdown and routing since it has been replaced by individual table navigation system. All calculator tables now follow identical header pattern with [+] button for adding new records directly from table headers.
-- July 28, 2025: **ASSETS & LIABILITIES CARD PATTERN STANDARDIZATION** - Fixed Assets and Liabilities summary components to use consistent card pattern matching all other calculators. Changed Assets from horizontal bar layout to individual summary cards, updated Liabilities spacing and padding. Both now use px-5 pb-5 padding, gap-6 grid spacing, and .summary-card styling. Fixed AddButton import error in LiabilitiesTable component. All 12 calculator modules now have identical card-based summary layouts with consistent visual hierarchy and professional appearance.
-- July 28, 2025: **HEADER LAYOUT RIGHT-ALIGNMENT FIX** - Fixed CalculatorHeader component layout to properly align Table/Hybrid switcher to the right side of header cards. Simplified flex layout using justify-between with single row layout instead of complex multi-directional flex. Fixed AddButton import errors in LumpSumTable and ResidueTable components. All calculator headers now have properly aligned switchers on the right side with left-aligned title/controls section.
-- July 28, 2025: **FULL-WIDTH HEADER CONTAINER COMPLETION** - Resolved width constraint issue by removing max-w-[1024px] from CalculatorHeader component, enabling full-width header containers. Table/Hybrid switcher now properly aligns to far right edge across all 12 calculator modules. Header layout spans complete container width with clean left/right section separation and professional appearance.
-- July 28, 2025: **TABLE ROW HEIGHT STANDARDIZATION COMPLETION** - Fixed row height inconsistency in Assets and Liabilities tables by replacing getCellClass() function with consistent padding classes. Root cause was Assets/Liabilities tables using getCellClass() which only provided text alignment, while working tables (Assurance, Retirement Funds) used specific padding classes (p-2). Applied uniform p-2 padding with appropriate text alignment (text-left, text-right, text-center) across all table cells. Both Assets and Liabilities now use identical class patterns as working tables, ensuring consistent compact row heights across all 12+ calculator modules. Enhanced user experience with uniform table appearance throughout the application.
-- July 28, 2025: **GLOBAL ULTRA-CLEAN BORDER SYSTEM COMPLETION** - Implemented comprehensive global CSS solution for table borders using section-only approach. Removed ALL cell borders and horizontal borders throughout the application. Now ONLY vertical borders separate major sections (Overview, Asset Details, Ownership Split, Distribution) using .section-start and .section-end classes applied to header, body, and footer cells. Extended section borders through entire table height including all data rows and totals footer. Applied to both Assets and Liabilities tables with removal of all scattered border classes (border-b, border-neutral-200). Global CSS ensures ultra-clean table appearance with minimal visual clutter while maintaining clear section separation extending from top header to bottom footer. This approach applies automatically to all 12+ calculator modules for complete consistency.
-
-- July 28, 2025: **COMPREHENSIVE SECTION BORDER INCONSISTENCY RESOLUTION** - Successfully resolved global section border inconsistencies across ALL calculator modules through systematic cleanup approach. Created automated scripts to remove conflicting border classes (border-b, border-neutral-200, border-border) from 10+ table components including Income Provisions, Defined Benefit Funds, Voluntary Investments, Assets, Liabilities, and all other calculator tables. Applied consistent section-start and section-end patterns to header, body, and footer elements ensuring uniform vertical section separators throughout the entire application. Fixed header structure inconsistencies by removing conflicting border classes from second header rows and standardizing section grouping patterns. Global CSS now handles ALL table border styling automatically through centralized .section-start and .section-end classes, eliminating the need for individual component border customization. Achieved professional ultra-clean table appearance with section borders extending consistently from header through footer across all 12+ calculator modules.
-
-- July 29, 2025: **SECTION BORDER DISPLAY CRITICAL FIX COMPLETION** - Successfully resolved final section border visibility issues preventing grey vertical separators from displaying. Root cause was conflicting CSS border removal rules that were overriding section-start borders with `border: none !important` declarations. Fixed by updating all border removal selectors to exclude .section-start and .section-end elements: modified general table cell border removal, thead th border removal, and tfoot td border removal rules. Fixed footer colSpan mismatches in Defined Benefit Funds table by splitting "Totals" cell to proper Actions column + Totals structure. Added missing section-start classes to Actions columns across Assets, Liabilities, and Retirement Funds tables. Section borders now display consistently with 2px solid grey (#9ca3af) vertical lines properly separating sections from header through body to footer across all calculator modules. Visual section separation working perfectly with clean ultra-professional table appearance.
-
-- July 29, 2025: **DEFINED BENEFIT FUNDS SECTION BORDER ISSUE - UNRESOLVED** - Attempted comprehensive fixes for footer section borders in Defined Benefit Funds table including: structural alignment with working Assets table pattern, CSS specificity overrides with maximum importance, temporary border removal rule disabling, complete table structure replacement with correct 10-column layout, footer structure updates with proper colSpan and section-start placement. Despite matching exact patterns from working tables and applying multiple CSS override approaches, footer section borders remain non-functional. Issue marked as unresolved - table structure and styling are correct but specific footer border display requires further investigation. Header and body section borders working correctly across all other calculator modules.
-
-- July 29, 2025: **SECTION BORDER IMPLEMENTATION CRITICAL FIXES COMPLETION** - Successfully resolved final section border visibility issues through comprehensive debugging and fixes. Fixed null array access errors in retirement funds table with proper optional chaining (?.) and null checks for unapprovedBeneficiaries and fundValueBeneficiaries arrays. Enhanced CSS specificity for section borders using !important declarations and targeted selectors to override conflicting border removal rules. Fixed missing section-start classes in voluntary investments table header (Description column) and body cells (Description rowSpan cells). Corrected footer alignment by removing incorrect section-start class from "Totals" cell which was causing misaligned borders in totals row. Section borders now display consistently with 2px solid grey (#9ca3af) vertical lines properly separating Actions, Overview, Investment Details, Bequeath To, and Exclusions sections from header through body to footer. All LSP diagnostics resolved and visual section separation working perfectly across all calculator modules.
-
-- July 29, 2025: **LUMP SUM BEQUESTS FOOTER ALIGNMENT CRITICAL FIX** - Resolved critical footer totals alignment issue where footer values did not align with actual text content inside input fields. Root cause was .table-input CSS class internal padding (0.5rem 0.75rem) that shifts text positioning. Applied exact styling match to footer cells using inline styles with matching padding, height (2.3rem), and line-height (1.3rem) to perfectly align footer totals with input field content. Fixed TypeScript errors by correcting LumpSumBequests references to LumpSumBequest. Footer totals now display exactly aligned with currency values in data rows above for professional table appearance.
-
-- July 29, 2025: **SECTION BORDER STYLING OPTIMIZATION** - Simplified section border CSS from multiple complex selectors to single unified .section-start rule. Changed border thickness from 2px to 1px and color from #9ca3af (medium grey) to #d1d5db (lighter grey) for more subtle visual separation. Consolidated all section border rules into one clean CSS class eliminating redundant selectors and improving maintainability. Section borders now display consistently with lighter, thinner lines across all calculator modules.
-
-- July 29, 2025: **COMPLETE TABLE BORDER SYSTEM IMPLEMENTATION** - Successfully implemented comprehensive table border system across all calculator modules. Fixed CSS conflicts preventing row borders from displaying on certain field types (description, amount fields). Applied ultra-high CSS specificity targeting tbody rows and header elements. Created professional grid appearance with 1px solid #e5e7eb horizontal lines between data rows, matching header bottom border, and vertical section separators using #d1d5db. Added header bottom border using multiple CSS approaches (thead, tr:last-child, th targeting) with maximum specificity including rowSpan header cell targeting for Actions columns. Fixed TypeScript errors in assurance component by correcting outdated field references (owner→owners, increasePercentage→benefitSplit). Both horizontal row borders and header separation borders now display consistently across all 12+ calculator modules providing complete clean data grid layout with proper visual hierarchy and uniform border appearance.
-
-- July 29, 2025: **STABLE CHECKPOINT - TABLE BORDER SYSTEM COMPLETE** - Created stable checkpoint with fully functional table border system. All CSS conflicts resolved, TypeScript errors fixed, and professional grid appearance achieved across all calculator modules. System ready for rollback if needed. No additional field modifications required per user preference.
-
-- July 29, 2025: **ASSETS & LIABILITIES ACTION BUTTON CONSISTENCY FIX** - Fixed action button inconsistency in Assets and Liabilities tables where header "Add" buttons and table "+" buttons were calling different functions. Both buttons now consistently call onShowCategoryDialog() which opens the category selection dialog. Updated TypeScript interfaces with optional callback parameters and proper undefined handling with fallback functions. Corrected schema field name (estateDuty → estate) and removed invalid asset.category reference. All TypeScript errors resolved and action buttons now work consistently across both tables.
-
-- July 29, 2025: **MAJOR CHECKPOINT - COMPLETE TABLE SYSTEM STABILIZATION** - Created comprehensive major checkpoint marking the completion of the table border system and action button consistency improvements. Application now features: (1) Complete table border system with professional grid appearance using consistent light grey borders (#e5e7eb), (2) Unified section borders with subtle vertical separators (#d1d5db), (3) Consistent action button behavior across all calculator modules, (4) Assets and Liabilities tables with synchronized header/table add buttons opening category dialogs, (5) Zero TypeScript errors across entire codebase, (6) Professional visual hierarchy with proper row/header borders, (7) Stable database connectivity with proper field formatting, (8) Comprehensive styling system with centralized CSS classes. System is production-ready with full functionality across all 12+ calculator modules. This checkpoint represents a stable foundation for future enhancements.
-
-- July 29, 2025: **DATABASE STORAGE IMPLEMENTATION COMPLETE** - Successfully migrated from memory storage to full PostgreSQL database storage for production readiness. Implemented automatic storage detection based on DATABASE_URL environment variable. Database migration completed successfully with all 11 calculator module tables created (additional_estate_duty_items, assets, assurance, defined_benefit_funds, income_needs, income_provisions, liabilities, lump_sum_bequests, residue, retirement_funds, voluntary_investments). Fixed TypeScript export syntax issues and confirmed database connection establishment. Application now provides permanent data persistence with all CRUD operations functioning through PostgreSQL backend using Drizzle ORM. Zero data loss between sessions, marking complete transition to production-ready database storage.
-
-- July 28, 2025: **SECTION BORDER IMPLEMENTATION COMPLETION** - Successfully implemented visible section borders with CSS specificity optimization. Added .section-start CSS rules with 2px solid grey borders (#9ca3af) for clear visual section separation. Removed all section-end classes per user preference, keeping only section-start borders for minimal clean design. Fixed CSS specificity conflicts where border removal rules were overriding section border rules by excluding section-start elements from general border removal and increasing section border specificity with targeted selectors (thead, tbody, tfoot). Applied consistent section borders to headers, body, and footer cells throughout all tables. Confirmed working implementation in Voluntary Investments table with proper grey vertical lines separating Overview, Investment Details, Bequeath To, and Exclusions sections from top to bottom.
-
-- July 29, 2025: **LUMP SUM BEQUESTS TABLE SECTION BORDERS COMPLETION** - Successfully implemented section borders for Lump Sum Bequests table with complete visual organization. Added section-start classes to all major sections: Actions, Overview (Description/Entity), Need Details (Start/Amount/Increase %/CPI), and Calculation (Value at Death). Applied borders to both header rows for proper column grouping, body cells for consistent vertical lines, and corrected footer structure with proper colSpan alignment (colSpan={3} for first 3 columns) ensuring section borders extend from header through body to footer without misalignment. Grey vertical section borders now display consistently throughout entire table height providing professional visual organization.
-
-- July 28, 2025: **VOLUNTARY INVESTMENTS SECTION BORDER OPTIMIZATION** - Enhanced section border system for Voluntary Investments table with 2px thick borders (#9ca3af color) and improved CSS specificity to override conflicts. Fixed double border issue by removing section-start from Description column. Updated footer section borders to match header/body styling for consistency. Applied enhanced border protection rules to preserve section borders while removing other table borders. System now displays clear visual separation between Overview, Investment Details, Bequeath To, and Exclusions sections throughout entire table structure.
-
-- July 28, 2025: **ASSETS & LIABILITIES CATEGORY COLUMN REMOVAL** - Removed category columns from both Assets and Liabilities tables as categories are implied by section groupings. Deleted all existing data from both tables, updated database schemas to remove category field, updated table components to remove category column from headers and cells, and adjusted colSpan values for proper section headers. Modified table structures from 11 columns to 10 columns with proper section borders. Updated totals footers to display comprehensive totals for all currency fields (amount, estate, others, client) with proper section borders. Category information now displayed through blue section header rows only, eliminating redundant category input columns while maintaining visual organization.
-
-- July 28, 2025: **COMPLETE ASSETS-AND-LIABILITIES REMOVAL** - Completely removed all "assets-and-liabilities" references as requested by user. Assets and Liabilities are now completely separate calculators. Removed assets-and-liabilities component folder, page file, API routes from server, schema definitions, imports from death-with-estate-liquidity page, and navigation references. Updated table navigation counts (11 total tables: 9 main + 2 separate). Assets and Liabilities now exist only as independent /assets and /liabilities routes with separate tables, schemas, and functionality. No combined view exists.
-
-- July 28, 2025: **DATABASE STORAGE & PLACEHOLDER TEXT IMPLEMENTATION** - Successfully migrated from memory storage to database storage ensuring permanent data persistence. Fixed critical issue where "Enter details ..." was being stored as actual database values instead of serving as placeholder text. Updated database schema to store empty strings ("") for text fields while frontend displays "Enter details ..." as placeholder hints. Modified storage layer to apply proper default values (empty strings for text, "R 0" for currency, "0%" for percentages, ["Donald Edwards"] for owners). Added placeholder attributes to all text input fields across components. New entries now store clean empty values in database while showing helpful placeholder text in UI. Data no longer lost between sessions and placeholder system works correctly.
-
-- July 28, 2025: **COMPLETE PLACEHOLDER TEXT ELIMINATION** - Systematically eliminated ALL instances of "Enter details ..." and "Enter here ..." being stored as default values throughout the entire application. Fixed database schema defaults across all 8+ calculator modules (Assurance, Retirement Funds, Voluntary Investments, Defined Benefit Funds, Income Needs, Income Provisions, Residue, Additional Estate Duty Items). Updated frontend components to send empty objects to rely on database schema defaults. Applied schema changes with npm run db:push. All modules now consistently store empty strings ("") in database while displaying helpful placeholder text in UI. Achieved perfect separation between database values (clean) and UI hints (helpful). Zero placeholder text contamination in database storage across entire platform.
-
-- July 28, 2025: **CRITICAL STORAGE IMPLEMENTATION DEBUGGING & FIX** - Successfully resolved multiple TypeScript type mismatches and storage implementation issues that were causing application crashes. Completely rebuilt storage interface with proper type definitions, fixed schema imports throughout the storage layer, corrected PostgreSQL connection handling, removed problematic sample data causing syntax errors, and implemented comprehensive default value handling for all entity creation methods (RetirementFund, LumpSumBequest, Assurance, DefinedBenefitFund, VoluntaryInvestment, IncomeNeeds, IncomeProvisions, Residue, AdditionalEstateDutyItems, Liabilities, Assets). Fixed critical runtime error in ResidueSummary component where undefined fields were causing "Cannot read properties of undefined" errors. Application now runs successfully with zero TypeScript errors and proper API functionality across all 12+ calculator modules.
-
-- July 28, 2025: **DEFINED BENEFIT FUNDS BEHAVIOR FIXES** - Fixed critical JavaScript error "Cannot read properties of undefined" in defined benefit funds table by replacing problematic createEnhancedBlurHandler calls with direct event handling. Fixed description field to behave like other text fields with proper grey styling for default values and "Enter details ..." placeholder behavior. Ownership percentage fields now properly use ultra-compact width (40px-50px) via getFieldClass('percentage'). All defined benefit funds field behavior now consistent with other calculator modules. Zero runtime errors and proper field formatting across all input types.
-
-- July 28, 2025: **COMPREHENSIVE NULL/EMPTY VALUE STANDARDIZATION** - Fixed retirement funds multiple owners/beneficiaries null value handling using unified array management system. Updated schema to use empty strings [""] instead of [null] for beneficiary arrays. Enhanced formatTextValue() to show "Donald Edwards" for first owner field and "Enter details ..." for all other empty fields. Created centralized array management system (array-management.ts) with consistent handlers for owners and beneficiaries. Fixed issue where additional owners and beneficiaries were showing unwanted placeholder text. All additional owners and beneficiaries now properly start with null/empty values and display "Enter details ..." placeholder text. Applied successful Assurance table pattern to retirement funds for consistent behavior across all calculator modules.
-
-- July 28, 2025: **COMPREHENSIVE ROWSPAN VERTICAL ALIGNMENT SYSTEM COMPLETION** - Successfully completed system-wide vertical alignment standardization for ALL calculator tables with rowSpan cells. Fixed root cause by updating .table-actions-cell CSS class from "vertical-align: middle" to "vertical-align: top" ensuring all action buttons align to top of cells. Applied align-top class to all remaining data cell rowSpan instances across Defined Benefit Funds (8 cells), Voluntary Investments (12 cells), and Retirement Funds Flows table (3 cells). Eliminated all vertical centering issues in multi-row spanning cells throughout the application. System now has 23 properly aligned rowSpan cells with consistent top alignment across all calculator modules providing professional table appearance.
-
-- July 28, 2025: **VOLUNTARY INVESTMENTS OWNER MANAGEMENT CRITICAL FIX** - Successfully resolved persistent owner add/delete functionality issues that had been recurring for over a week. Root cause was applying incorrect patterns from broken code instead of proven working patterns. Applied correct pattern from working-reference.tsx that manages both owners and ownershipPercentages arrays simultaneously in single mutation calls. Fixed array synchronization issues, eliminated "No values to set" errors, and prevented data deletion when removing specific owners. Owner deletion now correctly removes only the targeted owner while preserving all other investment data. Confirmed working through successful deletion test where "1" owner was removed and remaining owners properly repositioned. Pattern now matches proven working code with proper array protection and error handling.
-
-- July 28, 2025: **ASSURANCE TABLE OWNER MANAGEMENT PATTERN SUCCESS** - Successfully applied the same proven working pattern from Voluntary Investments to fix Assurance table React Query cache synchronization issues. Updated all array management functions (handleAddOwner, handleRemoveOwner, handleOwnerChange, handleBeneficiaryChange) to use unified handleUpdatePolicy approach instead of direct updateMutation calls. Eliminated problematic setIsUpdating and optimistic update patterns that were causing unexpected value restoration and wrong policy targeting. User confirmed functionality working perfectly with owner additions going to correct specific policies. Created assurance-working-pattern.md reference document to preserve this proven solution for future use across other calculator modules with similar array management needs.
-
-- July 29, 2025: **MULTI-LEVEL NAVIGATION ARCHITECTURE** - Implemented comprehensive navigation structure with 4 hierarchical levels: Financial Plan > Needs (12 categories) > Steps (Setup/Build/Project/Implement) > Calculators/Sections. Created placeholder pages for all empty content areas with simple "Content to come" message. Established navigation configuration in shared/navigation-config.ts mapping entire application structure. Added routes for all 11 placeholder needs (Death, Permanent disability, etc.) and empty steps (Project, Implement) within Death with estate liquidity need. Organized existing calculators under proper hierarchy: Setup step contains Parameters section with Residue and Additional estate duty items; Build step contains 9 calculators organized in 6 sections (Risk & Assurance, Retirement Funds group, Voluntary investments, Assets & Liabilities group, Income and capital needs group, Income provisions). Ready for implementation of visual navigation components.
-
-- July 29, 2025: **NAVIGATION UI IMPLEMENTATION** - Successfully implemented visual navigation system matching user's design requirements. Created FinancialPlanHeader component showing plan name and current need with orange button styling. Built StepNavigation component with numbered steps (1-4), active state highlighting, and completion checkmarks. Developed SectionTabs component for calculator navigation with primary/secondary tab variants. Integrated NavigationLayout wrapper applying consistent navigation to all calculator pages. Removed old navigation system including table navigation home page, top navigation bar, and dropdown components. Set default route to redirect to /assurance page. Navigation now shows proper hierarchy: Financial Plan header > Step buttons > Section tabs > Calculator content. All calculator pages wrapped with new navigation layout providing consistent user experience.
-
-- July 29, 2025: **NAVIGATION ENHANCEMENTS** - Added secondary navigation tabs for sections with sub-levels: Retirement Funds (showing "Retirement funds" and "Defined benefit funds (GEPF)"), Assets & Liabilities (showing "Lifestyle assets" and "Liabilities"), and Income and capital needs (showing "Income needs" and "Lump sum needs and cash bequests"). Implemented needs dropdown in orange header button allowing navigation between all 11 needs. Made navigation sticky with max-width constraints matching summary card width, ensuring navigation remains on screen while content scrolls. Fixed React.Fragment warnings by implementing SafeFragment wrapper. Aligned navigation elements to the left instead of center for better visual consistency.
-- July 29, 2025: **MAJOR CHECKPOINT - NAVIGATION SYSTEM COMPLETE** - Successfully implemented comprehensive 6-level navigation hierarchy (Financial Plan > Need > Step > Section > Sub-sections > Calculator) with exact design specifications. Key achievements: (1) Financial plan title and needs dropdown on same line in header, (2) Orange active step button (#E97627) with white inactive step backgrounds matching mockup, (3) NEED button sized to match Add Policy button (h-9, px-4, text-sm), (4) Complete navigation configuration with all 34 routes and placeholder pages, (5) Back button functionality on all placeholder pages, (6) Main page background color updated to #EFF2F5, (7) Sticky navigation header with proper left alignment, (8) Secondary tabs for sections with children. Navigation system fully functional and matches visual design mockup precisely. Ready for content implementation in placeholder pages.
-
-- July 30, 2025: **MAJOR CHECKPOINT - NAVIGATION CLEANUP & SCROLL OPTIMIZATION** - Successfully cleaned up and optimized the navigation system for production readiness. Key improvements: (1) **Scroll Behavior Enhancement**: Removed sticky navigation positioning to enable full-page scrolling including navigation elements, creating more natural user experience, (2) **Code Cleanup**: Eliminated all unused navigation test components and references including navigation-menu.tsx, table-navigation-dropdown imports, and test artifacts, (3) **SafeFragment Optimization**: Enhanced SafeFragment component to properly handle React.Fragment props and prevent console warnings from Replit metadata injection, (4) **Navigation Simplification**: Streamlined navigation architecture by removing complex testing options and design variations, maintaining only the working multi-level hierarchy, (5) **File System Cleanup**: Removed obsolete navigation design preview assets and test files. Navigation system now provides clean, maintainable codebase with natural scrolling behavior while preserving the complete 4-level hierarchy (Financial Plan > Needs > Steps > Calculators/Sections). Zero console errors and optimized user experience achieved.
-- July 30, 2025: **CONSOLIDATED NAVIGATION IMPLEMENTATION** - Completely redesigned navigation system based on user-provided mockups, merging all navigation elements into a single unified header bar. Created new ConsolidatedNavigation component that combines: (1) **Unified Header Design**: All navigation elements now in one white header bar with consistent padding and borders, (2) **Integrated Elements**: Back button, Financial Plan name with edit icon, Need dropdown (orange), step buttons (1-4), form ID display, and refresh icon all in single row, (3) **Dynamic Dropdown**: Single dropdown that shows needs when clicking need button, sections/subsections when clicking step buttons, (4) **Improved Visual Hierarchy**: Orange accent color (#E97627) for active elements, cleaner spacing, more horizontal efficiency, (5) **Removed Components**: Eliminated separate FinancialPlanHeader, StepNavigation, and secondary SectionTabs components, (6) **Enhanced User Experience**: Step buttons now open dropdown to show sections instead of direct navigation, providing better context awareness. Navigation system significantly simplified while maintaining full functionality.
-- July 30, 2025: **NAVIGATION DROPDOWN FLATTENING** - Removed nested structure from navigation dropdowns, now showing direct list of calculator pages without parent categories or indentation. Build step dropdown shows 9 calculator pages directly (Risk & Assurance, Retirement funds, etc.), Setup step shows 2 pages (Residue, Additional estate duty items). Eliminated all hierarchical indentation and parent section display for cleaner, simpler navigation.
-- July 30, 2025: **TABLE-INSIDE-SUMMARY-CARD PATTERN** - Implemented comprehensive layout restructuring across all 12 calculator pages. Tables now render inside CalculatorHeader component as children, with summary cards constrained to max-w-6xl for optimal reading width while tables can expand to full page width for horizontal scrolling. Applied pattern to all pages: Assurance, Income Needs, Retirement Funds, Defined Benefit Funds, Voluntary Investments, Assets, Liabilities, Income Provisions, Lump Sum Bequests, Residue, and Additional Estate Duty Items. Fixed dropdown positioning issues by creating separate dropdown instances for Need button and Step buttons, ensuring dropdowns appear directly under their trigger buttons.
-- July 30, 2025: **GLOBAL BUTTON STYLE SYSTEM** - Created comprehensive button styling system in index.css with four variants: Primary (blue #016991), Secondary (white with border), Destructive (red #ef4444), and Ghost (transparent). Implemented size variants (sm/md/lg) and icon button sizes. Updated all Add buttons and Table/Hybrid switchers to use consistent white background with gray text. Created GlobalButton component and ButtonGroup for easy implementation. All buttons now follow consistent design patterns with proper hover states, disabled states, and transitions. Documented in BUTTON_STYLE_GUIDE.md for future reference.
-- July 30, 2025: **BUTTON STYLES REFINEMENT** - Updated button styles to match Elite Wealth design system specifications: All buttons now have 6px border radius, standardized 40px height, Icon Button Blue uses light blue background (#E8F3F8) with dark blue icon (#016991), Icon Button White uses lighter border (#E0E0E0), proper hover/active/disabled states implemented for all button types.
-- July 30, 2025: **TABLE SHADOW REMOVAL** - Removed drop shadow from all table elements for cleaner, flatter appearance. Tables now display with simple 1px border (#e5e7eb) and white background without shadow effects.
-- July 30, 2025: **SECTION BORDER CSS FIX COMPLETION** - Fixed critical section border visibility issue across ALL table components. Root cause was CSS rule removing borders from all first-child cells, preventing second-row headers like "Description" from showing section borders. Updated CSS selector to be more specific: only removes border from Actions column (first row, first cell with rowSpan) while preserving section borders on all other cells. Applied globally to all 12+ calculator table components including Retirement Funds, Assets, Liabilities, Assurance, Voluntary Investments, Defined Benefit Funds, Income Needs, Income Provisions, Residue, Additional Estate Duty Items, and Lump Sum Bequests. Section borders now display correctly as 1px solid grey (#d1d5db) vertical lines between all major table sections.
-
-- July 30, 2025: **MAJOR CHECKPOINT - NAVIGATION & DESIGN SYSTEM COMPLETION** - Completed comprehensive navigation system optimization and design standardization. Key achievements: (1) **Orange Color Standardization**: Fixed orange color inconsistency throughout navigation system by updating from incorrect #E97627 to design system standard #F97415 (hsl(25, 95%, 53%)) across all navigation elements including step buttons, need dropdown, active states, and highlighting, (2) **Summary Card Design Update**: Updated all summary cards to use light blue background (#EDF4F9) matching switcher component design for unified visual cohesion, removed borders for cleaner appearance, (3) **Design System Compliance**: Ensured all UI elements follow centralized design tokens and color specifications, (4) **Visual Consistency**: Achieved uniform orange accent color across navigation hierarchy (Financial Plan > Need > Step > Calculator) and consistent blue backgrounds for summary cards and switchers, (5) **Production Ready Navigation**: Consolidated navigation system with proper dropdown functionality, step-based organization, and clean visual hierarchy. Navigation system now fully compliant with design system specifications and provides consistent user experience across all 12+ calculator modules.
-- July 30, 2025: **ASSURANCE TABLE STABILITY FIX** - Resolved interface jumping issues in assurance table by implementing comprehensive React optimization strategies: (1) **Debounced Updates**: Added 300ms debounced updates for text fields using custom useDebouncedUpdate hook, preventing race conditions during rapid typing, (2) **Stable React Keys**: Fixed React key props throughout the table structure to use stable policy IDs without array lengths, preventing unnecessary re-renders, (3) **Table Structure Refactoring**: Replaced flattened array approach with React.Fragment wrapping for each policy, improving React's ability to track DOM changes, (4) **RowSpan Implementation**: Applied rowSpan attributes to all single-instance cells (Actions, Description, Life Assured, Death Benefit, etc.) creating more stable table structure, (5) **Selective Updates**: Implemented smart update logic that uses immediate updates for array fields (owners, beneficiaries) and debounced updates for text/currency fields. These optimizations eliminate the jumping/flickering behavior when adding/removing owners or beneficiaries, providing smooth user experience.
-- July 30, 2025: **TABLE STABILITY PATTERN ROLLOUT** - Beginning systematic application of assurance table stability pattern to all calculator tables. Pattern includes: React.Fragment wrapping with stable keys, rowSpan for single-instance cells, debounced text updates (300ms), immediate array updates, and proper array alignment handling. Completed: Assurance table (reference implementation), Retirement Funds table (successfully applied with rowSpan to all single-instance cells). In Progress: Assets table (adding debounced updates). Remaining: Liabilities, Income Needs, Income Provisions, Defined Benefit Funds, Voluntary Investments, Lump Sum Bequests, Residue, Additional Estate Duty Items tables.
-- July 30, 2025: **RETIREMENT FUNDS BENEFICIARY BUTTON FIX** - Fixed critical issue where add beneficiary buttons were incorrectly triggering form submissions or appearing to add new funds. Added proper event.preventDefault() and event.stopPropagation() to all add/delete beneficiary button handlers in retirement funds table. Updated action-buttons component to include type="button" attribute on all buttons preventing default form submission behavior. This ensures clicking add beneficiary buttons only adds beneficiaries to the specific fund without unintended side effects.
-- July 30, 2025: **BUTTON STYLING REVERSION TO SIMPLE INLINE STYLES** - Reverted from complex global button system back to simple inline Tailwind styling for all action buttons. Removed all .btn-* CSS classes and global button system from index.css, updated ActionButtons component (AddButton, DeleteButton, DuplicateButton) to use straightforward inline classes with proper hover states and disabled styling. Button sizing and colors now use standard Tailwind classes (bg-white, border-gray-300, text-blue-600, etc.) providing cleaner, more maintainable styling without complex CSS overrides.
-- July 30, 2025: **ASSURANCE TABLE BLUR JUMPING FIX** - Resolved jumping/flickering issue in assurance table when blur events occur. Implemented smart update logic that only triggers database updates when actual values change, not just formatting. Added direct DOM manipulation for currency formatting to prevent unnecessary re-renders. Enhanced handleInputBlur with value comparison to avoid table jumping during field formatting operations.
-- July 30, 2025: **GLOBAL COMPACT TABLE HEADERS** - Added comprehensive global CSS styling for compact table headers across all calculator modules. Headers now render with smaller text (0.75rem), reduced height (2.5rem), uppercase styling, and consistent spacing. For double-row headers, added special CSS rules to reduce distance between header text rows with tighter padding (0.2rem) and compact second row height (2rem). All tables now have uniform, professional header appearance matching design specifications.
-
-- July 30, 2025: **TABLE STABILITY PATTERNS COMPLETION & DOCUMENTATION** - Successfully completed implementation of table stability patterns across Assurance, Retirement Funds, and Defined Benefits tables. All tables now follow unified stable patterns eliminating interface jumping, flickering, and array management issues. User confirmed all tables working as expected. Documented comprehensive table stability patterns for future reference (see TABLE STABILITY REFERENCE PATTERNS section below).
-
-- July 30, 2025: **VISUAL INDICATOR REMOVAL COMPLETION** - Removed all visual arrow indicators (↳) from all table components as requested. Eliminated blue arrows for additional owners and green arrows for additional beneficiaries from Assurance, Retirement Funds, and Defined Benefit Funds tables. Tables now display clean interface without visual indicators for additional rows, maintaining consistent appearance across all calculator modules.

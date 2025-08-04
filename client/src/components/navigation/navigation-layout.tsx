@@ -2,6 +2,7 @@ import React from "react";
 import { useLocation } from "wouter";
 import { ConsolidatedNavigation } from "./consolidated-navigation";
 import { SectionTabs } from "./section-tabs";
+import { SequentialNavigationBar } from "./sequential-navigation-bar";
 import { needs } from "@shared/navigation-config";
 import headerImage from "@assets/EW Header_1753945516780.png";
 
@@ -99,7 +100,14 @@ export function NavigationLayout({ children }: NavigationLayoutProps) {
         stepsWithStatus={stepsWithStatus}
         sections={sections}
       />
-      {children}
+      
+      {/* Main content with bottom padding to avoid overlap with fixed navigation bar */}
+      <div style={{ paddingBottom: '120px' }}>
+        {children}
+      </div>
+      
+      {/* Sequential Navigation Bar */}
+      <SequentialNavigationBar />
     </>
   );
 }
