@@ -67,13 +67,7 @@ export function GaugeChart({ data, title, compact = false }: GaugeChartProps) {
         </div>
       </div>
       
-      {compact && (
-        <div className="text-center mt-2">
-          <div className="text-xs text-gray-600">
-            Allocated to dependants: {formatCurrency(data.surplus)}
-          </div>
-        </div>
-      )}
+
     </div>
   );
 }
