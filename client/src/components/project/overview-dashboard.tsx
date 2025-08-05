@@ -61,41 +61,53 @@ export function OverviewDashboard({ data, chartType }: OverviewDashboardProps) {
   ];
 
   return (
-    <div className="grid grid-cols-4 gap-6">
+    <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
       {positions.map((position) => (
-        <Card key={position.title}>
-          <CardContent className="p-6">
-            <div className="text-center">
-              <div className="mb-4">
-                <GaugeChart data={position.data} title={position.title} compact />
+        <Card key={position.title} className="h-80">
+          <div className="h-full flex flex-col p-3">
+            <h3 className="font-semibold text-gray-900 mb-2 text-center text-sm capitalize">{position.title}</h3>
+            
+            {/* Chart and Summary - Centered */}
+            <div className="flex-1 flex flex-col items-center justify-center">
+              {/* Compact Chart */}
+              <div className="h-20 w-20 flex items-center justify-center mb-1">
+                <GaugeChart
+                  data={position.data}
+                  title={position.title}
+                  compact={true}
+                />
               </div>
               
-              <div className="space-y-2">
-                <h3 className="font-medium text-gray-900 capitalize">{position.title}</h3>
-                
-                <div className="space-y-1 text-sm">
-                  <div className="flex justify-between">
-                    <span className="text-gray-600">Provided:</span>
-                    <span className="font-medium text-blue-700">{formatCurrency(position.data.provided)}</span>
+              {/* Compact Summary */}
+              <div className="w-full space-y-1 text-xs">
+                <div className="p-2 rounded text-center" style={{ backgroundColor: 'hsl(220, 14%, 96%)' }}>
+                  <div className="text-xs" style={{ color: 'hsl(215, 14%, 34%)' }}>Provided</div>
+                  <div className="text-sm font-bold" style={{ color: 'hsl(198, 99%, 29%)' }}>
+                    {formatCurrency(position.data.provided)}
                   </div>
-                  <div className="flex justify-between">
-                    <span className="text-gray-600">Required:</span>
-                    <span className="font-medium text-gray-700">{formatCurrency(position.data.required)}</span>
+                </div>
+                <div className="p-2 rounded text-center" style={{ backgroundColor: 'hsl(220, 14%, 96%)' }}>
+                  <div className="text-xs" style={{ color: 'hsl(215, 14%, 34%)' }}>Required</div>
+                  <div className="text-sm font-bold" style={{ color: 'hsl(220, 13%, 18%)' }}>
+                    {formatCurrency(position.data.required)}
                   </div>
-                  <div className="flex justify-between border-t pt-1">
-                    <span className="text-gray-600">
-                      {position.data.surplus >= 0 ? 'Surplus:' : 'Deficit:'}
-                    </span>
-                    <span className={`font-bold ${
-                      position.data.surplus >= 0 ? 'text-green-600' : 'text-red-600'
-                    }`}>
-                      {formatCurrency(Math.abs(position.data.surplus))}
-                    </span>
+                </div>
+                <div className="p-2 rounded text-center" style={{ backgroundColor: 'hsl(220, 14%, 96%)' }}>
+                  <div className="text-xs" style={{ color: 'hsl(215, 14%, 34%)' }}>
+                    {position.data.surplus >= 0 ? 'Surplus' : 'Deficit'}
+                  </div>
+                  <div className={`text-sm font-bold`} style={{ 
+                    color: position.data.surplus >= 0 ? 'hsl(142, 76%, 36%)' : 'hsl(0, 84%, 60%)'
+                  }}>
+                    {formatCurrency(Math.abs(position.data.surplus))}
+                  </div>
+                  <div className="text-xs" style={{ color: 'hsl(220, 9%, 46%)' }}>
+                    {position.data.percentage.toFixed(1)}% Coverage
                   </div>
                 </div>
               </div>
             </div>
-          </CardContent>
+          </div>
         </Card>
       ))}
     </div>
