@@ -61,51 +61,43 @@ export function OverviewDashboard({ data, chartType }: OverviewDashboardProps) {
   ];
 
   return (
-    <div className="space-y-6">
-      {/* Overview Summary */}
-      <Card>
-        <CardHeader>
-          <CardTitle>Financial Position Overview</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="grid grid-cols-4 gap-6">
-            {positions.map((position) => (
-              <div key={position.title} className="text-center">
-                <div className="mb-4">
-                  <GaugeChart data={position.data} title={position.title} compact />
-                </div>
+    <div className="grid grid-cols-4 gap-6">
+      {positions.map((position) => (
+        <Card key={position.title}>
+          <CardContent className="p-6">
+            <div className="text-center">
+              <div className="mb-4">
+                <GaugeChart data={position.data} title={position.title} compact />
+              </div>
+              
+              <div className="space-y-2">
+                <h3 className="font-medium text-gray-900 capitalize">{position.title}</h3>
                 
-                <div className="space-y-2">
-                  <h3 className="font-medium text-gray-900 capitalize">{position.title}</h3>
-                  
-                  <div className="space-y-1 text-sm">
-                    <div className="flex justify-between">
-                      <span className="text-gray-600">Provided:</span>
-                      <span className="font-medium text-blue-700">{formatCurrency(position.data.provided)}</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className="text-gray-600">Required:</span>
-                      <span className="font-medium text-gray-700">{formatCurrency(position.data.required)}</span>
-                    </div>
-                    <div className="flex justify-between border-t pt-1">
-                      <span className="text-gray-600">
-                        {position.data.surplus >= 0 ? 'Surplus:' : 'Deficit:'}
-                      </span>
-                      <span className={`font-bold ${
-                        position.data.surplus >= 0 ? 'text-green-600' : 'text-red-600'
-                      }`}>
-                        {formatCurrency(Math.abs(position.data.surplus))}
-                      </span>
-                    </div>
+                <div className="space-y-1 text-sm">
+                  <div className="flex justify-between">
+                    <span className="text-gray-600">Provided:</span>
+                    <span className="font-medium text-blue-700">{formatCurrency(position.data.provided)}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-gray-600">Required:</span>
+                    <span className="font-medium text-gray-700">{formatCurrency(position.data.required)}</span>
+                  </div>
+                  <div className="flex justify-between border-t pt-1">
+                    <span className="text-gray-600">
+                      {position.data.surplus >= 0 ? 'Surplus:' : 'Deficit:'}
+                    </span>
+                    <span className={`font-bold ${
+                      position.data.surplus >= 0 ? 'text-green-600' : 'text-red-600'
+                    }`}>
+                      {formatCurrency(Math.abs(position.data.surplus))}
+                    </span>
                   </div>
                 </div>
               </div>
-            ))}
-          </div>
-        </CardContent>
-      </Card>
-
-
+            </div>
+          </CardContent>
+        </Card>
+      ))}
     </div>
   );
 }
