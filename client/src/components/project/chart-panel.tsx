@@ -41,7 +41,7 @@ export function ChartPanel({ title, data, chartType, description }: ChartPanelPr
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4">
       {/* Header */}
       <div className="mb-4">
         <h2 className="text-lg font-semibold text-gray-900">{title}</h2>
@@ -54,7 +54,9 @@ export function ChartPanel({ title, data, chartType, description }: ChartPanelPr
       </div>
 
       {/* Unified Summary Statistics */}
-      <UnifiedSummary data={data} />
+      <div className="-mt-6">
+        <UnifiedSummary data={data} />
+      </div>
     </div>
   );
 }
