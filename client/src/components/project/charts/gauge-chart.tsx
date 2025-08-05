@@ -15,10 +15,10 @@ export function GaugeChart({ data, title, compact = false }: GaugeChartProps) {
   // Calculate the percentage for the gauge (capped at 200% for visual purposes)
   const percentage = Math.min(data.percentage, 200);
   
-  // Create data for the gauge chart
+  // Create data for the gauge chart using Elite Wealth brand colors
   const chartData = [
-    { name: 'Covered', value: percentage, fill: '#016991' },
-    { name: 'Remaining', value: 200 - percentage, fill: '#e5e7eb' }
+    { name: 'Covered', value: percentage, fill: 'hsl(198, 99%, 29%)' }, // Primary brand blue
+    { name: 'Remaining', value: 200 - percentage, fill: 'hsl(220, 13%, 91%)' } // Neutral 200
   ];
 
   const formatCurrency = (value: number) => {
@@ -58,20 +58,20 @@ export function GaugeChart({ data, title, compact = false }: GaugeChartProps) {
           className="absolute inset-0 flex flex-col items-center justify-center"
           style={{ top: '20%' }}
         >
-          <div className={`font-bold text-gray-900 ${compact ? 'text-lg' : 'text-2xl'}`}>
+          <div className={`font-bold ${compact ? 'text-lg' : 'text-2xl'}`} style={{ color: 'hsl(220, 13%, 18%)' }}>
             {data.percentage.toFixed(1)}%
           </div>
           {!compact && (
             <>
-              <div className="text-sm text-blue-700 font-medium mt-1">
+              <div className="text-sm font-medium mt-1" style={{ color: 'hsl(198, 99%, 29%)' }}>
                 Provided: {formatCurrency(data.provided)}
               </div>
-              <div className="text-sm text-gray-600">
+              <div className="text-sm" style={{ color: 'hsl(215, 14%, 34%)' }}>
                 Required: {formatCurrency(data.required)}
               </div>
-              <div className={`text-sm font-medium mt-2 ${
-                data.surplus >= 0 ? 'text-green-600' : 'text-red-600'
-              }`}>
+              <div className={`text-sm font-medium mt-2`} style={{ 
+                color: data.surplus >= 0 ? 'hsl(142, 76%, 36%)' : 'hsl(0, 84%, 60%)'
+              }}>
                 {data.surplus >= 0 ? 'Surplus' : 'Deficit'}: {formatCurrency(Math.abs(data.surplus))}
               </div>
             </>
