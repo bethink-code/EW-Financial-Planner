@@ -46,6 +46,8 @@ Client requests data via TanStack Query hooks. Express routes handle CRUD operat
 - **Search Functionality**: Memoized real-time fund search across multiple fields.
 - **Real-time Updates**: Optimistic updates with TanStack Query.
 - **Multi-Level Navigation**: Hierarchical navigation structure (Financial Plan > Needs > Steps > Calculators/Sections) with consolidated header bar.
+- **Project Navigation**: Direct navigation to Project step without dropdown menus. Project button links directly to `/needs/death-estate-liquidity/project` for immediate access to graphs and projections.
+- **Graph Tab Switcher**: Compact, content-sized tab navigation using gray background with white active tabs. Includes Overview, Estate Position, Dependants Position, Total Capital Position, and Income Position tabs for seamless graph navigation.
 - **Multiple Owners/Beneficiaries**: Support for multiple owners and beneficiaries with CRUD operations and percentage splits.
 - **Comprehensive Formatting**: System-wide consistent formatting for currency (R prefix, thousands separators), percentages (% suffix), and years.
 - **Table Stability**: Implementation of patterns like `React.Fragment` with stable keys, debounced updates for text fields, immediate updates for array operations, and proper `rowSpan` usage to prevent jumping/flickering.

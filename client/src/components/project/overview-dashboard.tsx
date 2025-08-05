@@ -105,49 +105,7 @@ export function OverviewDashboard({ data, chartType }: OverviewDashboardProps) {
         </CardContent>
       </Card>
 
-      {/* Key Insights */}
-      <div className="grid grid-cols-2 gap-6">
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-lg">Key Insights</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="flex items-center gap-3">
-              <div className="w-3 h-3 bg-green-500 rounded-full"></div>
-              <span className="text-sm">All positions show positive coverage</span>
-            </div>
-            <div className="flex items-center gap-3">
-              <div className="w-3 h-3 bg-blue-500 rounded-full"></div>
-              <span className="text-sm">Dependants position is well-funded at 309%</span>
-            </div>
-            <div className="flex items-center gap-3">
-              <div className="w-3 h-3 bg-orange-500 rounded-full"></div>
-              <span className="text-sm">Estate has adequate liquidity for all obligations</span>
-            </div>
-          </CardContent>
-        </Card>
 
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-lg">Scenario Analysis</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="text-sm space-y-2">
-              <p className="text-gray-600">
-                The current financial plan provides robust coverage across all areas:
-              </p>
-              <ul className="list-disc list-inside space-y-1 text-gray-600">
-                <li>Estate liquidity is fully covered</li>
-                <li>Dependants have significant surplus provisions</li>
-                <li>Income replacement exceeds requirements</li>
-              </ul>
-              <p className="text-gray-600 pt-2">
-                Use the individual tabs to explore detailed parameters and run scenarios.
-              </p>
-            </div>
-          </CardContent>
-        </Card>
-      </div>
     </div>
   );
 }
