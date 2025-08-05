@@ -153,8 +153,8 @@ export default function ProjectStep() {
 
               {/* Individual Position Tabs */}
               <TabsContent value="estate">
-                <div className="grid grid-cols-12 gap-6">
-                  <div className="col-span-7">
+                <div className="grid grid-cols-2 gap-6">
+                  <div>
                     <ChartPanel
                       title="Estate Position"
                       data={calculatedValues.estatePosition}
@@ -162,7 +162,7 @@ export default function ProjectStep() {
                       description="Shows the estate's capital position after death"
                     />
                   </div>
-                  <div className="col-span-5">
+                  <div>
                     <ParameterPanel
                       title="Estate Position Parameters"
                       parameters={parameters}
@@ -174,8 +174,8 @@ export default function ProjectStep() {
               </TabsContent>
 
               <TabsContent value="dependants">
-                <div className="grid grid-cols-12 gap-6">
-                  <div className="col-span-7">
+                <div className="grid grid-cols-2 gap-6">
+                  <div>
                     <ChartPanel
                       title="Dependants Position"
                       data={calculatedValues.dependantsPosition}
@@ -183,7 +183,7 @@ export default function ProjectStep() {
                       description="Shows capital provisions for dependants"
                     />
                   </div>
-                  <div className="col-span-5">
+                  <div>
                     <ParameterPanel
                       title="Dependants Position Parameters"
                       parameters={parameters}
@@ -195,8 +195,8 @@ export default function ProjectStep() {
               </TabsContent>
 
               <TabsContent value="capital">
-                <div className="grid grid-cols-12 gap-6">
-                  <div className="col-span-7">
+                <div className="grid grid-cols-2 gap-6">
+                  <div>
                     <ChartPanel
                       title="Total Capital Position"
                       data={calculatedValues.totalCapitalPosition}
@@ -204,7 +204,7 @@ export default function ProjectStep() {
                       description="Overall capital adequacy analysis"
                     />
                   </div>
-                  <div className="col-span-5">
+                  <div>
                     <ParameterPanel
                       title="Total Capital Position Parameters"
                       parameters={parameters}
@@ -216,8 +216,8 @@ export default function ProjectStep() {
               </TabsContent>
 
               <TabsContent value="income">
-                <div className="grid grid-cols-12 gap-6">
-                  <div className="col-span-7">
+                <div className="grid grid-cols-2 gap-6">
+                  <div>
                     <ChartPanel
                       title="Income Position"
                       data={calculatedValues.incomePosition}
@@ -225,7 +225,7 @@ export default function ProjectStep() {
                       description="Monthly income provisions and requirements"
                     />
                   </div>
-                  <div className="col-span-5">
+                  <div>
                     <ParameterPanel
                       title="Income Position Parameters"
                       parameters={parameters}
