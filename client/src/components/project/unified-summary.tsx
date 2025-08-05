@@ -32,7 +32,7 @@ export function UnifiedSummary({ data }: UnifiedSummaryProps) {
             <div className="text-lg font-bold" style={{ color: 'hsl(220, 13%, 18%)' }}>{formatCurrency(data.required)}</div>
           </div>
           <div className="p-3 rounded-lg" style={{ 
-            backgroundColor: data.surplus >= 0 ? 'hsl(142, 76%, 96%)' : 'hsl(0, 84%, 96%)'
+            backgroundColor: data.surplus >= 0 ? 'hsl(198, 50%, 96%)' : 'hsl(0, 84%, 96%)'
           }}>
             <div className="text-xs mb-1" style={{ color: 'hsl(215, 14%, 34%)' }}>
               {data.surplus >= 0 ? 'Surplus' : 'Deficit'}
