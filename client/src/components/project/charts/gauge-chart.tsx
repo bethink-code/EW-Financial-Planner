@@ -61,7 +61,7 @@ export function GaugeChart({ data, title, compact = false }: GaugeChartProps) {
           <div className={`font-bold ${compact ? 'text-lg' : 'text-3xl'}`} style={{ color: 'hsl(220, 13%, 18%)' }}>
             {data.percentage.toFixed(1)}%
           </div>
-          <div className="text-sm mt-2" style={{ color: 'hsl(215, 14%, 34%)' }}>
+          <div className="text-sm mt-1" style={{ color: 'hsl(215, 14%, 34%)' }}>
             Coverage
           </div>
         </div>
