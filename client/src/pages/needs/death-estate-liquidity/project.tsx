@@ -154,14 +154,6 @@ export default function ProjectStep() {
               {/* Individual Position Tabs */}
               <TabsContent value="estate">
                 <div className="grid grid-cols-12 gap-6">
-                  <div className="col-span-5">
-                    <ParameterPanel
-                      title="Estate Position Parameters"
-                      parameters={parameters}
-                      onParameterChange={handleParameterChange}
-                      section="estate"
-                    />
-                  </div>
                   <div className="col-span-7">
                     <ChartPanel
                       title="Estate Position"
@@ -170,19 +162,19 @@ export default function ProjectStep() {
                       description="Shows the estate's capital position after death"
                     />
                   </div>
+                  <div className="col-span-5">
+                    <ParameterPanel
+                      title="Estate Position Parameters"
+                      parameters={parameters}
+                      onParameterChange={handleParameterChange}
+                      section="estate"
+                    />
+                  </div>
                 </div>
               </TabsContent>
 
               <TabsContent value="dependants">
                 <div className="grid grid-cols-12 gap-6">
-                  <div className="col-span-5">
-                    <ParameterPanel
-                      title="Dependants Position Parameters"
-                      parameters={parameters}
-                      onParameterChange={handleParameterChange}
-                      section="dependants"
-                    />
-                  </div>
                   <div className="col-span-7">
                     <ChartPanel
                       title="Dependants Position"
@@ -191,19 +183,19 @@ export default function ProjectStep() {
                       description="Shows capital provisions for dependants"
                     />
                   </div>
+                  <div className="col-span-5">
+                    <ParameterPanel
+                      title="Dependants Position Parameters"
+                      parameters={parameters}
+                      onParameterChange={handleParameterChange}
+                      section="dependants"
+                    />
+                  </div>
                 </div>
               </TabsContent>
 
               <TabsContent value="capital">
                 <div className="grid grid-cols-12 gap-6">
-                  <div className="col-span-5">
-                    <ParameterPanel
-                      title="Total Capital Position Parameters"
-                      parameters={parameters}
-                      onParameterChange={handleParameterChange}
-                      section="capital"
-                    />
-                  </div>
                   <div className="col-span-7">
                     <ChartPanel
                       title="Total Capital Position"
@@ -212,25 +204,33 @@ export default function ProjectStep() {
                       description="Overall capital adequacy analysis"
                     />
                   </div>
+                  <div className="col-span-5">
+                    <ParameterPanel
+                      title="Total Capital Position Parameters"
+                      parameters={parameters}
+                      onParameterChange={handleParameterChange}
+                      section="capital"
+                    />
+                  </div>
                 </div>
               </TabsContent>
 
               <TabsContent value="income">
                 <div className="grid grid-cols-12 gap-6">
-                  <div className="col-span-5">
-                    <ParameterPanel
-                      title="Income Position Parameters"
-                      parameters={parameters}
-                      onParameterChange={handleParameterChange}
-                      section="income"
-                    />
-                  </div>
                   <div className="col-span-7">
                     <ChartPanel
                       title="Income Position"
                       data={calculatedValues.incomePosition}
                       chartType={chartType}
                       description="Monthly income provisions and requirements"
+                    />
+                  </div>
+                  <div className="col-span-5">
+                    <ParameterPanel
+                      title="Income Position Parameters"
+                      parameters={parameters}
+                      onParameterChange={handleParameterChange}
+                      section="income"
                     />
                   </div>
                 </div>
