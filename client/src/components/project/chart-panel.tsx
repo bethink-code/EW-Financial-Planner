@@ -49,12 +49,12 @@ export function ChartPanel({ title, data, chartType, description }: ChartPanelPr
       </div>
 
       {/* Chart */}
-      <div className="h-80 flex items-center justify-center">
+      <div className="h-64 flex items-center justify-center">
         {renderChart()}
       </div>
 
       {/* Unified Summary Statistics */}
-      <div className="-mt-12">
+      <div className="-mt-8">
         <UnifiedSummary data={data} />
       </div>
     </div>
