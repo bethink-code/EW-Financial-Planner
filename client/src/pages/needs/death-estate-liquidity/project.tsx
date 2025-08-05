@@ -85,7 +85,7 @@ export default function ProjectStep() {
           className="mb-6"
         >
           {/* Tab Navigation and Content */}
-          <div className="">
+          <div className="px-5 pb-5">
             <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
               <TabsList className="grid w-full grid-cols-5">
                 <TabsTrigger value="overview">Overview</TabsTrigger>
