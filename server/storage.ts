@@ -10,6 +10,7 @@ import {
   additionalEstateDutyItems,
   liabilities,
   clientDetails,
+  estatePositionParameters,
   type RetirementFund,
   type InsertRetirementFund,
   type UpdateRetirementFund,
@@ -42,6 +43,9 @@ import {
   type ClientDetails,
   type InsertClientDetails,
   type UpdateClientDetails,
+  type EstatePositionParameters,
+  type InsertEstatePositionParameters,
+  type UpdateEstatePositionParameters,
 } from "@shared/schema";
 import { assets, type Assets, type InsertAssets } from "@shared/assets-schema";
 import { drizzle } from "drizzle-orm/node-postgres";
@@ -192,6 +196,17 @@ export interface IStorage {
   ): Promise<ClientDetails | undefined>;
   deleteClientDetail(id: number): Promise<boolean>;
   searchClientDetails(query: string): Promise<ClientDetails[]>;
+
+  // Estate Position Parameters
+  getEstatePositionParameters(): Promise<EstatePositionParameters[]>;
+  getEstatePositionParameter(id: number): Promise<EstatePositionParameters | undefined>;
+  createEstatePositionParameter(parameter: InsertEstatePositionParameters): Promise<EstatePositionParameters>;
+  updateEstatePositionParameter(
+    id: number,
+    updates: UpdateEstatePositionParameters,
+  ): Promise<EstatePositionParameters | undefined>;
+  deleteEstatePositionParameter(id: number): Promise<boolean>;
+  getOrCreateEstatePositionParameter(): Promise<EstatePositionParameters>;
 }
 
 export class MemStorage implements IStorage {
@@ -207,6 +222,7 @@ export class MemStorage implements IStorage {
   private liabilities: Map<number, Liabilities>;
   private assets: Map<number, Assets>;
   private clientDetails: Map<number, ClientDetails>;
+  private estatePositionParameters: Map<number, EstatePositionParameters>;
 
   private currentFundId: number;
   private currentBequestId: number;
@@ -220,6 +236,7 @@ export class MemStorage implements IStorage {
   private currentLiabilityId: number;
   private currentAssetId: number;
   private currentClientDetailId: number;
+  private currentEstatePositionParameterId: number;
 
   constructor() {
     this.retirementFunds = new Map();
@@ -234,6 +251,7 @@ export class MemStorage implements IStorage {
     this.liabilities = new Map();
     this.assets = new Map();
     this.clientDetails = new Map();
+    this.estatePositionParameters = new Map();
 
     this.currentFundId = 1;
     this.currentBequestId = 1;
@@ -247,6 +265,7 @@ export class MemStorage implements IStorage {
     this.currentLiabilityId = 1;
     this.currentAssetId = 1;
     this.currentClientDetailId = 1;
+    this.currentEstatePositionParameterId = 1;
   }
 
   // Retirement Funds methods
@@ -941,6 +960,74 @@ export class MemStorage implements IStorage {
         client.entityType.toLowerCase().includes(lowerQuery)
     );
   }
+
+  // Estate Position Parameters methods for MemStorage
+  async getEstatePositionParameters(): Promise<EstatePositionParameters[]> {
+    return Array.from(this.estatePositionParameters.values()).sort((a, b) => a.id - b.id);
+  }
+
+  async getEstatePositionParameter(id: number): Promise<EstatePositionParameters | undefined> {
+    return this.estatePositionParameters.get(id);
+  }
+
+  async createEstatePositionParameter(parameter: InsertEstatePositionParameters): Promise<EstatePositionParameters> {
+    const newParameter: EstatePositionParameters = {
+      id: this.currentEstatePositionParameterId++,
+      ...parameter,
+    };
+    this.estatePositionParameters.set(newParameter.id, newParameter);
+    return newParameter;
+  }
+
+  async updateEstatePositionParameter(
+    id: number,
+    updates: UpdateEstatePositionParameters,
+  ): Promise<EstatePositionParameters | undefined> {
+    const parameter = this.estatePositionParameters.get(id);
+    if (!parameter) {
+      return undefined;
+    }
+
+    const updatedParameter = { ...parameter, ...updates };
+    this.estatePositionParameters.set(id, updatedParameter);
+    return updatedParameter;
+  }
+
+  async deleteEstatePositionParameter(id: number): Promise<boolean> {
+    return this.estatePositionParameters.delete(id);
+  }
+
+  async getOrCreateEstatePositionParameter(): Promise<EstatePositionParameters> {
+    // Try to get existing parameter (should be only one record)
+    const existing = Array.from(this.estatePositionParameters.values());
+    if (existing.length > 0) {
+      return existing[0];
+    }
+
+    // If none exists, create with default values from the screenshot
+    const defaultParameter: InsertEstatePositionParameters = {
+      lifeCoverToEstate: "R 4,000,000",
+      voluntaryInvestments: "R 7,812,990", 
+      accrualClaimFromSpouse: "R 0",
+      dependantsSurplusUtilised: "R 0",
+      ownEstateCapitalProvided: "R 0",
+      estateDuty: "R 177,457",
+      executorsFees: "R 813,573",
+      settleClientLiabilities: "R 1,380,000",
+      capitalGainsTax: "R 886,653",
+      mastersFee: "R 7,000",
+      deathBedFuneralExpenses: "R 60,000",
+      conveyancingValuationFees: "R 132,130",
+      accrualClaimToSpouse: "R 6,081,350",
+      ownEstateCapitalRequired: "R 0",
+      surplus: "R 2,274,827",
+      estateSurplusUtilisedForDependants: "R 2,274,827",
+      estatePositionAfterAllocation: "R 0",
+      lastUpdated: new Date().toISOString(),
+    };
+
+    return this.createEstatePositionParameter(defaultParameter);
+  }
 }
 
 // Database storage class
@@ -1600,6 +1687,115 @@ export class DbStorage {
         )
       )
       .orderBy(asc(clientDetails.id));
+  }
+
+  // Estate Position Parameters methods
+  async getEstatePositionParameters(): Promise<EstatePositionParameters[]> {
+    return await this.db.select().from(estatePositionParameters).orderBy(asc(estatePositionParameters.id));
+  }
+
+  async getEstatePositionParameter(id: number): Promise<EstatePositionParameters | undefined> {
+    const result = await this.db
+      .select()
+      .from(estatePositionParameters)
+      .where(eq(estatePositionParameters.id, id));
+    return result[0];
+  }
+
+  async createEstatePositionParameter(parameter: InsertEstatePositionParameters): Promise<EstatePositionParameters> {
+    const result = await this.db
+      .insert(estatePositionParameters)
+      .values(parameter)
+      .returning();
+    return result[0];
+  }
+
+  async updateEstatePositionParameter(
+    id: number,
+    updates: UpdateEstatePositionParameters,
+  ): Promise<EstatePositionParameters | undefined> {
+    const result = await this.db
+      .update(estatePositionParameters)
+      .set(updates)
+      .where(eq(estatePositionParameters.id, id))
+      .returning();
+    return result[0];
+  }
+
+  async deleteEstatePositionParameter(id: number): Promise<boolean> {
+    const result = await this.db
+      .delete(estatePositionParameters)
+      .where(eq(estatePositionParameters.id, id));
+    return (result.rowCount || 0) > 0;
+  }
+
+  async getOrCreateEstatePositionParameter(): Promise<EstatePositionParameters> {
+    // Try to get existing parameter (should be only one record)
+    const existing = await this.getEstatePositionParameters();
+    if (existing.length > 0) {
+      return existing[0];
+    }
+
+    // If none exists, create with calculated default values
+    const defaultParameter: InsertEstatePositionParameters = await this.calculateDefaultEstateParameters();
+    return await this.createEstatePositionParameter(defaultParameter);
+  }
+
+  private async calculateDefaultEstateParameters(): Promise<InsertEstatePositionParameters> {
+    // Get data from various sources to calculate defaults
+    const [assets, liabilities, retirementFunds, lumpSumBequests] = await Promise.all([
+      this.getAssets(),
+      this.getLiabilities(), 
+      this.getRetirementFunds(),
+      this.getLumpSumBequests()
+    ]);
+
+    // Helper function to parse currency values
+    const parseCurrency = (value: string): number => {
+      return parseFloat(value.replace(/[^\d.-]/g, '')) || 0;
+    };
+
+    // Calculate total assets
+    const totalAssets = assets.reduce((sum, asset) => {
+      return sum + parseCurrency(asset.marketValue);
+    }, 0);
+
+    // Calculate total liabilities  
+    const totalLiabilities = liabilities.reduce((sum, liability) => {
+      return sum + parseCurrency(liability.debtAmount);
+    }, 0);
+
+    // Calculate total life cover from retirement funds
+    const totalLifeCover = retirementFunds.reduce((sum, fund) => {
+      return sum + parseCurrency(fund.approvedLifeCover) + parseCurrency(fund.coverAmount);
+    }, 0);
+
+    // Calculate total lump sum bequests
+    const totalBequests = lumpSumBequests.reduce((sum, bequest) => {
+      return sum + parseCurrency(bequest.valueAtDeath);
+    }, 0);
+
+    // Return calculated defaults
+    return {
+      lifeCoverToEstate: `R ${Math.round(totalLifeCover * 0.4).toLocaleString()}`, // 40% of life cover
+      voluntaryInvestments: `R ${Math.round(totalAssets * 0.6).toLocaleString()}`, // 60% of assets
+      accrualClaimFromSpouse: "R 0",
+      dependantsSurplusUtilised: "R 0", 
+      ownEstateCapitalProvided: "R 0", // Will be calculated
+      estateDuty: `R ${Math.round(totalAssets * 0.02).toLocaleString()}`, // 2% of assets
+      executorsFees: `R ${Math.round(totalAssets * 0.035).toLocaleString()}`, // 3.5% of assets
+      settleClientLiabilities: `R ${totalLiabilities.toLocaleString()}`,
+      capitalGainsTax: `R ${Math.round(totalAssets * 0.018).toLocaleString()}`, // 1.8% of assets
+      mastersFee: "R 7000",
+      deathBedFuneralExpenses: "R 60000",
+      conveyancingValuationFees: `R ${Math.round(totalAssets * 0.01).toLocaleString()}`, // 1% of assets
+      accrualClaimToSpouse: `R ${Math.round(totalAssets * 0.25).toLocaleString()}`, // 25% of assets
+      ownEstateCapitalRequired: "R 0", // Will be calculated
+      surplus: "R 0", // Will be calculated
+      estateSurplusUtilisedForDependants: "R 0", // Will be calculated
+      estatePositionAfterAllocation: "R 0", // Will be calculated
+      lastUpdated: new Date().toISOString(),
+    };
   }
 }
 

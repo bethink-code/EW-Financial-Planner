@@ -378,4 +378,47 @@ export type Liabilities = typeof liabilities.$inferSelect;
 export type InsertLiabilities = z.infer<typeof insertLiabilitiesSchema>;
 export type UpdateLiabilities = z.infer<typeof updateLiabilitiesSchema>;
 
+// Estate Position Parameters table
+export const estatePositionParameters = pgTable("estate_position_parameters", {
+  id: serial("id").primaryKey(),
+  
+  // Capital Provided Section
+  lifeCoverToEstate: text("life_cover_to_estate").notNull().default("R 0"),
+  voluntaryInvestments: text("voluntary_investments").notNull().default("R 0"),
+  accrualClaimFromSpouse: text("accrual_claim_from_spouse").notNull().default("R 0"),
+  dependantsSurplusUtilised: text("dependants_surplus_utilised").notNull().default("R 0"),
+  ownEstateCapitalProvided: text("own_estate_capital_provided").notNull().default("R 0"), // Calculated
+  
+  // Capital Required Section
+  estateDuty: text("estate_duty").notNull().default("R 0"),
+  executorsFees: text("executors_fees").notNull().default("R 0"),
+  settleClientLiabilities: text("settle_client_liabilities").notNull().default("R 0"),
+  capitalGainsTax: text("capital_gains_tax").notNull().default("R 0"),
+  mastersFee: text("masters_fee").notNull().default("R 0"),
+  deathBedFuneralExpenses: text("death_bed_funeral_expenses").notNull().default("R 0"),
+  conveyancingValuationFees: text("conveyancing_valuation_fees").notNull().default("R 0"),
+  accrualClaimToSpouse: text("accrual_claim_to_spouse").notNull().default("R 0"),
+  ownEstateCapitalRequired: text("own_estate_capital_required").notNull().default("R 0"), // Calculated
+  
+  // Results Section (all calculated)
+  surplus: text("surplus").notNull().default("R 0"), // Calculated
+  estateSurplusUtilisedForDependants: text("estate_surplus_utilised_for_dependants").notNull().default("R 0"), // Calculated
+  estatePositionAfterAllocation: text("estate_position_after_allocation").notNull().default("R 0"), // Calculated
+  
+  // Metadata
+  lastUpdated: text("last_updated").notNull().default(""),
+});
+
+export const insertEstatePositionParametersSchema = createInsertSchema(estatePositionParameters).omit({
+  id: true,
+});
+
+export const updateEstatePositionParametersSchema = createInsertSchema(estatePositionParameters).omit({
+  id: true,
+}).partial();
+
+export type EstatePositionParameters = typeof estatePositionParameters.$inferSelect;
+export type InsertEstatePositionParameters = z.infer<typeof insertEstatePositionParametersSchema>;
+export type UpdateEstatePositionParameters = z.infer<typeof updateEstatePositionParametersSchema>;
+
 export * from './assets-schema';

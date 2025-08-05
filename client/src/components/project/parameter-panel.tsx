@@ -6,6 +6,7 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { Button } from '@/components/ui/button';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
 import { ChevronDown, ChevronRight, RotateCcw } from 'lucide-react';
+import { EstatePositionParameters } from './estate-position-parameters';
 
 interface ParameterPanelProps {
   title: string;
@@ -162,10 +163,10 @@ export function ParameterPanel({ title, parameters, onParameterChange, section }
       </CardHeader>
       <CardContent className="space-y-6">
         {section === 'estate' && (
-          <>
-            {renderParameterGroup('Capital Provided', estateProvidedParams, 'provided')}
-            {renderParameterGroup('Capital Required', estateRequiredParams, 'required')}
-          </>
+          <EstatePositionParameters onParameterChange={(params) => {
+            // Trigger chart updates when parameters change
+            console.log('Estate position parameters updated:', params);
+          }} />
         )}
         
         {section === 'dependants' && (

@@ -24,6 +24,8 @@ import {
   updateLiabilitiesSchema,
   insertClientDetailsSchema,
   updateClientDetailsSchema,
+  insertEstatePositionParametersSchema,
+  updateEstatePositionParametersSchema,
 } from "@shared/schema";
 import { insertAssetsSchema } from "@shared/assets-schema";
 
@@ -1277,6 +1279,40 @@ export async function registerRoutes(app: Express): Promise<Server> {
     } catch (error) {
       console.error("Error deleting client detail:", error);
       res.status(500).json({ message: "Failed to delete client detail" });
+    }
+  });
+
+  // Estate Position Parameters API routes
+  app.get("/api/estate-position-parameters", async (req, res) => {
+    try {
+      const parameters = await storage.getOrCreateEstatePositionParameter();
+      res.json(parameters);
+    } catch (error) {
+      console.error("Error fetching estate position parameters:", error);
+      res.status(500).json({ message: "Failed to fetch estate position parameters" });
+    }
+  });
+
+  app.patch("/api/estate-position-parameters/:id", async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      if (isNaN(id)) {
+        return res.status(400).json({ message: "Invalid parameter ID" });
+      }
+
+      const validatedData = updateEstatePositionParametersSchema.parse(req.body);
+      
+      // Add current timestamp
+      const updatesWithTimestamp = {
+        ...validatedData,
+        lastUpdated: new Date().toISOString(),
+      };
+
+      const parameter = await storage.updateEstatePositionParameter(id, updatesWithTimestamp);
+      res.json(parameter);
+    } catch (error) {
+      console.error("Error updating estate position parameters:", error);
+      res.status(400).json({ message: "Invalid parameter data" });
     }
   });
 
