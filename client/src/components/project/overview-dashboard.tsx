@@ -63,14 +63,14 @@ export function OverviewDashboard({ data, chartType }: OverviewDashboardProps) {
   return (
     <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
       {positions.map((position) => (
-        <Card key={position.title} className="h-80">
+        <Card key={position.title} className="h-96">
           <div className="h-full flex flex-col p-3">
             <h3 className="font-semibold text-gray-900 mb-2 text-center text-sm capitalize">{position.title}</h3>
             
             {/* Chart and Summary - Centered */}
             <div className="flex-1 flex flex-col items-center justify-center">
               {/* Compact Chart */}
-              <div className="h-20 w-20 flex items-center justify-center mb-1">
+              <div className="h-32 w-32 flex items-center justify-center mb-2">
                 <GaugeChart
                   data={position.data}
                   title={position.title}
