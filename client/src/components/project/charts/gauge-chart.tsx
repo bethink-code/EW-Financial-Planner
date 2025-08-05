@@ -32,7 +32,7 @@ export function GaugeChart({ data, title, compact = false }: GaugeChartProps) {
 
   return (
     <div className="w-full h-full flex flex-col items-center justify-center">
-      <div className={compact ? "w-32 h-32" : "w-64 h-64"} style={{ position: 'relative' }}>
+      <div className={compact ? "w-24 h-24" : "w-56 h-56"} style={{ position: 'relative' }}>
         <ResponsiveContainer width="100%" height="100%">
           <PieChart>
             <Pie

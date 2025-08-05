@@ -70,7 +70,7 @@ export function OverviewDashboard({ data, chartType }: OverviewDashboardProps) {
             {/* Chart and Summary - Centered */}
             <div className="flex-1 flex flex-col items-center justify-center">
               {/* Compact Chart */}
-              <div className="h-32 w-32 flex items-center justify-center mb-2">
+              <div className="h-28 w-28 flex items-center justify-center mb-2">
                 <GaugeChart
                   data={position.data}
                   title={position.title}
