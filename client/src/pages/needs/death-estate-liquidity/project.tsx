@@ -88,8 +88,8 @@ export default function ProjectStep() {
           <div className="px-6 py-4">
             <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
               {/* Custom Tab Navigation */}
-              <div className="w-full bg-gray-100 rounded-lg p-1">
-                <div className="grid w-full grid-cols-5 gap-1">
+              <div className="inline-flex bg-gray-100 rounded-lg p-1">
+                <div className="flex gap-1">
                   <button
                     onClick={() => setActiveTab('overview')}
                     className={`px-4 py-2 text-sm font-medium rounded-md transition-colors ${
