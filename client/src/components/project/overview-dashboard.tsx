@@ -70,7 +70,7 @@ export function OverviewDashboard({ data, chartType }: OverviewDashboardProps) {
             {/* Chart and Summary - Centered */}
             <div className="flex-1 flex flex-col items-center justify-center">
               {/* Compact Chart */}
-              <div className="h-48 w-48 flex items-center justify-center mb-2">
+              <div className="h-48 w-48 flex items-center justify-center">
                 <GaugeChart
                   data={position.data}
                   title={position.title}
@@ -79,7 +79,7 @@ export function OverviewDashboard({ data, chartType }: OverviewDashboardProps) {
               </div>
               
               {/* Compact Summary */}
-              <div className="w-full space-y-1 text-xs">
+              <div className="w-full space-y-1 text-xs -mt-4">
                 <div className="p-2 rounded text-center" style={{ backgroundColor: 'hsl(220, 14%, 96%)' }}>
                   <div className="text-xs" style={{ color: 'hsl(215, 14%, 34%)' }}>Provided</div>
                   <div className="text-sm font-bold" style={{ color: 'hsl(198, 99%, 29%)' }}>
