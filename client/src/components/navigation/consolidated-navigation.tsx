@@ -261,7 +261,6 @@ export function ConsolidatedNavigation({
                         {step.number}
                       </span>
                       <span>{step.label}</span>
-                      <ChevronDown className="h-3.5 w-3.5 ml-1" />
                     </button>
                   )}
                 </SafeFragment>
