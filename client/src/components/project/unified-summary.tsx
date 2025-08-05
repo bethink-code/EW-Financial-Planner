@@ -23,7 +23,7 @@ export function UnifiedSummary({ data }: UnifiedSummaryProps) {
     <Card className="mt-6">
       <CardContent className="p-4">
         <div className="grid grid-cols-3 gap-4 text-center">
-          <div className="p-3 rounded-lg" style={{ backgroundColor: 'hsl(198, 50%, 96%)' }}>
+          <div className="p-3 rounded-lg" style={{ backgroundColor: 'hsl(220, 14%, 96%)' }}>
             <div className="text-xs mb-1" style={{ color: 'hsl(215, 14%, 34%)' }}>Provided</div>
             <div className="text-lg font-bold" style={{ color: 'hsl(198, 99%, 29%)' }}>{formatCurrency(data.provided)}</div>
           </div>
@@ -31,9 +31,7 @@ export function UnifiedSummary({ data }: UnifiedSummaryProps) {
             <div className="text-xs mb-1" style={{ color: 'hsl(215, 14%, 34%)' }}>Required</div>
             <div className="text-lg font-bold" style={{ color: 'hsl(220, 13%, 18%)' }}>{formatCurrency(data.required)}</div>
           </div>
-          <div className="p-3 rounded-lg" style={{ 
-            backgroundColor: data.surplus >= 0 ? 'hsl(198, 50%, 96%)' : 'hsl(0, 84%, 96%)'
-          }}>
+          <div className="p-3 rounded-lg" style={{ backgroundColor: 'hsl(220, 14%, 96%)' }}>
             <div className="text-xs mb-1" style={{ color: 'hsl(215, 14%, 34%)' }}>
               {data.surplus >= 0 ? 'Surplus' : 'Deficit'}
             </div>
