@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-// Note: Using simple grid layout instead of resizable panels for now
+import { CalculatorHeader } from '@/components/ui/calculator-header';
 import { ParameterPanel } from '@/components/project/parameter-panel';
 import { ChartPanel } from '@/components/project/chart-panel';
 import { OverviewDashboard } from '@/components/project/overview-dashboard';
@@ -61,27 +61,31 @@ export default function ProjectStep() {
     }
   };
 
-  return (
-    <div className="space-y-6">
-      {/* Chart Type Selector in top-right */}
-      <div className="flex justify-end">
-        <Select value={chartType} onValueChange={setChartType}>
-          <SelectTrigger className="w-40">
-            <SelectValue placeholder="Chart type" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="gauge">Gauge Charts</SelectItem>
-            <SelectItem value="bar">Bar Charts</SelectItem>
-            <SelectItem value="line">Line Charts</SelectItem>
-            <SelectItem value="pie">Pie Charts</SelectItem>
-            <SelectItem value="area">Area Charts</SelectItem>
-          </SelectContent>
-        </Select>
-      </div>
+  const chartTypeSelector = (
+    <Select value={chartType} onValueChange={setChartType}>
+      <SelectTrigger className="w-40">
+        <SelectValue placeholder="Chart type" />
+      </SelectTrigger>
+      <SelectContent>
+        <SelectItem value="gauge">Gauge Charts</SelectItem>
+        <SelectItem value="bar">Bar Charts</SelectItem>
+        <SelectItem value="line">Line Charts</SelectItem>
+        <SelectItem value="pie">Pie Charts</SelectItem>
+        <SelectItem value="area">Area Charts</SelectItem>
+      </SelectContent>
+    </Select>
+  );
 
-      {/* Tab Navigation */}
-      <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
-        <TabsList className="grid w-full grid-cols-5">
+  return (
+    <CalculatorHeader 
+      title="Projections"
+      additionalControls={chartTypeSelector}
+      className="mb-6"
+    >
+      {/* Tab Navigation and Content */}
+      <div className="px-5 pb-5">
+        <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
+          <TabsList className="grid w-full grid-cols-5">
           <TabsTrigger value="overview">Overview</TabsTrigger>
           <TabsTrigger value="estate">Estate Position</TabsTrigger>
           <TabsTrigger value="dependants">Dependants Position</TabsTrigger>
@@ -181,7 +185,8 @@ export default function ProjectStep() {
             </div>
           </div>
         </TabsContent>
-      </Tabs>
-    </div>
+        </Tabs>
+      </div>
+    </CalculatorHeader>
   );
 }
