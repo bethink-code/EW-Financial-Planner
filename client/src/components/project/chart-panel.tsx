@@ -41,14 +41,14 @@ export function ChartPanel({ title, data, chartType, description }: ChartPanelPr
   };
 
   return (
-    <Card className="h-full">
+    <Card className="h-[600px]">
       <CardHeader>
         <CardTitle className="text-lg">{title}</CardTitle>
         {description && <CardDescription>{description}</CardDescription>}
       </CardHeader>
-      <CardContent className="space-y-6">
+      <CardContent className="space-y-6 h-full overflow-hidden">
         {/* Chart */}
-        <div className="flex-1 min-h-[300px] flex items-center justify-center">
+        <div className="h-64 flex items-center justify-center">
           {renderChart()}
         </div>
 

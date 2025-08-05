@@ -62,33 +62,25 @@ export default function ProjectStep() {
   };
 
   return (
-    <div className="flex flex-col h-full">
-      {/* Header */}
-      <div className="mb-6">
-        <div className="flex items-center justify-between">
-          <div>
-            <h1 className="text-2xl font-bold text-gray-900">Death with Estate Liquidity - Projections</h1>
-            <p className="text-gray-600 mt-1">Interactive financial projections and scenario modeling</p>
-          </div>
-          <div className="flex items-center gap-4">
-            <Select value={chartType} onValueChange={setChartType}>
-              <SelectTrigger className="w-40">
-                <SelectValue placeholder="Chart type" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="gauge">Gauge Charts</SelectItem>
-                <SelectItem value="bar">Bar Charts</SelectItem>
-                <SelectItem value="line">Line Charts</SelectItem>
-                <SelectItem value="pie">Pie Charts</SelectItem>
-                <SelectItem value="area">Area Charts</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
-        </div>
+    <div className="space-y-6">
+      {/* Chart Type Selector in top-right */}
+      <div className="flex justify-end">
+        <Select value={chartType} onValueChange={setChartType}>
+          <SelectTrigger className="w-40">
+            <SelectValue placeholder="Chart type" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="gauge">Gauge Charts</SelectItem>
+            <SelectItem value="bar">Bar Charts</SelectItem>
+            <SelectItem value="line">Line Charts</SelectItem>
+            <SelectItem value="pie">Pie Charts</SelectItem>
+            <SelectItem value="area">Area Charts</SelectItem>
+          </SelectContent>
+        </Select>
       </div>
 
       {/* Tab Navigation */}
-      <Tabs value={activeTab} onValueChange={setActiveTab} className="flex-1 flex flex-col">
+      <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
         <TabsList className="grid w-full grid-cols-5">
           <TabsTrigger value="overview">Overview</TabsTrigger>
           <TabsTrigger value="estate">Estate Position</TabsTrigger>
@@ -98,7 +90,7 @@ export default function ProjectStep() {
         </TabsList>
 
         {/* Overview Tab - Shows all 4 gauges */}
-        <TabsContent value="overview" className="flex-1">
+        <TabsContent value="overview">
           <OverviewDashboard 
             data={calculatedValues}
             chartType={chartType}
@@ -106,8 +98,8 @@ export default function ProjectStep() {
         </TabsContent>
 
         {/* Individual Position Tabs */}
-        <TabsContent value="estate" className="flex-1">
-          <div className="grid grid-cols-12 gap-6 h-full">
+        <TabsContent value="estate">
+          <div className="grid grid-cols-12 gap-6">
             <div className="col-span-5">
               <ParameterPanel
                 title="Estate Position Parameters"
@@ -127,8 +119,8 @@ export default function ProjectStep() {
           </div>
         </TabsContent>
 
-        <TabsContent value="dependants" className="flex-1">
-          <div className="grid grid-cols-12 gap-6 h-full">
+        <TabsContent value="dependants">
+          <div className="grid grid-cols-12 gap-6">
             <div className="col-span-5">
               <ParameterPanel
                 title="Dependants Position Parameters"
@@ -148,8 +140,8 @@ export default function ProjectStep() {
           </div>
         </TabsContent>
 
-        <TabsContent value="capital" className="flex-1">
-          <div className="grid grid-cols-12 gap-6 h-full">
+        <TabsContent value="capital">
+          <div className="grid grid-cols-12 gap-6">
             <div className="col-span-5">
               <ParameterPanel
                 title="Total Capital Position Parameters"
@@ -169,8 +161,8 @@ export default function ProjectStep() {
           </div>
         </TabsContent>
 
-        <TabsContent value="income" className="flex-1">
-          <div className="grid grid-cols-12 gap-6 h-full">
+        <TabsContent value="income">
+          <div className="grid grid-cols-12 gap-6">
             <div className="col-span-5">
               <ParameterPanel
                 title="Income Position Parameters"
