@@ -87,13 +87,61 @@ export default function ProjectStep() {
           {/* Tab Navigation and Content */}
           <div className="px-6 py-4">
             <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
-              <TabsList className="grid w-full grid-cols-5">
-                <TabsTrigger value="overview">Overview</TabsTrigger>
-                <TabsTrigger value="estate">Estate Position</TabsTrigger>
-                <TabsTrigger value="dependants">Dependants Position</TabsTrigger>
-                <TabsTrigger value="capital">Total Capital Position</TabsTrigger>
-                <TabsTrigger value="income">Income Position</TabsTrigger>
-              </TabsList>
+              {/* Custom Tab Navigation */}
+              <div className="w-full bg-gray-100 rounded-lg p-1">
+                <div className="grid w-full grid-cols-5 gap-1">
+                  <button
+                    onClick={() => setActiveTab('overview')}
+                    className={`px-4 py-2 text-sm font-medium rounded-md transition-colors ${
+                      activeTab === 'overview'
+                        ? 'bg-white text-gray-900 shadow-sm'
+                        : 'text-gray-600 hover:text-gray-900'
+                    }`}
+                  >
+                    Overview
+                  </button>
+                  <button
+                    onClick={() => setActiveTab('estate')}
+                    className={`px-4 py-2 text-sm font-medium rounded-md transition-colors ${
+                      activeTab === 'estate'
+                        ? 'bg-white text-gray-900 shadow-sm'
+                        : 'text-gray-600 hover:text-gray-900'
+                    }`}
+                  >
+                    Estate Position
+                  </button>
+                  <button
+                    onClick={() => setActiveTab('dependants')}
+                    className={`px-4 py-2 text-sm font-medium rounded-md transition-colors ${
+                      activeTab === 'dependants'
+                        ? 'bg-white text-gray-900 shadow-sm'
+                        : 'text-gray-600 hover:text-gray-900'
+                    }`}
+                  >
+                    Dependants Position
+                  </button>
+                  <button
+                    onClick={() => setActiveTab('capital')}
+                    className={`px-4 py-2 text-sm font-medium rounded-md transition-colors ${
+                      activeTab === 'capital'
+                        ? 'bg-white text-gray-900 shadow-sm'
+                        : 'text-gray-600 hover:text-gray-900'
+                    }`}
+                  >
+                    Total Capital Position
+                  </button>
+                  <button
+                    onClick={() => setActiveTab('income')}
+                    className={`px-4 py-2 text-sm font-medium rounded-md transition-colors ${
+                      activeTab === 'income'
+                        ? 'bg-white text-gray-900 shadow-sm'
+                        : 'text-gray-600 hover:text-gray-900'
+                    }`}
+                  >
+                    Income Position
+                  </button>
+                </div>
+              </div>
 
               {/* Overview Tab - Shows all 4 gauges */}
               <TabsContent value="overview">
