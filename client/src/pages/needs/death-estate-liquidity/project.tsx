@@ -77,116 +77,120 @@ export default function ProjectStep() {
   );
 
   return (
-    <CalculatorHeader 
-      title="Projections"
-      additionalControls={chartTypeSelector}
-      className="mb-6"
-    >
-      {/* Tab Navigation and Content */}
-      <div className="px-5 pb-5">
-        <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
-          <TabsList className="grid w-full grid-cols-5">
-          <TabsTrigger value="overview">Overview</TabsTrigger>
-          <TabsTrigger value="estate">Estate Position</TabsTrigger>
-          <TabsTrigger value="dependants">Dependants Position</TabsTrigger>
-          <TabsTrigger value="capital">Total Capital Position</TabsTrigger>
-          <TabsTrigger value="income">Income Position</TabsTrigger>
-        </TabsList>
+    <div className="">
+      <div className="w-full px-6 py-6">
+        <CalculatorHeader 
+          title="Projections"
+          additionalControls={chartTypeSelector}
+          className="mb-6"
+        >
+          {/* Tab Navigation and Content */}
+          <div className="max-w-6xl">
+            <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
+              <TabsList className="grid w-full grid-cols-5">
+                <TabsTrigger value="overview">Overview</TabsTrigger>
+                <TabsTrigger value="estate">Estate Position</TabsTrigger>
+                <TabsTrigger value="dependants">Dependants Position</TabsTrigger>
+                <TabsTrigger value="capital">Total Capital Position</TabsTrigger>
+                <TabsTrigger value="income">Income Position</TabsTrigger>
+              </TabsList>
 
-        {/* Overview Tab - Shows all 4 gauges */}
-        <TabsContent value="overview">
-          <OverviewDashboard 
-            data={calculatedValues}
-            chartType={chartType}
-          />
-        </TabsContent>
+              {/* Overview Tab - Shows all 4 gauges */}
+              <TabsContent value="overview">
+                <OverviewDashboard 
+                  data={calculatedValues}
+                  chartType={chartType}
+                />
+              </TabsContent>
 
-        {/* Individual Position Tabs */}
-        <TabsContent value="estate">
-          <div className="grid grid-cols-12 gap-6">
-            <div className="col-span-5">
-              <ParameterPanel
-                title="Estate Position Parameters"
-                parameters={parameters}
-                onParameterChange={handleParameterChange}
-                section="estate"
-              />
-            </div>
-            <div className="col-span-7">
-              <ChartPanel
-                title="Estate Position"
-                data={calculatedValues.estatePosition}
-                chartType={chartType}
-                description="Shows the estate's capital position after death"
-              />
-            </div>
+              {/* Individual Position Tabs */}
+              <TabsContent value="estate">
+                <div className="grid grid-cols-12 gap-6">
+                  <div className="col-span-5">
+                    <ParameterPanel
+                      title="Estate Position Parameters"
+                      parameters={parameters}
+                      onParameterChange={handleParameterChange}
+                      section="estate"
+                    />
+                  </div>
+                  <div className="col-span-7">
+                    <ChartPanel
+                      title="Estate Position"
+                      data={calculatedValues.estatePosition}
+                      chartType={chartType}
+                      description="Shows the estate's capital position after death"
+                    />
+                  </div>
+                </div>
+              </TabsContent>
+
+              <TabsContent value="dependants">
+                <div className="grid grid-cols-12 gap-6">
+                  <div className="col-span-5">
+                    <ParameterPanel
+                      title="Dependants Position Parameters"
+                      parameters={parameters}
+                      onParameterChange={handleParameterChange}
+                      section="dependants"
+                    />
+                  </div>
+                  <div className="col-span-7">
+                    <ChartPanel
+                      title="Dependants Position"
+                      data={calculatedValues.dependantsPosition}
+                      chartType={chartType}
+                      description="Shows capital provisions for dependants"
+                    />
+                  </div>
+                </div>
+              </TabsContent>
+
+              <TabsContent value="capital">
+                <div className="grid grid-cols-12 gap-6">
+                  <div className="col-span-5">
+                    <ParameterPanel
+                      title="Total Capital Position Parameters"
+                      parameters={parameters}
+                      onParameterChange={handleParameterChange}
+                      section="capital"
+                    />
+                  </div>
+                  <div className="col-span-7">
+                    <ChartPanel
+                      title="Total Capital Position"
+                      data={calculatedValues.totalCapitalPosition}
+                      chartType={chartType}
+                      description="Overall capital adequacy analysis"
+                    />
+                  </div>
+                </div>
+              </TabsContent>
+
+              <TabsContent value="income">
+                <div className="grid grid-cols-12 gap-6">
+                  <div className="col-span-5">
+                    <ParameterPanel
+                      title="Income Position Parameters"
+                      parameters={parameters}
+                      onParameterChange={handleParameterChange}
+                      section="income"
+                    />
+                  </div>
+                  <div className="col-span-7">
+                    <ChartPanel
+                      title="Income Position"
+                      data={calculatedValues.incomePosition}
+                      chartType={chartType}
+                      description="Monthly income provisions and requirements"
+                    />
+                  </div>
+                </div>
+              </TabsContent>
+            </Tabs>
           </div>
-        </TabsContent>
-
-        <TabsContent value="dependants">
-          <div className="grid grid-cols-12 gap-6">
-            <div className="col-span-5">
-              <ParameterPanel
-                title="Dependants Position Parameters"
-                parameters={parameters}
-                onParameterChange={handleParameterChange}
-                section="dependants"
-              />
-            </div>
-            <div className="col-span-7">
-              <ChartPanel
-                title="Dependants Position"
-                data={calculatedValues.dependantsPosition}
-                chartType={chartType}
-                description="Shows capital provisions for dependants"
-              />
-            </div>
-          </div>
-        </TabsContent>
-
-        <TabsContent value="capital">
-          <div className="grid grid-cols-12 gap-6">
-            <div className="col-span-5">
-              <ParameterPanel
-                title="Total Capital Position Parameters"
-                parameters={parameters}
-                onParameterChange={handleParameterChange}
-                section="capital"
-              />
-            </div>
-            <div className="col-span-7">
-              <ChartPanel
-                title="Total Capital Position"
-                data={calculatedValues.totalCapitalPosition}
-                chartType={chartType}
-                description="Overall capital adequacy analysis"
-              />
-            </div>
-          </div>
-        </TabsContent>
-
-        <TabsContent value="income">
-          <div className="grid grid-cols-12 gap-6">
-            <div className="col-span-5">
-              <ParameterPanel
-                title="Income Position Parameters"
-                parameters={parameters}
-                onParameterChange={handleParameterChange}
-                section="income"
-              />
-            </div>
-            <div className="col-span-7">
-              <ChartPanel
-                title="Income Position"
-                data={calculatedValues.incomePosition}
-                chartType={chartType}
-                description="Monthly income provisions and requirements"
-              />
-            </div>
-          </div>
-        </TabsContent>
-        </Tabs>
+        </CalculatorHeader>
       </div>
-    </CalculatorHeader>
+    </div>
   );
 }
