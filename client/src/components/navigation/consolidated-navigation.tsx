@@ -65,15 +65,9 @@ export function ConsolidatedNavigation({
         { id: 'additional-estate-duty', label: 'Additional estate duty items', path: '/additional-estate-duty-items', hasContent: true }
       );
     }
-    // For Project step, show specific project sections
+    // For Project step, no dropdown - direct navigation
     else if (step.id === 'project') {
-      items.push(
-        { id: 'overview', label: 'Overview', path: '/project/overview', hasContent: false },
-        { id: 'estate-position', label: 'Estate position', path: '/project/estate-position', hasContent: false },
-        { id: 'dependents-positions', label: 'Dependents positions', path: '/project/dependents-positions', hasContent: false },
-        { id: 'total-capital-position', label: 'Total capital position', path: '/project/total-capital-position', hasContent: false },
-        { id: 'income-position', label: 'Income position', path: '/project/income-position', hasContent: false }
-      );
+      // No items needed - Project button will navigate directly
     }
     // For Implement step, show implementation options
     else if (step.id === 'implement') {

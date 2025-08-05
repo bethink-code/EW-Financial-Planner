@@ -171,26 +171,7 @@ export const needs: Need[] = [
         label: "Project",
         path: "/needs/death-estate-liquidity/project",
         hasContent: true,
-        sections: [
-          {
-            id: "projections",
-            label: "Projections",
-            path: "/needs/death-estate-liquidity/project/projections",
-            hasContent: false
-          },
-          {
-            id: "reports",
-            label: "Reports",
-            path: "/needs/death-estate-liquidity/project/reports",
-            hasContent: false
-          },
-          {
-            id: "analysis",
-            label: "Analysis",
-            path: "/needs/death-estate-liquidity/project/analysis",
-            hasContent: false
-          }
-        ]
+        sections: []
       },
       {
         id: "implement",
