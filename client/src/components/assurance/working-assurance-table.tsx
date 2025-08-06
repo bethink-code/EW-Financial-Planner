@@ -8,7 +8,7 @@ import { apiRequest } from "@/lib/queryClient";
 import { AddButton, DuplicateButton, DeleteButton, ActionButtonGroup } from "@/components/ui/action-buttons";
 import { TableHeaderAddButton } from "@/components/ui/table-header-add-button";
 import { EntityOwnerSelector } from "./entity-owner-selector";
-import { EntityBeneficiarySelector } from "./entity-beneficiary-selector";
+import EntityBeneficiarySelector from "@/components/common/entity-beneficiary-selector";
 import { useDebouncedUpdate } from "@/hooks/use-debounced-update";
 import { SafeFragment } from "@/lib/safe-fragment";
 import { Button } from "@/components/ui/button";
