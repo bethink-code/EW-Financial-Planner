@@ -674,7 +674,7 @@ th, td {
   .table-input {
     width: auto;
     height: 2.3rem !important; /* Match dropdown height for consistency */
-    padding: 0.5rem 0.75rem !important; /* Increased padding for better field height */
+    padding: 0.25rem 0.5rem !important; /* Reduced padding to match p-1 for consistent row height */
     background-color: hsl(var(--primary) / 0.05);
     border: 1px solid hsl(var(--border));
     outline: none;
