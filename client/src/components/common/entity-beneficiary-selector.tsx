@@ -101,67 +101,36 @@ export default function EntityBeneficiarySelector({
 
   return (
     <div className="space-y-1">
-      <div 
-        style={{ 
-          display: 'flex', 
-          alignItems: 'center', 
-          gap: '4px',
-          border: '1px solid red' // Debug border
-        }}
-      >
-        <div 
-          style={{ 
-            order: 1, 
-            flexShrink: 0, 
-            backgroundColor: 'lightblue' // Debug color for action button
-          }}
-        >
-          {actionButton}
-        </div>
+      <div className="flex items-center gap-1">
+        {/* Action Button - Using plain button without any wrapper */}
+        {actionButton}
         
-        <div 
-          style={{ 
-            order: 2, 
-            flex: 1, 
-            backgroundColor: 'lightgreen' // Debug color for select
-          }}
+        {/* Entity Selector - Using native HTML select to avoid CSS conflicts */}
+        <select
+          value={currentBeneficiary}
+          onChange={(e) => handleBeneficiarySelect(e.target.value, beneficiaryIndex)}
+          disabled={disabled}
+          className="h-8 text-xs flex-1 border border-neutral-300 rounded px-2 bg-white"
         >
-          <Select
-            value={currentBeneficiary}
-            onValueChange={(value) => handleBeneficiarySelect(value, beneficiaryIndex)}
-            disabled={disabled}
-          >
-            <SelectTrigger className="h-8 text-xs w-full">
-              <SelectValue placeholder="Select beneficiary..." />
-            </SelectTrigger>
-            <SelectContent>
-              {entities.map((entity) => (
-                <SelectItem key={entity.id} value={entity.entityName}>
-                  {entity.entityName} ({entity.entityType})
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        </div>
-        
-        <div 
-          style={{ 
-            order: 3, 
-            flexShrink: 0, 
-            backgroundColor: 'lightyellow' // Debug color for input
-          }}
-        >
-          <input
-            type="text"
-            value={currentPercentage}
-            onChange={(e) => handlePercentageChange(e.target.value, beneficiaryIndex)}
-            className={`w-16 h-8 text-xs border rounded px-1 text-center ${
-              isInvalidTotal ? 'border-red-500 bg-red-50' : 'border-neutral-300'
-            }`}
-            placeholder="0%"
-            disabled={disabled}
-          />
-        </div>
+          <option value="">Select beneficiary...</option>
+          {entities.map((entity) => (
+            <option key={entity.id} value={entity.entityName}>
+              {entity.entityName} ({entity.entityType})
+            </option>
+          ))}
+        </select>
+
+        {/* Percentage Input */}
+        <input
+          type="text"
+          value={currentPercentage}
+          onChange={(e) => handlePercentageChange(e.target.value, beneficiaryIndex)}
+          className={`w-16 h-8 text-xs border rounded px-1 text-center ${
+            isInvalidTotal ? 'border-red-500 bg-red-50' : 'border-neutral-300'
+          }`}
+          placeholder="0%"
+          disabled={disabled}
+        />
       </div>
 
       {/* Validation Warning - only show on first row */}
