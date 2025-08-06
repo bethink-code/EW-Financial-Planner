@@ -78,14 +78,14 @@ export function SequentialNavigationBar({ className }: SequentialNavigationBarPr
           {/* Progress & Breadcrumb */}
           <div className="flex-1 mx-2 min-w-0">
             <div className="flex flex-col items-center gap-1">
-              {/* Full Breadcrumb - no truncation */}
-              <div className="text-xs font-medium text-gray-700 dark:text-gray-300 text-center w-full">
-                (Step {progress.current} of {progress.total}) - {currentItem.breadcrumb}
+              {/* Top row: Simple Progress Fraction */}
+              <div className="text-sm font-semibold text-center" style={{ color: '#016991' }}>
+                Step {progress.current} / {progress.total}
               </div>
               
-              {/* Bottom row: Simple Progress Fraction */}
-              <div className="text-sm font-semibold text-center" style={{ color: '#016991' }}>
-                {progress.current} / {progress.total}
+              {/* Bottom row: Full Breadcrumb - no truncation */}
+              <div className="text-xs font-medium text-gray-700 dark:text-gray-300 text-center w-full">
+                {currentItem.breadcrumb}
               </div>
             </div>
           </div>
