@@ -472,7 +472,7 @@ export default function DefinedBenefitFundsTable({ onAddFund }: DefinedBenefitFu
 
                     {/* Pension Income Toggle Button */}
                     {rowIndex === 0 && (
-                      <td className="table-actions-cell align-top" rowSpan={maxRows}>
+                      <td className="table-actions-cell p-2 align-top" rowSpan={maxRows}>
                         <div className="pt-0.5">
                           <button
                             type="button"
@@ -490,7 +490,7 @@ export default function DefinedBenefitFundsTable({ onAddFund }: DefinedBenefitFu
 
                     {/* Pension Income Dynamic Field (Years OR Percentage) */}
                     {rowIndex === 0 && (
-                      <td className="p-1 align-top" rowSpan={maxRows}>
+                      <td className="p-2 align-top" rowSpan={maxRows}>
                         {isYearsMode(fund) ? (
                           // Years Mode
                           <input
