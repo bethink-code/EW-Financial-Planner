@@ -7,6 +7,7 @@ import { getCellClass } from"@/lib/field-types";
 import { formatCurrencyValue, formatPercentageValue, formatYearsValue, formatTextValue, getValueClass, isDefaultValue, handleDefaultValueFocus } from"@/lib/formatting";
 import { useDebouncedUpdate } from"@/hooks/use-debounced-update";
 import { SafeFragment } from"@/lib/safe-fragment";
+import EntityOwnerSelector from "@/components/common/entity-owner-selector";
 import type { DefinedBenefitFund, InsertDefinedBenefitFund } from"@shared/schema";
 
 interface DefinedBenefitFundsTableProps {
@@ -129,57 +130,67 @@ export default function DefinedBenefitFundsTable({ onAddFund }: DefinedBenefitFu
     };
   }, [funds]);
 
-  // Unified update handler for all fund updates
-  const handleUpdateFund = useCallback((id: number, updates: Partial<DefinedBenefitFund>) => {
-    updateMutation.mutate({ id, updates });
+  // Base update handler
+  const executeUpdate = useCallback((id: number, field: keyof DefinedBenefitFund, value: string | boolean | string[]) => {
+    updateMutation.mutate({ id, updates: { [field]: value } });
   }, [updateMutation]);
 
-  // Debounced update for text fields to prevent jumping
-  const debouncedUpdateFund = useDebouncedUpdate(handleUpdateFund, 300);
+  // Debounced update for text fields to prevent race conditions
+  const debouncedUpdate = useDebouncedUpdate(executeUpdate, 300);
 
-  // Owner management functions
-  const handleAddOwner = useCallback((fundId: number) => {
-    const fund = funds.find(f => f.id === fundId);
-    if (!fund) return;
+  // Unified update handler - use immediate updates for array fields to prevent synchronization issues
+  const handleUpdateFund = useCallback((id: number, field: keyof DefinedBenefitFund, value: string | boolean | string[]) => {
+    // Use immediate updates for array fields to prevent synchronization issues
+    const arrayFields = ['owners', 'ownershipPercentages'];
     
-    const newOwners = [...fund.owners,"Donald Edwards"];
-    const newPercentages = [...fund.ownershipPercentages,"0%"];
-    
-    handleUpdateFund(fundId, { 
-      owners: newOwners,
-      ownershipPercentages: newPercentages
-    });
+    if (arrayFields.includes(field)) {
+      executeUpdate(id, field, value);
+    } else {
+      debouncedUpdate(id, field, value);
+    }
+  }, [executeUpdate, debouncedUpdate]);
+
+  // Add owner to fund
+  const handleAddOwner = useCallback((id: number) => {
+    const fund = funds.find((f: DefinedBenefitFund) => f.id === id);
+    if (fund) {
+      const newOwners = [...fund.owners, ""];
+      const newOwnershipPercentages = [...(fund.ownershipPercentages || []), "0%"];
+      handleUpdateFund(id, 'owners', newOwners);
+      handleUpdateFund(id, 'ownershipPercentages', newOwnershipPercentages);
+    }
   }, [funds, handleUpdateFund]);
 
-  const handleRemoveOwner = useCallback((fundId: number, ownerIndex: number) => {
-    const fund = funds.find(f => f.id === fundId);
-    if (!fund || fund.owners.length <= 1) return; // Keep at least one owner
-    
-    const newOwners = [...fund.owners];
-    const newPercentages = [...fund.ownershipPercentages];
-    
-    newOwners.splice(ownerIndex, 1);
-    newPercentages.splice(ownerIndex, 1);
-    
-    handleUpdateFund(fundId, { 
-      owners: newOwners,
-      ownershipPercentages: newPercentages
-    });
-  }, [funds, handleUpdateFund]);
-
-  const handleOwnerUpdate = useCallback((fundId: number, ownerIndex: number, field: 'name' | 'percentage', value: string) => {
-    const fund = funds.find(f => f.id === fundId);
-    if (!fund) return;
-    
-    if (field === 'name') {
+  // Remove specific owner by index using splice method
+  const handleRemoveOwner = useCallback((id: number, ownerIndex: number) => {
+    const fund = funds.find((f: DefinedBenefitFund) => f.id === id);
+    if (fund && fund.owners.length > 1 && ownerIndex > 0) { // Protect first owner
       const newOwners = [...fund.owners];
-      newOwners[ownerIndex] = value;
-      handleUpdateFund(fundId, { owners: newOwners });
-    } else if (field === 'percentage') {
-      const formattedValue = formatPercentageValue(value);
-      const newPercentages = [...fund.ownershipPercentages];
-      newPercentages[ownerIndex] = formattedValue;
-      handleUpdateFund(fundId, { ownershipPercentages: newPercentages });
+      const newOwnershipPercentages = [...(fund.ownershipPercentages || [])];
+      newOwners.splice(ownerIndex, 1);
+      newOwnershipPercentages.splice(ownerIndex, 1);
+      handleUpdateFund(id, 'owners', newOwners);
+      handleUpdateFund(id, 'ownershipPercentages', newOwnershipPercentages);
+    }
+  }, [funds, handleUpdateFund]);
+
+  // Update owner name
+  const handleOwnerChange = useCallback((id: number, ownerIndex: number, newOwner: string) => {
+    const fund = funds.find((f: DefinedBenefitFund) => f.id === id);
+    if (fund) {
+      const updatedOwners = [...fund.owners];
+      updatedOwners[ownerIndex] = newOwner;
+      handleUpdateFund(id, 'owners', updatedOwners);
+    }
+  }, [funds, handleUpdateFund]);
+
+  // Update ownership percentage 
+  const handleOwnershipPercentageChange = useCallback((id: number, ownerIndex: number, newPercentage: string) => {
+    const fund = funds.find((f: DefinedBenefitFund) => f.id === id);
+    if (fund) {
+      const updatedPercentages = [...(fund.ownershipPercentages || [])];
+      updatedPercentages[ownerIndex] = newPercentage;
+      handleUpdateFund(id, 'ownershipPercentages', updatedPercentages);
     }
   }, [funds, handleUpdateFund]);
 
@@ -202,9 +213,9 @@ export default function DefinedBenefitFundsTable({ onAddFund }: DefinedBenefitFu
 
     // Use debounced update for text fields, immediate for currency/percentage
     if (field === 'description') {
-      debouncedUpdateFund(id, { [field]: formattedValue });
+      debouncedUpdate(id, field, formattedValue);
     } else {
-      handleUpdateFund(id, { [field]: formattedValue });
+      handleUpdateFund(id, field, formattedValue);
     }
 
     // Update the input field with formatted value if it changed
@@ -213,7 +224,7 @@ export default function DefinedBenefitFundsTable({ onAddFund }: DefinedBenefitFu
         target.value = formattedValue;
       }, 0);
     }
-  }, [debouncedUpdateFund, handleUpdateFund]);
+  }, [debouncedUpdate, handleUpdateFund]);
 
   const handleDeleteFund = useCallback((id: number) => {
     if (window.confirm('Are you sure you want to delete this fund?')) {
@@ -321,54 +332,25 @@ export default function DefinedBenefitFundsTable({ onAddFund }: DefinedBenefitFu
                           onFocus={handleDefaultValueFocus}
                           onBlur={(e) => {
                             const formattedValue = e.target.value ==="Enter details ..." ?"" : e.target.value;
-                            handleInputBlur(fund.id, 'description', formattedValue);
+                            handleUpdateFund(fund.id, 'description', formattedValue);
                           }}
                           disabled={isUpdating}
                         />
                       </td>
                     )}
                     
-                    {/* Owner Name and Percentage - One per row */}
-                    <td className="p-2">
-                      <div className="flex items-center gap-1">
-                        <input
-                          key={`owner-${fund.id}-${rowIndex}-${fund.owners[rowIndex]}`}
-                          type="text"
-                          defaultValue={formatTextValue(fund.owners[rowIndex], 'owner')}
-                          className={`table-input ${getFieldClass('text')} ${getValueClass(fund.owners[rowIndex], 'text')}`}
-                          style={{ flex: 1 }}
-                          onFocus={handleDefaultValueFocus}
-                          onBlur={(e) => handleOwnerUpdate(fund.id, rowIndex, 'name', e.target.value)}
-                          disabled={isUpdating}
-                        />
-                        {rowIndex === 0 ? (
-                          <AddButton
-                            onClick={() => handleAddOwner(fund.id)}
-                            disabled={isUpdating}
-                            size="sm"
-                          />
-                        ) : (
-                          <DeleteButton
-                            onClick={() => handleRemoveOwner(fund.id, rowIndex)}
-                            disabled={isUpdating}
-                            size="sm"
-                          />
-                        )}
-                      </div>
-                    </td>
-                    <td className={`p-2 ${getCellClass('percentage')}`}>
-                      <input
-                        key={`percentage-${fund.id}-${rowIndex}-${fund.ownershipPercentages[rowIndex]}`}
-                        type="text"
-                        defaultValue={fund.ownershipPercentages[rowIndex] ||"0%"}
-                        onFocus={handleDefaultValueFocus}
-                        onBlur={(e) => {
-                          const formattedValue = formatPercentageValue(e.target.value);
-                          handleOwnerUpdate(fund.id, rowIndex, 'percentage', formattedValue);
-                          e.target.value = formattedValue;
-                        }}
-                        className={`table-input ${getFieldClass('percentage')} ${getValueClass(fund.ownershipPercentages[rowIndex] ||"0%", 'percentage')}`}
-                        disabled={isUpdating}
+                    {/* Owner with Entity Selector and Percentage */}
+                    <td className="p-2" colSpan={2}>
+                      <EntityOwnerSelector
+                        policyId={fund.id}
+                        owners={fund.owners}
+                        ownershipPercentages={fund.ownershipPercentages || ["100%"]}
+                        onOwnerChange={handleOwnerChange}
+                        onOwnershipPercentageChange={handleOwnershipPercentageChange}
+                        onAddOwner={handleAddOwner}
+                        onRemoveOwner={handleRemoveOwner}
+                        rowIndex={rowIndex}
+                        disabled={updateMutation.isPending}
                       />
                     </td>
                     
@@ -381,7 +363,7 @@ export default function DefinedBenefitFundsTable({ onAddFund }: DefinedBenefitFu
                           defaultValue={fund.yearsOfService}
                           className={`table-input ${getFieldClass('years')} ${getValueClass(fund.yearsOfService, 'years')}`}
                           onFocus={handleDefaultValueFocus}
-                          onBlur={(e) => handleInputBlur(fund.id, 'yearsOfService', e.target.value, e.target)}
+                          onBlur={(e) => handleUpdateFund(fund.id, 'yearsOfService', e.target.value)}
                           disabled={isUpdating}
                         />
                       </td>
@@ -394,7 +376,7 @@ export default function DefinedBenefitFundsTable({ onAddFund }: DefinedBenefitFu
                           defaultValue={fund.finalMonthlySalary}
                           className={`table-input ${getFieldClass('currency')} ${getValueClass(fund.finalMonthlySalary, 'currency')}`}
                           onFocus={handleDefaultValueFocus}
-                          onBlur={(e) => handleInputBlur(fund.id, 'finalMonthlySalary', e.target.value, e.target)}
+                          onBlur={(e) => handleUpdateFund(fund.id, 'finalMonthlySalary', e.target.value)}
                           disabled={isUpdating}
                         />
                       </td>
@@ -407,7 +389,7 @@ export default function DefinedBenefitFundsTable({ onAddFund }: DefinedBenefitFu
                           defaultValue={fund.deathLumpSum}
                           className={`table-input ${getFieldClass('currency')} ${getValueClass(fund.deathLumpSum, 'currency')}`}
                           onFocus={handleDefaultValueFocus}
-                          onBlur={(e) => handleInputBlur(fund.id, 'deathLumpSum', e.target.value, e.target)}
+                          onBlur={(e) => handleUpdateFund(fund.id, 'deathLumpSum', e.target.value)}
                           disabled={isUpdating}
                         />
                       </td>
@@ -420,7 +402,7 @@ export default function DefinedBenefitFundsTable({ onAddFund }: DefinedBenefitFu
                           defaultValue={fund.additionalTaxFreeAmount}
                           className={`table-input ${getFieldClass('currency')} ${getValueClass(fund.additionalTaxFreeAmount, 'currency')}`}
                           onFocus={handleDefaultValueFocus}
-                          onBlur={(e) => handleInputBlur(fund.id, 'additionalTaxFreeAmount', e.target.value, e.target)}
+                          onBlur={(e) => handleUpdateFund(fund.id, 'additionalTaxFreeAmount', e.target.value)}
                           disabled={isUpdating}
                         />
                       </td>
@@ -435,7 +417,7 @@ export default function DefinedBenefitFundsTable({ onAddFund }: DefinedBenefitFu
                           defaultValue={fund.pensionIncomeAmount}
                           className={`table-input ${getFieldClass('currency')} ${getValueClass(fund.pensionIncomeAmount, 'currency')}`}
                           onFocus={handleDefaultValueFocus}
-                          onBlur={(e) => handleInputBlur(fund.id, 'pensionIncomeAmount', e.target.value, e.target)}
+                          onBlur={(e) => handleUpdateFund(fund.id, 'pensionIncomeAmount', e.target.value)}
                           disabled={isUpdating}
                         />
                       </td>
@@ -447,7 +429,7 @@ export default function DefinedBenefitFundsTable({ onAddFund }: DefinedBenefitFu
                           type="text"
                           defaultValue={fund.pensionIncomeIncrease ||"0%"}
                           onFocus={handleDefaultValueFocus}
-                          onBlur={(e) => handleInputBlur(fund.id, 'pensionIncomeIncrease', e.target.value, e.target)}
+                          onBlur={(e) => handleUpdateFund(fund.id, 'pensionIncomeIncrease', e.target.value)}
                           className={`table-input ${getFieldClass('percentage')} ${getValueClass(fund.pensionIncomeIncrease ||"0%", 'percentage')}`}
                           disabled={isUpdating}
                         />
