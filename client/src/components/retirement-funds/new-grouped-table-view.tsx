@@ -10,6 +10,7 @@ import { FundActions } from"./fund-actions";
 import { nanoid } from"nanoid";
 import { getFieldClass } from"@/lib/design-tokens";
 import { formatPercentageValue, getValueClass, isDefaultValue, handleDefaultValueFocus } from"@/lib/formatting";
+import { SafeFragment } from "@/lib/safe-fragment";
 interface ColumnVisibility {
   overview: boolean;
   unapprovedLifeCover: boolean;
@@ -729,7 +730,7 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
             const beneficiaries = parseBeneficiaries(fund.beneficiaries);
             
             return (
-              <React.Fragment key={fund.id}>
+              <SafeFragment key={fund.id}>
                 {/* Main fund row */}
                 <tr >
                   {/* Overview Section */}
@@ -899,7 +900,7 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
                     )}
                   </tr>
                 ))}
-              </React.Fragment>
+              </SafeFragment>
             );
           })}
           

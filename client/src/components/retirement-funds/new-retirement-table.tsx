@@ -6,6 +6,7 @@ import { createOwnerManager, createComplexBeneficiaryManager } from"@/lib/array-
 import { getFieldClass, getCellClass } from"@/lib/field-types";
 import { ActionButtonGroup, DuplicateButton, DeleteButton, AddButton } from"@/components/ui/action-buttons";
 import { TableHeaderAddButton } from "@/components/ui/table-header-add-button";
+import { SafeFragment } from "@/lib/safe-fragment";
 
 import { useDebouncedUpdate } from"@/hooks/use-debounced-update";
 
@@ -327,7 +328,7 @@ export function NewRetirementTable({
  );
 
  return (
- <React.Fragment key={`fund-${fund.id}-${maxRows}`}>
+ <SafeFragment key={`fund-${fund.id}-${maxRows}`}>
  {Array.from({ length: maxRows }, (_, rowIndex) => (
  <tr key={`${fund.id}-${rowIndex}`} className="hover:bg-neutral-50">
  {/* Actions */}
@@ -711,7 +712,7 @@ export function NewRetirementTable({
  )}
  </tr>
  ))}
- </React.Fragment>
+ </SafeFragment>
  );
  })}
  
