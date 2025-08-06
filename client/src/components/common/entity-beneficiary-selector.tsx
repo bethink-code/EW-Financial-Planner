@@ -54,6 +54,7 @@ export default function EntityBeneficiarySelector({
       const numValue = parseFloat(pct.replace('%', '')) || 0;
       return sum + numValue;
     }, 0);
+    console.log('Percentage calculation:', { beneficiaryPercentages, total });
     setPercentageTotal(total);
   }, [beneficiaryPercentages]);
 
@@ -61,11 +62,24 @@ export default function EntityBeneficiarySelector({
     onBeneficiaryChange(policyId, beneficiaryIndex, newBeneficiary);
   }, [policyId, onBeneficiaryChange]);
 
-  const handlePercentageChange = useCallback((newPercentage: string, beneficiaryIndex: number) => {
-    // Format percentage with % suffix
-    const formattedPercentage = newPercentage.endsWith('%') ? newPercentage : `${newPercentage}%`;
+  const handlePercentageChange = useCallback((newPercentage: string) => {
+    // Clean the value and format with % suffix
+    let cleanValue = newPercentage.replace(/[^\d.]/g, '');
+    if (!cleanValue) cleanValue = "0";
+    
+    const numValue = parseFloat(cleanValue);
+    const formattedPercentage = isNaN(numValue) ? "0%" : `${numValue}%`;
+    
+    console.log('Percentage change handler:', { 
+      input: newPercentage, 
+      cleaned: cleanValue, 
+      formatted: formattedPercentage, 
+      beneficiaryIndex, 
+      policyId 
+    });
+    
     onBeneficiaryPercentageChange(policyId, beneficiaryIndex, formattedPercentage);
-  }, [policyId, onBeneficiaryPercentageChange]);
+  }, [policyId, beneficiaryIndex, onBeneficiaryPercentageChange]);
 
   // Only show content for the current row's beneficiary
   const beneficiaryIndex = rowIndex;
