@@ -355,7 +355,7 @@ export default function DefinedBenefitFundsTable({ onAddFund }: DefinedBenefitFu
                   <tr key={`${fund.id}-${rowIndex}`} className="hover:bg-neutral-50">
                     {/* Actions Section - Only show on first row */}
                     {rowIndex === 0 && (
-                      <td className="table-actions-cell p-2 text-center section-start align-top" rowSpan={maxRows}>
+                      <td className="table-actions-cell p-1 text-center section-start align-top" rowSpan={maxRows}>
                         <ActionButtonGroup>
                           <DuplicateButton
                             onClick={() => handleDuplicateFund(fund)}
