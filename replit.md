@@ -72,8 +72,8 @@ Client requests data via TanStack Query hooks. Express routes handle CRUD operat
 
 ## Recent Major Updates
 
-### August 6, 2025 - Global Entity Management System with Ownership Percentages
-**Scope**: Complete transformation from text-based owner/beneficiary fields to dynamic entity management system with percentage validation across all major calculation tables
+### August 6, 2025 - Global Entity Management System with Primary Entity Defaults
+**Scope**: Complete transformation from text-based owner/beneficiary fields to dynamic entity management system with percentage validation and automatic Primary entity defaults across all major calculation tables
 
 **Core Implementation**:
 1. **Database Schema Updates**:
@@ -87,11 +87,15 @@ Client requests data via TanStack Query hooks. Express routes handle CRUD operat
    - Components validate that percentages total 100% for proper financial planning
    - Entity dropdowns populated from `/client-details` master registry
 
-3. **Assurance Table Transformation**:
-   - Updated `client/src/components/assurance/working-assurance-table.tsx` with entity selectors
-   - Single "Beneficiary" column with action buttons positioned correctly on left side
-   - Added percentage change handlers maintaining synchronization between arrays
-   - Implemented add/remove functionality preserving percentage array integrity
+3. **Primary Entity Default System**:
+   - **New Utility Functions**: `client/src/lib/entity-utils.ts` 
+     - `getPrimaryEntity()` - Locates Primary entity from client details
+     - `getDefaultOwners()` - Returns Primary entity as default owner
+     - `getDefaultBeneficiaries()` - Returns Primary entity as default beneficiary
+     - `getDefaultOwnershipPercentages()` - Returns 100% for single owner
+     - `getDefaultBeneficiaryPercentages()` - Returns 100% for single beneficiary
+   - **Global Rule**: All "Add Policy" and "Add Fund" buttons automatically pre-select "Garth Shoebridge (Primary entity)" with 100% allocations
+   - **User Verified**: Primary entity defaults working perfectly across all tables
 
 4. **UI Layout Resolution**:
    - **Issue Identified**: shadcn/ui Select component CSS specificity conflicts prevented proper action button positioning
@@ -105,18 +109,17 @@ Client requests data via TanStack Query hooks. Express routes handle CRUD operat
    - Add/remove buttons maintain array synchronization automatically
    - Master entity registry from `/client-details` ensures data consistency
    - Validation messages display only once per fund to maintain stable table layout
+   - Primary entity automatically selected for all new policies/funds
 
-6. **Retirement Funds Table Implementation**:
-   - Applied EntityOwnerSelector to owners section with percentage validation
-   - Applied EntityBeneficiarySelector to unapproved beneficiaries section  
-   - Applied EntityBeneficiarySelector to fund value beneficiaries section
-   - Removed redundant percentage split columns for streamlined UI
+6. **Streamlined Table UI**:
+   - Removed redundant "Percentage Split" columns since EntityBeneficiarySelector integrates both entity dropdown and percentage input
    - Updated table headers and colspan values for proper alignment
+   - Cleaner, more efficient table layout across all calculation pages
 
-**Tables Completed with Global Entity Pattern**:
-✓ `/assurance` - Working Assurance Table with EntityBeneficiarySelector  
-✓ `/defined-benefit-funds` - Defined Benefit Funds Table with EntityOwnerSelector and EntityBeneficiarySelector  
-✓ `/new-retirement-funds` - Retirement Funds Table with EntityOwnerSelector and EntityBeneficiarySelector  
+**Tables Completed with Global Entity Pattern + Primary Defaults**:
+✓ `/assurance` - Working Assurance Table with EntityBeneficiarySelector and Primary entity defaults
+✓ `/defined-benefit-funds` - Defined Benefit Funds Table with EntityOwnerSelector and Primary entity defaults
+✓ `/new-retirement-funds` - Retirement Funds Table with EntityOwnerSelector/EntityBeneficiarySelector and Primary entity defaults
 
 **Ready for Global Deployment**:
 - `/assets` - Asset table with section grouping
