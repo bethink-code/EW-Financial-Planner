@@ -322,7 +322,6 @@ export function AssuranceTable({ onAddPolicy }: AssuranceTableProps) {
               <th>Life Assured</th>
               <th>Death Benefit</th>
               <th>Beneficiary</th>
-              <th>Additional Info</th>
               <th>Amount</th>
               <th>Buy/Sell</th>
               <th>Key Man</th>
@@ -434,26 +433,9 @@ export function AssuranceTable({ onAddPolicy }: AssuranceTableProps) {
                     />
                   </td>
 
-                  {/* Additional Info - only show on first row */}
-                  <td className="border border-neutral-300 p-1">
-                    {rowIndex === 0 && (
-                      <input
-                        key={`additional-info-${policy.id}`}
-                        type="text"
-                        defaultValue={policy.additionalInfo}
-                        placeholder="Enter details ..."
-                        className={`table-input ${getFieldClass('text')} ${getValueClass(policy.additionalInfo, 'text')}`}
-                        onFocus={handleDefaultValueFocus}
-                        onBlur={(e) => handleUpdatePolicy(policy.id, 'additionalInfo', e.target.value)}
-                      />
-                    )}
-                  </td>
-
-
-
                   {/* Amount - only show on first row */}
-                  <td className="border border-neutral-300 p-1">
-                    {rowIndex === 0 && (
+                  {rowIndex === 0 && (
+                    <td className="border border-neutral-300 p-1 align-top" rowSpan={maxRows}>
                       <input
                         key={`amount-${policy.id}`}
                         type="text"
@@ -462,8 +444,8 @@ export function AssuranceTable({ onAddPolicy }: AssuranceTableProps) {
                         onFocus={handleDefaultValueFocus}
                         onBlur={(e) => handleInputBlur(policy.id, 'amount', e.target.value, e.target, 'amount')}
                       />
-                    )}
-                  </td>
+                    </td>
+                  )}
 
                   {/* Buy/Sell - only show on first row */}
                   <td className="border border-neutral-300 p-1 text-center">
