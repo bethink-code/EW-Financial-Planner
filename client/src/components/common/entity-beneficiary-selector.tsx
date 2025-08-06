@@ -4,6 +4,9 @@ import { Plus, X } from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { ClientDetails } from "@shared/schema";
+import { AddButton, DeleteButton } from "@/components/ui/action-buttons";
+import { getFieldClass } from "@/lib/design-tokens";
+import { getValueClass, handleDefaultValueFocus } from "@/lib/formatting";
 
 interface EntityBeneficiarySelectorProps {
   policyId: number;
@@ -74,29 +77,19 @@ export default function EntityBeneficiarySelector({
   const currentPercentage = beneficiaryPercentages[beneficiaryIndex] || "0%";
   const isInvalidTotal = Math.abs(percentageTotal - 100) > 0.01;
 
-  // Action button comes FIRST in the code
+  // Action button comes FIRST in the code - using same styling as owner component
   const actionButton = rowIndex === 0 ? (
-    <Button
-      size="sm"
-      variant="outline"
-      className="h-6 w-6 p-0"
+    <AddButton
       onClick={() => onAddBeneficiary(policyId)}
       disabled={disabled}
-      title="Add beneficiary"
-    >
-      <Plus className="h-3 w-3" />
-    </Button>
-  ) : rowIndex > 0 && beneficiaries.length > 1 ? (
-    <Button
       size="sm"
-      variant="outline"
-      className="h-6 w-6 p-0 text-red-600 hover:bg-red-50"
+    />
+  ) : rowIndex > 0 && beneficiaries.length > 1 ? (
+    <DeleteButton
       onClick={() => onRemoveBeneficiary(policyId, beneficiaryIndex)}
       disabled={disabled}
-      title="Remove beneficiary"
-    >
-      <X className="h-3 w-3" />
-    </Button>
+      size="sm"
+    />
   ) : null;
 
   return (
@@ -110,7 +103,7 @@ export default function EntityBeneficiarySelector({
           value={currentBeneficiary}
           onChange={(e) => handleBeneficiarySelect(e.target.value, beneficiaryIndex)}
           disabled={disabled}
-          className="h-8 text-xs flex-1 border border-neutral-300 rounded px-2 bg-white"
+          className="table-input table-dropdown flex-1"
         >
           <option value="">Select beneficiary...</option>
           {entities.map((entity) => (
@@ -120,15 +113,16 @@ export default function EntityBeneficiarySelector({
           ))}
         </select>
 
-        {/* Percentage Input */}
+        {/* Percentage Input - matching owner component styling */}
         <input
           type="text"
-          value={currentPercentage}
-          onChange={(e) => handlePercentageChange(e.target.value, beneficiaryIndex)}
-          className={`w-16 h-8 text-xs border rounded px-1 text-center ${
-            isInvalidTotal ? 'border-red-500 bg-red-50' : 'border-neutral-300'
-          }`}
+          defaultValue={currentPercentage}
           placeholder="0%"
+          className={`table-input ${getFieldClass('percentage')} w-16 text-center ${getValueClass(currentPercentage, 'percentage')} ${
+            isInvalidTotal ? 'border-red-500 bg-red-50' : ''
+          }`}
+          onFocus={handleDefaultValueFocus}
+          onBlur={(e) => handlePercentageChange(e.target.value)}
           disabled={disabled}
         />
       </div>
