@@ -101,62 +101,39 @@ export default function EntityBeneficiarySelector({
 
   return (
     <div className="space-y-1">
-      <div style={{ 
-        display: 'flex !important', 
-        alignItems: 'center !important', 
-        gap: '4px !important',
-        flexDirection: 'row !important' 
-      }}>
-        {/* ACTION BUTTON - Force to appear first with !important */}
-        <div style={{ 
-          order: '1 !important', 
-          flexShrink: '0 !important',
-          display: 'inline-block !important'
-        }}>
-          {actionButton}
-        </div>
+      <div className="flex items-center gap-1">
+        {/* 1. ACTION BUTTON FIRST - Natural DOM order */}
+        {actionButton}
         
-        {/* ENTITY SELECTOR - Force to appear second */}
-        <div style={{ 
-          order: '2 !important', 
-          flex: '1 !important',
-          display: 'inline-block !important'
-        }}>
-          <Select
-            value={currentBeneficiary}
-            onValueChange={(value) => handleBeneficiarySelect(value, beneficiaryIndex)}
-            disabled={disabled}
-          >
-            <SelectTrigger className="h-8 text-xs w-full">
-              <SelectValue placeholder="Select beneficiary..." />
-            </SelectTrigger>
-            <SelectContent>
-              {entities.map((entity) => (
-                <SelectItem key={entity.id} value={entity.entityName}>
-                  {entity.entityName} ({entity.entityType})
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        </div>
+        {/* 2. ENTITY SELECTOR SECOND - Natural DOM order */}
+        <Select
+          value={currentBeneficiary}
+          onValueChange={(value) => handleBeneficiarySelect(value, beneficiaryIndex)}
+          disabled={disabled}
+        >
+          <SelectTrigger className="h-8 text-xs flex-1">
+            <SelectValue placeholder="Select beneficiary..." />
+          </SelectTrigger>
+          <SelectContent>
+            {entities.map((entity) => (
+              <SelectItem key={entity.id} value={entity.entityName}>
+                {entity.entityName} ({entity.entityType})
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
 
-        {/* PERCENTAGE INPUT - Force to appear third */}
-        <div style={{ 
-          order: '3 !important', 
-          flexShrink: '0 !important',
-          display: 'inline-block !important'
-        }}>
-          <input
-            type="text"
-            value={currentPercentage}
-            onChange={(e) => handlePercentageChange(e.target.value, beneficiaryIndex)}
-            className={`w-16 h-8 text-xs border rounded px-1 text-center ${
-              isInvalidTotal ? 'border-red-500 bg-red-50' : 'border-neutral-300'
-            }`}
-            placeholder="0%"
-            disabled={disabled}
-          />
-        </div>
+        {/* 3. PERCENTAGE INPUT THIRD - Natural DOM order */}
+        <input
+          type="text"
+          value={currentPercentage}
+          onChange={(e) => handlePercentageChange(e.target.value, beneficiaryIndex)}
+          className={`w-16 h-8 text-xs border rounded px-1 text-center ${
+            isInvalidTotal ? 'border-red-500 bg-red-50' : 'border-neutral-300'
+          }`}
+          placeholder="0%"
+          disabled={disabled}
+        />
       </div>
 
       {/* Validation Warning - only show on first row */}
