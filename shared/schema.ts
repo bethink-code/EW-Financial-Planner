@@ -5,9 +5,10 @@ import { z } from "zod";
 export const retirementFunds = pgTable("retirement_funds", {
   id: serial("id").primaryKey(),
   
-  // Overview Section
+  // Overview Section - Funds now support multiple owners with percentages
   description: text("description"),  // Allow null, no default
   owners: text("owners").array().notNull().default(["Donald Edwards"]),
+  ownershipPercentages: text("ownership_percentages").array().notNull().default(["100%"]),
   
   // Unapproved Life Cover Section  
   coverAmount: text("cover_amount").notNull().default("R 0"),

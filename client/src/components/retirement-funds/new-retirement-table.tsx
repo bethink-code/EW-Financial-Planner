@@ -7,6 +7,8 @@ import { getFieldClass, getCellClass } from"@/lib/field-types";
 import { ActionButtonGroup, DuplicateButton, DeleteButton, AddButton } from"@/components/ui/action-buttons";
 import { TableHeaderAddButton } from "@/components/ui/table-header-add-button";
 import { SafeFragment } from "@/lib/safe-fragment";
+import EntityOwnerSelector from "@/components/common/entity-owner-selector";
+import EntityBeneficiarySelector from "@/components/common/entity-beneficiary-selector";
 
 import { useDebouncedUpdate } from"@/hooks/use-debounced-update";
 
@@ -60,7 +62,7 @@ export function NewRetirementTable({
  // Smart update handler - immediate for arrays, debounced for text (from Assurance pattern)
  const handleUpdateFund = useCallback((fundId: number, field: string, value: any) => {
    // Use immediate updates for array fields to prevent synchronization issues
-   const arrayFields = ['owners', 'unapprovedBeneficiaries', 'fundValueBeneficiaries', 'unapprovedPercentageSplits', 'fundValuePercentageSplits', 'unapprovedCoverSplits', 'fundValueCoverSplits'];
+   const arrayFields = ['owners', 'ownershipPercentages', 'unapprovedBeneficiaries', 'fundValueBeneficiaries', 'unapprovedPercentageSplits', 'fundValuePercentageSplits', 'unapprovedCoverSplits', 'fundValueCoverSplits'];
    
    if (arrayFields.includes(field)) {
      onFieldUpdate(fundId, field, value);
@@ -107,12 +109,14 @@ export function NewRetirementTable({
  return `R ${result.toLocaleString()}`;
  }, []);
 
- // Owner management (from Assurance pattern)
+ // Owner management with percentage support (from Assurance pattern)
  const handleAddOwner = useCallback((fundId: number) => {
    const fund = funds.find((f: RetirementFund) => f.id === fundId);
    if (fund) {
      const newOwners = [...fund.owners,""];
+     const newOwnershipPercentages = [...(fund.ownershipPercentages || []), "0%"];
      handleUpdateFund(fundId, 'owners', newOwners);
+     handleUpdateFund(fundId, 'ownershipPercentages', newOwnershipPercentages);
    }
  }, [funds, handleUpdateFund]);
 
@@ -120,8 +124,11 @@ export function NewRetirementTable({
    const fund = funds.find((f: RetirementFund) => f.id === fundId);
    if (fund && (fund.owners || []).length > 1 && ownerIndex > 0) { // Protect first owner
      const newOwners = [...(fund.owners || [])];
+     const newOwnershipPercentages = [...(fund.ownershipPercentages || [])];
      newOwners.splice(ownerIndex, 1);
+     newOwnershipPercentages.splice(ownerIndex, 1);
      handleUpdateFund(fundId, 'owners', newOwners);
+     handleUpdateFund(fundId, 'ownershipPercentages', newOwnershipPercentages);
    }
  }, [funds, handleUpdateFund]);
 
@@ -131,6 +138,15 @@ export function NewRetirementTable({
      const updatedOwners = [...fund.owners];
      updatedOwners[ownerIndex] = newOwner;
      handleUpdateFund(fundId, 'owners', updatedOwners);
+   }
+ }, [funds, handleUpdateFund]);
+
+ const handleOwnershipPercentageChange = useCallback((fundId: number, ownerIndex: number, newPercentage: string) => {
+   const fund = funds.find((f: RetirementFund) => f.id === fundId);
+   if (fund) {
+     const updatedPercentages = [...(fund.ownershipPercentages || [])];
+     updatedPercentages[ownerIndex] = newPercentage;
+     handleUpdateFund(fundId, 'ownershipPercentages', updatedPercentages);
    }
  }, [funds, handleUpdateFund]);
 
@@ -368,27 +384,19 @@ export function NewRetirementTable({
  <td className="p-1">
  {rowIndex < (fund.owners?.length || 0) && (
  <div className="flex items-center gap-1">
- <input
- key={`owner-${fund.id}-${rowIndex}`}
- type="text"
- defaultValue={formatTextValue(fund.owners?.[rowIndex], 'owner')}
- className={`table-input ${getFieldClass('text')} flex-1 ${getValueClass(fund.owners?.[rowIndex], 'text')}`}
- onFocus={handleDefaultValueFocus}
- onBlur={(e) => handleOwnerChange(fund.id, rowIndex, e.target.value)}
+ <EntityOwnerSelector
+ fundId={fund.id}
+ ownerIndex={rowIndex}
+ ownerName={fund.owners?.[rowIndex] || ""}
+ ownerPercentage={fund.ownershipPercentages?.[rowIndex] || "0%"}
+ owners={fund.owners || []}
+ ownershipPercentages={fund.ownershipPercentages || []}
+ onOwnerChange={handleOwnerChange}
+ onOwnershipPercentageChange={handleOwnershipPercentageChange}
+ onAddOwner={handleAddOwner}
+ onRemoveOwner={handleRemoveOwner}
+ isUpdating={isUpdating}
  />
- {rowIndex === 0 ? (
- <AddButton
- onClick={() => handleAddOwner(fund.id)}
- disabled={isUpdating}
- size="sm"
- />
- ) : (
- <DeleteButton
- onClick={() => handleRemoveOwner(fund.id, rowIndex)}
- disabled={isUpdating}
- size="sm"
- />
- )}
  </div>
  )}
  </td>
