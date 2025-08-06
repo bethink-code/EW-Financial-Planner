@@ -83,29 +83,9 @@ export function SequentialNavigationBar({ className }: SequentialNavigationBarPr
                 (Step {progress.current} of {progress.total}) - {currentItem.breadcrumb}
               </div>
               
-              {/* Bottom row: Step Dots Progress */}
-              <div className="flex items-center justify-center gap-1.5 max-w-md mx-auto">
-                {Array.from({ length: progress.total }, (_, index) => {
-                  const stepNumber = index + 1;
-                  const isActive = stepNumber === progress.current;
-                  const isCompleted = stepNumber < progress.current;
-                  
-                  return (
-                    <div
-                      key={stepNumber}
-                      className={cn(
-                        "w-2 h-2 rounded-full transition-all duration-300",
-                        isActive && "w-3 h-3 ring-2 ring-blue-200",
-                        isCompleted && "opacity-100",
-                        !isActive && !isCompleted && "opacity-30"
-                      )}
-                      style={{ 
-                        backgroundColor: isActive ? '#016991' : isCompleted ? '#016991' : '#9CA3AF'
-                      }}
-                      title={`Step ${stepNumber}${isActive ? ' (current)' : isCompleted ? ' (completed)' : ''}`}
-                    />
-                  );
-                })}
+              {/* Bottom row: Simple Progress Fraction */}
+              <div className="text-sm font-semibold text-center" style={{ color: '#016991' }}>
+                {progress.current} / {progress.total}
               </div>
             </div>
           </div>
