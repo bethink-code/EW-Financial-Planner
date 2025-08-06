@@ -477,24 +477,18 @@ export function NewRetirementTable({
  {/* Monthly Death Benefit - Toggle Button */}
  {rowIndex === 0 && (
  <td className="p-1 text-center align-top" rowSpan={maxRows}>
- {getControlsEnabled(fund) ? (
  <button
  type="button"
  onClick={() => handleUpdateFund(fund.id, 'monthlyIncomeCheckbox', !fund.monthlyIncomeCheckbox)}
- className={`px-2 py-1 text-xs font-medium rounded border transition-colors ${
+ className={`px-3 py-1 text-xs font-medium rounded transition-all duration-200 ${
  isYearsMode(fund) 
- ? 'bg-primary text-white border-primary' 
- : 'bg-orange-100 text-orange-700 border-orange-300'
- }`}
- disabled={isUpdating}
+ ? 'bg-primary text-white shadow-sm hover:bg-primary/90' 
+ : 'bg-orange-500 text-white shadow-sm hover:bg-orange-600'
+ } ${!getControlsEnabled(fund) ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}`}
+ disabled={!getControlsEnabled(fund) || isUpdating}
  >
  {isYearsMode(fund) ? 'Years' : '%'}
  </button>
- ) : (
- <div className="px-2 py-1 text-xs text-neutral-400 border border-neutral-200 rounded bg-neutral-50">
- {isYearsMode(fund) ? 'Years' : '%'}
- </div>
- )}
  </td>
  )}
 
