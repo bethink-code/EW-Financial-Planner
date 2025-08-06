@@ -74,62 +74,61 @@ export default function EntityBeneficiarySelector({
   const currentPercentage = beneficiaryPercentages[beneficiaryIndex] || "0%";
   const isInvalidTotal = Math.abs(percentageTotal - 100) > 0.01;
 
+  // Action button comes FIRST in the code
+  const actionButton = rowIndex === 0 ? (
+    <Button
+      size="sm"
+      variant="outline"
+      className="h-6 w-6 p-0"
+      onClick={() => onAddBeneficiary(policyId)}
+      disabled={disabled}
+      title="Add beneficiary"
+    >
+      <Plus className="h-3 w-3" />
+    </Button>
+  ) : rowIndex > 0 && beneficiaries.length > 1 ? (
+    <Button
+      size="sm"
+      variant="outline"
+      className="h-6 w-6 p-0 text-red-600 hover:bg-red-50"
+      onClick={() => onRemoveBeneficiary(policyId, beneficiaryIndex)}
+      disabled={disabled}
+      title="Remove beneficiary"
+    >
+      <X className="h-3 w-3" />
+    </Button>
+  ) : null;
+
   return (
     <div className="space-y-1">
-      <div className="flex items-center gap-1 flex-row">
-        {/* Action Buttons - FIRST in flex order */}
-        {rowIndex === 0 && (
-          <Button
-            size="sm"
-            variant="outline"
-            className="h-6 w-6 p-0 order-1"
-            onClick={() => onAddBeneficiary(policyId)}
-            disabled={disabled}
-            title="Add beneficiary"
-          >
-            <Plus className="h-3 w-3" />
-          </Button>
-        )}
+      <div className="flex items-center gap-1">
+        {/* 1. ACTION BUTTON FIRST */}
+        {actionButton}
         
-        {rowIndex > 0 && beneficiaries.length > 1 && (
-          <Button
-            size="sm"
-            variant="outline"
-            className="h-6 w-6 p-0 text-red-600 hover:bg-red-50 order-1"
-            onClick={() => onRemoveBeneficiary(policyId, beneficiaryIndex)}
-            disabled={disabled}
-            title="Remove beneficiary"
-          >
-            <X className="h-3 w-3" />
-          </Button>
-        )}
+        {/* 2. ENTITY SELECTOR SECOND */}
+        <Select
+          value={currentBeneficiary}
+          onValueChange={(value) => handleBeneficiarySelect(value, beneficiaryIndex)}
+          disabled={disabled}
+        >
+          <SelectTrigger className="h-8 text-xs flex-1">
+            <SelectValue placeholder="Select beneficiary..." />
+          </SelectTrigger>
+          <SelectContent>
+            {entities.map((entity) => (
+              <SelectItem key={entity.id} value={entity.entityName}>
+                {entity.entityName} ({entity.entityType})
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
 
-        {/* Entity Selector - SECOND in flex order */}
-        <div className="flex-1 order-2">
-          <Select
-            value={currentBeneficiary}
-            onValueChange={(value) => handleBeneficiarySelect(value, beneficiaryIndex)}
-            disabled={disabled}
-          >
-            <SelectTrigger className="h-8 text-xs w-full">
-              <SelectValue placeholder="Select beneficiary..." />
-            </SelectTrigger>
-            <SelectContent>
-              {entities.map((entity) => (
-                <SelectItem key={entity.id} value={entity.entityName}>
-                  {entity.entityName} ({entity.entityType})
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        </div>
-
-        {/* Percentage Input - THIRD in flex order */}
+        {/* 3. PERCENTAGE INPUT THIRD */}
         <input
           type="text"
           value={currentPercentage}
           onChange={(e) => handlePercentageChange(e.target.value, beneficiaryIndex)}
-          className={`w-16 h-8 text-xs border rounded px-1 text-center order-3 ${
+          className={`w-16 h-8 text-xs border rounded px-1 text-center ${
             isInvalidTotal ? 'border-red-500 bg-red-50' : 'border-neutral-300'
           }`}
           placeholder="0%"
