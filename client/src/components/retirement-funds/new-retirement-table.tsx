@@ -56,10 +56,9 @@ export function NewRetirementTable({
  
  // Dynamic Toggle Pattern Helper Functions
  const hasIncome = (fund: RetirementFund) => {
- return fund.monthlyIncome && 
- fund.monthlyIncome !== "R 0" && 
- fund.monthlyIncome !== "0" && 
- fund.monthlyIncome.trim() !== "";
+ const income = fund.monthlyIncome || "";
+ const cleanValue = income.replace(/[^\d]/g, '');
+ return cleanValue && cleanValue !== "0";
  };
  
  const getControlsEnabled = (fund: RetirementFund) => {
@@ -68,7 +67,7 @@ export function NewRetirementTable({
  
  // Toggle shows "Years" when checked, "%" when unchecked
  const isYearsMode = (fund: RetirementFund) => {
- return fund.monthlyIncomeCheckbox;
+ return fund.monthlyIncomeCheckbox === true;
  };
 
  // Track which field is being edited to prevent jumping (from Assurance pattern)
@@ -480,11 +479,11 @@ export function NewRetirementTable({
  <button
  type="button"
  onClick={() => handleUpdateFund(fund.id, 'monthlyIncomeCheckbox', !fund.monthlyIncomeCheckbox)}
- className={`px-3 py-1 text-xs font-medium rounded transition-all duration-200 ${
+ className={`h-8 px-3 text-xs font-semibold rounded border transition-colors ${
  isYearsMode(fund) 
- ? 'bg-primary text-white shadow-sm hover:bg-primary/90' 
- : 'bg-orange-500 text-white shadow-sm hover:bg-orange-600'
- } ${!getControlsEnabled(fund) ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}`}
+ ? 'bg-blue-600 text-white border-blue-600 hover:bg-blue-700' 
+ : 'bg-orange-500 text-white border-orange-500 hover:bg-orange-600'
+ } ${!getControlsEnabled(fund) ? 'opacity-40 cursor-not-allowed' : 'cursor-pointer shadow-sm'}`}
  disabled={!getControlsEnabled(fund) || isUpdating}
  >
  {isYearsMode(fund) ? 'Years' : '%'}
