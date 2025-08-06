@@ -286,7 +286,7 @@ interface ActionButtonGroupProps {
  */
 export function ActionButtonGroup({ children, className }: ActionButtonGroupProps) {
   return (
-    <div className={cn("flex items-center gap-2", className)}>
+    <div className={cn("flex items-start gap-2", className)}>
       {children}
     </div>
   );
