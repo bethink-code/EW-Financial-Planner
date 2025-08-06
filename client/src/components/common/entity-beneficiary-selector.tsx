@@ -76,62 +76,60 @@ export default function EntityBeneficiarySelector({
 
   return (
     <div className="space-y-1">
-      <div className="flex items-center gap-1">
-        {/* Action Button Container - Always present to maintain layout */}
-        <div className="flex gap-1 min-w-[28px]">
-          {/* Add button - only show on first row */}
-          {rowIndex === 0 && (
-            <Button
-              size="sm"
-              variant="outline"
-              className="h-6 w-6 p-0"
-              onClick={() => onAddBeneficiary(policyId)}
-              disabled={disabled}
-              title="Add beneficiary"
-            >
-              <Plus className="h-3 w-3" />
-            </Button>
-          )}
-          
-          {/* Remove button - only show on non-first rows */}
-          {rowIndex > 0 && beneficiaries.length > 1 && (
-            <Button
-              size="sm"
-              variant="outline"
-              className="h-6 w-6 p-0 text-red-600 hover:bg-red-50"
-              onClick={() => onRemoveBeneficiary(policyId, beneficiaryIndex)}
-              disabled={disabled}
-              title="Remove beneficiary"
-            >
-              <X className="h-3 w-3" />
-            </Button>
-          )}
+      <div className="flex items-center gap-1 flex-row">
+        {/* Action Buttons - FIRST in flex order */}
+        {rowIndex === 0 && (
+          <Button
+            size="sm"
+            variant="outline"
+            className="h-6 w-6 p-0 order-1"
+            onClick={() => onAddBeneficiary(policyId)}
+            disabled={disabled}
+            title="Add beneficiary"
+          >
+            <Plus className="h-3 w-3" />
+          </Button>
+        )}
+        
+        {rowIndex > 0 && beneficiaries.length > 1 && (
+          <Button
+            size="sm"
+            variant="outline"
+            className="h-6 w-6 p-0 text-red-600 hover:bg-red-50 order-1"
+            onClick={() => onRemoveBeneficiary(policyId, beneficiaryIndex)}
+            disabled={disabled}
+            title="Remove beneficiary"
+          >
+            <X className="h-3 w-3" />
+          </Button>
+        )}
+
+        {/* Entity Selector - SECOND in flex order */}
+        <div className="flex-1 order-2">
+          <Select
+            value={currentBeneficiary}
+            onValueChange={(value) => handleBeneficiarySelect(value, beneficiaryIndex)}
+            disabled={disabled}
+          >
+            <SelectTrigger className="h-8 text-xs w-full">
+              <SelectValue placeholder="Select beneficiary..." />
+            </SelectTrigger>
+            <SelectContent>
+              {entities.map((entity) => (
+                <SelectItem key={entity.id} value={entity.entityName}>
+                  {entity.entityName} ({entity.entityType})
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
         </div>
 
-        {/* Entity Selector */}
-        <Select
-          value={currentBeneficiary}
-          onValueChange={(value) => handleBeneficiarySelect(value, beneficiaryIndex)}
-          disabled={disabled}
-        >
-          <SelectTrigger className="h-8 text-xs flex-1">
-            <SelectValue placeholder="Select beneficiary..." />
-          </SelectTrigger>
-          <SelectContent>
-            {entities.map((entity) => (
-              <SelectItem key={entity.id} value={entity.entityName}>
-                {entity.entityName} ({entity.entityType})
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-
-        {/* Percentage Input */}
+        {/* Percentage Input - THIRD in flex order */}
         <input
           type="text"
           value={currentPercentage}
           onChange={(e) => handlePercentageChange(e.target.value, beneficiaryIndex)}
-          className={`w-16 h-8 text-xs border rounded px-1 text-center ${
+          className={`w-16 h-8 text-xs border rounded px-1 text-center order-3 ${
             isInvalidTotal ? 'border-red-500 bg-red-50' : 'border-neutral-300'
           }`}
           placeholder="0%"
