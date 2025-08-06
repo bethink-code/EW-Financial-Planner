@@ -54,7 +54,7 @@ export function NewRetirementTable({
  isUpdating 
 }: NewRetirementTableProps) {
  
- // Dynamic Term Selector Helper Functions
+ // Dynamic Toggle Pattern Helper Functions
  const hasIncome = (fund: RetirementFund) => {
  return fund.monthlyIncome && 
  fund.monthlyIncome !== "R 0" && 
@@ -66,20 +66,9 @@ export function NewRetirementTable({
  return hasIncome(fund) && !isUpdating;
  };
  
- const getTermEditable = (fund: RetirementFund) => {
- return getControlsEnabled(fund) && fund.monthlyIncomeCheckbox;
- };
- 
- const getTermDisplayValue = (fund: RetirementFund) => {
- if (getTermEditable(fund)) {
- return formatYearsValue(fund.termYears);
- } else if (getControlsEnabled(fund)) {
- // Show percentage from settings when checkbox unchecked but income exists
- return "5%"; // This should come from settings eventually
- } else {
- // Show default years when no income
- return formatYearsValue(fund.termYears);
- }
+ // Toggle shows "Years" when checked, "%" when unchecked
+ const isYearsMode = (fund: RetirementFund) => {
+ return fund.monthlyIncomeCheckbox;
  };
 
  // Track which field is being edited to prevent jumping (from Assurance pattern)
@@ -335,7 +324,7 @@ export function NewRetirementTable({
  </th>
  <th className="section-start" colSpan={2}>Overview</th>
  <th className="section-start" colSpan={3}>Unapproved Life Cover</th>
- <th className="section-start" colSpan={4}>Monthly Death Benefit</th>
+ <th className="section-start" colSpan={3}>Monthly Death Benefit</th>
  <th className="section-start" colSpan={3}>Approved Life Cover</th>
  <th className="section-start" colSpan={6}>Fund Value Beneficiaries</th>
  </tr>
@@ -348,9 +337,8 @@ export function NewRetirementTable({
  <th>Beneficiaries</th>
  <th>Cover Split</th>
  <th className="section-start">Monthly Income</th>
- <th>Checkbox</th>
- <th>Term Years</th>
- <th>Increase %</th>
+ <th>Toggle</th>
+ <th>Term/Rate</th>
  <th className="section-start">Cover</th>
  <th>Fund Value</th>
  <th>Fund Value at Death</th>
@@ -486,43 +474,52 @@ export function NewRetirementTable({
  </td>
  )}
 
- {/* Monthly Death Benefit - Checkbox */}
+ {/* Monthly Death Benefit - Toggle Button */}
  {rowIndex === 0 && (
  <td className="p-1 text-center align-top" rowSpan={maxRows}>
- <input
- type="checkbox"
- checked={fund.monthlyIncomeCheckbox}
- onChange={(e) => handleUpdateFund(fund.id, 'monthlyIncomeCheckbox', e.target.checked)}
- className="text-xs"
- disabled={!fund.monthlyIncome || fund.monthlyIncome === "R 0" || isUpdating}
- />
+ {getControlsEnabled(fund) ? (
+ <button
+ type="button"
+ onClick={() => handleUpdateFund(fund.id, 'monthlyIncomeCheckbox', !fund.monthlyIncomeCheckbox)}
+ className={`px-2 py-1 text-xs font-medium rounded border transition-colors ${
+ isYearsMode(fund) 
+ ? 'bg-primary text-white border-primary' 
+ : 'bg-orange-100 text-orange-700 border-orange-300'
+ }`}
+ disabled={isUpdating}
+ >
+ {isYearsMode(fund) ? 'Years' : '%'}
+ </button>
+ ) : (
+ <div className="px-2 py-1 text-xs text-neutral-400 border border-neutral-200 rounded bg-neutral-50">
+ {isYearsMode(fund) ? 'Years' : '%'}
+ </div>
+ )}
  </td>
  )}
 
- {/* Monthly Death Benefit - Term Years */}
+ {/* Monthly Death Benefit - Dynamic Field (Years OR Percentage) */}
  {rowIndex === 0 && (
  <td className="p-1 align-top" rowSpan={maxRows}>
+ {isYearsMode(fund) ? (
+ // Years Mode
  <input
- key={`term-years-${fund.id}-${fund.monthlyIncomeCheckbox}`}
+ key={`term-years-${fund.id}`}
  type="text"
- value={getTermDisplayValue(fund)}
- className={`table-input ${getFieldClass('years')} ${getValueClass(getTermDisplayValue(fund), 'years')} ${
- !getTermEditable(fund) ? 'bg-neutral-100 cursor-not-allowed' : ''
+ defaultValue={formatYearsValue(fund.termYears)}
+ className={`table-input ${getFieldClass('years')} ${getValueClass(fund.termYears, 'years')} ${
+ !getControlsEnabled(fund) ? 'bg-neutral-100 cursor-not-allowed' : ''
  }`}
- onFocus={getTermEditable(fund) ? handleDefaultValueFocus : undefined}
- onBlur={getTermEditable(fund) ? (e) => {
+ onFocus={getControlsEnabled(fund) ? handleDefaultValueFocus : undefined}
+ onBlur={getControlsEnabled(fund) ? (e) => {
  const value = e.target.value;
  handleUpdateFund(fund.id, 'termYears', value);
  } : undefined}
- disabled={!getTermEditable(fund)}
- readOnly={!getTermEditable(fund)}
+ disabled={!getControlsEnabled(fund) || isUpdating}
+ placeholder="0 years"
  />
- </td>
- )}
-
- {/* Monthly Death Benefit - Increase % */}
- {rowIndex === 0 && (
- <td className="p-1 align-top" rowSpan={maxRows}>
+ ) : (
+ // Percentage Mode
  <input
  key={`increase-percent-${fund.id}`}
  type="text"
@@ -536,7 +533,9 @@ export function NewRetirementTable({
  handleUpdateFund(fund.id, 'increasePercentage', value);
  } : undefined}
  disabled={!getControlsEnabled(fund) || isUpdating}
+ placeholder="0%"
  />
+ )}
  </td>
  )}
 
