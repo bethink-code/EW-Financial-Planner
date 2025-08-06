@@ -1,6 +1,6 @@
 import React, { useState, useCallback, useMemo, memo } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { Plus, Trash2, Copy } from "lucide-react";
+import { Plus, Trash2, Copy, X } from "lucide-react";
 import { getFieldClass, getFieldWidth } from "@/lib/design-tokens";
 import { getCellClass } from "@/lib/field-types";
 import { formatTextValue, getValueClass, isDefaultValue, handleDefaultValueFocus } from "@/lib/formatting";
@@ -11,7 +11,9 @@ import { EntityOwnerSelector } from "./entity-owner-selector";
 import { EntityBeneficiarySelector } from "./entity-beneficiary-selector";
 import { useDebouncedUpdate } from "@/hooks/use-debounced-update";
 import { SafeFragment } from "@/lib/safe-fragment";
-import type { Assurance, InsertAssurance } from "@shared/schema";
+import { Button } from "@/components/ui/button";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import type { Assurance, InsertAssurance, ClientDetails } from "@shared/schema";
 
 interface AssuranceTableProps {
   onAddPolicy?: () => void;
@@ -43,6 +45,11 @@ const formatCurrencyValue = (value: string, fieldType: string): string => {
 export function AssuranceTable({ onAddPolicy }: AssuranceTableProps) {
   const queryClient = useQueryClient();
   const [isUpdating, setIsUpdating] = useState(false);
+
+  // Fetch client details for entity options
+  const { data: entities = [] } = useQuery<ClientDetails[]>({
+    queryKey: ["/api/client-details"]
+  });
 
   // Fetch assurance policies
   const { data: policies = [], isLoading } = useQuery({
@@ -416,19 +423,70 @@ export function AssuranceTable({ onAddPolicy }: AssuranceTableProps) {
                     </td>
                   )}
 
-                  {/* Beneficiary */}
+                  {/* Beneficiary Entity */}
                   <td className="border border-neutral-300 p-1">
-                    <EntityBeneficiarySelector
-                      policyId={policy.id}
-                      beneficiaries={policy.beneficiaries}
-                      beneficiaryPercentages={policy.beneficiaryPercentages || ["100%"]}
-                      onBeneficiaryChange={handleBeneficiaryChange}
-                      onBeneficiaryPercentageChange={handleBeneficiaryPercentageChange}
-                      onAddBeneficiary={handleAddBeneficiary}
-                      onRemoveBeneficiary={handleRemoveBeneficiary}
-                      rowIndex={rowIndex}
-                      disabled={updateMutation.isPending}
-                    />
+                    {policy.beneficiaries.length > rowIndex && (
+                      <div className="flex items-center gap-1">
+                        {/* Add/Remove Buttons */}
+                        <div className="flex gap-1">
+                          <Button
+                            size="sm"
+                            variant="outline"
+                            className="h-6 w-6 p-0"
+                            onClick={() => handleAddBeneficiary(policy.id)}
+                            disabled={updateMutation.isPending}
+                            title="Add beneficiary"
+                          >
+                            <Plus className="h-3 w-3" />
+                          </Button>
+                          
+                          {policy.beneficiaries.length > 1 && rowIndex > 0 && (
+                            <Button
+                              size="sm"
+                              variant="outline"
+                              className="h-6 w-6 p-0 text-red-600 hover:bg-red-50"
+                              onClick={() => handleRemoveBeneficiary(policy.id, rowIndex)}
+                              disabled={updateMutation.isPending}
+                              title="Remove beneficiary"
+                            >
+                              <X className="h-3 w-3" />
+                            </Button>
+                          )}
+                        </div>
+
+                        {/* Entity Selector */}
+                        <Select
+                          value={policy.beneficiaries[rowIndex] || ""}
+                          onValueChange={(value) => handleBeneficiaryChange(policy.id, rowIndex, value)}
+                          disabled={updateMutation.isPending}
+                        >
+                          <SelectTrigger className="h-8 text-xs flex-1">
+                            <SelectValue placeholder="Select beneficiary..." />
+                          </SelectTrigger>
+                          <SelectContent>
+                            {entities.map((entity) => (
+                              <SelectItem key={entity.id} value={entity.entityName}>
+                                {entity.entityName} ({entity.entityType})
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                      </div>
+                    )}
+                  </td>
+
+                  {/* Benefit Split */}
+                  <td className="border border-neutral-300 p-1">
+                    {policy.beneficiaryPercentages && policy.beneficiaryPercentages[rowIndex] && (
+                      <input
+                        type="text"
+                        value={policy.beneficiaryPercentages[rowIndex]}
+                        onChange={(e) => handleBeneficiaryPercentageChange(policy.id, rowIndex, e.target.value)}
+                        className="w-16 h-8 text-xs border rounded px-1 text-center border-neutral-300"
+                        placeholder="0%"
+                        disabled={updateMutation.isPending}
+                      />
+                    )}
                   </td>
 
                   {/* Additional Info - only show on first row */}
