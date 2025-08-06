@@ -106,14 +106,15 @@ export default function EntityBeneficiarySelector({
         {actionButton}
         
         {/* 2. ENTITY SELECTOR SECOND */}
-        <Select
-          value={currentBeneficiary}
-          onValueChange={(value) => handleBeneficiarySelect(value, beneficiaryIndex)}
-          disabled={disabled}
-        >
-          <SelectTrigger className="h-8 text-xs flex-1">
-            <SelectValue placeholder="Select beneficiary..." />
-          </SelectTrigger>
+        <div className="flex-1">
+          <Select
+            value={currentBeneficiary}
+            onValueChange={(value) => handleBeneficiarySelect(value, beneficiaryIndex)}
+            disabled={disabled}
+          >
+            <SelectTrigger className="h-8 text-xs w-full">
+              <SelectValue placeholder="Select beneficiary..." />
+            </SelectTrigger>
           <SelectContent>
             {entities.map((entity) => (
               <SelectItem key={entity.id} value={entity.entityName}>
@@ -121,7 +122,8 @@ export default function EntityBeneficiarySelector({
               </SelectItem>
             ))}
           </SelectContent>
-        </Select>
+          </Select>
+        </div>
 
         {/* 3. PERCENTAGE INPUT THIRD */}
         <input
