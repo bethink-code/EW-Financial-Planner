@@ -116,16 +116,30 @@ Client requests data via TanStack Query hooks. Express routes handle CRUD operat
    - Updated table headers and colspan values for proper alignment
    - Cleaner, more efficient table layout across all calculation pages
 
-**Tables Completed with Global Entity Pattern + Primary Defaults**:
+**Tables Completed with Global Entity Pattern + Primary Defaults + Years/% Toggle Pattern**:
 ✓ `/assurance` - Working Assurance Table with EntityBeneficiarySelector and Primary entity defaults
-✓ `/defined-benefit-funds` - Defined Benefit Funds Table with EntityOwnerSelector and Primary entity defaults
-✓ `/new-retirement-funds` - Retirement Funds Table with EntityOwnerSelector/EntityBeneficiarySelector and Primary entity defaults
+✓ `/defined-benefit-funds` - Defined Benefit Funds Table with EntityOwnerSelector, Primary entity defaults, and Years/% toggle for Pension Income at Death
+✓ `/new-retirement-funds` - Retirement Funds Table with EntityOwnerSelector/EntityBeneficiarySelector, Primary entity defaults, and Years/% toggle for Monthly Death Benefit
 
 **Ready for Global Deployment**:
 - `/assets` - Asset table with section grouping
 - `/income-needs` - Income calculation tables
 - `/income-provisions` - Provision calculation tables
 - `/additional-estate-duty-items` - Estate duty calculation tables
+
+### August 6, 2025 - Years/% Toggle Pattern Implementation for Defined Benefit Funds
+**Scope**: Successfully implemented the reusable Years/% toggle pattern for Pension Income at Death section in Defined Benefit Funds table
+
+**Implementation Details**:
+1. **Database Schema**: Added `pensionIncomeCheckbox` (boolean) and `pensionIncomeYears` (text) fields to `defined_benefit_funds` table
+2. **Toggle Functionality**: Button switches between Years mode (shows years input) and % mode (shows percentage input)
+3. **Styling Consistency**: Applied established light blue toggle button styling (`bg-[#E8F3F8]` with `text-[#016991]`)
+4. **Vertical Alignment**: Resolved alignment issues with proper `p-2` padding for both toggle and dynamic field columns
+5. **Years Formatting**: Automatic "years" suffix formatting on blur (e.g., "10" becomes "10 years")
+6. **Control Logic**: Toggle only enabled when pension income amount has a non-zero value
+7. **Pattern Documentation**: Created comprehensive `YEARS_PERCENTAGE_TOGGLE_PATTERN.md` for future implementations
+
+**Reusable Pattern Established**: The Years/% toggle pattern is now fully documented and ready for deployment to other calculation tables when needed (Income Needs, Income Provisions, Assets, etc.)
 
 **Previous Updates**:
 ### August 6, 2025 - Comprehensive Calculation Page Refinements
