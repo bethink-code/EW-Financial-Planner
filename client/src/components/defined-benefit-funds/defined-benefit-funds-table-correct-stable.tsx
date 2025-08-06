@@ -371,7 +371,7 @@ export default function DefinedBenefitFundsTable({ onAddFund }: DefinedBenefitFu
                     
                     {/* Overview Section - Only show on first row */}
                     {rowIndex === 0 && (
-                      <td className="p-2 section-start align-top" rowSpan={maxRows}>
+                      <td className="p-1 section-start align-top" rowSpan={maxRows}>
                         <input
                           type="text"
                           defaultValue={formatTextValue(fund.description)}
@@ -387,7 +387,7 @@ export default function DefinedBenefitFundsTable({ onAddFund }: DefinedBenefitFu
                     )}
                     
                     {/* Owner with Entity Selector and Percentage */}
-                    <td className="p-2 align-top" colSpan={2}>
+                    <td className="p-1 align-top" colSpan={2}>
                       <EntityOwnerSelector
                         policyId={fund.id}
                         owners={fund.owners}
@@ -403,7 +403,7 @@ export default function DefinedBenefitFundsTable({ onAddFund }: DefinedBenefitFu
                     
                     {/* Fund Details Section - Only show on first row */}
                     {rowIndex === 0 && (
-                      <td className={`p-2 section-start align-top ${getCellClass('years')}`} rowSpan={maxRows}>
+                      <td className={`p-1 section-start align-top ${getCellClass('years')}`} rowSpan={maxRows}>
                         <input
                           key={`yearsOfService-${fund.id}-${fund.yearsOfService}`}
                           type="text"
@@ -416,7 +416,7 @@ export default function DefinedBenefitFundsTable({ onAddFund }: DefinedBenefitFu
                       </td>
                     )}
                     {rowIndex === 0 && (
-                      <td className={`p-2 align-top ${getCellClass('currency')}`} rowSpan={maxRows}>
+                      <td className={`p-1 align-top ${getCellClass('currency')}`} rowSpan={maxRows}>
                         <input
                           key={`finalMonthlySalary-${fund.id}-${fund.finalMonthlySalary}`}
                           type="text"
@@ -429,7 +429,7 @@ export default function DefinedBenefitFundsTable({ onAddFund }: DefinedBenefitFu
                       </td>
                     )}
                     {rowIndex === 0 && (
-                      <td className={`p-2 align-top ${getCellClass('currency')}`} rowSpan={maxRows}>
+                      <td className={`p-1 align-top ${getCellClass('currency')}`} rowSpan={maxRows}>
                         <input
                           key={`deathLumpSum-${fund.id}-${fund.deathLumpSum}`}
                           type="text"
@@ -442,7 +442,7 @@ export default function DefinedBenefitFundsTable({ onAddFund }: DefinedBenefitFu
                       </td>
                     )}
                     {rowIndex === 0 && (
-                      <td className={`p-2 align-top ${getCellClass('currency')}`} rowSpan={maxRows}>
+                      <td className={`p-1 align-top ${getCellClass('currency')}`} rowSpan={maxRows}>
                         <input
                           key={`additionalTaxFreeAmount-${fund.id}-${fund.additionalTaxFreeAmount}`}
                           type="text"
@@ -457,7 +457,7 @@ export default function DefinedBenefitFundsTable({ onAddFund }: DefinedBenefitFu
                     
                     {/* Pension Income at Death Section */}
                     {rowIndex === 0 && (
-                      <td className={`p-2 section-start align-top ${getCellClass('currency')}`} rowSpan={maxRows}>
+                      <td className={`p-1 section-start align-top ${getCellClass('currency')}`} rowSpan={maxRows}>
                         <input
                           key={`pensionIncomeAmount-${fund.id}-${fund.pensionIncomeAmount}`}
                           type="text"
@@ -472,7 +472,7 @@ export default function DefinedBenefitFundsTable({ onAddFund }: DefinedBenefitFu
 
                     {/* Pension Income Toggle Button */}
                     {rowIndex === 0 && (
-                      <td className="table-actions-cell p-2 align-top" rowSpan={maxRows}>
+                      <td className="table-actions-cell p-1 align-top" rowSpan={maxRows}>
                         <div className="pt-0.5">
                           <button
                             type="button"
@@ -490,7 +490,7 @@ export default function DefinedBenefitFundsTable({ onAddFund }: DefinedBenefitFu
 
                     {/* Pension Income Dynamic Field (Years OR Percentage) */}
                     {rowIndex === 0 && (
-                      <td className="p-2 align-top" rowSpan={maxRows}>
+                      <td className="p-1 align-top" rowSpan={maxRows}>
                         {isYearsMode(fund) ? (
                           // Years Mode
                           <input
