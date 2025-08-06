@@ -379,7 +379,7 @@ export function NewRetirementTable({
  )}
 
  {/* Overview - Owner */}
- <td className="p-1">
+ <td className="p-1 align-top">
  {rowIndex < (fund.owners?.length || 0) && (
  <EntityOwnerSelector
  policyId={fund.id}
@@ -413,7 +413,7 @@ export function NewRetirementTable({
  )}
 
  {/* Unapproved Life Cover - Beneficiary */}
- <td className="p-1">
+ <td className="p-1 align-top">
  {rowIndex < (fund.unapprovedBeneficiaries?.length || 0) && (
  <EntityBeneficiarySelector
  policyId={fund.id}
@@ -432,7 +432,7 @@ export function NewRetirementTable({
 
 
  {/* Unapproved Life Cover - Cover Split (Calculated) */}
- <td className="p-1 bg-neutral-100 text-right">
+ <td className="p-1 bg-neutral-100 text-right align-top">
  {rowIndex < (fund.unapprovedCoverSplits?.length || 0) && (
  <span className="calculated-field">
  {fund.unapprovedCoverSplits?.[rowIndex]}
@@ -550,7 +550,7 @@ export function NewRetirementTable({
  )}
 
  {/* Fund Value Beneficiaries - Beneficiary */}
- <td className="p-1 section-start">
+ <td className="p-1 section-start align-top">
  {rowIndex < (fund.fundValueBeneficiaries?.length || 0) && (
  <EntityBeneficiarySelector
  policyId={fund.id}
@@ -569,7 +569,7 @@ export function NewRetirementTable({
 
 
  {/* Fund Value Beneficiaries - Cover (Calculated) */}
- <td className="p-1 bg-neutral-100 text-right">
+ <td className="p-1 bg-neutral-100 text-right align-top">
  {rowIndex < (fund.fundValueCoverSplits?.length || 0) && (
  <span className="calculated-field">
  {fund.fundValueCoverSplits?.[rowIndex]}
