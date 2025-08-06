@@ -855,7 +855,6 @@ th, td {
     box-shadow: none !important;
     color: #374151 !important; /* grey-700 - same as entered values */
     padding: 0.25rem 0.5rem !important; /* Compact padding for consistent table row height */
-    padding-top: 0.75rem !important; /* Additional top padding for better vertical alignment */
     font-size: 0.875rem !important;
     text-align: right !important;
     height: auto !important;
@@ -868,10 +867,7 @@ th, td {
   table td.calculated-field,
   table .calculated-field,
   td .calculated-field {
-    padding-top: 0.75rem !important; /* Additional top padding for better vertical alignment */
-    padding-bottom: 0.25rem !important;
-    padding-left: 0.5rem !important;
-    padding-right: 0.5rem !important;
+    padding: 0.25rem 0.5rem !important; /* Consistent padding to match other table inputs */
   }
 
   .calculated-field:hover {
