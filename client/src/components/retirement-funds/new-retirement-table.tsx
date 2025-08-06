@@ -10,6 +10,7 @@ import { SafeFragment } from "@/lib/safe-fragment";
 import EntityOwnerSelector from "@/components/common/entity-owner-selector";
 import EntityBeneficiarySelector from "@/components/common/entity-beneficiary-selector";
 
+
 import { useDebouncedUpdate } from"@/hooks/use-debounced-update";
 
 interface NewRetirementTableProps {
@@ -52,6 +53,34 @@ export function NewRetirementTable({
  onAddFund,
  isUpdating 
 }: NewRetirementTableProps) {
+ 
+ // Dynamic Term Selector Helper Functions
+ const hasIncome = (fund: RetirementFund) => {
+ return fund.monthlyIncome && 
+ fund.monthlyIncome !== "R 0" && 
+ fund.monthlyIncome !== "0" && 
+ fund.monthlyIncome.trim() !== "";
+ };
+ 
+ const getControlsEnabled = (fund: RetirementFund) => {
+ return hasIncome(fund) && !isUpdating;
+ };
+ 
+ const getTermEditable = (fund: RetirementFund) => {
+ return getControlsEnabled(fund) && fund.monthlyIncomeCheckbox;
+ };
+ 
+ const getTermDisplayValue = (fund: RetirementFund) => {
+ if (getTermEditable(fund)) {
+ return formatYearsValue(fund.termYears);
+ } else if (getControlsEnabled(fund)) {
+ // Show percentage from settings when checkbox unchecked but income exists
+ return "5%"; // This should come from settings eventually
+ } else {
+ // Show default years when no income
+ return formatYearsValue(fund.termYears);
+ }
+ };
 
  // Track which field is being edited to prevent jumping (from Assurance pattern)
  const [editingField, setEditingField] = useState<string | null>(null);
@@ -465,6 +494,7 @@ export function NewRetirementTable({
  checked={fund.monthlyIncomeCheckbox}
  onChange={(e) => handleUpdateFund(fund.id, 'monthlyIncomeCheckbox', e.target.checked)}
  className="text-xs"
+ disabled={!fund.monthlyIncome || fund.monthlyIncome === "R 0" || isUpdating}
  />
  </td>
  )}
@@ -473,15 +503,19 @@ export function NewRetirementTable({
  {rowIndex === 0 && (
  <td className="p-1 align-top" rowSpan={maxRows}>
  <input
- key={`term-years-${fund.id}`}
+ key={`term-years-${fund.id}-${fund.monthlyIncomeCheckbox}`}
  type="text"
- defaultValue={formatYearsValue(fund.termYears)}
- className={`table-input ${getFieldClass('years')} ${getValueClass(fund.termYears, 'years')}`}
- onFocus={handleDefaultValueFocus}
- onBlur={(e) => {
+ value={getTermDisplayValue(fund)}
+ className={`table-input ${getFieldClass('years')} ${getValueClass(getTermDisplayValue(fund), 'years')} ${
+ !getTermEditable(fund) ? 'bg-neutral-100 cursor-not-allowed' : ''
+ }`}
+ onFocus={getTermEditable(fund) ? handleDefaultValueFocus : undefined}
+ onBlur={getTermEditable(fund) ? (e) => {
  const value = e.target.value;
  handleUpdateFund(fund.id, 'termYears', value);
- }}
+ } : undefined}
+ disabled={!getTermEditable(fund)}
+ readOnly={!getTermEditable(fund)}
  />
  </td>
  )}
@@ -493,12 +527,15 @@ export function NewRetirementTable({
  key={`increase-percent-${fund.id}`}
  type="text"
  defaultValue={formatPercentageValue(fund.increasePercentage)}
- className={`table-input ${getFieldClass('percentage')} ${getValueClass(fund.increasePercentage, 'percentage')}`}
- onFocus={handleDefaultValueFocus}
- onBlur={(e) => {
+ className={`table-input ${getFieldClass('percentage')} ${getValueClass(fund.increasePercentage, 'percentage')} ${
+ !getControlsEnabled(fund) ? 'bg-neutral-100 cursor-not-allowed' : ''
+ }`}
+ onFocus={getControlsEnabled(fund) ? handleDefaultValueFocus : undefined}
+ onBlur={getControlsEnabled(fund) ? (e) => {
  const value = e.target.value;
  handleUpdateFund(fund.id, 'increasePercentage', value);
- }}
+ } : undefined}
+ disabled={!getControlsEnabled(fund) || isUpdating}
  />
  </td>
  )}
