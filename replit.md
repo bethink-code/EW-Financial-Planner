@@ -69,4 +69,37 @@ Client requests data via TanStack Query hooks. Express routes handle CRUD operat
 - **Vite**: Fast build tool with HMR support.
 - **TypeScript**: For type safety across the stack.
 - **ESBuild**: Fast JavaScript bundler for backend production builds.
+
+## Recent Major Updates
+
+### August 6, 2025 - Comprehensive Calculation Page Refinements
+**Scope**: Complete SafeFragment implementation and React warning elimination across ALL calculation pages
+
+**Impact Assessment Completed For**:
+- `/assurance` - Primary focus with complex multi-row table structure
+- `/new-retirement-funds` - Multiple calculation tables and grouped views  
+- `/defined-benefit-funds` - Owner/beneficiary management patterns
+- `/assets` - Asset table with section grouping
+- `/income-needs` - Income calculation tables
+- `/income-provisions` - Provision calculation tables
+- `/additional-estate-duty-items` - Estate duty calculation tables
+
+**Technical Changes**:
+1. **SafeFragment Component Refinement**:
+   - Updated `client/src/lib/safe-fragment.tsx` to use React fragment shorthand `<>{children}</>`
+   - Eliminated data-replit-metadata prop warnings completely
+   - Removed problematic key prop access that caused React warnings
+
+2. **Table Component Updates**:
+   - `client/src/components/assurance/working-assurance-table.tsx` - Updated React.Fragment to SafeFragment
+   - `client/src/components/retirement-funds/new-retirement-table.tsx` - Added SafeFragment import and usage
+   - `client/src/components/retirement-funds/new-grouped-table-view.tsx` - Updated fragment implementation  
+   - `client/src/components/defined-benefit-funds/defined-benefit-funds-table-correct-stable.tsx` - Already using SafeFragment
+
+3. **API Functionality Verification**:
+   - All calculation page APIs responding correctly (assurance, assets, income-needs, retirement-funds, defined-benefit-funds)
+   - No functionality broken during refinement process
+   - Table interactions, updates, and calculations working as expected
+
+**Result**: React Fragment warnings eliminated across all calculation pages while preserving full functionality of complex financial calculation tables with multi-row structures, owner/beneficiary management, and real-time updates.
 ```
