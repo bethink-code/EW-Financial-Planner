@@ -90,7 +90,28 @@ export function NewRetirementTable({
 
  // OnBlur handler with formatting and jump prevention (from Assurance pattern)
  const handleInputBlur = useCallback((fundId: number, field: string, value: string, element: HTMLInputElement, fieldType: string) => {
-   const formattedValue = formatCurrency(value, fieldType);
+   let formattedValue;
+   
+   // Special handling for years fields
+   if (fieldType.includes('years') || fieldType.includes('Years') || field === 'termYears') {
+     if (!value || value === "0" || value.trim() === "") {
+       formattedValue = "0 years";
+     } else {
+       const cleanValue = value.toString().replace(/\s*years?\s*/gi, '').trim();
+       if (cleanValue === "" || cleanValue === "0") {
+         formattedValue = "0 years";
+       } else {
+         const numValue = parseFloat(cleanValue);
+         if (isNaN(numValue)) {
+           formattedValue = "0 years";
+         } else {
+           formattedValue = `${numValue} years`;
+         }
+       }
+     }
+   } else {
+     formattedValue = formatCurrency(value, fieldType);
+   }
    
    // Update the DOM directly to avoid re-render jump
    if (formattedValue !== value) {
