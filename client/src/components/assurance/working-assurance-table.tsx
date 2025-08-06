@@ -316,7 +316,6 @@ export function AssuranceTable({ onAddPolicy }: AssuranceTableProps) {
               <th>Death Benefit</th>
               <th>Beneficiary</th>
               <th>Additional Info</th>
-              <th>Beneficiary Split</th>
               <th>Amount</th>
               <th>Buy/Sell</th>
               <th>Key Man</th>
@@ -443,19 +442,7 @@ export function AssuranceTable({ onAddPolicy }: AssuranceTableProps) {
                     )}
                   </td>
 
-                  {/* Beneficiary Split - only show on first row */}
-                  <td className="border border-neutral-300 p-1">
-                    {rowIndex === 0 && (
-                      <input
-                        key={`benefit-split-${policy.id}`}
-                        type="text"
-                        defaultValue={policy.benefitSplit}
-                        className={`table-input ${getFieldClass('percentage')} ${getValueClass(policy.benefitSplit, 'percentage')}`}
-                        onFocus={handleDefaultValueFocus}
-                        onBlur={(e) => handleInputBlur(policy.id, 'benefitSplit', e.target.value, e.target, 'benefitSplit')}
-                      />
-                    )}
-                  </td>
+
 
                   {/* Amount - only show on first row */}
                   <td className="border border-neutral-300 p-1">
@@ -562,8 +549,6 @@ export function AssuranceTable({ onAddPolicy }: AssuranceTableProps) {
             <tr>
               <td className="totals-cell-label text-right" colSpan={4}>Totals</td>
               <td className="totals-cell-value">R {totals.deathBenefit.toLocaleString()}</td>
-              <td className="totals-cell-label"></td>
-              <td className="totals-cell-label"></td>
               <td className="totals-cell-label"></td>
               <td className="totals-cell-value">R {totals.amount.toLocaleString()}</td>
               <td className="totals-cell-label"></td>
