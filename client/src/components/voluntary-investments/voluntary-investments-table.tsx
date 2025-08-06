@@ -290,7 +290,7 @@ function VoluntaryInvestmentsTable({ viewMode, searchTerm, onAddInvestment }: Vo
                 )}
                 
                 {ownerIndex === 0 && (
-                  <td className="p-2 align-top section-start" rowSpan={maxRows}>
+                  <td className="p-1 align-top section-start" rowSpan={maxRows}>
                     <input
                       type="text"
                       defaultValue={formatTextValue(investment.description)}
@@ -302,7 +302,7 @@ function VoluntaryInvestmentsTable({ viewMode, searchTerm, onAddInvestment }: Vo
                   </td>
                 )}
                 
-                <td className="p-2 align-top">
+                <td className="p-1 align-top">
                   {ownerIndex < investment.owners.length && (
                     <div className="flex items-center gap-1">
                       <input
@@ -330,7 +330,7 @@ function VoluntaryInvestmentsTable({ viewMode, searchTerm, onAddInvestment }: Vo
                   )}
                 </td>
                 
-                <td className="p-2 align-top">
+                <td className="p-1 align-top">
                   {ownerIndex < investment.owners.length && (
                     <input
                       type="text"
@@ -344,7 +344,7 @@ function VoluntaryInvestmentsTable({ viewMode, searchTerm, onAddInvestment }: Vo
                 
                 {ownerIndex === 0 && (
                   <>
-                    <td className="p-2 section-start align-top" rowSpan={maxRows}>
+                    <td className="p-1 section-start align-top" rowSpan={maxRows}>
                       <input
                         type="text"
                         defaultValue={investment.baseCost}
@@ -355,7 +355,7 @@ function VoluntaryInvestmentsTable({ viewMode, searchTerm, onAddInvestment }: Vo
                       />
                     </td>
                     
-                    <td className="p-2 align-top" rowSpan={maxRows}>
+                    <td className="p-1 align-top" rowSpan={maxRows}>
                       <input
                         type="text"
                         defaultValue={investment.marketValue}
@@ -366,7 +366,7 @@ function VoluntaryInvestmentsTable({ viewMode, searchTerm, onAddInvestment }: Vo
                       />
                     </td>
                     
-                    <td className="p-2 align-top" rowSpan={maxRows}>
+                    <td className="p-1 align-top" rowSpan={maxRows}>
                       <input
                         type="text"
                         defaultValue={investment.liquidationPercentage}
@@ -377,7 +377,7 @@ function VoluntaryInvestmentsTable({ viewMode, searchTerm, onAddInvestment }: Vo
                       />
                     </td>
                     
-                    <td className="p-2 section-start align-top" rowSpan={maxRows}>
+                    <td className="p-1 section-start align-top" rowSpan={maxRows}>
                       <input
                         type="text"
                         defaultValue={investment.spouse}
@@ -388,7 +388,7 @@ function VoluntaryInvestmentsTable({ viewMode, searchTerm, onAddInvestment }: Vo
                       />
                     </td>
                     
-                    <td className="p-2 align-top" rowSpan={maxRows}>
+                    <td className="p-1 align-top" rowSpan={maxRows}>
                       <input
                         type="text"
                         defaultValue={investment.others}
@@ -399,7 +399,7 @@ function VoluntaryInvestmentsTable({ viewMode, searchTerm, onAddInvestment }: Vo
                       />
                     </td>
                     
-                    <td className="p-2 text-center section-start align-top" rowSpan={maxRows}>
+                    <td className="p-1 text-center section-start align-top" rowSpan={maxRows}>
                       <input
                         type="checkbox"
                         checked={investment.excludedFromJointEstate}
@@ -409,7 +409,7 @@ function VoluntaryInvestmentsTable({ viewMode, searchTerm, onAddInvestment }: Vo
                       />
                     </td>
                     
-                    <td className="p-2 text-center align-top" rowSpan={maxRows}>
+                    <td className="p-1 text-center align-top" rowSpan={maxRows}>
                       <input
                         type="checkbox"
                         checked={investment.excludedFromEstateDuty}
@@ -419,7 +419,7 @@ function VoluntaryInvestmentsTable({ viewMode, searchTerm, onAddInvestment }: Vo
                       />
                     </td>
                     
-                    <td className="p-2 text-center align-top" rowSpan={maxRows}>
+                    <td className="p-1 text-center align-top" rowSpan={maxRows}>
                       <input
                         type="checkbox"
                         checked={investment.excludedFromCGT}
@@ -429,7 +429,7 @@ function VoluntaryInvestmentsTable({ viewMode, searchTerm, onAddInvestment }: Vo
                       />
                     </td>
                     
-                    <td className="p-2 text-center align-top" rowSpan={maxRows}>
+                    <td className="p-1 text-center align-top" rowSpan={maxRows}>
                       <input
                         type="checkbox"
                         checked={investment.excludedFromExecutorsFees}
