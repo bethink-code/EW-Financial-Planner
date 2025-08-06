@@ -89,11 +89,17 @@ Client requests data via TanStack Query hooks. Express routes handle CRUD operat
 
 3. **Assurance Table Transformation**:
    - Updated `client/src/components/assurance/working-assurance-table.tsx` with entity selectors
-   - Renamed "Benefit Split" column to "Beneficiary Split" for clarity
+   - Single "Beneficiary" column with action buttons positioned correctly on left side
    - Added percentage change handlers maintaining synchronization between arrays
    - Implemented add/remove functionality preserving percentage array integrity
 
-4. **Global Pattern Established**:
+4. **UI Layout Resolution**:
+   - **Issue Identified**: shadcn/ui Select component CSS specificity conflicts prevented proper action button positioning
+   - **Solution Applied**: Replaced shadcn Select with native HTML select element in EntityBeneficiarySelector
+   - **Result**: Action buttons now correctly appear before entity dropdowns as intended
+   - Layout achieved: [+ Button] [Entity Dropdown] [Percentage %] with proper left-to-right ordering
+
+5. **Global Pattern Established**:
    - Entity dropdowns replace text inputs for consistent entity selection
    - Percentage inputs with validation ensure 100% total distribution
    - Add/remove buttons maintain array synchronization automatically
