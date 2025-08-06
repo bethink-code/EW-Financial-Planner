@@ -479,7 +479,7 @@ export function NewRetirementTable({
  <button
  type="button"
  onClick={() => handleUpdateFund(fund.id, 'monthlyIncomeCheckbox', !fund.monthlyIncomeCheckbox)}
- className={`h-8 w-8 border rounded-md flex items-center justify-center transition-colors text-xs font-medium ${
+ className={`h-8 px-3 min-w-[48px] border rounded-md flex items-center justify-center transition-colors text-sm font-medium ${
  isYearsMode(fund) 
  ? 'bg-[#E8F3F8] border-[#E0E0E0] text-[#016991] hover:bg-[#D1E7F0]' 
  : 'bg-[#FFF7ED] border-[#FDBA74] text-[#EA580C] hover:bg-[#FED7AA]'
