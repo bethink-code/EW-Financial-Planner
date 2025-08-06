@@ -427,20 +427,25 @@ export function AssuranceTable({ onAddPolicy }: AssuranceTableProps) {
                   <td className="border border-neutral-300 p-1">
                     {policy.beneficiaries.length > rowIndex && (
                       <div className="flex items-center gap-1">
-                        {/* Add/Remove Buttons */}
-                        <div className="flex gap-1">
-                          <Button
-                            size="sm"
-                            variant="outline"
-                            className="h-6 w-6 p-0"
-                            onClick={() => handleAddBeneficiary(policy.id)}
-                            disabled={updateMutation.isPending}
-                            title="Add beneficiary"
-                          >
-                            <Plus className="h-3 w-3" />
-                          </Button>
-                          
-                          {policy.beneficiaries.length > 1 && rowIndex > 0 && (
+                        {/* Add/Remove Buttons - only show on first row */}
+                        {rowIndex === 0 && (
+                          <div className="flex gap-1">
+                            <Button
+                              size="sm"
+                              variant="outline"
+                              className="h-6 w-6 p-0"
+                              onClick={() => handleAddBeneficiary(policy.id)}
+                              disabled={updateMutation.isPending}
+                              title="Add beneficiary"
+                            >
+                              <Plus className="h-3 w-3" />
+                            </Button>
+                          </div>
+                        )}
+                        
+                        {/* Remove button - only show on non-first rows */}
+                        {rowIndex > 0 && policy.beneficiaries.length > 1 && (
+                          <div className="flex gap-1">
                             <Button
                               size="sm"
                               variant="outline"
@@ -451,8 +456,8 @@ export function AssuranceTable({ onAddPolicy }: AssuranceTableProps) {
                             >
                               <X className="h-3 w-3" />
                             </Button>
-                          )}
-                        </div>
+                          </div>
+                        )}
 
                         {/* Entity Selector */}
                         <Select
@@ -482,9 +487,10 @@ export function AssuranceTable({ onAddPolicy }: AssuranceTableProps) {
                         type="text"
                         value={policy.beneficiaryPercentages[rowIndex]}
                         onChange={(e) => handleBeneficiaryPercentageChange(policy.id, rowIndex, e.target.value)}
-                        className="w-16 h-8 text-xs border rounded px-1 text-center border-neutral-300"
+                        className={`table-input ${getFieldClass('percentage')} ${getValueClass(policy.beneficiaryPercentages[rowIndex], 'percentage')}`}
                         placeholder="0%"
                         disabled={updateMutation.isPending}
+                        onFocus={handleDefaultValueFocus}
                       />
                     )}
                   </td>
