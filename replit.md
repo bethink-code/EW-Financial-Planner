@@ -72,6 +72,33 @@ Client requests data via TanStack Query hooks. Express routes handle CRUD operat
 
 ## Recent Major Updates
 
+### August 6, 2025 - Complete Table Row Height Standardization
+**Scope**: Systematic resolution of inconsistent table row heights across all calculation tables through padding standardization and CSS optimization
+
+**Root Cause Identified**: Double padding issue where table cells (`p-1` = 4px) combined with table-input internal padding (`0.5rem` = 8px) and calculated-field extra padding (`0.75rem` = 12px) created inconsistent row heights ranging from 12px to 24px across different tables.
+
+**Solutions Implemented**:
+1. **Table Cell Padding Standardization**:
+   - Applied consistent `p-1` (4px) padding to ALL table cells across major calculation tables
+   - Replaced inconsistent `p-2` (8px) usage throughout the application
+   - Tables updated: Assurance, Retirement Funds, Defined Benefit Funds, Voluntary Investments, Assets, Liabilities, Income Needs, Lump Sum Bequests
+
+2. **Input Field Padding Optimization**:
+   - Reduced `.table-input` internal padding from `0.5rem 0.75rem` to `0.25rem 0.5rem`
+   - Eliminated double padding effect while maintaining field usability
+   - Applied globally to ALL input fields across the application
+
+3. **Calculated Field Padding Correction**:
+   - Fixed `.calculated-field` extra padding that was adding 12px (`0.75rem`) to calculated columns
+   - Standardized calculated field padding to match input fields (`0.25rem 0.5rem`)
+   - Resolved Income Needs and Lump Sum Bequests table height inconsistencies
+
+**Result**: All calculation tables now have perfectly uniform row heights with consistent 4px cell padding and optimized internal field padding. This creates a clean, professional appearance across the entire financial planning platform.
+
+**CSS Files Modified**:
+- `client/src/index.css` - Updated `.table-input` and `.calculated-field` padding rules
+- Multiple table components updated with `p-1` standardization
+
 ### August 6, 2025 - Global Entity Management System with Primary Entity Defaults
 **Scope**: Complete transformation from text-based owner/beneficiary fields to dynamic entity management system with percentage validation and automatic Primary entity defaults across all major calculation tables
 
