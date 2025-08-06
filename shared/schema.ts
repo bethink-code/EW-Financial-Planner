@@ -121,9 +121,11 @@ export const assurance = pgTable("assurance", {
   
   // Owner information
   owners: text("owners").array().notNull().default(["Donald Edwards"]),
+  ownershipPercentages: text("ownership_percentages").array().notNull().default(["100%"]),
   
   // Beneficiary information 
   beneficiaries: text("beneficiaries").array().notNull().default([""]),
+  beneficiaryPercentages: text("beneficiary_percentages").array().notNull().default(["100%"]),
   
   // Financial details
   deathBenefit: text("death_benefit").notNull().default("R 0"),

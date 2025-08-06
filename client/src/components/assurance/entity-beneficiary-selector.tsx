@@ -2,11 +2,15 @@ import React from 'react';
 import { EntitySelector } from "@/components/ui/entity-selector";
 import { AddButton, DeleteButton } from "@/components/ui/action-buttons";
 import { useEntityConversion } from "@/lib/entity-conversion";
+import { getFieldClass } from "@/lib/design-tokens";
+import { getValueClass, handleDefaultValueFocus } from "@/lib/formatting";
 
 interface EntityBeneficiarySelectorProps {
   policyId: number;
   beneficiaries: string[];
+  beneficiaryPercentages: string[];
   onBeneficiaryChange: (policyId: number, index: number, value: string) => void;
+  onBeneficiaryPercentageChange: (policyId: number, index: number, value: string) => void;
   onAddBeneficiary: (policyId: number) => void;
   onRemoveBeneficiary: (policyId: number, index: number) => void;
   rowIndex: number;
@@ -16,7 +20,9 @@ interface EntityBeneficiarySelectorProps {
 export function EntityBeneficiarySelector({
   policyId,
   beneficiaries,
+  beneficiaryPercentages,
   onBeneficiaryChange,
+  onBeneficiaryPercentageChange,
   onAddBeneficiary,
   onRemoveBeneficiary,
   rowIndex,
@@ -55,6 +61,19 @@ export function EntityBeneficiarySelector({
     onBeneficiaryChange(policyId, rowIndex, entityName);
   };
 
+  const currentPercentage = beneficiaryPercentages[rowIndex] || "0%";
+
+  const handlePercentageChange = (value: string) => {
+    // Ensure percentage format
+    let cleanValue = value.replace(/[^\d.]/g, '');
+    if (cleanValue && !isNaN(parseFloat(cleanValue))) {
+      cleanValue = `${parseFloat(cleanValue)}%`;
+    } else {
+      cleanValue = "0%";
+    }
+    onBeneficiaryPercentageChange(policyId, rowIndex, cleanValue);
+  };
+
   return (
     <div className="flex items-center gap-1">
       <EntitySelector
@@ -63,6 +82,15 @@ export function EntityBeneficiarySelector({
         disabled={disabled}
         placeholder="Select beneficiary..."
         className="table-input table-dropdown flex-1"
+      />
+      <input
+        type="text"
+        defaultValue={currentPercentage}
+        placeholder="0%"
+        className={`table-input ${getFieldClass('percentage')} w-16 text-center ${getValueClass(currentPercentage, 'percentage')}`}
+        onFocus={handleDefaultValueFocus}
+        onBlur={(e) => handlePercentageChange(e.target.value)}
+        disabled={disabled}
       />
       {rowIndex === 0 ? (
         <AddButton

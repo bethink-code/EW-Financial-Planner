@@ -145,7 +145,7 @@ export function AssuranceTable({ onAddPolicy }: AssuranceTableProps) {
 
   const handleUpdatePolicy = useCallback((id: number, field: keyof Assurance, value: string | boolean | string[]) => {
     // Use immediate updates for array fields to prevent synchronization issues
-    const arrayFields = ['owners', 'beneficiaries'];
+    const arrayFields = ['owners', 'beneficiaries', 'ownershipPercentages', 'beneficiaryPercentages'];
     
     if (arrayFields.includes(field)) {
       executeUpdate(id, field, value);
@@ -176,7 +176,9 @@ export function AssuranceTable({ onAddPolicy }: AssuranceTableProps) {
     const policy = policies.find((p: Assurance) => p.id === id);
     if (policy) {
       const newOwners = [...policy.owners, ""];
+      const newOwnershipPercentages = [...(policy.ownershipPercentages || []), "0%"];
       handleUpdatePolicy(id, 'owners', newOwners);
+      handleUpdatePolicy(id, 'ownershipPercentages', newOwnershipPercentages);
     }
   }, [policies, handleUpdatePolicy]);
 
@@ -185,8 +187,11 @@ export function AssuranceTable({ onAddPolicy }: AssuranceTableProps) {
     const policy = policies.find((p: Assurance) => p.id === id);
     if (policy && policy.owners.length > 1 && ownerIndex > 0) { // Protect first owner
       const newOwners = [...policy.owners];
+      const newOwnershipPercentages = [...(policy.ownershipPercentages || [])];
       newOwners.splice(ownerIndex, 1);
+      newOwnershipPercentages.splice(ownerIndex, 1);
       handleUpdatePolicy(id, 'owners', newOwners);
+      handleUpdatePolicy(id, 'ownershipPercentages', newOwnershipPercentages);
     }
   }, [policies, handleUpdatePolicy]);
 
@@ -195,7 +200,9 @@ export function AssuranceTable({ onAddPolicy }: AssuranceTableProps) {
     const policy = policies.find((p: Assurance) => p.id === id);
     if (policy) {
       const newBeneficiaries = [...policy.beneficiaries, ""];
+      const newBeneficiaryPercentages = [...(policy.beneficiaryPercentages || []), "0%"];
       handleUpdatePolicy(id, 'beneficiaries', newBeneficiaries);
+      handleUpdatePolicy(id, 'beneficiaryPercentages', newBeneficiaryPercentages);
     }
   }, [policies, handleUpdatePolicy]);
 
@@ -204,8 +211,11 @@ export function AssuranceTable({ onAddPolicy }: AssuranceTableProps) {
     const policy = policies.find((p: Assurance) => p.id === id);
     if (policy && policy.beneficiaries.length > 1 && beneficiaryIndex > 0) { // Protect first beneficiary
       const newBeneficiaries = [...policy.beneficiaries];
+      const newBeneficiaryPercentages = [...(policy.beneficiaryPercentages || [])];
       newBeneficiaries.splice(beneficiaryIndex, 1);
+      newBeneficiaryPercentages.splice(beneficiaryIndex, 1);
       handleUpdatePolicy(id, 'beneficiaries', newBeneficiaries);
+      handleUpdatePolicy(id, 'beneficiaryPercentages', newBeneficiaryPercentages);
     }
   }, [policies, handleUpdatePolicy]);
 
@@ -226,6 +236,26 @@ export function AssuranceTable({ onAddPolicy }: AssuranceTableProps) {
       const updatedBeneficiaries = [...policy.beneficiaries];
       updatedBeneficiaries[beneficiaryIndex] = newBeneficiary;
       handleUpdatePolicy(id, 'beneficiaries', updatedBeneficiaries);
+    }
+  }, [policies, handleUpdatePolicy]);
+
+  // Update ownership percentage
+  const handleOwnershipPercentageChange = useCallback((id: number, ownerIndex: number, newPercentage: string) => {
+    const policy = policies.find((p: Assurance) => p.id === id);
+    if (policy) {
+      const updatedPercentages = [...(policy.ownershipPercentages || [])];
+      updatedPercentages[ownerIndex] = newPercentage;
+      handleUpdatePolicy(id, 'ownershipPercentages', updatedPercentages);
+    }
+  }, [policies, handleUpdatePolicy]);
+
+  // Update beneficiary percentage
+  const handleBeneficiaryPercentageChange = useCallback((id: number, beneficiaryIndex: number, newPercentage: string) => {
+    const policy = policies.find((p: Assurance) => p.id === id);
+    if (policy) {
+      const updatedPercentages = [...(policy.beneficiaryPercentages || [])];
+      updatedPercentages[beneficiaryIndex] = newPercentage;
+      handleUpdatePolicy(id, 'beneficiaryPercentages', updatedPercentages);
     }
   }, [policies, handleUpdatePolicy]);
 
@@ -344,7 +374,9 @@ export function AssuranceTable({ onAddPolicy }: AssuranceTableProps) {
                     <EntityOwnerSelector
                       policyId={policy.id}
                       owners={policy.owners}
+                      ownershipPercentages={policy.ownershipPercentages || ["100%"]}
                       onOwnerChange={handleOwnerChange}
+                      onOwnershipPercentageChange={handleOwnershipPercentageChange}
                       onAddOwner={handleAddOwner}
                       onRemoveOwner={handleRemoveOwner}
                       rowIndex={rowIndex}
@@ -386,7 +418,9 @@ export function AssuranceTable({ onAddPolicy }: AssuranceTableProps) {
                     <EntityBeneficiarySelector
                       policyId={policy.id}
                       beneficiaries={policy.beneficiaries}
+                      beneficiaryPercentages={policy.beneficiaryPercentages || ["100%"]}
                       onBeneficiaryChange={handleBeneficiaryChange}
+                      onBeneficiaryPercentageChange={handleBeneficiaryPercentageChange}
                       onAddBeneficiary={handleAddBeneficiary}
                       onRemoveBeneficiary={handleRemoveBeneficiary}
                       rowIndex={rowIndex}

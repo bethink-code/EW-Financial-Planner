@@ -2,11 +2,15 @@ import React from 'react';
 import { EntitySelector } from "@/components/ui/entity-selector";
 import { AddButton, DeleteButton } from "@/components/ui/action-buttons";
 import { useEntityConversion } from "@/lib/entity-conversion";
+import { getFieldClass } from "@/lib/design-tokens";
+import { getValueClass, handleDefaultValueFocus } from "@/lib/formatting";
 
 interface EntityOwnerSelectorProps {
   policyId: number;
   owners: string[];
+  ownershipPercentages: string[];
   onOwnerChange: (policyId: number, index: number, value: string) => void;
+  onOwnershipPercentageChange: (policyId: number, index: number, value: string) => void;
   onAddOwner: (policyId: number) => void;
   onRemoveOwner: (policyId: number, index: number) => void;
   rowIndex: number;
@@ -16,7 +20,9 @@ interface EntityOwnerSelectorProps {
 export function EntityOwnerSelector({
   policyId,
   owners,
+  ownershipPercentages,
   onOwnerChange,
+  onOwnershipPercentageChange,
   onAddOwner,
   onRemoveOwner,
   rowIndex,
@@ -55,6 +61,19 @@ export function EntityOwnerSelector({
     onOwnerChange(policyId, rowIndex, entityName);
   };
 
+  const currentPercentage = ownershipPercentages[rowIndex] || "0%";
+
+  const handlePercentageChange = (value: string) => {
+    // Ensure percentage format
+    let cleanValue = value.replace(/[^\d.]/g, '');
+    if (cleanValue && !isNaN(parseFloat(cleanValue))) {
+      cleanValue = `${parseFloat(cleanValue)}%`;
+    } else {
+      cleanValue = "0%";
+    }
+    onOwnershipPercentageChange(policyId, rowIndex, cleanValue);
+  };
+
   return (
     <div className="flex items-center gap-1">
       <EntitySelector
@@ -63,6 +82,15 @@ export function EntityOwnerSelector({
         disabled={disabled}
         placeholder="Select owner..."
         className="table-input table-dropdown flex-1"
+      />
+      <input
+        type="text"
+        defaultValue={currentPercentage}
+        placeholder="0%"
+        className={`table-input ${getFieldClass('percentage')} w-16 text-center ${getValueClass(currentPercentage, 'percentage')}`}
+        onFocus={handleDefaultValueFocus}
+        onBlur={(e) => handlePercentageChange(e.target.value)}
+        disabled={disabled}
       />
       {rowIndex === 0 ? (
         <AddButton
