@@ -479,11 +479,11 @@ export function NewRetirementTable({
  <button
  type="button"
  onClick={() => handleUpdateFund(fund.id, 'monthlyIncomeCheckbox', !fund.monthlyIncomeCheckbox)}
- className={`h-8 px-3 text-xs font-semibold rounded border transition-colors ${
+ className={`inline-flex items-center justify-center h-8 px-3 text-xs font-medium rounded border transition-colors ${
  isYearsMode(fund) 
- ? 'bg-blue-600 text-white border-blue-600 hover:bg-blue-700' 
- : 'bg-orange-500 text-white border-orange-500 hover:bg-orange-600'
- } ${!getControlsEnabled(fund) ? 'opacity-40 cursor-not-allowed' : 'cursor-pointer shadow-sm'}`}
+ ? 'bg-[#016991] text-white border-[#016991] hover:bg-[#014f73]' 
+ : 'bg-[#F97316] text-white border-[#F97316] hover:bg-[#EA580C]'
+ } ${!getControlsEnabled(fund) ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}`}
  disabled={!getControlsEnabled(fund) || isUpdating}
  >
  {isYearsMode(fund) ? 'Years' : '%'}
