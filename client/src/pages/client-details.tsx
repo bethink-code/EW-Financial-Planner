@@ -177,8 +177,8 @@ function ClientDetailsTable() {
                     >
                       <option value="Primary entity">Primary entity</option>
                       <option value="Spouse">Spouse</option>
-                      <option value="Dependants">Dependants</option>
-                      <option value="Others">Others</option>
+                      <option value="Dependant">Dependant</option>
+                      <option value="Other">Other</option>
                     </select>
                   </td>
                   <td className="section-start p-2 text-center">

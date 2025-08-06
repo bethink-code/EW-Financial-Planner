@@ -84,7 +84,7 @@ export const clientDetails = pgTable("client_details", {
   
   // Entity Information
   entityName: text("entity_name").notNull().default(""),
-  entityType: text("entity_type").notNull().default("Primary entity"), // Primary entity, Spouse, Dependants, Others
+  entityType: text("entity_type").notNull().default("Primary entity"), // Primary entity, Spouse, Dependant, Other
   
   // Personal Information
   dateOfBirth: text("date_of_birth").notNull().default(""), // Date field
