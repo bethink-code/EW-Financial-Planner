@@ -156,9 +156,7 @@ function AssetsTable({ viewMode, searchTerm, onShowCategoryDialog, onAddAsset }:
 
   const handleInputBlur = useCallback((id: number, field: keyof Assets, value: string) => {
     let formattedValue: string;
-    if (field === 'johnDoe' || field === 'janetteDoe' || field === 'doeJunior' || field === 'doeFamilyTrust') {
-      formattedValue = formatPercentageValue(value);
-    } else if (field === 'marketValue' || field === 'estate' || field === 'others' || field === 'client') {
+    if (field === 'marketValue' || field === 'estate' || field === 'others' || field === 'client') {
       formattedValue = formatCurrencyValue(value);
     } else {
       formattedValue = value;
@@ -204,16 +202,17 @@ function AssetsTable({ viewMode, searchTerm, onShowCategoryDialog, onAddAsset }:
             </th>
             <th className="section-start" colSpan={1}>Overview</th>
             <th className="section-start" colSpan={1}>Asset Details</th>
-            <th className="section-start" colSpan={4}>Ownership Split</th>
+            <th className="section-start" colSpan={clientEntities.length}>Ownership Split</th>
             <th className="section-start" colSpan={3}>Distribution</th>
           </tr>
           <tr className="double-row-header-second">
             <th className="section-start">Description</th>
             <th className="section-start">Market Value</th>
-            <th className="section-start">John Doe</th>
-            <th>Janette Doe (Spouse)</th>
-            <th>Doe Junior</th>
-            <th>Doe family trust</th>
+            {clientEntities.map((entity, index) => (
+              <th key={entity.id} className={index === 0 ? "section-start" : ""}>
+                {getEntityDisplayName(entity)}
+              </th>
+            ))}
             <th className="section-start">Estate</th>
             <th>Others</th>
             <th>Client</th>
@@ -234,7 +233,7 @@ function AssetsTable({ viewMode, searchTerm, onShowCategoryDialog, onAddAsset }:
             return Object.entries(groupedAssets).map(([sectionName, sectionAssets]) => [
               // Section Header
               <tr key={`section-${sectionName}`} className="bg-blue-50">
-                <td colSpan={11} className="px-4 text-sm font-medium text-neutral-700 uppercase tracking-wider">
+                <td colSpan={clientEntities.length + 5} className="px-4 text-sm font-medium text-neutral-700 uppercase tracking-wider">
                   {sectionName.replace('_', ' ')}
                 </td>
               </tr>,
@@ -278,53 +277,33 @@ function AssetsTable({ viewMode, searchTerm, onShowCategoryDialog, onAddAsset }:
                 />
               </td>
               
-              <td className="p-1 text-right section-start">
-                <input
-                  key={`johnDoe-${asset.id}-${asset.johnDoe}`}
-                  type="text"
-                  defaultValue={asset.johnDoe}
-                  className={`table-input ${getFieldClass('percentage')} ${getValueClass(asset.johnDoe, 'percentage')}`}
-                  onFocus={handleDefaultValueFocus}
-                  onBlur={(e) => handleInputBlur(asset.id, 'johnDoe', e.target.value)}
-                  disabled={isUpdating}
-                />
-              </td>
-              
-              <td className="p-1 text-right">
-                <input
-                  key={`janetteDoe-${asset.id}-${asset.janetteDoe}`}
-                  type="text"
-                  defaultValue={asset.janetteDoe}
-                  className={`table-input ${getFieldClass('percentage')} ${getValueClass(asset.janetteDoe, 'percentage')}`}
-                  onFocus={handleDefaultValueFocus}
-                  onBlur={(e) => handleInputBlur(asset.id, 'janetteDoe', e.target.value)}
-                  disabled={isUpdating}
-                />
-              </td>
-              
-              <td className="p-1 text-right">
-                <input
-                  key={`doeJunior-${asset.id}-${asset.doeJunior}`}
-                  type="text"
-                  defaultValue={asset.doeJunior}
-                  className={`table-input ${getFieldClass('percentage')} ${getValueClass(asset.doeJunior, 'percentage')}`}
-                  onFocus={handleDefaultValueFocus}
-                  onBlur={(e) => handleInputBlur(asset.id, 'doeJunior', e.target.value)}
-                  disabled={isUpdating}
-                />
-              </td>
-              
-              <td className="p-1 text-right">
-                <input
-                  key={`doeFamilyTrust-${asset.id}-${asset.doeFamilyTrust}`}
-                  type="text"
-                  defaultValue={asset.doeFamilyTrust}
-                  className={`table-input ${getFieldClass('percentage')} ${getValueClass(asset.doeFamilyTrust, 'percentage')}`}
-                  onFocus={handleDefaultValueFocus}
-                  onBlur={(e) => handleInputBlur(asset.id, 'doeFamilyTrust', e.target.value)}
-                  disabled={isUpdating}
-                />
-              </td>
+              {clientEntities.map((entity, index) => {
+                const entityDisplayName = getEntityDisplayName(entity);
+                const ownership = parseEntityOwnership(asset.entityOwnership);
+                const value = ownership[entityDisplayName] || '0%';
+                
+                return (
+                  <td key={entity.id} className={`p-1 text-right ${index === 0 ? 'section-start' : ''}`}>
+                    <input
+                      type="text"
+                      defaultValue={value}
+                      className={`table-input ${getFieldClass('percentage')} ${getValueClass(value, 'percentage')}`}
+                      onFocus={handleDefaultValueFocus}
+                      onBlur={(e) => {
+                        const formattedValue = formatPercentageValue(e.target.value);
+                        const newOwnership = setEntityOwnership(asset.entityOwnership, entityDisplayName, formattedValue);
+                        handleUpdateAsset(asset.id, 'entityOwnership', newOwnership);
+                        
+                        // Update DOM element for immediate visual feedback
+                        setTimeout(() => {
+                          e.target.value = formattedValue;
+                        }, 0);
+                      }}
+                      disabled={isUpdating}
+                    />
+                  </td>
+                );
+              })}
               
               <td className="p-1 text-right section-start">
                 <input
@@ -556,66 +535,37 @@ function AssetsTable({ viewMode, searchTerm, onShowCategoryDialog, onAddAsset }:
                     {/* Ownership Split Section */}
                     <div>
                       <h5 className="text-sm font-medium text-neutral-700 mb-3">Ownership Split</h5>
-                      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
-                        <div>
-                          <label className="block text-xs font-medium text-neutral-600 mb-1">
-                            John Doe
-                          </label>
-                          <input
-                            key={`hybrid-johnDoe-${asset.id}-${asset.johnDoe}`}
-                            type="text"
-                            defaultValue={asset.johnDoe}
-                            className={`w-full px-2 py-1 text-sm border border-neutral-300 rounded focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-transparent ${getValueClass(asset.johnDoe, 'percentage')}`}
-                            onFocus={handleDefaultValueFocus}
-                            onBlur={(e) => handleInputBlur(asset.id, 'johnDoe', e.target.value)}
-                            disabled={isUpdating}
-                          />
-                        </div>
-                        
-                        <div>
-                          <label className="block text-xs font-medium text-neutral-600 mb-1">
-                            Janette Doe
-                          </label>
-                          <input
-                            key={`hybrid-janetteDoe-${asset.id}-${asset.janetteDoe}`}
-                            type="text"
-                            defaultValue={asset.janetteDoe}
-                            className={`w-full px-2 py-1 text-sm border border-neutral-300 rounded focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-transparent ${getValueClass(asset.janetteDoe, 'percentage')}`}
-                            onFocus={handleDefaultValueFocus}
-                            onBlur={(e) => handleInputBlur(asset.id, 'janetteDoe', e.target.value)}
-                            disabled={isUpdating}
-                          />
-                        </div>
-                        
-                        <div>
-                          <label className="block text-xs font-medium text-neutral-600 mb-1">
-                            Doe Junior
-                          </label>
-                          <input
-                            key={`hybrid-doeJunior-${asset.id}-${asset.doeJunior}`}
-                            type="text"
-                            defaultValue={asset.doeJunior}
-                            className={`w-full px-2 py-1 text-sm border border-neutral-300 rounded focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-transparent ${getValueClass(asset.doeJunior, 'percentage')}`}
-                            onFocus={handleDefaultValueFocus}
-                            onBlur={(e) => handleInputBlur(asset.id, 'doeJunior', e.target.value)}
-                            disabled={isUpdating}
-                          />
-                        </div>
-                        
-                        <div>
-                          <label className="block text-xs font-medium text-neutral-600 mb-1">
-                            Family Trust
-                          </label>
-                          <input
-                            key={`hybrid-doeFamilyTrust-${asset.id}-${asset.doeFamilyTrust}`}
-                            type="text"
-                            defaultValue={asset.doeFamilyTrust}
-                            className={`w-full px-2 py-1 text-sm border border-neutral-300 rounded focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-transparent ${getValueClass(asset.doeFamilyTrust, 'percentage')}`}
-                            onFocus={handleDefaultValueFocus}
-                            onBlur={(e) => handleInputBlur(asset.id, 'doeFamilyTrust', e.target.value)}
-                            disabled={isUpdating}
-                          />
-                        </div>
+                      <div className={`grid grid-cols-2 lg:grid-cols-${Math.min(4, clientEntities.length)} gap-3`}>
+                        {clientEntities.map((entity) => {
+                          const entityDisplayName = getEntityDisplayName(entity);
+                          const ownership = parseEntityOwnership(asset.entityOwnership);
+                          const value = ownership[entityDisplayName] || '0%';
+                          
+                          return (
+                            <div key={entity.id}>
+                              <label className="block text-xs font-medium text-neutral-600 mb-1">
+                                {entityDisplayName}
+                              </label>
+                              <input
+                                type="text"
+                                defaultValue={value}
+                                className={`w-full px-2 py-1 text-sm border border-neutral-300 rounded focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-transparent ${getValueClass(value, 'percentage')}`}
+                                onFocus={handleDefaultValueFocus}
+                                onBlur={(e) => {
+                                  const formattedValue = formatPercentageValue(e.target.value);
+                                  const newOwnership = setEntityOwnership(asset.entityOwnership, entityDisplayName, formattedValue);
+                                  handleUpdateAsset(asset.id, 'entityOwnership', newOwnership);
+                                  
+                                  // Update DOM element for immediate visual feedback
+                                  setTimeout(() => {
+                                    e.target.value = formattedValue;
+                                  }, 0);
+                                }}
+                                disabled={isUpdating}
+                              />
+                            </div>
+                          );
+                        })}
                       </div>
                     </div>
                     
