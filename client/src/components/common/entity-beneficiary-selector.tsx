@@ -77,9 +77,10 @@ export default function EntityBeneficiarySelector({
   return (
     <div className="space-y-1">
       <div className="flex items-center gap-1">
-        {/* Add/Remove Buttons - only show Add on first row */}
-        {rowIndex === 0 && (
-          <div className="flex gap-1">
+        {/* Action Button Container - Always present to maintain layout */}
+        <div className="flex gap-1 min-w-[28px]">
+          {/* Add button - only show on first row */}
+          {rowIndex === 0 && (
             <Button
               size="sm"
               variant="outline"
@@ -90,12 +91,10 @@ export default function EntityBeneficiarySelector({
             >
               <Plus className="h-3 w-3" />
             </Button>
-          </div>
-        )}
-        
-        {/* Remove button - only show on non-first rows */}
-        {rowIndex > 0 && beneficiaries.length > 1 && (
-          <div className="flex gap-1">
+          )}
+          
+          {/* Remove button - only show on non-first rows */}
+          {rowIndex > 0 && beneficiaries.length > 1 && (
             <Button
               size="sm"
               variant="outline"
@@ -106,8 +105,8 @@ export default function EntityBeneficiarySelector({
             >
               <X className="h-3 w-3" />
             </Button>
-          </div>
-        )}
+          )}
+        </div>
 
         {/* Entity Selector */}
         <Select
