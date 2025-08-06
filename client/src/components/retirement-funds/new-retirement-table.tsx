@@ -476,7 +476,7 @@ export function NewRetirementTable({
  {/* Monthly Death Benefit - Toggle Button */}
  {rowIndex === 0 && (
  <td className="table-actions-cell align-top" rowSpan={maxRows}>
- <div className="pt-1">
+ <div className="pt-0.5">
  <button
  type="button"
  onClick={() => handleUpdateFund(fund.id, 'monthlyIncomeCheckbox', !fund.monthlyIncomeCheckbox)}
