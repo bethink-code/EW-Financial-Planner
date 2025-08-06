@@ -308,8 +308,8 @@ export function AssuranceTable({ onAddPolicy }: AssuranceTableProps) {
       {/* Table */}
       <table >
           <thead>
-            <tr className="double-row-header-top">
-              <th className="table-actions-cell" rowSpan={2}>
+            <tr className="single-row-header">
+              <th className="table-actions-cell">
                 {onAddPolicy && (
                   <TableHeaderAddButton
                     onClick={onAddPolicy}
@@ -317,23 +317,20 @@ export function AssuranceTable({ onAddPolicy }: AssuranceTableProps) {
                   />
                 )}
               </th>
-              <th rowSpan={2}>Description</th>
-              <th rowSpan={2}>Owner</th>
-              <th rowSpan={2}>Life Assured</th>
-              <th rowSpan={2}>Death Benefit</th>
-              <th colSpan={2}>Beneficiary</th>
-              <th rowSpan={2}>Additional Info</th>
-              <th rowSpan={2}>Amount</th>
-              <th rowSpan={2}>Buy/Sell</th>
-              <th rowSpan={2}>Key Man</th>
-              <th rowSpan={2}>Excluded Estate Duty</th>
-              <th rowSpan={2}>Excluded Provisions</th>
-              <th rowSpan={2}>Premiums by Others</th>
-              <th rowSpan={2}>Collateral Session</th>
-            </tr>
-            <tr className="double-row-header-bottom">
-              <th>Entity</th>
+              <th>Description</th>
+              <th>Owner</th>
+              <th>Life Assured</th>
+              <th>Death Benefit</th>
+              <th>Beneficiary</th>
               <th>Benefit Split</th>
+              <th>Additional Info</th>
+              <th>Amount</th>
+              <th>Buy/Sell</th>
+              <th>Key Man</th>
+              <th>Excluded Estate Duty</th>
+              <th>Excluded Provisions</th>
+              <th>Premiums by Others</th>
+              <th>Collateral Session</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-neutral-200">
