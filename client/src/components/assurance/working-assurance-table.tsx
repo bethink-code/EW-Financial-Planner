@@ -322,7 +322,6 @@ export function AssuranceTable({ onAddPolicy }: AssuranceTableProps) {
               <th>Life Assured</th>
               <th>Death Benefit</th>
               <th>Beneficiary</th>
-              <th>Benefit Split</th>
               <th>Additional Info</th>
               <th>Amount</th>
               <th>Buy/Sell</th>
@@ -433,21 +432,6 @@ export function AssuranceTable({ onAddPolicy }: AssuranceTableProps) {
                       rowIndex={rowIndex}
                       disabled={updateMutation.isPending}
                     />
-                  </td>
-
-                  {/* Benefit Split */}
-                  <td className="border border-neutral-300 p-1">
-                    {policy.beneficiaryPercentages && policy.beneficiaryPercentages[rowIndex] && (
-                      <input
-                        type="text"
-                        value={policy.beneficiaryPercentages[rowIndex]}
-                        onChange={(e) => handleBeneficiaryPercentageChange(policy.id, rowIndex, e.target.value)}
-                        className={`table-input ${getFieldClass('percentage')} ${getValueClass(policy.beneficiaryPercentages[rowIndex], 'percentage')}`}
-                        placeholder="0%"
-                        disabled={updateMutation.isPending}
-                        onFocus={handleDefaultValueFocus}
-                      />
-                    )}
                   </td>
 
                   {/* Additional Info - only show on first row */}

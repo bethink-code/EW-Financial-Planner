@@ -125,6 +125,18 @@ export default function EntityBeneficiarySelector({
             ))}
           </SelectContent>
         </Select>
+
+        {/* Percentage Input */}
+        <input
+          type="text"
+          value={currentPercentage}
+          onChange={(e) => handlePercentageChange(e.target.value, beneficiaryIndex)}
+          className={`w-16 h-8 text-xs border rounded px-1 text-center ${
+            isInvalidTotal ? 'border-red-500 bg-red-50' : 'border-neutral-300'
+          }`}
+          placeholder="0%"
+          disabled={disabled}
+        />
       </div>
 
       {/* Validation Warning - only show on first row */}
