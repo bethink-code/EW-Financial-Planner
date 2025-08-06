@@ -4,7 +4,8 @@ import DefinedBenefitFundsTable from "../components/defined-benefit-funds/define
 import { DefinedBenefitFundsSummary } from "@/components/defined-benefit-funds/defined-benefit-funds-summary";
 import { CalculatorHeader } from "@/components/ui/calculator-header";
 import { apiRequest, queryClient } from "@/lib/queryClient";
-import type { InsertDefinedBenefitFund } from "@shared/schema";
+import { getDefaultOwners, getDefaultOwnershipPercentages } from "@/lib/entity-utils";
+import type { InsertDefinedBenefitFund, ClientDetails } from "@shared/schema";
 
 type ViewMode = "table" | "hybrid";
 
@@ -21,13 +22,18 @@ export default function DefinedBenefitFunds() {
     }
   });
 
-  // Add new fund mutation
+  // Fetch client details for default entity
+  const { data: clientDetails = [] } = useQuery<ClientDetails[]>({
+    queryKey: ["/api/client-details"]
+  });
+
+  // Add new fund mutation with Primary entity default
   const addMutation = useMutation({
     mutationFn: async () => {
       const newFund: InsertDefinedBenefitFund = {
         description: "",
-        owners: ["Donald Edwards"],
-        ownershipPercentages: ["100%"],
+        owners: getDefaultOwners(clientDetails),
+        ownershipPercentages: getDefaultOwnershipPercentages(),
         yearsOfService: "0 years",
         finalMonthlySalary: "R 0",
         deathLumpSum: "R 0",

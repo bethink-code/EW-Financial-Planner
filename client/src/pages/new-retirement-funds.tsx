@@ -1,12 +1,13 @@
 import { useState, useMemo, useCallback, useRef } from "react";
 import { useQuery, useMutation } from "@tanstack/react-query";
-import { RetirementFund, UpdateRetirementFund } from "@shared/schema";
+import { RetirementFund, UpdateRetirementFund, ClientDetails } from "@shared/schema";
 import { queryClient, apiRequest } from "@/lib/queryClient";
 import { CalculatorHeader } from "@/components/ui/calculator-header";
 import { RetirementFundsSummary } from "@/components/retirement-funds/retirement-funds-summary";
 import { NewRetirementTable } from "@/components/retirement-funds/new-retirement-table";
 import { AdditionalDetails } from "@/components/retirement-funds/additional-details";
 import { useDebouncedUpdate } from "@/hooks/use-debounced-update";
+import { getDefaultOwners, getDefaultOwnershipPercentages, getDefaultBeneficiaries, getDefaultBeneficiaryPercentages } from "@/lib/entity-utils";
 
 
 type ViewMode = "table" | "hybrid";
@@ -88,10 +89,22 @@ export default function NewRetirementFunds() {
     }
   }, [executeUpdate, debouncedUpdate]);
 
+  // Fetch client details for default entity
+  const { data: clientDetails = [] } = useQuery<ClientDetails[]>({
+    queryKey: ["/api/client-details"]
+  });
+
   const handleAddFund = useCallback(() => {
-    const newFund = {}; // Send empty object to use database defaults
+    const newFund = {
+      owners: getDefaultOwners(clientDetails),
+      ownershipPercentages: getDefaultOwnershipPercentages(),
+      unapprovedBeneficiaries: getDefaultBeneficiaries(clientDetails),
+      unapprovedPercentageSplits: getDefaultBeneficiaryPercentages(),
+      fundValueBeneficiaries: getDefaultBeneficiaries(clientDetails),
+      fundValuePercentageSplits: getDefaultBeneficiaryPercentages()
+    }; // Use Primary entity defaults
     addMutation.mutate(newFund as Omit<RetirementFund, 'id'>);
-  }, [addMutation]);
+  }, [addMutation, clientDetails]);
 
   const deleteMutation = useMutation({
     mutationFn: async (id: number) => {

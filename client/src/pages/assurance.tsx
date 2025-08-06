@@ -4,7 +4,8 @@ import { AssuranceTable } from "@/components/assurance/working-assurance-table";
 import { AssuranceSummary } from "@/components/assurance/simple-assurance-summary";
 import { CalculatorHeader } from "@/components/ui/calculator-header";
 import { apiRequest, queryClient } from "@/lib/queryClient";
-import type { InsertAssurance } from "@shared/schema";
+import { getDefaultOwners, getDefaultOwnershipPercentages, getDefaultBeneficiaries, getDefaultBeneficiaryPercentages } from "@/lib/entity-utils";
+import type { InsertAssurance, ClientDetails } from "@shared/schema";
 
 type ViewMode = "table" | "hybrid";
 
@@ -22,10 +23,29 @@ export default function Assurance() {
     }
   });
 
-  // Add new policy mutation
+  // Fetch client details for default entity
+  const { data: clientDetails = [] } = useQuery<ClientDetails[]>({
+    queryKey: ["/api/client-details"]
+  });
+
+  // Add new policy mutation with Primary entity defaults
   const addMutation = useMutation({
     mutationFn: async () => {
-      const newPolicy = {}; // Send empty object to use database defaults
+      const newPolicy: InsertAssurance = {
+        description: "",
+        owners: getDefaultOwners(clientDetails),
+        ownershipPercentages: getDefaultOwnershipPercentages(),
+        beneficiaries: getDefaultBeneficiaries(clientDetails),
+        beneficiaryPercentages: getDefaultBeneficiaryPercentages(),
+        assuredAmount: "R 0",
+        monthlyPremium: "R 0",
+        premiumEscalation: "0%",
+        entryAge: "0",
+        termToAge: "0",
+        yearsRemaining: "0 years",
+        paidUp: "R 0",
+        currentCashValue: "R 0"
+      };
       return apiRequest("POST", "/api/assurance", newPolicy);
     },
     onSuccess: () => {

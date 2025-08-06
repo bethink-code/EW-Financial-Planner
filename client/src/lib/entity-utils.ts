@@ -67,3 +67,40 @@ export function getEntityDisplayName(clientDetails: ClientDetails[], entityId: n
 export function validateEntityExists(clientDetails: ClientDetails[], entityId: number): boolean {
   return clientDetails.some(c => c.id === entityId);
 }
+
+/**
+ * Get the Primary entity for use as default owner/beneficiary
+ */
+export function getPrimaryEntity(clientDetails: ClientDetails[]): ClientDetails | null {
+  return clientDetails.find(c => c.entityType === "Primary entity") || null;
+}
+
+/**
+ * Get default owner array with Primary entity
+ */
+export function getDefaultOwners(clientDetails: ClientDetails[]): string[] {
+  const primary = getPrimaryEntity(clientDetails);
+  return primary ? [primary.entityName] : [""];
+}
+
+/**
+ * Get default beneficiary array with Primary entity
+ */
+export function getDefaultBeneficiaries(clientDetails: ClientDetails[]): string[] {
+  const primary = getPrimaryEntity(clientDetails);
+  return primary ? [primary.entityName] : [""];
+}
+
+/**
+ * Get default ownership percentages (100% for single owner)
+ */
+export function getDefaultOwnershipPercentages(): string[] {
+  return ["100%"];
+}
+
+/**
+ * Get default beneficiary percentages (100% for single beneficiary)
+ */
+export function getDefaultBeneficiaryPercentages(): string[] {
+  return ["100%"];
+}
