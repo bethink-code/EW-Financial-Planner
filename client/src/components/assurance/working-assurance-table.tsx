@@ -8,6 +8,7 @@ import { apiRequest } from "@/lib/queryClient";
 import { AddButton, DuplicateButton, DeleteButton, ActionButtonGroup } from "@/components/ui/action-buttons";
 import { TableHeaderAddButton } from "@/components/ui/table-header-add-button";
 import { useDebouncedUpdate } from "@/hooks/use-debounced-update";
+import { SafeFragment } from "@/lib/safe-fragment";
 import type { Assurance, InsertAssurance } from "@shared/schema";
 
 interface AssuranceTableProps {
@@ -299,7 +300,7 @@ export function AssuranceTable({ onAddPolicy }: AssuranceTableProps) {
               const maxRows = Math.max(policy.owners.length, policy.beneficiaries.length);
               
               return (
-                <React.Fragment key={policy.id}>
+                <SafeFragment key={policy.id}>
                   {Array.from({ length: maxRows }, (_, rowIndex) => (
                     <tr 
                       key={`${policy.id}-${rowIndex}`} 
@@ -351,20 +352,12 @@ export function AssuranceTable({ onAddPolicy }: AssuranceTableProps) {
                         />
                         {rowIndex === 0 ? (
                           <AddButton
-                            onClick={(e) => {
-                              e.preventDefault();
-                              e.stopPropagation();
-                              handleAddOwner(policy.id);
-                            }}
+                            onClick={() => handleAddOwner(policy.id)}
                             size="sm"
                           />
                         ) : (
                           <DeleteButton
-                            onClick={(e) => {
-                              e.preventDefault();
-                              e.stopPropagation();
-                              handleRemoveOwner(policy.id, rowIndex);
-                            }}
+                            onClick={() => handleRemoveOwner(policy.id, rowIndex)}
                             size="sm"
                           />
                         )}
@@ -419,20 +412,12 @@ export function AssuranceTable({ onAddPolicy }: AssuranceTableProps) {
                         />
                         {rowIndex === 0 ? (
                           <AddButton
-                            onClick={(e) => {
-                              e.preventDefault();
-                              e.stopPropagation();
-                              handleAddBeneficiary(policy.id);
-                            }}
+                            onClick={() => handleAddBeneficiary(policy.id)}
                             size="sm"
                           />
                         ) : (
                           <DeleteButton
-                            onClick={(e) => {
-                              e.preventDefault();
-                              e.stopPropagation();
-                              handleRemoveBeneficiary(policy.id, rowIndex);
-                            }}
+                            onClick={() => handleRemoveBeneficiary(policy.id, rowIndex)}
                             size="sm"
                           />
                         )}
@@ -567,7 +552,7 @@ export function AssuranceTable({ onAddPolicy }: AssuranceTableProps) {
                   </td>
                 </tr>
                   ))}
-                </React.Fragment>
+                </SafeFragment>
               );
             })}
           </tbody>
