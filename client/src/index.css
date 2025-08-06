@@ -648,7 +648,6 @@ th, td {
   /* Action buttons alignment in table cells */
   .table-actions-cell {
     vertical-align: top !important;
-    padding: 0.25rem !important; /* Match p-1 class used by other table cells */
     text-align: center;
   }
   
