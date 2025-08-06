@@ -7,7 +7,7 @@ import { formatTextValue, getValueClass, isDefaultValue, handleDefaultValueFocus
 import { apiRequest } from "@/lib/queryClient";
 import { AddButton, DuplicateButton, DeleteButton, ActionButtonGroup } from "@/components/ui/action-buttons";
 import { TableHeaderAddButton } from "@/components/ui/table-header-add-button";
-import { EntityOwnerSelector } from "./entity-owner-selector";
+import EntityOwnerSelector from "@/components/common/entity-owner-selector";
 import EntityBeneficiarySelector from "@/components/common/entity-beneficiary-selector";
 import { useDebouncedUpdate } from "@/hooks/use-debounced-update";
 import { SafeFragment } from "@/lib/safe-fragment";

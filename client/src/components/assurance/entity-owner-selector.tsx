@@ -4,6 +4,8 @@ import { AddButton, DeleteButton } from "@/components/ui/action-buttons";
 import { useEntityConversion } from "@/lib/entity-conversion";
 import { getFieldClass } from "@/lib/design-tokens";
 import { getValueClass, handleDefaultValueFocus } from "@/lib/formatting";
+import { useQuery } from "@tanstack/react-query";
+import { ClientDetails } from "@shared/schema";
 
 interface EntityOwnerSelectorProps {
   policyId: number;
@@ -29,6 +31,11 @@ export function EntityOwnerSelector({
   disabled = false
 }: EntityOwnerSelectorProps) {
   const { namesToIds, idsToNames, clientDetails, isReady } = useEntityConversion();
+
+  // Fetch client details for entity options
+  const { data: entities = [] } = useQuery<ClientDetails[]>({
+    queryKey: ["/api/client-details"]
+  });
 
   if (!isReady) {
     return (
@@ -76,22 +83,7 @@ export function EntityOwnerSelector({
 
   return (
     <div className="flex items-center gap-1">
-      <EntitySelector
-        value={currentEntityId}
-        onChange={handleEntityChange}
-        disabled={disabled}
-        placeholder="Select owner..."
-        className="table-input table-dropdown flex-1"
-      />
-      <input
-        type="text"
-        defaultValue={currentPercentage}
-        placeholder="0%"
-        className={`table-input ${getFieldClass('percentage')} w-16 text-center ${getValueClass(currentPercentage, 'percentage')}`}
-        onFocus={handleDefaultValueFocus}
-        onBlur={(e) => handlePercentageChange(e.target.value)}
-        disabled={disabled}
-      />
+      {/* Action Button FIRST - Same pattern as beneficiary component */}
       {rowIndex === 0 ? (
         <AddButton
           onClick={() => onAddOwner(policyId)}
@@ -105,6 +97,43 @@ export function EntityOwnerSelector({
           size="sm"
         />
       )}
+      
+      {/* Entity Selector - Using native HTML select to avoid CSS conflicts */}
+      <select
+        value={currentOwnerName}
+        onChange={(e) => onOwnerChange(policyId, rowIndex, e.target.value)}
+        disabled={disabled}
+        className="table-input table-dropdown flex-1"
+      >
+        <option value="">Select owner...</option>
+        {entities.map((entity) => (
+          <option key={entity.id} value={entity.entityName}>
+            {entity.entityName} ({entity.entityType})
+          </option>
+        ))}
+      </select>
+      
+      {/* Percentage Input with same behavior as beneficiary component */}
+      <input
+        type="text"
+        defaultValue={currentPercentage}
+        placeholder="0%"
+        className={`table-input ${getFieldClass('percentage')} w-16 text-center ${getValueClass(currentPercentage, 'percentage')}`}
+        onFocus={(e) => {
+          handleDefaultValueFocus(e);
+          // Remove % sign for editing but keep the number
+          const valueWithoutPercent = e.target.value.replace('%', '');
+          e.target.value = valueWithoutPercent;
+        }}
+        onBlur={(e) => {
+          handlePercentageChange(e.target.value);
+          // Restore the formatted value with % sign
+          const cleanValue = e.target.value.replace(/[^\d.]/g, '');
+          const numValue = parseFloat(cleanValue);
+          e.target.value = isNaN(numValue) ? "0%" : `${numValue}%`;
+        }}
+        disabled={disabled}
+      />
     </div>
   );
 }
