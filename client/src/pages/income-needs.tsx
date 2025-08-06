@@ -4,7 +4,7 @@ import IncomeNeedsTable from "../components/income-needs/income-needs-table";
 import { IncomeNeedsSummary } from "@/components/income-needs/income-needs-summary";
 import { CalculatorHeader } from "@/components/ui/calculator-header";
 import { apiRequest, queryClient } from "@/lib/queryClient";
-import type { InsertIncomeNeed } from "@shared/schema";
+import type { InsertIncomeNeeds } from "@shared/schema";
 
 type ViewMode = "table" | "hybrid";
 
