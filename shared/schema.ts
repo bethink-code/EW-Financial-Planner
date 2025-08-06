@@ -168,6 +168,8 @@ export const definedBenefitFunds = pgTable("defined_benefit_funds", {
   
   // Pension Income at Death Section
   pensionIncomeAmount: text("pension_income_amount").notNull().default("R 0"),
+  pensionIncomeCheckbox: boolean("pension_income_checkbox").notNull().default(true), // Toggle: true = Years mode, false = % mode
+  pensionIncomeYears: text("pension_income_years").notNull().default("0 years"),
   pensionIncomeIncrease: text("pension_income_increase").notNull().default("0%"),
 });
 

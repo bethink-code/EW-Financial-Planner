@@ -42,6 +42,8 @@ export default function DefinedBenefitFundsTable({ onAddFund }: DefinedBenefitFu
         deathLumpSum:"R 0",
         additionalTaxFreeAmount:"R 0",
         pensionIncomeAmount:"R 0",
+        pensionIncomeCheckbox: true, // Default to Years mode
+        pensionIncomeYears:"0 years",
         pensionIncomeIncrease:"0%",
       };
       
@@ -130,6 +132,22 @@ export default function DefinedBenefitFundsTable({ onAddFund }: DefinedBenefitFu
     };
   }, [funds]);
 
+  // Dynamic Toggle Pattern Helper Functions (Based on New Retirement Funds Pattern)
+  const hasIncomeAmount = (fund: DefinedBenefitFund) => {
+    const income = fund.pensionIncomeAmount || "";
+    const cleanValue = income.replace(/[^\d]/g, '');
+    return cleanValue && cleanValue !== "0";
+  };
+
+  const getControlsEnabled = (fund: DefinedBenefitFund) => {
+    return hasIncomeAmount(fund) && !isUpdating;
+  };
+
+  // Toggle shows "Years" when checked (true), "%" when unchecked (false)
+  const isYearsMode = (fund: DefinedBenefitFund) => {
+    return fund.pensionIncomeCheckbox === true;
+  };
+
   // Base update handler
   const executeUpdate = useCallback((id: number, field: keyof DefinedBenefitFund, value: string | boolean | string[]) => {
     updateMutation.mutate({ id, updates: { [field]: value } });
@@ -149,6 +167,8 @@ export default function DefinedBenefitFundsTable({ onAddFund }: DefinedBenefitFu
       debouncedUpdate(id, field, value);
     }
   }, [executeUpdate, debouncedUpdate]);
+
+
 
   // Add owner to fund
   const handleAddOwner = useCallback((id: number) => {
@@ -194,10 +214,12 @@ export default function DefinedBenefitFundsTable({ onAddFund }: DefinedBenefitFu
     }
   }, [funds, handleUpdateFund]);
 
+  // Special onBlur handler with years formatting (Based on New Retirement Funds Pattern)
   const handleInputBlur = useCallback((id: number, field: keyof DefinedBenefitFund, value: string, target?: HTMLInputElement) => {
     // Map field names to field types for proper formatting
     const fieldTypeMap: Record<string, string> = {
       'yearsOfService': 'years',
+      'pensionIncomeYears': 'years',
       'pensionIncomeIncrease': 'percentage',
       'finalMonthlySalary': 'currency',
       'deathLumpSum': 'currency',
@@ -206,10 +228,32 @@ export default function DefinedBenefitFundsTable({ onAddFund }: DefinedBenefitFu
     };
     
     const fieldType = fieldTypeMap[field] || field;
-    const formattedValue = fieldType === 'percentage' ? formatPercentageValue(value) : 
-                          fieldType === 'years' ? formatYearsValue(value) : 
-                          fieldType === 'currency' ? formatCurrencyValue(value) : 
-                          value;
+    
+    let formattedValue;
+    
+    // Special handling for years fields
+    if (fieldType === 'years' || field === 'pensionIncomeYears') {
+      if (!value || value === "0" || value.trim() === "") {
+        formattedValue = "0 years";
+      } else {
+        const cleanValue = value.toString().replace(/\s*years?\s*/gi, '').trim();
+        if (cleanValue === "" || cleanValue === "0") {
+          formattedValue = "0 years";
+        } else {
+          const numValue = parseFloat(cleanValue);
+          if (isNaN(numValue)) {
+            formattedValue = "0 years";
+          } else {
+            formattedValue = `${numValue} years`;
+          }
+        }
+      }
+    } else {
+      // Use standard formatting for other fields
+      formattedValue = fieldType === 'percentage' ? formatPercentageValue(value) : 
+                        fieldType === 'currency' ? formatCurrencyValue(value) : 
+                        value;
+    }
 
     // Use debounced update for text fields, immediate for currency/percentage
     if (field === 'description') {
@@ -242,6 +286,8 @@ export default function DefinedBenefitFundsTable({ onAddFund }: DefinedBenefitFu
       finalMonthlySalary: fund.finalMonthlySalary,
       deathLumpSum: fund.deathLumpSum,
       additionalTaxFreeAmount: fund.additionalTaxFreeAmount,
+      pensionIncomeCheckbox: fund.pensionIncomeCheckbox,
+      pensionIncomeYears: fund.pensionIncomeYears,
       pensionIncomeAmount: fund.pensionIncomeAmount,
       pensionIncomeIncrease: fund.pensionIncomeIncrease,
     };
@@ -283,7 +329,7 @@ export default function DefinedBenefitFundsTable({ onAddFund }: DefinedBenefitFu
             </th>
             <th className="section-start" colSpan={3}>Overview</th>
             <th className="section-start" colSpan={4}>Fund Details</th>
-            <th className="section-start" colSpan={2}>Pension Income at Death</th>
+            <th className="section-start" colSpan={3}>Pension Income at Death</th>
           </tr>
           {/* Second Header Row - Individual Fields */}
           <tr className="double-row-header-second">
@@ -295,7 +341,8 @@ export default function DefinedBenefitFundsTable({ onAddFund }: DefinedBenefitFu
             <th>Death Lump Sum</th>
             <th>Additional Tax Free Amount</th>
             <th className="section-start">Amount</th>
-            <th>Increase</th>
+            <th>Toggle</th>
+            <th>Years / %</th>
           </tr>
         </thead>
         <tbody className="divide-y divide-neutral-200">
@@ -422,17 +469,55 @@ export default function DefinedBenefitFundsTable({ onAddFund }: DefinedBenefitFu
                         />
                       </td>
                     )}
+
+                    {/* Pension Income Toggle Button */}
                     {rowIndex === 0 && (
-                      <td className={`p-2 align-top ${getCellClass('percentage')}`} rowSpan={maxRows}>
-                        <input
-                          key={`pensionIncomeIncrease-${fund.id}-${fund.pensionIncomeIncrease}`}
-                          type="text"
-                          defaultValue={fund.pensionIncomeIncrease ||"0%"}
-                          onFocus={handleDefaultValueFocus}
-                          onBlur={(e) => handleUpdateFund(fund.id, 'pensionIncomeIncrease', e.target.value)}
-                          className={`table-input ${getFieldClass('percentage')} ${getValueClass(fund.pensionIncomeIncrease ||"0%", 'percentage')}`}
-                          disabled={isUpdating}
-                        />
+                      <td className="table-actions-cell align-top" rowSpan={maxRows}>
+                        <div className="pt-0.5">
+                          <button
+                            type="button"
+                            onClick={() => handleUpdateFund(fund.id, 'pensionIncomeCheckbox', !fund.pensionIncomeCheckbox)}
+                            className={`h-8 px-3 min-w-[48px] bg-[#E8F3F8] border border-[#E0E0E0] text-[#016991] hover:bg-[#D1E7F0] rounded-md flex items-center justify-center transition-colors text-sm font-medium ${
+                              !getControlsEnabled(fund) ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'
+                            }`}
+                            disabled={!getControlsEnabled(fund) || isUpdating}
+                          >
+                            {isYearsMode(fund) ? 'Years' : '%'}
+                          </button>
+                        </div>
+                      </td>
+                    )}
+
+                    {/* Pension Income Dynamic Field (Years OR Percentage) */}
+                    {rowIndex === 0 && (
+                      <td className="p-1 align-top" rowSpan={maxRows}>
+                        {isYearsMode(fund) ? (
+                          // Years Mode
+                          <input
+                            key={`pension-years-${fund.id}`}
+                            type="text"
+                            defaultValue={formatYearsValue(fund.pensionIncomeYears)}
+                            className={`table-input ${getFieldClass('years')} ${getValueClass(fund.pensionIncomeYears, 'years')} ${
+                              !getControlsEnabled(fund) ? 'bg-neutral-100 cursor-not-allowed' : ''
+                            }`}
+                            onFocus={handleDefaultValueFocus}
+                            onBlur={(e) => handleInputBlur(fund.id, 'pensionIncomeYears', e.target.value, e.target)}
+                            disabled={!getControlsEnabled(fund) || isUpdating}
+                          />
+                        ) : (
+                          // Percentage Mode
+                          <input
+                            key={`pension-increase-${fund.id}`}
+                            type="text"
+                            defaultValue={fund.pensionIncomeIncrease || "0%"}
+                            className={`table-input ${getFieldClass('percentage')} ${getValueClass(fund.pensionIncomeIncrease || "0%", 'percentage')} ${
+                              !getControlsEnabled(fund) ? 'bg-neutral-100 cursor-not-allowed' : ''
+                            }`}
+                            onFocus={handleDefaultValueFocus}
+                            onBlur={(e) => handleInputBlur(fund.id, 'pensionIncomeIncrease', e.target.value, e.target)}
+                            disabled={!getControlsEnabled(fund) || isUpdating}
+                          />
+                        )}
                       </td>
                     )}
                   </tr>
@@ -445,11 +530,12 @@ export default function DefinedBenefitFundsTable({ onAddFund }: DefinedBenefitFu
         {/* Totals Footer */}
         <tfoot>
           <tr>
-            <td className="totals-cell-label text-right" colSpan={5}>Totals</td>
+            <td className="totals-cell-label text-right" colSpan={6}>Totals</td>
             <td className="totals-cell-value">R {totals.finalMonthlySalary.toLocaleString()}</td>
             <td className="totals-cell-value">R {totals.deathLumpSum.toLocaleString()}</td>
             <td className="totals-cell-value">R {totals.additionalTaxFreeAmount.toLocaleString()}</td>
             <td className="totals-cell-value">R {totals.pensionIncomeAmount.toLocaleString()}</td>
+            <td className="totals-cell-label"></td>
             <td className="totals-cell-label"></td>
           </tr>
         </tfoot>
