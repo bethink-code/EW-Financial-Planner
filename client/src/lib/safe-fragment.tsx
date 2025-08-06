@@ -1,13 +1,14 @@
 import React from 'react';
 
 // SafeFragment utility to prevent React metadata warnings
-export function SafeFragment({ children, key, ...props }: { children: React.ReactNode, key?: any } & Record<string, any>) {
-  // Filter out any non-standard props that could cause warnings
-  const safeProps = Object.fromEntries(
-    Object.entries({ key, ...props }).filter(([key]) => 
-      key === 'key' || key === 'children'
-    )
-  );
+export function SafeFragment({ children, ...props }: { children: React.ReactNode } & Record<string, any>) {
+  // Only allow 'key' prop for React.Fragment - filter out everything else including data-replit-metadata
+  const cleanProps: Record<string, any> = {};
   
-  return React.createElement(React.Fragment, safeProps, children);
+  // React.Fragment only accepts 'key' and 'children'
+  if ('key' in props) {
+    cleanProps.key = props.key;
+  }
+  
+  return React.createElement(React.Fragment, cleanProps, children);
 }
