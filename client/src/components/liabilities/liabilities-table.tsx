@@ -172,7 +172,7 @@ function LiabilitiesTable({ viewMode, searchTerm, onShowCategoryDialog, onAddLia
     return <div className="text-red-600">Error loading liabilities. Please try again.</div>;
   }
 
-  return (
+  return viewMode === 'table' ? (
     <div className="space-y-6">
       <table>
         <thead>
@@ -365,6 +365,299 @@ function LiabilitiesTable({ viewMode, searchTerm, onShowCategoryDialog, onAddLia
           </tr>
         </tfoot>
       </table>
+    </div>
+  ) : (
+    // Hybrid View - Left sidebar with summary cards + Right side detailed form
+    <div className="flex gap-6">
+      {/* Left Sidebar - Summary Cards */}
+      <div className="w-80 flex-shrink-0 space-y-4">
+        {/* Totals Summary Card */}
+        <div className="bg-white rounded-lg shadow-sm border border-neutral-200 p-4">
+          <h3 className="text-lg font-semibold text-neutral-800 mb-3">Liabilities Summary</h3>
+          <div className="space-y-2">
+            <div className="flex justify-between">
+              <span className="text-sm text-neutral-600">Total Debt:</span>
+              <span className="font-semibold">R {totals.amount.toLocaleString()}</span>
+            </div>
+            <div className="flex justify-between">
+              <span className="text-sm text-neutral-600">Estate:</span>
+              <span className="font-semibold">R {totals.estate.toLocaleString()}</span>
+            </div>
+            <div className="flex justify-between">
+              <span className="text-sm text-neutral-600">Others:</span>
+              <span className="font-semibold">R {totals.others.toLocaleString()}</span>
+            </div>
+            <div className="flex justify-between">
+              <span className="text-sm text-neutral-600">Client:</span>
+              <span className="font-semibold">R {totals.client.toLocaleString()}</span>
+            </div>
+          </div>
+        </div>
+
+        {/* Liabilities by Category Cards */}
+        {(() => {
+          const groupedLiabilities = liabilities.reduce((groups, liability) => {
+            const section = liability.section || 'Other';
+            if (!groups[section]) {
+              groups[section] = [];
+            }
+            groups[section].push(liability);
+            return groups;
+          }, {} as Record<string, Liabilities[]>);
+
+          return Object.entries(groupedLiabilities).map(([sectionName, sectionLiabilities]) => {
+            const sectionTotal = sectionLiabilities.reduce((sum: number, liability: Liabilities) => {
+              const value = parseFloat((liability.debtAmount || '').replace(/[^\d.-]/g, '')) || 0;
+              return sum + value;
+            }, 0);
+
+            return (
+              <div key={`summary-${sectionName}`} className="bg-red-50 rounded-lg border border-red-200 p-4">
+                <h4 className="font-medium text-red-900 mb-2">
+                  {sectionName.replace('_', ' ')}
+                </h4>
+                <div className="text-sm text-red-700 mb-2">
+                  {sectionLiabilities.length} liability{sectionLiabilities.length !== 1 ? 'ies' : 'y'}
+                </div>
+                <div className="font-semibold text-red-900">
+                  R {sectionTotal.toLocaleString()}
+                </div>
+                <div className="mt-2 space-y-1">
+                  {sectionLiabilities.slice(0, 3).map((liability: Liabilities) => (
+                    <div key={`summary-item-${liability.id}`} className="text-xs text-red-700 truncate">
+                      {formatTextValue(liability.description) || 'Untitled Liability'}
+                    </div>
+                  ))}
+                  {sectionLiabilities.length > 3 && (
+                    <div className="text-xs text-red-600">
+                      +{sectionLiabilities.length - 3} more...
+                    </div>
+                  )}
+                </div>
+              </div>
+            );
+          });
+        })()}
+        
+        {/* Add Liability Button */}
+        {onAddLiability && (
+          <button
+            onClick={onAddLiability}
+            disabled={isUpdating}
+            className="w-full inline-flex items-center justify-center px-4 py-3 bg-red-600 text-white rounded-lg hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+            </svg>
+            Add New Liability
+          </button>
+        )}
+      </div>
+
+      {/* Right Side - Detailed Forms */}
+      <div className="flex-1 space-y-6">
+        {(() => {
+          const groupedLiabilities = liabilities.reduce((groups, liability) => {
+            const section = liability.section || 'Other';
+            if (!groups[section]) {
+              groups[section] = [];
+            }
+            groups[section].push(liability);
+            return groups;
+          }, {} as Record<string, Liabilities[]>);
+
+          return Object.entries(groupedLiabilities).map(([sectionName, sectionLiabilities]) => (
+            <div key={`hybrid-section-${sectionName}`} className="bg-white rounded-lg shadow-sm border border-neutral-200">
+              {/* Section Header */}
+              <div className="bg-red-50 px-6 py-4 border-b border-neutral-200">
+                <h3 className="text-lg font-medium text-neutral-700">
+                  {sectionName.replace('_', ' ')} ({sectionLiabilities.length})
+                </h3>
+              </div>
+              
+              {/* Liabilities in this section */}
+              <div className="p-6 space-y-6">
+                {sectionLiabilities.map((liability: Liabilities) => (
+                  <div key={`hybrid-${liability.id}`} className="border border-gray-200 rounded-lg p-4 space-y-4">
+                    {/* Liability Header with Actions */}
+                    <div className="flex justify-between items-start">
+                      <div>
+                        <h4 className="font-medium text-neutral-800 text-lg">
+                          {formatTextValue(liability.description) || `Liability #${liability.id}`}
+                        </h4>
+                        <p className="text-sm text-neutral-600 mt-1">
+                          Debt Amount: <span className="font-semibold">{liability.debtAmount}</span>
+                        </p>
+                      </div>
+                      <ActionButtonGroup>
+                        <DuplicateButton
+                          onClick={onShowCategoryDialog || (() => addMutation.mutate())}
+                          disabled={isUpdating}
+                        />
+                        <DeleteButton
+                          onClick={() => handleDeleteLiability(liability.id)}
+                          disabled={isUpdating}
+                        />
+                      </ActionButtonGroup>
+                    </div>
+                    
+                    {/* Liability Details Grid */}
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      {/* Description */}
+                      <div>
+                        <label className="block text-sm font-medium text-neutral-700 mb-2">
+                          Description
+                        </label>
+                        <input
+                          type="text"
+                          defaultValue={formatTextValue(liability.description)}
+                          className={`w-full px-3 py-2 border border-neutral-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent ${getValueClass(liability.description, 'text')}`}
+                          onFocus={handleDefaultValueFocus}
+                          onBlur={(e) => handleInputBlur(liability.id, 'description', e.target.value)}
+                          disabled={isUpdating}
+                        />
+                      </div>
+                      
+                      {/* Debt Amount */}
+                      <div>
+                        <label className="block text-sm font-medium text-neutral-700 mb-2">
+                          Debt Amount
+                        </label>
+                        <input
+                          key={`hybrid-debtAmount-${liability.id}-${liability.debtAmount}`}
+                          type="text"
+                          defaultValue={liability.debtAmount}
+                          className={`w-full px-3 py-2 border border-neutral-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent ${getValueClass(liability.debtAmount, 'currency')}`}
+                          onFocus={handleDefaultValueFocus}
+                          onBlur={(e) => handleInputBlur(liability.id, 'debtAmount', e.target.value)}
+                          disabled={isUpdating}
+                        />
+                      </div>
+                    </div>
+                    
+                    {/* Ownership Split Section */}
+                    <div>
+                      <h5 className="text-sm font-medium text-neutral-700 mb-3">Ownership Split</h5>
+                      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
+                        <div>
+                          <label className="block text-xs font-medium text-neutral-600 mb-1">
+                            Peter Lambie
+                          </label>
+                          <input
+                            key={`hybrid-peterLambie-${liability.id}-${liability.peterLambie}`}
+                            type="text"
+                            defaultValue={liability.peterLambie}
+                            className={`w-full px-2 py-1 text-sm border border-neutral-300 rounded focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-transparent ${getValueClass(liability.peterLambie, 'percentage')}`}
+                            onFocus={handleDefaultValueFocus}
+                            onBlur={(e) => handleInputBlur(liability.id, 'peterLambie', e.target.value)}
+                            disabled={isUpdating}
+                          />
+                        </div>
+                        
+                        <div>
+                          <label className="block text-xs font-medium text-neutral-600 mb-1">
+                            Victoria Lambie
+                          </label>
+                          <input
+                            key={`hybrid-victoriaLambie-${liability.id}-${liability.victoriaLambie}`}
+                            type="text"
+                            defaultValue={liability.victoriaLambie}
+                            className={`w-full px-2 py-1 text-sm border border-neutral-300 rounded focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-transparent ${getValueClass(liability.victoriaLambie, 'percentage')}`}
+                            onFocus={handleDefaultValueFocus}
+                            onBlur={(e) => handleInputBlur(liability.id, 'victoriaLambie', e.target.value)}
+                            disabled={isUpdating}
+                          />
+                        </div>
+                        
+                        <div>
+                          <label className="block text-xs font-medium text-neutral-600 mb-1">
+                            Junior Lambie
+                          </label>
+                          <input
+                            key={`hybrid-juniorLambie-${liability.id}-${liability.juniorLambie}`}
+                            type="text"
+                            defaultValue={liability.juniorLambie}
+                            className={`w-full px-2 py-1 text-sm border border-neutral-300 rounded focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-transparent ${getValueClass(liability.juniorLambie, 'percentage')}`}
+                            onFocus={handleDefaultValueFocus}
+                            onBlur={(e) => handleInputBlur(liability.id, 'juniorLambie', e.target.value)}
+                            disabled={isUpdating}
+                          />
+                        </div>
+                        
+                        <div>
+                          <label className="block text-xs font-medium text-neutral-600 mb-1">
+                            Family Trust
+                          </label>
+                          <input
+                            key={`hybrid-lambiesFamilyTrust-${liability.id}-${liability.lambiesFamilyTrust}`}
+                            type="text"
+                            defaultValue={liability.lambiesFamilyTrust}
+                            className={`w-full px-2 py-1 text-sm border border-neutral-300 rounded focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-transparent ${getValueClass(liability.lambiesFamilyTrust, 'percentage')}`}
+                            onFocus={handleDefaultValueFocus}
+                            onBlur={(e) => handleInputBlur(liability.id, 'lambiesFamilyTrust', e.target.value)}
+                            disabled={isUpdating}
+                          />
+                        </div>
+                      </div>
+                    </div>
+                    
+                    {/* Settlement Section */}
+                    <div>
+                      <h5 className="text-sm font-medium text-neutral-700 mb-3">Settlement</h5>
+                      <div className="grid grid-cols-1 lg:grid-cols-3 gap-3">
+                        <div>
+                          <label className="block text-xs font-medium text-neutral-600 mb-1">
+                            Estate Duty
+                          </label>
+                          <input
+                            key={`hybrid-estate-${liability.id}-${liability.estate}`}
+                            type="text"
+                            defaultValue={liability.estate}
+                            className={`w-full px-2 py-1 text-sm border border-neutral-300 rounded focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-transparent ${getValueClass(liability.estate, 'currency')}`}
+                            onFocus={handleDefaultValueFocus}
+                            onBlur={(e) => handleInputBlur(liability.id, 'estate', e.target.value)}
+                            disabled={isUpdating}
+                          />
+                        </div>
+                        
+                        <div>
+                          <label className="block text-xs font-medium text-neutral-600 mb-1">
+                            Others
+                          </label>
+                          <input
+                            key={`hybrid-others-${liability.id}-${liability.others}`}
+                            type="text"
+                            defaultValue={liability.others}
+                            className={`w-full px-2 py-1 text-sm border border-neutral-300 rounded focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-transparent ${getValueClass(liability.others, 'currency')}`}
+                            onFocus={handleDefaultValueFocus}
+                            onBlur={(e) => handleInputBlur(liability.id, 'others', e.target.value)}
+                            disabled={isUpdating}
+                          />
+                        </div>
+                        
+                        <div>
+                          <label className="block text-xs font-medium text-neutral-600 mb-1">
+                            Client
+                          </label>
+                          <input
+                            key={`hybrid-client-${liability.id}-${liability.client}`}
+                            type="text"
+                            defaultValue={liability.client}
+                            className={`w-full px-2 py-1 text-sm border border-neutral-300 rounded focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-transparent ${getValueClass(liability.client, 'currency')}`}
+                            onFocus={handleDefaultValueFocus}
+                            onBlur={(e) => handleInputBlur(liability.id, 'client', e.target.value)}
+                            disabled={isUpdating}
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          ));
+        })()}
+      </div>
     </div>
   );
 }

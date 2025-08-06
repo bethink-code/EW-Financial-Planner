@@ -376,242 +376,297 @@ function AssetsTable({ viewMode, searchTerm, onShowCategoryDialog, onAddAsset }:
       </table>
     </div>
   ) : (
-    // Hybrid View - Form-like interface
-    <div className="space-y-6">
-      {(() => {
-        // Group assets by section/category for hybrid view
-        const groupedAssets = assets.reduce((groups, asset) => {
-          const section = asset.section || 'Other';
-          if (!groups[section]) {
-            groups[section] = [];
-          }
-          groups[section].push(asset);
-          return groups;
-        }, {} as Record<string, Assets[]>);
-
-        return Object.entries(groupedAssets).map(([sectionName, sectionAssets]) => (
-          <div key={`hybrid-section-${sectionName}`} className="bg-white rounded-lg shadow-sm border border-neutral-200">
-            {/* Section Header */}
-            <div className="bg-blue-50 px-4 py-3 border-b border-neutral-200">
-              <h3 className="text-sm font-medium text-neutral-700 uppercase tracking-wider">
-                {sectionName.replace('_', ' ')}
-              </h3>
+    // Hybrid View - Left sidebar with summary cards + Right side detailed form
+    <div className="flex gap-6">
+      {/* Left Sidebar - Summary Cards */}
+      <div className="w-80 flex-shrink-0 space-y-4">
+        {/* Totals Summary Card */}
+        <div className="bg-white rounded-lg shadow-sm border border-neutral-200 p-4">
+          <h3 className="text-lg font-semibold text-neutral-800 mb-3">Assets Summary</h3>
+          <div className="space-y-2">
+            <div className="flex justify-between">
+              <span className="text-sm text-neutral-600">Total Assets:</span>
+              <span className="font-semibold">R {totals.amount.toLocaleString()}</span>
             </div>
-            
-            {/* Assets in this section */}
-            <div className="p-4 space-y-4">
-              {sectionAssets.map((asset: Assets) => (
-                <div key={`hybrid-${asset.id}`} className="bg-gray-50 rounded-lg p-4 space-y-4">
-                  {/* Asset Header with Actions */}
-                  <div className="flex justify-between items-center">
-                    <h4 className="font-medium text-neutral-800">Asset #{asset.id}</h4>
-                    <ActionButtonGroup>
-                      <DuplicateButton
-                        onClick={onShowCategoryDialog || (() => addMutation.mutate())}
-                        disabled={isUpdating}
-                      />
-                      <DeleteButton
-                        onClick={() => handleDeleteAsset(asset.id)}
-                        disabled={isUpdating}
-                      />
-                    </ActionButtonGroup>
-                  </div>
-                  
-                  {/* Asset Details Grid */}
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                    {/* Description */}
-                    <div>
-                      <label className="block text-sm font-medium text-neutral-700 mb-1">
-                        Description
-                      </label>
-                      <input
-                        type="text"
-                        defaultValue={formatTextValue(asset.description)}
-                        className={`w-full px-3 py-2 border border-neutral-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent ${getValueClass(asset.description, 'text')}`}
-                        onFocus={handleDefaultValueFocus}
-                        onChange={(e) => debouncedUpdate(asset.id, 'description', e.target.value)}
-                        onBlur={(e) => handleInputBlur(asset.id, 'description', e.target.value)}
-                        disabled={isUpdating}
-                      />
-                    </div>
-                    
-                    {/* Market Value */}
-                    <div>
-                      <label className="block text-sm font-medium text-neutral-700 mb-1">
-                        Market Value
-                      </label>
-                      <input
-                        key={`hybrid-marketValue-${asset.id}-${asset.marketValue}`}
-                        type="text"
-                        defaultValue={asset.marketValue}
-                        className={`w-full px-3 py-2 border border-neutral-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent ${getValueClass(asset.marketValue, 'currency')}`}
-                        onFocus={handleDefaultValueFocus}
-                        onBlur={(e) => handleInputBlur(asset.id, 'marketValue', e.target.value)}
-                        disabled={isUpdating}
-                      />
-                    </div>
-                  </div>
-                  
-                  {/* Ownership Split Section */}
-                  <div>
-                    <h5 className="text-sm font-medium text-neutral-700 mb-3">Ownership Split</h5>
-                    <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-                      <div>
-                        <label className="block text-sm font-medium text-neutral-600 mb-1">
-                          John Doe
-                        </label>
-                        <input
-                          key={`hybrid-johnDoe-${asset.id}-${asset.johnDoe}`}
-                          type="text"
-                          defaultValue={asset.johnDoe}
-                          className={`w-full px-3 py-2 border border-neutral-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent ${getValueClass(asset.johnDoe, 'percentage')}`}
-                          onFocus={handleDefaultValueFocus}
-                          onBlur={(e) => handleInputBlur(asset.id, 'johnDoe', e.target.value)}
-                          disabled={isUpdating}
-                        />
-                      </div>
-                      
-                      <div>
-                        <label className="block text-sm font-medium text-neutral-600 mb-1">
-                          Janette Doe (Spouse)
-                        </label>
-                        <input
-                          key={`hybrid-janetteDoe-${asset.id}-${asset.janetteDoe}`}
-                          type="text"
-                          defaultValue={asset.janetteDoe}
-                          className={`w-full px-3 py-2 border border-neutral-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent ${getValueClass(asset.janetteDoe, 'percentage')}`}
-                          onFocus={handleDefaultValueFocus}
-                          onBlur={(e) => handleInputBlur(asset.id, 'janetteDoe', e.target.value)}
-                          disabled={isUpdating}
-                        />
-                      </div>
-                      
-                      <div>
-                        <label className="block text-sm font-medium text-neutral-600 mb-1">
-                          Doe Junior
-                        </label>
-                        <input
-                          key={`hybrid-doeJunior-${asset.id}-${asset.doeJunior}`}
-                          type="text"
-                          defaultValue={asset.doeJunior}
-                          className={`w-full px-3 py-2 border border-neutral-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent ${getValueClass(asset.doeJunior, 'percentage')}`}
-                          onFocus={handleDefaultValueFocus}
-                          onBlur={(e) => handleInputBlur(asset.id, 'doeJunior', e.target.value)}
-                          disabled={isUpdating}
-                        />
-                      </div>
-                      
-                      <div>
-                        <label className="block text-sm font-medium text-neutral-600 mb-1">
-                          Doe Family Trust
-                        </label>
-                        <input
-                          key={`hybrid-doeFamilyTrust-${asset.id}-${asset.doeFamilyTrust}`}
-                          type="text"
-                          defaultValue={asset.doeFamilyTrust}
-                          className={`w-full px-3 py-2 border border-neutral-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent ${getValueClass(asset.doeFamilyTrust, 'percentage')}`}
-                          onFocus={handleDefaultValueFocus}
-                          onBlur={(e) => handleInputBlur(asset.id, 'doeFamilyTrust', e.target.value)}
-                          disabled={isUpdating}
-                        />
-                      </div>
-                    </div>
-                  </div>
-                  
-                  {/* Distribution Section */}
-                  <div>
-                    <h5 className="text-sm font-medium text-neutral-700 mb-3">Distribution</h5>
-                    <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-                      <div>
-                        <label className="block text-sm font-medium text-neutral-600 mb-1">
-                          Estate
-                        </label>
-                        <input
-                          key={`hybrid-estate-${asset.id}-${asset.estate}`}
-                          type="text"
-                          defaultValue={asset.estate}
-                          className={`w-full px-3 py-2 border border-neutral-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent ${getValueClass(asset.estate, 'currency')}`}
-                          onFocus={handleDefaultValueFocus}
-                          onBlur={(e) => handleInputBlur(asset.id, 'estate', e.target.value)}
-                          disabled={isUpdating}
-                        />
-                      </div>
-                      
-                      <div>
-                        <label className="block text-sm font-medium text-neutral-600 mb-1">
-                          Others
-                        </label>
-                        <input
-                          key={`hybrid-others-${asset.id}-${asset.others}`}
-                          type="text"
-                          defaultValue={asset.others}
-                          className={`w-full px-3 py-2 border border-neutral-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent ${getValueClass(asset.others, 'currency')}`}
-                          onFocus={handleDefaultValueFocus}
-                          onBlur={(e) => handleInputBlur(asset.id, 'others', e.target.value)}
-                          disabled={isUpdating}
-                        />
-                      </div>
-                      
-                      <div>
-                        <label className="block text-sm font-medium text-neutral-600 mb-1">
-                          Client
-                        </label>
-                        <input
-                          key={`hybrid-client-${asset.id}-${asset.client}`}
-                          type="text"
-                          defaultValue={asset.client}
-                          className={`w-full px-3 py-2 border border-neutral-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent ${getValueClass(asset.client, 'currency')}`}
-                          onFocus={handleDefaultValueFocus}
-                          onBlur={(e) => handleInputBlur(asset.id, 'client', e.target.value)}
-                          disabled={isUpdating}
-                        />
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              ))}
-              
-              {/* Add Asset Button for this section */}
-              {onAddAsset && (
-                <div className="pt-4 border-t border-neutral-200">
-                  <button
-                    onClick={onAddAsset}
-                    disabled={isUpdating}
-                    className="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed"
-                  >
-                    <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
-                    </svg>
-                    Add Asset to {sectionName.replace('_', ' ')}
-                  </button>
-                </div>
-              )}
+            <div className="flex justify-between">
+              <span className="text-sm text-neutral-600">Estate:</span>
+              <span className="font-semibold">R {totals.estate.toLocaleString()}</span>
             </div>
-          </div>
-        ));
-      })()}
-      
-      {/* Totals Summary for Hybrid View */}
-      <div className="bg-neutral-50 rounded-lg p-4 border border-neutral-200">
-        <h3 className="text-lg font-semibold text-neutral-800 mb-4">Totals Summary</h3>
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-          <div className="text-center">
-            <div className="text-sm text-neutral-600">Total Assets</div>
-            <div className="text-lg font-semibold text-neutral-800">R {totals.amount.toLocaleString()}</div>
-          </div>
-          <div className="text-center">
-            <div className="text-sm text-neutral-600">Estate</div>
-            <div className="text-lg font-semibold text-neutral-800">R {totals.estate.toLocaleString()}</div>
-          </div>
-          <div className="text-center">
-            <div className="text-sm text-neutral-600">Others</div>
-            <div className="text-lg font-semibold text-neutral-800">R {totals.others.toLocaleString()}</div>
-          </div>
-          <div className="text-center">
-            <div className="text-sm text-neutral-600">Client</div>
-            <div className="text-lg font-semibold text-neutral-800">R {totals.client.toLocaleString()}</div>
+            <div className="flex justify-between">
+              <span className="text-sm text-neutral-600">Others:</span>
+              <span className="font-semibold">R {totals.others.toLocaleString()}</span>
+            </div>
+            <div className="flex justify-between">
+              <span className="text-sm text-neutral-600">Client:</span>
+              <span className="font-semibold">R {totals.client.toLocaleString()}</span>
+            </div>
           </div>
         </div>
+
+        {/* Assets by Category Cards */}
+        {(() => {
+          const groupedAssets = assets.reduce((groups, asset) => {
+            const section = asset.section || 'Other';
+            if (!groups[section]) {
+              groups[section] = [];
+            }
+            groups[section].push(asset);
+            return groups;
+          }, {} as Record<string, Assets[]>);
+
+          return Object.entries(groupedAssets).map(([sectionName, sectionAssets]) => {
+            const sectionTotal = sectionAssets.reduce((sum: number, asset: Assets) => {
+              const value = parseFloat((asset.marketValue || '').replace(/[^\d.-]/g, '')) || 0;
+              return sum + value;
+            }, 0);
+
+            return (
+              <div key={`summary-${sectionName}`} className="bg-blue-50 rounded-lg border border-blue-200 p-4">
+                <h4 className="font-medium text-blue-900 mb-2">
+                  {sectionName.replace('_', ' ')}
+                </h4>
+                <div className="text-sm text-blue-700 mb-2">
+                  {sectionAssets.length} asset{sectionAssets.length !== 1 ? 's' : ''}
+                </div>
+                <div className="font-semibold text-blue-900">
+                  R {sectionTotal.toLocaleString()}
+                </div>
+                <div className="mt-2 space-y-1">
+                  {sectionAssets.slice(0, 3).map((asset: Assets) => (
+                    <div key={`summary-item-${asset.id}`} className="text-xs text-blue-700 truncate">
+                      {formatTextValue(asset.description) || 'Untitled Asset'}
+                    </div>
+                  ))}
+                  {sectionAssets.length > 3 && (
+                    <div className="text-xs text-blue-600">
+                      +{sectionAssets.length - 3} more...
+                    </div>
+                  )}
+                </div>
+              </div>
+            );
+          });
+        })()}
+        
+        {/* Add Asset Button */}
+        {onAddAsset && (
+          <button
+            onClick={onAddAsset}
+            disabled={isUpdating}
+            className="w-full inline-flex items-center justify-center px-4 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+            </svg>
+            Add New Asset
+          </button>
+        )}
+      </div>
+
+      {/* Right Side - Detailed Forms */}
+      <div className="flex-1 space-y-6">
+        {(() => {
+          const groupedAssets = assets.reduce((groups, asset) => {
+            const section = asset.section || 'Other';
+            if (!groups[section]) {
+              groups[section] = [];
+            }
+            groups[section].push(asset);
+            return groups;
+          }, {} as Record<string, Assets[]>);
+
+          return Object.entries(groupedAssets).map(([sectionName, sectionAssets]) => (
+            <div key={`hybrid-section-${sectionName}`} className="bg-white rounded-lg shadow-sm border border-neutral-200">
+              {/* Section Header */}
+              <div className="bg-blue-50 px-6 py-4 border-b border-neutral-200">
+                <h3 className="text-lg font-medium text-neutral-700">
+                  {sectionName.replace('_', ' ')} ({sectionAssets.length})
+                </h3>
+              </div>
+              
+              {/* Assets in this section */}
+              <div className="p-6 space-y-6">
+                {sectionAssets.map((asset: Assets) => (
+                  <div key={`hybrid-${asset.id}`} className="border border-gray-200 rounded-lg p-4 space-y-4">
+                    {/* Asset Header with Actions */}
+                    <div className="flex justify-between items-start">
+                      <div>
+                        <h4 className="font-medium text-neutral-800 text-lg">
+                          {formatTextValue(asset.description) || `Asset #${asset.id}`}
+                        </h4>
+                        <p className="text-sm text-neutral-600 mt-1">
+                          Market Value: <span className="font-semibold">{asset.marketValue}</span>
+                        </p>
+                      </div>
+                      <ActionButtonGroup>
+                        <DuplicateButton
+                          onClick={onShowCategoryDialog || (() => addMutation.mutate())}
+                          disabled={isUpdating}
+                        />
+                        <DeleteButton
+                          onClick={() => handleDeleteAsset(asset.id)}
+                          disabled={isUpdating}
+                        />
+                      </ActionButtonGroup>
+                    </div>
+                    
+                    {/* Asset Details Grid */}
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      {/* Description */}
+                      <div>
+                        <label className="block text-sm font-medium text-neutral-700 mb-2">
+                          Description
+                        </label>
+                        <input
+                          type="text"
+                          defaultValue={formatTextValue(asset.description)}
+                          className={`w-full px-3 py-2 border border-neutral-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent ${getValueClass(asset.description, 'text')}`}
+                          onFocus={handleDefaultValueFocus}
+                          onChange={(e) => debouncedUpdate(asset.id, 'description', e.target.value)}
+                          onBlur={(e) => handleInputBlur(asset.id, 'description', e.target.value)}
+                          disabled={isUpdating}
+                        />
+                      </div>
+                      
+                      {/* Market Value */}
+                      <div>
+                        <label className="block text-sm font-medium text-neutral-700 mb-2">
+                          Market Value
+                        </label>
+                        <input
+                          key={`hybrid-marketValue-${asset.id}-${asset.marketValue}`}
+                          type="text"
+                          defaultValue={asset.marketValue}
+                          className={`w-full px-3 py-2 border border-neutral-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent ${getValueClass(asset.marketValue, 'currency')}`}
+                          onFocus={handleDefaultValueFocus}
+                          onBlur={(e) => handleInputBlur(asset.id, 'marketValue', e.target.value)}
+                          disabled={isUpdating}
+                        />
+                      </div>
+                    </div>
+                    
+                    {/* Ownership Split Section */}
+                    <div>
+                      <h5 className="text-sm font-medium text-neutral-700 mb-3">Ownership Split</h5>
+                      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
+                        <div>
+                          <label className="block text-xs font-medium text-neutral-600 mb-1">
+                            John Doe
+                          </label>
+                          <input
+                            key={`hybrid-johnDoe-${asset.id}-${asset.johnDoe}`}
+                            type="text"
+                            defaultValue={asset.johnDoe}
+                            className={`w-full px-2 py-1 text-sm border border-neutral-300 rounded focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-transparent ${getValueClass(asset.johnDoe, 'percentage')}`}
+                            onFocus={handleDefaultValueFocus}
+                            onBlur={(e) => handleInputBlur(asset.id, 'johnDoe', e.target.value)}
+                            disabled={isUpdating}
+                          />
+                        </div>
+                        
+                        <div>
+                          <label className="block text-xs font-medium text-neutral-600 mb-1">
+                            Janette Doe
+                          </label>
+                          <input
+                            key={`hybrid-janetteDoe-${asset.id}-${asset.janetteDoe}`}
+                            type="text"
+                            defaultValue={asset.janetteDoe}
+                            className={`w-full px-2 py-1 text-sm border border-neutral-300 rounded focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-transparent ${getValueClass(asset.janetteDoe, 'percentage')}`}
+                            onFocus={handleDefaultValueFocus}
+                            onBlur={(e) => handleInputBlur(asset.id, 'janetteDoe', e.target.value)}
+                            disabled={isUpdating}
+                          />
+                        </div>
+                        
+                        <div>
+                          <label className="block text-xs font-medium text-neutral-600 mb-1">
+                            Doe Junior
+                          </label>
+                          <input
+                            key={`hybrid-doeJunior-${asset.id}-${asset.doeJunior}`}
+                            type="text"
+                            defaultValue={asset.doeJunior}
+                            className={`w-full px-2 py-1 text-sm border border-neutral-300 rounded focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-transparent ${getValueClass(asset.doeJunior, 'percentage')}`}
+                            onFocus={handleDefaultValueFocus}
+                            onBlur={(e) => handleInputBlur(asset.id, 'doeJunior', e.target.value)}
+                            disabled={isUpdating}
+                          />
+                        </div>
+                        
+                        <div>
+                          <label className="block text-xs font-medium text-neutral-600 mb-1">
+                            Family Trust
+                          </label>
+                          <input
+                            key={`hybrid-doeFamilyTrust-${asset.id}-${asset.doeFamilyTrust}`}
+                            type="text"
+                            defaultValue={asset.doeFamilyTrust}
+                            className={`w-full px-2 py-1 text-sm border border-neutral-300 rounded focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-transparent ${getValueClass(asset.doeFamilyTrust, 'percentage')}`}
+                            onFocus={handleDefaultValueFocus}
+                            onBlur={(e) => handleInputBlur(asset.id, 'doeFamilyTrust', e.target.value)}
+                            disabled={isUpdating}
+                          />
+                        </div>
+                      </div>
+                    </div>
+                    
+                    {/* Distribution Section */}
+                    <div>
+                      <h5 className="text-sm font-medium text-neutral-700 mb-3">Distribution</h5>
+                      <div className="grid grid-cols-1 lg:grid-cols-3 gap-3">
+                        <div>
+                          <label className="block text-xs font-medium text-neutral-600 mb-1">
+                            Estate
+                          </label>
+                          <input
+                            key={`hybrid-estate-${asset.id}-${asset.estate}`}
+                            type="text"
+                            defaultValue={asset.estate}
+                            className={`w-full px-2 py-1 text-sm border border-neutral-300 rounded focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-transparent ${getValueClass(asset.estate, 'currency')}`}
+                            onFocus={handleDefaultValueFocus}
+                            onBlur={(e) => handleInputBlur(asset.id, 'estate', e.target.value)}
+                            disabled={isUpdating}
+                          />
+                        </div>
+                        
+                        <div>
+                          <label className="block text-xs font-medium text-neutral-600 mb-1">
+                            Others
+                          </label>
+                          <input
+                            key={`hybrid-others-${asset.id}-${asset.others}`}
+                            type="text"
+                            defaultValue={asset.others}
+                            className={`w-full px-2 py-1 text-sm border border-neutral-300 rounded focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-transparent ${getValueClass(asset.others, 'currency')}`}
+                            onFocus={handleDefaultValueFocus}
+                            onBlur={(e) => handleInputBlur(asset.id, 'others', e.target.value)}
+                            disabled={isUpdating}
+                          />
+                        </div>
+                        
+                        <div>
+                          <label className="block text-xs font-medium text-neutral-600 mb-1">
+                            Client
+                          </label>
+                          <input
+                            key={`hybrid-client-${asset.id}-${asset.client}`}
+                            type="text"
+                            defaultValue={asset.client}
+                            className={`w-full px-2 py-1 text-sm border border-neutral-300 rounded focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-transparent ${getValueClass(asset.client, 'currency')}`}
+                            onFocus={handleDefaultValueFocus}
+                            onBlur={(e) => handleInputBlur(asset.id, 'client', e.target.value)}
+                            disabled={isUpdating}
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          ));
+        })()}
       </div>
     </div>
   );
