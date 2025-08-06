@@ -84,7 +84,7 @@ export function SequentialNavigationBar({ className }: SequentialNavigationBarPr
               </div>
               
               {/* Bottom row: Full Breadcrumb - no truncation */}
-              <div className="text-xs font-medium text-gray-700 dark:text-gray-300 text-center w-full">
+              <div className="text-xs font-medium text-gray-500 dark:text-gray-400 text-center w-full">
                 {currentItem.breadcrumb}
               </div>
             </div>
