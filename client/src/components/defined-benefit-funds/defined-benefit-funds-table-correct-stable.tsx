@@ -387,7 +387,7 @@ export default function DefinedBenefitFundsTable({ onAddFund }: DefinedBenefitFu
                     )}
                     
                     {/* Owner with Entity Selector and Percentage */}
-                    <td className="p-2" colSpan={2}>
+                    <td className="p-2 align-top" colSpan={2}>
                       <EntityOwnerSelector
                         policyId={fund.id}
                         owners={fund.owners}
