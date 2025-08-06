@@ -305,10 +305,10 @@ export function NewRetirementTable({
    )}
  </th>
  <th className="section-start" colSpan={2}>Overview</th>
- <th className="section-start" colSpan={4}>Unapproved Life Cover</th>
+ <th className="section-start" colSpan={3}>Unapproved Life Cover</th>
  <th className="section-start" colSpan={4}>Monthly Death Benefit</th>
  <th className="section-start" colSpan={3}>Approved Life Cover</th>
- <th className="section-start" colSpan={7}>Fund Value Beneficiaries</th>
+ <th className="section-start" colSpan={6}>Fund Value Beneficiaries</th>
  </tr>
  
  {/* Individual column headers */}
@@ -317,7 +317,6 @@ export function NewRetirementTable({
  <th>Owners</th>
  <th className="section-start">Cover Amount</th>
  <th>Beneficiaries</th>
- <th>Percentage Split</th>
  <th>Cover Split</th>
  <th className="section-start">Monthly Income</th>
  <th>Checkbox</th>
@@ -327,7 +326,6 @@ export function NewRetirementTable({
  <th>Fund Value</th>
  <th>Fund Value at Death</th>
  <th className="section-start">Beneficiary Name</th>
- <th>Percentage</th>
  <th>Amount</th>
  <th>Lump Sum Taken</th>
  <th>Non-deductible Contribution</th>
@@ -431,25 +429,7 @@ export function NewRetirementTable({
  )}
  </td>
 
- {/* Unapproved Life Cover - Percentage Split */}
- <td className="p-1">
- {rowIndex < (fund.unapprovedPercentageSplits?.length || 0) && (
- <input
- key={`unapproved-percent-${fund.id}-${rowIndex}`}
- type="text"
- defaultValue={formatPercentageValue(fund.unapprovedPercentageSplits?.[rowIndex])}
- className={`table-input ${getFieldClass('percentage')} ${getValueClass(fund.unapprovedPercentageSplits?.[rowIndex], 'percentage')}`}
- onFocus={handleDefaultValueFocus}
- onBlur={(e) => {
- handleUnapprovedPercentageChange(fund.id, rowIndex, e.target.value);
- // Update calculated cover split
- const updatedCoverSplits = [...(fund.unapprovedCoverSplits || [])];
- updatedCoverSplits[rowIndex] = calculateCoverSplit(fund.coverAmount, e.target.value);
- onFieldUpdate(fund.id, 'unapprovedCoverSplits', updatedCoverSplits);
- }}
- />
- )}
- </td>
+
 
  {/* Unapproved Life Cover - Cover Split (Calculated) */}
  <td className="p-1 bg-neutral-100 text-right">
@@ -586,25 +566,7 @@ export function NewRetirementTable({
  )}
  </td>
 
- {/* Fund Value Beneficiaries - Cover % Split */}
- <td className="p-1">
- {rowIndex < (fund.fundValuePercentageSplits?.length || 0) && (
- <input
- key={`fundvalue-percent-${fund.id}-${rowIndex}`}
- type="text"
- defaultValue={formatPercentageValue(fund.fundValuePercentageSplits?.[rowIndex])}
- className={`table-input ${getFieldClass('percentage')} ${getValueClass(fund.fundValuePercentageSplits?.[rowIndex], 'percentage')}`}
- onFocus={handleDefaultValueFocus}
- onBlur={(e) => {
- handleFundValuePercentageChange(fund.id, rowIndex, e.target.value);
- // Update calculated cover split
- const updatedCoverSplits = [...(fund.fundValueCoverSplits || [])];
- updatedCoverSplits[rowIndex] = calculateCoverSplit(fund.fundValue, e.target.value);
- onFieldUpdate(fund.id, 'fundValueCoverSplits', updatedCoverSplits);
- }}
- />
- )}
- </td>
+
 
  {/* Fund Value Beneficiaries - Cover (Calculated) */}
  <td className="p-1 bg-neutral-100 text-right">
