@@ -232,7 +232,7 @@ function AssetsTable({ viewMode, searchTerm, onShowCategoryDialog, onAddAsset }:
               // Section Assets
               ...sectionAssets.map((asset: Assets, assetIndex) => (
                 <tr key={asset.id} className="hover:bg-neutral-50">
-              <td className="table-actions-cell p-2 text-center section-start">
+              <td className="table-actions-cell p-1 text-center section-start">
                 <ActionButtonGroup>
                   <DuplicateButton
                     onClick={onShowCategoryDialog || (() => addMutation.mutate())}
@@ -245,7 +245,7 @@ function AssetsTable({ viewMode, searchTerm, onShowCategoryDialog, onAddAsset }:
                 </ActionButtonGroup>
               </td>
               
-              <td className="p-2 text-left section-start">
+              <td className="p-1 text-left section-start">
                 <input
                   type="text"
                   defaultValue={formatTextValue(asset.description)}
@@ -257,7 +257,7 @@ function AssetsTable({ viewMode, searchTerm, onShowCategoryDialog, onAddAsset }:
                 />
               </td>
               
-              <td className="p-2 text-right section-start">
+              <td className="p-1 text-right section-start">
                 <input
                   key={`marketValue-${asset.id}-${asset.marketValue}`}
                   type="text"
@@ -269,7 +269,7 @@ function AssetsTable({ viewMode, searchTerm, onShowCategoryDialog, onAddAsset }:
                 />
               </td>
               
-              <td className="p-2 text-right section-start">
+              <td className="p-1 text-right section-start">
                 <input
                   key={`johnDoe-${asset.id}-${asset.johnDoe}`}
                   type="text"
@@ -281,7 +281,7 @@ function AssetsTable({ viewMode, searchTerm, onShowCategoryDialog, onAddAsset }:
                 />
               </td>
               
-              <td className="p-2 text-right">
+              <td className="p-1 text-right">
                 <input
                   key={`janetteDoe-${asset.id}-${asset.janetteDoe}`}
                   type="text"
@@ -293,7 +293,7 @@ function AssetsTable({ viewMode, searchTerm, onShowCategoryDialog, onAddAsset }:
                 />
               </td>
               
-              <td className="p-2 text-right">
+              <td className="p-1 text-right">
                 <input
                   key={`doeJunior-${asset.id}-${asset.doeJunior}`}
                   type="text"
@@ -305,7 +305,7 @@ function AssetsTable({ viewMode, searchTerm, onShowCategoryDialog, onAddAsset }:
                 />
               </td>
               
-              <td className="p-2 text-right">
+              <td className="p-1 text-right">
                 <input
                   key={`doeFamilyTrust-${asset.id}-${asset.doeFamilyTrust}`}
                   type="text"
@@ -317,7 +317,7 @@ function AssetsTable({ viewMode, searchTerm, onShowCategoryDialog, onAddAsset }:
                 />
               </td>
               
-              <td className="p-2 text-right section-start">
+              <td className="p-1 text-right section-start">
                 <input
                   key={`estate-${asset.id}-${asset.estate}`}
                   type="text"
@@ -329,7 +329,7 @@ function AssetsTable({ viewMode, searchTerm, onShowCategoryDialog, onAddAsset }:
                 />
               </td>
               
-              <td className="p-2 text-right">
+              <td className="p-1 text-right">
                 <input
                   key={`others-${asset.id}-${asset.others}`}
                   type="text"
@@ -341,7 +341,7 @@ function AssetsTable({ viewMode, searchTerm, onShowCategoryDialog, onAddAsset }:
                 />
               </td>
               
-              <td className="p-2 text-right">
+              <td className="p-1 text-right">
                 <input
                   key={`client-${asset.id}-${asset.client}`}
                   type="text"

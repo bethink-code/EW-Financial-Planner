@@ -224,7 +224,7 @@ function LiabilitiesTable({ viewMode, searchTerm, onShowCategoryDialog, onAddLia
               // Section Liabilities
               ...sectionLiabilities.map((liability: Liabilities) => (
                 <tr key={liability.id} className="hover:bg-neutral-50">
-                  <td className="table-actions-cell p-2 text-center section-start">
+                  <td className="table-actions-cell p-1 text-center section-start">
                     <ActionButtonGroup>
                       <DuplicateButton
                         onClick={onShowCategoryDialog || (() => addMutation.mutate())}
@@ -237,7 +237,7 @@ function LiabilitiesTable({ viewMode, searchTerm, onShowCategoryDialog, onAddLia
                     </ActionButtonGroup>
                   </td>
                   
-                  <td className="p-2 text-left section-start">
+                  <td className="p-1 text-left section-start">
                     <input
                       type="text"
                       defaultValue={formatTextValue(liability.description)}
@@ -248,7 +248,7 @@ function LiabilitiesTable({ viewMode, searchTerm, onShowCategoryDialog, onAddLia
                     />
                   </td>
                   
-                  <td className="p-2 text-right section-start">
+                  <td className="p-1 text-right section-start">
                     <input
                       key={`debtAmount-${liability.id}-${liability.debtAmount}`}
                       type="text"
@@ -260,7 +260,7 @@ function LiabilitiesTable({ viewMode, searchTerm, onShowCategoryDialog, onAddLia
                     />
                   </td>
                   
-                  <td className="p-2 text-center section-start">
+                  <td className="p-1 text-center section-start">
                     <input
                       key={`peterLambie-${liability.id}-${liability.peterLambie}`}
                       type="text"
@@ -272,7 +272,7 @@ function LiabilitiesTable({ viewMode, searchTerm, onShowCategoryDialog, onAddLia
                     />
                   </td>
                   
-                  <td className="p-2 text-center">
+                  <td className="p-1 text-center">
                     <input
                       key={`victoriaLambie-${liability.id}-${liability.victoriaLambie}`}
                       type="text"
@@ -284,7 +284,7 @@ function LiabilitiesTable({ viewMode, searchTerm, onShowCategoryDialog, onAddLia
                     />
                   </td>
                   
-                  <td className="p-2 text-center">
+                  <td className="p-1 text-center">
                     <input
                       key={`juniorLambie-${liability.id}-${liability.juniorLambie}`}
                       type="text"
@@ -296,7 +296,7 @@ function LiabilitiesTable({ viewMode, searchTerm, onShowCategoryDialog, onAddLia
                     />
                   </td>
                   
-                  <td className="p-2 text-center">
+                  <td className="p-1 text-center">
                     <input
                       key={`lambiesFamilyTrust-${liability.id}-${liability.lambiesFamilyTrust}`}
                       type="text"
@@ -308,7 +308,7 @@ function LiabilitiesTable({ viewMode, searchTerm, onShowCategoryDialog, onAddLia
                     />
                   </td>
                   
-                  <td className="p-2 text-right section-start">
+                  <td className="p-1 text-right section-start">
                     <input
                       key={`estate-${liability.id}-${liability.estate}`}
                       type="text"
@@ -320,7 +320,7 @@ function LiabilitiesTable({ viewMode, searchTerm, onShowCategoryDialog, onAddLia
                     />
                   </td>
                   
-                  <td className="p-2 text-right">
+                  <td className="p-1 text-right">
                     <input
                       key={`others-${liability.id}-${liability.others}`}
                       type="text"
@@ -332,7 +332,7 @@ function LiabilitiesTable({ viewMode, searchTerm, onShowCategoryDialog, onAddLia
                     />
                   </td>
                   
-                  <td className="p-2 text-right">
+                  <td className="p-1 text-right">
                     <input
                       key={`client-${liability.id}-${liability.client}`}
                       type="text"
