@@ -101,14 +101,27 @@ export default function EntityBeneficiarySelector({
 
   return (
     <div className="space-y-1">
-      <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
-        {/* ACTION BUTTON - Force to appear first with inline styles */}
-        <div style={{ order: 1, flexShrink: 0 }}>
+      <div style={{ 
+        display: 'flex !important', 
+        alignItems: 'center !important', 
+        gap: '4px !important',
+        flexDirection: 'row !important' 
+      }}>
+        {/* ACTION BUTTON - Force to appear first with !important */}
+        <div style={{ 
+          order: '1 !important', 
+          flexShrink: '0 !important',
+          display: 'inline-block !important'
+        }}>
           {actionButton}
         </div>
         
         {/* ENTITY SELECTOR - Force to appear second */}
-        <div style={{ order: 2, flex: 1 }}>
+        <div style={{ 
+          order: '2 !important', 
+          flex: '1 !important',
+          display: 'inline-block !important'
+        }}>
           <Select
             value={currentBeneficiary}
             onValueChange={(value) => handleBeneficiarySelect(value, beneficiaryIndex)}
@@ -128,7 +141,11 @@ export default function EntityBeneficiarySelector({
         </div>
 
         {/* PERCENTAGE INPUT - Force to appear third */}
-        <div style={{ order: 3, flexShrink: 0 }}>
+        <div style={{ 
+          order: '3 !important', 
+          flexShrink: '0 !important',
+          display: 'inline-block !important'
+        }}>
           <input
             type="text"
             value={currentPercentage}
