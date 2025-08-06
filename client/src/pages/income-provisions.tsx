@@ -5,11 +5,10 @@ import { IncomeProvisionsSummary } from "@/components/income-provisions/income-p
 import { CalculatorHeader } from "@/components/ui/calculator-header";
 import { apiRequest, queryClient } from "@/lib/queryClient";
 import type { InsertIncomeProvisions } from "@shared/schema";
-
-type ViewMode = "table" | "hybrid";
+import { useViewMode } from '@/contexts/view-mode-context';
 
 export default function IncomeProvisions() {
-  const [viewMode, setViewMode] = useState<ViewMode>("table");
+  const { viewMode, setViewMode } = useViewMode();
   const [searchTerm, setSearchTerm] = useState("");
 
   // Fetch provisions for count
@@ -33,9 +32,9 @@ export default function IncomeProvisions() {
     },
   });
 
-  const handleViewModeChange = useCallback((newMode: ViewMode) => {
+  const handleViewModeChange = useCallback((newMode: 'table' | 'hybrid') => {
     setViewMode(newMode);
-  }, []);
+  }, [setViewMode]);
 
   const handleAddProvision = useCallback(() => {
     addMutation.mutate();

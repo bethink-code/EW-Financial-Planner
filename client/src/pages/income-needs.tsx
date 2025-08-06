@@ -5,11 +5,10 @@ import { IncomeNeedsSummary } from "@/components/income-needs/income-needs-summa
 import { CalculatorHeader } from "@/components/ui/calculator-header";
 import { apiRequest, queryClient } from "@/lib/queryClient";
 import type { InsertIncomeNeeds } from "@shared/schema";
-
-type ViewMode = "table" | "hybrid";
+import { useViewMode } from '@/contexts/view-mode-context';
 
 export default function IncomeNeeds() {
-  const [viewMode, setViewMode] = useState<ViewMode>("table");
+  const { viewMode, setViewMode } = useViewMode();
 
   // Fetch needs for count
   const { data: needs = [] } = useQuery({
@@ -32,9 +31,9 @@ export default function IncomeNeeds() {
     },
   });
 
-  const handleViewModeChange = useCallback((newMode: ViewMode) => {
+  const handleViewModeChange = useCallback((newMode: 'table' | 'hybrid') => {
     setViewMode(newMode);
-  }, []);
+  }, [setViewMode]);
 
   const handleAddNeed = useCallback(() => {
     addMutation.mutate();

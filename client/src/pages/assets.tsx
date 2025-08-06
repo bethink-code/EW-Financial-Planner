@@ -6,9 +6,10 @@ import { AssetsSummary } from '@/components/assets/assets-summary';
 import { CalculatorHeader } from '@/components/ui/calculator-header';
 import { CategorySelectionDialog } from '@/components/ui/category-selection-dialog';
 import { apiRequest, queryClient } from '@/lib/queryClient';
+import { useViewMode } from '@/contexts/view-mode-context';
 
 export function AssetsPage() {
-  const [viewMode, setViewMode] = useState<'table' | 'hybrid'>('table');
+  const { viewMode, setViewMode } = useViewMode();
   const [showCategoryDialog, setShowCategoryDialog] = useState(false);
 
   const { data: assets = [] } = useQuery<Assets[]>({

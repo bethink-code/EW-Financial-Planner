@@ -5,9 +5,10 @@ import { LiabilitiesSummary } from '@/components/liabilities/liabilities-summary
 import { CategorySelectionDialog } from '@/components/ui/category-selection-dialog';
 import { useQuery, useMutation } from '@tanstack/react-query';
 import { queryClient, apiRequest } from '@/lib/queryClient';
+import { useViewMode } from '@/contexts/view-mode-context';
 
 export default function LiabilitiesPage() {
-  const [viewMode, setViewMode] = useState<'table' | 'hybrid'>('table');
+  const { viewMode, setViewMode } = useViewMode();
   const [showCategoryDialog, setShowCategoryDialog] = useState(false);
 
   // Fetch liabilities
