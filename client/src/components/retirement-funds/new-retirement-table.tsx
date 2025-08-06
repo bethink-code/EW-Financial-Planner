@@ -475,11 +475,11 @@ export function NewRetirementTable({
 
  {/* Monthly Death Benefit - Toggle Button */}
  {rowIndex === 0 && (
- <td className="p-1 text-center align-top" rowSpan={maxRows}>
+ <td className="table-actions-cell align-top" rowSpan={maxRows}>
  <button
  type="button"
  onClick={() => handleUpdateFund(fund.id, 'monthlyIncomeCheckbox', !fund.monthlyIncomeCheckbox)}
- className={`h-8 px-2 border rounded-md flex items-center justify-center transition-colors text-xs font-medium ${
+ className={`h-8 w-8 border rounded-md flex items-center justify-center transition-colors text-xs font-medium ${
  isYearsMode(fund) 
  ? 'bg-[#E8F3F8] border-[#E0E0E0] text-[#016991] hover:bg-[#D1E7F0]' 
  : 'bg-[#FFF7ED] border-[#FDBA74] text-[#EA580C] hover:bg-[#FED7AA]'
