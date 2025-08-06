@@ -73,7 +73,7 @@ Client requests data via TanStack Query hooks. Express routes handle CRUD operat
 ## Recent Major Updates
 
 ### August 6, 2025 - Global Entity Management System with Ownership Percentages
-**Scope**: Complete transformation from text-based owner/beneficiary fields to dynamic entity management system with percentage validation across all calculation tables
+**Scope**: Complete transformation from text-based owner/beneficiary fields to dynamic entity management system with percentage validation across all major calculation tables
 
 **Core Implementation**:
 1. **Database Schema Updates**:
@@ -104,11 +104,21 @@ Client requests data via TanStack Query hooks. Express routes handle CRUD operat
    - Percentage inputs with validation ensure 100% total distribution
    - Add/remove buttons maintain array synchronization automatically
    - Master entity registry from `/client-details` ensures data consistency
+   - Validation messages display only once per fund to maintain stable table layout
+
+6. **Retirement Funds Table Implementation**:
+   - Applied EntityOwnerSelector to owners section with percentage validation
+   - Applied EntityBeneficiarySelector to unapproved beneficiaries section  
+   - Applied EntityBeneficiarySelector to fund value beneficiaries section
+   - Removed redundant percentage split columns for streamlined UI
+   - Updated table headers and colspan values for proper alignment
+
+**Tables Completed with Global Entity Pattern**:
+✓ `/assurance` - Working Assurance Table with EntityBeneficiarySelector  
+✓ `/defined-benefit-funds` - Defined Benefit Funds Table with EntityOwnerSelector and EntityBeneficiarySelector  
+✓ `/new-retirement-funds` - Retirement Funds Table with EntityOwnerSelector and EntityBeneficiarySelector  
 
 **Ready for Global Deployment**:
-The pattern is now complete and tested in assurance table. Ready to apply to:
-- `/new-retirement-funds` - Multiple calculation tables and grouped views  
-- `/defined-benefit-funds` - Owner/beneficiary management patterns
 - `/assets` - Asset table with section grouping
 - `/income-needs` - Income calculation tables
 - `/income-provisions` - Provision calculation tables
