@@ -192,14 +192,14 @@ function IncomeNeedsTable({ viewMode, searchTerm, onAddIncomeNeed }: IncomeNeeds
         <tbody className="divide-y divide-neutral-200">
           {incomeNeeds.map((incomeNeed: IncomeNeeds, index) => (
             <tr key={incomeNeed.id} className="hover:bg-neutral-50">
-              <td className="table-actions-cell p-2 text-center section-start">
+              <td className="table-actions-cell p-1 text-center section-start">
                 <ActionButtonGroup>
                   <DuplicateButton onClick={() => addMutation.mutate()} disabled={isUpdating} />
                   <DeleteButton onClick={() => handleDeleteIncomeNeed(incomeNeed.id)} disabled={isUpdating} />
                 </ActionButtonGroup>
               </td>
               
-              <td className="p-2 text-left section-start">
+              <td className="p-1 text-left section-start">
                 <input
                   type="text"
                   defaultValue={formatTextValue(incomeNeed.description)}
@@ -210,7 +210,7 @@ function IncomeNeedsTable({ viewMode, searchTerm, onAddIncomeNeed }: IncomeNeeds
                 />
               </td>
               
-              <td className="p-2 text-left">
+              <td className="p-1 text-left">
                 <input
                   type="text"
                   defaultValue={formatTextValue(incomeNeed.personName)}
@@ -221,7 +221,7 @@ function IncomeNeedsTable({ viewMode, searchTerm, onAddIncomeNeed }: IncomeNeeds
                 />
               </td>
               
-              <td className="p-2 text-right section-start">
+              <td className="p-1 text-right section-start">
                 <input
                   key={`amount-${incomeNeed.id}-${incomeNeed.amount}`}
                   type="text"
@@ -233,7 +233,7 @@ function IncomeNeedsTable({ viewMode, searchTerm, onAddIncomeNeed }: IncomeNeeds
                 />
               </td>
               
-              <td className="p-2 text-left">
+              <td className="p-1 text-left">
                 <input
                   type="text"
                   defaultValue={incomeNeed.startDate}
@@ -244,7 +244,7 @@ function IncomeNeedsTable({ viewMode, searchTerm, onAddIncomeNeed }: IncomeNeeds
                 />
               </td>
               
-              <td className="p-2 text-center">
+              <td className="p-1 text-center">
                 <input
                   key={`termYears-${incomeNeed.id}-${incomeNeed.termYears}`}
                   type="text"
@@ -256,7 +256,7 @@ function IncomeNeedsTable({ viewMode, searchTerm, onAddIncomeNeed }: IncomeNeeds
                 />
               </td>
               
-              <td className="p-2 text-center">
+              <td className="p-1 text-center">
                 <input
                   key={`increasePercentage-${incomeNeed.id}-${incomeNeed.increasePercentage}`}
                   type="text"
@@ -268,7 +268,7 @@ function IncomeNeedsTable({ viewMode, searchTerm, onAddIncomeNeed }: IncomeNeeds
                 />
               </td>
               
-              <td className="p-2 text-center">
+              <td className="p-1 text-center">
                 <input
                   type="checkbox"
                   defaultChecked={incomeNeed.cpi}
@@ -278,7 +278,7 @@ function IncomeNeedsTable({ viewMode, searchTerm, onAddIncomeNeed }: IncomeNeeds
                 />
               </td>
               
-              <td className="p-2 text-center">
+              <td className="p-1 text-center">
                 <select
                   defaultValue={incomeNeed.frequency}
                   className="table-input table-dropdown"
@@ -291,7 +291,7 @@ function IncomeNeedsTable({ viewMode, searchTerm, onAddIncomeNeed }: IncomeNeeds
                 </select>
               </td>
               
-              <td className="p-2 text-right">
+              <td className="p-1 text-right">
                 <input
                   key={`capitalisedAmount-${incomeNeed.id}-${incomeNeed.capitalisedAmount}`}
                   type="text"
