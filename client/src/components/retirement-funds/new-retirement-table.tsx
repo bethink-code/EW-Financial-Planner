@@ -65,9 +65,15 @@ export function NewRetirementTable({
  return hasIncome(fund) && !isUpdating;
  };
  
- // Toggle shows "Years" when checked, "%" when unchecked
+ // Toggle shows "Years" when checked (true), "%" when unchecked (false)
  const isYearsMode = (fund: RetirementFund) => {
+ console.log('isYearsMode check:', fund.id, fund.monthlyIncomeCheckbox, fund.monthlyIncomeCheckbox === true);
  return fund.monthlyIncomeCheckbox === true;
+ };
+ 
+ const isPercentageMode = (fund: RetirementFund) => {
+ console.log('isPercentageMode check:', fund.id, fund.monthlyIncomeCheckbox, fund.monthlyIncomeCheckbox === false);
+ return fund.monthlyIncomeCheckbox === false;
  };
 
  // Track which field is being edited to prevent jumping (from Assurance pattern)
@@ -483,7 +489,9 @@ export function NewRetirementTable({
  className={`h-8 px-3 min-w-[48px] border rounded-md flex items-center justify-center transition-colors text-sm font-medium ${
  isYearsMode(fund) 
  ? 'bg-[#E8F3F8] border-[#E0E0E0] text-[#016991] hover:bg-[#D1E7F0]' 
- : 'bg-[#FFF7ED] border-[#FDBA74] text-[#EA580C] hover:bg-[#FED7AA]'
+ : isPercentageMode(fund)
+ ? 'bg-[#FFF7ED] border-[#FDBA74] text-[#EA580C] hover:bg-[#FED7AA]'
+ : 'bg-[#E8F3F8] border-[#E0E0E0] text-[#016991] hover:bg-[#D1E7F0]'
  } ${!getControlsEnabled(fund) ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}`}
  disabled={!getControlsEnabled(fund) || isUpdating}
  >
