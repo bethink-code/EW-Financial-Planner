@@ -77,6 +77,33 @@ export default function EntityOwnerSelector({
   return (
     <div className="space-y-1">
       <div className="flex items-center gap-1">
+        {/* Add/Remove Buttons */}
+        <div className="flex gap-1">
+          <Button
+            size="sm"
+            variant="outline"
+            className="h-6 w-6 p-0"
+            onClick={() => onAddOwner(policyId)}
+            disabled={disabled}
+            title="Add owner"
+          >
+            <Plus className="h-3 w-3" />
+          </Button>
+          
+          {owners.length > 1 && ownerIndex > 0 && (
+            <Button
+              size="sm"
+              variant="outline"
+              className="h-6 w-6 p-0 text-red-600 hover:bg-red-50"
+              onClick={() => onRemoveOwner(policyId, ownerIndex)}
+              disabled={disabled}
+              title="Remove owner"
+            >
+              <X className="h-3 w-3" />
+            </Button>
+          )}
+        </div>
+
         {/* Entity Selector */}
         <Select
           value={currentOwner}
@@ -106,33 +133,6 @@ export default function EntityOwnerSelector({
           placeholder="0%"
           disabled={disabled}
         />
-
-        {/* Add/Remove Buttons */}
-        <div className="flex gap-1">
-          <Button
-            size="sm"
-            variant="outline"
-            className="h-6 w-6 p-0"
-            onClick={() => onAddOwner(policyId)}
-            disabled={disabled}
-            title="Add owner"
-          >
-            <Plus className="h-3 w-3" />
-          </Button>
-          
-          {owners.length > 1 && ownerIndex > 0 && (
-            <Button
-              size="sm"
-              variant="outline"
-              className="h-6 w-6 p-0 text-red-600 hover:bg-red-50"
-              onClick={() => onRemoveOwner(policyId, ownerIndex)}
-              disabled={disabled}
-              title="Remove owner"
-            >
-              <X className="h-3 w-3" />
-            </Button>
-          )}
-        </div>
       </div>
 
       {/* Validation Warning */}

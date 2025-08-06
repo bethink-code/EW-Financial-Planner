@@ -77,6 +77,33 @@ export default function EntityBeneficiarySelector({
   return (
     <div className="space-y-1">
       <div className="flex items-center gap-1">
+        {/* Add/Remove Buttons */}
+        <div className="flex gap-1">
+          <Button
+            size="sm"
+            variant="outline"
+            className="h-6 w-6 p-0"
+            onClick={() => onAddBeneficiary(policyId)}
+            disabled={disabled}
+            title="Add beneficiary"
+          >
+            <Plus className="h-3 w-3" />
+          </Button>
+          
+          {beneficiaries.length > 1 && beneficiaryIndex > 0 && (
+            <Button
+              size="sm"
+              variant="outline"
+              className="h-6 w-6 p-0 text-red-600 hover:bg-red-50"
+              onClick={() => onRemoveBeneficiary(policyId, beneficiaryIndex)}
+              disabled={disabled}
+              title="Remove beneficiary"
+            >
+              <X className="h-3 w-3" />
+            </Button>
+          )}
+        </div>
+
         {/* Entity Selector */}
         <Select
           value={currentBeneficiary}
@@ -106,33 +133,6 @@ export default function EntityBeneficiarySelector({
           placeholder="0%"
           disabled={disabled}
         />
-
-        {/* Add/Remove Buttons */}
-        <div className="flex gap-1">
-          <Button
-            size="sm"
-            variant="outline"
-            className="h-6 w-6 p-0"
-            onClick={() => onAddBeneficiary(policyId)}
-            disabled={disabled}
-            title="Add beneficiary"
-          >
-            <Plus className="h-3 w-3" />
-          </Button>
-          
-          {beneficiaries.length > 1 && beneficiaryIndex > 0 && (
-            <Button
-              size="sm"
-              variant="outline"
-              className="h-6 w-6 p-0 text-red-600 hover:bg-red-50"
-              onClick={() => onRemoveBeneficiary(policyId, beneficiaryIndex)}
-              disabled={disabled}
-              title="Remove beneficiary"
-            >
-              <X className="h-3 w-3" />
-            </Button>
-          )}
-        </div>
       </div>
 
       {/* Validation Warning */}
