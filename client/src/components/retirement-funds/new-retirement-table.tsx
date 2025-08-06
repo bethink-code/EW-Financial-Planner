@@ -383,21 +383,17 @@ export function NewRetirementTable({
  {/* Overview - Owner */}
  <td className="p-1">
  {rowIndex < (fund.owners?.length || 0) && (
- <div className="flex items-center gap-1">
  <EntityOwnerSelector
- fundId={fund.id}
- ownerIndex={rowIndex}
- ownerName={fund.owners?.[rowIndex] || ""}
- ownerPercentage={fund.ownershipPercentages?.[rowIndex] || "0%"}
+ policyId={fund.id}
  owners={fund.owners || []}
  ownershipPercentages={fund.ownershipPercentages || []}
  onOwnerChange={handleOwnerChange}
  onOwnershipPercentageChange={handleOwnershipPercentageChange}
  onAddOwner={handleAddOwner}
  onRemoveOwner={handleRemoveOwner}
- isUpdating={isUpdating}
+ rowIndex={rowIndex}
+ disabled={isUpdating}
  />
- </div>
  )}
  </td>
 
@@ -421,31 +417,17 @@ export function NewRetirementTable({
  {/* Unapproved Life Cover - Beneficiary */}
  <td className="p-1">
  {rowIndex < (fund.unapprovedBeneficiaries?.length || 0) && (
- <div className="flex items-center gap-1">
- <input
- key={`unapproved-benef-${fund.id}-${rowIndex}`}
- type="text"
- defaultValue={formatTextValue(fund.unapprovedBeneficiaries?.[rowIndex] ||"")}
- className={`table-input ${getFieldClass('text')} flex-1 ${getValueClass(fund.unapprovedBeneficiaries?.[rowIndex] ||"", 'text')}`}
- onFocus={handleDefaultValueFocus}
- onBlur={(e) => {
- handleUnapprovedBeneficiaryChange(fund.id, rowIndex, e.target.value);
- }}
- />
- {rowIndex === 0 ? (
- <AddButton
- onClick={() => handleAddUnapprovedBeneficiary(fund.id)}
+ <EntityBeneficiarySelector
+ policyId={fund.id}
+ beneficiaries={fund.unapprovedBeneficiaries || []}
+ beneficiaryPercentages={fund.unapprovedPercentageSplits || []}
+ onBeneficiaryChange={handleUnapprovedBeneficiaryChange}
+ onBeneficiaryPercentageChange={handleUnapprovedPercentageChange}
+ onAddBeneficiary={handleAddUnapprovedBeneficiary}
+ onRemoveBeneficiary={handleRemoveUnapprovedBeneficiary}
+ rowIndex={rowIndex}
  disabled={isUpdating}
- size="sm"
  />
- ) : (
- <DeleteButton
- onClick={() => handleRemoveUnapprovedBeneficiary(fund.id, rowIndex)}
- disabled={isUpdating}
- size="sm"
- />
- )}
- </div>
  )}
  </td>
 
@@ -590,31 +572,17 @@ export function NewRetirementTable({
  {/* Fund Value Beneficiaries - Beneficiary */}
  <td className="p-1 section-start">
  {rowIndex < (fund.fundValueBeneficiaries?.length || 0) && (
- <div className="flex items-center gap-1">
- <input
- key={`fundvalue-benef-${fund.id}-${rowIndex}`}
- type="text"
- defaultValue={formatTextValue(fund.fundValueBeneficiaries?.[rowIndex] ||"")}
- className={`table-input ${getFieldClass('text')} flex-1 ${getValueClass(fund.fundValueBeneficiaries?.[rowIndex] ||"", 'text')}`}
- onFocus={handleDefaultValueFocus}
- onBlur={(e) => {
- handleFundValueBeneficiaryChange(fund.id, rowIndex, e.target.value);
- }}
- />
- {rowIndex === 0 ? (
- <AddButton
- onClick={() => handleAddFundValueBeneficiary(fund.id)}
+ <EntityBeneficiarySelector
+ policyId={fund.id}
+ beneficiaries={fund.fundValueBeneficiaries || []}
+ beneficiaryPercentages={fund.fundValuePercentageSplits || []}
+ onBeneficiaryChange={handleFundValueBeneficiaryChange}
+ onBeneficiaryPercentageChange={handleFundValuePercentageChange}
+ onAddBeneficiary={handleAddFundValueBeneficiary}
+ onRemoveBeneficiary={handleRemoveFundValueBeneficiary}
+ rowIndex={rowIndex}
  disabled={isUpdating}
- size="sm"
  />
- ) : (
- <DeleteButton
- onClick={() => handleRemoveFundValueBeneficiary(fund.id, rowIndex)}
- disabled={isUpdating}
- size="sm"
- />
- )}
- </div>
  )}
  </td>
 
