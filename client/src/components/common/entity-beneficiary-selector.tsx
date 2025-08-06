@@ -77,20 +77,25 @@ export default function EntityBeneficiarySelector({
   return (
     <div className="space-y-1">
       <div className="flex items-center gap-1">
-        {/* Add/Remove Buttons */}
-        <div className="flex gap-1">
-          <Button
-            size="sm"
-            variant="outline"
-            className="h-6 w-6 p-0"
-            onClick={() => onAddBeneficiary(policyId)}
-            disabled={disabled}
-            title="Add beneficiary"
-          >
-            <Plus className="h-3 w-3" />
-          </Button>
-          
-          {beneficiaries.length > 1 && beneficiaryIndex > 0 && (
+        {/* Add/Remove Buttons - only show Add on first row */}
+        {rowIndex === 0 && (
+          <div className="flex gap-1">
+            <Button
+              size="sm"
+              variant="outline"
+              className="h-6 w-6 p-0"
+              onClick={() => onAddBeneficiary(policyId)}
+              disabled={disabled}
+              title="Add beneficiary"
+            >
+              <Plus className="h-3 w-3" />
+            </Button>
+          </div>
+        )}
+        
+        {/* Remove button - only show on non-first rows */}
+        {rowIndex > 0 && beneficiaries.length > 1 && (
+          <div className="flex gap-1">
             <Button
               size="sm"
               variant="outline"
@@ -101,8 +106,8 @@ export default function EntityBeneficiarySelector({
             >
               <X className="h-3 w-3" />
             </Button>
-          )}
-        </div>
+          </div>
+        )}
 
         {/* Entity Selector */}
         <Select
@@ -121,21 +126,9 @@ export default function EntityBeneficiarySelector({
             ))}
           </SelectContent>
         </Select>
-
-        {/* Percentage Input */}
-        <input
-          type="text"
-          value={currentPercentage}
-          onChange={(e) => handlePercentageChange(e.target.value, beneficiaryIndex)}
-          className={`w-16 h-8 text-xs border rounded px-1 text-center ${
-            isInvalidTotal ? 'border-red-500 bg-red-50' : 'border-neutral-300'
-          }`}
-          placeholder="0%"
-          disabled={disabled}
-        />
       </div>
 
-      {/* Validation Warning */}
+      {/* Validation Warning - only show on first row */}
       {rowIndex === 0 && isInvalidTotal && (
         <div className="text-xs text-red-600 font-medium">
           Total: {percentageTotal.toFixed(1)}% (must equal 100%)

@@ -420,61 +420,19 @@ export function AssuranceTable({ onAddPolicy }: AssuranceTableProps) {
                     </td>
                   )}
 
-                  {/* Beneficiary Entity */}
+                  {/* Beneficiary */}
                   <td className="border border-neutral-300 p-1">
-                    {policy.beneficiaries.length > rowIndex && (
-                      <div className="flex items-center gap-1">
-                        {/* Add/Remove Buttons - only show on first row */}
-                        {rowIndex === 0 && (
-                          <div className="flex gap-1">
-                            <Button
-                              size="sm"
-                              variant="outline"
-                              className="h-6 w-6 p-0"
-                              onClick={() => handleAddBeneficiary(policy.id)}
-                              disabled={updateMutation.isPending}
-                              title="Add beneficiary"
-                            >
-                              <Plus className="h-3 w-3" />
-                            </Button>
-                          </div>
-                        )}
-                        
-                        {/* Remove button - only show on non-first rows */}
-                        {rowIndex > 0 && policy.beneficiaries.length > 1 && (
-                          <div className="flex gap-1">
-                            <Button
-                              size="sm"
-                              variant="outline"
-                              className="h-6 w-6 p-0 text-red-600 hover:bg-red-50"
-                              onClick={() => handleRemoveBeneficiary(policy.id, rowIndex)}
-                              disabled={updateMutation.isPending}
-                              title="Remove beneficiary"
-                            >
-                              <X className="h-3 w-3" />
-                            </Button>
-                          </div>
-                        )}
-
-                        {/* Entity Selector */}
-                        <Select
-                          value={policy.beneficiaries[rowIndex] || ""}
-                          onValueChange={(value) => handleBeneficiaryChange(policy.id, rowIndex, value)}
-                          disabled={updateMutation.isPending}
-                        >
-                          <SelectTrigger className="h-8 text-xs flex-1">
-                            <SelectValue placeholder="Select beneficiary..." />
-                          </SelectTrigger>
-                          <SelectContent>
-                            {entities.map((entity) => (
-                              <SelectItem key={entity.id} value={entity.entityName}>
-                                {entity.entityName} ({entity.entityType})
-                              </SelectItem>
-                            ))}
-                          </SelectContent>
-                        </Select>
-                      </div>
-                    )}
+                    <EntityBeneficiarySelector
+                      policyId={policy.id}
+                      beneficiaries={policy.beneficiaries}
+                      beneficiaryPercentages={policy.beneficiaryPercentages || ["100%"]}
+                      onBeneficiaryChange={handleBeneficiaryChange}
+                      onBeneficiaryPercentageChange={handleBeneficiaryPercentageChange}
+                      onAddBeneficiary={handleAddBeneficiary}
+                      onRemoveBeneficiary={handleRemoveBeneficiary}
+                      rowIndex={rowIndex}
+                      disabled={updateMutation.isPending}
+                    />
                   </td>
 
                   {/* Benefit Split */}
