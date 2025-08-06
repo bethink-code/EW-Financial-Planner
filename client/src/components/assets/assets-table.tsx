@@ -6,6 +6,7 @@ import { AddButton, ActionButtonGroup, DuplicateButton, DeleteButton } from '@/c
 import { TableHeaderAddButton } from '@/components/ui/table-header-add-button';
 import { getFieldClass, getFieldWidth, getCellClass } from '@/lib/field-types';
 import { formatCurrencyValue, formatPercentageValue, isDefaultValue, getValueClass, formatTextValue, handleDefaultValueFocus } from '@/lib/formatting';
+import { parseEntityOwnership, getEntityDisplayName, setEntityOwnership, type ClientEntity } from '@/lib/entity-columns-utils';
 import { useDebouncedUpdate } from '@/hooks/use-debounced-update';
 
 interface AssetsTableProps {
@@ -23,16 +24,23 @@ function AssetsTable({ viewMode, searchTerm, onShowCategoryDialog, onAddAsset }:
     queryKey: ['/api/assets'],
   });
 
+  // Query for client entities to build dynamic columns
+  const { data: clientEntities = [] } = useQuery<ClientEntity[]>({
+    queryKey: ['/api/client-details'],
+    select: (data: any[]) => data.map(entity => ({
+      id: entity.id,
+      entityName: entity.entityName,
+      entityType: entity.entityType
+    }))
+  });
+
   // Add asset mutation
   const addMutation = useMutation({
     mutationFn: async (): Promise<Assets> => {
       const newAsset: InsertAssets = {
         description:"",
         marketValue:"R 0",
-        johnDoe:"0%",
-        janetteDoe:"0%",
-        doeJunior:"0%",
-        doeFamilyTrust:"0%",
+        entityOwnership:"{}",
         estate:"R 0",
         others:"R 0",
         client:"R 0",
