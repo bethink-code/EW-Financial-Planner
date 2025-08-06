@@ -127,8 +127,8 @@ export default function EntityBeneficiarySelector({
         />
       </div>
 
-      {/* Validation Warning - only show on first row */}
-      {rowIndex === 0 && isInvalidTotal && (
+      {/* Validation Warning - show on last row only */}
+      {rowIndex === beneficiaries.length - 1 && isInvalidTotal && (
         <div className="text-xs text-red-600 font-medium">
           Total: {percentageTotal.toFixed(1)}% (must equal 100%)
         </div>
