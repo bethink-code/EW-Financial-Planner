@@ -316,7 +316,7 @@ export function AssuranceTable({ onAddPolicy }: AssuranceTableProps) {
               <th>Death Benefit</th>
               <th>Beneficiary</th>
               <th>Additional Info</th>
-              <th>Benefit Split</th>
+              <th>Beneficiary Split</th>
               <th>Amount</th>
               <th>Buy/Sell</th>
               <th>Key Man</th>
@@ -443,7 +443,7 @@ export function AssuranceTable({ onAddPolicy }: AssuranceTableProps) {
                     )}
                   </td>
 
-                  {/* Benefit Split - only show on first row */}
+                  {/* Beneficiary Split - only show on first row */}
                   <td className="border border-neutral-300 p-1">
                     {rowIndex === 0 && (
                       <input

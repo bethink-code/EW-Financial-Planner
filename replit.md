@@ -72,11 +72,35 @@ Client requests data via TanStack Query hooks. Express routes handle CRUD operat
 
 ## Recent Major Updates
 
-### August 6, 2025 - Comprehensive Calculation Page Refinements
-**Scope**: Complete SafeFragment implementation and React warning elimination across ALL calculation pages
+### August 6, 2025 - Global Entity Management System with Ownership Percentages
+**Scope**: Complete transformation from text-based owner/beneficiary fields to dynamic entity management system with percentage validation across all calculation tables
 
-**Impact Assessment Completed For**:
-- `/assurance` - Primary focus with complex multi-row table structure
+**Core Implementation**:
+1. **Database Schema Updates**:
+   - Added `ownershipPercentages` and `beneficiaryPercentages` arrays to assurance table
+   - Synchronized array lengths to match owners/beneficiaries for data integrity
+   - Default percentage values ensure proper functionality and prevent data corruption
+
+2. **Reusable Global Components Created**:
+   - `client/src/components/common/entity-owner-selector.tsx` - Universal owner selector with percentage validation
+   - `client/src/components/common/entity-beneficiary-selector.tsx` - Universal beneficiary selector with percentage validation
+   - Components validate that percentages total 100% for proper financial planning
+   - Entity dropdowns populated from `/client-details` master registry
+
+3. **Assurance Table Transformation**:
+   - Updated `client/src/components/assurance/working-assurance-table.tsx` with entity selectors
+   - Renamed "Benefit Split" column to "Beneficiary Split" for clarity
+   - Added percentage change handlers maintaining synchronization between arrays
+   - Implemented add/remove functionality preserving percentage array integrity
+
+4. **Global Pattern Established**:
+   - Entity dropdowns replace text inputs for consistent entity selection
+   - Percentage inputs with validation ensure 100% total distribution
+   - Add/remove buttons maintain array synchronization automatically
+   - Master entity registry from `/client-details` ensures data consistency
+
+**Ready for Global Deployment**:
+The pattern is now complete and tested in assurance table. Ready to apply to:
 - `/new-retirement-funds` - Multiple calculation tables and grouped views  
 - `/defined-benefit-funds` - Owner/beneficiary management patterns
 - `/assets` - Asset table with section grouping
@@ -84,22 +108,10 @@ Client requests data via TanStack Query hooks. Express routes handle CRUD operat
 - `/income-provisions` - Provision calculation tables
 - `/additional-estate-duty-items` - Estate duty calculation tables
 
-**Technical Changes**:
-1. **SafeFragment Component Refinement**:
-   - Updated `client/src/lib/safe-fragment.tsx` to use React fragment shorthand `<>{children}</>`
-   - Eliminated data-replit-metadata prop warnings completely
-   - Removed problematic key prop access that caused React warnings
-
-2. **Table Component Updates**:
-   - `client/src/components/assurance/working-assurance-table.tsx` - Updated React.Fragment to SafeFragment
-   - `client/src/components/retirement-funds/new-retirement-table.tsx` - Added SafeFragment import and usage
-   - `client/src/components/retirement-funds/new-grouped-table-view.tsx` - Updated fragment implementation  
-   - `client/src/components/defined-benefit-funds/defined-benefit-funds-table-correct-stable.tsx` - Already using SafeFragment
-
-3. **API Functionality Verification**:
-   - All calculation page APIs responding correctly (assurance, assets, income-needs, retirement-funds, defined-benefit-funds)
-   - No functionality broken during refinement process
-   - Table interactions, updates, and calculations working as expected
-
-**Result**: React Fragment warnings eliminated across all calculation pages while preserving full functionality of complex financial calculation tables with multi-row structures, owner/beneficiary management, and real-time updates.
+**Previous Updates**:
+### August 6, 2025 - Comprehensive Calculation Page Refinements
+- Complete SafeFragment implementation and React warning elimination across ALL calculation pages
+- Table component updates with SafeFragment usage
+- API functionality verification across all calculation pages
+- Result: React Fragment warnings eliminated while preserving full functionality
 ```
