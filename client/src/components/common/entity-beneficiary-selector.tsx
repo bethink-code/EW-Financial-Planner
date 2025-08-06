@@ -135,8 +135,19 @@ export default function EntityBeneficiarySelector({
           className={`table-input ${getFieldClass('percentage')} w-16 text-center ${getValueClass(currentPercentage, 'percentage')} ${
             isInvalidTotal ? 'border-red-500 bg-red-50' : ''
           }`}
-          onFocus={handleDefaultValueFocus}
-          onBlur={(e) => handlePercentageChange(e.target.value)}
+          onFocus={(e) => {
+            handleDefaultValueFocus(e);
+            // Remove % sign for editing but keep the number
+            const valueWithoutPercent = e.target.value.replace('%', '');
+            e.target.value = valueWithoutPercent;
+          }}
+          onBlur={(e) => {
+            handlePercentageChange(e.target.value);
+            // Restore the formatted value with % sign
+            const cleanValue = e.target.value.replace(/[^\d.]/g, '');
+            const numValue = parseFloat(cleanValue);
+            e.target.value = isNaN(numValue) ? "0%" : `${numValue}%`;
+          }}
           disabled={disabled}
         />
       </div>
