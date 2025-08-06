@@ -28,8 +28,35 @@ import {
   updateEstatePositionParametersSchema,
 } from "@shared/schema";
 import { insertAssetsSchema } from "@shared/assets-schema";
+import { entityIdsToNames, entityNamesToIds } from "./entity-resolver";
 
 export async function registerRoutes(app: Express): Promise<Server> {
+  
+  // Entity conversion endpoints
+  app.post("/api/entities/resolve", async (req, res) => {
+    try {
+      const { names } = req.body; // array of entity names
+      const clientDetails = await storage.getClientDetails();
+      const entityIds = entityNamesToIds(names, clientDetails);
+      res.json({ entityIds });
+    } catch (error) {
+      console.error("Error resolving entities:", error);
+      res.status(500).json({ message: "Failed to resolve entities" });
+    }
+  });
+
+  app.post("/api/entities/names", async (req, res) => {
+    try {
+      const { entityIds } = req.body; // array of entity IDs
+      const clientDetails = await storage.getClientDetails();
+      const names = entityIdsToNames(entityIds, clientDetails);
+      res.json({ names });
+    } catch (error) {
+      console.error("Error converting entity IDs to names:", error);
+      res.status(500).json({ message: "Failed to convert entity IDs" });
+    }
+  });
+
   // Get all retirement funds
   app.get("/api/retirement-funds", async (req, res) => {
     try {
