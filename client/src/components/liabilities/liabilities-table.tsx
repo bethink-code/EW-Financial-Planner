@@ -6,6 +6,7 @@ import { AddButton, ActionButtonGroup, DuplicateButton, DeleteButton } from '@/c
 import { TableHeaderAddButton } from '@/components/ui/table-header-add-button';
 import { getFieldClass, getCellClass } from '@/lib/field-types';
 import { formatCurrencyValue, formatPercentageValue, getValueClass, handleDefaultValueFocus, formatTextValue } from '@/lib/formatting';
+import { parseEntityOwnership, getEntityDisplayName, setEntityOwnership, type ClientEntity } from '@/lib/entity-columns-utils';
 
 interface LiabilitiesTableProps {
   viewMode: 'table' | 'hybrid';
@@ -22,16 +23,23 @@ function LiabilitiesTable({ viewMode, searchTerm, onShowCategoryDialog, onAddLia
     queryKey: ['/api/liabilities'],
   });
 
+  // Query for client entities to build dynamic columns
+  const { data: clientEntities = [] } = useQuery<ClientEntity[]>({
+    queryKey: ['/api/client-details'],
+    select: (data: any[]) => data.map(entity => ({
+      id: entity.id,
+      entityName: entity.entityName,
+      entityType: entity.entityType
+    }))
+  });
+
   // Add liability mutation
   const addMutation = useMutation({
     mutationFn: async (): Promise<Liabilities> => {
       const newLiability: InsertLiabilities = {
         description:"",
         debtAmount:"R 0",
-        peterLambie:"0%",
-        victoriaLambie:"0%",
-        juniorLambie:"0%",
-        lambiesFamilyTrust:"0%",
+        entityOwnership:"{}",
         estate:"R 0",
         others:"R 0",
         client:"R 0",
@@ -140,9 +148,7 @@ function LiabilitiesTable({ viewMode, searchTerm, onShowCategoryDialog, onAddLia
 
   const handleInputBlur = useCallback((id: number, field: keyof Liabilities, value: string) => {
     let formattedValue: string;
-    if (field === 'peterLambie' || field === 'victoriaLambie' || field === 'juniorLambie' || field === 'lambiesFamilyTrust') {
-      formattedValue = formatPercentageValue(value);
-    } else if (field === 'debtAmount' || field === 'estate' || field === 'others' || field === 'client') {
+    if (field === 'debtAmount' || field === 'estate' || field === 'others' || field === 'client') {
       formattedValue = formatCurrencyValue(value);
     } else {
       formattedValue = value;
@@ -187,16 +193,17 @@ function LiabilitiesTable({ viewMode, searchTerm, onShowCategoryDialog, onAddLia
             </th>
             <th className="section-start" colSpan={1}>Overview</th>
             <th className="section-start" colSpan={1}>Liability Details</th>
-            <th className="section-start" colSpan={4}>Ownership Split</th>
+            <th className="section-start" colSpan={clientEntities.length}>Ownership Split</th>
             <th className="section-start" colSpan={3}>Settlement</th>
           </tr>
           <tr className="double-row-header-second">
             <th className="section-start">Description</th>
             <th className="section-start">Debt Amount</th>
-            <th className="section-start">Peter Lambie</th>
-            <th>Victoria Lambie (Spouse)</th>
-            <th>Junior Lambie</th>
-            <th>Lambies Family Trust</th>
+            {clientEntities.map((entity, index) => (
+              <th key={entity.id} className={index === 0 ? "section-start" : ""}>
+                {getEntityDisplayName(entity)}
+              </th>
+            ))}
             <th className="section-start">Estate Duty</th>
             <th>Others</th>
             <th>Client</th>
@@ -217,7 +224,7 @@ function LiabilitiesTable({ viewMode, searchTerm, onShowCategoryDialog, onAddLia
             return Object.entries(groupedLiabilities).map(([sectionName, sectionLiabilities]) => [
               // Section Header
               <tr key={`section-${sectionName}`} className="bg-blue-50">
-                <td colSpan={10} className="px-4 text-sm font-medium text-neutral-700 uppercase tracking-wider">
+                <td colSpan={clientEntities.length + 5} className="px-4 text-sm font-medium text-neutral-700 uppercase tracking-wider">
                   {sectionName.replace('_', ' ')}
                 </td>
               </tr>,
@@ -260,53 +267,33 @@ function LiabilitiesTable({ viewMode, searchTerm, onShowCategoryDialog, onAddLia
                     />
                   </td>
                   
-                  <td className="p-1 text-center section-start">
-                    <input
-                      key={`peterLambie-${liability.id}-${liability.peterLambie}`}
-                      type="text"
-                      defaultValue={liability.peterLambie}
-                      className={`table-input ${getFieldClass('percentage')} ${getValueClass(liability.peterLambie, 'percentage')}`}
-                      onFocus={handleDefaultValueFocus}
-                      onBlur={(e) => handleInputBlur(liability.id, 'peterLambie', e.target.value)}
-                      disabled={isUpdating}
-                    />
-                  </td>
-                  
-                  <td className="p-1 text-center">
-                    <input
-                      key={`victoriaLambie-${liability.id}-${liability.victoriaLambie}`}
-                      type="text"
-                      defaultValue={liability.victoriaLambie}
-                      className={`table-input ${getFieldClass('percentage')} ${getValueClass(liability.victoriaLambie, 'percentage')}`}
-                      onFocus={handleDefaultValueFocus}
-                      onBlur={(e) => handleInputBlur(liability.id, 'victoriaLambie', e.target.value)}
-                      disabled={isUpdating}
-                    />
-                  </td>
-                  
-                  <td className="p-1 text-center">
-                    <input
-                      key={`juniorLambie-${liability.id}-${liability.juniorLambie}`}
-                      type="text"
-                      defaultValue={liability.juniorLambie}
-                      className={`table-input ${getFieldClass('percentage')} ${getValueClass(liability.juniorLambie, 'percentage')}`}
-                      onFocus={handleDefaultValueFocus}
-                      onBlur={(e) => handleInputBlur(liability.id, 'juniorLambie', e.target.value)}
-                      disabled={isUpdating}
-                    />
-                  </td>
-                  
-                  <td className="p-1 text-center">
-                    <input
-                      key={`lambiesFamilyTrust-${liability.id}-${liability.lambiesFamilyTrust}`}
-                      type="text"
-                      defaultValue={liability.lambiesFamilyTrust}
-                      className={`table-input ${getFieldClass('percentage')} ${getValueClass(liability.lambiesFamilyTrust, 'percentage')}`}
-                      onFocus={handleDefaultValueFocus}
-                      onBlur={(e) => handleInputBlur(liability.id, 'lambiesFamilyTrust', e.target.value)}
-                      disabled={isUpdating}
-                    />
-                  </td>
+                  {clientEntities.map((entity, index) => {
+                    const entityDisplayName = getEntityDisplayName(entity);
+                    const ownership = parseEntityOwnership(liability.entityOwnership);
+                    const value = ownership[entityDisplayName] || '0%';
+                    
+                    return (
+                      <td key={entity.id} className={`p-1 text-center ${index === 0 ? 'section-start' : ''}`}>
+                        <input
+                          type="text"
+                          defaultValue={value}
+                          className={`table-input ${getFieldClass('percentage')} ${getValueClass(value, 'percentage')}`}
+                          onFocus={handleDefaultValueFocus}
+                          onBlur={(e) => {
+                            const formattedValue = formatPercentageValue(e.target.value);
+                            const newOwnership = setEntityOwnership(liability.entityOwnership, entityDisplayName, formattedValue);
+                            handleUpdateLiability(liability.id, 'entityOwnership', newOwnership);
+                            
+                            // Update DOM element for immediate visual feedback
+                            setTimeout(() => {
+                              e.target.value = formattedValue;
+                            }, 0);
+                          }}
+                          disabled={isUpdating}
+                        />
+                      </td>
+                    );
+                  })}
                   
                   <td className="p-1 text-right section-start">
                     <input
@@ -538,66 +525,37 @@ function LiabilitiesTable({ viewMode, searchTerm, onShowCategoryDialog, onAddLia
                     {/* Ownership Split Section */}
                     <div>
                       <h5 className="text-sm font-medium text-neutral-700 mb-3">Ownership Split</h5>
-                      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
-                        <div>
-                          <label className="block text-xs font-medium text-neutral-600 mb-1">
-                            Peter Lambie
-                          </label>
-                          <input
-                            key={`hybrid-peterLambie-${liability.id}-${liability.peterLambie}`}
-                            type="text"
-                            defaultValue={liability.peterLambie}
-                            className={`w-full px-2 py-1 text-sm border border-neutral-300 rounded focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-transparent ${getValueClass(liability.peterLambie, 'percentage')}`}
-                            onFocus={handleDefaultValueFocus}
-                            onBlur={(e) => handleInputBlur(liability.id, 'peterLambie', e.target.value)}
-                            disabled={isUpdating}
-                          />
-                        </div>
-                        
-                        <div>
-                          <label className="block text-xs font-medium text-neutral-600 mb-1">
-                            Victoria Lambie
-                          </label>
-                          <input
-                            key={`hybrid-victoriaLambie-${liability.id}-${liability.victoriaLambie}`}
-                            type="text"
-                            defaultValue={liability.victoriaLambie}
-                            className={`w-full px-2 py-1 text-sm border border-neutral-300 rounded focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-transparent ${getValueClass(liability.victoriaLambie, 'percentage')}`}
-                            onFocus={handleDefaultValueFocus}
-                            onBlur={(e) => handleInputBlur(liability.id, 'victoriaLambie', e.target.value)}
-                            disabled={isUpdating}
-                          />
-                        </div>
-                        
-                        <div>
-                          <label className="block text-xs font-medium text-neutral-600 mb-1">
-                            Junior Lambie
-                          </label>
-                          <input
-                            key={`hybrid-juniorLambie-${liability.id}-${liability.juniorLambie}`}
-                            type="text"
-                            defaultValue={liability.juniorLambie}
-                            className={`w-full px-2 py-1 text-sm border border-neutral-300 rounded focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-transparent ${getValueClass(liability.juniorLambie, 'percentage')}`}
-                            onFocus={handleDefaultValueFocus}
-                            onBlur={(e) => handleInputBlur(liability.id, 'juniorLambie', e.target.value)}
-                            disabled={isUpdating}
-                          />
-                        </div>
-                        
-                        <div>
-                          <label className="block text-xs font-medium text-neutral-600 mb-1">
-                            Family Trust
-                          </label>
-                          <input
-                            key={`hybrid-lambiesFamilyTrust-${liability.id}-${liability.lambiesFamilyTrust}`}
-                            type="text"
-                            defaultValue={liability.lambiesFamilyTrust}
-                            className={`w-full px-2 py-1 text-sm border border-neutral-300 rounded focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-transparent ${getValueClass(liability.lambiesFamilyTrust, 'percentage')}`}
-                            onFocus={handleDefaultValueFocus}
-                            onBlur={(e) => handleInputBlur(liability.id, 'lambiesFamilyTrust', e.target.value)}
-                            disabled={isUpdating}
-                          />
-                        </div>
+                      <div className={`grid grid-cols-2 lg:grid-cols-${Math.min(4, clientEntities.length)} gap-3`}>
+                        {clientEntities.map((entity) => {
+                          const entityDisplayName = getEntityDisplayName(entity);
+                          const ownership = parseEntityOwnership(liability.entityOwnership);
+                          const value = ownership[entityDisplayName] || '0%';
+                          
+                          return (
+                            <div key={entity.id}>
+                              <label className="block text-xs font-medium text-neutral-600 mb-1">
+                                {entityDisplayName}
+                              </label>
+                              <input
+                                type="text"
+                                defaultValue={value}
+                                className={`w-full px-2 py-1 text-sm border border-neutral-300 rounded focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-transparent ${getValueClass(value, 'percentage')}`}
+                                onFocus={handleDefaultValueFocus}
+                                onBlur={(e) => {
+                                  const formattedValue = formatPercentageValue(e.target.value);
+                                  const newOwnership = setEntityOwnership(liability.entityOwnership, entityDisplayName, formattedValue);
+                                  handleUpdateLiability(liability.id, 'entityOwnership', newOwnership);
+                                  
+                                  // Update DOM element for immediate visual feedback
+                                  setTimeout(() => {
+                                    e.target.value = formattedValue;
+                                  }, 0);
+                                }}
+                                disabled={isUpdating}
+                              />
+                            </div>
+                          );
+                        })}
                       </div>
                     </div>
                     
