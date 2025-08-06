@@ -62,6 +62,9 @@ export default function EntityBeneficiarySelector({
     onBeneficiaryChange(policyId, beneficiaryIndex, newBeneficiary);
   }, [policyId, onBeneficiaryChange]);
 
+  // Only show content for the current row's beneficiary
+  const beneficiaryIndex = rowIndex;
+
   const handlePercentageChange = useCallback((newPercentage: string) => {
     // Clean the value and format with % suffix
     let cleanValue = newPercentage.replace(/[^\d.]/g, '');
@@ -80,9 +83,6 @@ export default function EntityBeneficiarySelector({
     
     onBeneficiaryPercentageChange(policyId, beneficiaryIndex, formattedPercentage);
   }, [policyId, beneficiaryIndex, onBeneficiaryPercentageChange]);
-
-  // Only show content for the current row's beneficiary
-  const beneficiaryIndex = rowIndex;
   if (beneficiaryIndex >= beneficiaries.length) {
     return <div className="p-2"></div>; // Empty cell for rows beyond beneficiaries count
   }
