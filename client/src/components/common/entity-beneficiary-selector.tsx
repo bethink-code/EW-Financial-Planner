@@ -101,12 +101,14 @@ export default function EntityBeneficiarySelector({
 
   return (
     <div className="space-y-1">
-      <div className="flex items-center gap-1">
-        {/* 1. ACTION BUTTON FIRST */}
-        {actionButton}
+      <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+        {/* ACTION BUTTON - Force to appear first with inline styles */}
+        <div style={{ order: 1, flexShrink: 0 }}>
+          {actionButton}
+        </div>
         
-        {/* 2. ENTITY SELECTOR SECOND */}
-        <div className="flex-1">
+        {/* ENTITY SELECTOR - Force to appear second */}
+        <div style={{ order: 2, flex: 1 }}>
           <Select
             value={currentBeneficiary}
             onValueChange={(value) => handleBeneficiarySelect(value, beneficiaryIndex)}
@@ -115,27 +117,29 @@ export default function EntityBeneficiarySelector({
             <SelectTrigger className="h-8 text-xs w-full">
               <SelectValue placeholder="Select beneficiary..." />
             </SelectTrigger>
-          <SelectContent>
-            {entities.map((entity) => (
-              <SelectItem key={entity.id} value={entity.entityName}>
-                {entity.entityName} ({entity.entityType})
-              </SelectItem>
-            ))}
-          </SelectContent>
+            <SelectContent>
+              {entities.map((entity) => (
+                <SelectItem key={entity.id} value={entity.entityName}>
+                  {entity.entityName} ({entity.entityType})
+                </SelectItem>
+              ))}
+            </SelectContent>
           </Select>
         </div>
 
-        {/* 3. PERCENTAGE INPUT THIRD */}
-        <input
-          type="text"
-          value={currentPercentage}
-          onChange={(e) => handlePercentageChange(e.target.value, beneficiaryIndex)}
-          className={`w-16 h-8 text-xs border rounded px-1 text-center ${
-            isInvalidTotal ? 'border-red-500 bg-red-50' : 'border-neutral-300'
-          }`}
-          placeholder="0%"
-          disabled={disabled}
-        />
+        {/* PERCENTAGE INPUT - Force to appear third */}
+        <div style={{ order: 3, flexShrink: 0 }}>
+          <input
+            type="text"
+            value={currentPercentage}
+            onChange={(e) => handlePercentageChange(e.target.value, beneficiaryIndex)}
+            className={`w-16 h-8 text-xs border rounded px-1 text-center ${
+              isInvalidTotal ? 'border-red-500 bg-red-50' : 'border-neutral-300'
+            }`}
+            placeholder="0%"
+            disabled={disabled}
+          />
+        </div>
       </div>
 
       {/* Validation Warning - only show on first row */}
