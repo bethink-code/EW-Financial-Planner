@@ -21,6 +21,7 @@ import VoluntaryInvestments from "@/pages/voluntary-investments";
 import Residue from "@/pages/residue";
 import AdditionalEstateDutyItems from "@/pages/additional-estate-duty-items";
 import ClientDetailsPage from "@/pages/client-details";
+import EntityTestPage from "@/pages/entity-test";
 
 // Placeholder need pages
 import DeathNeed from "@/pages/needs/death";
@@ -144,6 +145,13 @@ function Router() {
             {() => (
               <NavigationLayout>
                 <ClientDetailsPage />
+              </NavigationLayout>
+            )}
+          </Route>
+          <Route path="/entity-test">
+            {() => (
+              <NavigationLayout>
+                <EntityTestPage />
               </NavigationLayout>
             )}
           </Route>
