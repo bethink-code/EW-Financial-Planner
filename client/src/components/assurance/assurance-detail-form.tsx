@@ -197,141 +197,144 @@ export function AssuranceDetailForm({
 
 
           <FormField label="Beneficiaries & Controls">
-            {/* Compact table header */}
-            <div className="grid grid-cols-6 gap-1 px-1 py-1 bg-neutral-100 border border-neutral-300 rounded-t text-sm font-medium text-neutral-700">
-              <div className="text-center">Actions</div>
-              <div className="text-left">Beneficiary</div>
-              <div className="text-center">Split</div>
-              <div className="text-center">Amount</div>
-              <div className="text-center">Toggle</div>
-              <div className="text-center">Years/%</div>
-            </div>
-            
-            {/* Compact table rows */}
-            <div className="space-y-0">
-              {Array.from({ length: Math.max(policy.owners.length, policy.beneficiaries.length) }, (_, rowIndex) => (
-                <div key={`beneficiary-table-row-${rowIndex}`} className="grid grid-cols-6 gap-1 px-1 py-1 border border-neutral-200 border-t-0 bg-white items-center">
-                  {/* Actions - compact */}
-                  <div className="flex justify-center">
-                    <EntityBeneficiarySelector
-                      policyId={policy.id}
-                      beneficiaries={policy.beneficiaries}
-                      beneficiaryPercentages={policy.beneficiaryPercentages || ["100%"]}
-                      onBeneficiaryChange={onBeneficiaryChange}
-                      onBeneficiaryPercentageChange={onBeneficiaryPercentageChange}
-                      onAddBeneficiary={onAddBeneficiary}
-                      onRemoveBeneficiary={onRemoveBeneficiary}
-                      rowIndex={rowIndex}
-                      disabled={disabled}
-                      showOnlyActions={true}
-                    />
-                  </div>
+            {/* Table with custom column sizing to fit screen */}
+            <div className="w-full overflow-hidden">
+              {/* Table header with flexible grid */}
+              <div className="grid gap-2 px-2 py-2 bg-neutral-100 border border-neutral-300 rounded-t text-sm font-medium text-neutral-700" style={{gridTemplateColumns: "60px 1fr 70px 100px 70px 80px"}}>
+                <div className="text-center">Actions</div>
+                <div className="text-left">Beneficiary</div>
+                <div className="text-center">Split</div>
+                <div className="text-center">Amount</div>
+                <div className="text-center">Toggle</div>
+                <div className="text-center">Years/%</div>
+              </div>
+              
+              {/* Table rows with matching column sizing */}
+              <div className="space-y-0">
+                {Array.from({ length: Math.max(policy.owners.length, policy.beneficiaries.length) }, (_, rowIndex) => (
+                  <div key={`beneficiary-table-row-${rowIndex}`} className="grid gap-2 px-2 py-2 border border-neutral-200 border-t-0 bg-white items-center" style={{gridTemplateColumns: "60px 1fr 70px 100px 70px 80px"}}>
+                    {/* Actions */}
+                    <div className="flex justify-center">
+                      <EntityBeneficiarySelector
+                        policyId={policy.id}
+                        beneficiaries={policy.beneficiaries}
+                        beneficiaryPercentages={policy.beneficiaryPercentages || ["100%"]}
+                        onBeneficiaryChange={onBeneficiaryChange}
+                        onBeneficiaryPercentageChange={onBeneficiaryPercentageChange}
+                        onAddBeneficiary={onAddBeneficiary}
+                        onRemoveBeneficiary={onRemoveBeneficiary}
+                        rowIndex={rowIndex}
+                        disabled={disabled}
+                        showOnlyActions={true}
+                      />
+                    </div>
 
-                  {/* Beneficiary Dropdown - compact */}
-                  <div>
-                    <select
-                      value={(policy.beneficiaries || [])[rowIndex] || ""}
-                      onChange={(e) => onBeneficiaryChange(policy.id, rowIndex, e.target.value)}
-                      disabled={disabled}
-                      className="table-input table-dropdown w-full"
-                    >
-                      <option value="">Select...</option>
-                      {entities.map((entity) => (
-                        <option key={entity.id} value={entity.entityName}>
-                          {entity.entityName.length > 15 ? entity.entityName.substring(0, 15) + "..." : entity.entityName}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
+                    {/* Beneficiary Dropdown */}
+                    <div>
+                      <select
+                        value={(policy.beneficiaries || [])[rowIndex] || ""}
+                        onChange={(e) => onBeneficiaryChange(policy.id, rowIndex, e.target.value)}
+                        disabled={disabled}
+                        className="table-input table-dropdown w-full"
+                      >
+                        <option value="">Select beneficiary...</option>
+                        {entities.map((entity) => (
+                          <option key={entity.id} value={entity.entityName}>
+                            {entity.entityName} ({entity.entityType})
+                          </option>
+                        ))}
+                      </select>
+                    </div>
 
-                  {/* Benefit Split - compact */}
-                  <div className="text-center">
-                    <input
-                      type="text"
-                      defaultValue={(policy.beneficiaryPercentages || ["100%"])[rowIndex] || "0%"}
-                      className="table-input text-center w-10"
-                      onFocus={handleDefaultValueFocus}
-                      onBlur={(e) => {
-                        let value = e.target.value.trim().replace(/[^\d.]/g, '');
-                        if (!value) value = "0";
-                        const formattedValue = `${parseFloat(value)}%`;
-                        onBeneficiaryPercentageChange(policy.id, rowIndex, formattedValue);
-                        e.target.value = formattedValue;
-                      }}
-                      disabled={disabled}
-                    />
-                  </div>
-
-                  {/* Amount - compact */}
-                  <div className="text-center">
-                    <input
-                      key={`amount-${policy.id}-${rowIndex}`}
-                      type="text"
-                      defaultValue={policy.amount || "R 0"}
-                      className={`table-input text-right w-14 ${!policy.amount || policy.amount === 'R 0' ? 'text-neutral-400' : ''}`}
-                      onFocus={handleDefaultValueFocus}
-                      onBlur={(e) => handleTextFieldBlur('amount', e.target.value)}
-                      disabled={disabled}
-                    />
-                  </div>
-
-                  {/* Toggle Button - compact */}
-                  <div className="flex justify-center">
-                    <button
-                      type="button"
-                      onClick={() => {
-                        const currentToggle = isAmountYearsMode(policy, rowIndex);
-                        handleArrayFieldUpdate(policy.id, 'amountToggles', rowIndex, !currentToggle);
-                      }}
-                      className={`h-8 px-2 min-w-[40px] bg-[#E8F3F8] border border-[#E0E0E0] text-[#016991] hover:bg-[#D1E7F0] rounded text-sm font-medium ${
-                        !getAmountControlsEnabled(policy, disabled) ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'
-                      }`}
-                      disabled={!getAmountControlsEnabled(policy, disabled)}
-                    >
-                      {isAmountYearsMode(policy, rowIndex) ? 'Years' : '%'}
-                    </button>
-                  </div>
-
-                  {/* Years/% Input - compact */}
-                  <div className="text-center">
-                    {isAmountYearsMode(policy, rowIndex) ? (
-                      // Years Mode
+                    {/* Benefit Split */}
+                    <div className="text-center">
                       <input
-                        key={`amount-years-${policy.id}-${rowIndex}`}
                         type="text"
-                        defaultValue={formatYearsValue((policy.amountYearsValues || ["0 years"])[rowIndex] || "0 years")}
-                        className={`table-input text-center w-12 ${
-                          !getAmountControlsEnabled(policy, disabled) ? 'bg-neutral-100 cursor-not-allowed' : ''
-                        }`}
+                        defaultValue={(policy.beneficiaryPercentages || ["100%"])[rowIndex] || "0%"}
+                        className="table-input text-center w-full"
                         onFocus={handleDefaultValueFocus}
                         onBlur={(e) => {
-                          const formattedValue = formatYearsValue(e.target.value);
+                          let value = e.target.value.trim().replace(/[^\d.]/g, '');
+                          if (!value) value = "0";
+                          const formattedValue = `${parseFloat(value)}%`;
+                          onBeneficiaryPercentageChange(policy.id, rowIndex, formattedValue);
                           e.target.value = formattedValue;
-                          handleArrayFieldUpdate(policy.id, 'amountYearsValues', rowIndex, formattedValue);
                         }}
-                        disabled={!getAmountControlsEnabled(policy, disabled)}
+                        disabled={disabled}
                       />
-                    ) : (
-                      // Percentage Mode
+                    </div>
+
+                    {/* Amount */}
+                    <div className="text-center">
                       <input
-                        key={`amount-increase-${policy.id}-${rowIndex}`}
+                        key={`amount-${policy.id}-${rowIndex}`}
                         type="text"
-                        defaultValue={(policy.amountIncreaseValues || ["0%"])[rowIndex] || "0%"}
-                        className={`table-input text-center w-12 ${
-                          !getAmountControlsEnabled(policy, disabled) ? 'bg-neutral-100 cursor-not-allowed' : ''
-                        }`}
+                        defaultValue={policy.amount || "R 0"}
+                        className={`table-input text-right w-full ${!policy.amount || policy.amount === 'R 0' ? 'text-neutral-400' : ''}`}
                         onFocus={handleDefaultValueFocus}
-                        onBlur={(e) => {
-                          const formattedValue = formatPercentageValue(e.target.value);
-                          e.target.value = formattedValue;
-                          handleArrayFieldUpdate(policy.id, 'amountIncreaseValues', rowIndex, formattedValue);
-                        }}
-                        disabled={!getAmountControlsEnabled(policy, disabled)}
+                        onBlur={(e) => handleTextFieldBlur('amount', e.target.value)}
+                        disabled={disabled}
                       />
-                    )}
+                    </div>
+
+                    {/* Toggle Button */}
+                    <div className="flex justify-center">
+                      <button
+                        type="button"
+                        onClick={() => {
+                          const currentToggle = isAmountYearsMode(policy, rowIndex);
+                          handleArrayFieldUpdate(policy.id, 'amountToggles', rowIndex, !currentToggle);
+                        }}
+                        className={`h-8 px-2 w-full bg-[#E8F3F8] border border-[#E0E0E0] text-[#016991] hover:bg-[#D1E7F0] rounded text-sm font-medium ${
+                          !getAmountControlsEnabled(policy, disabled) ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'
+                        }`}
+                        disabled={!getAmountControlsEnabled(policy, disabled)}
+                      >
+                        {isAmountYearsMode(policy, rowIndex) ? 'Years' : '%'}
+                      </button>
+                    </div>
+
+                    {/* Years/% Input */}
+                    <div className="text-center">
+                      {isAmountYearsMode(policy, rowIndex) ? (
+                        // Years Mode
+                        <input
+                          key={`amount-years-${policy.id}-${rowIndex}`}
+                          type="text"
+                          defaultValue={formatYearsValue((policy.amountYearsValues || ["0 years"])[rowIndex] || "0 years")}
+                          className={`table-input text-center w-full ${
+                            !getAmountControlsEnabled(policy, disabled) ? 'bg-neutral-100 cursor-not-allowed' : ''
+                          }`}
+                          onFocus={handleDefaultValueFocus}
+                          onBlur={(e) => {
+                            const formattedValue = formatYearsValue(e.target.value);
+                            e.target.value = formattedValue;
+                            handleArrayFieldUpdate(policy.id, 'amountYearsValues', rowIndex, formattedValue);
+                          }}
+                          disabled={!getAmountControlsEnabled(policy, disabled)}
+                        />
+                      ) : (
+                        // Percentage Mode
+                        <input
+                          key={`amount-increase-${policy.id}-${rowIndex}`}
+                          type="text"
+                          defaultValue={(policy.amountIncreaseValues || ["0%"])[rowIndex] || "0%"}
+                          className={`table-input text-center w-full ${
+                            !getAmountControlsEnabled(policy, disabled) ? 'bg-neutral-100 cursor-not-allowed' : ''
+                          }`}
+                          onFocus={handleDefaultValueFocus}
+                          onBlur={(e) => {
+                            const formattedValue = formatPercentageValue(e.target.value);
+                            e.target.value = formattedValue;
+                            handleArrayFieldUpdate(policy.id, 'amountIncreaseValues', rowIndex, formattedValue);
+                          }}
+                          disabled={!getAmountControlsEnabled(policy, disabled)}
+                        />
+                      )}
+                    </div>
                   </div>
-                </div>
-              ))}
+                ))}
+              </div>
             </div>
             
             <div className="text-sm text-neutral-500 mt-1">
