@@ -127,7 +127,7 @@ export function AssuranceDetailForm({
                 </tr>
               </thead>
               <tbody>
-                {Array.from({ length: Math.max(policy.owners.length, policy.beneficiaries.length) }, (_, rowIndex) => (
+                {Array.from({ length: Math.max(policy.owners.length, 1) }, (_, rowIndex) => (
                   <tr key={`owner-table-row-${rowIndex}`} className="border-b border-neutral-200 bg-white">
                     <td className="px-1 py-1 border-r border-neutral-200">
                       <EntityOwnerSelector
