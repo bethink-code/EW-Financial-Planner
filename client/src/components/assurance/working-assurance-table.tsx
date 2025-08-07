@@ -313,8 +313,11 @@ export function AssuranceTable({ viewMode = 'table', onAddPolicy }: AssuranceTab
   // Calculate totals - defined as separate function to avoid hook ordering issues
   const getTotals = useCallback((policies: Assurance[]) => ({
     deathBenefit: policies.reduce((sum, policy) => {
-      const value = parseFloat(policy.deathBenefit.replace(/[^\d.-]/g, '')) || 0;
-      return sum + value;
+      // Sum all death benefits from the array
+      const deathBenefitTotal = (policy.deathBenefits || []).reduce((benefitSum, benefit) => {
+        return benefitSum + (parseFloat(benefit?.replace(/[^\d.-]/g, '') || '0') || 0);
+      }, 0);
+      return sum + deathBenefitTotal;
     }, 0),
     amount: policies.reduce((sum, policy) => {
       const value = parseFloat(policy.amount.replace(/[^\d.-]/g, '')) || 0;
@@ -344,14 +347,21 @@ export function AssuranceTable({ viewMode = 'table', onAddPolicy }: AssuranceTab
   }, [viewMode, filteredPolicies, selectedPolicyId]);
 
   // Hybrid view data preparation functions
-  const getItemPreview = useCallback((policy: Assurance, isSelected: boolean) => ({
-    id: policy.id,
-    title: formatTextValue(policy.description) || `Policy #${policy.id}`,
-    subtitle: `Owner: ${policy.owners[0] || 'Unassigned'}`,
-    primaryValue: policy.deathBenefit,
-    secondaryInfo: policy.amount !== 'R 0' ? `Amount: ${policy.amount}` : undefined,
-    isSelected
-  }), []);
+  const getItemPreview = useCallback((policy: Assurance, isSelected: boolean) => {
+    // Calculate total death benefit from array
+    const totalDeathBenefit = (policy.deathBenefits || []).reduce((sum, benefit) => {
+      return sum + (parseFloat(benefit?.replace(/[^\d.-]/g, '') || '0') || 0);
+    }, 0);
+    
+    return {
+      id: policy.id,
+      title: formatTextValue(policy.description) || `Policy #${policy.id}`,
+      subtitle: `Owner: ${policy.owners[0] || 'Unassigned'}`,
+      primaryValue: `R ${totalDeathBenefit.toLocaleString()}`,
+      secondaryInfo: policy.amount !== 'R 0' ? `Amount: ${policy.amount}` : undefined,
+      isSelected
+    };
+  }, []);
 
   // Prepare preview items with selection state
   const previewItems = useMemo(() => 

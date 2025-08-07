@@ -43,16 +43,21 @@ export default function EntityLifeAssuredSelector({
 
   const handleDeathBenefitChange = (e: React.FocusEvent<HTMLInputElement>) => {
     let value = e.target.value.trim();
-    if (value && !value.startsWith('R ')) {
-      value = value.replace(/[^\d.-]/g, '');
-      if (!isNaN(parseFloat(value))) {
-        const numValue = parseFloat(value);
-        value = `R ${numValue.toLocaleString()}`;
-      } else {
-        value = "R 0";
-      }
+    // Clean the input to only numbers
+    value = value.replace(/[^\d.-]/g, '');
+    
+    if (value === '' || value === '0') {
+      onDeathBenefitChange(policyId, rowIndex, 'R 0');
+      return;
     }
-    onDeathBenefitChange(policyId, rowIndex, value);
+    
+    if (!isNaN(parseFloat(value))) {
+      const numValue = parseFloat(value);
+      const formattedValue = `R ${numValue.toLocaleString()}`;
+      onDeathBenefitChange(policyId, rowIndex, formattedValue);
+    } else {
+      onDeathBenefitChange(policyId, rowIndex, 'R 0');
+    }
   };
 
   return (
@@ -80,12 +85,13 @@ export default function EntityLifeAssuredSelector({
       </div>
       
       {/* Death Benefit Amount */}
-      <div className="w-32">
+      <div className="w-32 relative">
+        <span className="absolute left-2 top-1/2 transform -translate-y-1/2 text-gray-500 text-sm">R</span>
         <input
           type="text"
-          defaultValue={currentDeathBenefit}
-          className="w-full table-input text-right"
-          placeholder="R 0"
+          defaultValue={currentDeathBenefit.replace('R ', '')}
+          className="w-full table-input text-right pl-6"
+          placeholder="0"
           onBlur={handleDeathBenefitChange}
           disabled={disabled}
         />
