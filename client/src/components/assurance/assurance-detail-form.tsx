@@ -199,11 +199,9 @@ export function AssuranceDetailForm({
           <FormField label="Beneficiaries & Controls">
             {/* Table with custom column sizing to fit screen */}
             <div className="w-full overflow-hidden">
-              {/* Table header with flexible grid */}
-              <div className="grid gap-1 px-1 py-2 bg-neutral-100 border border-neutral-300 rounded-t text-sm font-medium text-neutral-700" style={{gridTemplateColumns: "70px 180px 60px 100px 60px 80px"}}>
-                <div className="text-center text-xs">Actions</div>
-                <div className="text-left text-xs">Beneficiary</div>
-                <div className="text-center text-xs">Split</div>
+              {/* Table header with 4 columns total */}
+              <div className="grid gap-1 px-1 py-2 bg-neutral-100 border border-neutral-300 rounded-t text-sm font-medium text-neutral-700" style={{gridTemplateColumns: "310px 100px 60px 80px"}}>
+                <div className="text-left text-xs">Beneficiary & Split</div>
                 <div className="text-center text-xs">Amount</div>
                 <div className="text-center text-xs">Toggle</div>
                 <div className="text-center text-xs">Years/%</div>
@@ -212,9 +210,9 @@ export function AssuranceDetailForm({
               {/* Table rows with matching column sizing */}
               <div className="space-y-0">
                 {Array.from({ length: Math.max(policy.owners.length, policy.beneficiaries.length) }, (_, rowIndex) => (
-                  <div key={`beneficiary-table-row-${rowIndex}`} className="grid gap-1 px-1 py-1 border border-neutral-200 border-t-0 bg-white items-center" style={{gridTemplateColumns: "70px 180px 60px 100px 60px 80px"}}>
-                    {/* Actions */}
-                    <div className="flex justify-center overflow-hidden">
+                  <div key={`beneficiary-table-row-${rowIndex}`} className="grid gap-1 px-1 py-1 border border-neutral-200 border-t-0 bg-white items-center" style={{gridTemplateColumns: "310px 100px 60px 80px"}}>
+                    {/* EntityBeneficiarySelector in first column */}
+                    <div className="overflow-hidden">
                       <EntityBeneficiarySelector
                         policyId={policy.id}
                         beneficiaries={policy.beneficiaries}
@@ -224,42 +222,6 @@ export function AssuranceDetailForm({
                         onAddBeneficiary={onAddBeneficiary}
                         onRemoveBeneficiary={onRemoveBeneficiary}
                         rowIndex={rowIndex}
-                        disabled={disabled}
-                        showOnlyActions={true}
-                      />
-                    </div>
-
-                    {/* Beneficiary Dropdown */}
-                    <div className="overflow-hidden">
-                      <select
-                        value={(policy.beneficiaries || [])[rowIndex] || ""}
-                        onChange={(e) => onBeneficiaryChange(policy.id, rowIndex, e.target.value)}
-                        disabled={disabled}
-                        className="table-input table-dropdown w-full text-xs"
-                      >
-                        <option value="">Select beneficiary...</option>
-                        {entities.map((entity) => (
-                          <option key={entity.id} value={entity.entityName}>
-                            {entity.entityName} ({entity.entityType})
-                          </option>
-                        ))}
-                      </select>
-                    </div>
-
-                    {/* Benefit Split */}
-                    <div className="text-center overflow-hidden">
-                      <input
-                        type="text"
-                        defaultValue={(policy.beneficiaryPercentages || ["100%"])[rowIndex] || "0%"}
-                        className="table-input text-center w-full text-xs"
-                        onFocus={handleDefaultValueFocus}
-                        onBlur={(e) => {
-                          let value = e.target.value.trim().replace(/[^\d.]/g, '');
-                          if (!value) value = "0";
-                          const formattedValue = `${parseFloat(value)}%`;
-                          onBeneficiaryPercentageChange(policy.id, rowIndex, formattedValue);
-                          e.target.value = formattedValue;
-                        }}
                         disabled={disabled}
                       />
                     </div>
