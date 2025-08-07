@@ -6,6 +6,7 @@ import { CalculatorHeader } from "@/components/ui/calculator-header";
 import { RetirementFundsSummary } from "@/components/retirement-funds/retirement-funds-summary";
 import { NewRetirementTable } from "@/components/retirement-funds/new-retirement-table";
 import { AdditionalDetails } from "@/components/retirement-funds/additional-details";
+import { RetirementFundHybridTable } from "@/components/retirement-funds/retirement-fund-hybrid-table";
 import { useDebouncedUpdate } from "@/hooks/use-debounced-update";
 import { getDefaultOwners, getDefaultOwnershipPercentages, getDefaultBeneficiaries, getDefaultBeneficiaryPercentages } from "@/lib/entity-utils";
 
@@ -191,15 +192,14 @@ export default function NewRetirementFunds() {
               />
             )}
 
-            {/* Hybrid View - Using same table for now */}
+            {/* Hybrid View */}
             {viewMode === "hybrid" && (
-              <NewRetirementTable
+              <RetirementFundHybridTable
                 funds={funds}
-                onFieldUpdate={handleFieldUpdate}
-                onRemoveFund={handleRemoveFund}
-                onDuplicateFund={handleDuplicateFund}
-                onAddFund={handleAddFund}
-                isUpdating={updateMutation.isPending}
+                onUpdate={handleFieldUpdate}
+                onDuplicate={handleDuplicateFund}
+                onDelete={handleRemoveFund}
+                disabled={updateMutation.isPending || addMutation.isPending}
               />
             )}
           </div>
