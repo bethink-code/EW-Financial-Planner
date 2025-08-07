@@ -837,21 +837,40 @@ export function AssuranceTable({ viewMode = 'table', onAddPolicy }: AssuranceTab
             })}
           </tbody>
           
-          {/* Totals Footer */}
+          {/* Totals Footer - Match exact table structure */}
           <tfoot>
             <tr>
-              <td className="totals-cell-label text-right" colSpan={5}>Totals</td>
-              <td className="totals-cell-value">R {totals.deathBenefit.toLocaleString()}</td>
+              {/* Actions column */}
               <td className="totals-cell-label"></td>
+              {/* Description column */}
+              <td className="totals-cell-label"></td>
+              {/* Owner column */}
+              <td className="totals-cell-label"></td>
+              {/* Life Assured column */}
+              <td className="totals-cell-label text-right">Totals</td>
+              {/* Death Benefit column */}
               <td className="totals-cell-value">R {totals.deathBenefit.toLocaleString()}</td>
+              {/* Beneficiary column */}
+              <td className="totals-cell-label"></td>
+              {/* Benefit Split column */}
+              <td className="totals-cell-value">R {totals.benefitSplit.toLocaleString()}</td>
+              {/* Amount column */}
               <td className="totals-cell-value">R {totals.amount.toLocaleString()}</td>
+              {/* Toggle column */}
               <td className="totals-cell-label"></td>
+              {/* Years/% column */}
               <td className="totals-cell-label"></td>
+              {/* Buy/Sell column */}
               <td className="totals-cell-label"></td>
+              {/* Key Man column */}
               <td className="totals-cell-label"></td>
+              {/* Excluded Estate Duty column */}
               <td className="totals-cell-label"></td>
+              {/* Excluded Provisions column */}
               <td className="totals-cell-label"></td>
+              {/* Premiums by Others column */}
               <td className="totals-cell-value">R {totals.premiumsByOthers.toLocaleString()}</td>
+              {/* Collateral Session column */}
               <td className="totals-cell-value">R {totals.collateralSession.toLocaleString()}</td>
             </tr>
           </tfoot>
