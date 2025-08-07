@@ -95,15 +95,15 @@ export default function AssuranceOwnerSelector({
   const showRemoveButton = owners.length > 1 && rowIndex > 0; // Don't show on first row
 
   return (
-    <div className="flex items-center gap-2">
+    <div className="flex items-center gap-3 p-2 border border-neutral-200 rounded bg-neutral-50">
       {/* Owner Dropdown */}
-      <div className="flex-1">
+      <div className="min-w-0">
         <Select
           value={currentOwner}
           onValueChange={handleOwnerChange}
           disabled={disabled}
         >
-          <SelectTrigger className="w-full table-input">
+          <SelectTrigger className="table-input" style={{ width: 'fit-content', minWidth: '180px' }}>
             <SelectValue placeholder="Select owner..." />
           </SelectTrigger>
           <SelectContent>
@@ -119,13 +119,13 @@ export default function AssuranceOwnerSelector({
       </div>
 
       {/* Life Assured Dropdown */}
-      <div className="w-full min-w-[250px]">
+      <div className="min-w-0">
         <Select
           value={currentLifeAssured}
           onValueChange={handleLifeAssuredChange}
           disabled={disabled}
         >
-          <SelectTrigger className="w-full table-input">
+          <SelectTrigger className="table-input" style={{ width: 'fit-content', minWidth: '160px' }}>
             <SelectValue placeholder="Select life assured..." />
           </SelectTrigger>
           <SelectContent>
@@ -141,21 +141,20 @@ export default function AssuranceOwnerSelector({
       </div>
 
       {/* Death Benefit Amount */}
-      <div className="min-w-[100px] max-w-[140px]">
+      <div className="min-w-0">
         <input
           type="text"
           defaultValue={currentDeathBenefit}
-          className="w-full table-input text-right"
+          className="table-input text-right"
+          style={{ width: 'fit-content', minWidth: '120px' }}
           placeholder="R 0"
           onBlur={handleDeathBenefitChange}
           disabled={disabled}
         />
       </div>
 
-
-
       {/* Action Buttons */}
-      <div className="flex items-center gap-1">
+      <div className="flex items-center gap-1 flex-shrink-0">
         {showAddButton && (
           <button
             type="button"
