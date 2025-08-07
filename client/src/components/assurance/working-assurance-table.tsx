@@ -473,14 +473,16 @@ export function AssuranceTable({ viewMode = 'table', onAddPolicy }: AssuranceTab
     // This matches what's displayed in the main table
     const totalDeathBenefit = parseFloat(policy.deathBenefit?.replace(/[^\d.-]/g, '') || '0') || 0;
     
-    // Format owners list - show each owner on separate line
+    // Format owners list - show each owner on separate line with prefix
     const owners = policy.owners || [];
-    const ownersDisplay = owners.length === 0 ? 'Unassigned' : owners.join('\n');
+    const ownersDisplay = owners.length === 0 
+      ? 'Owner: Unassigned' 
+      : owners.map(owner => `Owner: ${owner}`).join('\n');
     
     return {
       id: policy.id,
       title: formatTextValue(policy.description) || `Policy #${policy.id}`,
-      subtitle: `Owner: ${ownersDisplay}`,
+      subtitle: ownersDisplay,
       primaryValue: `R ${totalDeathBenefit.toLocaleString()}`,
       secondaryInfo: policy.amount !== 'R 0' ? `Amount: ${policy.amount}` : undefined,
       isSelected
