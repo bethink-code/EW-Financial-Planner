@@ -16,6 +16,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import type { Assurance, InsertAssurance, ClientDetails } from "@shared/schema";
 
 interface AssuranceTableProps {
+  viewMode?: 'table' | 'hybrid';
   onAddPolicy?: () => void;
 }
 
@@ -42,7 +43,7 @@ const formatCurrencyValue = (value: string, fieldType: string): string => {
   return "R 0";
 };
 
-export function AssuranceTable({ onAddPolicy }: AssuranceTableProps) {
+export function AssuranceTable({ viewMode = 'table', onAddPolicy }: AssuranceTableProps) {
   const queryClient = useQueryClient();
   const [isUpdating, setIsUpdating] = useState(false);
 
@@ -301,7 +302,8 @@ export function AssuranceTable({ onAddPolicy }: AssuranceTableProps) {
     );
   }
 
-  return (
+  // Render hybrid view or table view based on viewMode
+  return viewMode === 'table' ? (
     <div className="space-y-6">
       {/* Note: Add Policy Button moved to parent component header */}
 
@@ -550,7 +552,171 @@ export function AssuranceTable({ onAddPolicy }: AssuranceTableProps) {
           </tfoot>
         </table>
       </div>
-    );
+    ) : (
+    // Hybrid View - Left sidebar with summary cards + Right side detailed form
+    <div className="flex gap-6">
+      {/* Left Sidebar - Summary Cards */}
+      <div className="w-80 flex-shrink-0 space-y-4">
+        {/* Totals Summary Card */}
+        <div className="bg-white rounded-lg shadow-sm border border-neutral-200 p-4">
+          <h3 className="text-lg font-semibold text-neutral-800 mb-3">Assurance Summary</h3>
+          <div className="space-y-2">
+            <div className="flex justify-between">
+              <span className="text-sm text-neutral-600">Total Death Benefit:</span>
+              <span className="font-semibold">R {totals.deathBenefit.toLocaleString()}</span>
+            </div>
+            <div className="flex justify-between">
+              <span className="text-sm text-neutral-600">Total Amount:</span>
+              <span className="font-semibold">R {totals.amount.toLocaleString()}</span>
+            </div>
+            <div className="flex justify-between">
+              <span className="text-sm text-neutral-600">Premiums by Others:</span>
+              <span className="font-semibold">R {totals.premiumsByOthers.toLocaleString()}</span>
+            </div>
+            <div className="flex justify-between">
+              <span className="text-sm text-neutral-600">Total Policies:</span>
+              <span className="font-semibold">{filteredPolicies.length}</span>
+            </div>
+          </div>
+        </div>
+
+        {/* Individual Policy Cards */}
+        <div className="space-y-3">
+          {filteredPolicies.slice(0, 5).map((policy: Assurance) => (
+            <div key={`summary-${policy.id}`} className="bg-blue-50 rounded-lg border border-blue-200 p-3">
+              <h4 className="font-medium text-blue-900 text-sm mb-1">
+                {formatTextValue(policy.description) || `Policy #${policy.id}`}
+              </h4>
+              <div className="text-xs text-blue-700 mb-1">
+                Owner: {policy.owners[0] || 'Unassigned'}
+              </div>
+              <div className="font-semibold text-blue-900 text-sm">
+                {policy.deathBenefit}
+              </div>
+            </div>
+          ))}
+          {filteredPolicies.length > 5 && (
+            <div className="text-center text-sm text-neutral-600">
+              +{filteredPolicies.length - 5} more policies
+            </div>
+          )}
+        </div>
+        
+        {/* Add Policy Button */}
+        {onAddPolicy && (
+          <button
+            onClick={onAddPolicy}
+            disabled={isUpdating}
+            className="w-full inline-flex items-center justify-center px-4 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            <Plus className="w-4 h-4 mr-2" />
+            Add Policy
+          </button>
+        )}
+      </div>
+
+      {/* Right Side - Detailed Forms */}
+      <div className="flex-1 space-y-6">
+        {filteredPolicies.map((policy: Assurance) => {
+          const maxRows = Math.max(policy.owners.length, policy.beneficiaries.length);
+          
+          return (
+            <div key={`form-${policy.id}`} className="bg-white rounded-lg shadow-sm border border-neutral-200 p-6">
+              <div className="flex items-center justify-between mb-4">
+                <h3 className="text-lg font-semibold text-neutral-800">
+                  {formatTextValue(policy.description) || `Policy #${policy.id}`}
+                </h3>
+                <ActionButtonGroup>
+                  <DuplicateButton onClick={() => handleDuplicatePolicy(policy)} />
+                  <DeleteButton onClick={() => handleDeletePolicy(policy.id)} />
+                </ActionButtonGroup>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {/* Basic Information */}
+                <div className="space-y-4">
+                  <div>
+                    <label className="block text-sm font-medium text-neutral-700 mb-1">Description</label>
+                    <input
+                      type="text"
+                      defaultValue={policy.description}
+                      className={`w-full table-input ${getValueClass(policy.description, 'text')}`}
+                      onFocus={handleDefaultValueFocus}
+                      onBlur={(e) => handleInputBlur(policy.id, 'description', e.target.value, e.target, 'description')}
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-neutral-700 mb-1">Death Benefit</label>
+                    <input
+                      type="text"
+                      defaultValue={policy.deathBenefit}
+                      className={`w-full table-input ${getValueClass(policy.deathBenefit, 'currency')}`}
+                      onFocus={handleDefaultValueFocus}
+                      onBlur={(e) => handleInputBlur(policy.id, 'deathBenefit', e.target.value, e.target, 'deathBenefit')}
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-neutral-700 mb-1">Amount</label>
+                    <input
+                      type="text"
+                      defaultValue={policy.amount}
+                      className={`w-full table-input ${getValueClass(policy.amount, 'currency')}`}
+                      onFocus={handleDefaultValueFocus}
+                      onBlur={(e) => handleInputBlur(policy.id, 'amount', e.target.value, e.target, 'amount')}
+                    />
+                  </div>
+                </div>
+
+                {/* Entity Management */}
+                <div className="space-y-4">
+                  <div>
+                    <label className="block text-sm font-medium text-neutral-700 mb-1">Owners</label>
+                    <EntityOwnerSelector
+                      owners={policy.owners}
+                      ownershipPercentages={policy.ownershipPercentages || []}
+                      onOwnersChange={(owners: string[]) => handleUpdatePolicy(policy.id, 'owners', owners)}
+                      onOwnershipPercentagesChange={(percentages: string[]) => handleUpdatePolicy(policy.id, 'ownershipPercentages', percentages)}
+                      onAddOwner={() => handleAddOwner(policy.id)}
+                      onRemoveOwner={(index) => handleRemoveOwner(policy.id, index)}
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-neutral-700 mb-1">Beneficiaries</label>
+                    <EntityBeneficiarySelector
+                      beneficiaries={policy.beneficiaries}
+                      beneficiaryPercentages={policy.beneficiaryPercentages || []}
+                      onBeneficiariesChange={(beneficiaries: string[]) => handleUpdatePolicy(policy.id, 'beneficiaries', beneficiaries)}
+                      onBeneficiaryPercentagesChange={(percentages: string[]) => handleUpdatePolicy(policy.id, 'beneficiaryPercentages', percentages)}
+                      onAddBeneficiary={() => handleAddBeneficiary(policy.id)}
+                      onRemoveBeneficiary={(index) => handleRemoveBeneficiary(policy.id, index)}
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+          );
+        })}
+
+        {filteredPolicies.length === 0 && (
+          <div className="text-center py-8">
+            <p className="text-neutral-500 mb-4">No assurance policies found</p>
+            {onAddPolicy && (
+              <button
+                onClick={onAddPolicy}
+                className="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+              >
+                <Plus className="w-4 h-4 mr-2" />
+                Add Your First Policy
+              </button>
+            )}
+          </div>
+        )}
+      </div>
+    </div>
+  );
 }
 
 export default AssuranceTable;

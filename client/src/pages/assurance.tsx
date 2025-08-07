@@ -5,12 +5,11 @@ import { AssuranceSummary } from "@/components/assurance/simple-assurance-summar
 import { CalculatorHeader } from "@/components/ui/calculator-header";
 import { apiRequest, queryClient } from "@/lib/queryClient";
 import { getDefaultOwners, getDefaultOwnershipPercentages, getDefaultBeneficiaries, getDefaultBeneficiaryPercentages } from "@/lib/entity-utils";
+import { useViewMode } from '@/contexts/view-mode-context';
 import type { InsertAssurance, ClientDetails } from "@shared/schema";
 
-type ViewMode = "table" | "hybrid";
-
 export default function Assurance() {
-  const [viewMode, setViewMode] = useState<ViewMode>("table");
+  const { viewMode, setViewMode } = useViewMode();
   const [isRefreshing, setIsRefreshing] = useState(false);
 
   // Fetch policies for count
@@ -37,14 +36,15 @@ export default function Assurance() {
         ownershipPercentages: getDefaultOwnershipPercentages(),
         beneficiaries: getDefaultBeneficiaries(clientDetails),
         beneficiaryPercentages: getDefaultBeneficiaryPercentages(),
-        assuredAmount: "R 0",
+        deathBenefit: "R 0",
         monthlyPremium: "R 0",
         premiumEscalation: "0%",
         entryAge: "0",
         termToAge: "0",
         yearsRemaining: "0 years",
         paidUp: "R 0",
-        currentCashValue: "R 0"
+        currentCashValue: "R 0",
+        additionalInfo: ""
       };
       return apiRequest("POST", "/api/assurance", newPolicy);
     },
@@ -53,9 +53,9 @@ export default function Assurance() {
     },
   });
 
-  const handleViewModeChange = useCallback((newMode: ViewMode) => {
+  const handleViewModeChange = useCallback((newMode: 'table' | 'hybrid') => {
     setViewMode(newMode);
-  }, []);
+  }, [setViewMode]);
 
   const handleAddPolicy = useCallback(() => {
     addMutation.mutate();
@@ -92,7 +92,7 @@ export default function Assurance() {
           
           {/* Table with full width and margin */}
           <div className="table-container-wrapper">
-            <AssuranceTable onAddPolicy={handleAddPolicy} />
+            <AssuranceTable viewMode={viewMode} onAddPolicy={handleAddPolicy} />
           </div>
         </CalculatorHeader>
       </div>
