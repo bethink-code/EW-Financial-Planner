@@ -200,21 +200,21 @@ export function AssuranceDetailForm({
             {/* Table with custom column sizing to fit screen */}
             <div className="w-full overflow-hidden">
               {/* Table header with flexible grid */}
-              <div className="grid gap-2 px-2 py-2 bg-neutral-100 border border-neutral-300 rounded-t text-sm font-medium text-neutral-700" style={{gridTemplateColumns: "80px 2fr 80px 120px 80px 100px"}}>
-                <div className="text-center">Actions</div>
-                <div className="text-left">Beneficiary</div>
-                <div className="text-center">Split</div>
-                <div className="text-center">Amount</div>
-                <div className="text-center">Toggle</div>
-                <div className="text-center">Years/%</div>
+              <div className="grid gap-1 px-1 py-2 bg-neutral-100 border border-neutral-300 rounded-t text-sm font-medium text-neutral-700" style={{gridTemplateColumns: "50px 200px 60px 100px 60px 80px"}}>
+                <div className="text-center text-xs">Act</div>
+                <div className="text-left text-xs">Beneficiary</div>
+                <div className="text-center text-xs">Split</div>
+                <div className="text-center text-xs">Amount</div>
+                <div className="text-center text-xs">Toggle</div>
+                <div className="text-center text-xs">Years/%</div>
               </div>
               
               {/* Table rows with matching column sizing */}
               <div className="space-y-0">
                 {Array.from({ length: Math.max(policy.owners.length, policy.beneficiaries.length) }, (_, rowIndex) => (
-                  <div key={`beneficiary-table-row-${rowIndex}`} className="grid gap-2 px-2 py-2 border border-neutral-200 border-t-0 bg-white items-center" style={{gridTemplateColumns: "80px 2fr 80px 120px 80px 100px"}}>
+                  <div key={`beneficiary-table-row-${rowIndex}`} className="grid gap-1 px-1 py-1 border border-neutral-200 border-t-0 bg-white items-center" style={{gridTemplateColumns: "50px 200px 60px 100px 60px 80px"}}>
                     {/* Actions */}
-                    <div className="flex justify-center">
+                    <div className="flex justify-center overflow-hidden">
                       <EntityBeneficiarySelector
                         policyId={policy.id}
                         beneficiaries={policy.beneficiaries}
@@ -230,12 +230,12 @@ export function AssuranceDetailForm({
                     </div>
 
                     {/* Beneficiary Dropdown */}
-                    <div>
+                    <div className="overflow-hidden">
                       <select
                         value={(policy.beneficiaries || [])[rowIndex] || ""}
                         onChange={(e) => onBeneficiaryChange(policy.id, rowIndex, e.target.value)}
                         disabled={disabled}
-                        className="table-input table-dropdown w-full"
+                        className="table-input table-dropdown w-full text-xs"
                       >
                         <option value="">Select beneficiary...</option>
                         {entities.map((entity) => (
@@ -247,11 +247,11 @@ export function AssuranceDetailForm({
                     </div>
 
                     {/* Benefit Split */}
-                    <div className="text-center">
+                    <div className="text-center overflow-hidden">
                       <input
                         type="text"
                         defaultValue={(policy.beneficiaryPercentages || ["100%"])[rowIndex] || "0%"}
-                        className="table-input text-center w-full"
+                        className="table-input text-center w-full text-xs"
                         onFocus={handleDefaultValueFocus}
                         onBlur={(e) => {
                           let value = e.target.value.trim().replace(/[^\d.]/g, '');
@@ -265,12 +265,12 @@ export function AssuranceDetailForm({
                     </div>
 
                     {/* Amount */}
-                    <div className="text-center">
+                    <div className="text-center overflow-hidden">
                       <input
                         key={`amount-${policy.id}-${rowIndex}`}
                         type="text"
                         defaultValue={policy.amount || "R 0"}
-                        className={`table-input text-right w-full ${!policy.amount || policy.amount === 'R 0' ? 'text-neutral-400' : ''}`}
+                        className={`table-input text-right w-full text-xs ${!policy.amount || policy.amount === 'R 0' ? 'text-neutral-400' : ''}`}
                         onFocus={handleDefaultValueFocus}
                         onBlur={(e) => handleTextFieldBlur('amount', e.target.value)}
                         disabled={disabled}
@@ -278,31 +278,31 @@ export function AssuranceDetailForm({
                     </div>
 
                     {/* Toggle Button */}
-                    <div className="flex justify-center">
+                    <div className="flex justify-center overflow-hidden">
                       <button
                         type="button"
                         onClick={() => {
                           const currentToggle = isAmountYearsMode(policy, rowIndex);
                           handleArrayFieldUpdate(policy.id, 'amountToggles', rowIndex, !currentToggle);
                         }}
-                        className={`h-8 px-2 w-full bg-[#E8F3F8] border border-[#E0E0E0] text-[#016991] hover:bg-[#D1E7F0] rounded text-sm font-medium ${
+                        className={`h-6 px-1 w-full bg-[#E8F3F8] border border-[#E0E0E0] text-[#016991] hover:bg-[#D1E7F0] rounded text-xs font-medium ${
                           !getAmountControlsEnabled(policy, disabled) ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'
                         }`}
                         disabled={!getAmountControlsEnabled(policy, disabled)}
                       >
-                        {isAmountYearsMode(policy, rowIndex) ? 'Years' : '%'}
+                        {isAmountYearsMode(policy, rowIndex) ? 'Y' : '%'}
                       </button>
                     </div>
 
                     {/* Years/% Input */}
-                    <div className="text-center">
+                    <div className="text-center overflow-hidden">
                       {isAmountYearsMode(policy, rowIndex) ? (
                         // Years Mode
                         <input
                           key={`amount-years-${policy.id}-${rowIndex}`}
                           type="text"
                           defaultValue={formatYearsValue((policy.amountYearsValues || ["0 years"])[rowIndex] || "0 years")}
-                          className={`table-input text-center w-full ${
+                          className={`table-input text-center w-full text-xs ${
                             !getAmountControlsEnabled(policy, disabled) ? 'bg-neutral-100 cursor-not-allowed' : ''
                           }`}
                           onFocus={handleDefaultValueFocus}
@@ -319,7 +319,7 @@ export function AssuranceDetailForm({
                           key={`amount-increase-${policy.id}-${rowIndex}`}
                           type="text"
                           defaultValue={(policy.amountIncreaseValues || ["0%"])[rowIndex] || "0%"}
-                          className={`table-input text-center w-full ${
+                          className={`table-input text-center w-full text-xs ${
                             !getAmountControlsEnabled(policy, disabled) ? 'bg-neutral-100 cursor-not-allowed' : ''
                           }`}
                           onFocus={handleDefaultValueFocus}
