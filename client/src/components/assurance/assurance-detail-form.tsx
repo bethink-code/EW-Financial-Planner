@@ -207,12 +207,22 @@ export function AssuranceDetailForm({
           </FormField>
 
           <FormField label="Beneficiaries & Benefit Splits with Toggle Controls">
-            <div className="space-y-2">
-              {/* Combined beneficiary + amount toggle pattern - single row per beneficiary */}
+            {/* Table header */}
+            <div className="grid grid-cols-6 gap-2 p-2 bg-neutral-100 border border-neutral-300 rounded-t text-sm font-medium text-neutral-700">
+              <div className="text-center">Actions</div>
+              <div>Beneficiary</div>
+              <div className="text-center">Benefit Split</div>
+              <div className="text-center">Amount</div>
+              <div className="text-center">Toggle</div>
+              <div className="text-center">Years / %</div>
+            </div>
+            
+            {/* Table rows - exact table pattern */}
+            <div className="space-y-0">
               {Array.from({ length: Math.max(policy.owners.length, policy.beneficiaries.length) }, (_, rowIndex) => (
-                <div key={`combined-row-${rowIndex}`} className="flex items-center gap-3 p-2 border border-neutral-200 rounded bg-neutral-50">
-                  {/* Beneficiary Selector - using exact table component */}
-                  <div className="flex-1">
+                <div key={`beneficiary-table-row-${rowIndex}`} className="grid grid-cols-6 gap-2 p-2 border border-neutral-200 border-t-0 bg-white items-center">
+                  {/* Actions - exact table pattern */}
+                  <div className="flex justify-center">
                     <EntityBeneficiarySelector
                       policyId={policy.id}
                       beneficiaries={policy.beneficiaries}
@@ -223,11 +233,59 @@ export function AssuranceDetailForm({
                       onRemoveBeneficiary={onRemoveBeneficiary}
                       rowIndex={rowIndex}
                       disabled={disabled}
+                      showOnlyActions={true}
+                    />
+                  </div>
+
+                  {/* Beneficiary Dropdown - exact table pattern */}
+                  <div>
+                    <select
+                      value={(policy.beneficiaries || [])[rowIndex] || ""}
+                      onChange={(e) => onBeneficiaryChange(policy.id, rowIndex, e.target.value)}
+                      disabled={disabled}
+                      className="table-input table-dropdown w-full"
+                    >
+                      <option value="">Select beneficiary...</option>
+                      {entities.map((entity) => (
+                        <option key={entity.id} value={entity.entityName}>
+                          {entity.entityName} ({entity.entityType})
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+
+                  {/* Benefit Split - exact table pattern */}
+                  <div className="text-center">
+                    <input
+                      type="text"
+                      defaultValue={(policy.beneficiaryPercentages || ["100%"])[rowIndex] || "0%"}
+                      className="table-input text-center w-16"
+                      onFocus={handleDefaultValueFocus}
+                      onBlur={(e) => {
+                        let value = e.target.value.trim().replace(/[^\d.]/g, '');
+                        if (!value) value = "0";
+                        const formattedValue = `${parseFloat(value)}%`;
+                        onBeneficiaryPercentageChange(policy.id, rowIndex, formattedValue);
+                        e.target.value = formattedValue;
+                      }}
+                      disabled={disabled}
+                    />
+                  </div>
+
+                  {/* Amount - exact table pattern */}
+                  <div className="text-center">
+                    <input
+                      type="text"
+                      defaultValue={policy.amount || "R 0"}
+                      className={`table-input text-right w-24 ${policy.amount === 'R 0' ? 'text-neutral-400' : ''}`}
+                      onFocus={handleDefaultValueFocus}
+                      onBlur={(e) => handleTextFieldBlur('amount', e.target.value)}
+                      disabled={disabled}
                     />
                   </div>
 
                   {/* Toggle Button - exact table pattern */}
-                  <div className="pt-0.5 flex-shrink-0">
+                  <div className="flex justify-center pt-0.5">
                     <button
                       type="button"
                       onClick={() => {
@@ -244,17 +302,16 @@ export function AssuranceDetailForm({
                   </div>
 
                   {/* Years/% Input - exact table pattern */}
-                  <div className="min-w-0 flex-shrink-0">
+                  <div className="text-center">
                     {isAmountYearsMode(policy, rowIndex) ? (
                       // Years Mode
                       <input
                         key={`amount-years-${policy.id}-${rowIndex}`}
                         type="text"
                         defaultValue={formatYearsValue((policy.amountYearsValues || ["0 years"])[rowIndex] || "0 years")}
-                        className={`table-input ${
+                        className={`table-input text-center w-20 ${
                           !getAmountControlsEnabled(policy, disabled) ? 'bg-neutral-100 cursor-not-allowed' : ''
                         }`}
-                        style={{ width: 'fit-content', minWidth: '100px' }}
                         onFocus={handleDefaultValueFocus}
                         onBlur={(e) => {
                           const formattedValue = formatYearsValue(e.target.value);
@@ -269,10 +326,9 @@ export function AssuranceDetailForm({
                         key={`amount-increase-${policy.id}-${rowIndex}`}
                         type="text"
                         defaultValue={(policy.amountIncreaseValues || ["0%"])[rowIndex] || "0%"}
-                        className={`table-input ${
+                        className={`table-input text-center w-20 ${
                           !getAmountControlsEnabled(policy, disabled) ? 'bg-neutral-100 cursor-not-allowed' : ''
                         }`}
-                        style={{ width: 'fit-content', minWidth: '100px' }}
                         onFocus={handleDefaultValueFocus}
                         onBlur={(e) => {
                           const formattedValue = formatPercentageValue(e.target.value);
@@ -285,9 +341,10 @@ export function AssuranceDetailForm({
                   </div>
                 </div>
               ))}
-              <div className="text-sm text-neutral-500 mt-2">
-                Note: Each beneficiary has independent toggle controls for years/percentage input mode
-              </div>
+            </div>
+            
+            <div className="text-sm text-neutral-500 mt-2">
+              Note: Each beneficiary has independent toggle controls for years/percentage input mode
             </div>
           </FormField>
         </div>
