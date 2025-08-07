@@ -552,10 +552,12 @@ export function AssuranceTable({ viewMode = 'table', onAddPolicy }: AssuranceTab
                   <td className="border border-neutral-300 p-1">
                     {(() => {
                       const currentPercentage = (policy.beneficiaryPercentages || ["100%"])[rowIndex] || "0%";
-                      const currentDeathBenefit = (policy.deathBenefits || ["R 0"])[rowIndex] || "R 0";
-                      const deathBenefitAmount = parseFloat(currentDeathBenefit.replace(/[^\d.-]/g, '')) || 0;
+                      // Calculate total death benefit across all Life Assured entries for this policy
+                      const totalDeathBenefit = (policy.deathBenefits || []).reduce((sum, benefit) => {
+                        return sum + (parseFloat(benefit?.replace(/[^\d.-]/g, '') || '0') || 0);
+                      }, 0);
                       const percentage = parseFloat(currentPercentage.replace('%', '')) || 0;
-                      const benefitSplit = Math.round((deathBenefitAmount * percentage) / 100);
+                      const benefitSplit = Math.round((totalDeathBenefit * percentage) / 100);
                       
                       return (
                         <div className="calculated-field min-w-[100px] max-w-[140px] text-right">
