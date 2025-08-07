@@ -221,7 +221,7 @@ export function AssuranceDetailForm({
               <tbody>
                   {Array.from({ length: Math.max(policy.owners.length, policy.beneficiaries.length) }, (_, rowIndex) => (
                     <tr key={`beneficiary-table-row-${rowIndex}`} className="border-b border-neutral-200 bg-white">
-                      <td className="px-1 py-1 border-r border-neutral-200" style={{width: "300px"}}>
+                      <td className="border-r border-neutral-200" style={{width: "300px", padding: "2px"}}>
                         <EntityBeneficiarySelector
                           policyId={policy.id}
                           beneficiaries={policy.beneficiaries}
@@ -234,7 +234,7 @@ export function AssuranceDetailForm({
                           disabled={disabled}
                         />
                       </td>
-                      <td className="px-1 py-1 border-r border-neutral-200" style={{width: "120px"}}>
+                      <td className="border-r border-neutral-200" style={{width: "120px", padding: "2px"}}>
                         <input
                           key={`amount-${policy.id}-${rowIndex}`}
                           type="text"
@@ -246,7 +246,7 @@ export function AssuranceDetailForm({
                           disabled={disabled}
                         />
                       </td>
-                      <td className="px-1 py-1 border-r border-neutral-200" style={{width: "60px"}}>
+                      <td className="border-r border-neutral-200" style={{width: "60px", padding: "2px"}}>
                         <button
                           type="button"
                           onClick={() => {
@@ -261,7 +261,7 @@ export function AssuranceDetailForm({
                           {isAmountYearsMode(policy, rowIndex) ? 'Y' : '%'}
                         </button>
                       </td>
-                      <td className="px-1 py-1" style={{width: "80px"}}>
+                      <td style={{width: "80px", padding: "2px"}}>
                         {isAmountYearsMode(policy, rowIndex) ? (
                           // Years Mode
                           <input
