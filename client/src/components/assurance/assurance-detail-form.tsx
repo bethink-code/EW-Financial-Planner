@@ -95,8 +95,8 @@ export function AssuranceDetailForm({
         </ActionButtonGroup>
       </div>
 
-      {/* Group 1: Entity Relationship Triad (Owner → Life Assured → Death Benefit) */}
-      <FieldGroup title="Entity Relationship Triad">
+      {/* Group 1: Overview (Owner → Life Assured → Death Benefit) */}
+      <FieldGroup title="Overview">
         <div className="space-y-4">
           <FormField label="Policy Description">
             <input
