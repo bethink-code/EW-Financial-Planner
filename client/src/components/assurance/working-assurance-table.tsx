@@ -321,13 +321,13 @@ export function AssuranceTable({ viewMode = 'table', onAddPolicy }: AssuranceTab
 
   // Prepare preview items with selection state
   const previewItems = useMemo(() => 
-    filteredPolicies.map(policy => getItemPreview(policy, policy.id === selectedPolicyId)), 
+    filteredPolicies.map((policy: Assurance) => getItemPreview(policy, policy.id === selectedPolicyId)), 
     [filteredPolicies, getItemPreview, selectedPolicyId]
   );
 
   // Get selected policy for detail view
   const selectedPolicy = useMemo(() => 
-    filteredPolicies.find(policy => policy.id === selectedPolicyId), 
+    filteredPolicies.find((policy: Assurance) => policy.id === selectedPolicyId), 
     [filteredPolicies, selectedPolicyId]
   );
 
@@ -596,7 +596,14 @@ export function AssuranceTable({ viewMode = 'table', onAddPolicy }: AssuranceTab
   // Summary cards for hybrid view - clickable policy tabs
   const summaryCards = (
     <div className="space-y-3">
-      {previewItems.map((item) => (
+      {previewItems.map((item: {
+        id: number;
+        title: string;
+        subtitle: string;
+        primaryValue: string;
+        secondaryInfo?: string;
+        isSelected: boolean;
+      }) => (
         <HybridItemPreviewCard
           key={item.id}
           title={item.title}
