@@ -62,7 +62,7 @@ export function RetirementFundHybridTable({
         {/* Section Title */}
         <div className="mb-6">
           <h2 className="text-lg font-medium text-neutral-600 uppercase tracking-wide">
-            RETIREMENT FUNDS
+            {activeFund?.description || 'RETIREMENT FUNDS'}
           </h2>
         </div>
         {detailForm}
