@@ -201,19 +201,19 @@ export function AssuranceDetailForm({
           <FormField label="Beneficiaries & Controls">
             {/* Use actual table element with overflow wrapper for wide dropdown */}
             <div className="overflow-x-auto">
-              <table className="border-collapse" style={{width: "560px"}}>
+              <table className="border-collapse" style={{width: "480px"}}>
               <thead>
                 <tr className="bg-neutral-100 border border-neutral-300">
-                  <th className="text-left text-xs font-medium text-neutral-700 px-2 py-2 border-r border-neutral-300" style={{width: "300px"}}>
+                  <th className="text-left text-xs font-medium text-neutral-700" style={{width: "250px", padding: "4px 8px"}}>
                     Beneficiary & Split
                   </th>
-                  <th className="text-center text-xs font-medium text-neutral-700 px-2 py-2 border-r border-neutral-300" style={{width: "120px"}}>
+                  <th className="text-center text-xs font-medium text-neutral-700 border-l border-neutral-300" style={{width: "100px", padding: "4px 8px"}}>
                     Amount
                   </th>
-                  <th className="text-center text-xs font-medium text-neutral-700 px-2 py-2 border-r border-neutral-300" style={{width: "60px"}}>
+                  <th className="text-center text-xs font-medium text-neutral-700 border-l border-neutral-300" style={{width: "50px", padding: "4px 8px"}}>
                     Toggle
                   </th>
-                  <th className="text-center text-xs font-medium text-neutral-700 px-2 py-2" style={{width: "80px"}}>
+                  <th className="text-center text-xs font-medium text-neutral-700 border-l border-neutral-300" style={{width: "80px", padding: "4px 8px"}}>
                     Years/%
                   </th>
                 </tr>
@@ -221,7 +221,7 @@ export function AssuranceDetailForm({
               <tbody>
                   {Array.from({ length: Math.max(policy.owners.length, policy.beneficiaries.length) }, (_, rowIndex) => (
                     <tr key={`beneficiary-table-row-${rowIndex}`} className="border-b border-neutral-200 bg-white">
-                      <td className="border-r border-neutral-200" style={{width: "300px", padding: "2px"}}>
+                      <td className="border-r border-neutral-200" style={{width: "250px", padding: "2px"}}>
                         <EntityBeneficiarySelector
                           policyId={policy.id}
                           beneficiaries={policy.beneficiaries}
@@ -234,7 +234,7 @@ export function AssuranceDetailForm({
                           disabled={disabled}
                         />
                       </td>
-                      <td className="border-r border-neutral-200" style={{width: "120px", padding: "2px"}}>
+                      <td className="border-r border-neutral-200" style={{width: "100px", padding: "2px"}}>
                         <input
                           key={`amount-${policy.id}-${rowIndex}`}
                           type="text"
@@ -246,7 +246,7 @@ export function AssuranceDetailForm({
                           disabled={disabled}
                         />
                       </td>
-                      <td className="border-r border-neutral-200" style={{width: "60px", padding: "2px"}}>
+                      <td className="border-r border-neutral-200" style={{width: "50px", padding: "2px"}}>
                         <button
                           type="button"
                           onClick={() => {
