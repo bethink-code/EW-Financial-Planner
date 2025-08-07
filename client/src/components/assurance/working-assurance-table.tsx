@@ -473,14 +473,9 @@ export function AssuranceTable({ viewMode = 'table', onAddPolicy }: AssuranceTab
     // This matches what's displayed in the main table
     const totalDeathBenefit = parseFloat(policy.deathBenefit?.replace(/[^\d.-]/g, '') || '0') || 0;
     
-    // Format owners list - show all owners or indicate multiple
-    const ownersDisplay = (() => {
-      const owners = policy.owners || [];
-      if (owners.length === 0) return 'Unassigned';
-      if (owners.length === 1) return owners[0];
-      if (owners.length === 2) return `${owners[0]} & ${owners[1]}`;
-      return `${owners[0]} + ${owners.length - 1} more`;
-    })();
+    // Format owners list - show each owner on separate line
+    const owners = policy.owners || [];
+    const ownersDisplay = owners.length === 0 ? 'Unassigned' : owners.join('\n');
     
     return {
       id: policy.id,

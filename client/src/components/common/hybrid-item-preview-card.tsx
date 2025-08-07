@@ -62,7 +62,9 @@ export function HybridItemPreviewCard({
     >
       <h4 className={`font-medium text-sm mb-1 ${getTextClasses()}`}>{title}</h4>
       {subtitle && (
-        <div className={`text-xs mb-1 ${getSubtitleClasses()}`}>{subtitle}</div>
+        <div className={`text-xs mb-1 ${getSubtitleClasses()}`} style={{ whiteSpace: 'pre-line' }}>
+          {subtitle}
+        </div>
       )}
       <div className={`font-semibold text-sm ${getTextClasses()}`}>{primaryValue}</div>
       {secondaryInfo && (
