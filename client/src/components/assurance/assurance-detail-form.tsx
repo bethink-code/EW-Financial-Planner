@@ -202,16 +202,16 @@ export function AssuranceDetailForm({
               <table className="w-full border-collapse">
                 <thead>
                   <tr className="bg-neutral-100 border border-neutral-300">
-                    <th className="text-left text-xs font-medium text-neutral-700 px-2 py-2 border-r border-neutral-300" style={{width: "250px"}}>
+                    <th className="text-left text-xs font-medium text-neutral-700 px-2 py-2 border-r border-neutral-300" style={{width: "190px"}}>
                       Beneficiary & Split
                     </th>
                     <th className="text-center text-xs font-medium text-neutral-700 px-2 py-2 border-r border-neutral-300" style={{width: "100px"}}>
                       Amount
                     </th>
-                    <th className="text-center text-xs font-medium text-neutral-700 px-2 py-2 border-r border-neutral-300" style={{width: "70px"}}>
+                    <th className="text-center text-xs font-medium text-neutral-700 px-2 py-2 border-r border-neutral-300" style={{width: "45px"}}>
                       Toggle
                     </th>
-                    <th className="text-center text-xs font-medium text-neutral-700 px-2 py-2" style={{width: "80px"}}>
+                    <th className="text-center text-xs font-medium text-neutral-700 px-2 py-2" style={{width: "90px"}}>
                       Years/%
                     </th>
                   </tr>
@@ -232,25 +232,26 @@ export function AssuranceDetailForm({
                           disabled={disabled}
                         />
                       </td>
-                      <td className="px-2 py-1 border-r border-neutral-200 text-center">
+                      <td className="px-1 py-1 border-r border-neutral-200" style={{width: "100px"}}>
                         <input
                           key={`amount-${policy.id}-${rowIndex}`}
                           type="text"
                           defaultValue={policy.amount || "R 0"}
-                          className={`table-input text-right w-full text-xs ${!policy.amount || policy.amount === 'R 0' ? 'text-neutral-400' : ''}`}
+                          className={`${getFieldClass('amount')} ${getCellClass('amount')} ${getValueClass(policy.amount || "R 0", 'amount')}`}
+                          style={{minWidth: "100px", maxWidth: "140px"}}
                           onFocus={handleDefaultValueFocus}
                           onBlur={(e) => handleTextFieldBlur('amount', e.target.value)}
                           disabled={disabled}
                         />
                       </td>
-                      <td className="px-2 py-1 border-r border-neutral-200 text-center">
+                      <td className="px-1 py-1 border-r border-neutral-200" style={{width: "45px"}}>
                         <button
                           type="button"
                           onClick={() => {
                             const currentToggle = isAmountYearsMode(policy, rowIndex);
                             handleArrayFieldUpdate(policy.id, 'amountToggles', rowIndex, !currentToggle);
                           }}
-                          className={`h-6 px-2 w-full bg-[#E8F3F8] border border-[#E0E0E0] text-[#016991] hover:bg-[#D1E7F0] rounded text-xs font-medium ${
+                          className={`h-6 px-1 w-full bg-[#E8F3F8] border border-[#E0E0E0] text-[#016991] hover:bg-[#D1E7F0] rounded text-xs font-medium ${
                             !getAmountControlsEnabled(policy, disabled) ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'
                           }`}
                           disabled={!getAmountControlsEnabled(policy, disabled)}
@@ -258,16 +259,17 @@ export function AssuranceDetailForm({
                           {isAmountYearsMode(policy, rowIndex) ? 'Y' : '%'}
                         </button>
                       </td>
-                      <td className="px-2 py-1 text-center">
+                      <td className="px-1 py-1" style={{width: "90px"}}>
                         {isAmountYearsMode(policy, rowIndex) ? (
                           // Years Mode
                           <input
                             key={`amount-years-${policy.id}-${rowIndex}`}
                             type="text"
                             defaultValue={formatYearsValue((policy.amountYearsValues || ["0 years"])[rowIndex] || "0 years")}
-                            className={`table-input text-center w-full text-xs ${
+                            className={`${getFieldClass('years')} ${getCellClass('years')} ${getValueClass((policy.amountYearsValues || ["0 years"])[rowIndex] || "0 years", 'years')} ${
                               !getAmountControlsEnabled(policy, disabled) ? 'bg-neutral-100 cursor-not-allowed' : ''
                             }`}
+                            style={{minWidth: "80px", maxWidth: "80px"}}
                             onFocus={handleDefaultValueFocus}
                             onBlur={(e) => {
                               const formattedValue = formatYearsValue(e.target.value);
@@ -282,9 +284,10 @@ export function AssuranceDetailForm({
                             key={`amount-increase-${policy.id}-${rowIndex}`}
                             type="text"
                             defaultValue={(policy.amountIncreaseValues || ["0%"])[rowIndex] || "0%"}
-                            className={`table-input text-center w-full text-xs ${
+                            className={`${getFieldClass('percentage')} ${getCellClass('percentage')} ${getValueClass((policy.amountIncreaseValues || ["0%"])[rowIndex] || "0%", 'percentage')} ${
                               !getAmountControlsEnabled(policy, disabled) ? 'bg-neutral-100 cursor-not-allowed' : ''
                             }`}
+                            style={{minWidth: "50px", maxWidth: "65px"}}
                             onFocus={handleDefaultValueFocus}
                             onBlur={(e) => {
                               const formattedValue = formatPercentageValue(e.target.value);
