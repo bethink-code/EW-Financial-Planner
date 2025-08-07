@@ -613,10 +613,11 @@ export function AssuranceTable({ viewMode = 'table', onAddPolicy }: AssuranceTab
                 <label className="block text-sm font-medium text-neutral-700 mb-1">Description</label>
                 <input
                   type="text"
-                  defaultValue={policy.description}
-                  className={`w-full table-input ${getValueClass(policy.description, 'text')}`}
+                  defaultValue={formatTextValue(policy.description)}
+                  placeholder="Enter details ..."
+                  className={`w-full table-input ${getFieldClass('text')} ${getValueClass(policy.description, 'text')}`}
                   onFocus={handleDefaultValueFocus}
-                  onBlur={(e) => handleInputBlur(policy.id, 'description', e.target.value, e.target, 'description')}
+                  onBlur={(e) => handleUpdatePolicy(policy.id, 'description', e.target.value)}
                 />
               </div>
 
