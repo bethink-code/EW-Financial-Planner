@@ -43,14 +43,14 @@ export function HybridViewWrapper({
 
   // Render hybrid view - Left sidebar with summary cards + Right side detailed forms
   return (
-    <div className="flex gap-6">
-      {/* Left Sidebar - Summary Cards */}
-      <div className="w-80 flex-shrink-0 space-y-4">
+    <div className="flex">
+      {/* Left Sidebar - Summary Cards (Tabs) */}
+      <div className="w-80 flex-shrink-0 border-r border-neutral-200">
         {summaryCards}
       </div>
 
       {/* Right Side - Detailed Forms */}
-      <div className="flex-1 space-y-6">
+      <div className="flex-1">
         {isEmpty ? (
           <div className="text-center py-8">
             <p className="text-neutral-500 mb-4">{emptyStateMessage}</p>

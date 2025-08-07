@@ -29,9 +29,9 @@ export function HybridItemPreviewCard({
   const getVariantClasses = () => {
     switch (variant) {
       case 'active':
-        return 'bg-white border-r border-neutral-200 border-l-4 border-l-orange-500 shadow-sm';
+        return 'bg-white border-r-0 border-l-4 border-l-[#F97316] border-t border-neutral-200 border-b border-neutral-200';
       default:
-        return 'bg-neutral-50 border-r border-neutral-200 hover:bg-white hover:shadow-sm';
+        return 'bg-neutral-50 border-r-0 border-t border-neutral-200 border-b border-neutral-200 hover:bg-white';
     }
   };
 
