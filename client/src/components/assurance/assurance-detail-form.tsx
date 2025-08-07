@@ -77,12 +77,13 @@ export function AssuranceDetailForm({
       {/* Group 1: Entity Relationship Triad (Owner → Life Assured → Death Benefit) */}
       <FieldGroup title="Entity Relationship Triad">
         <div className="space-y-4">
-          <FormField label="Policy Description" className="md:col-span-2">
+          <FormField label="Policy Description">
             <input
               type="text"
               defaultValue={policy.description || ''}
               placeholder="Enter details ..."
-              className={`w-full table-input ${policy.description ? '' : 'text-neutral-400'}`}
+              className={`table-input ${policy.description ? '' : 'text-neutral-400'}`}
+              style={{ width: 'fit-content', minWidth: '200px' }}
               onFocus={handleDefaultValueFocus}
               onBlur={(e) => handleTextFieldBlur('description', e.target.value)}
               disabled={disabled}
@@ -136,11 +137,12 @@ export function AssuranceDetailForm({
           </FormField>
           
           <FormField label="Amount (with Years/% Toggle per Beneficiary)">
-            <div className="grid grid-cols-1 gap-4">
+            <div className="space-y-2">
               <input
                 type="text"
                 defaultValue={policy.amount || 'R 0'}
-                className={`w-full table-input text-right ${policy.amount === 'R 0' ? 'text-neutral-400' : ''}`}
+                className={`table-input text-right ${policy.amount === 'R 0' ? 'text-neutral-400' : ''}`}
+                style={{ width: 'fit-content', minWidth: '120px' }}
                 onFocus={handleDefaultValueFocus}
                 onBlur={(e) => handleTextFieldBlur('amount', e.target.value)}
                 disabled={disabled}
@@ -155,12 +157,13 @@ export function AssuranceDetailForm({
 
       {/* Group 4: Policy-Level Financial Fields */}
       <FieldGroup title="Policy-Level Financial Details">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="flex flex-wrap gap-6">
           <FormField label="Premiums by Others">
             <input
               type="text"
               defaultValue={policy.premiumsByOthers || 'R 0'}
-              className={`w-full table-input text-right ${policy.premiumsByOthers === 'R 0' ? 'text-neutral-400' : ''}`}
+              className={`table-input text-right ${policy.premiumsByOthers === 'R 0' ? 'text-neutral-400' : ''}`}
+              style={{ width: 'fit-content', minWidth: '120px' }}
               onFocus={handleDefaultValueFocus}
               onBlur={(e) => handleTextFieldBlur('premiumsByOthers', e.target.value)}
               disabled={disabled}
@@ -172,7 +175,8 @@ export function AssuranceDetailForm({
               type="text"
               defaultValue={policy.collateralSession || ''}
               placeholder="Enter details ..."
-              className={`w-full table-input text-right ${!policy.collateralSession ? 'text-neutral-400' : ''}`}
+              className={`table-input text-right ${!policy.collateralSession ? 'text-neutral-400' : ''}`}
+              style={{ width: 'fit-content', minWidth: '120px' }}
               onFocus={handleDefaultValueFocus}
               onBlur={(e) => handleTextFieldBlur('collateralSession', e.target.value)}
               disabled={disabled}
@@ -189,7 +193,8 @@ export function AssuranceDetailForm({
           <textarea
             defaultValue={policy.additionalInfo || ''}
             placeholder="Enter details ..."
-            className={`w-full table-input resize-none ${!policy.additionalInfo ? 'text-neutral-400' : ''}`}
+            className={`table-input resize-none ${!policy.additionalInfo ? 'text-neutral-400' : ''}`}
+            style={{ width: 'fit-content', minWidth: '300px' }}
             rows={3}
             onFocus={handleDefaultValueFocus}
             onBlur={(e) => handleTextFieldBlur('additionalInfo', e.target.value)}
