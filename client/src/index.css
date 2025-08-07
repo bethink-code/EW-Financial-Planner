@@ -121,6 +121,11 @@ th, td {
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
+/* Tab active state orange border */
+.tab-active-border {
+  border-left-color: #F97316 !important;
+}
+
 /* Optimized visibility transitions */
 .column-hidden {
   opacity: 0;
