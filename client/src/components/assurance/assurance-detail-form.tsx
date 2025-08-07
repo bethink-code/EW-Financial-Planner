@@ -368,24 +368,6 @@ export function AssuranceDetailForm({
           </FormField>
         </div>
       </FieldGroup>
-
-
-
-      {/* Additional Information */}
-      <FieldGroup title="Additional Information">
-        <FormField label="Additional Information">
-          <textarea
-            defaultValue={policy.additionalInfo || ''}
-            placeholder="Enter details ..."
-            className={`table-input resize-none ${!policy.additionalInfo ? 'text-neutral-400' : ''}`}
-            style={{ width: 'fit-content', minWidth: '300px' }}
-            rows={3}
-            onFocus={handleDefaultValueFocus}
-            onBlur={(e) => handleTextFieldBlur('additionalInfo', e.target.value)}
-            disabled={disabled}
-          />
-        </FormField>
-      </FieldGroup>
     </GroupedDetailForm>
   );
 }
