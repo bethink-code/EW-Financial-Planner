@@ -5,6 +5,7 @@ import EntityOwnerSelector from '@/components/common/entity-owner-selector';
 import EntityBeneficiarySelector from '@/components/common/entity-beneficiary-selector';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { ActionButtonGroup, DuplicateButton, DeleteButton } from '@/components/ui/action-buttons';
+import { handleDefaultValueFocus } from '@/lib/formatting';
 
 interface AssuranceDetailFormProps {
   policy: Assurance;
@@ -76,8 +77,9 @@ export function AssuranceDetailForm({
             <input
               type="text"
               defaultValue={policy.description || ''}
-              placeholder="Enter policy description..."
-              className="w-full px-3 py-2 border border-neutral-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
+              placeholder="Enter details ..."
+              className={`w-full table-input ${policy.description ? '' : 'text-neutral-400'}`}
+              onFocus={handleDefaultValueFocus}
               onBlur={(e) => handleTextFieldBlur('description', e.target.value)}
               disabled={disabled}
             />
@@ -87,8 +89,8 @@ export function AssuranceDetailForm({
             <input
               type="text"
               defaultValue=""
-              placeholder="Enter life assured..."
-              className="w-full px-3 py-2 border border-neutral-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
+              placeholder="Enter details ..."
+              className="w-full table-input text-neutral-400"
               disabled={disabled}
             />
           </FormField>
@@ -97,7 +99,8 @@ export function AssuranceDetailForm({
             <input
               type="text"
               defaultValue={policy.deathBenefit || 'R 0'}
-              className="w-full px-3 py-2 border border-neutral-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
+              className={`w-full table-input text-right ${policy.deathBenefit === 'R 0' ? 'text-neutral-400' : ''}`}
+              onFocus={handleDefaultValueFocus}
               onBlur={(e) => handleTextFieldBlur('deathBenefit', e.target.value)}
               disabled={disabled}
             />
@@ -109,31 +112,41 @@ export function AssuranceDetailForm({
       <FieldGroup title="Ownership Structure">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <FormField label="Owners & Ownership">
-            <EntityOwnerSelector
-              policyId={policy.id}
-              owners={policy.owners}
-              ownershipPercentages={policy.ownershipPercentages || ["100%"]}
-              onOwnerChange={onOwnerChange}
-              onOwnershipPercentageChange={onOwnershipPercentageChange}
-              onAddOwner={onAddOwner}
-              onRemoveOwner={onRemoveOwner}
-              rowIndex={0}
-              disabled={disabled}
-            />
+            <div className="space-y-2">
+              {policy.owners.map((_, ownerIndex) => (
+                <EntityOwnerSelector
+                  key={`owner-${ownerIndex}`}
+                  policyId={policy.id}
+                  owners={policy.owners}
+                  ownershipPercentages={policy.ownershipPercentages || ["100%"]}
+                  onOwnerChange={onOwnerChange}
+                  onOwnershipPercentageChange={onOwnershipPercentageChange}
+                  onAddOwner={onAddOwner}
+                  onRemoveOwner={onRemoveOwner}
+                  rowIndex={ownerIndex}
+                  disabled={disabled}
+                />
+              ))}
+            </div>
           </FormField>
           
           <FormField label="Beneficiaries & Allocation">
-            <EntityBeneficiarySelector
-              policyId={policy.id}
-              beneficiaries={policy.beneficiaries}
-              beneficiaryPercentages={policy.beneficiaryPercentages || ["100%"]}
-              onBeneficiaryChange={onBeneficiaryChange}
-              onBeneficiaryPercentageChange={onBeneficiaryPercentageChange}
-              onAddBeneficiary={onAddBeneficiary}
-              onRemoveBeneficiary={onRemoveBeneficiary}
-              rowIndex={0}
-              disabled={disabled}
-            />
+            <div className="space-y-2">
+              {policy.beneficiaries.map((_, beneficiaryIndex) => (
+                <EntityBeneficiarySelector
+                  key={`beneficiary-${beneficiaryIndex}`}
+                  policyId={policy.id}
+                  beneficiaries={policy.beneficiaries}
+                  beneficiaryPercentages={policy.beneficiaryPercentages || ["100%"]}
+                  onBeneficiaryChange={onBeneficiaryChange}
+                  onBeneficiaryPercentageChange={onBeneficiaryPercentageChange}
+                  onAddBeneficiary={onAddBeneficiary}
+                  onRemoveBeneficiary={onRemoveBeneficiary}
+                  rowIndex={beneficiaryIndex}
+                  disabled={disabled}
+                />
+              ))}
+            </div>
           </FormField>
         </div>
       </FieldGroup>
@@ -145,7 +158,8 @@ export function AssuranceDetailForm({
             <input
               type="text"
               defaultValue={policy.amount || 'R 0'}
-              className="w-full px-3 py-2 border border-neutral-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
+              className={`w-full table-input text-right ${policy.amount === 'R 0' ? 'text-neutral-400' : ''}`}
+              onFocus={handleDefaultValueFocus}
               onBlur={(e) => handleTextFieldBlur('amount', e.target.value)}
               disabled={disabled}
             />
@@ -155,7 +169,8 @@ export function AssuranceDetailForm({
             <input
               type="text"
               defaultValue={policy.premiumsByOthers || 'R 0'}
-              className="w-full px-3 py-2 border border-neutral-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
+              className={`w-full table-input text-right ${policy.premiumsByOthers === 'R 0' ? 'text-neutral-400' : ''}`}
+              onFocus={handleDefaultValueFocus}
               onBlur={(e) => handleTextFieldBlur('premiumsByOthers', e.target.value)}
               disabled={disabled}
             />
@@ -165,8 +180,9 @@ export function AssuranceDetailForm({
             <input
               type="text"
               defaultValue={policy.collateralSession || ''}
-              placeholder="Enter collateral session details..."
-              className="w-full px-3 py-2 border border-neutral-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
+              placeholder="Enter details ..."
+              className={`w-full table-input text-right ${!policy.collateralSession ? 'text-neutral-400' : ''}`}
+              onFocus={handleDefaultValueFocus}
               onBlur={(e) => handleTextFieldBlur('collateralSession', e.target.value)}
               disabled={disabled}
             />
@@ -229,12 +245,13 @@ export function AssuranceDetailForm({
 
       {/* Additional Information Group */}
       <FieldGroup title="Additional Information">
-        <FormField label="Notes">
+        <FormField label="Additional Information">
           <textarea
             defaultValue={policy.additionalInfo || ''}
-            placeholder="Enter additional notes..."
-            className="w-full px-3 py-2 border border-neutral-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
+            placeholder="Enter details ..."
+            className={`w-full table-input resize-none ${!policy.additionalInfo ? 'text-neutral-400' : ''}`}
             rows={3}
+            onFocus={handleDefaultValueFocus}
             onBlur={(e) => handleTextFieldBlur('additionalInfo', e.target.value)}
             disabled={disabled}
           />
