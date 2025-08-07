@@ -367,6 +367,49 @@ export function AssuranceDetailForm({
             />
           </FormField>
         </div>
+
+        {/* Policy-Level Checkboxes */}
+        <div className="flex flex-wrap gap-6 pt-4 border-t border-neutral-200">
+          <FormField label="Buy/Sell">
+            <input
+              type="checkbox"
+              defaultChecked={false}
+              className="rounded border-neutral-300"
+              onChange={(e) => handleTextFieldBlur('buySell', e.target.checked ? 'checked' : 'unchecked')}
+              disabled={disabled}
+            />
+          </FormField>
+          
+          <FormField label="Key Man">
+            <input
+              type="checkbox"
+              defaultChecked={false}
+              className="rounded border-neutral-300"
+              onChange={(e) => handleTextFieldBlur('keyMan', e.target.checked ? 'checked' : 'unchecked')}
+              disabled={disabled}
+            />
+          </FormField>
+          
+          <FormField label="Excluded Estate Duty">
+            <input
+              type="checkbox"
+              defaultChecked={false}
+              className="rounded border-neutral-300"
+              onChange={(e) => handleTextFieldBlur('excludedEstateDuty', e.target.checked ? 'checked' : 'unchecked')}
+              disabled={disabled}
+            />
+          </FormField>
+          
+          <FormField label="Excluded Provisions">
+            <input
+              type="checkbox"
+              defaultChecked={false}
+              className="rounded border-neutral-300"
+              onChange={(e) => handleTextFieldBlur('excludedProvisions', e.target.checked ? 'checked' : 'unchecked')}
+              disabled={disabled}
+            />
+          </FormField>
+        </div>
       </FieldGroup>
     </GroupedDetailForm>
   );
