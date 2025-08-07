@@ -840,11 +840,13 @@ export function AssuranceTable({ viewMode = 'table', onAddPolicy }: AssuranceTab
           {/* Totals Footer */}
           <tfoot>
             <tr>
-              <td className="totals-cell-label text-right" colSpan={4}>Totals</td>
+              <td className="totals-cell-label text-right" colSpan={5}>Totals</td>
               <td className="totals-cell-value">R {totals.deathBenefit.toLocaleString()}</td>
               <td className="totals-cell-label"></td>
               <td className="totals-cell-value">R {totals.deathBenefit.toLocaleString()}</td>
               <td className="totals-cell-value">R {totals.amount.toLocaleString()}</td>
+              <td className="totals-cell-label"></td>
+              <td className="totals-cell-label"></td>
               <td className="totals-cell-label"></td>
               <td className="totals-cell-label"></td>
               <td className="totals-cell-label"></td>
