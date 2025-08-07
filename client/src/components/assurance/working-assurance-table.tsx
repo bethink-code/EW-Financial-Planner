@@ -701,30 +701,40 @@ export function AssuranceTable({ viewMode = 'table', onAddPolicy }: AssuranceTab
 
           <div>
             <label className="block text-sm font-medium text-neutral-700 mb-1">Owners</label>
-            <EntityOwnerSelector
-              policyId={selectedPolicy.id}
-              owners={selectedPolicy.owners}
-              ownershipPercentages={selectedPolicy.ownershipPercentages || []}
-              onOwnerChange={handleOwnerChange}
-              onOwnershipPercentageChange={handleOwnershipPercentageChange}
-              onAddOwner={handleAddOwner}
-              onRemoveOwner={handleRemoveOwner}
-              rowIndex={0}
-            />
+            <div className="space-y-2">
+              {selectedPolicy.owners.map((_, ownerIndex) => (
+                <EntityOwnerSelector
+                  key={`owner-${ownerIndex}`}
+                  policyId={selectedPolicy.id}
+                  owners={selectedPolicy.owners}
+                  ownershipPercentages={selectedPolicy.ownershipPercentages || []}
+                  onOwnerChange={handleOwnerChange}
+                  onOwnershipPercentageChange={handleOwnershipPercentageChange}
+                  onAddOwner={handleAddOwner}
+                  onRemoveOwner={handleRemoveOwner}
+                  rowIndex={ownerIndex}
+                />
+              ))}
+            </div>
           </div>
 
           <div>
             <label className="block text-sm font-medium text-neutral-700 mb-1">Beneficiaries</label>
-            <EntityBeneficiarySelector
-              policyId={selectedPolicy.id}
-              beneficiaries={selectedPolicy.beneficiaries}
-              beneficiaryPercentages={selectedPolicy.beneficiaryPercentages || []}
-              onBeneficiaryChange={handleBeneficiaryChange}
-              onBeneficiaryPercentageChange={handleBeneficiaryPercentageChange}
-              onAddBeneficiary={handleAddBeneficiary}
-              onRemoveBeneficiary={handleRemoveBeneficiary}
-              rowIndex={0}
-            />
+            <div className="space-y-2">
+              {selectedPolicy.beneficiaries.map((_, beneficiaryIndex) => (
+                <EntityBeneficiarySelector
+                  key={`beneficiary-${beneficiaryIndex}`}
+                  policyId={selectedPolicy.id}
+                  beneficiaries={selectedPolicy.beneficiaries}
+                  beneficiaryPercentages={selectedPolicy.beneficiaryPercentages || []}
+                  onBeneficiaryChange={handleBeneficiaryChange}
+                  onBeneficiaryPercentageChange={handleBeneficiaryPercentageChange}
+                  onAddBeneficiary={handleAddBeneficiary}
+                  onRemoveBeneficiary={handleRemoveBeneficiary}
+                  rowIndex={beneficiaryIndex}
+                />
+              ))}
+            </div>
           </div>
 
           <div>
