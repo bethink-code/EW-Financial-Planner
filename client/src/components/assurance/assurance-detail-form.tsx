@@ -199,8 +199,9 @@ export function AssuranceDetailForm({
 
 
           <FormField label="Beneficiaries & Controls">
-            {/* Use actual table element for proper styling */}
-            <table className="border-collapse">
+            {/* Use actual table element with responsive wrapper */}
+            <div className="w-full overflow-x-auto">
+              <table className="border-collapse" style={{tableLayout: "auto", width: "100%", minWidth: "min-content"}}>
               <thead>
                 <tr className="bg-neutral-100 border border-neutral-300">
                   <th className="text-left text-xs font-medium text-neutral-700 px-2 py-2 border-r border-neutral-300">

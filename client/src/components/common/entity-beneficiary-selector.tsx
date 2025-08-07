@@ -118,7 +118,7 @@ export default function EntityBeneficiarySelector({
           onChange={(e) => handleBeneficiarySelect(e.target.value, beneficiaryIndex)}
           disabled={disabled}
           className="table-input table-dropdown"
-          style={{minWidth: "300px", maxWidth: "300px", width: "300px"}}
+          style={{minWidth: "200px", maxWidth: "250px", width: "auto"}}
         >
           <option value="">Select beneficiary...</option>
           {entities.map((entity) => (
