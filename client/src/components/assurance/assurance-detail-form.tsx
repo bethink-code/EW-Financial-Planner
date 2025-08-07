@@ -112,83 +112,92 @@ export function AssuranceDetailForm({
           </FormField>
           
           <FormField label="Owners & Life Assured & Death Benefits">
-            <div className="space-y-2">
-              {/* Use exact table pattern for maximum rows */}
-              {Array.from({ length: Math.max(policy.owners.length, policy.beneficiaries.length) }, (_, rowIndex) => (
-                <div key={`owner-row-${rowIndex}`} className="flex items-center gap-3 p-2 border border-neutral-200 rounded bg-neutral-50">
-                  {/* Owner - using exact table component */}
-                  <div className="min-w-0">
-                    <EntityOwnerSelector
-                      policyId={policy.id}
-                      owners={policy.owners}
-                      ownershipPercentages={policy.ownershipPercentages || ["100%"]}
-                      onOwnerChange={onOwnerChange}
-                      onOwnershipPercentageChange={onOwnershipPercentageChange}
-                      onAddOwner={onAddOwner}
-                      onRemoveOwner={onRemoveOwner}
-                      rowIndex={rowIndex}
-                      disabled={disabled}
-                    />
-                  </div>
-
-                  {/* Life Assured - using exact table pattern */}
-                  <div className="min-w-0">
-                    <Select
-                      value={(policy.lifeAssured || [])[rowIndex] || "none"}
-                      onValueChange={(value) => {
-                        const valueToStore = value === "none" ? "" : value;
-                        onLifeAssuredChange(policy.id, rowIndex, valueToStore);
-                      }}
-                      disabled={disabled}
-                    >
-                      <SelectTrigger className="table-input" style={{ width: 'fit-content', minWidth: '200px' }}>
-                        <SelectValue placeholder="Select life assured..." />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="none">Select life assured...</SelectItem>
-                        {entities.map((client) => (
-                          <SelectItem key={client.id} value={client.entityName}>
-                            {client.entityName}
-                            {client.entityType === "Primary entity" && " (Primary entity)"}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                  </div>
-
-                  {/* Death Benefit - using exact table pattern */}
-                  <div className="min-w-0">
-                    <input
-                      type="text"
-                      defaultValue={((policy.deathBenefits || [])[rowIndex] || "R 0")}
-                      className="table-input text-right"
-                      style={{ width: 'fit-content', minWidth: '120px' }}
-                      onBlur={(e) => {
-                        let value = e.target.value.trim();
-                        value = value.replace(/[^\d.-]/g, '');
-                        
-                        if (value === '' || value === '0') {
-                          onDeathBenefitChange(policy.id, rowIndex, 'R 0');
-                          e.target.value = 'R 0';
-                          return;
-                        }
-                        
-                        if (!isNaN(parseFloat(value))) {
-                          const numValue = parseFloat(value);
-                          const formattedValue = `R ${numValue.toLocaleString()}`;
-                          onDeathBenefitChange(policy.id, rowIndex, formattedValue);
-                          e.target.value = formattedValue;
-                        } else {
-                          onDeathBenefitChange(policy.id, rowIndex, 'R 0');
-                          e.target.value = 'R 0';
-                        }
-                      }}
-                      disabled={disabled}
-                    />
-                  </div>
-                </div>
-              ))}
-            </div>
+            <table className="border-collapse">
+              <thead>
+                <tr className="bg-neutral-100 border border-neutral-300">
+                  <th className="text-left text-xs font-medium text-neutral-700 px-2 py-2 border-r border-neutral-300">
+                    Owner
+                  </th>
+                  <th className="text-center text-xs font-medium text-neutral-700 px-2 py-2 border-r border-neutral-300">
+                    Life Assured
+                  </th>
+                  <th className="text-center text-xs font-medium text-neutral-700 px-2 py-2">
+                    Death Benefit
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                {Array.from({ length: Math.max(policy.owners.length, policy.beneficiaries.length) }, (_, rowIndex) => (
+                  <tr key={`owner-table-row-${rowIndex}`} className="border-b border-neutral-200 bg-white">
+                    <td className="px-1 py-1 border-r border-neutral-200">
+                      <EntityOwnerSelector
+                        policyId={policy.id}
+                        owners={policy.owners}
+                        ownershipPercentages={policy.ownershipPercentages || ["100%"]}
+                        onOwnerChange={onOwnerChange}
+                        onOwnershipPercentageChange={onOwnershipPercentageChange}
+                        onAddOwner={onAddOwner}
+                        onRemoveOwner={onRemoveOwner}
+                        rowIndex={rowIndex}
+                        disabled={disabled}
+                      />
+                    </td>
+                    <td className="px-1 py-1 border-r border-neutral-200">
+                      <Select
+                        value={(policy.lifeAssured || [])[rowIndex] || "none"}
+                        onValueChange={(value) => {
+                          const valueToStore = value === "none" ? "" : value;
+                          onLifeAssuredChange(policy.id, rowIndex, valueToStore);
+                        }}
+                        disabled={disabled}
+                      >
+                        <SelectTrigger className="table-input w-full">
+                          <SelectValue placeholder="Select life assured..." />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="none">Select life assured...</SelectItem>
+                          {entities.map((client) => (
+                            <SelectItem key={client.id} value={client.entityName}>
+                              {client.entityName}
+                              {client.entityType === "Primary entity" && " (Primary entity)"}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </td>
+                    <td className="px-1 py-1">
+                      <input
+                        type="text"
+                        defaultValue={((policy.deathBenefits || [])[rowIndex] || "R 0")}
+                        className={`${getFieldClass('currency')} ${getCellClass('currency')} ${getValueClass(((policy.deathBenefits || [])[rowIndex] || "R 0"), 'currency')}`}
+                        onFocus={handleDefaultValueFocus}
+                        onBlur={(e) => {
+                          let value = e.target.value.trim();
+                          value = value.replace(/[^\d.-]/g, '');
+                          
+                          if (value === '' || value === '0') {
+                            onDeathBenefitChange(policy.id, rowIndex, 'R 0');
+                            e.target.value = 'R 0';
+                            return;
+                          }
+                          
+                          if (!isNaN(parseFloat(value))) {
+                            const numValue = parseFloat(value);
+                            const formattedValue = `R ${numValue.toLocaleString()}`;
+                            onDeathBenefitChange(policy.id, rowIndex, formattedValue);
+                            e.target.value = formattedValue;
+                          } else {
+                            onDeathBenefitChange(policy.id, rowIndex, 'R 0');
+                            e.target.value = 'R 0';
+                          }
+                        }}
+                        disabled={disabled}
+                      />
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           </FormField>
         </div>
       </FieldGroup>
