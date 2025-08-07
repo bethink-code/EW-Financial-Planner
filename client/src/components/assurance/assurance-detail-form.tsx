@@ -194,17 +194,7 @@ export function AssuranceDetailForm({
       {/* Groups 2 & 3: Beneficiary Distribution & Amount Toggle Pattern (Related per-beneficiary) */}
       <FieldGroup title="Beneficiary Distribution & Amount Controls">
         <div className="space-y-4">
-          <FormField label="Amount (Policy Level)">
-            <input
-              type="text"
-              defaultValue={policy.amount || 'R 0'}
-              className={`table-input text-right ${policy.amount === 'R 0' ? 'text-neutral-400' : ''}`}
-              style={{ width: 'fit-content', minWidth: '120px' }}
-              onFocus={handleDefaultValueFocus}
-              onBlur={(e) => handleTextFieldBlur('amount', e.target.value)}
-              disabled={disabled}
-            />
-          </FormField>
+
 
           <FormField label="Beneficiaries & Benefit Splits with Toggle Controls">
             {/* Table header */}
@@ -272,12 +262,13 @@ export function AssuranceDetailForm({
                     />
                   </div>
 
-                  {/* Amount - exact table pattern */}
+                  {/* Amount - exact table pattern (same amount for all rows) */}
                   <div className="text-center">
                     <input
+                      key={`amount-${policy.id}-${rowIndex}`}
                       type="text"
                       defaultValue={policy.amount || "R 0"}
-                      className={`table-input text-right w-24 ${policy.amount === 'R 0' ? 'text-neutral-400' : ''}`}
+                      className={`table-input text-right w-24 ${!policy.amount || policy.amount === 'R 0' ? 'text-neutral-400' : ''}`}
                       onFocus={handleDefaultValueFocus}
                       onBlur={(e) => handleTextFieldBlur('amount', e.target.value)}
                       disabled={disabled}
