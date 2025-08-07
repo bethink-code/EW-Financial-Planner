@@ -58,13 +58,7 @@ export function RetirementFundHybridTable({
       </div>
 
       {/* Right Side - Detail Form */}
-      <div className="flex-1 p-6">
-        {/* Section Title */}
-        <div className="mb-6">
-          <h2 className="text-lg font-medium text-neutral-600 uppercase tracking-wide">
-            {activeFund?.description || 'RETIREMENT FUNDS'}
-          </h2>
-        </div>
+      <div className="flex-1">
         {detailForm}
       </div>
     </div>

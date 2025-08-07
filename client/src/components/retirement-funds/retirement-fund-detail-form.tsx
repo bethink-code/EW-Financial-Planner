@@ -142,9 +142,12 @@ export function RetirementFundDetailForm({
   };
 
   return (
-    <div className="space-y-6">
-      {/* Action Buttons */}
-      <div className="flex justify-end">
+    <div className="space-y-12 p-6 bg-white">
+      {/* Header with Actions */}
+      <div className="flex justify-between items-start">
+        <h2 className="text-lg font-semibold text-neutral-800">
+          {fund.description || 'Untitled Fund'}
+        </h2>
         <ActionButtonGroup>
           <DuplicateButton 
             onClick={() => onDuplicate(fund)} 
