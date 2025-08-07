@@ -200,28 +200,27 @@ export function AssuranceDetailForm({
 
           <FormField label="Beneficiaries & Controls">
             {/* Use actual table element for proper styling */}
-            <div className="w-full overflow-x-auto">
-              <table className="w-full border-collapse">
-                <thead>
-                  <tr className="bg-neutral-100 border border-neutral-300">
-                    <th className="text-left text-xs font-medium text-neutral-700 px-2 py-2 border-r border-neutral-300" style={{width: "190px"}}>
-                      Beneficiary & Split
-                    </th>
-                    <th className="text-center text-xs font-medium text-neutral-700 px-2 py-2 border-r border-neutral-300" style={{width: "100px"}}>
-                      Amount
-                    </th>
-                    <th className="text-center text-xs font-medium text-neutral-700 px-2 py-2 border-r border-neutral-300" style={{width: "45px"}}>
-                      Toggle
-                    </th>
-                    <th className="text-center text-xs font-medium text-neutral-700 px-2 py-2" style={{width: "90px"}}>
-                      Years/%
-                    </th>
-                  </tr>
-                </thead>
-                <tbody>
+            <table className="border-collapse">
+              <thead>
+                <tr className="bg-neutral-100 border border-neutral-300">
+                  <th className="text-left text-xs font-medium text-neutral-700 px-2 py-2 border-r border-neutral-300">
+                    Beneficiary & Split
+                  </th>
+                  <th className="text-center text-xs font-medium text-neutral-700 px-2 py-2 border-r border-neutral-300">
+                    Amount
+                  </th>
+                  <th className="text-center text-xs font-medium text-neutral-700 px-2 py-2 border-r border-neutral-300">
+                    Toggle
+                  </th>
+                  <th className="text-center text-xs font-medium text-neutral-700 px-2 py-2">
+                    Years/%
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
                   {Array.from({ length: Math.max(policy.owners.length, policy.beneficiaries.length) }, (_, rowIndex) => (
                     <tr key={`beneficiary-table-row-${rowIndex}`} className="border-b border-neutral-200 bg-white">
-                      <td className="px-2 py-1 border-r border-neutral-200">
+                      <td className="px-1 py-1 border-r border-neutral-200">
                         <EntityBeneficiarySelector
                           policyId={policy.id}
                           beneficiaries={policy.beneficiaries}
@@ -304,7 +303,6 @@ export function AssuranceDetailForm({
                   ))}
                 </tbody>
               </table>
-            </div>
             
             <div className="text-sm text-neutral-500 mt-2">
               Note: Independent toggle controls per beneficiary
