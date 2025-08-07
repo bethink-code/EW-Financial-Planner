@@ -203,9 +203,11 @@ border-r: 1px solid #e5e5e5; /* Right borders between cells */
 ## Navigation and UX Patterns
 
 ### Tab System
-- Left panel shows preview cards as tabs
-- Active tab highlighted with Elite Wealth blue
-- Card content shows key identifiers (description, amounts)
+- Left panel shows preview cards as tabs using HybridItemPreviewCard
+- Active tab highlighted with Elite Wealth blue (`variant="active"`)
+- Inactive tabs use default styling (`variant="default"`)
+- Card content shows key identifiers (description, amounts, owners)
+- **Multi-line Owner Display**: Owners listed on separate lines with "Owner:" prefix
 - Smooth transitions between tabs
 
 ### Form Interaction
@@ -241,7 +243,8 @@ border-r: 1px solid #e5e5e5; /* Right borders between cells */
 
 ### Component Integration
 - [ ] Wrap in HybridViewWrapper
-- [ ] Create preview cards for left panel
+- [ ] Create preview cards using HybridItemPreviewCard component
+- [ ] Implement multi-line owner display in card subtitles
 - [ ] Implement ActionButtonGroup
 - [ ] Apply FieldGroup organization
 
@@ -262,9 +265,35 @@ This pattern is designed to be applied across:
 
 Each calculator adapts the 4 logical field groupings to its specific domain while maintaining the same underlying structure, styling, and interaction patterns.
 
+## Preview Card Standards
+
+### HybridItemPreviewCard Usage
+```typescript
+// Standard implementation for all calculators
+const subtitle = validOwners.length > 0 
+  ? validOwners.map(owner => `Owner: ${owner}`).join('\n')
+  : 'Owner: Not specified';
+
+<HybridItemPreviewCard
+  title={item.description || 'Untitled Item'}
+  subtitle={subtitle}
+  primaryValue={item.primaryAmount || 'R 0'}
+  secondaryInfo="Additional context line"
+  variant={isActive ? 'active' : 'default'}
+  onClick={onSelect}
+  isClickable={true}
+/>
+```
+
+### Multi-line Owner Display Standard
+- Filter out empty/null owners: `validOwners = owners?.filter(owner => owner && owner.trim() !== '') || []`
+- Each owner on separate line: `owners.map(owner => 'Owner: ${owner}').join('\n')`
+- Fallback for no owners: `'Owner: Not specified'`
+- Works with HybridItemPreviewCard's `whiteSpace: 'pre-line'` styling
+
 ## Benefits of This Pattern
 
-1. **Consistency**: Unified UX across all calculators
+1. **Consistency**: Unified UX across all calculators with standardized tab styling
 2. **Maintainability**: Shared components and styling patterns
 3. **Scalability**: Easy to add new calculators following the same structure
 4. **Data Integrity**: Robust validation and synchronization
