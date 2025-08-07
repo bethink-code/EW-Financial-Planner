@@ -334,6 +334,31 @@ if (type1Count > 0 && type2Count > 0) {
 }
 ```
 
+**Display Rule**: Each beneficiary MUST be displayed in its own row in detail forms.
+
+```typescript
+// Example: Combined table with type identification
+<tbody>
+  {/* Type 1 Beneficiaries */}
+  {Array.from({ length: Math.max(item.type1Beneficiaries.length, 1) }, (_, rowIndex) => (
+    <tr key={`type1-${rowIndex}`}>
+      <EntitySelector ... />
+      <td>Type 1</td> {/* Type identifier */}
+      <td>{/* Type-specific data */}</td>
+    </tr>
+  ))}
+  
+  {/* Type 2 Beneficiaries */}
+  {Array.from({ length: Math.max(item.type2Beneficiaries.length, 1) }, (_, rowIndex) => (
+    <tr key={`type2-${rowIndex}`}>
+      <EntitySelector ... />
+      <td>Type 2</td> {/* Type identifier */}
+      <td>{/* Type-specific data */}</td>
+    </tr>
+  ))}
+</tbody>
+```
+
 ### 8. State Management Pattern
 
 ```typescript
