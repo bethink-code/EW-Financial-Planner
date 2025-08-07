@@ -108,7 +108,7 @@ export default function EntityBeneficiarySelector({
 
   return (
     <div className="space-y-1">
-      <div className="flex items-center gap-1" style={{width: "240px"}}>
+      <div className="flex items-center gap-1">
         {/* Action Button - Using plain button without any wrapper */}
         {actionButton}
         
@@ -118,7 +118,6 @@ export default function EntityBeneficiarySelector({
           onChange={(e) => handleBeneficiarySelect(e.target.value, beneficiaryIndex)}
           disabled={disabled}
           className="table-input table-dropdown"
-          style={{minWidth: "240px", maxWidth: "240px", width: "240px"}}
         >
           <option value="">Select beneficiary...</option>
           {entities.map((entity) => (

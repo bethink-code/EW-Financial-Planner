@@ -200,20 +200,19 @@ export function AssuranceDetailForm({
 
           <FormField label="Beneficiaries & Controls">
             {/* Use actual table element with overflow wrapper for wide dropdown */}
-            <div className="overflow-x-auto">
-              <table className="border-collapse" style={{width: "480px"}}>
+            <table className="border-collapse">
               <thead>
                 <tr className="bg-neutral-100 border border-neutral-300">
-                  <th className="text-left text-xs font-medium text-neutral-700" style={{width: "250px", padding: "4px 8px"}}>
+                  <th className="text-left text-xs font-medium text-neutral-700 px-2 py-2 border-r border-neutral-300">
                     Beneficiary & Split
                   </th>
-                  <th className="text-center text-xs font-medium text-neutral-700 border-l border-neutral-300" style={{width: "100px", padding: "4px 8px"}}>
+                  <th className="text-center text-xs font-medium text-neutral-700 px-2 py-2 border-r border-neutral-300">
                     Amount
                   </th>
-                  <th className="text-center text-xs font-medium text-neutral-700 border-l border-neutral-300" style={{width: "50px", padding: "4px 8px"}}>
+                  <th className="text-center text-xs font-medium text-neutral-700 px-2 py-2 border-r border-neutral-300">
                     Toggle
                   </th>
-                  <th className="text-center text-xs font-medium text-neutral-700 border-l border-neutral-300" style={{width: "80px", padding: "4px 8px"}}>
+                  <th className="text-center text-xs font-medium text-neutral-700 px-2 py-2">
                     Years/%
                   </th>
                 </tr>
@@ -221,7 +220,7 @@ export function AssuranceDetailForm({
               <tbody>
                   {Array.from({ length: Math.max(policy.owners.length, policy.beneficiaries.length) }, (_, rowIndex) => (
                     <tr key={`beneficiary-table-row-${rowIndex}`} className="border-b border-neutral-200 bg-white">
-                      <td className="border-r border-neutral-200" style={{width: "250px", padding: "2px"}}>
+                      <td className="px-1 py-1 border-r border-neutral-200">
                         <EntityBeneficiarySelector
                           policyId={policy.id}
                           beneficiaries={policy.beneficiaries}
@@ -234,19 +233,18 @@ export function AssuranceDetailForm({
                           disabled={disabled}
                         />
                       </td>
-                      <td className="border-r border-neutral-200" style={{width: "100px", padding: "2px"}}>
+                      <td className="px-1 py-1 border-r border-neutral-200">
                         <input
                           key={`amount-${policy.id}-${rowIndex}`}
                           type="text"
                           defaultValue={policy.amount || "R 0"}
                           className={`${getFieldClass('amount')} ${getCellClass('amount')} ${getValueClass(policy.amount || "R 0", 'amount')}`}
-                          style={{width: "100%"}}
                           onFocus={handleDefaultValueFocus}
                           onBlur={(e) => handleTextFieldBlur('amount', e.target.value)}
                           disabled={disabled}
                         />
                       </td>
-                      <td className="border-r border-neutral-200" style={{width: "50px", padding: "2px"}}>
+                      <td className="px-1 py-1 border-r border-neutral-200">
                         <button
                           type="button"
                           onClick={() => {
@@ -261,7 +259,7 @@ export function AssuranceDetailForm({
                           {isAmountYearsMode(policy, rowIndex) ? 'Y' : '%'}
                         </button>
                       </td>
-                      <td style={{width: "80px", padding: "2px"}}>
+                      <td className="px-1 py-1">
                         {isAmountYearsMode(policy, rowIndex) ? (
                           // Years Mode
                           <input
@@ -304,7 +302,6 @@ export function AssuranceDetailForm({
                   ))}
                 </tbody>
               </table>
-            </div>
             
             <div className="text-sm text-neutral-500 mt-2">
               Note: Independent toggle controls per beneficiary
