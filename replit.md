@@ -4,11 +4,12 @@
 This is a full-stack web application for managing retirement funds. It provides robust capabilities for viewing, editing, and searching retirement fund data through a modern React frontend and an Express.js backend. The system supports multiple viewing modes, including grouped table, cards, and detailed views, with real-time editing and search functionalities. The project's vision is to provide a comprehensive and intuitive platform for financial planning, with high market potential in personal and professional financial management.
 
 ## Recent Major Accomplishments
-- **January 2025**: Successfully implemented Years/% Toggle Pattern for Assurance Amount field with per-beneficiary independence
-- **Database Evolution**: Migrated from single toggle fields to array-based per-beneficiary toggle system (amountToggles, amountYearsValues, amountIncreaseValues)
-- **Table Alignment**: Fixed comprehensive totals row column alignment issues across all 16 table columns
-- **Pattern Consistency**: Established reusable toggle pattern now implemented across Defined Benefit Funds and Assurance tables
-- **Field Grouping Discovery**: Identified 4 logical field groupings in table architecture: Entity Relationship Triad (Owner→Life Assured→Death Benefit), Beneficiary Distribution Group (Beneficiary→Benefit Split), Amount Toggle Pattern Group (Amount→Toggle→Years/%), and Policy-Level Financial Fields
+- **January 2025**: Completed Global Hybrid View Pattern framework with comprehensive implementation guide
+- **Border Management**: Resolved all double border issues across hybrid view interfaces with proper CSS classes and component props
+- **Pattern Documentation**: Created `GLOBAL_HYBRID_VIEW_PATTERN.md` - definitive guide for implementing hybrid views in any new calculator
+- **Universal Field Groupings**: Established 4 reusable logical groupings adaptable across all financial calculators
+- **CSS Framework**: Added hybrid view CSS classes for consistent tab styling and border management
+- **Implementation Template**: Both Assurance and Retirement Funds serve as working examples of the complete pattern
 
 ## User Preferences
 Preferred communication style: Simple, everyday language.
@@ -61,7 +62,7 @@ Client requests data via TanStack Query hooks. Express routes handle CRUD operat
 - **Global Entity Management System**: Dynamic entity management with percentage validation and automatic Primary entity defaults across major calculation tables. This includes reusable global components for owner/beneficiary selection and primary entity default utility functions.
 - **Years/% Toggle Pattern**: Reusable toggle pattern for specific fields to switch between year and percentage input, successfully implemented in Defined Benefit Funds and Assurance tables. In Assurance, each beneficiary row has independent toggle controls with per-beneficiary arrays (amountToggles, amountYearsValues, amountIncreaseValues) for Amount field toggle functionality. Pattern includes Elite Wealth blue styling, automatic array synchronization during beneficiary add/remove operations, and proper validation helper functions.
 - **Global Loading System**: Comprehensive loading indicators with Elite Wealth primary blue branding, providing visual feedback during CRUD operations through a global progress bar and enhanced loading mutations.
-- **Hybrid View Pattern**: Comprehensive global framework for calculator interfaces with 80% reusable infrastructure. Features standardized HybridItemPreviewCard components with multi-line owner display, consistent tab styling with active/inactive states, and 4 universal field groupings (Entity Relationships, Beneficiary Distribution, Toggle Patterns, Policy-Level Fields). Successfully implemented across Assurance and Retirement Funds calculators.
+- **Global Hybrid View Pattern**: Complete implementation framework providing 80% reusable infrastructure for all calculator hybrid views. Includes comprehensive documentation in `GLOBAL_HYBRID_VIEW_PATTERN.md` with step-by-step implementation guide, 4 universal field groupings (Entity Relationships, Owner/Life Assured/Benefits, Beneficiary Distribution, Financial Details), proper border management CSS classes, and state management patterns. Successfully implemented across Assurance and Retirement Funds with reliable template for future calculators.
 
 ## External Dependencies
 

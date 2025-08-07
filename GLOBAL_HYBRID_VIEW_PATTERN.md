@@ -1,210 +1,341 @@
-# Global Hybrid View Pattern Documentation
+# Global Hybrid View Pattern - Complete Implementation Guide
 
 ## Overview
-The Global Hybrid View Pattern provides a consistent, reusable approach to implementing table/hybrid view functionality across all calculation tables in the financial planning platform. This pattern allows users to choose between:
+This is the definitive guide for implementing hybrid view functionality across all financial planning calculators. This pattern provides 80% reusable infrastructure while allowing 20% calculator-specific customization.
 
-- **Table View**: Traditional wide horizontal table layout for users who prefer compact, tabular data presentation
-- **Hybrid View**: Left sidebar with summary cards + Right detailed vertical forms for users who prefer form-based data entry
+## Pattern Architecture
 
-## Architecture Components
+### 1. Core Components Required
 
-### 1. Core Wrapper Component
-**File**: `client/src/components/common/hybrid-view-wrapper.tsx`
+#### A. HybridViewWrapper (Already Available)
+**Location**: `client/src/components/common/hybrid-view-wrapper.tsx`
+**Purpose**: Provides consistent container structure across all calculators
 
-The main orchestrator that conditionally renders either table view or hybrid view layout.
-
-```tsx
+```typescript
 <HybridViewWrapper
-  viewMode={viewMode} // 'table' | 'hybrid'
-  tableComponent={<YourTableComponent />}
-  summaryCards={<YourSummaryCards />}
-  detailForms={<YourDetailForms />}
-  onAddItem={handleAddItem}
-  addButtonLabel="Add Policy"
+  viewMode={viewMode}
+  tableComponent={tableComponent}
+  summaryCards={summaryCards}
+  detailForms={detailForms}
   isUpdating={isUpdating}
-  isEmpty={isEmpty}
+  isEmpty={filteredItems.length === 0}
   emptyStateMessage="No items found"
 />
 ```
 
-### 2. Reusable UI Components
+#### B. HybridItemPreviewCard (Already Available)
+**Location**: `client/src/components/common/hybrid-item-preview-card.tsx`
+**Purpose**: Standardized tab-style preview cards with proper border management
 
-#### HybridSummaryCard
-**File**: `client/src/components/common/hybrid-summary-card.tsx`
-- Displays totals and key metrics in the left sidebar
-- Supports multiple color variants (default, blue, green, orange)
-- Consistent styling and structure
-
-#### HybridDetailCard  
-**File**: `client/src/components/common/hybrid-detail-card.tsx`
-- Container for individual item detail forms
-- Includes action buttons (duplicate, delete) in the header
-- Clean, consistent layout for form fields
-
-#### HybridItemPreviewCard
-**File**: `client/src/components/common/hybrid-item-preview-card.tsx`
-- Compact preview cards for individual items in the sidebar
-- Shows title, subtitle, primary value, and secondary info
-- Color variants match the summary cards
-
-### 3. Data Preparation Hook
-**File**: `client/src/hooks/use-hybrid-view-data.tsx`
-
-Custom hook that abstracts data preparation for hybrid view components:
-
-```tsx
-const hybridData = useHybridViewData({
-  items: filteredItems,
-  getTotals: (items) => ({ /* calculate totals */ }),
-  getSummaryItems: (totals, items) => [/* summary data */],
-  getItemPreview: (item) => ({ /* preview data */ }),
-  maxPreviewItems: 5
-});
+```typescript
+<HybridItemPreviewCard
+  key={item.id}
+  title={item.title}
+  subtitle={item.subtitle}
+  primaryValue={item.primaryValue}
+  secondaryInfo={item.secondaryInfo}
+  variant={item.isSelected ? "active" : "blue"}
+  onClick={() => setSelectedId(item.id)}
+  isClickable={true}
+  isFirst={index === 0}
+  isLast={index === items.length - 1}
+/>
 ```
 
-## Implementation Pattern
+#### C. GroupedDetailForm (Already Available)
+**Location**: `client/src/components/common/grouped-detail-form.tsx`
+**Purpose**: Structured form container with consistent spacing and field groupings
 
-### Step 1: Prepare Hybrid View Data
-```tsx
-const hybridData = useHybridViewData({
-  items: filteredPolicies,
-  getTotals: useCallback((policies: Assurance[]) => ({
-    deathBenefit: policies.reduce((sum, policy) => /* calculate */, 0),
-    // ... other totals
-  }), []),
-  getSummaryItems: useCallback((totals, policies) => [
-    { label: 'Total Death Benefit', value: `R ${totals.deathBenefit.toLocaleString()}` },
-    // ... other summary items
-  ], []),
-  getItemPreview: useCallback((policy) => ({
-    id: policy.id,
-    title: policy.description || `Policy #${policy.id}`,
-    subtitle: `Owner: ${policy.owners[0]}`,
-    primaryValue: policy.deathBenefit
-  }), [])
-});
+```typescript
+<GroupedDetailForm>
+  <FieldGroup title="OVERVIEW">
+    <FormField label="Description">
+      <input ... />
+    </FormField>
+  </FieldGroup>
+</GroupedDetailForm>
 ```
 
-### Step 2: Define Table Component
-```tsx
-const tableComponent = (
-  <div className="space-y-6">
-    <table>
-      {/* Your existing table implementation */}
-    </table>
-  </div>
+### 2. Implementation Steps for New Calculators
+
+#### Step 1: Create Preview Data Mapping
+```typescript
+// In your main calculator component
+const getItemPreview = useCallback((item: YourItemType, isSelected: boolean) => {
+  const validOwners = item.owners?.filter(owner => owner && owner.trim() !== '') || [];
+  const ownersDisplay = validOwners.length === 0 
+    ? 'Owner: Not specified' 
+    : validOwners.map(owner => `Owner: ${owner}`).join('\n');
+  
+  return {
+    id: item.id,
+    title: item.description || `Item #${item.id}`,
+    subtitle: ownersDisplay,
+    primaryValue: `R ${item.primaryAmount?.toLocaleString() || '0'}`,
+    secondaryInfo: item.secondaryInfo || undefined,
+    isSelected
+  };
+}, []);
+
+const previewItems = useMemo(() => 
+  filteredItems.map((item) => getItemPreview(item, item.id === selectedId)), 
+  [filteredItems, getItemPreview, selectedId]
 );
 ```
 
-### Step 3: Define Summary Cards
-```tsx
+#### Step 2: Create Summary Cards Container
+```typescript
 const summaryCards = (
-  <div className="space-y-3">
-    {hybridData.previewItems.map((item) => (
+  <div>
+    {previewItems.map((item, index) => (
       <HybridItemPreviewCard
         key={item.id}
         title={item.title}
         subtitle={item.subtitle}
         primaryValue={item.primaryValue}
-        variant="blue"
+        secondaryInfo={item.secondaryInfo}
+        variant={item.isSelected ? "active" : "blue"}
+        onClick={() => setSelectedId(item.id)}
+        isClickable={true}
+        isFirst={index === 0}
+        isLast={index === previewItems.length - 1}
       />
     ))}
-    {hybridData.hasMoreItems && (
-      <div className="text-center text-sm text-neutral-600">
-        +{hybridData.remainingCount} more items
-      </div>
-    )}
   </div>
 );
 ```
 
-### Step 4: Define Detail Forms
-```tsx
-const detailForms = (
-  <>
-    {filteredPolicies.map((policy) => (
-      <HybridDetailCard
-        key={policy.id}
-        title={policy.description || `Policy #${policy.id}`}
-        onDuplicate={() => handleDuplicatePolicy(policy)}
-        onDelete={() => handleDeletePolicy(policy.id)}
-      >
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          {/* Your form fields */}
-        </div>
-      </HybridDetailCard>
-    ))}
-  </>
+#### Step 3: Create Detail Form Component
+Create `YourCalculatorDetailForm.tsx`:
+
+```typescript
+import { GroupedDetailForm, FieldGroup, FormField } from '@/components/common/grouped-detail-form';
+
+export function YourCalculatorDetailForm({ item, onUpdate, ... }: Props) {
+  return (
+    <GroupedDetailForm>
+      {/* Group 1: Entity Relationship Triad */}
+      <FieldGroup title="OVERVIEW">
+        <FormField label="Description">
+          <input
+            type="text"
+            defaultValue={item.description}
+            onBlur={(e) => onUpdate(item.id, 'description', e.target.value)}
+          />
+        </FormField>
+      </FieldGroup>
+
+      {/* Group 2: Owner & Life Assured & Death Benefits */}
+      <FieldGroup title="OWNERS & LIFE ASSURED & BENEFITS">
+        <FormField label="Owners">
+          <EntityOwnerSelector
+            owners={item.owners}
+            ownershipPercentages={item.ownershipPercentages}
+            onOwnerChange={(index, owner) => onOwnerChange(item.id, index, owner)}
+            onPercentageChange={(index, percentage) => onPercentageChange(item.id, index, percentage)}
+            onAddOwner={() => onAddOwner(item.id)}
+            onRemoveOwner={(index) => onRemoveOwner(item.id, index)}
+          />
+        </FormField>
+      </FieldGroup>
+
+      {/* Group 3: Beneficiary Distribution */}
+      <FieldGroup title="BENEFICIARY DISTRIBUTION">
+        <FormField label="Beneficiaries & Controls">
+          <EntityBeneficiarySelector
+            beneficiaries={item.beneficiaries}
+            beneficiaryPercentages={item.beneficiaryPercentages}
+            onBeneficiaryChange={(index, beneficiary) => onBeneficiaryChange(item.id, index, beneficiary)}
+            onPercentageChange={(index, percentage) => onBeneficiaryPercentageChange(item.id, index, percentage)}
+            onAddBeneficiary={() => onAddBeneficiary(item.id)}
+            onRemoveBeneficiary={(index) => onRemoveBeneficiary(item.id, index)}
+          />
+        </FormField>
+      </FieldGroup>
+
+      {/* Group 4: Policy-Level Financial Fields */}
+      <FieldGroup title="FINANCIAL DETAILS">
+        <FormField label="Amount">
+          <input
+            type="text"
+            defaultValue={item.amount}
+            onBlur={(e) => onUpdate(item.id, 'amount', e.target.value)}
+          />
+        </FormField>
+        {/* Add other calculator-specific financial fields */}
+      </FieldGroup>
+    </GroupedDetailForm>
+  );
+}
+```
+
+#### Step 4: Integrate with Main Calculator Component
+```typescript
+export function YourCalculatorTable({ items, viewMode, ... }: Props) {
+  const [selectedId, setSelectedId] = useState<number | null>(null);
+
+  // Set default selection for hybrid view
+  useEffect(() => {
+    if (viewMode === 'hybrid' && items.length > 0 && selectedId === null) {
+      setSelectedId(items[0].id);
+    }
+  }, [viewMode, items, selectedId]);
+
+  // Get selected item
+  const selectedItem = useMemo(() => 
+    items.find(item => item.id === selectedId), 
+    [items, selectedId]
+  );
+
+  // Create detail forms
+  const detailForms = selectedItem ? (
+    <YourCalculatorDetailForm
+      key={`form-${selectedItem.id}`}
+      item={selectedItem}
+      onUpdate={handleUpdate}
+      // ... other handlers
+    />
+  ) : (
+    <div className="text-center py-8">
+      <p className="text-neutral-500">Select an item from the left to view details</p>
+    </div>
+  );
+
+  // Use HybridViewWrapper
+  return (
+    <HybridViewWrapper
+      viewMode={viewMode}
+      tableComponent={tableComponent}
+      summaryCards={summaryCards}
+      detailForms={detailForms}
+      isUpdating={isUpdating}
+      isEmpty={items.length === 0}
+      emptyStateMessage="No items found"
+    />
+  );
+}
+```
+
+### 3. Universal Field Groupings
+
+Every calculator should use these 4 logical groupings:
+
+#### Group 1: Entity Relationship Triad
+- **Purpose**: Core item identification and description
+- **Fields**: Description, basic identification fields
+- **Title**: "OVERVIEW"
+
+#### Group 2: Owner & Life Assured & Death Benefits  
+- **Purpose**: Entity relationships and key beneficiaries
+- **Fields**: Owners, Life Assured, Primary Benefits
+- **Title**: "OWNERS & LIFE ASSURED & BENEFITS" (adapt as needed)
+
+#### Group 3: Beneficiary Distribution
+- **Purpose**: Beneficiary management and percentage splits
+- **Fields**: Beneficiaries, Benefit splits, Percentage controls
+- **Title**: "BENEFICIARY DISTRIBUTION"
+
+#### Group 4: Policy-Level Financial Fields
+- **Purpose**: Financial amounts, toggles, and calculator-specific fields
+- **Fields**: Amount fields, toggles, years/percentage inputs, other financial data
+- **Title**: "FINANCIAL DETAILS" or calculator-specific title
+
+### 4. CSS Classes Available
+
+```css
+/* Container */
+.hybrid-tab-container         /* No spacing between tabs */
+
+/* Border Management */
+.hybrid-tab-first            /* No top border for first tab */
+.hybrid-tab-last             /* Bottom border for last tab */
+.hybrid-tab-standard         /* Top border for middle tabs */
+
+/* Visual States */
+.hybrid-tab-active           /* Active tab with orange left border */
+.hybrid-tab-inactive         /* Inactive tab with hover effects */
+
+/* Legacy Support */
+.tab-active-border           /* Orange left border for active tabs */
+```
+
+### 5. Border Management Rules
+
+**Critical Requirements**:
+1. Container has `border-t` for top continuity
+2. Sidebar wrapper provides single `border-r` for separation
+3. First tab: `isFirst={index === 0}` removes top border
+4. Last tab: `isLast={index === length - 1}` adds bottom border
+5. NO individual right borders on preview cards
+6. NO `space-y-*` classes on tab containers
+7. NO borders on GroupedDetailForm component
+
+### 6. Multi-line Owner Display Standard
+
+```typescript
+const validOwners = item.owners?.filter(owner => owner && owner.trim() !== '') || [];
+const ownersDisplay = validOwners.length === 0 
+  ? 'Owner: Not specified' 
+  : validOwners.map(owner => `Owner: ${owner}`).join('\n');
+```
+
+### 7. State Management Pattern
+
+```typescript
+// Selection state
+const [selectedId, setSelectedId] = useState<number | null>(null);
+
+// Auto-select first item in hybrid view
+useEffect(() => {
+  if (viewMode === 'hybrid' && items.length > 0 && selectedId === null) {
+    setSelectedId(items[0].id);
+  }
+}, [viewMode, items, selectedId]);
+
+// Memoized selected item
+const selectedItem = useMemo(() => 
+  items.find(item => item.id === selectedId), 
+  [items, selectedId]
 );
 ```
 
-### Step 5: Use HybridViewWrapper
-```tsx
-return (
-  <HybridViewWrapper
-    viewMode={viewMode}
-    tableComponent={tableComponent}
-    summaryCards={summaryCards}
-    detailForms={detailForms}
-    onAddItem={onAddPolicy}
-    addButtonLabel="Add Policy"
-    isUpdating={isUpdating}
-    isEmpty={hybridData.isEmpty}
-    emptyStateMessage="No assurance policies found"
-  />
-);
-```
+### 8. Implementation Checklist
 
-## Benefits
+When implementing a new calculator hybrid view:
 
-### 1. **Consistency**
-- All calculation tables now have identical hybrid view UX
-- Standardized component styling and behavior
-- Unified interaction patterns
+- [ ] Create `getItemPreview` function with standard owner display
+- [ ] Implement `summaryCards` with proper `isFirst`/`isLast` props
+- [ ] Create detail form component using `GroupedDetailForm`
+- [ ] Use 4 universal field groupings adapted to calculator needs
+- [ ] Add selection state management with auto-selection
+- [ ] Use `HybridViewWrapper` for consistent container structure
+- [ ] Test border management (no double borders)
+- [ ] Verify tab styling (no vertical spacing)
+- [ ] Confirm multi-line owner display works
+- [ ] Ensure proper empty state handling
 
-### 2. **Maintainability**  
-- Single source of truth for hybrid view logic
-- Easy to update styling or behavior globally
-- Reduced code duplication across tables
+### 9. Pattern Benefits
 
-### 3. **Scalability**
-- New calculation tables can adopt the pattern in minutes
-- Easy to add new UI variants or features
-- Consistent data preparation patterns
+✓ **80% Reusable Infrastructure**: Core components work across all calculators
+✓ **20% Customization**: Field groupings adapt to calculator-specific needs
+✓ **Consistent Visual Design**: Professional tab interface with proper borders
+✓ **Maintainable Code**: Centralized components reduce duplication
+✓ **Extensible Pattern**: Easy to add new calculators following this guide
 
-### 4. **User Experience**
-- Users get the same experience across all calculators
-- View mode preferences persist across navigation
-- Accommodates different user preferences (table vs form)
+### 10. Examples in Codebase
 
-## Tables Using This Pattern
+- **Assurance**: `client/src/components/assurance/working-assurance-table.tsx`
+- **Retirement Funds**: `client/src/components/retirement-funds/retirement-fund-hybrid-table.tsx`
 
-### ✅ Completed
-- **Assurance Table** (`/assurance`) - Working with global pattern
+Both demonstrate complete implementations of this pattern.
 
-### 🚀 Ready for Implementation
-- **Retirement Funds** (`/new-retirement-funds`)
-- **Assets Table** (`/assets`) 
-- **Liabilities Table** (`/liabilities`)
-- **Income Needs** (`/income-needs`)
-- **Income Provisions** (`/income-provisions`)
-- **Defined Benefit Funds** (`/defined-benefit-funds`)
-- **Additional Estate Duty Items** (`/additional-estate-duty-items`)
+## Quick Start for New Calculator
 
-## Future Enhancements
+1. Copy structure from existing calculator (Assurance or Retirement Funds)
+2. Replace data types and field mappings
+3. Adapt the 4 field groupings to your calculator's needs
+4. Implement calculator-specific handlers
+5. Test hybrid view functionality and border styling
+6. Update this documentation with any new patterns discovered
 
-1. **Dynamic Column Configuration**: Allow tables to specify which columns appear in hybrid forms
-2. **Advanced Filtering**: Add filtering capabilities to the sidebar summary
-3. **Export Functions**: Add export buttons to the summary cards
-4. **Responsive Improvements**: Enhanced mobile experience for hybrid view
-5. **Keyboard Navigation**: Full keyboard accessibility for hybrid view
-
-## Usage Guidelines
-
-1. **Always use the global pattern** for new calculation tables
-2. **Migrate existing tables** to use this pattern for consistency
-3. **Follow the 4-step implementation** process outlined above
-4. **Test both view modes** thoroughly when implementing
-5. **Update this documentation** when adding new features or patterns
-
-This pattern ensures that users have a consistent, efficient way to interact with financial data regardless of their preferred input method.
+This pattern ensures consistency across all calculators while providing flexibility for calculator-specific requirements.
