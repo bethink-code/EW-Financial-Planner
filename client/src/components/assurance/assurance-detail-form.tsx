@@ -200,7 +200,7 @@ export function AssuranceDetailForm({
             {/* Table with custom column sizing to fit screen */}
             <div className="w-full overflow-hidden">
               {/* Table header with flexible grid */}
-              <div className="grid gap-2 px-2 py-2 bg-neutral-100 border border-neutral-300 rounded-t text-sm font-medium text-neutral-700" style={{gridTemplateColumns: "60px 1fr 70px 100px 70px 80px"}}>
+              <div className="grid gap-2 px-2 py-2 bg-neutral-100 border border-neutral-300 rounded-t text-sm font-medium text-neutral-700" style={{gridTemplateColumns: "80px 2fr 80px 120px 80px 100px"}}>
                 <div className="text-center">Actions</div>
                 <div className="text-left">Beneficiary</div>
                 <div className="text-center">Split</div>
@@ -212,7 +212,7 @@ export function AssuranceDetailForm({
               {/* Table rows with matching column sizing */}
               <div className="space-y-0">
                 {Array.from({ length: Math.max(policy.owners.length, policy.beneficiaries.length) }, (_, rowIndex) => (
-                  <div key={`beneficiary-table-row-${rowIndex}`} className="grid gap-2 px-2 py-2 border border-neutral-200 border-t-0 bg-white items-center" style={{gridTemplateColumns: "60px 1fr 70px 100px 70px 80px"}}>
+                  <div key={`beneficiary-table-row-${rowIndex}`} className="grid gap-2 px-2 py-2 border border-neutral-200 border-t-0 bg-white items-center" style={{gridTemplateColumns: "80px 2fr 80px 120px 80px 100px"}}>
                     {/* Actions */}
                     <div className="flex justify-center">
                       <EntityBeneficiarySelector
