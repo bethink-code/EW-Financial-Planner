@@ -10,6 +10,7 @@ import { TableHeaderAddButton } from "@/components/ui/table-header-add-button";
 import EntityOwnerSelector from "@/components/common/entity-owner-selector";
 import EntityBeneficiarySelector from "@/components/common/entity-beneficiary-selector";
 import { useDebouncedUpdate } from "@/hooks/use-debounced-update";
+import { useLoadingMutation } from "@/hooks/use-loading-mutation";
 import { SafeFragment } from "@/lib/safe-fragment";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -68,8 +69,8 @@ export function AssuranceTable({ viewMode = 'table', onAddPolicy }: AssuranceTab
 
   // Note: Add policy functionality moved to parent component
 
-  // Update policy mutation
-  const updateMutation = useMutation({
+  // Update policy mutation with loading integration
+  const updateMutation = useLoadingMutation({
     mutationFn: async ({ id, updates }: { id: number; updates: Partial<Assurance> }) => {
       try {
         const response = await apiRequest("PATCH", `/api/assurance/${id}`, updates);
@@ -91,8 +92,8 @@ export function AssuranceTable({ viewMode = 'table', onAddPolicy }: AssuranceTab
     }
   });
 
-  // Delete policy mutation
-  const deleteMutation = useMutation({
+  // Delete policy mutation with loading integration
+  const deleteMutation = useLoadingMutation({
     mutationFn: (id: number) => {
       return apiRequest("DELETE", `/api/assurance/${id}`);
     },
@@ -101,8 +102,8 @@ export function AssuranceTable({ viewMode = 'table', onAddPolicy }: AssuranceTab
     },
   });
 
-  // Duplicate policy mutation
-  const duplicateMutation = useMutation({
+  // Duplicate policy mutation with loading integration
+  const duplicateMutation = useLoadingMutation({
     mutationFn: async (policy: Assurance) => {
       try {
         const newPolicy: InsertAssurance = {
