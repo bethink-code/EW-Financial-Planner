@@ -304,7 +304,7 @@ export function AssuranceDetailForm({
       </FieldGroup>
 
       {/* Group 4: Policy-Level Financial Fields */}
-      <FieldGroup title="Policy-Level Financial Details">
+      <FieldGroup title="Other Policy Details">
         <div className="flex flex-wrap gap-6">
           <FormField label="Premiums by Others">
             <input
