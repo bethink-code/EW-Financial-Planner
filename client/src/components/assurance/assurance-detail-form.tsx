@@ -1,11 +1,12 @@
 import React from 'react';
-import { Assurance } from '@shared/schema';
+import { useQuery } from '@tanstack/react-query';
+import { Assurance, ClientDetails } from '@shared/schema';
 import { GroupedDetailForm, FieldGroup, FormField } from '@/components/common/grouped-detail-form';
-import AssuranceOwnerSelector from '@/components/common/assurance-owner-selector';
+import EntityOwnerSelector from '@/components/common/entity-owner-selector';
 import EntityBeneficiarySelector from '@/components/common/entity-beneficiary-selector';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { ActionButtonGroup, DuplicateButton, DeleteButton } from '@/components/ui/action-buttons';
-import { handleDefaultValueFocus } from '@/lib/formatting';
+import { handleDefaultValueFocus, formatYearsValue, formatPercentageValue } from '@/lib/formatting';
 
 interface AssuranceDetailFormProps {
   policy: Assurance;
@@ -55,6 +56,24 @@ export function AssuranceDetailForm({
     onUpdate(policy.id, field, checked);
   };
 
+  // Fetch entities for dropdowns
+  const { data: entities = [] } = useQuery<ClientDetails[]>({
+    queryKey: ["/api/client-details"]
+  });
+
+  // Helper functions from table
+  const isAmountYearsMode = (policy: Assurance, rowIndex: number): boolean => {
+    return (policy.amountToggles || [])[rowIndex] === true;
+  };
+
+  const getAmountControlsEnabled = (policy: Assurance, isPending: boolean): boolean => {
+    return !isPending; // Simple check - can be enhanced as needed
+  };
+
+  const handleArrayFieldUpdate = (policyId: number, field: string, index: number, value: any) => {
+    onUpdate(policyId, field, { index, value });
+  };
+
   return (
     <GroupedDetailForm>
       {/* Header with Actions */}
@@ -92,22 +111,80 @@ export function AssuranceDetailForm({
           
           <FormField label="Owners & Life Assured & Death Benefits">
             <div className="space-y-2">
-              {policy.owners.map((_, ownerIndex) => (
-                <AssuranceOwnerSelector
-                  key={`owner-${ownerIndex}`}
-                  policyId={policy.id}
-                  owners={policy.owners}
-                  lifeAssured={policy.lifeAssured || [""]}
-                  deathBenefits={policy.deathBenefits || ["R 0"]}
-                  onOwnerChange={onOwnerChange}
-                  onLifeAssuredChange={onLifeAssuredChange}
-                  onDeathBenefitChange={onDeathBenefitChange}
-                  onOwnershipPercentageChange={onOwnershipPercentageChange}
-                  onAddOwner={onAddOwner}
-                  onRemoveOwner={onRemoveOwner}
-                  rowIndex={ownerIndex}
-                  disabled={disabled}
-                />
+              {/* Use exact table pattern for maximum rows */}
+              {Array.from({ length: Math.max(policy.owners.length, policy.beneficiaries.length) }, (_, rowIndex) => (
+                <div key={`owner-row-${rowIndex}`} className="flex items-center gap-3 p-2 border border-neutral-200 rounded bg-neutral-50">
+                  {/* Owner - using exact table component */}
+                  <div className="min-w-0">
+                    <EntityOwnerSelector
+                      policyId={policy.id}
+                      owners={policy.owners}
+                      ownershipPercentages={policy.ownershipPercentages || ["100%"]}
+                      onOwnerChange={onOwnerChange}
+                      onOwnershipPercentageChange={onOwnershipPercentageChange}
+                      onAddOwner={onAddOwner}
+                      onRemoveOwner={onRemoveOwner}
+                      rowIndex={rowIndex}
+                      disabled={disabled}
+                    />
+                  </div>
+
+                  {/* Life Assured - using exact table pattern */}
+                  <div className="min-w-0">
+                    <Select
+                      value={(policy.lifeAssured || [])[rowIndex] || "none"}
+                      onValueChange={(value) => {
+                        const valueToStore = value === "none" ? "" : value;
+                        onLifeAssuredChange(policy.id, rowIndex, valueToStore);
+                      }}
+                      disabled={disabled}
+                    >
+                      <SelectTrigger className="table-input" style={{ width: 'fit-content', minWidth: '200px' }}>
+                        <SelectValue placeholder="Select life assured..." />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="none">Select life assured...</SelectItem>
+                        {entities.map((client) => (
+                          <SelectItem key={client.id} value={client.entityName}>
+                            {client.entityName}
+                            {client.entityType === "Primary entity" && " (Primary entity)"}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+
+                  {/* Death Benefit - using exact table pattern */}
+                  <div className="min-w-0">
+                    <input
+                      type="text"
+                      defaultValue={((policy.deathBenefits || [])[rowIndex] || "R 0")}
+                      className="table-input text-right"
+                      style={{ width: 'fit-content', minWidth: '120px' }}
+                      onBlur={(e) => {
+                        let value = e.target.value.trim();
+                        value = value.replace(/[^\d.-]/g, '');
+                        
+                        if (value === '' || value === '0') {
+                          onDeathBenefitChange(policy.id, rowIndex, 'R 0');
+                          e.target.value = 'R 0';
+                          return;
+                        }
+                        
+                        if (!isNaN(parseFloat(value))) {
+                          const numValue = parseFloat(value);
+                          const formattedValue = `R ${numValue.toLocaleString()}`;
+                          onDeathBenefitChange(policy.id, rowIndex, formattedValue);
+                          e.target.value = formattedValue;
+                        } else {
+                          onDeathBenefitChange(policy.id, rowIndex, 'R 0');
+                          e.target.value = 'R 0';
+                        }
+                      }}
+                      disabled={disabled}
+                    />
+                  </div>
+                </div>
               ))}
             </div>
           </FormField>
@@ -119,19 +196,21 @@ export function AssuranceDetailForm({
         <div className="space-y-4">
           <FormField label="Beneficiaries & Benefit Splits">
             <div className="space-y-2">
-              {policy.beneficiaries.map((_, beneficiaryIndex) => (
-                <EntityBeneficiarySelector
-                  key={`beneficiary-${beneficiaryIndex}`}
-                  policyId={policy.id}
-                  beneficiaries={policy.beneficiaries}
-                  beneficiaryPercentages={policy.beneficiaryPercentages || ["100%"]}
-                  onBeneficiaryChange={onBeneficiaryChange}
-                  onBeneficiaryPercentageChange={onBeneficiaryPercentageChange}
-                  onAddBeneficiary={onAddBeneficiary}
-                  onRemoveBeneficiary={onRemoveBeneficiary}
-                  rowIndex={beneficiaryIndex}
-                  disabled={disabled}
-                />
+              {/* Use exact table pattern for beneficiaries */}
+              {Array.from({ length: Math.max(policy.owners.length, policy.beneficiaries.length) }, (_, rowIndex) => (
+                <div key={`beneficiary-row-${rowIndex}`} className="p-2 border border-neutral-200 rounded bg-neutral-50">
+                  <EntityBeneficiarySelector
+                    policyId={policy.id}
+                    beneficiaries={policy.beneficiaries}
+                    beneficiaryPercentages={policy.beneficiaryPercentages || ["100%"]}
+                    onBeneficiaryChange={onBeneficiaryChange}
+                    onBeneficiaryPercentageChange={onBeneficiaryPercentageChange}
+                    onAddBeneficiary={onAddBeneficiary}
+                    onRemoveBeneficiary={onRemoveBeneficiary}
+                    rowIndex={rowIndex}
+                    disabled={disabled}
+                  />
+                </div>
               ))}
             </div>
           </FormField>
@@ -147,6 +226,78 @@ export function AssuranceDetailForm({
                 onBlur={(e) => handleTextFieldBlur('amount', e.target.value)}
                 disabled={disabled}
               />
+              
+              {/* Amount Toggle Pattern per Beneficiary - using exact table pattern */}
+              <div className="space-y-2 mt-3">
+                <h4 className="text-sm font-medium text-neutral-700">Toggle Controls per Beneficiary:</h4>
+                {Array.from({ length: Math.max(policy.owners.length, policy.beneficiaries.length) }, (_, rowIndex) => (
+                  <div key={`amount-toggle-${rowIndex}`} className="flex items-center gap-3 p-2 border border-neutral-200 rounded bg-neutral-50">
+                    {/* Toggle Button - exact table pattern */}
+                    <div className="pt-0.5">
+                      <button
+                        type="button"
+                        onClick={() => {
+                          const currentToggle = isAmountYearsMode(policy, rowIndex);
+                          handleArrayFieldUpdate(policy.id, 'amountToggles', rowIndex, !currentToggle);
+                        }}
+                        className={`h-8 px-3 min-w-[48px] bg-[#E8F3F8] border border-[#E0E0E0] text-[#016991] hover:bg-[#D1E7F0] rounded-md flex items-center justify-center transition-colors text-sm font-medium ${
+                          !getAmountControlsEnabled(policy, disabled) ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'
+                        }`}
+                        disabled={!getAmountControlsEnabled(policy, disabled)}
+                      >
+                        {isAmountYearsMode(policy, rowIndex) ? 'Years' : '%'}
+                      </button>
+                    </div>
+
+                    {/* Years/% Input - exact table pattern */}
+                    <div className="min-w-0">
+                      {isAmountYearsMode(policy, rowIndex) ? (
+                        // Years Mode
+                        <input
+                          key={`amount-years-${policy.id}-${rowIndex}`}
+                          type="text"
+                          defaultValue={formatYearsValue((policy.amountYearsValues || ["0 years"])[rowIndex] || "0 years")}
+                          className={`table-input ${
+                            !getAmountControlsEnabled(policy, disabled) ? 'bg-neutral-100 cursor-not-allowed' : ''
+                          }`}
+                          style={{ width: 'fit-content', minWidth: '100px' }}
+                          onFocus={handleDefaultValueFocus}
+                          onBlur={(e) => {
+                            const formattedValue = formatYearsValue(e.target.value);
+                            e.target.value = formattedValue;
+                            handleArrayFieldUpdate(policy.id, 'amountYearsValues', rowIndex, formattedValue);
+                          }}
+                          disabled={!getAmountControlsEnabled(policy, disabled)}
+                        />
+                      ) : (
+                        // Percentage Mode
+                        <input
+                          key={`amount-increase-${policy.id}-${rowIndex}`}
+                          type="text"
+                          defaultValue={(policy.amountIncreaseValues || ["0%"])[rowIndex] || "0%"}
+                          className={`table-input ${
+                            !getAmountControlsEnabled(policy, disabled) ? 'bg-neutral-100 cursor-not-allowed' : ''
+                          }`}
+                          style={{ width: 'fit-content', minWidth: '100px' }}
+                          onFocus={handleDefaultValueFocus}
+                          onBlur={(e) => {
+                            const formattedValue = formatPercentageValue(e.target.value);
+                            e.target.value = formattedValue;
+                            handleArrayFieldUpdate(policy.id, 'amountIncreaseValues', rowIndex, formattedValue);
+                          }}
+                          disabled={!getAmountControlsEnabled(policy, disabled)}
+                        />
+                      )}
+                    </div>
+
+                    {/* Row Label */}
+                    <span className="text-sm text-neutral-500">
+                      Row {rowIndex + 1}
+                    </span>
+                  </div>
+                ))}
+              </div>
+
               <div className="text-sm text-neutral-500">
                 Note: Each beneficiary has independent toggle controls for years/percentage input mode
               </div>
