@@ -3,6 +3,14 @@
 ## Overview
 This is the definitive guide for implementing hybrid view functionality across all financial planning calculators. This pattern provides 80% reusable infrastructure while allowing 20% calculator-specific customization.
 
+**CRITICAL**: This pattern has been battle-tested across multiple calculators. Follow it exactly or expect broken UI.
+
+## Implementation Rules
+1. **NO EXCEPTIONS**: Border management props (`isFirst`/`isLast`) are mandatory
+2. **NO SHORTCUTS**: Use provided templates and checklist completely  
+3. **NO VARIATIONS**: Visual protocol must be followed exactly
+4. **ZERO TOLERANCE**: Any deviation will cause UI issues
+
 ## Pattern Architecture
 
 ### 1. Core Components Required
@@ -270,6 +278,31 @@ Every calculator should use these 4 logical groupings:
 6. NO `space-y-*` classes on tab containers
 7. NO borders on GroupedDetailForm component
 
+**MANDATORY IMPLEMENTATION**:
+```typescript
+// Always apply both isFirst AND isLast props
+{items.map((item, index) => (
+  <HybridItemPreviewCard
+    key={item.id}
+    // ... other props
+    isFirst={index === 0}
+    isLast={index === items.length - 1}
+  />
+))}
+
+// Container wrapper with proper borders
+<div className="flex border-t border-neutral-200">
+  <div className="w-80 flex-shrink-0 border-r border-neutral-200 bg-neutral-50">
+    <div> {/* NO space-y-* classes here */}
+      {summaryCards}
+    </div>
+  </div>
+  <div className="flex-1 p-6">
+    {detailForms}
+  </div>
+</div>
+```
+
 ### 6. Multi-line Owner Display Standard
 
 ```typescript
@@ -301,18 +334,20 @@ const selectedItem = useMemo(() =>
 
 ### 8. Implementation Checklist
 
-When implementing a new calculator hybrid view:
+**MANDATORY STEPS** - Every calculator MUST follow this checklist:
 
-- [ ] Create `getItemPreview` function with standard owner display
-- [ ] Implement `summaryCards` with proper `isFirst`/`isLast` props
-- [ ] Create detail form component using `GroupedDetailForm`
-- [ ] Use 4 universal field groupings adapted to calculator needs
-- [ ] Add selection state management with auto-selection
-- [ ] Use `HybridViewWrapper` for consistent container structure
-- [ ] Test border management (no double borders)
-- [ ] Verify tab styling (no vertical spacing)
-- [ ] Confirm multi-line owner display works
-- [ ] Ensure proper empty state handling
+- [ ] **Border Management**: Apply `isFirst={index === 0}` AND `isLast={index === items.length - 1}` to ALL preview cards
+- [ ] **Container Structure**: Use `HybridViewWrapper` with proper border classes (`border-t`, `border-r`)
+- [ ] **Tab Spacing**: NO `space-y-*` classes on summary cards container
+- [ ] **GroupedDetailForm**: NO borders on detail form component - keep it clean
+- [ ] **Multi-line Owners**: Standard owner display format with `join('\n')`
+- [ ] **State Management**: Auto-select first item in hybrid view
+- [ ] **Field Groupings**: Use 4 universal groupings adapted to calculator
+- [ ] **Error Handling**: Proper empty states and loading indicators
+- [ ] **Visual Testing**: Verify no double borders anywhere in interface
+- [ ] **Accessibility**: All tabs keyboard navigable and properly labeled
+
+**FAILURE TO FOLLOW = BROKEN UI** - These are not suggestions, they are requirements.
 
 ### 9. Pattern Benefits
 
@@ -329,13 +364,41 @@ When implementing a new calculator hybrid view:
 
 Both demonstrate complete implementations of this pattern.
 
-## Quick Start for New Calculator
+## MANDATORY Implementation Protocol
 
-1. Copy structure from existing calculator (Assurance or Retirement Funds)
-2. Replace data types and field mappings
-3. Adapt the 4 field groupings to your calculator's needs
-4. Implement calculator-specific handlers
-5. Test hybrid view functionality and border styling
-6. Update this documentation with any new patterns discovered
+**STEP 1: Copy Working Template**
+```bash
+# Copy from working implementation
+cp client/src/components/assurance/working-assurance-table.tsx client/src/components/[new-calculator]/[new-calculator]-table.tsx
+cp client/src/components/assurance/assurance-detail-form.tsx client/src/components/[new-calculator]/[new-calculator]-detail-form.tsx
+```
 
-This pattern ensures consistency across all calculators while providing flexibility for calculator-specific requirements.
+**STEP 2: Required Replacements**
+- Replace ALL data type imports and interfaces
+- Update field mappings and handlers
+- Adapt 4 field groupings to calculator needs
+- Update entity selection logic if needed
+
+**STEP 3: Border Management Verification**
+```typescript
+// VERIFY these exact patterns exist:
+isFirst={index === 0}
+isLast={index === items.length - 1}
+<div> {/* NO space-y-* */}
+  {summaryCards}
+</div>
+```
+
+**STEP 4: Visual Testing Protocol**
+1. Check first tab has no top border
+2. Check last tab has bottom border 
+3. Verify no double borders anywhere
+4. Confirm tab container has no vertical spacing
+5. Test detail form has clean borders
+
+**STEP 5: Update Documentation**
+- Add new calculator to examples list
+- Document any calculator-specific variations
+- Update this guide with new patterns if discovered
+
+**WARNING**: Skipping any step will result in broken UI. This pattern has been battle-tested across multiple calculators - follow it exactly.
