@@ -9,6 +9,7 @@ import { AddButton, DuplicateButton, DeleteButton, ActionButtonGroup } from "@/c
 import { TableHeaderAddButton } from "@/components/ui/table-header-add-button";
 import EntityOwnerSelector from "@/components/common/entity-owner-selector";
 import EntityBeneficiarySelector from "@/components/common/entity-beneficiary-selector";
+import { AssuranceDetailForm } from "@/components/assurance/assurance-detail-form";
 import { useDebouncedUpdate } from "@/hooks/use-debounced-update";
 import { useLoadingMutation } from "@/hooks/use-loading-mutation";
 import { SafeFragment } from "@/lib/safe-fragment";
@@ -619,138 +620,24 @@ export function AssuranceTable({ viewMode = 'table', onAddPolicy }: AssuranceTab
     </div>
   );
 
-  // Detail form for selected policy only
+  // Detail form for selected policy only - now using structured groups
   const detailForms = selectedPolicy ? (
-    <HybridDetailCard
+    <AssuranceDetailForm
       key={`form-${selectedPolicy.id}-${selectedPolicy.owners.length}-${selectedPolicy.beneficiaries.length}`}
-      title={formatTextValue(selectedPolicy.description) || `Policy #${selectedPolicy.id}`}
-      onDuplicate={() => handleDuplicatePolicy(selectedPolicy)}
-      onDelete={() => handleDeletePolicy(selectedPolicy.id)}
-    >
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        {/* Basic Information */}
-        <div className="space-y-4">
-          <div>
-            <label className="block text-sm font-medium text-neutral-700 mb-1">Description</label>
-            <input
-              type="text"
-              defaultValue={formatTextValue(selectedPolicy.description)}
-              placeholder="Enter details ..."
-              className={`w-full table-input ${getFieldClass('text')} ${getValueClass(selectedPolicy.description, 'text')}`}
-              onFocus={handleDefaultValueFocus}
-              onBlur={(e) => handleUpdatePolicy(selectedPolicy.id, 'description', e.target.value)}
-            />
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-neutral-700 mb-1">Death Benefit</label>
-            <input
-              type="text"
-              defaultValue={selectedPolicy.deathBenefit}
-              className={`w-full table-input ${getValueClass(selectedPolicy.deathBenefit, 'currency')}`}
-              onFocus={handleDefaultValueFocus}
-              onBlur={(e) => handleInputBlur(selectedPolicy.id, 'deathBenefit', e.target.value, e.target, 'deathBenefit')}
-            />
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-neutral-700 mb-1">Amount</label>
-            <input
-              type="text"
-              defaultValue={selectedPolicy.amount}
-              className={`w-full table-input ${getValueClass(selectedPolicy.amount, 'currency')}`}
-              onFocus={handleDefaultValueFocus}
-              onBlur={(e) => handleInputBlur(selectedPolicy.id, 'amount', e.target.value, e.target, 'amount')}
-            />
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-neutral-700 mb-1">Premiums by Others</label>
-            <input
-              type="text"
-              defaultValue={selectedPolicy.premiumsByOthers}
-              className={`w-full table-input ${getValueClass(selectedPolicy.premiumsByOthers, 'currency')}`}
-              onFocus={handleDefaultValueFocus}
-              onBlur={(e) => handleInputBlur(selectedPolicy.id, 'premiumsByOthers', e.target.value, e.target, 'premiumsByOthers')}
-            />
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-neutral-700 mb-1">Collateral Session</label>
-            <input
-              type="text"
-              defaultValue={selectedPolicy.collateralSession}
-              className={`w-full table-input ${getValueClass(selectedPolicy.collateralSession, 'currency')}`}
-              onFocus={handleDefaultValueFocus}
-              onBlur={(e) => handleInputBlur(selectedPolicy.id, 'collateralSession', e.target.value, e.target, 'collateralSession')}
-            />
-          </div>
-        </div>
-
-        {/* Entity Management */}
-        <div className="space-y-4">
-          <div>
-            <label className="block text-sm font-medium text-neutral-700 mb-1">Benefit Split</label>
-            <input
-              type="text"
-              defaultValue={selectedPolicy.benefitSplit}
-              className={`w-full table-input ${getValueClass(selectedPolicy.benefitSplit, 'text')}`}
-              onFocus={handleDefaultValueFocus}
-              onBlur={(e) => handleInputBlur(selectedPolicy.id, 'benefitSplit', e.target.value, e.target, 'benefitSplit')}
-            />
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-neutral-700 mb-1">Owners</label>
-            <div className="space-y-2">
-              {selectedPolicy.owners.map((_, ownerIndex) => (
-                <EntityOwnerSelector
-                  key={`owner-${ownerIndex}`}
-                  policyId={selectedPolicy.id}
-                  owners={selectedPolicy.owners}
-                  ownershipPercentages={selectedPolicy.ownershipPercentages || []}
-                  onOwnerChange={handleOwnerChange}
-                  onOwnershipPercentageChange={handleOwnershipPercentageChange}
-                  onAddOwner={handleAddOwner}
-                  onRemoveOwner={handleRemoveOwner}
-                  rowIndex={ownerIndex}
-                />
-              ))}
-            </div>
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-neutral-700 mb-1">Beneficiaries</label>
-            <div className="space-y-2">
-              {selectedPolicy.beneficiaries.map((_, beneficiaryIndex) => (
-                <EntityBeneficiarySelector
-                  key={`beneficiary-${beneficiaryIndex}`}
-                  policyId={selectedPolicy.id}
-                  beneficiaries={selectedPolicy.beneficiaries}
-                  beneficiaryPercentages={selectedPolicy.beneficiaryPercentages || []}
-                  onBeneficiaryChange={handleBeneficiaryChange}
-                  onBeneficiaryPercentageChange={handleBeneficiaryPercentageChange}
-                  onAddBeneficiary={handleAddBeneficiary}
-                  onRemoveBeneficiary={handleRemoveBeneficiary}
-                  rowIndex={beneficiaryIndex}
-                />
-              ))}
-            </div>
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-neutral-700 mb-1">Additional Info</label>
-            <input
-              type="text"
-              defaultValue={selectedPolicy.additionalInfo}
-              className={`w-full table-input ${getValueClass(selectedPolicy.additionalInfo, 'text')}`}
-              onFocus={handleDefaultValueFocus}
-              onBlur={(e) => handleInputBlur(selectedPolicy.id, 'additionalInfo', e.target.value, e.target, 'additionalInfo')}
-            />
-          </div>
-        </div>
-      </div>
-    </HybridDetailCard>
+      policy={selectedPolicy}
+      onUpdate={handleUpdatePolicy}
+      onDuplicate={handleDuplicatePolicy}
+      onDelete={handleDeletePolicy}
+      onOwnerChange={handleOwnerChange}
+      onOwnershipPercentageChange={handleOwnershipPercentageChange}
+      onAddOwner={handleAddOwner}
+      onRemoveOwner={handleRemoveOwner}
+      onBeneficiaryChange={handleBeneficiaryChange}
+      onBeneficiaryPercentageChange={handleBeneficiaryPercentageChange}
+      onAddBeneficiary={handleAddBeneficiary}
+      onRemoveBeneficiary={handleRemoveBeneficiary}
+      disabled={updateMutation.isPending}
+    />
   ) : (
     <div className="text-center py-8">
       <p className="text-neutral-500">Select a policy from the left to view details</p>
