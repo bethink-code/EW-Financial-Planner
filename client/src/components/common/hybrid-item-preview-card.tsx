@@ -32,9 +32,9 @@ export function HybridItemPreviewCard({
     const topBorderClass = isFirst ? '' : 'border-t border-neutral-200';
     switch (variant) {
       case 'active':
-        return `bg-white border-l-4 ${topBorderClass} border-r border-white -mr-px relative z-10 tab-active-border`;
+        return `bg-white border-l-4 ${topBorderClass} -mr-px relative z-10 tab-active-border`;
       default:
-        return `bg-neutral-50 border-r border-neutral-200 ${topBorderClass} hover:bg-white hover:border-l hover:border-l-neutral-300`;
+        return `bg-neutral-50 ${topBorderClass} hover:bg-white hover:border-l hover:border-l-neutral-300`;
     }
   };
 

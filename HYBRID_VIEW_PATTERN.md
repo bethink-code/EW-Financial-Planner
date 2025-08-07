@@ -315,9 +315,11 @@ const previewCards = items.map((item, index) => {
 
 ### Border Continuity Standard
 - Container has `border-t` class for top border continuity
-- First preview card uses `isFirst={index === 0}` to avoid double borders
+- Left sidebar wrapper provides single `border-r` for right-side separation
+- First preview card uses `isFirst={index === 0}` to avoid double top borders
 - Subsequent cards get individual top borders for separation
-- Prevents visual double-border issues while maintaining clean styling
+- Individual cards do NOT have right borders to prevent double-border issues
+- Clean tab styling without visual border conflicts
 
 ## Benefits of This Pattern
 
