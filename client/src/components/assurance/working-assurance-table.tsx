@@ -621,7 +621,7 @@ export function AssuranceTable({ viewMode = 'table', onAddPolicy }: AssuranceTab
   // Detail form for selected policy only
   const detailForms = selectedPolicy ? (
     <HybridDetailCard
-      key={`form-${selectedPolicy.id}`}
+      key={`form-${selectedPolicy.id}-${selectedPolicy.owners.length}-${selectedPolicy.beneficiaries.length}`}
       title={formatTextValue(selectedPolicy.description) || `Policy #${selectedPolicy.id}`}
       onDuplicate={() => handleDuplicatePolicy(selectedPolicy)}
       onDelete={() => handleDeletePolicy(selectedPolicy.id)}
