@@ -1,7 +1,7 @@
 import React from 'react';
 import { Assurance } from '@shared/schema';
 import { GroupedDetailForm, FieldGroup, FormField } from '@/components/common/grouped-detail-form';
-import EntityOwnerSelector from '@/components/common/entity-owner-selector';
+import AssuranceOwnerSelector from '@/components/common/assurance-owner-selector';
 import EntityBeneficiarySelector from '@/components/common/entity-beneficiary-selector';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { ActionButtonGroup, DuplicateButton, DeleteButton } from '@/components/ui/action-buttons';
@@ -13,6 +13,7 @@ interface AssuranceDetailFormProps {
   onDuplicate: (policy: Assurance) => void;
   onDelete: (id: number) => void;
   onOwnerChange: (policyId: number, ownerIndex: number, newOwner: string) => void;
+  onLifeAssuredChange: (policyId: number, lifeAssuredIndex: number, newLifeAssured: string) => void;
   onOwnershipPercentageChange: (policyId: number, ownerIndex: number, newPercentage: string) => void;
   onAddOwner: (policyId: number) => void;
   onRemoveOwner: (policyId: number, ownerIndex: number) => void;
@@ -33,6 +34,7 @@ export function AssuranceDetailForm({
   onDuplicate,
   onDelete,
   onOwnerChange,
+  onLifeAssuredChange,
   onOwnershipPercentageChange,
   onAddOwner,
   onRemoveOwner,
@@ -110,16 +112,18 @@ export function AssuranceDetailForm({
 
       {/* Ownership Structure Group */}
       <FieldGroup title="Ownership Structure">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <FormField label="Owners & Ownership">
+        <div className="space-y-6">
+          <FormField label="Owners & Life Assured" className="md:col-span-2">
             <div className="space-y-2">
               {policy.owners.map((_, ownerIndex) => (
-                <EntityOwnerSelector
+                <AssuranceOwnerSelector
                   key={`owner-${ownerIndex}`}
                   policyId={policy.id}
                   owners={policy.owners}
+                  lifeAssured={policy.lifeAssured || [""]}
                   ownershipPercentages={policy.ownershipPercentages || ["100%"]}
                   onOwnerChange={onOwnerChange}
+                  onLifeAssuredChange={onLifeAssuredChange}
                   onOwnershipPercentageChange={onOwnershipPercentageChange}
                   onAddOwner={onAddOwner}
                   onRemoveOwner={onRemoveOwner}

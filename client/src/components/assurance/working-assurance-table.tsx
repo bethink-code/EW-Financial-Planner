@@ -8,6 +8,7 @@ import { apiRequest } from "@/lib/queryClient";
 import { AddButton, DuplicateButton, DeleteButton, ActionButtonGroup } from "@/components/ui/action-buttons";
 import { TableHeaderAddButton } from "@/components/ui/table-header-add-button";
 import EntityOwnerSelector from "@/components/common/entity-owner-selector";
+import AssuranceOwnerSelector from "@/components/common/assurance-owner-selector";
 import EntityBeneficiarySelector from "@/components/common/entity-beneficiary-selector";
 import { AssuranceDetailForm } from "@/components/assurance/assurance-detail-form";
 import { useDebouncedUpdate } from "@/hooks/use-debounced-update";
@@ -185,26 +186,31 @@ export function AssuranceTable({ viewMode = 'table', onAddPolicy }: AssuranceTab
     }
   }, [policies, handleUpdatePolicy]);
 
-  // Add owner to policy
+  // Add owner to policy - includes life assured pairing for Assurance
   const handleAddOwner = useCallback((id: number) => {
     const policy = policies.find((p: Assurance) => p.id === id);
     if (policy) {
       const newOwners = [...policy.owners, ""];
+      const newLifeAssured = [...(policy.lifeAssured || []), ""];
       const newOwnershipPercentages = [...(policy.ownershipPercentages || []), "0%"];
       handleUpdatePolicy(id, 'owners', newOwners);
+      handleUpdatePolicy(id, 'lifeAssured', newLifeAssured);
       handleUpdatePolicy(id, 'ownershipPercentages', newOwnershipPercentages);
     }
   }, [policies, handleUpdatePolicy]);
 
-  // Remove specific owner by index using splice method
+  // Remove specific owner by index using splice method - includes life assured pairing
   const handleRemoveOwner = useCallback((id: number, ownerIndex: number) => {
     const policy = policies.find((p: Assurance) => p.id === id);
     if (policy && policy.owners.length > 1 && ownerIndex > 0) { // Protect first owner
       const newOwners = [...policy.owners];
+      const newLifeAssured = [...(policy.lifeAssured || [])];
       const newOwnershipPercentages = [...(policy.ownershipPercentages || [])];
       newOwners.splice(ownerIndex, 1);
+      newLifeAssured.splice(ownerIndex, 1);
       newOwnershipPercentages.splice(ownerIndex, 1);
       handleUpdatePolicy(id, 'owners', newOwners);
+      handleUpdatePolicy(id, 'lifeAssured', newLifeAssured);
       handleUpdatePolicy(id, 'ownershipPercentages', newOwnershipPercentages);
     }
   }, [policies, handleUpdatePolicy]);
@@ -250,6 +256,16 @@ export function AssuranceTable({ viewMode = 'table', onAddPolicy }: AssuranceTab
       const updatedBeneficiaries = [...policy.beneficiaries];
       updatedBeneficiaries[beneficiaryIndex] = newBeneficiary;
       handleUpdatePolicy(id, 'beneficiaries', updatedBeneficiaries);
+    }
+  }, [policies, handleUpdatePolicy]);
+
+  // Update life assured name
+  const handleLifeAssuredChange = useCallback((id: number, lifeAssuredIndex: number, newLifeAssured: string) => {
+    const policy = policies.find((p: Assurance) => p.id === id);
+    if (policy) {
+      const updatedLifeAssured = [...(policy.lifeAssured || [])];
+      updatedLifeAssured[lifeAssuredIndex] = newLifeAssured;
+      handleUpdatePolicy(id, 'lifeAssured', updatedLifeAssured);
     }
   }, [policies, handleUpdatePolicy]);
 
@@ -359,8 +375,7 @@ export function AssuranceTable({ viewMode = 'table', onAddPolicy }: AssuranceTab
                 )}
               </th>
               <th>Description</th>
-              <th>Owner</th>
-              <th>Life Assured</th>
+              <th colSpan={2}>Owner & Life Assured</th>
               <th>Death Benefit</th>
               <th>Beneficiary</th>
               <th>Amount</th>
@@ -415,13 +430,15 @@ export function AssuranceTable({ viewMode = 'table', onAddPolicy }: AssuranceTab
                     </td>
                   )}
 
-                  {/* Owner */}
-                  <td className="border border-neutral-300 p-1">
-                    <EntityOwnerSelector
+                  {/* Owner + Life Assured (linked fields) */}
+                  <td className="border border-neutral-300 p-1" colSpan={2}>
+                    <AssuranceOwnerSelector
                       policyId={policy.id}
                       owners={policy.owners}
+                      lifeAssured={policy.lifeAssured || [""]}
                       ownershipPercentages={policy.ownershipPercentages || ["100%"]}
                       onOwnerChange={handleOwnerChange}
+                      onLifeAssuredChange={handleLifeAssuredChange}
                       onOwnershipPercentageChange={handleOwnershipPercentageChange}
                       onAddOwner={handleAddOwner}
                       onRemoveOwner={handleRemoveOwner}
@@ -429,21 +446,6 @@ export function AssuranceTable({ viewMode = 'table', onAddPolicy }: AssuranceTab
                       disabled={updateMutation.isPending}
                     />
                   </td>
-
-                  {/* Life Assured - only show on first row */}
-                  {rowIndex === 0 && (
-                    <td className="border border-neutral-300 p-1 align-top" rowSpan={maxRows}>
-                      <input
-                        key={`life-assured-${policy.id}`}
-                        type="text"
-                        defaultValue=""
-                        placeholder="Enter details ..."
-                        className={`table-input ${getFieldClass('text')} ${getValueClass("", 'text')}`}
-                        onFocus={handleDefaultValueFocus}
-                        onBlur={(e) => handleUpdatePolicy(policy.id, 'description', e.target.value)}
-                      />
-                    </td>
-                  )}
 
                   {/* Death Benefit - only show on first row */}
                   {rowIndex === 0 && (
@@ -629,6 +631,7 @@ export function AssuranceTable({ viewMode = 'table', onAddPolicy }: AssuranceTab
       onDuplicate={handleDuplicatePolicy}
       onDelete={handleDeletePolicy}
       onOwnerChange={handleOwnerChange}
+      onLifeAssuredChange={handleLifeAssuredChange}
       onOwnershipPercentageChange={handleOwnershipPercentageChange}
       onAddOwner={handleAddOwner}
       onRemoveOwner={handleRemoveOwner}
