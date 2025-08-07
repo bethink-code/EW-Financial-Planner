@@ -312,7 +312,29 @@ const ownersDisplay = validOwners.length === 0
   : validOwners.map(owner => `Owner: ${owner}`).join('\n');
 ```
 
-### 7. State Management Pattern
+### 7. Data Consistency Rules
+
+**CRITICAL**: Preview card data MUST match detail form content exactly.
+
+**Common Issues**:
+- Preview shows total count but detail form has multiple sections
+- Different beneficiary/owner types counted together without clarity
+
+**Solutions**:
+```typescript
+// For multiple beneficiary types (like retirement funds)
+const type1Count = item.type1Beneficiaries?.filter(b => b).length || 0;
+const type2Count = item.type2Beneficiaries?.filter(b => b).length || 0;
+
+// Show breakdown when both exist
+if (type1Count > 0 && type2Count > 0) {
+  beneficiariesText = `Type1: ${type1Count}, Type2: ${type2Count}`;
+} else {
+  beneficiariesText = `Beneficiaries: ${type1Count + type2Count}`;
+}
+```
+
+### 8. State Management Pattern
 
 ```typescript
 // Selection state
@@ -332,7 +354,7 @@ const selectedItem = useMemo(() =>
 );
 ```
 
-### 8. Implementation Checklist
+### 9. Implementation Checklist
 
 **MANDATORY STEPS** - Every calculator MUST follow this checklist:
 
@@ -345,11 +367,12 @@ const selectedItem = useMemo(() =>
 - [ ] **Field Groupings**: Use 4 universal groupings adapted to calculator
 - [ ] **Error Handling**: Proper empty states and loading indicators
 - [ ] **Visual Testing**: Verify no double borders anywhere in interface
+- [ ] **Data Consistency**: Ensure preview card counts match detail form sections exactly
 - [ ] **Accessibility**: All tabs keyboard navigable and properly labeled
 
 **FAILURE TO FOLLOW = BROKEN UI** - These are not suggestions, they are requirements.
 
-### 9. Pattern Benefits
+### 10. Pattern Benefits
 
 ✓ **80% Reusable Infrastructure**: Core components work across all calculators
 ✓ **20% Customization**: Field groupings adapt to calculator-specific needs
@@ -357,7 +380,7 @@ const selectedItem = useMemo(() =>
 ✓ **Maintainable Code**: Centralized components reduce duplication
 ✓ **Extensible Pattern**: Easy to add new calculators following this guide
 
-### 10. Examples in Codebase
+### 11. Examples in Codebase
 
 - **Assurance**: `client/src/components/assurance/working-assurance-table.tsx`
 - **Retirement Funds**: `client/src/components/retirement-funds/retirement-fund-hybrid-table.tsx`

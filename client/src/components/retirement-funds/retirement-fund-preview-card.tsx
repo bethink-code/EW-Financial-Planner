@@ -17,10 +17,21 @@ export function RetirementFundPreviewCard({ fund, isActive, onClick, isFirst = f
     ? validOwners.map(owner => `Owner: ${owner}`).join('\n')
     : 'Owner: Not specified';
   
-  const beneficiariesCount = (fund.unapprovedBeneficiaries?.filter(b => b).length || 0) + 
-                           (fund.fundValueBeneficiaries?.filter(b => b).length || 0);
+  const unapprovedCount = fund.unapprovedBeneficiaries?.filter(b => b).length || 0;
+  const fundValueCount = fund.fundValueBeneficiaries?.filter(b => b).length || 0;
+  const totalBeneficiaries = unapprovedCount + fundValueCount;
   
-  const subtitle = `${ownerLines}\nBeneficiaries: ${beneficiariesCount}`;
+  // Show breakdown if both types exist, otherwise show total
+  let beneficiariesText;
+  if (unapprovedCount > 0 && fundValueCount > 0) {
+    beneficiariesText = `Cover Beneficiaries: ${unapprovedCount}, Fund Beneficiaries: ${fundValueCount}`;
+  } else if (totalBeneficiaries > 0) {
+    beneficiariesText = `Beneficiaries: ${totalBeneficiaries}`;
+  } else {
+    beneficiariesText = 'Beneficiaries: 0';
+  }
+  
+  const subtitle = `${ownerLines}\n${beneficiariesText}`;
   
   // Create secondary info with financial details
   const secondaryInfo = `Cover: ${fund.coverAmount || 'R 0'} | Monthly: ${fund.monthlyIncome || 'R 0'}`;
