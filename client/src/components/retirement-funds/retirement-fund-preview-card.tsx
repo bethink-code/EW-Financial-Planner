@@ -21,10 +21,10 @@ export function RetirementFundPreviewCard({ fund, isActive, onClick, isFirst = f
   const fundValueCount = fund.fundValueBeneficiaries?.filter(b => b).length || 0;
   const totalBeneficiaries = unapprovedCount + fundValueCount;
   
-  // Show breakdown if both types exist, otherwise show total
+  // Show breakdown with each type on separate lines
   let beneficiariesText;
   if (unapprovedCount > 0 && fundValueCount > 0) {
-    beneficiariesText = `Cover Beneficiaries: ${unapprovedCount}, Fund Beneficiaries: ${fundValueCount}`;
+    beneficiariesText = `Cover Beneficiaries: ${unapprovedCount}\nFund Beneficiaries: ${fundValueCount}`;
   } else if (totalBeneficiaries > 0) {
     beneficiariesText = `Beneficiaries: ${totalBeneficiaries}`;
   } else {
