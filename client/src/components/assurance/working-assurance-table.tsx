@@ -187,31 +187,36 @@ export function AssuranceTable({ viewMode = 'table', onAddPolicy }: AssuranceTab
     }
   }, [policies, handleUpdatePolicy]);
 
-  // Add owner to policy - includes life assured pairing for Assurance
+  // Add owner to policy - includes life assured and death benefit pairing for Assurance
   const handleAddOwner = useCallback((id: number) => {
     const policy = policies.find((p: Assurance) => p.id === id);
     if (policy) {
       const newOwners = [...policy.owners, ""];
       const newLifeAssured = [...(policy.lifeAssured || []), ""];
+      const newDeathBenefits = [...(policy.deathBenefits || []), "R 0"];
       const newOwnershipPercentages = [...(policy.ownershipPercentages || []), "0%"];
       handleUpdatePolicy(id, 'owners', newOwners);
       handleUpdatePolicy(id, 'lifeAssured', newLifeAssured);
+      handleUpdatePolicy(id, 'deathBenefits', newDeathBenefits);
       handleUpdatePolicy(id, 'ownershipPercentages', newOwnershipPercentages);
     }
   }, [policies, handleUpdatePolicy]);
 
-  // Remove specific owner by index using splice method - includes life assured pairing
+  // Remove specific owner by index using splice method - includes life assured and death benefit pairing
   const handleRemoveOwner = useCallback((id: number, ownerIndex: number) => {
     const policy = policies.find((p: Assurance) => p.id === id);
     if (policy && policy.owners.length > 1 && ownerIndex > 0) { // Protect first owner
       const newOwners = [...policy.owners];
       const newLifeAssured = [...(policy.lifeAssured || [])];
+      const newDeathBenefits = [...(policy.deathBenefits || [])];
       const newOwnershipPercentages = [...(policy.ownershipPercentages || [])];
       newOwners.splice(ownerIndex, 1);
       newLifeAssured.splice(ownerIndex, 1);
+      newDeathBenefits.splice(ownerIndex, 1);
       newOwnershipPercentages.splice(ownerIndex, 1);
       handleUpdatePolicy(id, 'owners', newOwners);
       handleUpdatePolicy(id, 'lifeAssured', newLifeAssured);
+      handleUpdatePolicy(id, 'deathBenefits', newDeathBenefits);
       handleUpdatePolicy(id, 'ownershipPercentages', newOwnershipPercentages);
     }
   }, [policies, handleUpdatePolicy]);
@@ -267,6 +272,16 @@ export function AssuranceTable({ viewMode = 'table', onAddPolicy }: AssuranceTab
       const updatedLifeAssured = [...(policy.lifeAssured || [])];
       updatedLifeAssured[lifeAssuredIndex] = newLifeAssured;
       handleUpdatePolicy(id, 'lifeAssured', updatedLifeAssured);
+    }
+  }, [policies, handleUpdatePolicy]);
+
+  // Update death benefit amount for specific index
+  const handleDeathBenefitChange = useCallback((id: number, deathBenefitIndex: number, newDeathBenefit: string) => {
+    const policy = policies.find((p: Assurance) => p.id === id);
+    if (policy) {
+      const updatedDeathBenefits = [...(policy.deathBenefits || [])];
+      updatedDeathBenefits[deathBenefitIndex] = newDeathBenefit;
+      handleUpdatePolicy(id, 'deathBenefits', updatedDeathBenefits);
     }
   }, [policies, handleUpdatePolicy]);
 
@@ -377,8 +392,7 @@ export function AssuranceTable({ viewMode = 'table', onAddPolicy }: AssuranceTab
               </th>
               <th className="table-header-base">Description</th>
               <th className="table-header-base">Owner</th>
-              <th className="table-header-base">Life Assured</th>
-              <th className="table-header-base">Death Benefit</th>
+              <th className="table-header-base" colSpan={2}>Life Assured & Death Benefit</th>
               <th className="table-header-base">Beneficiary</th>
               <th className="table-header-base">Amount</th>
               <th className="table-header-base">Buy/Sell</th>
@@ -447,30 +461,20 @@ export function AssuranceTable({ viewMode = 'table', onAddPolicy }: AssuranceTab
                     />
                   </td>
 
-                  {/* Life Assured */}
-                  <td className="border border-neutral-300 p-1">
+                  {/* Life Assured & Death Benefit */}
+                  <td className="border border-neutral-300 p-1" colSpan={2}>
                     <EntityLifeAssuredSelector
                       policyId={policy.id}
                       lifeAssured={policy.lifeAssured || [""]}
+                      deathBenefits={policy.deathBenefits || ["R 0"]}
                       onLifeAssuredChange={handleLifeAssuredChange}
+                      onDeathBenefitChange={handleDeathBenefitChange}
                       rowIndex={rowIndex}
                       disabled={updateMutation.isPending}
                     />
                   </td>
 
-                  {/* Death Benefit - only show on first row */}
-                  <td className="border border-neutral-300 p-1">
-                    {rowIndex === 0 && (
-                      <input
-                        key={`death-benefit-${policy.id}`}
-                        type="text"
-                        defaultValue={policy.deathBenefit}
-                        className={`table-input ${getFieldClass('currency')} ${getValueClass(policy.deathBenefit, 'currency')}`}
-                        onFocus={handleDefaultValueFocus}
-                        onBlur={(e) => handleInputBlur(policy.id, 'deathBenefit', e.target.value, e.target, 'deathBenefit')}
-                      />
-                    )}
-                  </td>
+
 
                   {/* Beneficiary */}
                   <td className="border border-neutral-300 p-1">
@@ -590,7 +594,7 @@ export function AssuranceTable({ viewMode = 'table', onAddPolicy }: AssuranceTab
           {/* Totals Footer */}
           <tfoot>
             <tr>
-              <td className="totals-cell-label text-right" colSpan={5}>Totals</td>
+              <td className="totals-cell-label text-right" colSpan={4}>Totals</td>
               <td className="totals-cell-value">R {totals.deathBenefit.toLocaleString()}</td>
               <td className="totals-cell-label"></td>
               <td className="totals-cell-value">R {totals.amount.toLocaleString()}</td>
@@ -643,6 +647,7 @@ export function AssuranceTable({ viewMode = 'table', onAddPolicy }: AssuranceTab
       onDelete={handleDeletePolicy}
       onOwnerChange={handleOwnerChange}
       onLifeAssuredChange={handleLifeAssuredChange}
+      onDeathBenefitChange={handleDeathBenefitChange}
       onOwnershipPercentageChange={handleOwnershipPercentageChange}
       onAddOwner={handleAddOwner}
       onRemoveOwner={handleRemoveOwner}

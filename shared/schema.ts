@@ -123,6 +123,7 @@ export const assurance = pgTable("assurance", {
   // Owner information - linked triplets: Owner + Life Assured + Death Benefit
   owners: text("owners").array().notNull().default(["Donald Edwards"]),
   lifeAssured: text("life_assured").array().notNull().default([""]), // Linked to owners
+  deathBenefits: text("death_benefits").array().notNull().default(["R 0"]), // Individual death benefits per owner/life assured
   ownershipPercentages: text("ownership_percentages").array().notNull().default(["100%"]),
   
   // Beneficiary information 

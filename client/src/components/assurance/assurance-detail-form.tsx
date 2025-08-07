@@ -14,6 +14,7 @@ interface AssuranceDetailFormProps {
   onDelete: (id: number) => void;
   onOwnerChange: (policyId: number, ownerIndex: number, newOwner: string) => void;
   onLifeAssuredChange: (policyId: number, lifeAssuredIndex: number, newLifeAssured: string) => void;
+  onDeathBenefitChange: (policyId: number, deathBenefitIndex: number, newDeathBenefit: string) => void;
   onOwnershipPercentageChange: (policyId: number, ownerIndex: number, newPercentage: string) => void;
   onAddOwner: (policyId: number) => void;
   onRemoveOwner: (policyId: number, ownerIndex: number) => void;
@@ -35,6 +36,7 @@ export function AssuranceDetailForm({
   onDelete,
   onOwnerChange,
   onLifeAssuredChange,
+  onDeathBenefitChange,
   onOwnershipPercentageChange,
   onAddOwner,
   onRemoveOwner,
@@ -121,9 +123,10 @@ export function AssuranceDetailForm({
                   policyId={policy.id}
                   owners={policy.owners}
                   lifeAssured={policy.lifeAssured || [""]}
-                  ownershipPercentages={policy.ownershipPercentages || ["100%"]}
+                  deathBenefits={policy.deathBenefits || ["R 0"]}
                   onOwnerChange={onOwnerChange}
                   onLifeAssuredChange={onLifeAssuredChange}
+                  onDeathBenefitChange={onDeathBenefitChange}
                   onOwnershipPercentageChange={onOwnershipPercentageChange}
                   onAddOwner={onAddOwner}
                   onRemoveOwner={onRemoveOwner}

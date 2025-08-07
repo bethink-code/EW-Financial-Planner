@@ -8,9 +8,10 @@ interface AssuranceOwnerSelectorProps {
   policyId: number;
   owners: string[];
   lifeAssured: string[];
-  ownershipPercentages: string[];
+  deathBenefits: string[];
   onOwnerChange: (policyId: number, ownerIndex: number, newOwner: string) => void;
   onLifeAssuredChange: (policyId: number, lifeAssuredIndex: number, newLifeAssured: string) => void;
+  onDeathBenefitChange: (policyId: number, deathBenefitIndex: number, newDeathBenefit: string) => void;
   onOwnershipPercentageChange: (policyId: number, ownerIndex: number, newPercentage: string) => void;
   onAddOwner: (policyId: number) => void;
   onRemoveOwner: (policyId: number, ownerIndex: number) => void;
@@ -26,9 +27,10 @@ export default function AssuranceOwnerSelector({
   policyId,
   owners,
   lifeAssured,
-  ownershipPercentages,
+  deathBenefits,
   onOwnerChange,
   onLifeAssuredChange,
+  onDeathBenefitChange,
   onOwnershipPercentageChange,
   onAddOwner,
   onRemoveOwner,
@@ -43,7 +45,7 @@ export default function AssuranceOwnerSelector({
 
   const currentOwner = owners[rowIndex] || "none";
   const currentLifeAssured = lifeAssured[rowIndex] || "none";
-  const currentPercentage = ownershipPercentages[rowIndex] || "0%";
+  const currentDeathBenefit = deathBenefits[rowIndex] || "R 0";
 
   const handleOwnerChange = (newOwner: string) => {
     const valueToStore = newOwner === "none" ? "" : newOwner;
@@ -55,13 +57,21 @@ export default function AssuranceOwnerSelector({
     onLifeAssuredChange(policyId, rowIndex, valueToStore);
   };
 
-  const handlePercentageChange = (e: React.FocusEvent<HTMLInputElement>) => {
+  const handleDeathBenefitChange = (e: React.FocusEvent<HTMLInputElement>) => {
     let value = e.target.value.trim();
-    if (value && !value.includes('%')) {
-      value = value + '%';
+    if (value && !value.startsWith('R ')) {
+      value = value.replace(/[^\d.-]/g, '');
+      if (!isNaN(parseFloat(value))) {
+        const numValue = parseFloat(value);
+        value = `R ${numValue.toLocaleString()}`;
+      } else {
+        value = "R 0";
+      }
     }
-    onOwnershipPercentageChange(policyId, rowIndex, value);
+    onDeathBenefitChange(policyId, rowIndex, value);
   };
+
+
 
   const handleAddOwner = () => {
     onAddOwner(policyId);
@@ -101,7 +111,7 @@ export default function AssuranceOwnerSelector({
       </div>
 
       {/* Life Assured Dropdown */}
-      <div className="flex-1">
+      <div className="flex-1 min-w-[200px]">
         <Select
           value={currentLifeAssured}
           onValueChange={handleLifeAssuredChange}
@@ -122,17 +132,19 @@ export default function AssuranceOwnerSelector({
         </Select>
       </div>
 
-      {/* Ownership Percentage */}
-      <div className="w-20">
+      {/* Death Benefit Amount */}
+      <div className="w-32">
         <input
           type="text"
-          defaultValue={currentPercentage}
+          defaultValue={currentDeathBenefit}
           className="w-full table-input text-right"
-          placeholder="0%"
-          onBlur={handlePercentageChange}
+          placeholder="R 0"
+          onBlur={handleDeathBenefitChange}
           disabled={disabled}
         />
       </div>
+
+
 
       {/* Action Buttons */}
       <div className="flex items-center gap-1">
