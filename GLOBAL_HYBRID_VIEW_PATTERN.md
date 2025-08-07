@@ -326,13 +326,15 @@ const ownersDisplay = validOwners.length === 0
 const type1Count = item.type1Beneficiaries?.filter(b => b).length || 0;
 const type2Count = item.type2Beneficiaries?.filter(b => b).length || 0;
 
-// Show breakdown when both exist
+// Show breakdown with each type on separate lines (preferred format)
 if (type1Count > 0 && type2Count > 0) {
-  beneficiariesText = `Type1: ${type1Count}, Type2: ${type2Count}`;
+  beneficiariesText = `Type1 Beneficiaries: ${type1Count}\nType2 Beneficiaries: ${type2Count}`;
 } else {
   beneficiariesText = `Beneficiaries: ${type1Count + type2Count}`;
 }
 ```
+
+**Formatting Rule**: When displaying multiple entity types in preview cards, use separate lines (`\n`) for better readability.
 
 **Display Rule**: Preview cards show beneficiary type breakdown; detail forms can use separate sections or unified tables based on calculator requirements.
 
