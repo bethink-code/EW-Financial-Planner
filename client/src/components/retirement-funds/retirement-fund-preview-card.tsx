@@ -6,9 +6,10 @@ interface RetirementFundPreviewCardProps {
   fund: RetirementFund;
   isActive: boolean;
   onClick: () => void;
+  isFirst?: boolean;
 }
 
-export function RetirementFundPreviewCard({ fund, isActive, onClick }: RetirementFundPreviewCardProps) {
+export function RetirementFundPreviewCard({ fund, isActive, onClick, isFirst = false }: RetirementFundPreviewCardProps) {
   // Create subtitle with owners listed on separate lines
   const validOwners = fund.owners?.filter(owner => owner && owner.trim() !== '') || [];
   const ownerLines = validOwners.length > 0 
@@ -32,6 +33,7 @@ export function RetirementFundPreviewCard({ fund, isActive, onClick }: Retiremen
       variant={isActive ? 'active' : 'default'}
       onClick={onClick}
       isClickable={true}
+      isFirst={isFirst}
     />
   );
 }

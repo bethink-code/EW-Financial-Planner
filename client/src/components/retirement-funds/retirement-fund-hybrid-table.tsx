@@ -25,12 +25,13 @@ export function RetirementFundHybridTable({
 
   const activeFund = funds.find(fund => fund.id === activeFundId);
 
-  const previewCards = funds.map(fund => (
+  const previewCards = funds.map((fund, index) => (
     <RetirementFundPreviewCard
       key={fund.id}
       fund={fund}
       isActive={fund.id === activeFundId}
       onClick={() => setActiveFundId(fund.id)}
+      isFirst={index === 0}
     />
   ));
 

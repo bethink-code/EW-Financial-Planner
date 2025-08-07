@@ -285,20 +285,26 @@ Each calculator adapts the 4 logical field groupings to its specific domain whil
 
 ### HybridItemPreviewCard Usage
 ```typescript
-// Standard implementation for all calculators
-const subtitle = validOwners.length > 0 
-  ? validOwners.map(owner => `Owner: ${owner}`).join('\n')
-  : 'Owner: Not specified';
+// Standard implementation for all calculators - includes isFirst to prevent double borders
+const previewCards = items.map((item, index) => {
+  const subtitle = validOwners.length > 0 
+    ? validOwners.map(owner => `Owner: ${owner}`).join('\n')
+    : 'Owner: Not specified';
 
-<HybridItemPreviewCard
-  title={item.description || 'Untitled Item'}
-  subtitle={subtitle}
-  primaryValue={item.primaryAmount || 'R 0'}
-  secondaryInfo="Additional context line"
-  variant={isActive ? 'active' : 'default'}
-  onClick={onSelect}
-  isClickable={true}
-/>
+  return (
+    <HybridItemPreviewCard
+      key={item.id}
+      title={item.description || 'Untitled Item'}
+      subtitle={subtitle}
+      primaryValue={item.primaryAmount || 'R 0'}
+      secondaryInfo="Additional context line"
+      variant={isActive ? 'active' : 'default'}
+      onClick={onSelect}
+      isClickable={true}
+      isFirst={index === 0}
+    />
+  );
+});
 ```
 
 ### Multi-line Owner Display Standard
@@ -306,6 +312,12 @@ const subtitle = validOwners.length > 0
 - Each owner on separate line: `owners.map(owner => 'Owner: ${owner}').join('\n')`
 - Fallback for no owners: `'Owner: Not specified'`
 - Works with HybridItemPreviewCard's `whiteSpace: 'pre-line'` styling
+
+### Border Continuity Standard
+- Container has `border-t` class for top border continuity
+- First preview card uses `isFirst={index === 0}` to avoid double borders
+- Subsequent cards get individual top borders for separation
+- Prevents visual double-border issues while maintaining clean styling
 
 ## Benefits of This Pattern
 
