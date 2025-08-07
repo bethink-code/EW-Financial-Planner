@@ -416,7 +416,7 @@ export function AssuranceTable({ viewMode = 'table', onAddPolicy }: AssuranceTab
             </tr>
           </thead>
           <tbody className="divide-y divide-neutral-200">
-            {filteredPolicies.map((policy: Assurance) => {
+            {filteredPolicies.map((policy: Assurance, policyIndex) => {
               // Calculate max rows needed for this policy
               const maxRows = Math.max(policy.owners.length, policy.beneficiaries.length);
               
@@ -425,7 +425,9 @@ export function AssuranceTable({ viewMode = 'table', onAddPolicy }: AssuranceTab
                   {Array.from({ length: maxRows }, (_, rowIndex) => (
                     <tr 
                       key={`${policy.id}-${rowIndex}`} 
-                      className="hover:bg-neutral-50"
+                      className={`hover:bg-neutral-50 ${
+                        rowIndex === 0 && policyIndex > 0 ? 'policy-first-row' : ''
+                      }`}
                     >
                   {/* Actions - only show on first row */}
                   {rowIndex === 0 && (

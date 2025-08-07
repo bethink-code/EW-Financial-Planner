@@ -751,6 +751,26 @@ th, td {
     height: 2rem;
     font-weight: 700;
   }
+
+  /* Policy separation - add space between different policies */
+  .policy-group {
+    border-top: 2px solid hsl(var(--border));
+    margin-top: 0.5rem;
+  }
+
+  .policy-group:first-child {
+    border-top: none;
+    margin-top: 0;
+  }
+
+  /* First row of each policy - add top border for separation */
+  .policy-first-row {
+    border-top: 2px solid hsl(var(--neutral-300)) !important;
+  }
+
+  .policy-first-row:first-child {
+    border-top: none !important;
+  }
   
   .table-total-row td {
     height: 2rem;
