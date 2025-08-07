@@ -281,7 +281,6 @@ th, td {
   
   /* GLOBAL TABLE STYLING - Ultra Clean with Section Borders Only */
   table {
-    min-width: 1200px !important;
     width: auto !important;
     background-color: white !important;
     border-radius: 0.5rem !important;
