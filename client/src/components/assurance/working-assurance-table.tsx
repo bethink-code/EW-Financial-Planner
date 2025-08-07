@@ -51,7 +51,7 @@ const formatCurrencyValue = (value: string, fieldType: string): string => {
   return "R 0";
 };
 
-// Years/% Toggle Pattern Helper Functions for Amount field
+// Years/% Toggle Pattern Helper Functions for Amount field - Per Beneficiary
 const hasAmountValue = (policy: Assurance) => {
   const amount = policy.amount || "";
   const cleanValue = amount.replace(/[^\d]/g, '');
@@ -62,9 +62,10 @@ const getAmountControlsEnabled = (policy: Assurance, isUpdating: boolean) => {
   return hasAmountValue(policy) && !isUpdating;
 };
 
-// Toggle shows "Years" when checked (true), "%" when unchecked (false)
-const isAmountYearsMode = (policy: Assurance) => {
-  return policy.amountCheckbox === true;
+// Toggle shows "Years" when checked (true), "%" when unchecked (false) - Per Beneficiary
+const isAmountYearsMode = (policy: Assurance, beneficiaryIndex: number) => {
+  const toggles = policy.amountToggles || [true];
+  return toggles[beneficiaryIndex] !== false; // Default to true if undefined
 };
 
 // Format years value with proper suffix
@@ -169,9 +170,9 @@ export function AssuranceTable({ viewMode = 'table', onAddPolicy }: AssuranceTab
           beneficiaries: [...policy.beneficiaries],
           deathBenefit: policy.deathBenefit,
           amount: policy.amount,
-          amountCheckbox: policy.amountCheckbox || true,
-          amountYears: policy.amountYears || "0 years",
-          amountIncrease: policy.amountIncrease || "0%",
+          amountToggles: [...(policy.amountToggles || [true])],
+          amountYearsValues: [...(policy.amountYearsValues || ["0 years"])],
+          amountIncreaseValues: [...(policy.amountIncreaseValues || ["0%"])],
           premiumsByOthers: policy.premiumsByOthers,
           collateralSession: policy.collateralSession,
           benefitSplit: policy.benefitSplit,
@@ -233,9 +234,9 @@ export function AssuranceTable({ viewMode = 'table', onAddPolicy }: AssuranceTab
     let formattedValue;
     
     // Special handling for years fields
-    if (fieldType === 'years' || field === 'amountYears') {
+    if (fieldType === 'years') {
       formattedValue = formatYearsValue(value);
-    } else if (fieldType === 'percentage' || field === 'amountIncrease') {
+    } else if (fieldType === 'percentage') {
       formattedValue = formatPercentageValue(value);
     } else {
       formattedValue = formatCurrencyValue(value, fieldType || '');
@@ -252,6 +253,28 @@ export function AssuranceTable({ viewMode = 'table', onAddPolicy }: AssuranceTab
       handleUpdatePolicy(id, field, formattedValue);
     }
   }, [policies, handleUpdatePolicy]);
+
+  // Handle per-beneficiary array updates for toggle values
+  const handleArrayFieldUpdate = useCallback((id: number, field: keyof Assurance, index: number, value: string | boolean) => {
+    const policy = policies.find((p: Assurance) => p.id === id);
+    if (!policy) return;
+
+    let updatedArray;
+    if (field === 'amountToggles') {
+      updatedArray = [...(policy.amountToggles || [true])];
+      updatedArray[index] = value as boolean;
+    } else if (field === 'amountYearsValues') {
+      updatedArray = [...(policy.amountYearsValues || ["0 years"])];
+      updatedArray[index] = value as string;
+    } else if (field === 'amountIncreaseValues') {
+      updatedArray = [...(policy.amountIncreaseValues || ["0%"])];
+      updatedArray[index] = value as string;
+    } else {
+      return;
+    }
+
+    executeUpdate(id, field, updatedArray);
+  }, [policies, executeUpdate]);
 
   // Add owner to policy - includes life assured and death benefit pairing for Assurance
   const handleAddOwner = useCallback((id: number) => {
@@ -287,27 +310,45 @@ export function AssuranceTable({ viewMode = 'table', onAddPolicy }: AssuranceTab
     }
   }, [policies, handleUpdatePolicy]);
 
-  // Add beneficiary to policy
+  // Add beneficiary to policy - also expand toggle arrays
   const handleAddBeneficiary = useCallback((id: number) => {
     const policy = policies.find((p: Assurance) => p.id === id);
     if (policy) {
       const newBeneficiaries = [...policy.beneficiaries, ""];
       const newBeneficiaryPercentages = [...(policy.beneficiaryPercentages || []), "0%"];
+      const newToggles = [...(policy.amountToggles || []), true];
+      const newYearsValues = [...(policy.amountYearsValues || []), "0 years"];
+      const newIncreaseValues = [...(policy.amountIncreaseValues || []), "0%"];
+      
       handleUpdatePolicy(id, 'beneficiaries', newBeneficiaries);
       handleUpdatePolicy(id, 'beneficiaryPercentages', newBeneficiaryPercentages);
+      handleUpdatePolicy(id, 'amountToggles', newToggles);
+      handleUpdatePolicy(id, 'amountYearsValues', newYearsValues);
+      handleUpdatePolicy(id, 'amountIncreaseValues', newIncreaseValues);
     }
   }, [policies, handleUpdatePolicy]);
 
-  // Remove specific beneficiary by index using splice method
+  // Remove specific beneficiary by index using splice method - also trim toggle arrays
   const handleRemoveBeneficiary = useCallback((id: number, beneficiaryIndex: number) => {
     const policy = policies.find((p: Assurance) => p.id === id);
     if (policy && policy.beneficiaries.length > 1 && beneficiaryIndex > 0) { // Protect first beneficiary
       const newBeneficiaries = [...policy.beneficiaries];
       const newBeneficiaryPercentages = [...(policy.beneficiaryPercentages || [])];
+      const newToggles = [...(policy.amountToggles || [])];
+      const newYearsValues = [...(policy.amountYearsValues || [])];
+      const newIncreaseValues = [...(policy.amountIncreaseValues || [])];
+      
       newBeneficiaries.splice(beneficiaryIndex, 1);
       newBeneficiaryPercentages.splice(beneficiaryIndex, 1);
+      newToggles.splice(beneficiaryIndex, 1);
+      newYearsValues.splice(beneficiaryIndex, 1);
+      newIncreaseValues.splice(beneficiaryIndex, 1);
+      
       handleUpdatePolicy(id, 'beneficiaries', newBeneficiaries);
       handleUpdatePolicy(id, 'beneficiaryPercentages', newBeneficiaryPercentages);
+      handleUpdatePolicy(id, 'amountToggles', newToggles);
+      handleUpdatePolicy(id, 'amountYearsValues', newYearsValues);
+      handleUpdatePolicy(id, 'amountIncreaseValues', newIncreaseValues);
     }
   }, [policies, handleUpdatePolicy]);
 
@@ -657,30 +698,37 @@ export function AssuranceTable({ viewMode = 'table', onAddPolicy }: AssuranceTab
                     <div className="pt-0.5">
                       <button
                         type="button"
-                        onClick={() => handleUpdatePolicy(policy.id, 'amountCheckbox', !policy.amountCheckbox)}
+                        onClick={() => {
+                          const currentToggle = isAmountYearsMode(policy, rowIndex);
+                          handleArrayFieldUpdate(policy.id, 'amountToggles', rowIndex, !currentToggle);
+                        }}
                         className={`h-8 px-3 min-w-[48px] bg-[#E8F3F8] border border-[#E0E0E0] text-[#016991] hover:bg-[#D1E7F0] rounded-md flex items-center justify-center transition-colors text-sm font-medium ${
                           !getAmountControlsEnabled(policy, updateMutation.isPending) ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'
                         }`}
                         disabled={!getAmountControlsEnabled(policy, updateMutation.isPending)}
                       >
-                        {isAmountYearsMode(policy) ? 'Years' : '%'}
+                        {isAmountYearsMode(policy, rowIndex) ? 'Years' : '%'}
                       </button>
                     </div>
                   </td>
 
                   {/* Dynamic Field (Years OR Percentage) - show for every beneficiary row */}
                   <td className="border border-neutral-300 p-1">
-                    {isAmountYearsMode(policy) ? (
+                    {isAmountYearsMode(policy, rowIndex) ? (
                       // Years Mode
                       <input
                         key={`amount-years-${policy.id}-${rowIndex}`}
                         type="text"
-                        defaultValue={formatYearsValue(policy.amountYears || "0 years")}
-                        className={`table-input ${getFieldClass('years')} ${getValueClass(policy.amountYears || "0 years", 'years')} ${
+                        defaultValue={formatYearsValue((policy.amountYearsValues || ["0 years"])[rowIndex] || "0 years")}
+                        className={`table-input ${getFieldClass('years')} ${getValueClass((policy.amountYearsValues || ["0 years"])[rowIndex] || "0 years", 'years')} ${
                           !getAmountControlsEnabled(policy, updateMutation.isPending) ? 'bg-neutral-100 cursor-not-allowed' : ''
                         }`}
                         onFocus={handleDefaultValueFocus}
-                        onBlur={(e) => handleInputBlur(policy.id, 'amountYears', e.target.value, e.target, 'years')}
+                        onBlur={(e) => {
+                          const formattedValue = formatYearsValue(e.target.value);
+                          e.target.value = formattedValue;
+                          handleArrayFieldUpdate(policy.id, 'amountYearsValues', rowIndex, formattedValue);
+                        }}
                         disabled={!getAmountControlsEnabled(policy, updateMutation.isPending)}
                       />
                     ) : (
@@ -688,12 +736,16 @@ export function AssuranceTable({ viewMode = 'table', onAddPolicy }: AssuranceTab
                       <input
                         key={`amount-increase-${policy.id}-${rowIndex}`}
                         type="text"
-                        defaultValue={policy.amountIncrease || "0%"}
-                        className={`table-input ${getFieldClass('percentage')} ${getValueClass(policy.amountIncrease || "0%", 'percentage')} ${
+                        defaultValue={(policy.amountIncreaseValues || ["0%"])[rowIndex] || "0%"}
+                        className={`table-input ${getFieldClass('percentage')} ${getValueClass((policy.amountIncreaseValues || ["0%"])[rowIndex] || "0%", 'percentage')} ${
                           !getAmountControlsEnabled(policy, updateMutation.isPending) ? 'bg-neutral-100 cursor-not-allowed' : ''
                         }`}
                         onFocus={handleDefaultValueFocus}
-                        onBlur={(e) => handleInputBlur(policy.id, 'amountIncrease', e.target.value, e.target, 'percentage')}
+                        onBlur={(e) => {
+                          const formattedValue = formatPercentageValue(e.target.value);
+                          e.target.value = formattedValue;
+                          handleArrayFieldUpdate(policy.id, 'amountIncreaseValues', rowIndex, formattedValue);
+                        }}
                         disabled={!getAmountControlsEnabled(policy, updateMutation.isPending)}
                       />
                     )}

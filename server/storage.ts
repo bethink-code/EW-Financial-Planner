@@ -1105,9 +1105,9 @@ export class DbStorage {
           ? assuranceData.deathBenefit
           : "R 0",
       amount: assuranceData.amount !== undefined ? assuranceData.amount : "R 0",
-      amountCheckbox: assuranceData.amountCheckbox !== undefined ? assuranceData.amountCheckbox : true,
-      amountYears: assuranceData.amountYears !== undefined ? assuranceData.amountYears : "0 years",
-      amountIncrease: assuranceData.amountIncrease !== undefined ? assuranceData.amountIncrease : "0%",
+      amountToggles: assuranceData.amountToggles || [true],
+      amountYearsValues: assuranceData.amountYearsValues || ["0 years"],
+      amountIncreaseValues: assuranceData.amountIncreaseValues || ["0%"],
       premiumsByOthers:
         assuranceData.premiumsByOthers !== undefined
           ? assuranceData.premiumsByOthers
