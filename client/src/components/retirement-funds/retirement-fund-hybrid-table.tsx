@@ -49,7 +49,7 @@ export function RetirementFundHybridTable({
   );
 
   return (
-    <div className="flex">
+    <div className="flex border-t border-neutral-200">
       {/* Left Sidebar - Preview Cards (Tabs) */}
       <div className="w-80 flex-shrink-0 border-r border-neutral-200 bg-neutral-50">
         {previewCards}

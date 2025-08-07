@@ -194,6 +194,9 @@ const ensureArrayConsistency = (policy: PolicyData): PolicyData => {
 /* Section borders */
 .border-neutral-200 { border-color: #e5e5e5; }
 
+/* Hybrid view container borders */
+.flex.border-t { border-top: 1px solid #e5e5e5; } /* Top border continuation */
+
 /* Table borders */
 border-collapse: collapse;
 border: 1px solid #e5e5e5;
@@ -266,6 +269,19 @@ This pattern is designed to be applied across:
 Each calculator adapts the 4 logical field groupings to its specific domain while maintaining the same underlying structure, styling, and interaction patterns.
 
 ## Preview Card Standards
+
+### HybridViewWrapper Usage
+```typescript
+// Standard hybrid view container with border continuity
+<div className="flex border-t border-neutral-200">
+  <div className="w-80 flex-shrink-0 border-r border-neutral-200 bg-neutral-50">
+    {previewCards}
+  </div>
+  <div className="flex-1 p-6">
+    {detailForm}
+  </div>
+</div>
+```
 
 ### HybridItemPreviewCard Usage
 ```typescript
