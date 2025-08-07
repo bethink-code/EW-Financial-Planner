@@ -109,12 +109,12 @@ export default function EntityBeneficiarySelector({
   return (
     <>
       {/* Actions Column */}
-      <td className="px-1 py-1 border-r border-neutral-200" style={{ width: '8%' }}>
+      <td className="px-1 py-1 border-r border-neutral-200" style={{ width: '60px' }}>
         {actionButton}
       </td>
       
       {/* Beneficiary Column */}
-      <td className="px-1 py-1 border-r border-neutral-200" style={{ width: '22%' }}>
+      <td className="px-1 py-1 border-r border-neutral-200" style={{ width: '160px' }}>
         <select
           value={currentBeneficiary}
           onChange={(e) => handleBeneficiarySelect(e.target.value, beneficiaryIndex)}
@@ -131,7 +131,7 @@ export default function EntityBeneficiarySelector({
       </td>
 
       {/* Benefit % Column */}
-      <td className="px-1 py-1 border-r border-neutral-200" style={{ width: '12%' }}>
+      <td className="px-1 py-1 border-r border-neutral-200" style={{ width: '80px' }}>
         <input
           type="text"
           defaultValue={currentPercentage}

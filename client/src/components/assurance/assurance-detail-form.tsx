@@ -135,22 +135,22 @@ export function AssuranceDetailForm({
           </FormField>
           
           <FormField label="Owners & Life Assured & Death Benefits">
-            <table className="border-collapse" style={{ tableLayout: 'fixed', width: '100%' }}>
+            <table className="border-collapse" style={{ tableLayout: 'fixed', width: 'fit-content', minWidth: '600px' }}>
               <thead>
                 <tr className="bg-neutral-50">
-                  <th className="table-header-12 px-2 py-2 border border-neutral-200 text-center font-normal text-neutral-600" style={{ width: '8%' }}>
+                  <th className="table-header-12 px-1 py-2 border border-neutral-200 text-center font-normal text-neutral-600" style={{ width: '60px' }}>
                     ACTIONS
                   </th>
-                  <th className="table-header-12 px-2 py-2 border border-neutral-200 text-left font-normal text-neutral-600" style={{ width: '32%' }}>
+                  <th className="table-header-12 px-1 py-2 border border-neutral-200 text-left font-normal text-neutral-600" style={{ width: '180px' }}>
                     OWNER
                   </th>
-                  <th className="table-header-12 px-2 py-2 border border-neutral-200 text-center font-normal text-neutral-600" style={{ width: '15%' }}>
+                  <th className="table-header-12 px-1 py-2 border border-neutral-200 text-center font-normal text-neutral-600" style={{ width: '80px' }}>
                     OWNERSHIP %
                   </th>
-                  <th className="table-header-12 px-2 py-2 border border-neutral-200 text-left font-normal text-neutral-600" style={{ width: '30%' }}>
+                  <th className="table-header-12 px-1 py-2 border border-neutral-200 text-left font-normal text-neutral-600" style={{ width: '180px' }}>
                     LIFE ASSURED
                   </th>
-                  <th className="table-header-12 px-2 py-2 border border-neutral-200 text-right font-normal text-neutral-600" style={{ width: '15%' }}>
+                  <th className="table-header-12 px-1 py-2 border border-neutral-200 text-right font-normal text-neutral-600" style={{ width: '100px' }}>
                     DEATH BENEFIT
                   </th>
                 </tr>
@@ -169,7 +169,7 @@ export function AssuranceDetailForm({
                       rowIndex={rowIndex}
                       disabled={disabled}
                     />
-                    <td className="px-1 py-1 border-r border-neutral-200" style={{ width: '30%' }}>
+                    <td className="px-1 py-1 border-r border-neutral-200" style={{ width: '180px' }}>
                       <Select
                         value={(policy.lifeAssured || [])[rowIndex] || "none"}
                         onValueChange={(value) => {
@@ -192,7 +192,7 @@ export function AssuranceDetailForm({
                         </SelectContent>
                       </Select>
                     </td>
-                    <td className="px-1 py-1" style={{ width: '15%' }}>
+                    <td className="px-1 py-1" style={{ width: '100px' }}>
                       <input
                         type="text"
                         defaultValue={((policy.deathBenefits || [])[rowIndex] || "R 0")}
@@ -236,28 +236,28 @@ export function AssuranceDetailForm({
 
           <FormField label="Beneficiaries & Controls">
             {/* Use actual table element with overflow wrapper for wide dropdown */}
-            <table className="border-collapse" style={{ tableLayout: 'fixed', width: '100%' }}>
+            <table className="border-collapse" style={{ tableLayout: 'fixed', width: 'fit-content', minWidth: '700px' }}>
               <thead>
                 <tr className="bg-neutral-50">
-                  <th className="table-header-12 px-2 py-2 border border-neutral-200 text-center font-normal text-neutral-600" style={{ width: '8%' }}>
+                  <th className="table-header-12 px-1 py-2 border border-neutral-200 text-center font-normal text-neutral-600" style={{ width: '60px' }}>
                     ACTIONS
                   </th>
-                  <th className="table-header-12 px-2 py-2 border border-neutral-200 text-left font-normal text-neutral-600" style={{ width: '22%' }}>
+                  <th className="table-header-12 px-1 py-2 border border-neutral-200 text-left font-normal text-neutral-600" style={{ width: '160px' }}>
                     BENEFICIARY
                   </th>
-                  <th className="table-header-12 px-2 py-2 border border-neutral-200 text-center font-normal text-neutral-600" style={{ width: '12%' }}>
+                  <th className="table-header-12 px-1 py-2 border border-neutral-200 text-center font-normal text-neutral-600" style={{ width: '80px' }}>
                     BENEFIT %
                   </th>
-                  <th className="table-header-12 px-2 py-2 border border-neutral-200 text-right font-normal text-neutral-600" style={{ width: '17%' }}>
+                  <th className="table-header-12 px-1 py-2 border border-neutral-200 text-right font-normal text-neutral-600" style={{ width: '100px' }}>
                     BENEFIT SPLIT
                   </th>
-                  <th className="table-header-12 px-2 py-2 border border-neutral-200 text-right font-normal text-neutral-600" style={{ width: '14%' }}>
+                  <th className="table-header-12 px-1 py-2 border border-neutral-200 text-right font-normal text-neutral-600" style={{ width: '90px' }}>
                     AMOUNT
                   </th>
-                  <th className="table-header-12 px-2 py-2 border border-neutral-200 text-center font-normal text-neutral-600" style={{ width: '11%' }}>
+                  <th className="table-header-12 px-1 py-2 border border-neutral-200 text-center font-normal text-neutral-600" style={{ width: '70px' }}>
                     TOGGLE
                   </th>
-                  <th className="table-header-12 px-2 py-2 border border-neutral-200 text-center font-normal text-neutral-600" style={{ width: '16%' }}>
+                  <th className="table-header-12 px-1 py-2 border border-neutral-200 text-center font-normal text-neutral-600" style={{ width: '80px' }}>
                     YEARS/%
                   </th>
                 </tr>
@@ -276,7 +276,7 @@ export function AssuranceDetailForm({
                         rowIndex={rowIndex}
                         disabled={disabled}
                       />
-                      <td className="px-1 py-1 border-r border-neutral-200" style={{ width: '17%' }}>
+                      <td className="px-1 py-1 border-r border-neutral-200" style={{ width: '100px' }}>
                         {(() => {
                           const currentPercentage = (policy.beneficiaryPercentages || ["100%"])[rowIndex] || "0%";
                           // Calculate total death benefit across all Life Assured entries for this policy
@@ -293,7 +293,7 @@ export function AssuranceDetailForm({
                           );
                         })()}
                       </td>
-                      <td className="px-1 py-1 border-r border-neutral-200" style={{ width: '14%' }}>
+                      <td className="px-1 py-1 border-r border-neutral-200" style={{ width: '90px' }}>
                         <input
                           key={`amount-${policy.id}-${rowIndex}`}
                           type="text"
@@ -304,7 +304,7 @@ export function AssuranceDetailForm({
                           disabled={disabled}
                         />
                       </td>
-                      <td className="px-1 py-1 border-r border-neutral-200" style={{ width: '11%' }}>
+                      <td className="px-1 py-1 border-r border-neutral-200" style={{ width: '70px' }}>
                         <button
                           type="button"
                           onClick={() => {
@@ -319,7 +319,7 @@ export function AssuranceDetailForm({
                           {isAmountYearsMode(policy, rowIndex) ? 'Y' : '%'}
                         </button>
                       </td>
-                      <td className="px-1 py-1" style={{ width: '16%' }}>
+                      <td className="px-1 py-1" style={{ width: '80px' }}>
                         {isAmountYearsMode(policy, rowIndex) ? (
                           // Years Mode
                           <input
