@@ -115,13 +115,16 @@ export function AssuranceDetailForm({
             <table className="border-collapse w-full">
               <thead>
                 <tr className="bg-neutral-50">
-                  <th className="table-header-12 px-2 py-2 border border-neutral-200 text-left font-normal text-neutral-600" style={{ width: '35%' }}>
+                  <th className="table-header-12 px-2 py-2 border border-neutral-200 text-center font-normal text-neutral-600" style={{ width: '8%' }}>
+                    ACTIONS
+                  </th>
+                  <th className="table-header-12 px-2 py-2 border border-neutral-200 text-left font-normal text-neutral-600" style={{ width: '32%' }}>
                     OWNER
                   </th>
                   <th className="table-header-12 px-2 py-2 border border-neutral-200 text-center font-normal text-neutral-600" style={{ width: '15%' }}>
                     OWNERSHIP %
                   </th>
-                  <th className="table-header-12 px-2 py-2 border border-neutral-200 text-left font-normal text-neutral-600" style={{ width: '35%' }}>
+                  <th className="table-header-12 px-2 py-2 border border-neutral-200 text-left font-normal text-neutral-600" style={{ width: '30%' }}>
                     LIFE ASSURED
                   </th>
                   <th className="table-header-12 px-2 py-2 border border-neutral-200 text-right font-normal text-neutral-600" style={{ width: '15%' }}>
@@ -215,22 +218,25 @@ export function AssuranceDetailForm({
             <table className="border-collapse w-full">
               <thead>
                 <tr className="bg-neutral-50">
-                  <th className="table-header-12 px-2 py-2 border border-neutral-200 text-left font-normal text-neutral-600" style={{ width: '25%' }}>
+                  <th className="table-header-12 px-2 py-2 border border-neutral-200 text-center font-normal text-neutral-600" style={{ width: '8%' }}>
+                    ACTIONS
+                  </th>
+                  <th className="table-header-12 px-2 py-2 border border-neutral-200 text-left font-normal text-neutral-600" style={{ width: '22%' }}>
                     BENEFICIARY
                   </th>
                   <th className="table-header-12 px-2 py-2 border border-neutral-200 text-center font-normal text-neutral-600" style={{ width: '12%' }}>
                     BENEFIT %
                   </th>
-                  <th className="table-header-12 px-2 py-2 border border-neutral-200 text-right font-normal text-neutral-600" style={{ width: '18%' }}>
+                  <th className="table-header-12 px-2 py-2 border border-neutral-200 text-right font-normal text-neutral-600" style={{ width: '17%' }}>
                     BENEFIT SPLIT
                   </th>
-                  <th className="table-header-12 px-2 py-2 border border-neutral-200 text-right font-normal text-neutral-600" style={{ width: '15%' }}>
+                  <th className="table-header-12 px-2 py-2 border border-neutral-200 text-right font-normal text-neutral-600" style={{ width: '14%' }}>
                     AMOUNT
                   </th>
-                  <th className="table-header-12 px-2 py-2 border border-neutral-200 text-center font-normal text-neutral-600" style={{ width: '12%' }}>
+                  <th className="table-header-12 px-2 py-2 border border-neutral-200 text-center font-normal text-neutral-600" style={{ width: '11%' }}>
                     TOGGLE
                   </th>
-                  <th className="table-header-12 px-2 py-2 border border-neutral-200 text-center font-normal text-neutral-600" style={{ width: '18%' }}>
+                  <th className="table-header-12 px-2 py-2 border border-neutral-200 text-center font-normal text-neutral-600" style={{ width: '16%' }}>
                     YEARS/%
                   </th>
                 </tr>
