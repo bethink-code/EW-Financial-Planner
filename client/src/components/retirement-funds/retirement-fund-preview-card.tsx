@@ -9,13 +9,16 @@ interface RetirementFundPreviewCardProps {
 }
 
 export function RetirementFundPreviewCard({ fund, isActive, onClick }: RetirementFundPreviewCardProps) {
-  // Create subtitle with owner and beneficiary information
-  const ownerInfo = fund.owners?.[0] || 'Not specified';
-  const ownerCount = fund.owners?.length > 1 ? ` +${fund.owners.length - 1} more` : '';
+  // Create subtitle with owners listed on separate lines
+  const validOwners = fund.owners?.filter(owner => owner && owner.trim() !== '') || [];
+  const ownerLines = validOwners.length > 0 
+    ? validOwners.map(owner => `Owner: ${owner}`).join('\n')
+    : 'Owner: Not specified';
+  
   const beneficiariesCount = (fund.unapprovedBeneficiaries?.filter(b => b).length || 0) + 
                            (fund.fundValueBeneficiaries?.filter(b => b).length || 0);
   
-  const subtitle = `Owner: ${ownerInfo}${ownerCount}\nBeneficiaries: ${beneficiariesCount}`;
+  const subtitle = `${ownerLines}\nBeneficiaries: ${beneficiariesCount}`;
   
   // Create secondary info with financial details
   const secondaryInfo = `Cover: ${fund.coverAmount || 'R 0'} | Monthly: ${fund.monthlyIncome || 'R 0'}`;
