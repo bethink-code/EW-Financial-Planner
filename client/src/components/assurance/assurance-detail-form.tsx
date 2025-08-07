@@ -141,13 +141,13 @@ export function AssuranceDetailForm({
                   <th className="table-header-12 px-1 py-2 border border-neutral-200 text-center font-normal text-neutral-600" style={{ width: '60px' }}>
                     ACTIONS
                   </th>
-                  <th className="table-header-12 px-1 py-2 border border-neutral-200 text-left font-normal text-neutral-600" style={{ width: '180px' }}>
+                  <th className="table-header-12 px-1 py-2 border border-neutral-200 text-left font-normal text-neutral-600" style={{ width: '300px' }}>
                     OWNER
                   </th>
                   <th className="table-header-12 px-1 py-2 border border-neutral-200 text-center font-normal text-neutral-600" style={{ width: '80px' }}>
                     OWNERSHIP %
                   </th>
-                  <th className="table-header-12 px-1 py-2 border border-neutral-200 text-left font-normal text-neutral-600" style={{ width: '180px' }}>
+                  <th className="table-header-12 px-1 py-2 border border-neutral-200 text-left font-normal text-neutral-600" style={{ width: '300px' }}>
                     LIFE ASSURED
                   </th>
                   <th className="table-header-12 px-1 py-2 border border-neutral-200 text-right font-normal text-neutral-600" style={{ width: '100px' }}>
@@ -169,7 +169,7 @@ export function AssuranceDetailForm({
                       rowIndex={rowIndex}
                       disabled={disabled}
                     />
-                    <td className="px-1 py-1 border-r border-neutral-200" style={{ width: '180px' }}>
+                    <td className="px-1 py-1 border-r border-neutral-200" style={{ width: '300px' }}>
                       <Select
                         value={(policy.lifeAssured || [])[rowIndex] || "none"}
                         onValueChange={(value) => {
@@ -242,7 +242,7 @@ export function AssuranceDetailForm({
                   <th className="table-header-12 px-1 py-2 border border-neutral-200 text-center font-normal text-neutral-600" style={{ width: '60px' }}>
                     ACTIONS
                   </th>
-                  <th className="table-header-12 px-1 py-2 border border-neutral-200 text-left font-normal text-neutral-600" style={{ width: '160px' }}>
+                  <th className="table-header-12 px-1 py-2 border border-neutral-200 text-left font-normal text-neutral-600" style={{ width: '300px' }}>
                     BENEFICIARY
                   </th>
                   <th className="table-header-12 px-1 py-2 border border-neutral-200 text-center font-normal text-neutral-600" style={{ width: '80px' }}>

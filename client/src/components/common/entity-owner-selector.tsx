@@ -112,7 +112,7 @@ export default function EntityOwnerSelector({
       </td>
       
       {/* Owner Column */}
-      <td className="px-1 py-1 border-r border-neutral-200" style={{ width: '180px' }}>
+      <td className="px-1 py-1 border-r border-neutral-200" style={{ width: '300px' }}>
         <select
           value={currentOwner}
           onChange={(e) => handleOwnerSelect(e.target.value, ownerIndex)}
