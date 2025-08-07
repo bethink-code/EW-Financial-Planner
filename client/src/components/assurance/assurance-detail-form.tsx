@@ -196,22 +196,22 @@ export function AssuranceDetailForm({
         <div className="space-y-4">
 
 
-          <FormField label="Beneficiaries & Benefit Splits with Toggle Controls">
-            {/* Table header */}
-            <div className="grid grid-cols-6 gap-2 p-2 bg-neutral-100 border border-neutral-300 rounded-t text-sm font-medium text-neutral-700">
-              <div className="text-center">Actions</div>
-              <div>Beneficiary</div>
-              <div className="text-center">Benefit Split</div>
+          <FormField label="Beneficiaries & Controls">
+            {/* Compact table header */}
+            <div className="grid grid-cols-6 gap-1 px-1 py-1 bg-neutral-100 border border-neutral-300 rounded-t text-xs font-medium text-neutral-700">
+              <div className="text-center">Act</div>
+              <div className="text-left">Beneficiary</div>
+              <div className="text-center">Split</div>
               <div className="text-center">Amount</div>
-              <div className="text-center">Toggle</div>
-              <div className="text-center">Years / %</div>
+              <div className="text-center">Tog</div>
+              <div className="text-center">Val</div>
             </div>
             
-            {/* Table rows - exact table pattern */}
+            {/* Compact table rows */}
             <div className="space-y-0">
               {Array.from({ length: Math.max(policy.owners.length, policy.beneficiaries.length) }, (_, rowIndex) => (
-                <div key={`beneficiary-table-row-${rowIndex}`} className="grid grid-cols-6 gap-2 p-2 border border-neutral-200 border-t-0 bg-white items-center">
-                  {/* Actions - exact table pattern */}
+                <div key={`beneficiary-table-row-${rowIndex}`} className="grid grid-cols-6 gap-1 px-1 py-1 border border-neutral-200 border-t-0 bg-white items-center text-xs">
+                  {/* Actions - compact */}
                   <div className="flex justify-center">
                     <EntityBeneficiarySelector
                       policyId={policy.id}
@@ -227,29 +227,29 @@ export function AssuranceDetailForm({
                     />
                   </div>
 
-                  {/* Beneficiary Dropdown - exact table pattern */}
+                  {/* Beneficiary Dropdown - compact */}
                   <div>
                     <select
                       value={(policy.beneficiaries || [])[rowIndex] || ""}
                       onChange={(e) => onBeneficiaryChange(policy.id, rowIndex, e.target.value)}
                       disabled={disabled}
-                      className="table-input table-dropdown w-full"
+                      className="table-input table-dropdown w-full text-xs h-6"
                     >
-                      <option value="">Select beneficiary...</option>
+                      <option value="">Select...</option>
                       {entities.map((entity) => (
                         <option key={entity.id} value={entity.entityName}>
-                          {entity.entityName} ({entity.entityType})
+                          {entity.entityName.length > 15 ? entity.entityName.substring(0, 15) + "..." : entity.entityName}
                         </option>
                       ))}
                     </select>
                   </div>
 
-                  {/* Benefit Split - exact table pattern */}
+                  {/* Benefit Split - compact */}
                   <div className="text-center">
                     <input
                       type="text"
                       defaultValue={(policy.beneficiaryPercentages || ["100%"])[rowIndex] || "0%"}
-                      className="table-input text-center w-16"
+                      className="table-input text-center w-12 h-6 text-xs"
                       onFocus={handleDefaultValueFocus}
                       onBlur={(e) => {
                         let value = e.target.value.trim().replace(/[^\d.]/g, '');
@@ -262,37 +262,37 @@ export function AssuranceDetailForm({
                     />
                   </div>
 
-                  {/* Amount - exact table pattern (same amount for all rows) */}
+                  {/* Amount - compact */}
                   <div className="text-center">
                     <input
                       key={`amount-${policy.id}-${rowIndex}`}
                       type="text"
                       defaultValue={policy.amount || "R 0"}
-                      className={`table-input text-right w-24 ${!policy.amount || policy.amount === 'R 0' ? 'text-neutral-400' : ''}`}
+                      className={`table-input text-right w-16 h-6 text-xs ${!policy.amount || policy.amount === 'R 0' ? 'text-neutral-400' : ''}`}
                       onFocus={handleDefaultValueFocus}
                       onBlur={(e) => handleTextFieldBlur('amount', e.target.value)}
                       disabled={disabled}
                     />
                   </div>
 
-                  {/* Toggle Button - exact table pattern */}
-                  <div className="flex justify-center pt-0.5">
+                  {/* Toggle Button - compact */}
+                  <div className="flex justify-center">
                     <button
                       type="button"
                       onClick={() => {
                         const currentToggle = isAmountYearsMode(policy, rowIndex);
                         handleArrayFieldUpdate(policy.id, 'amountToggles', rowIndex, !currentToggle);
                       }}
-                      className={`h-8 px-3 min-w-[48px] bg-[#E8F3F8] border border-[#E0E0E0] text-[#016991] hover:bg-[#D1E7F0] rounded-md flex items-center justify-center transition-colors text-sm font-medium ${
+                      className={`h-6 px-2 min-w-[32px] bg-[#E8F3F8] border border-[#E0E0E0] text-[#016991] hover:bg-[#D1E7F0] rounded text-xs font-medium ${
                         !getAmountControlsEnabled(policy, disabled) ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'
                       }`}
                       disabled={!getAmountControlsEnabled(policy, disabled)}
                     >
-                      {isAmountYearsMode(policy, rowIndex) ? 'Years' : '%'}
+                      {isAmountYearsMode(policy, rowIndex) ? 'Y' : '%'}
                     </button>
                   </div>
 
-                  {/* Years/% Input - exact table pattern */}
+                  {/* Years/% Input - compact */}
                   <div className="text-center">
                     {isAmountYearsMode(policy, rowIndex) ? (
                       // Years Mode
@@ -300,7 +300,7 @@ export function AssuranceDetailForm({
                         key={`amount-years-${policy.id}-${rowIndex}`}
                         type="text"
                         defaultValue={formatYearsValue((policy.amountYearsValues || ["0 years"])[rowIndex] || "0 years")}
-                        className={`table-input text-center w-20 ${
+                        className={`table-input text-center w-14 h-6 text-xs ${
                           !getAmountControlsEnabled(policy, disabled) ? 'bg-neutral-100 cursor-not-allowed' : ''
                         }`}
                         onFocus={handleDefaultValueFocus}
@@ -317,7 +317,7 @@ export function AssuranceDetailForm({
                         key={`amount-increase-${policy.id}-${rowIndex}`}
                         type="text"
                         defaultValue={(policy.amountIncreaseValues || ["0%"])[rowIndex] || "0%"}
-                        className={`table-input text-center w-20 ${
+                        className={`table-input text-center w-14 h-6 text-xs ${
                           !getAmountControlsEnabled(policy, disabled) ? 'bg-neutral-100 cursor-not-allowed' : ''
                         }`}
                         onFocus={handleDefaultValueFocus}
@@ -334,8 +334,8 @@ export function AssuranceDetailForm({
               ))}
             </div>
             
-            <div className="text-sm text-neutral-500 mt-2">
-              Note: Each beneficiary has independent toggle controls for years/percentage input mode
+            <div className="text-xs text-neutral-500 mt-1">
+              Note: Independent toggle controls per beneficiary
             </div>
           </FormField>
         </div>
