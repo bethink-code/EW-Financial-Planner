@@ -7,6 +7,7 @@ import { formatTextValue, getValueClass, isDefaultValue, handleDefaultValueFocus
 import { apiRequest } from "@/lib/queryClient";
 import { AddButton, DuplicateButton, DeleteButton, ActionButtonGroup } from "@/components/ui/action-buttons";
 import { TableHeaderAddButton } from "@/components/ui/table-header-add-button";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import EntityOwnerSelector from "@/components/common/entity-owner-selector";
 import AssuranceOwnerSelector from "@/components/common/assurance-owner-selector";
 import EntityLifeAssuredSelector from "@/components/common/entity-life-assured-selector";
@@ -16,7 +17,6 @@ import { useDebouncedUpdate } from "@/hooks/use-debounced-update";
 import { useLoadingMutation } from "@/hooks/use-loading-mutation";
 import { SafeFragment } from "@/lib/safe-fragment";
 import { Button } from "@/components/ui/button";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { HybridViewWrapper } from "@/components/common/hybrid-view-wrapper";
 import { HybridSummaryCard } from "@/components/common/hybrid-summary-card";
 import { HybridDetailCard } from "@/components/common/hybrid-detail-card";
@@ -402,7 +402,8 @@ export function AssuranceTable({ viewMode = 'table', onAddPolicy }: AssuranceTab
               </th>
               <th className="table-header-base">Description</th>
               <th className="table-header-base">Owner</th>
-              <th className="table-header-base" colSpan={2}>Life Assured & Death Benefit</th>
+              <th className="table-header-base">Life Assured</th>
+              <th className="table-header-base">Death Benefit</th>
               <th className="table-header-base">Beneficiary</th>
               <th className="table-header-base">Amount</th>
               <th className="table-header-base">Buy/Sell</th>
@@ -471,17 +472,62 @@ export function AssuranceTable({ viewMode = 'table', onAddPolicy }: AssuranceTab
                     />
                   </td>
 
-                  {/* Life Assured & Death Benefit */}
-                  <td className="border border-neutral-300 p-1" colSpan={2}>
-                    <EntityLifeAssuredSelector
-                      policyId={policy.id}
-                      lifeAssured={policy.lifeAssured || [""]}
-                      deathBenefits={policy.deathBenefits || ["R 0"]}
-                      onLifeAssuredChange={handleLifeAssuredChange}
-                      onDeathBenefitChange={handleDeathBenefitChange}
-                      rowIndex={rowIndex}
-                      disabled={updateMutation.isPending}
-                    />
+                  {/* Life Assured */}
+                  <td className="border border-neutral-300 p-1">
+                    <div className="min-w-[200px]">
+                      <Select
+                        value={(policy.lifeAssured || [])[rowIndex] || "none"}
+                        onValueChange={(value) => {
+                          const valueToStore = value === "none" ? "" : value;
+                          handleLifeAssuredChange(policy.id, rowIndex, valueToStore);
+                        }}
+                        disabled={updateMutation.isPending}
+                      >
+                        <SelectTrigger className="w-full table-input">
+                          <SelectValue placeholder="Select life assured..." />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="none">Select life assured...</SelectItem>
+                          {entities.map((client) => (
+                            <SelectItem key={client.id} value={client.entityName}>
+                              {client.entityName}
+                              {client.entityType === "Primary entity" && " (Primary entity)"}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </div>
+                  </td>
+
+                  {/* Death Benefit */}
+                  <td className="border border-neutral-300 p-1">
+                    <div className="w-32 relative">
+                      <span className="absolute left-2 top-1/2 transform -translate-y-1/2 text-gray-500 text-sm">R</span>
+                      <input
+                        type="text"
+                        defaultValue={((policy.deathBenefits || [])[rowIndex] || "R 0").replace('R ', '')}
+                        className="w-full table-input text-right pl-6"
+                        placeholder="0"
+                        onBlur={(e) => {
+                          let value = e.target.value.trim();
+                          value = value.replace(/[^\d.-]/g, '');
+                          
+                          if (value === '' || value === '0') {
+                            handleDeathBenefitChange(policy.id, rowIndex, 'R 0');
+                            return;
+                          }
+                          
+                          if (!isNaN(parseFloat(value))) {
+                            const numValue = parseFloat(value);
+                            const formattedValue = `R ${numValue.toLocaleString()}`;
+                            handleDeathBenefitChange(policy.id, rowIndex, formattedValue);
+                          } else {
+                            handleDeathBenefitChange(policy.id, rowIndex, 'R 0');
+                          }
+                        }}
+                        disabled={updateMutation.isPending}
+                      />
+                    </div>
                   </td>
 
 
