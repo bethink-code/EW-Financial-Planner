@@ -731,8 +731,6 @@ export function AssuranceTable({ viewMode = 'table', onAddPolicy }: AssuranceTab
       tableComponent={tableComponent}
       summaryCards={summaryCards}
       detailForms={detailForms}
-      onAddItem={onAddPolicy}
-      addButtonLabel="Add Policy"
       isUpdating={isUpdating}
       isEmpty={filteredPolicies.length === 0}
       emptyStateMessage="No assurance policies found"
