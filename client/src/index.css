@@ -348,6 +348,26 @@ th, td {
     border-spacing: 0 !important;
   }
 
+  /* FIX: Prevent double borders at table bottom */
+  table tbody tr:last-child td {
+    border-bottom: none !important;
+  }
+
+  /* FIX: Ensure consistent thin borders for all table edges */
+  table tbody tr {
+    border-bottom: 1px solid #e5e7eb !important;
+  }
+
+  /* FIX: Remove shadcn/ui default row borders that cause double borders */
+  .border-b {
+    border-bottom: 1px solid #e5e7eb !important;
+  }
+
+  /* FIX: Override default table row borders from ui components */
+  table tr.border-b {
+    border-bottom: 1px solid #e5e7eb !important;
+  }
+
   /* Clean table styling - no borders by default (except section borders and row borders) */
   table th:not(.section-start):not(.section-end) {
     border-left: none;

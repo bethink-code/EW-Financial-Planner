@@ -444,9 +444,10 @@ isLast={index === items.length - 1}
 **STEP 4: Visual Testing Protocol**
 1. Check first tab has no top border
 2. Check last tab has bottom border 
-3. Verify no double borders anywhere
+3. Verify no double borders anywhere (including table bottoms)
 4. Confirm tab container has no vertical spacing
 5. Test detail form has clean borders
+6. Verify table borders are consistent thin style (1px) on all edges
 
 **STEP 5: Update Documentation**
 - Add new calculator to examples list
