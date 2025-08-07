@@ -99,24 +99,22 @@ const tableComponent = (
 ### Step 3: Define Summary Cards
 ```tsx
 const summaryCards = (
-  <>
-    <HybridSummaryCard
-      title="Assurance Summary"
-      items={hybridData.summaryItems}
-      variant="default"
-    />
-    <div className="space-y-3">
-      {hybridData.previewItems.map((item) => (
-        <HybridItemPreviewCard
-          key={item.id}
-          title={item.title}
-          subtitle={item.subtitle}
-          primaryValue={item.primaryValue}
-          variant="blue"
-        />
-      ))}
-    </div>
-  </>
+  <div className="space-y-3">
+    {hybridData.previewItems.map((item) => (
+      <HybridItemPreviewCard
+        key={item.id}
+        title={item.title}
+        subtitle={item.subtitle}
+        primaryValue={item.primaryValue}
+        variant="blue"
+      />
+    ))}
+    {hybridData.hasMoreItems && (
+      <div className="text-center text-sm text-neutral-600">
+        +{hybridData.remainingCount} more items
+      </div>
+    )}
+  </div>
 );
 ```
 

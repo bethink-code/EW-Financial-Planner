@@ -300,13 +300,6 @@ export function AssuranceTable({ viewMode = 'table', onAddPolicy }: AssuranceTab
   const totals = useMemo(() => getTotals(filteredPolicies), [filteredPolicies, getTotals]);
 
   // Hybrid view data preparation functions
-  const getSummaryItems = useCallback((totals: Record<string, number>, policies: Assurance[]) => [
-    { label: 'Total Death Benefit', value: `R ${totals.deathBenefit.toLocaleString()}` },
-    { label: 'Total Amount', value: `R ${totals.amount.toLocaleString()}` },
-    { label: 'Premiums by Others', value: `R ${totals.premiumsByOthers.toLocaleString()}` },
-    { label: 'Total Policies', value: policies.length.toString() }
-  ], []);
-
   const getItemPreview = useCallback((policy: Assurance) => ({
     id: policy.id,
     title: formatTextValue(policy.description) || `Policy #${policy.id}`,
@@ -315,8 +308,7 @@ export function AssuranceTable({ viewMode = 'table', onAddPolicy }: AssuranceTab
     secondaryInfo: policy.amount !== 'R 0' ? `Amount: ${policy.amount}` : undefined
   }), []);
 
-  // Prepare summary items and preview items
-  const summaryItems = useMemo(() => getSummaryItems(totals, filteredPolicies), [getSummaryItems, totals, filteredPolicies]);
+  // Prepare preview items
   const previewItems = useMemo(() => filteredPolicies.slice(0, 5).map(getItemPreview), [filteredPolicies, getItemPreview]);
   const hasMoreItems = filteredPolicies.length > 5;
   const remainingCount = filteredPolicies.length - 5;
@@ -583,32 +575,25 @@ export function AssuranceTable({ viewMode = 'table', onAddPolicy }: AssuranceTab
 
 
 
-  // Summary cards for hybrid view
+  // Summary cards for hybrid view - only policy previews, no duplicate summary
   const summaryCards = (
-    <>
-      <HybridSummaryCard
-        title="Assurance Summary"
-        items={summaryItems}
-        variant="default"
-      />
-      <div className="space-y-3">
-        {previewItems.map((item) => (
-          <HybridItemPreviewCard
-            key={item.id}
-            title={item.title}
-            subtitle={item.subtitle}
-            primaryValue={item.primaryValue}
-            secondaryInfo={item.secondaryInfo}
-            variant="blue"
-          />
-        ))}
-        {hasMoreItems && (
-          <div className="text-center text-sm text-neutral-600">
-            +{remainingCount} more policies
-          </div>
-        )}
-      </div>
-    </>
+    <div className="space-y-3">
+      {previewItems.map((item: { id: number; title: string; subtitle: string; primaryValue: string; secondaryInfo?: string }) => (
+        <HybridItemPreviewCard
+          key={item.id}
+          title={item.title}
+          subtitle={item.subtitle}
+          primaryValue={item.primaryValue}
+          secondaryInfo={item.secondaryInfo}
+          variant="blue"
+        />
+      ))}
+      {hasMoreItems && (
+        <div className="text-center text-sm text-neutral-600">
+          +{remainingCount} more policies
+        </div>
+      )}
+    </div>
   );
 
   // Detail forms for hybrid view
@@ -683,13 +668,13 @@ export function AssuranceTable({ viewMode = 'table', onAddPolicy }: AssuranceTab
             {/* Entity Management */}
             <div className="space-y-4">
               <div>
-                <label className="block text-sm font-medium text-neutral-700 mb-1">Life Assured</label>
+                <label className="block text-sm font-medium text-neutral-700 mb-1">Benefit Split</label>
                 <input
                   type="text"
-                  defaultValue={policy.lifeAssured}
-                  className={`w-full table-input ${getValueClass(policy.lifeAssured, 'text')}`}
+                  defaultValue={policy.benefitSplit}
+                  className={`w-full table-input ${getValueClass(policy.benefitSplit, 'text')}`}
                   onFocus={handleDefaultValueFocus}
-                  onBlur={(e) => handleInputBlur(policy.id, 'lifeAssured', e.target.value, e.target, 'lifeAssured')}
+                  onBlur={(e) => handleInputBlur(policy.id, 'benefitSplit', e.target.value, e.target, 'benefitSplit')}
                 />
               </div>
 
@@ -721,70 +706,15 @@ export function AssuranceTable({ viewMode = 'table', onAddPolicy }: AssuranceTab
                 />
               </div>
 
-              <div className="grid grid-cols-3 gap-2">
-                <div>
-                  <label className="block text-sm font-medium text-neutral-700 mb-1">Buy/Sell</label>
-                  <Select
-                    defaultValue={policy.buySell}
-                    onValueChange={(value) => handleSelectChange(policy.id, 'buySell', value)}
-                  >
-                    <SelectTrigger className="table-input">
-                      <SelectValue placeholder="Select" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="Yes">Yes</SelectItem>
-                      <SelectItem value="No">No</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-neutral-700 mb-1">Key Man</label>
-                  <Select
-                    defaultValue={policy.keyMan}
-                    onValueChange={(value) => handleSelectChange(policy.id, 'keyMan', value)}
-                  >
-                    <SelectTrigger className="table-input">
-                      <SelectValue placeholder="Select" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="Yes">Yes</SelectItem>
-                      <SelectItem value="No">No</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-neutral-700 mb-1">Excluded Estate Duty</label>
-                  <Select
-                    defaultValue={policy.excludedEstateDuty}
-                    onValueChange={(value) => handleSelectChange(policy.id, 'excludedEstateDuty', value)}
-                  >
-                    <SelectTrigger className="table-input">
-                      <SelectValue placeholder="Select" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="Yes">Yes</SelectItem>
-                      <SelectItem value="No">No</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-              </div>
-
               <div>
-                <label className="block text-sm font-medium text-neutral-700 mb-1">Excluded Provisions</label>
-                <Select
-                  defaultValue={policy.excludedProvisions}
-                  onValueChange={(value) => handleSelectChange(policy.id, 'excludedProvisions', value)}
-                >
-                  <SelectTrigger className="table-input">
-                    <SelectValue placeholder="Select" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="Yes">Yes</SelectItem>
-                    <SelectItem value="No">No</SelectItem>
-                  </SelectContent>
-                </Select>
+                <label className="block text-sm font-medium text-neutral-700 mb-1">Additional Info</label>
+                <input
+                  type="text"
+                  defaultValue={policy.additionalInfo}
+                  className={`w-full table-input ${getValueClass(policy.additionalInfo, 'text')}`}
+                  onFocus={handleDefaultValueFocus}
+                  onBlur={(e) => handleInputBlur(policy.id, 'additionalInfo', e.target.value, e.target, 'additionalInfo')}
+                />
               </div>
             </div>
           </div>
