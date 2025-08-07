@@ -250,8 +250,8 @@ export function RetirementFundDetailForm({
         </div>
       </FieldGroup>
 
-      {/* Group 2: All Beneficiaries Combined */}
-      <FieldGroup title="Beneficiaries Distribution">
+      {/* Group 2: Unapproved Life Cover Distribution */}
+      <FieldGroup title="Unapproved Life Cover Distribution">
         <div className="space-y-4">
           <FormField label="Cover Amount">
             <input
@@ -265,18 +265,15 @@ export function RetirementFundDetailForm({
             />
           </FormField>
 
-          <FormField label="All Beneficiaries & Distribution">
-            <table className="border-collapse" style={{ tableLayout: 'fixed', width: 'fit-content', minWidth: '740px' }}>
+          <FormField label="Beneficiaries & Cover Distribution">
+            <table className="border-collapse" style={{ tableLayout: 'fixed', width: 'fit-content', minWidth: '640px' }}>
               <thead>
                 <tr className="bg-neutral-50">
                   <th className="table-header-12 px-1 py-2 border border-neutral-200 text-center font-normal text-neutral-600" style={{ width: '60px' }}>
                     ACTIONS
                   </th>
-                  <th className="table-header-12 px-1 py-2 border border-neutral-200 text-left font-normal text-neutral-600" style={{ width: '250px' }}>
+                  <th className="table-header-12 px-1 py-2 border border-neutral-200 text-left font-normal text-neutral-600" style={{ width: '300px' }}>
                     BENEFICIARY
-                  </th>
-                  <th className="table-header-12 px-1 py-2 border border-neutral-200 text-center font-normal text-neutral-600" style={{ width: '120px' }}>
-                    TYPE
                   </th>
                   <th className="table-header-12 px-1 py-2 border border-neutral-200 text-center font-normal text-neutral-600" style={{ width: '80px' }}>
                     BENEFIT %
@@ -284,13 +281,9 @@ export function RetirementFundDetailForm({
                   <th className="table-header-12 px-1 py-2 border border-neutral-200 text-right font-normal text-neutral-600" style={{ width: '100px' }}>
                     COVER SPLIT
                   </th>
-                  <th className="table-header-12 px-1 py-2 border border-neutral-200 text-right font-normal text-neutral-600" style={{ width: '100px' }}>
-                    LIVING ANNUITY
-                  </th>
                 </tr>
               </thead>
               <tbody>
-                {/* Unapproved Beneficiaries */}
                 {Array.from({ length: Math.max(fund.unapprovedBeneficiaries.length, 1) }, (_, rowIndex) => (
                   <tr key={`unapproved-beneficiary-table-row-${rowIndex}`} className="border-b border-neutral-200 bg-white">
                     <EntityBeneficiarySelector
@@ -304,47 +297,9 @@ export function RetirementFundDetailForm({
                       rowIndex={rowIndex}
                       disabled={disabled}
                     />
-                    <td className="px-1 py-1 border-r border-neutral-200" style={{ width: '120px' }}>
-                      <div className="text-xs text-neutral-500 text-center">Cover</div>
-                    </td>
-                    <td className="px-1 py-1 border-r border-neutral-200" style={{ width: '100px' }}>
+                    <td className="px-1 py-1" style={{ width: '100px' }}>
                       <div className="calculated-field text-right">
                         {fund.unapprovedCoverSplits?.[rowIndex] || "R 0"}
-                      </div>
-                    </td>
-                    <td className="px-1 py-1" style={{ width: '100px' }}>
-                      <div className="calculated-field text-right text-neutral-400">
-                        -
-                      </div>
-                    </td>
-                  </tr>
-                ))}
-                
-                {/* Fund Value Beneficiaries */}
-                {Array.from({ length: Math.max(fund.fundValueBeneficiaries.length, 1) }, (_, rowIndex) => (
-                  <tr key={`fund-value-beneficiary-table-row-${rowIndex}`} className="border-b border-neutral-200 bg-white">
-                    <EntityBeneficiarySelector
-                      policyId={fund.id}
-                      beneficiaries={fund.fundValueBeneficiaries}
-                      beneficiaryPercentages={fund.fundValuePercentageSplits || ["100%"]}
-                      onBeneficiaryChange={onFundValueBeneficiaryChange}
-                      onBeneficiaryPercentageChange={onFundValuePercentageChange}
-                      onAddBeneficiary={onAddFundValueBeneficiary}
-                      onRemoveBeneficiary={onRemoveFundValueBeneficiary}
-                      rowIndex={rowIndex}
-                      disabled={disabled}
-                    />
-                    <td className="px-1 py-1 border-r border-neutral-200" style={{ width: '120px' }}>
-                      <div className="text-xs text-neutral-500 text-center">Fund Value</div>
-                    </td>
-                    <td className="px-1 py-1 border-r border-neutral-200" style={{ width: '100px' }}>
-                      <div className="calculated-field text-right">
-                        {fund.fundValueCoverSplits?.[rowIndex] || "R 0"}
-                      </div>
-                    </td>
-                    <td className="px-1 py-1" style={{ width: '100px' }}>
-                      <div className="calculated-field text-right">
-                        {fund.livingAnnuity || "R 0"}
                       </div>
                     </td>
                   </tr>
@@ -404,10 +359,10 @@ export function RetirementFundDetailForm({
         </div>
       </FieldGroup>
 
-      {/* Group 4: Additional Fund Details */}
-      <FieldGroup title="Additional Fund Details">
+      {/* Group 4: Fund Value Beneficiaries */}
+      <FieldGroup title="Fund Value Beneficiaries">
         <div className="space-y-4">
-          <FormField label="Fund Configuration">
+          <FormField label="Additional Fund Details">
             <div className="flex items-center gap-4">
               <div className="flex flex-col gap-2">
                 <label className="text-sm font-medium">Lump Sum Taken</label>
@@ -458,6 +413,57 @@ export function RetirementFundDetailForm({
                 <span className="text-sm">Living Annuity</span>
               </label>
             </div>
+          </FormField>
+
+          <FormField label="Fund Value Beneficiaries">
+            <table className="border-collapse" style={{ tableLayout: 'fixed', width: 'fit-content', minWidth: '640px' }}>
+              <thead>
+                <tr className="bg-neutral-50">
+                  <th className="table-header-12 px-1 py-2 border border-neutral-200 text-center font-normal text-neutral-600" style={{ width: '60px' }}>
+                    ACTIONS
+                  </th>
+                  <th className="table-header-12 px-1 py-2 border border-neutral-200 text-left font-normal text-neutral-600" style={{ width: '300px' }}>
+                    BENEFICIARY
+                  </th>
+                  <th className="table-header-12 px-1 py-2 border border-neutral-200 text-center font-normal text-neutral-600" style={{ width: '80px' }}>
+                    BENEFIT %
+                  </th>
+                  <th className="table-header-12 px-1 py-2 border border-neutral-200 text-right font-normal text-neutral-600" style={{ width: '100px' }}>
+                    COVER SPLIT
+                  </th>
+                  <th className="table-header-12 px-1 py-2 border border-neutral-200 text-right font-normal text-neutral-600" style={{ width: '100px' }}>
+                    LIVING ANNUITY
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                {Array.from({ length: Math.max(fund.fundValueBeneficiaries.length, 1) }, (_, rowIndex) => (
+                  <tr key={`fund-value-beneficiary-table-row-${rowIndex}`} className="border-b border-neutral-200 bg-white">
+                    <EntityBeneficiarySelector
+                      policyId={fund.id}
+                      beneficiaries={fund.fundValueBeneficiaries}
+                      beneficiaryPercentages={fund.fundValuePercentageSplits || ["100%"]}
+                      onBeneficiaryChange={onFundValueBeneficiaryChange}
+                      onBeneficiaryPercentageChange={onFundValuePercentageChange}
+                      onAddBeneficiary={onAddFundValueBeneficiary}
+                      onRemoveBeneficiary={onRemoveFundValueBeneficiary}
+                      rowIndex={rowIndex}
+                      disabled={disabled}
+                    />
+                    <td className="px-1 py-1 border-r border-neutral-200" style={{ width: '100px' }}>
+                      <div className="calculated-field text-right">
+                        {fund.fundValueCoverSplits?.[rowIndex] || "R 0"}
+                      </div>
+                    </td>
+                    <td className="px-1 py-1" style={{ width: '100px' }}>
+                      <div className="calculated-field text-right">
+                        {fund.livingAnnuity || "R 0"}
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           </FormField>
         </div>
       </FieldGroup>
