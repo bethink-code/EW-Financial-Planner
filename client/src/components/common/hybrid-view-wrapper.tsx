@@ -45,7 +45,7 @@ export function HybridViewWrapper({
   return (
     <div className="flex">
       {/* Left Sidebar - Summary Cards (Tabs) */}
-      <div className="w-80 flex-shrink-0 border-r border-neutral-200">
+      <div className="w-80 flex-shrink-0 border-r border-neutral-200 bg-neutral-50">
         {summaryCards}
       </div>
 

@@ -29,9 +29,9 @@ export function HybridItemPreviewCard({
   const getVariantClasses = () => {
     switch (variant) {
       case 'active':
-        return 'bg-white border-l-4 border-t border-neutral-200 border-b border-neutral-200 border-r border-white -mr-px relative z-10 tab-active-border';
+        return 'bg-white border-l-4 border-t border-neutral-200 border-r border-white -mr-px relative z-10 tab-active-border';
       default:
-        return 'bg-neutral-50 border-r border-neutral-200 border-t border-neutral-200 border-b border-neutral-200 hover:bg-white';
+        return 'bg-neutral-50 border-r border-neutral-200 border-t border-neutral-200 hover:bg-white hover:border-l hover:border-l-neutral-300';
     }
   };
 
@@ -55,7 +55,7 @@ export function HybridItemPreviewCard({
 
   return (
     <div 
-      className={`border-b border-neutral-100 p-4 transition-all ${getVariantClasses()} ${
+      className={`py-4 px-5 transition-all ${getVariantClasses()} ${
         isClickable || onClick ? 'cursor-pointer' : ''
       } ${className}`}
       onClick={onClick}
