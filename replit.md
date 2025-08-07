@@ -3,6 +3,12 @@
 ## Overview
 This is a full-stack web application for managing retirement funds. It provides robust capabilities for viewing, editing, and searching retirement fund data through a modern React frontend and an Express.js backend. The system supports multiple viewing modes, including grouped table, cards, and detailed views, with real-time editing and search functionalities. The project's vision is to provide a comprehensive and intuitive platform for financial planning, with high market potential in personal and professional financial management.
 
+## Recent Major Accomplishments
+- **January 2025**: Successfully implemented Years/% Toggle Pattern for Assurance Amount field with per-beneficiary independence
+- **Database Evolution**: Migrated from single toggle fields to array-based per-beneficiary toggle system (amountToggles, amountYearsValues, amountIncreaseValues)
+- **Table Alignment**: Fixed comprehensive totals row column alignment issues across all 16 table columns
+- **Pattern Consistency**: Established reusable toggle pattern now implemented across Defined Benefit Funds and Assurance tables
+
 ## User Preferences
 Preferred communication style: Simple, everyday language.
 
@@ -52,7 +58,7 @@ Client requests data via TanStack Query hooks. Express routes handle CRUD operat
 - **Comprehensive Formatting**: System-wide consistent formatting for currency, percentages, and years.
 - **Table Stability**: Implementation of patterns like `React.Fragment` with stable keys, debounced updates for text fields, immediate updates for array operations, and proper `rowSpan` usage.
 - **Global Entity Management System**: Dynamic entity management with percentage validation and automatic Primary entity defaults across major calculation tables. This includes reusable global components for owner/beneficiary selection and primary entity default utility functions.
-- **Years/% Toggle Pattern**: Reusable toggle pattern for specific fields to switch between year and percentage input, successfully implemented in Defined Benefit Funds and Assurance tables. In Assurance, each beneficiary row has independent toggle controls with per-beneficiary arrays (amountToggles, amountYearsValues, amountIncreaseValues) for Amount field toggle functionality.
+- **Years/% Toggle Pattern**: Reusable toggle pattern for specific fields to switch between year and percentage input, successfully implemented in Defined Benefit Funds and Assurance tables. In Assurance, each beneficiary row has independent toggle controls with per-beneficiary arrays (amountToggles, amountYearsValues, amountIncreaseValues) for Amount field toggle functionality. Pattern includes Elite Wealth blue styling, automatic array synchronization during beneficiary add/remove operations, and proper validation helper functions.
 - **Global Loading System**: Comprehensive loading indicators with Elite Wealth primary blue branding, providing visual feedback during CRUD operations through a global progress bar and enhanced loading mutations.
 
 ## External Dependencies
