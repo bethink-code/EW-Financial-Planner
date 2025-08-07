@@ -501,33 +501,33 @@ export function AssuranceTable({ viewMode = 'table', onAddPolicy }: AssuranceTab
 
                   {/* Death Benefit */}
                   <td className="border border-neutral-300 p-1">
-                    <div className="w-32 relative">
-                      <span className="absolute left-2 top-1/2 transform -translate-y-1/2 text-gray-500 text-sm">R</span>
-                      <input
-                        type="text"
-                        defaultValue={((policy.deathBenefits || [])[rowIndex] || "R 0").replace('R ', '')}
-                        className="w-full table-input text-right pl-6"
-                        placeholder="0"
-                        onBlur={(e) => {
-                          let value = e.target.value.trim();
-                          value = value.replace(/[^\d.-]/g, '');
-                          
-                          if (value === '' || value === '0') {
-                            handleDeathBenefitChange(policy.id, rowIndex, 'R 0');
-                            return;
-                          }
-                          
-                          if (!isNaN(parseFloat(value))) {
-                            const numValue = parseFloat(value);
-                            const formattedValue = `R ${numValue.toLocaleString()}`;
-                            handleDeathBenefitChange(policy.id, rowIndex, formattedValue);
-                          } else {
-                            handleDeathBenefitChange(policy.id, rowIndex, 'R 0');
-                          }
-                        }}
-                        disabled={updateMutation.isPending}
-                      />
-                    </div>
+                    <input
+                      type="text"
+                      defaultValue={((policy.deathBenefits || [])[rowIndex] || "R 0")}
+                      className={`table-input ${getFieldClass('currency')} ${getValueClass(((policy.deathBenefits || [])[rowIndex] || "R 0"), 'currency')}`}
+                      onFocus={handleDefaultValueFocus}
+                      onBlur={(e) => {
+                        let value = e.target.value.trim();
+                        value = value.replace(/[^\d.-]/g, '');
+                        
+                        if (value === '' || value === '0') {
+                          handleDeathBenefitChange(policy.id, rowIndex, 'R 0');
+                          e.target.value = 'R 0';
+                          return;
+                        }
+                        
+                        if (!isNaN(parseFloat(value))) {
+                          const numValue = parseFloat(value);
+                          const formattedValue = `R ${numValue.toLocaleString()}`;
+                          handleDeathBenefitChange(policy.id, rowIndex, formattedValue);
+                          e.target.value = formattedValue;
+                        } else {
+                          handleDeathBenefitChange(policy.id, rowIndex, 'R 0');
+                          e.target.value = 'R 0';
+                        }
+                      }}
+                      disabled={updateMutation.isPending}
+                    />
                   </td>
 
 
