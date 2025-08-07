@@ -8,7 +8,7 @@ This is a full-stack web application for managing retirement funds. It provides 
 - **Database Evolution**: Migrated from single toggle fields to array-based per-beneficiary toggle system (amountToggles, amountYearsValues, amountIncreaseValues)
 - **Table Alignment**: Fixed comprehensive totals row column alignment issues across all 16 table columns
 - **Pattern Consistency**: Established reusable toggle pattern now implemented across Defined Benefit Funds and Assurance tables
-- **Field Grouping Discovery**: Identified 5 logical field groupings in table architecture: Entity Relationship Triad (Owner→Life Assured→Death Benefit), Beneficiary Distribution Group (Beneficiary→Benefit Split), Amount Toggle Pattern Group (Amount→Toggle→Years/%), Policy-Level Financial Fields, and Policy-Level Boolean Flags
+- **Field Grouping Discovery**: Identified 4 logical field groupings in table architecture: Entity Relationship Triad (Owner→Life Assured→Death Benefit), Beneficiary Distribution Group (Beneficiary→Benefit Split), Amount Toggle Pattern Group (Amount→Toggle→Years/%), and Policy-Level Financial Fields
 
 ## User Preferences
 Preferred communication style: Simple, everyday language.

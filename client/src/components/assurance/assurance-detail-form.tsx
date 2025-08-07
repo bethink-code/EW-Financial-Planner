@@ -74,10 +74,10 @@ export function AssuranceDetailForm({
         </ActionButtonGroup>
       </div>
 
-      {/* Policy Details Group */}
-      <FieldGroup title="Policy Details">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <FormField label="Description" className="md:col-span-2">
+      {/* Group 1: Entity Relationship Triad (Owner → Life Assured → Death Benefit) */}
+      <FieldGroup title="Entity Relationship Triad">
+        <div className="space-y-4">
+          <FormField label="Policy Description" className="md:col-span-2">
             <input
               type="text"
               defaultValue={policy.description || ''}
@@ -89,33 +89,7 @@ export function AssuranceDetailForm({
             />
           </FormField>
           
-          <FormField label="Life Assured">
-            <input
-              type="text"
-              defaultValue=""
-              placeholder="Enter details ..."
-              className="w-full table-input text-neutral-400"
-              disabled={disabled}
-            />
-          </FormField>
-          
-          <FormField label="Death Benefit">
-            <input
-              type="text"
-              defaultValue={policy.deathBenefit || 'R 0'}
-              className={`w-full table-input text-right ${policy.deathBenefit === 'R 0' ? 'text-neutral-400' : ''}`}
-              onFocus={handleDefaultValueFocus}
-              onBlur={(e) => handleTextFieldBlur('deathBenefit', e.target.value)}
-              disabled={disabled}
-            />
-          </FormField>
-        </div>
-      </FieldGroup>
-
-      {/* Ownership Structure Group */}
-      <FieldGroup title="Ownership Structure">
-        <div className="space-y-6">
-          <FormField label="Owners & Life Assured" className="md:col-span-2">
+          <FormField label="Owners & Life Assured & Death Benefits">
             <div className="space-y-2">
               {policy.owners.map((_, ownerIndex) => (
                 <AssuranceOwnerSelector
@@ -136,8 +110,13 @@ export function AssuranceDetailForm({
               ))}
             </div>
           </FormField>
-          
-          <FormField label="Beneficiaries & Allocation">
+        </div>
+      </FieldGroup>
+
+      {/* Groups 2 & 3: Beneficiary Distribution & Amount Toggle Pattern (Related per-beneficiary) */}
+      <FieldGroup title="Beneficiary Distribution & Amount Controls">
+        <div className="space-y-4">
+          <FormField label="Beneficiaries & Benefit Splits">
             <div className="space-y-2">
               {policy.beneficiaries.map((_, beneficiaryIndex) => (
                 <EntityBeneficiarySelector
@@ -155,23 +134,28 @@ export function AssuranceDetailForm({
               ))}
             </div>
           </FormField>
+          
+          <FormField label="Amount (with Years/% Toggle per Beneficiary)">
+            <div className="grid grid-cols-1 gap-4">
+              <input
+                type="text"
+                defaultValue={policy.amount || 'R 0'}
+                className={`w-full table-input text-right ${policy.amount === 'R 0' ? 'text-neutral-400' : ''}`}
+                onFocus={handleDefaultValueFocus}
+                onBlur={(e) => handleTextFieldBlur('amount', e.target.value)}
+                disabled={disabled}
+              />
+              <div className="text-sm text-neutral-500">
+                Note: Each beneficiary has independent toggle controls for years/percentage input mode
+              </div>
+            </div>
+          </FormField>
         </div>
       </FieldGroup>
 
-      {/* Financial Details Group */}
-      <FieldGroup title="Financial Details">
+      {/* Group 4: Policy-Level Financial Fields */}
+      <FieldGroup title="Policy-Level Financial Details">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <FormField label="Amount">
-            <input
-              type="text"
-              defaultValue={policy.amount || 'R 0'}
-              className={`w-full table-input text-right ${policy.amount === 'R 0' ? 'text-neutral-400' : ''}`}
-              onFocus={handleDefaultValueFocus}
-              onBlur={(e) => handleTextFieldBlur('amount', e.target.value)}
-              disabled={disabled}
-            />
-          </FormField>
-          
           <FormField label="Premiums by Others">
             <input
               type="text"
@@ -183,7 +167,7 @@ export function AssuranceDetailForm({
             />
           </FormField>
           
-          <FormField label="Collateral Session" className="md:col-span-2">
+          <FormField label="Collateral Session">
             <input
               type="text"
               defaultValue={policy.collateralSession || ''}
@@ -197,60 +181,9 @@ export function AssuranceDetailForm({
         </div>
       </FieldGroup>
 
-      {/* Policy Options Group */}
-      <FieldGroup title="Policy Options">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <FormField label="Buy/Sell Option">
-            <div className="flex items-center space-x-2">
-              <input
-                type="checkbox"
-                id={`buy-sell-${policy.id}`}
-                defaultChecked={false}
-                className="rounded border-neutral-300 text-primary focus:ring-primary"
-                onChange={(e) => handleCheckboxChange('description' as keyof Assurance, e.target.checked)}
-                disabled={disabled}
-              />
-              <label htmlFor={`buy-sell-${policy.id}`} className="text-sm text-neutral-600">
-                Enable buy/sell option
-              </label>
-            </div>
-          </FormField>
-          
-          <FormField label="Key Man Insurance">
-            <div className="flex items-center space-x-2">
-              <input
-                type="checkbox"
-                id={`key-man-${policy.id}`}
-                defaultChecked={false}
-                className="rounded border-neutral-300 text-primary focus:ring-primary"
-                onChange={(e) => handleCheckboxChange('description' as keyof Assurance, e.target.checked)}
-                disabled={disabled}
-              />
-              <label htmlFor={`key-man-${policy.id}`} className="text-sm text-neutral-600">
-                Key man insurance
-              </label>
-            </div>
-          </FormField>
-          
-          <FormField label="Estate Duty">
-            <div className="flex items-center space-x-2">
-              <input
-                type="checkbox"
-                id={`excluded-estate-${policy.id}`}
-                defaultChecked={false}
-                className="rounded border-neutral-300 text-primary focus:ring-primary"
-                onChange={(e) => handleCheckboxChange('description' as keyof Assurance, e.target.checked)}
-                disabled={disabled}
-              />
-              <label htmlFor={`excluded-estate-${policy.id}`} className="text-sm text-neutral-600">
-                Excluded from estate duty
-              </label>
-            </div>
-          </FormField>
-        </div>
-      </FieldGroup>
 
-      {/* Additional Information Group */}
+
+      {/* Additional Information */}
       <FieldGroup title="Additional Information">
         <FormField label="Additional Information">
           <textarea
