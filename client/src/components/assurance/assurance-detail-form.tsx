@@ -197,109 +197,111 @@ export function AssuranceDetailForm({
 
 
           <FormField label="Beneficiaries & Controls">
-            {/* Table with custom column sizing to fit screen */}
-            <div className="w-full overflow-hidden">
-              {/* Table header with 4 columns total */}
-              <div className="grid gap-1 px-1 py-2 bg-neutral-100 border border-neutral-300 rounded-t text-sm font-medium text-neutral-700" style={{gridTemplateColumns: "310px 100px 60px 80px"}}>
-                <div className="text-left text-xs">Beneficiary & Split</div>
-                <div className="text-center text-xs">Amount</div>
-                <div className="text-center text-xs">Toggle</div>
-                <div className="text-center text-xs">Years/%</div>
-              </div>
-              
-              {/* Table rows with matching column sizing */}
-              <div className="space-y-0">
-                {Array.from({ length: Math.max(policy.owners.length, policy.beneficiaries.length) }, (_, rowIndex) => (
-                  <div key={`beneficiary-table-row-${rowIndex}`} className="grid gap-1 px-1 py-1 border border-neutral-200 border-t-0 bg-white items-center" style={{gridTemplateColumns: "310px 100px 60px 80px"}}>
-                    {/* EntityBeneficiarySelector in first column */}
-                    <div className="overflow-hidden">
-                      <EntityBeneficiarySelector
-                        policyId={policy.id}
-                        beneficiaries={policy.beneficiaries}
-                        beneficiaryPercentages={policy.beneficiaryPercentages || ["100%"]}
-                        onBeneficiaryChange={onBeneficiaryChange}
-                        onBeneficiaryPercentageChange={onBeneficiaryPercentageChange}
-                        onAddBeneficiary={onAddBeneficiary}
-                        onRemoveBeneficiary={onRemoveBeneficiary}
-                        rowIndex={rowIndex}
-                        disabled={disabled}
-                      />
-                    </div>
-
-                    {/* Amount */}
-                    <div className="text-center overflow-hidden">
-                      <input
-                        key={`amount-${policy.id}-${rowIndex}`}
-                        type="text"
-                        defaultValue={policy.amount || "R 0"}
-                        className={`table-input text-right w-full text-xs ${!policy.amount || policy.amount === 'R 0' ? 'text-neutral-400' : ''}`}
-                        onFocus={handleDefaultValueFocus}
-                        onBlur={(e) => handleTextFieldBlur('amount', e.target.value)}
-                        disabled={disabled}
-                      />
-                    </div>
-
-                    {/* Toggle Button */}
-                    <div className="flex justify-center overflow-hidden">
-                      <button
-                        type="button"
-                        onClick={() => {
-                          const currentToggle = isAmountYearsMode(policy, rowIndex);
-                          handleArrayFieldUpdate(policy.id, 'amountToggles', rowIndex, !currentToggle);
-                        }}
-                        className={`h-6 px-1 w-full bg-[#E8F3F8] border border-[#E0E0E0] text-[#016991] hover:bg-[#D1E7F0] rounded text-xs font-medium ${
-                          !getAmountControlsEnabled(policy, disabled) ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'
-                        }`}
-                        disabled={!getAmountControlsEnabled(policy, disabled)}
-                      >
-                        {isAmountYearsMode(policy, rowIndex) ? 'Y' : '%'}
-                      </button>
-                    </div>
-
-                    {/* Years/% Input */}
-                    <div className="text-center overflow-hidden">
-                      {isAmountYearsMode(policy, rowIndex) ? (
-                        // Years Mode
-                        <input
-                          key={`amount-years-${policy.id}-${rowIndex}`}
-                          type="text"
-                          defaultValue={formatYearsValue((policy.amountYearsValues || ["0 years"])[rowIndex] || "0 years")}
-                          className={`table-input text-center w-full text-xs ${
-                            !getAmountControlsEnabled(policy, disabled) ? 'bg-neutral-100 cursor-not-allowed' : ''
-                          }`}
-                          onFocus={handleDefaultValueFocus}
-                          onBlur={(e) => {
-                            const formattedValue = formatYearsValue(e.target.value);
-                            e.target.value = formattedValue;
-                            handleArrayFieldUpdate(policy.id, 'amountYearsValues', rowIndex, formattedValue);
-                          }}
-                          disabled={!getAmountControlsEnabled(policy, disabled)}
+            {/* Use actual table element for proper styling */}
+            <div className="w-full overflow-x-auto">
+              <table className="w-full border-collapse">
+                <thead>
+                  <tr className="bg-neutral-100 border border-neutral-300">
+                    <th className="text-left text-xs font-medium text-neutral-700 px-2 py-2 border-r border-neutral-300" style={{width: "250px"}}>
+                      Beneficiary & Split
+                    </th>
+                    <th className="text-center text-xs font-medium text-neutral-700 px-2 py-2 border-r border-neutral-300" style={{width: "100px"}}>
+                      Amount
+                    </th>
+                    <th className="text-center text-xs font-medium text-neutral-700 px-2 py-2 border-r border-neutral-300" style={{width: "70px"}}>
+                      Toggle
+                    </th>
+                    <th className="text-center text-xs font-medium text-neutral-700 px-2 py-2" style={{width: "80px"}}>
+                      Years/%
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {Array.from({ length: Math.max(policy.owners.length, policy.beneficiaries.length) }, (_, rowIndex) => (
+                    <tr key={`beneficiary-table-row-${rowIndex}`} className="border-b border-neutral-200 bg-white">
+                      <td className="px-2 py-1 border-r border-neutral-200">
+                        <EntityBeneficiarySelector
+                          policyId={policy.id}
+                          beneficiaries={policy.beneficiaries}
+                          beneficiaryPercentages={policy.beneficiaryPercentages || ["100%"]}
+                          onBeneficiaryChange={onBeneficiaryChange}
+                          onBeneficiaryPercentageChange={onBeneficiaryPercentageChange}
+                          onAddBeneficiary={onAddBeneficiary}
+                          onRemoveBeneficiary={onRemoveBeneficiary}
+                          rowIndex={rowIndex}
+                          disabled={disabled}
                         />
-                      ) : (
-                        // Percentage Mode
+                      </td>
+                      <td className="px-2 py-1 border-r border-neutral-200 text-center">
                         <input
-                          key={`amount-increase-${policy.id}-${rowIndex}`}
+                          key={`amount-${policy.id}-${rowIndex}`}
                           type="text"
-                          defaultValue={(policy.amountIncreaseValues || ["0%"])[rowIndex] || "0%"}
-                          className={`table-input text-center w-full text-xs ${
-                            !getAmountControlsEnabled(policy, disabled) ? 'bg-neutral-100 cursor-not-allowed' : ''
-                          }`}
+                          defaultValue={policy.amount || "R 0"}
+                          className={`table-input text-right w-full text-xs ${!policy.amount || policy.amount === 'R 0' ? 'text-neutral-400' : ''}`}
                           onFocus={handleDefaultValueFocus}
-                          onBlur={(e) => {
-                            const formattedValue = formatPercentageValue(e.target.value);
-                            e.target.value = formattedValue;
-                            handleArrayFieldUpdate(policy.id, 'amountIncreaseValues', rowIndex, formattedValue);
-                          }}
-                          disabled={!getAmountControlsEnabled(policy, disabled)}
+                          onBlur={(e) => handleTextFieldBlur('amount', e.target.value)}
+                          disabled={disabled}
                         />
-                      )}
-                    </div>
-                  </div>
-                ))}
-              </div>
+                      </td>
+                      <td className="px-2 py-1 border-r border-neutral-200 text-center">
+                        <button
+                          type="button"
+                          onClick={() => {
+                            const currentToggle = isAmountYearsMode(policy, rowIndex);
+                            handleArrayFieldUpdate(policy.id, 'amountToggles', rowIndex, !currentToggle);
+                          }}
+                          className={`h-6 px-2 w-full bg-[#E8F3F8] border border-[#E0E0E0] text-[#016991] hover:bg-[#D1E7F0] rounded text-xs font-medium ${
+                            !getAmountControlsEnabled(policy, disabled) ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'
+                          }`}
+                          disabled={!getAmountControlsEnabled(policy, disabled)}
+                        >
+                          {isAmountYearsMode(policy, rowIndex) ? 'Y' : '%'}
+                        </button>
+                      </td>
+                      <td className="px-2 py-1 text-center">
+                        {isAmountYearsMode(policy, rowIndex) ? (
+                          // Years Mode
+                          <input
+                            key={`amount-years-${policy.id}-${rowIndex}`}
+                            type="text"
+                            defaultValue={formatYearsValue((policy.amountYearsValues || ["0 years"])[rowIndex] || "0 years")}
+                            className={`table-input text-center w-full text-xs ${
+                              !getAmountControlsEnabled(policy, disabled) ? 'bg-neutral-100 cursor-not-allowed' : ''
+                            }`}
+                            onFocus={handleDefaultValueFocus}
+                            onBlur={(e) => {
+                              const formattedValue = formatYearsValue(e.target.value);
+                              e.target.value = formattedValue;
+                              handleArrayFieldUpdate(policy.id, 'amountYearsValues', rowIndex, formattedValue);
+                            }}
+                            disabled={!getAmountControlsEnabled(policy, disabled)}
+                          />
+                        ) : (
+                          // Percentage Mode
+                          <input
+                            key={`amount-increase-${policy.id}-${rowIndex}`}
+                            type="text"
+                            defaultValue={(policy.amountIncreaseValues || ["0%"])[rowIndex] || "0%"}
+                            className={`table-input text-center w-full text-xs ${
+                              !getAmountControlsEnabled(policy, disabled) ? 'bg-neutral-100 cursor-not-allowed' : ''
+                            }`}
+                            onFocus={handleDefaultValueFocus}
+                            onBlur={(e) => {
+                              const formattedValue = formatPercentageValue(e.target.value);
+                              e.target.value = formattedValue;
+                              handleArrayFieldUpdate(policy.id, 'amountIncreaseValues', rowIndex, formattedValue);
+                            }}
+                            disabled={!getAmountControlsEnabled(policy, disabled)}
+                          />
+                        )}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
             </div>
             
-            <div className="text-sm text-neutral-500 mt-1">
+            <div className="text-sm text-neutral-500 mt-2">
               Note: Independent toggle controls per beneficiary
             </div>
           </FormField>
