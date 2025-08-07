@@ -199,8 +199,9 @@ export function AssuranceDetailForm({
 
 
           <FormField label="Beneficiaries & Controls">
-            {/* Use actual table element for proper styling */}
-            <table className="border-collapse">
+            {/* Use actual table element with overflow wrapper for wide dropdown */}
+            <div className="w-full overflow-x-auto">
+              <table className="border-collapse" style={{width: "max-content"}}>
               <thead>
                 <tr className="bg-neutral-100 border border-neutral-300">
                   <th className="text-left text-xs font-medium text-neutral-700 px-2 py-2 border-r border-neutral-300">
@@ -303,6 +304,7 @@ export function AssuranceDetailForm({
                   ))}
                 </tbody>
               </table>
+            </div>
             
             <div className="text-sm text-neutral-500 mt-2">
               Note: Independent toggle controls per beneficiary
