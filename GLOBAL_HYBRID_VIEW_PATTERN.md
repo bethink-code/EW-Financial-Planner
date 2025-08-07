@@ -56,12 +56,29 @@ This is the definitive guide for implementing hybrid view functionality across a
 
 ```typescript
 <GroupedDetailForm>
+  {/* Header with Actions - MANDATORY PATTERN */}
+  <div className="flex justify-between items-start">
+    <h2 className="text-lg font-semibold text-neutral-800">
+      {item.description || 'Untitled Item'}
+    </h2>
+    <ActionButtonGroup>
+      <DuplicateButton onClick={() => onDuplicate(item)} disabled={disabled} />
+      <DeleteButton onClick={() => onDelete(item.id)} disabled={disabled} />
+    </ActionButtonGroup>
+  </div>
+
   <FieldGroup title="OVERVIEW">
     <FormField label="Description">
       <input ... />
     </FormField>
   </FieldGroup>
 </GroupedDetailForm>
+```
+
+**Required Detail Form Container Styling**:
+```typescript
+// EXACT container classes required for consistency
+<div className="space-y-12 p-6 bg-white">
 ```
 
 ### 2. Implementation Steps for New Calculators
@@ -267,7 +284,30 @@ Every calculator should use these 4 logical groupings:
 .tab-active-border           /* Orange left border for active tabs */
 ```
 
-### 5. Border Management Rules
+### 5. Title Styling Standards
+
+**MANDATORY Title Pattern for Detail Forms**:
+```typescript
+{/* Header with Actions - USE EXACT STYLING */}
+<div className="flex justify-between items-start">
+  <h2 className="text-lg font-semibold text-neutral-800">
+    {item.description || 'Untitled Item'}
+  </h2>
+  <ActionButtonGroup>
+    <DuplicateButton onClick={() => onDuplicate(item)} disabled={disabled} />
+    <DeleteButton onClick={() => onDelete(item.id)} disabled={disabled} />
+  </ActionButtonGroup>
+</div>
+```
+
+**Typography Requirements**:
+- **Font Size**: `text-lg` (18px)
+- **Font Weight**: `font-semibold` (600)
+- **Color**: `text-neutral-800` (dark gray)
+- **Dynamic Content**: Show item description (e.g., "Policy 1", "Sanlam Protector")
+- **Fallback**: "Untitled Item" (adapt to calculator type)
+
+### 6. Border Management Rules
 
 **Critical Requirements**:
 1. Container has `border-t` for top continuity
@@ -414,6 +454,12 @@ const selectedItem = useMemo(() =>
 - **Assurance**: `client/src/components/assurance/working-assurance-table.tsx`
 - **Retirement Funds**: `client/src/components/retirement-funds/retirement-fund-hybrid-table.tsx`
 
+**Recent Success Stories**:
+- **Assurance Calculator**: Full implementation with all patterns and consistent title styling
+- **Retirement Funds Calculator**: Complete hybrid view integration with matching title typography  
+- **Title Consistency**: Both calculators now display individual item names with identical styling
+- **Border Resolution**: All double border issues resolved with global CSS fixes
+
 Both demonstrate complete implementations of this pattern.
 
 ## MANDATORY Implementation Protocol
@@ -448,6 +494,17 @@ isLast={index === items.length - 1}
 4. Confirm tab container has no vertical spacing
 5. Test detail form has clean borders
 6. Verify table borders are consistent thin style (1px) on all edges
+7. **Verify title styling matches pattern exactly**:
+   - Individual item name displayed (not generic section name)
+   - Font: `text-lg font-semibold text-neutral-800`
+   - Layout: Title left, action buttons right
+   - Spacing: Consistent with other calculators
+
+**STEP 5: Commit All Changes to Pattern**
+1. Document any new styling requirements in this guide
+2. Update container classes and typography standards
+3. Add visual testing steps for new features
+4. Update success stories with implementation notes
 
 **STEP 5: Update Documentation**
 - Add new calculator to examples list
