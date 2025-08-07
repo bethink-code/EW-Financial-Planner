@@ -133,6 +133,9 @@ export const assurance = pgTable("assurance", {
   // Financial details
   deathBenefit: text("death_benefit").notNull().default("R 0"),
   amount: text("amount").notNull().default("R 0"),
+  amountCheckbox: boolean("amount_checkbox").notNull().default(true), // Toggle: true = Years mode, false = % mode
+  amountYears: text("amount_years").notNull().default("0 years"),
+  amountIncrease: text("amount_increase").notNull().default("0%"),
   premiumsByOthers: text("premiums_by_others").notNull().default("R 0"),
   collateralSession: text("collateral_session").notNull().default("R 0"),
   benefitSplit: text("benefit_split").notNull().default("0%"),

@@ -51,6 +51,60 @@ const formatCurrencyValue = (value: string, fieldType: string): string => {
   return "R 0";
 };
 
+// Years/% Toggle Pattern Helper Functions for Amount field
+const hasAmountValue = (policy: Assurance) => {
+  const amount = policy.amount || "";
+  const cleanValue = amount.replace(/[^\d]/g, '');
+  return cleanValue && cleanValue !== "0";
+};
+
+const getAmountControlsEnabled = (policy: Assurance, isUpdating: boolean) => {
+  return hasAmountValue(policy) && !isUpdating;
+};
+
+// Toggle shows "Years" when checked (true), "%" when unchecked (false)
+const isAmountYearsMode = (policy: Assurance) => {
+  return policy.amountCheckbox === true;
+};
+
+// Format years value with proper suffix
+const formatYearsValue = (value: string): string => {
+  if (!value || value === "0" || value.trim() === "") {
+    return "0 years";
+  }
+  
+  const cleanValue = value.toString().replace(/\s*years?\s*/gi, '').trim();
+  if (cleanValue === "" || cleanValue === "0") {
+    return "0 years";
+  }
+  
+  const numValue = parseFloat(cleanValue);
+  if (isNaN(numValue)) {
+    return "0 years";
+  }
+  
+  return `${numValue} years`;
+};
+
+// Format percentage value with proper suffix
+const formatPercentageValue = (value: string): string => {
+  if (!value || value === "0" || value.trim() === "") {
+    return "0%";
+  }
+  
+  const cleanValue = value.toString().replace(/[^\d.-]/g, '').trim();
+  if (cleanValue === "" || cleanValue === "0") {
+    return "0%";
+  }
+  
+  const numValue = parseFloat(cleanValue);
+  if (isNaN(numValue)) {
+    return "0%";
+  }
+  
+  return `${numValue}%`;
+};
+
 export function AssuranceTable({ viewMode = 'table', onAddPolicy }: AssuranceTableProps) {
   const queryClient = useQueryClient();
   const [isUpdating, setIsUpdating] = useState(false);
@@ -115,6 +169,9 @@ export function AssuranceTable({ viewMode = 'table', onAddPolicy }: AssuranceTab
           beneficiaries: [...policy.beneficiaries],
           deathBenefit: policy.deathBenefit,
           amount: policy.amount,
+          amountCheckbox: policy.amountCheckbox || true,
+          amountYears: policy.amountYears || "0 years",
+          amountIncrease: policy.amountIncrease || "0%",
           premiumsByOthers: policy.premiumsByOthers,
           collateralSession: policy.collateralSession,
           benefitSplit: policy.benefitSplit,
@@ -172,8 +229,17 @@ export function AssuranceTable({ viewMode = 'table', onAddPolicy }: AssuranceTab
 
   // Note: Policy deletion removed - only individual owners/beneficiaries can be deleted
 
-  const handleInputBlur = useCallback((id: number, field: keyof Assurance, value: string, element: HTMLInputElement, fieldType: string) => {
-    const formattedValue = formatCurrencyValue(value, fieldType);
+  const handleInputBlur = useCallback((id: number, field: keyof Assurance, value: string, element: HTMLInputElement, fieldType?: string) => {
+    let formattedValue;
+    
+    // Special handling for years fields
+    if (fieldType === 'years' || field === 'amountYears') {
+      formattedValue = formatYearsValue(value);
+    } else if (fieldType === 'percentage' || field === 'amountIncrease') {
+      formattedValue = formatPercentageValue(value);
+    } else {
+      formattedValue = formatCurrencyValue(value, fieldType || '');
+    }
     
     // Update the DOM directly to avoid re-render jump
     if (formattedValue !== value) {
@@ -407,6 +473,8 @@ export function AssuranceTable({ viewMode = 'table', onAddPolicy }: AssuranceTab
               <th className="table-header-base">Beneficiary</th>
               <th className="table-header-base">Benefit Split</th>
               <th className="table-header-base">Amount</th>
+              <th className="table-header-base">Toggle</th>
+              <th className="table-header-base">Years / %</th>
               <th className="table-header-base">Buy/Sell</th>
               <th className="table-header-base">Key Man</th>
               <th className="table-header-base">Excluded Estate Duty</th>
@@ -581,7 +649,59 @@ export function AssuranceTable({ viewMode = 'table', onAddPolicy }: AssuranceTab
                         className={`table-input ${getFieldClass('currency')} ${getValueClass(policy.amount, 'currency')}`}
                         onFocus={handleDefaultValueFocus}
                         onBlur={(e) => handleInputBlur(policy.id, 'amount', e.target.value, e.target, 'amount')}
+                        disabled={updateMutation.isPending}
                       />
+                    )}
+                  </td>
+
+                  {/* Toggle Button - only show on first row */}
+                  <td className="border border-neutral-300 p-1">
+                    {rowIndex === 0 && (
+                      <div className="pt-0.5">
+                        <button
+                          type="button"
+                          onClick={() => handleUpdatePolicy(policy.id, 'amountCheckbox', !policy.amountCheckbox)}
+                          className={`h-8 px-3 min-w-[48px] bg-[#E8F3F8] border border-[#E0E0E0] text-[#016991] hover:bg-[#D1E7F0] rounded-md flex items-center justify-center transition-colors text-sm font-medium ${
+                            !getAmountControlsEnabled(policy, updateMutation.isPending) ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'
+                          }`}
+                          disabled={!getAmountControlsEnabled(policy, updateMutation.isPending)}
+                        >
+                          {isAmountYearsMode(policy) ? 'Years' : '%'}
+                        </button>
+                      </div>
+                    )}
+                  </td>
+
+                  {/* Dynamic Field (Years OR Percentage) - only show on first row */}
+                  <td className="border border-neutral-300 p-1">
+                    {rowIndex === 0 && (
+                      isAmountYearsMode(policy) ? (
+                        // Years Mode
+                        <input
+                          key={`amount-years-${policy.id}`}
+                          type="text"
+                          defaultValue={formatYearsValue(policy.amountYears || "0 years")}
+                          className={`table-input ${getFieldClass('years')} ${getValueClass(policy.amountYears || "0 years", 'years')} ${
+                            !getAmountControlsEnabled(policy, updateMutation.isPending) ? 'bg-neutral-100 cursor-not-allowed' : ''
+                          }`}
+                          onFocus={handleDefaultValueFocus}
+                          onBlur={(e) => handleInputBlur(policy.id, 'amountYears', e.target.value, e.target, 'years')}
+                          disabled={!getAmountControlsEnabled(policy, updateMutation.isPending)}
+                        />
+                      ) : (
+                        // Percentage Mode
+                        <input
+                          key={`amount-increase-${policy.id}`}
+                          type="text"
+                          defaultValue={policy.amountIncrease || "0%"}
+                          className={`table-input ${getFieldClass('percentage')} ${getValueClass(policy.amountIncrease || "0%", 'percentage')} ${
+                            !getAmountControlsEnabled(policy, updateMutation.isPending) ? 'bg-neutral-100 cursor-not-allowed' : ''
+                          }`}
+                          onFocus={handleDefaultValueFocus}
+                          onBlur={(e) => handleInputBlur(policy.id, 'amountIncrease', e.target.value, e.target, 'percentage')}
+                          disabled={!getAmountControlsEnabled(policy, updateMutation.isPending)}
+                        />
+                      )
                     )}
                   </td>
 
