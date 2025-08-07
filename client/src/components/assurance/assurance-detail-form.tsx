@@ -207,6 +207,9 @@ export function AssuranceDetailForm({
                     Beneficiary & Split
                   </th>
                   <th className="text-center text-xs font-medium text-neutral-700 px-2 py-2 border-r border-neutral-300">
+                    Benefit Split
+                  </th>
+                  <th className="text-center text-xs font-medium text-neutral-700 px-2 py-2 border-r border-neutral-300">
                     Amount
                   </th>
                   <th className="text-center text-xs font-medium text-neutral-700 px-2 py-2 border-r border-neutral-300">
@@ -232,6 +235,23 @@ export function AssuranceDetailForm({
                           rowIndex={rowIndex}
                           disabled={disabled}
                         />
+                      </td>
+                      <td className="px-1 py-1 border-r border-neutral-200">
+                        {(() => {
+                          const currentPercentage = (policy.beneficiaryPercentages || ["100%"])[rowIndex] || "0%";
+                          // Calculate total death benefit across all Life Assured entries for this policy
+                          const totalDeathBenefit = (policy.deathBenefits || []).reduce((sum, benefit) => {
+                            return sum + (parseFloat(benefit?.replace(/[^\d.-]/g, '') || '0') || 0);
+                          }, 0);
+                          const percentage = parseFloat(currentPercentage.replace('%', '')) || 0;
+                          const benefitSplit = Math.round((totalDeathBenefit * percentage) / 100);
+                          
+                          return (
+                            <div className="calculated-field text-right">
+                              R {benefitSplit.toLocaleString()}
+                            </div>
+                          );
+                        })()}
                       </td>
                       <td className="px-1 py-1 border-r border-neutral-200">
                         <input
