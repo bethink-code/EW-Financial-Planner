@@ -901,7 +901,7 @@ export function AssuranceTable({ viewMode = 'table', onAddPolicy }: AssuranceTab
 
   // Summary cards for hybrid view - clickable policy tabs
   const summaryCards = (
-    <div className="space-y-3">
+    <div>
       {previewItems.map((item: {
         id: number;
         title: string;

@@ -287,6 +287,15 @@ Each calculator adapts the 4 logical field groupings to its specific domain whil
     {detailForm}
   </div>
 </div>
+
+// Summary cards container - NO spacing between tabs
+const summaryCards = (
+  <div>
+    {previewItems.map((item, index) => (
+      <HybridItemPreviewCard key={item.id} isFirst={index === 0} {...otherProps} />
+    ))}
+  </div>
+);
 ```
 
 ### Border Management Best Practices
@@ -338,11 +347,12 @@ const previewCards = items.map((item, index) => {
 
 ### Border Continuity Standard
 - **Container borders**: `border-t` class for top border continuity across entire hybrid view
-- **Sidebar separation**: Left sidebar wrapper provides single `border-r` for clean right-side separation
+- **Sidebar separation**: Left sidebar wrapper provides single `border-r` for clean right-side separation  
 - **First card handling**: First preview card uses `isFirst={index === 0}` to avoid double top borders
 - **Subsequent cards**: Get individual `border-t` for proper separation between tabs
 - **No right borders**: Individual cards do NOT have right borders to prevent double-border issues
-- **Professional appearance**: Clean tab styling without visual border conflicts
+- **No vertical spacing**: Tabs container has NO `space-y-*` classes - tabs should be directly adjacent
+- **Professional appearance**: Clean tab styling without visual border conflicts or spacing gaps
 
 **Implementation Pattern**:
 ```typescript
