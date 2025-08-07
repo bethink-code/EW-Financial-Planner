@@ -95,7 +95,33 @@ export default function AssuranceOwnerSelector({
   const showRemoveButton = owners.length > 1 && rowIndex > 0; // Don't show on first row
 
   return (
-    <div className="flex items-center gap-3 p-2 border border-neutral-200 rounded bg-neutral-50">
+    <div className="flex items-center gap-3">
+      {/* Action Buttons - At front of row per design system */}
+      <div className="flex items-center gap-1 flex-shrink-0">
+        {showAddButton && (
+          <button
+            type="button"
+            onClick={handleAddOwner}
+            className="w-6 h-6 flex items-center justify-center text-green-600 hover:text-green-800 hover:bg-green-50 rounded border border-green-300 hover:border-green-400"
+            disabled={disabled}
+            title="Add owner"
+          >
+            <Plus className="w-4 h-4" />
+          </button>
+        )}
+        {showRemoveButton && (
+          <button
+            type="button"
+            onClick={handleRemoveOwner}
+            className="w-6 h-6 flex items-center justify-center text-red-600 hover:text-red-800 hover:bg-red-50 rounded border border-red-300 hover:border-red-400"
+            disabled={disabled}
+            title="Remove owner"
+          >
+            <Minus className="w-4 h-4" />
+          </button>
+        )}
+      </div>
+
       {/* Owner Dropdown */}
       <div className="min-w-0">
         <Select
@@ -151,32 +177,6 @@ export default function AssuranceOwnerSelector({
           onBlur={handleDeathBenefitChange}
           disabled={disabled}
         />
-      </div>
-
-      {/* Action Buttons */}
-      <div className="flex items-center gap-1 flex-shrink-0">
-        {showAddButton && (
-          <button
-            type="button"
-            onClick={handleAddOwner}
-            className="p-1 text-green-600 hover:text-green-800 hover:bg-green-50 rounded"
-            disabled={disabled}
-            title="Add owner"
-          >
-            <Plus className="w-4 h-4" />
-          </button>
-        )}
-        {showRemoveButton && (
-          <button
-            type="button"
-            onClick={handleRemoveOwner}
-            className="p-1 text-red-600 hover:text-red-800 hover:bg-red-50 rounded"
-            disabled={disabled}
-            title="Remove owner"
-          >
-            <Minus className="w-4 h-4" />
-          </button>
-        )}
       </div>
     </div>
   );
