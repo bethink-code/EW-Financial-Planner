@@ -105,17 +105,19 @@ export default function EntityOwnerSelector({
   ) : null;
 
   return (
-    <div className="space-y-1">
-      <div className="flex items-center gap-1">
-        {/* Action Button - Using plain button without any wrapper */}
+    <>
+      {/* Actions Column */}
+      <td className="px-1 py-1 border-r border-neutral-200" style={{ width: '8%' }}>
         {actionButton}
-        
-        {/* Entity Selector - Using native HTML select to avoid CSS conflicts */}
+      </td>
+      
+      {/* Owner Column */}
+      <td className="px-1 py-1 border-r border-neutral-200" style={{ width: '32%' }}>
         <select
           value={currentOwner}
           onChange={(e) => handleOwnerSelect(e.target.value, ownerIndex)}
           disabled={disabled}
-          className="table-input table-dropdown flex-1"
+          className="table-input table-dropdown w-full"
         >
           <option value="">Select owner...</option>
           {entities.map((entity) => (
@@ -124,8 +126,10 @@ export default function EntityOwnerSelector({
             </option>
           ))}
         </select>
+      </td>
 
-        {/* Percentage Input - matching beneficiary component styling */}
+      {/* Ownership % Column */}
+      <td className="px-1 py-1 border-r border-neutral-200" style={{ width: '15%' }}>
         <input
           type="text"
           defaultValue={currentPercentage}
@@ -148,14 +152,7 @@ export default function EntityOwnerSelector({
           }}
           disabled={disabled}
         />
-      </div>
-
-      {/* Validation Warning - show on last row only */}
-      {rowIndex === owners.length - 1 && isInvalidTotal && (
-        <div className="text-xs text-red-600 font-medium">
-          Total: {percentageTotal.toFixed(1)}% (must equal 100%)
-        </div>
-      )}
-    </div>
+      </td>
+    </>
   );
 }

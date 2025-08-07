@@ -158,20 +158,18 @@ export function AssuranceDetailForm({
               <tbody>
                 {Array.from({ length: Math.max(policy.owners.length, 1) }, (_, rowIndex) => (
                   <tr key={`owner-table-row-${rowIndex}`} className="border-b border-neutral-200 bg-white">
-                    <td className="px-1 py-1 border-r border-neutral-200" style={{ width: '8%' }}>
-                      <EntityOwnerSelector
-                        policyId={policy.id}
-                        owners={policy.owners}
-                        ownershipPercentages={policy.ownershipPercentages || ["100%"]}
-                        onOwnerChange={onOwnerChange}
-                        onOwnershipPercentageChange={onOwnershipPercentageChange}
-                        onAddOwner={onAddOwner}
-                        onRemoveOwner={onRemoveOwner}
-                        rowIndex={rowIndex}
-                        disabled={disabled}
-                      />
-                    </td>
-                    <td className="px-1 py-1 border-r border-neutral-200" style={{ width: '32%' }}>
+                    <EntityOwnerSelector
+                      policyId={policy.id}
+                      owners={policy.owners}
+                      ownershipPercentages={policy.ownershipPercentages || ["100%"]}
+                      onOwnerChange={onOwnerChange}
+                      onOwnershipPercentageChange={onOwnershipPercentageChange}
+                      onAddOwner={onAddOwner}
+                      onRemoveOwner={onRemoveOwner}
+                      rowIndex={rowIndex}
+                      disabled={disabled}
+                    />
+                    <td className="px-1 py-1 border-r border-neutral-200" style={{ width: '30%' }}>
                       <Select
                         value={(policy.lifeAssured || [])[rowIndex] || "none"}
                         onValueChange={(value) => {
