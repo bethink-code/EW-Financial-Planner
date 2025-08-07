@@ -6,7 +6,9 @@ import EntityOwnerSelector from '@/components/common/entity-owner-selector';
 import EntityBeneficiarySelector from '@/components/common/entity-beneficiary-selector';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { ActionButtonGroup, DuplicateButton, DeleteButton } from '@/components/ui/action-buttons';
-import { handleDefaultValueFocus, formatYearsValue, formatPercentageValue } from '@/lib/formatting';
+import { handleDefaultValueFocus, formatYearsValue, formatPercentageValue, getValueClass } from '@/lib/formatting';
+import { getFieldClass } from '@/lib/design-tokens';
+import { getCellClass } from '@/lib/field-types';
 
 interface AssuranceDetailFormProps {
   policy: Assurance;
