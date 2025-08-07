@@ -198,19 +198,19 @@ export function AssuranceDetailForm({
 
           <FormField label="Beneficiaries & Controls">
             {/* Compact table header */}
-            <div className="grid grid-cols-6 gap-1 px-1 py-1 bg-neutral-100 border border-neutral-300 rounded-t text-xs font-medium text-neutral-700">
-              <div className="text-center">Act</div>
+            <div className="grid grid-cols-6 gap-1 px-1 py-1 bg-neutral-100 border border-neutral-300 rounded-t text-sm font-medium text-neutral-700">
+              <div className="text-center">Actions</div>
               <div className="text-left">Beneficiary</div>
               <div className="text-center">Split</div>
               <div className="text-center">Amount</div>
-              <div className="text-center">Tog</div>
-              <div className="text-center">Val</div>
+              <div className="text-center">Toggle</div>
+              <div className="text-center">Years/%</div>
             </div>
             
             {/* Compact table rows */}
             <div className="space-y-0">
               {Array.from({ length: Math.max(policy.owners.length, policy.beneficiaries.length) }, (_, rowIndex) => (
-                <div key={`beneficiary-table-row-${rowIndex}`} className="grid grid-cols-6 gap-1 px-1 py-1 border border-neutral-200 border-t-0 bg-white items-center text-xs">
+                <div key={`beneficiary-table-row-${rowIndex}`} className="grid grid-cols-6 gap-1 px-1 py-1 border border-neutral-200 border-t-0 bg-white items-center">
                   {/* Actions - compact */}
                   <div className="flex justify-center">
                     <EntityBeneficiarySelector
@@ -233,7 +233,7 @@ export function AssuranceDetailForm({
                       value={(policy.beneficiaries || [])[rowIndex] || ""}
                       onChange={(e) => onBeneficiaryChange(policy.id, rowIndex, e.target.value)}
                       disabled={disabled}
-                      className="table-input table-dropdown w-full text-xs h-6"
+                      className="table-input table-dropdown w-full"
                     >
                       <option value="">Select...</option>
                       {entities.map((entity) => (
@@ -249,7 +249,7 @@ export function AssuranceDetailForm({
                     <input
                       type="text"
                       defaultValue={(policy.beneficiaryPercentages || ["100%"])[rowIndex] || "0%"}
-                      className="table-input text-center w-12 h-6 text-xs"
+                      className="table-input text-center w-10"
                       onFocus={handleDefaultValueFocus}
                       onBlur={(e) => {
                         let value = e.target.value.trim().replace(/[^\d.]/g, '');
@@ -268,7 +268,7 @@ export function AssuranceDetailForm({
                       key={`amount-${policy.id}-${rowIndex}`}
                       type="text"
                       defaultValue={policy.amount || "R 0"}
-                      className={`table-input text-right w-16 h-6 text-xs ${!policy.amount || policy.amount === 'R 0' ? 'text-neutral-400' : ''}`}
+                      className={`table-input text-right w-14 ${!policy.amount || policy.amount === 'R 0' ? 'text-neutral-400' : ''}`}
                       onFocus={handleDefaultValueFocus}
                       onBlur={(e) => handleTextFieldBlur('amount', e.target.value)}
                       disabled={disabled}
@@ -283,12 +283,12 @@ export function AssuranceDetailForm({
                         const currentToggle = isAmountYearsMode(policy, rowIndex);
                         handleArrayFieldUpdate(policy.id, 'amountToggles', rowIndex, !currentToggle);
                       }}
-                      className={`h-6 px-2 min-w-[32px] bg-[#E8F3F8] border border-[#E0E0E0] text-[#016991] hover:bg-[#D1E7F0] rounded text-xs font-medium ${
+                      className={`h-8 px-2 min-w-[40px] bg-[#E8F3F8] border border-[#E0E0E0] text-[#016991] hover:bg-[#D1E7F0] rounded text-sm font-medium ${
                         !getAmountControlsEnabled(policy, disabled) ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'
                       }`}
                       disabled={!getAmountControlsEnabled(policy, disabled)}
                     >
-                      {isAmountYearsMode(policy, rowIndex) ? 'Y' : '%'}
+                      {isAmountYearsMode(policy, rowIndex) ? 'Years' : '%'}
                     </button>
                   </div>
 
@@ -300,7 +300,7 @@ export function AssuranceDetailForm({
                         key={`amount-years-${policy.id}-${rowIndex}`}
                         type="text"
                         defaultValue={formatYearsValue((policy.amountYearsValues || ["0 years"])[rowIndex] || "0 years")}
-                        className={`table-input text-center w-14 h-6 text-xs ${
+                        className={`table-input text-center w-12 ${
                           !getAmountControlsEnabled(policy, disabled) ? 'bg-neutral-100 cursor-not-allowed' : ''
                         }`}
                         onFocus={handleDefaultValueFocus}
@@ -317,7 +317,7 @@ export function AssuranceDetailForm({
                         key={`amount-increase-${policy.id}-${rowIndex}`}
                         type="text"
                         defaultValue={(policy.amountIncreaseValues || ["0%"])[rowIndex] || "0%"}
-                        className={`table-input text-center w-14 h-6 text-xs ${
+                        className={`table-input text-center w-12 ${
                           !getAmountControlsEnabled(policy, disabled) ? 'bg-neutral-100 cursor-not-allowed' : ''
                         }`}
                         onFocus={handleDefaultValueFocus}
@@ -334,7 +334,7 @@ export function AssuranceDetailForm({
               ))}
             </div>
             
-            <div className="text-xs text-neutral-500 mt-1">
+            <div className="text-sm text-neutral-500 mt-1">
               Note: Independent toggle controls per beneficiary
             </div>
           </FormField>
