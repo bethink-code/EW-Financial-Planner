@@ -190,7 +190,7 @@ export function AssuranceDetailForm({
       </FieldGroup>
 
       {/* Groups 2 & 3: Beneficiary Distribution & Amount Toggle Pattern (Related per-beneficiary) */}
-      <FieldGroup title="Beneficiary Distribution & Amount Controls">
+      <FieldGroup title="Beneficiary Distribution">
         <div className="space-y-4">
 
 
