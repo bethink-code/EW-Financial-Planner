@@ -135,7 +135,7 @@ export function AssuranceDetailForm({
               <tbody>
                 {Array.from({ length: Math.max(policy.owners.length, 1) }, (_, rowIndex) => (
                   <tr key={`owner-table-row-${rowIndex}`} className="border-b border-neutral-200 bg-white">
-                    <td className="px-1 py-1 border-r border-neutral-200">
+                    <td className="px-1 py-1 border-r border-neutral-200" style={{ width: '8%' }}>
                       <EntityOwnerSelector
                         policyId={policy.id}
                         owners={policy.owners}
@@ -148,7 +148,7 @@ export function AssuranceDetailForm({
                         disabled={disabled}
                       />
                     </td>
-                    <td className="px-1 py-1 border-r border-neutral-200">
+                    <td className="px-1 py-1 border-r border-neutral-200" style={{ width: '32%' }}>
                       <Select
                         value={(policy.lifeAssured || [])[rowIndex] || "none"}
                         onValueChange={(value) => {
@@ -171,7 +171,7 @@ export function AssuranceDetailForm({
                         </SelectContent>
                       </Select>
                     </td>
-                    <td className="px-1 py-1">
+                    <td className="px-1 py-1" style={{ width: '15%' }}>
                       <input
                         type="text"
                         defaultValue={((policy.deathBenefits || [])[rowIndex] || "R 0")}
@@ -244,7 +244,7 @@ export function AssuranceDetailForm({
               <tbody>
                   {Array.from({ length: Math.max(policy.owners.length, policy.beneficiaries.length) }, (_, rowIndex) => (
                     <tr key={`beneficiary-table-row-${rowIndex}`} className="border-b border-neutral-200 bg-white">
-                      <td className="px-1 py-1 border-r border-neutral-200">
+                      <td className="px-1 py-1 border-r border-neutral-200" style={{ width: '8%' }}>
                         <EntityBeneficiarySelector
                           policyId={policy.id}
                           beneficiaries={policy.beneficiaries}
@@ -257,7 +257,13 @@ export function AssuranceDetailForm({
                           disabled={disabled}
                         />
                       </td>
-                      <td className="px-1 py-1 border-r border-neutral-200">
+                      <td className="px-1 py-1 border-r border-neutral-200" style={{ width: '22%' }}>
+                        {/* This would be the beneficiary selector column - currently placeholder */}
+                      </td>
+                      <td className="px-1 py-1 border-r border-neutral-200" style={{ width: '12%' }}>
+                        {/* This would be the benefit % column - currently placeholder */}
+                      </td>
+                      <td className="px-1 py-1 border-r border-neutral-200" style={{ width: '17%' }}>
                         {(() => {
                           const currentPercentage = (policy.beneficiaryPercentages || ["100%"])[rowIndex] || "0%";
                           // Calculate total death benefit across all Life Assured entries for this policy
@@ -274,7 +280,7 @@ export function AssuranceDetailForm({
                           );
                         })()}
                       </td>
-                      <td className="px-1 py-1 border-r border-neutral-200">
+                      <td className="px-1 py-1 border-r border-neutral-200" style={{ width: '14%' }}>
                         <input
                           key={`amount-${policy.id}-${rowIndex}`}
                           type="text"
@@ -285,7 +291,7 @@ export function AssuranceDetailForm({
                           disabled={disabled}
                         />
                       </td>
-                      <td className="px-1 py-1 border-r border-neutral-200">
+                      <td className="px-1 py-1 border-r border-neutral-200" style={{ width: '11%' }}>
                         <button
                           type="button"
                           onClick={() => {
@@ -300,7 +306,7 @@ export function AssuranceDetailForm({
                           {isAmountYearsMode(policy, rowIndex) ? 'Y' : '%'}
                         </button>
                       </td>
-                      <td className="px-1 py-1">
+                      <td className="px-1 py-1" style={{ width: '16%' }}>
                         {isAmountYearsMode(policy, rowIndex) ? (
                           // Years Mode
                           <input
