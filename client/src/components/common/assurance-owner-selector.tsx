@@ -119,7 +119,7 @@ export default function AssuranceOwnerSelector({
       </div>
 
       {/* Life Assured Dropdown */}
-      <div className="flex-1 min-w-[200px]">
+      <div className="w-full min-w-[250px]">
         <Select
           value={currentLifeAssured}
           onValueChange={handleLifeAssuredChange}

@@ -66,7 +66,7 @@ export default function EntityLifeAssuredSelector({
   return (
     <div className="flex items-center gap-2">
       {/* Life Assured Dropdown - wider to accommodate longer names */}
-      <div className="flex-1 min-w-[200px]">
+      <div className="w-full min-w-[250px]">
         <Select
           value={currentLifeAssured}
           onValueChange={handleLifeAssuredChange}

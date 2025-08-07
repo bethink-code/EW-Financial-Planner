@@ -474,7 +474,7 @@ export function AssuranceTable({ viewMode = 'table', onAddPolicy }: AssuranceTab
 
                   {/* Life Assured */}
                   <td className="border border-neutral-300 p-1">
-                    <div className="min-w-[200px]">
+                    <div className="w-full min-w-[250px]">
                       <Select
                         value={(policy.lifeAssured || [])[rowIndex] || "none"}
                         onValueChange={(value) => {
