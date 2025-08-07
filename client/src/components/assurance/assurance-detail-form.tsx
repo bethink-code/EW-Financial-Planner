@@ -200,8 +200,8 @@ export function AssuranceDetailForm({
             {/* Table with custom column sizing to fit screen */}
             <div className="w-full overflow-hidden">
               {/* Table header with flexible grid */}
-              <div className="grid gap-1 px-1 py-2 bg-neutral-100 border border-neutral-300 rounded-t text-sm font-medium text-neutral-700" style={{gridTemplateColumns: "50px 200px 60px 100px 60px 80px"}}>
-                <div className="text-center text-xs">Act</div>
+              <div className="grid gap-1 px-1 py-2 bg-neutral-100 border border-neutral-300 rounded-t text-sm font-medium text-neutral-700" style={{gridTemplateColumns: "70px 180px 60px 100px 60px 80px"}}>
+                <div className="text-center text-xs">Actions</div>
                 <div className="text-left text-xs">Beneficiary</div>
                 <div className="text-center text-xs">Split</div>
                 <div className="text-center text-xs">Amount</div>
@@ -212,7 +212,7 @@ export function AssuranceDetailForm({
               {/* Table rows with matching column sizing */}
               <div className="space-y-0">
                 {Array.from({ length: Math.max(policy.owners.length, policy.beneficiaries.length) }, (_, rowIndex) => (
-                  <div key={`beneficiary-table-row-${rowIndex}`} className="grid gap-1 px-1 py-1 border border-neutral-200 border-t-0 bg-white items-center" style={{gridTemplateColumns: "50px 200px 60px 100px 60px 80px"}}>
+                  <div key={`beneficiary-table-row-${rowIndex}`} className="grid gap-1 px-1 py-1 border border-neutral-200 border-t-0 bg-white items-center" style={{gridTemplateColumns: "70px 180px 60px 100px 60px 80px"}}>
                     {/* Actions */}
                     <div className="flex justify-center overflow-hidden">
                       <EntityBeneficiarySelector
