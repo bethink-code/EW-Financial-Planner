@@ -197,6 +197,12 @@ const ensureArrayConsistency = (policy: PolicyData): PolicyData => {
 /* Hybrid view container borders */
 .flex.border-t { border-top: 1px solid #e5e5e5; } /* Top border continuation */
 
+/* Sidebar borders - single right border for clean separation */
+.border-r { border-right: 1px solid #e5e5e5; } /* Container provides right border */
+
+/* Preview card borders - NO individual right borders to prevent double borders */
+/* Only top borders between cards, container handles right separation */
+
 /* Table borders */
 border-collapse: collapse;
 border: 1px solid #e5e5e5;
@@ -272,7 +278,7 @@ Each calculator adapts the 4 logical field groupings to its specific domain whil
 
 ### HybridViewWrapper Usage
 ```typescript
-// Standard hybrid view container with border continuity
+// Standard hybrid view container with clean border management
 <div className="flex border-t border-neutral-200">
   <div className="w-80 flex-shrink-0 border-r border-neutral-200 bg-neutral-50">
     {previewCards}
@@ -281,6 +287,23 @@ Each calculator adapts the 4 logical field groupings to its specific domain whil
     {detailForm}
   </div>
 </div>
+```
+
+### Border Management Best Practices
+```typescript
+// CORRECT: Container provides borders, cards handle internal separation
+const getVariantClasses = () => {
+  const topBorderClass = isFirst ? '' : 'border-t border-neutral-200';
+  switch (variant) {
+    case 'active':
+      return `bg-white border-l-4 ${topBorderClass} -mr-px relative z-10`;
+    default:
+      return `bg-neutral-50 ${topBorderClass} hover:bg-white hover:border-l`;
+  }
+};
+
+// INCORRECT: Individual right borders create double-border issues
+// return `bg-white border-r border-neutral-200`; // ❌ Don't do this
 ```
 
 ### HybridItemPreviewCard Usage
@@ -314,12 +337,23 @@ const previewCards = items.map((item, index) => {
 - Works with HybridItemPreviewCard's `whiteSpace: 'pre-line'` styling
 
 ### Border Continuity Standard
-- Container has `border-t` class for top border continuity
-- Left sidebar wrapper provides single `border-r` for right-side separation
-- First preview card uses `isFirst={index === 0}` to avoid double top borders
-- Subsequent cards get individual top borders for separation
-- Individual cards do NOT have right borders to prevent double-border issues
-- Clean tab styling without visual border conflicts
+- **Container borders**: `border-t` class for top border continuity across entire hybrid view
+- **Sidebar separation**: Left sidebar wrapper provides single `border-r` for clean right-side separation
+- **First card handling**: First preview card uses `isFirst={index === 0}` to avoid double top borders
+- **Subsequent cards**: Get individual `border-t` for proper separation between tabs
+- **No right borders**: Individual cards do NOT have right borders to prevent double-border issues
+- **Professional appearance**: Clean tab styling without visual border conflicts
+
+**Implementation Pattern**:
+```typescript
+{items.map((item, index) => (
+  <HybridItemPreviewCard
+    key={item.id}
+    // ... other props
+    isFirst={index === 0}
+  />
+))}
+```
 
 ## Benefits of This Pattern
 

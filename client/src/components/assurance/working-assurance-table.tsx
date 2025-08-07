@@ -909,7 +909,7 @@ export function AssuranceTable({ viewMode = 'table', onAddPolicy }: AssuranceTab
         primaryValue: string;
         secondaryInfo?: string;
         isSelected: boolean;
-      }) => (
+      }, index: number) => (
         <HybridItemPreviewCard
           key={item.id}
           title={item.title}
@@ -919,6 +919,7 @@ export function AssuranceTable({ viewMode = 'table', onAddPolicy }: AssuranceTab
           variant={item.isSelected ? "active" : "blue"}
           onClick={() => setSelectedPolicyId(item.id)}
           isClickable={true}
+          isFirst={index === 0}
         />
       ))}
     </div>
