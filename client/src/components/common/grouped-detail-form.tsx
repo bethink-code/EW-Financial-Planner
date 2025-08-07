@@ -56,7 +56,7 @@ interface GroupedDetailFormProps {
  */
 export function GroupedDetailForm({ children, className = "" }: GroupedDetailFormProps) {
   return (
-    <div className={`space-y-12 p-6 bg-white border-t border-b border-r border-neutral-200 ${className}`}>
+    <div className={`space-y-12 p-6 bg-white ${className}`}>
       {children}
     </div>
   );
