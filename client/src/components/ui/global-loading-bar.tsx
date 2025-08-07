@@ -57,11 +57,11 @@ export function GlobalLoadingBar() {
   return (
     <div className="fixed top-0 left-0 right-0 z-50">
       <div 
-        className="h-1 bg-blue-500 transition-all duration-200 ease-out"
+        className="h-1 bg-primary transition-all duration-200 ease-out"
         style={{ 
           width: `${progress}%`,
-          background: 'linear-gradient(90deg, #3b82f6, #1d4ed8)',
-          boxShadow: '0 0 10px rgba(59, 130, 246, 0.5)'
+          background: 'linear-gradient(90deg, hsl(var(--primary)), hsl(198, 99%, 25%))',
+          boxShadow: '0 0 10px hsla(var(--primary), 0.5)'
         }}
       />
     </div>

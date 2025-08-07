@@ -53,6 +53,7 @@ Client requests data via TanStack Query hooks. Express routes handle CRUD operat
 - **Table Stability**: Implementation of patterns like `React.Fragment` with stable keys, debounced updates for text fields, immediate updates for array operations, and proper `rowSpan` usage.
 - **Global Entity Management System**: Dynamic entity management with percentage validation and automatic Primary entity defaults across major calculation tables. This includes reusable global components for owner/beneficiary selection and primary entity default utility functions.
 - **Years/% Toggle Pattern**: Reusable toggle pattern for specific fields to switch between year and percentage input, applied to sections like Pension Income at Death in Defined Benefit Funds.
+- **Global Loading System**: Comprehensive loading indicators with Elite Wealth primary blue branding, providing visual feedback during CRUD operations through a global progress bar and enhanced loading mutations.
 
 ## External Dependencies
 
