@@ -41,16 +41,18 @@ export default function AssuranceOwnerSelector({
     queryKey: ["/api/client-details"]
   });
 
-  const currentOwner = owners[rowIndex] || "";
-  const currentLifeAssured = lifeAssured[rowIndex] || "";
+  const currentOwner = owners[rowIndex] || "none";
+  const currentLifeAssured = lifeAssured[rowIndex] || "none";
   const currentPercentage = ownershipPercentages[rowIndex] || "0%";
 
   const handleOwnerChange = (newOwner: string) => {
-    onOwnerChange(policyId, rowIndex, newOwner);
+    const valueToStore = newOwner === "none" ? "" : newOwner;
+    onOwnerChange(policyId, rowIndex, valueToStore);
   };
 
   const handleLifeAssuredChange = (newLifeAssured: string) => {
-    onLifeAssuredChange(policyId, rowIndex, newLifeAssured);
+    const valueToStore = newLifeAssured === "none" ? "" : newLifeAssured;
+    onLifeAssuredChange(policyId, rowIndex, valueToStore);
   };
 
   const handlePercentageChange = (e: React.FocusEvent<HTMLInputElement>) => {

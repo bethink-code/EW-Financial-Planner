@@ -9,6 +9,7 @@ import { AddButton, DuplicateButton, DeleteButton, ActionButtonGroup } from "@/c
 import { TableHeaderAddButton } from "@/components/ui/table-header-add-button";
 import EntityOwnerSelector from "@/components/common/entity-owner-selector";
 import AssuranceOwnerSelector from "@/components/common/assurance-owner-selector";
+import EntityLifeAssuredSelector from "@/components/common/entity-life-assured-selector";
 import EntityBeneficiarySelector from "@/components/common/entity-beneficiary-selector";
 import { AssuranceDetailForm } from "@/components/assurance/assurance-detail-form";
 import { useDebouncedUpdate } from "@/hooks/use-debounced-update";
@@ -374,17 +375,18 @@ export function AssuranceTable({ viewMode = 'table', onAddPolicy }: AssuranceTab
                   />
                 )}
               </th>
-              <th>Description</th>
-              <th colSpan={2}>Owner & Life Assured</th>
-              <th>Death Benefit</th>
-              <th>Beneficiary</th>
-              <th>Amount</th>
-              <th>Buy/Sell</th>
-              <th>Key Man</th>
-              <th>Excluded Estate Duty</th>
-              <th>Excluded Provisions</th>
-              <th>Premiums by Others</th>
-              <th>Collateral Session</th>
+              <th className="table-header-base">Description</th>
+              <th className="table-header-base">Owner</th>
+              <th className="table-header-base">Life Assured</th>
+              <th className="table-header-base">Death Benefit</th>
+              <th className="table-header-base">Beneficiary</th>
+              <th className="table-header-base">Amount</th>
+              <th className="table-header-base">Buy/Sell</th>
+              <th className="table-header-base">Key Man</th>
+              <th className="table-header-base">Excluded Estate Duty</th>
+              <th className="table-header-base">Excluded Provisions</th>
+              <th className="table-header-base">Premiums by Others</th>
+              <th className="table-header-base">Collateral Session</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-neutral-200">
@@ -430,15 +432,13 @@ export function AssuranceTable({ viewMode = 'table', onAddPolicy }: AssuranceTab
                     </td>
                   )}
 
-                  {/* Owner + Life Assured (linked fields) */}
-                  <td className="border border-neutral-300 p-1" colSpan={2}>
-                    <AssuranceOwnerSelector
+                  {/* Owner */}
+                  <td className="border border-neutral-300 p-1">
+                    <EntityOwnerSelector
                       policyId={policy.id}
                       owners={policy.owners}
-                      lifeAssured={policy.lifeAssured || [""]}
                       ownershipPercentages={policy.ownershipPercentages || ["100%"]}
                       onOwnerChange={handleOwnerChange}
-                      onLifeAssuredChange={handleLifeAssuredChange}
                       onOwnershipPercentageChange={handleOwnershipPercentageChange}
                       onAddOwner={handleAddOwner}
                       onRemoveOwner={handleRemoveOwner}
@@ -447,9 +447,20 @@ export function AssuranceTable({ viewMode = 'table', onAddPolicy }: AssuranceTab
                     />
                   </td>
 
+                  {/* Life Assured */}
+                  <td className="border border-neutral-300 p-1">
+                    <EntityLifeAssuredSelector
+                      policyId={policy.id}
+                      lifeAssured={policy.lifeAssured || [""]}
+                      onLifeAssuredChange={handleLifeAssuredChange}
+                      rowIndex={rowIndex}
+                      disabled={updateMutation.isPending}
+                    />
+                  </td>
+
                   {/* Death Benefit - only show on first row */}
-                  {rowIndex === 0 && (
-                    <td className="border border-neutral-300 p-1 align-top" rowSpan={maxRows}>
+                  <td className="border border-neutral-300 p-1">
+                    {rowIndex === 0 && (
                       <input
                         key={`death-benefit-${policy.id}`}
                         type="text"
@@ -458,8 +469,8 @@ export function AssuranceTable({ viewMode = 'table', onAddPolicy }: AssuranceTab
                         onFocus={handleDefaultValueFocus}
                         onBlur={(e) => handleInputBlur(policy.id, 'deathBenefit', e.target.value, e.target, 'deathBenefit')}
                       />
-                    </td>
-                  )}
+                    )}
+                  </td>
 
                   {/* Beneficiary */}
                   <td className="border border-neutral-300 p-1">
@@ -477,8 +488,8 @@ export function AssuranceTable({ viewMode = 'table', onAddPolicy }: AssuranceTab
                   </td>
 
                   {/* Amount - only show on first row */}
-                  {rowIndex === 0 && (
-                    <td className="border border-neutral-300 p-1 align-top" rowSpan={maxRows}>
+                  <td className="border border-neutral-300 p-1">
+                    {rowIndex === 0 && (
                       <input
                         key={`amount-${policy.id}`}
                         type="text"
@@ -487,8 +498,8 @@ export function AssuranceTable({ viewMode = 'table', onAddPolicy }: AssuranceTab
                         onFocus={handleDefaultValueFocus}
                         onBlur={(e) => handleInputBlur(policy.id, 'amount', e.target.value, e.target, 'amount')}
                       />
-                    </td>
-                  )}
+                    )}
+                  </td>
 
                   {/* Buy/Sell - only show on first row */}
                   <td className="border border-neutral-300 p-1 text-center">
@@ -579,7 +590,7 @@ export function AssuranceTable({ viewMode = 'table', onAddPolicy }: AssuranceTab
           {/* Totals Footer */}
           <tfoot>
             <tr>
-              <td className="totals-cell-label text-right" colSpan={4}>Totals</td>
+              <td className="totals-cell-label text-right" colSpan={5}>Totals</td>
               <td className="totals-cell-value">R {totals.deathBenefit.toLocaleString()}</td>
               <td className="totals-cell-label"></td>
               <td className="totals-cell-value">R {totals.amount.toLocaleString()}</td>

@@ -28,10 +28,12 @@ export default function EntityLifeAssuredSelector({
     queryKey: ["/api/client-details"]
   });
 
-  const currentLifeAssured = lifeAssured[rowIndex] || "";
+  const currentLifeAssured = lifeAssured[rowIndex] || "none";
 
   const handleLifeAssuredChange = (newLifeAssured: string) => {
-    onLifeAssuredChange(policyId, rowIndex, newLifeAssured);
+    // Convert "none" back to empty string for storage
+    const valueToStore = newLifeAssured === "none" ? "" : newLifeAssured;
+    onLifeAssuredChange(policyId, rowIndex, valueToStore);
   };
 
   return (
@@ -45,7 +47,7 @@ export default function EntityLifeAssuredSelector({
           <SelectValue placeholder="Select life assured..." />
         </SelectTrigger>
         <SelectContent>
-          <SelectItem value="">Select life assured...</SelectItem>
+          <SelectItem value="none">Select life assured...</SelectItem>
           {clientDetails.map((client) => (
             <SelectItem key={client.id} value={client.entityName}>
               {client.entityName}
