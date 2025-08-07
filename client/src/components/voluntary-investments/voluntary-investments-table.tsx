@@ -265,14 +265,18 @@ function VoluntaryInvestmentsTable({ viewMode, searchTerm, onAddInvestment }: Vo
           </tr>
         </thead>
         <tbody className="divide-y divide-neutral-200">
-          {investments.map((investment: VoluntaryInvestment) => {
+          {investments.map((investment: VoluntaryInvestment, investmentIndex) => {
 
             const maxRows = Math.max(investment.owners.length, 1);
             
             return Array.from({ length: maxRows }, (_, ownerIndex) => (
               <tr 
                 key={`investment-${investment.id}-owner-${ownerIndex}-v${investment.owners.length}`} 
-                className="hover:bg-neutral-50"
+                className={`hover:bg-neutral-50 ${
+                  ownerIndex === 0 && investmentIndex > 0 ? 'policy-first-row' : ''
+                } ${
+                  ownerIndex === maxRows - 1 ? 'policy-last-row' : ''
+                }`}
               >
                 {ownerIndex === 0 && (
                   <td className="table-actions-cell p-1 text-center section-start align-top" rowSpan={maxRows}>

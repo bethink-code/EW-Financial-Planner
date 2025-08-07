@@ -267,11 +267,15 @@ export default function DefinedBenefitFundsTable() {
  </tr>
  </thead>
  <tbody className="divide-y divide-neutral-200">
- {funds.map((fund: DefinedBenefitFund) => {
+ {funds.map((fund: DefinedBenefitFund, fundIndex) => {
  const maxRows = Math.max(fund.owners.length, 1);
  
  return fund.owners.map((owner: string, rowIndex: number) => (
- <tr key={`${fund.id}-${rowIndex}-${fund.owners.length}-${fund.ownershipPercentages.length}`} className="hover:bg-neutral-50">
+ <tr key={`${fund.id}-${rowIndex}-${fund.owners.length}-${fund.ownershipPercentages.length}`} className={`hover:bg-neutral-50 ${
+   rowIndex === 0 && fundIndex > 0 ? 'policy-first-row' : ''
+ } ${
+   rowIndex === maxRows - 1 ? 'policy-last-row' : ''
+ }`}>
  {/* Actions Section - Only show on first row */}
  {rowIndex === 0 && (
  <td className="table-actions-cell p-1 text-center section-start align-top" rowSpan={maxRows}>

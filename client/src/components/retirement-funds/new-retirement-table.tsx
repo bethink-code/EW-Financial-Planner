@@ -381,7 +381,11 @@ export function NewRetirementTable({
  return (
  <SafeFragment key={`fund-${fund.id}-${maxRows}`}>
  {Array.from({ length: maxRows }, (_, rowIndex) => (
- <tr key={`${fund.id}-${rowIndex}`} className="hover:bg-neutral-50">
+ <tr key={`${fund.id}-${rowIndex}`} className={`hover:bg-neutral-50 ${
+   rowIndex === 0 && fundIndex > 0 ? 'policy-first-row' : ''
+ } ${
+   rowIndex === maxRows - 1 ? 'policy-last-row' : ''
+ }`}>
  {/* Actions */}
  {rowIndex === 0 && (
  <td className="table-actions-cell p-1 text-center section-start align-top" rowSpan={maxRows}>
