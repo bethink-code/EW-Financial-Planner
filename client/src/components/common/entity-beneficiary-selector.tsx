@@ -107,17 +107,19 @@ export default function EntityBeneficiarySelector({
   ) : null;
 
   return (
-    <div className="space-y-1">
-      <div className="flex items-center gap-1">
-        {/* Action Button - Using plain button without any wrapper */}
+    <>
+      {/* Actions Column */}
+      <td className="px-1 py-1 border-r border-neutral-200" style={{ width: '8%' }}>
         {actionButton}
-        
-        {/* Entity Selector - Using native HTML select to avoid CSS conflicts */}
+      </td>
+      
+      {/* Beneficiary Column */}
+      <td className="px-1 py-1 border-r border-neutral-200" style={{ width: '22%' }}>
         <select
           value={currentBeneficiary}
           onChange={(e) => handleBeneficiarySelect(e.target.value, beneficiaryIndex)}
           disabled={disabled}
-          className="table-input table-dropdown"
+          className="table-input table-dropdown w-full"
         >
           <option value="">Select beneficiary...</option>
           {entities.map((entity) => (
@@ -126,8 +128,10 @@ export default function EntityBeneficiarySelector({
             </option>
           ))}
         </select>
+      </td>
 
-        {/* Percentage Input - matching owner component styling */}
+      {/* Benefit % Column */}
+      <td className="px-1 py-1 border-r border-neutral-200" style={{ width: '12%' }}>
         <input
           type="text"
           defaultValue={currentPercentage}
@@ -151,14 +155,7 @@ export default function EntityBeneficiarySelector({
           }}
           disabled={disabled}
         />
-      </div>
-
-      {/* Validation Warning - show on last row only */}
-      {rowIndex === beneficiaries.length - 1 && isInvalidTotal && (
-        <div className="text-xs text-red-600 font-medium">
-          Total: {percentageTotal.toFixed(1)}% (must equal 100%)
-        </div>
-      )}
-    </div>
+      </td>
+    </>
   );
 }
