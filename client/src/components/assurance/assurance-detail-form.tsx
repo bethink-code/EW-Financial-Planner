@@ -299,10 +299,6 @@ export function AssuranceDetailForm({
                   ))}
                 </tbody>
               </table>
-            
-            <div className="text-sm text-neutral-500 mt-2">
-              Note: Independent toggle controls per beneficiary
-            </div>
           </FormField>
         </div>
       </FieldGroup>
