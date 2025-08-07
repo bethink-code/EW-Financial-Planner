@@ -113,6 +113,22 @@ export function AssuranceDetailForm({
           
           <FormField label="Owners & Life Assured & Death Benefits">
             <table className="border-collapse">
+              <thead>
+                <tr className="bg-neutral-50">
+                  <th className="table-header-12 px-2 py-2 border border-neutral-200 text-left font-normal text-neutral-600">
+                    Owner
+                  </th>
+                  <th className="table-header-12 px-2 py-2 border border-neutral-200 text-center font-normal text-neutral-600">
+                    Ownership %
+                  </th>
+                  <th className="table-header-12 px-2 py-2 border border-neutral-200 text-left font-normal text-neutral-600">
+                    Life Assured
+                  </th>
+                  <th className="table-header-12 px-2 py-2 border border-neutral-200 text-right font-normal text-neutral-600">
+                    Death Benefit
+                  </th>
+                </tr>
+              </thead>
               <tbody>
                 {Array.from({ length: Math.max(policy.owners.length, 1) }, (_, rowIndex) => (
                   <tr key={`owner-table-row-${rowIndex}`} className="border-b border-neutral-200 bg-white">
@@ -197,6 +213,28 @@ export function AssuranceDetailForm({
           <FormField label="Beneficiaries & Controls">
             {/* Use actual table element with overflow wrapper for wide dropdown */}
             <table className="border-collapse">
+              <thead>
+                <tr className="bg-neutral-50">
+                  <th className="table-header-12 px-2 py-2 border border-neutral-200 text-left font-normal text-neutral-600">
+                    Beneficiary
+                  </th>
+                  <th className="table-header-12 px-2 py-2 border border-neutral-200 text-center font-normal text-neutral-600">
+                    Benefit %
+                  </th>
+                  <th className="table-header-12 px-2 py-2 border border-neutral-200 text-right font-normal text-neutral-600">
+                    Benefit Split
+                  </th>
+                  <th className="table-header-12 px-2 py-2 border border-neutral-200 text-right font-normal text-neutral-600">
+                    Amount
+                  </th>
+                  <th className="table-header-12 px-2 py-2 border border-neutral-200 text-center font-normal text-neutral-600">
+                    Toggle
+                  </th>
+                  <th className="table-header-12 px-2 py-2 border border-neutral-200 text-center font-normal text-neutral-600">
+                    Years/%
+                  </th>
+                </tr>
+              </thead>
               <tbody>
                   {Array.from({ length: Math.max(policy.owners.length, policy.beneficiaries.length) }, (_, rowIndex) => (
                     <tr key={`beneficiary-table-row-${rowIndex}`} className="border-b border-neutral-200 bg-white">
