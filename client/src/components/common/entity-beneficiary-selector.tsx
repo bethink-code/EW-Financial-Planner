@@ -108,7 +108,7 @@ export default function EntityBeneficiarySelector({
 
   return (
     <div className="space-y-1">
-      <div className="flex items-center gap-1">
+      <div className="flex items-center gap-1" style={{width: "240px"}}>
         {/* Action Button - Using plain button without any wrapper */}
         {actionButton}
         
