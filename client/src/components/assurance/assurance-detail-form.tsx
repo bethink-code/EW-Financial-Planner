@@ -73,7 +73,30 @@ export function AssuranceDetailForm({
   };
 
   const handleArrayFieldUpdate = (policyId: number, field: string, index: number, value: any) => {
-    onUpdate(policyId, field, { index, value });
+    // Get current array value
+    const currentArray = policy[field as keyof Assurance] as any[];
+    
+    // Create new array with updated value at index
+    const newArray = [...(currentArray || [])];
+    
+    // Ensure array is long enough
+    while (newArray.length <= index) {
+      if (field === 'amountToggles') {
+        newArray.push(true); // Default toggle state
+      } else if (field === 'amountYearsValues') {
+        newArray.push("0 years"); // Default years value
+      } else if (field === 'amountIncreaseValues') {
+        newArray.push("0%"); // Default percentage value
+      } else {
+        newArray.push("");
+      }
+    }
+    
+    // Update the specific index
+    newArray[index] = value;
+    
+    // Call onUpdate with the complete updated array
+    onUpdate(policyId, field as keyof Assurance, newArray);
   };
 
   return (
@@ -242,7 +265,7 @@ export function AssuranceDetailForm({
                 </tr>
               </thead>
               <tbody>
-                  {Array.from({ length: Math.max(policy.owners.length, policy.beneficiaries.length) }, (_, rowIndex) => (
+                  {Array.from({ length: Math.max(policy.beneficiaries.length, 1) }, (_, rowIndex) => (
                     <tr key={`beneficiary-table-row-${rowIndex}`} className="border-b border-neutral-200 bg-white">
                       <EntityBeneficiarySelector
                         policyId={policy.id}
