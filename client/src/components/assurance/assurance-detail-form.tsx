@@ -112,20 +112,20 @@ export function AssuranceDetailForm({
           </FormField>
           
           <FormField label="Owners & Life Assured & Death Benefits">
-            <table className="border-collapse">
+            <table className="border-collapse w-full">
               <thead>
                 <tr className="bg-neutral-50">
-                  <th className="table-header-12 px-2 py-2 border border-neutral-200 text-left font-normal text-neutral-600">
-                    Owner
+                  <th className="table-header-12 px-2 py-2 border border-neutral-200 text-left font-normal text-neutral-600" style={{ width: '35%' }}>
+                    OWNER
                   </th>
-                  <th className="table-header-12 px-2 py-2 border border-neutral-200 text-center font-normal text-neutral-600">
-                    Ownership %
+                  <th className="table-header-12 px-2 py-2 border border-neutral-200 text-center font-normal text-neutral-600" style={{ width: '15%' }}>
+                    OWNERSHIP %
                   </th>
-                  <th className="table-header-12 px-2 py-2 border border-neutral-200 text-left font-normal text-neutral-600">
-                    Life Assured
+                  <th className="table-header-12 px-2 py-2 border border-neutral-200 text-left font-normal text-neutral-600" style={{ width: '35%' }}>
+                    LIFE ASSURED
                   </th>
-                  <th className="table-header-12 px-2 py-2 border border-neutral-200 text-right font-normal text-neutral-600">
-                    Death Benefit
+                  <th className="table-header-12 px-2 py-2 border border-neutral-200 text-right font-normal text-neutral-600" style={{ width: '15%' }}>
+                    DEATH BENEFIT
                   </th>
                 </tr>
               </thead>
@@ -212,26 +212,26 @@ export function AssuranceDetailForm({
 
           <FormField label="Beneficiaries & Controls">
             {/* Use actual table element with overflow wrapper for wide dropdown */}
-            <table className="border-collapse">
+            <table className="border-collapse w-full">
               <thead>
                 <tr className="bg-neutral-50">
-                  <th className="table-header-12 px-2 py-2 border border-neutral-200 text-left font-normal text-neutral-600">
-                    Beneficiary
+                  <th className="table-header-12 px-2 py-2 border border-neutral-200 text-left font-normal text-neutral-600" style={{ width: '25%' }}>
+                    BENEFICIARY
                   </th>
-                  <th className="table-header-12 px-2 py-2 border border-neutral-200 text-center font-normal text-neutral-600">
-                    Benefit %
+                  <th className="table-header-12 px-2 py-2 border border-neutral-200 text-center font-normal text-neutral-600" style={{ width: '12%' }}>
+                    BENEFIT %
                   </th>
-                  <th className="table-header-12 px-2 py-2 border border-neutral-200 text-right font-normal text-neutral-600">
-                    Benefit Split
+                  <th className="table-header-12 px-2 py-2 border border-neutral-200 text-right font-normal text-neutral-600" style={{ width: '18%' }}>
+                    BENEFIT SPLIT
                   </th>
-                  <th className="table-header-12 px-2 py-2 border border-neutral-200 text-right font-normal text-neutral-600">
-                    Amount
+                  <th className="table-header-12 px-2 py-2 border border-neutral-200 text-right font-normal text-neutral-600" style={{ width: '15%' }}>
+                    AMOUNT
                   </th>
-                  <th className="table-header-12 px-2 py-2 border border-neutral-200 text-center font-normal text-neutral-600">
-                    Toggle
+                  <th className="table-header-12 px-2 py-2 border border-neutral-200 text-center font-normal text-neutral-600" style={{ width: '12%' }}>
+                    TOGGLE
                   </th>
-                  <th className="table-header-12 px-2 py-2 border border-neutral-200 text-center font-normal text-neutral-600">
-                    Years/%
+                  <th className="table-header-12 px-2 py-2 border border-neutral-200 text-center font-normal text-neutral-600" style={{ width: '18%' }}>
+                    YEARS/%
                   </th>
                 </tr>
               </thead>
