@@ -32,6 +32,7 @@ export function RetirementFundHybridTable({
       isActive={fund.id === activeFundId}
       onClick={() => setActiveFundId(fund.id)}
       isFirst={index === 0}
+      isLast={index === funds.length - 1}
     />
   ));
 

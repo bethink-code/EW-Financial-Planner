@@ -920,6 +920,7 @@ export function AssuranceTable({ viewMode = 'table', onAddPolicy }: AssuranceTab
           onClick={() => setSelectedPolicyId(item.id)}
           isClickable={true}
           isFirst={index === 0}
+          isLast={index === previewItems.length - 1}
         />
       ))}
     </div>

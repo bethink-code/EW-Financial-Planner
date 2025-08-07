@@ -126,6 +126,60 @@ th, td {
   border-left-color: #F97316 !important;
 }
 
+/* ===== HYBRID VIEW TAB BORDER MANAGEMENT PATTERN ===== */
+/* 
+ * Comprehensive border management for hybrid view tabs to prevent double borders 
+ * and ensure professional tab-style appearance across all calculators
+ */
+
+/* Tab Container: NO vertical spacing between tabs */
+.hybrid-tab-container {
+  /* No space-y-* classes - tabs should be directly adjacent */
+}
+
+/* First Tab: No top border to prevent double border with container */
+.hybrid-tab-first {
+  border-top: none !important;
+}
+
+/* Last Tab: Bottom border for proper closure */
+.hybrid-tab-last {
+  border-bottom: 1px solid #e5e7eb !important;
+}
+
+/* Standard Tab: Top border for separation */
+.hybrid-tab-standard {
+  border-top: 1px solid #e5e7eb !important;
+}
+
+/* Active Tab: Enhanced styling with orange left border */
+.hybrid-tab-active {
+  background-color: white !important;
+  border-left: 4px solid #F97316 !important;
+  position: relative !important;
+  z-index: 10 !important;
+  margin-right: -1px !important; /* Overlap right border */
+}
+
+/* Inactive Tab: Subtle styling with hover effects */
+.hybrid-tab-inactive {
+  background-color: #f9fafb !important;
+}
+
+.hybrid-tab-inactive:hover {
+  background-color: white !important;
+  border-left: 1px solid #d1d5db !important;
+}
+
+/* Tab Border Management Rules:
+ * 1. Container has border-t for top continuity
+ * 2. Sidebar wrapper provides single border-r for separation
+ * 3. First tab: isFirst={index === 0} removes top border
+ * 4. Last tab: isLast={index === length - 1} adds bottom border
+ * 5. No individual right borders to prevent double borders
+ * 6. Clean professional tab appearance without spacing gaps
+ */
+
 /* Optimized visibility transitions */
 .column-hidden {
   opacity: 0;

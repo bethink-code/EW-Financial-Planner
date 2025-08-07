@@ -361,9 +361,18 @@ const previewCards = items.map((item, index) => {
     key={item.id}
     // ... other props
     isFirst={index === 0}
+    isLast={index === items.length - 1}
   />
 ))}
 ```
+
+**CSS Classes Available**:
+- `.hybrid-tab-container` - Container with no spacing
+- `.hybrid-tab-first` - Removes top border for first tab
+- `.hybrid-tab-last` - Adds bottom border for last tab  
+- `.hybrid-tab-standard` - Standard top border for middle tabs
+- `.hybrid-tab-active` - Active tab styling with orange left border
+- `.hybrid-tab-inactive` - Inactive tab styling with hover effects
 
 ## Benefits of This Pattern
 

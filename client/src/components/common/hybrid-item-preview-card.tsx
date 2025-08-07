@@ -10,6 +10,7 @@ interface HybridItemPreviewCardProps {
   variant?: 'default' | 'blue' | 'green' | 'orange' | 'active';
   isClickable?: boolean;
   isFirst?: boolean;
+  isLast?: boolean;
 }
 
 /**
@@ -25,16 +26,18 @@ export function HybridItemPreviewCard({
   className = "",
   variant = 'blue',
   isClickable = false,
-  isFirst = false
+  isFirst = false,
+  isLast = false
 }: HybridItemPreviewCardProps) {
   
   const getVariantClasses = () => {
     const topBorderClass = isFirst ? '' : 'border-t border-neutral-200';
+    const bottomBorderClass = isLast ? 'border-b border-neutral-200' : '';
     switch (variant) {
       case 'active':
-        return `bg-white border-l-4 ${topBorderClass} -mr-px relative z-10 tab-active-border`;
+        return `bg-white border-l-4 ${topBorderClass} ${bottomBorderClass} -mr-px relative z-10 tab-active-border`;
       default:
-        return `bg-neutral-50 ${topBorderClass} hover:bg-white hover:border-l hover:border-l-neutral-300`;
+        return `bg-neutral-50 ${topBorderClass} ${bottomBorderClass} hover:bg-white hover:border-l hover:border-l-neutral-300`;
     }
   };
 
