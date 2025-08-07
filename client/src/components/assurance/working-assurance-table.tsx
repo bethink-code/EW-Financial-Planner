@@ -13,7 +13,10 @@ import { useDebouncedUpdate } from "@/hooks/use-debounced-update";
 import { SafeFragment } from "@/lib/safe-fragment";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-
+import { HybridViewWrapper } from "@/components/common/hybrid-view-wrapper";
+import { HybridSummaryCard } from "@/components/common/hybrid-summary-card";
+import { HybridDetailCard } from "@/components/common/hybrid-detail-card";
+import { HybridItemPreviewCard } from "@/components/common/hybrid-item-preview-card";
 import type { Assurance, InsertAssurance, ClientDetails } from "@shared/schema";
 
 interface AssuranceTableProps {
@@ -273,29 +276,50 @@ export function AssuranceTable({ viewMode = 'table', onAddPolicy }: AssuranceTab
   // Use policies directly without filtering
   const filteredPolicies = policies;
 
+  // Calculate totals - defined as separate function to avoid hook ordering issues
+  const getTotals = useCallback((policies: Assurance[]) => ({
+    deathBenefit: policies.reduce((sum, policy) => {
+      const value = parseFloat(policy.deathBenefit.replace(/[^\d.-]/g, '')) || 0;
+      return sum + value;
+    }, 0),
+    amount: policies.reduce((sum, policy) => {
+      const value = parseFloat(policy.amount.replace(/[^\d.-]/g, '')) || 0;
+      return sum + value;
+    }, 0),
+    premiumsByOthers: policies.reduce((sum, policy) => {
+      const value = parseFloat(policy.premiumsByOthers.replace(/[^\d.-]/g, '')) || 0;
+      return sum + value;
+    }, 0),
+    collateralSession: policies.reduce((sum, policy) => {
+      const value = parseFloat(policy.collateralSession.replace(/[^\d.-]/g, '')) || 0;
+      return sum + value;
+    }, 0)
+  }), []);
 
+  // Calculate totals for this render
+  const totals = useMemo(() => getTotals(filteredPolicies), [filteredPolicies, getTotals]);
 
-  // Calculate totals
-  const totals = useMemo(() => {
-    return {
-      deathBenefit: filteredPolicies.reduce((sum: number, policy: Assurance) => {
-        const value = parseFloat(policy.deathBenefit.replace(/[^\d.-]/g, '')) || 0;
-        return sum + value;
-      }, 0),
-      amount: filteredPolicies.reduce((sum: number, policy: Assurance) => {
-        const value = parseFloat(policy.amount.replace(/[^\d.-]/g, '')) || 0;
-        return sum + value;
-      }, 0),
-      premiumsByOthers: filteredPolicies.reduce((sum: number, policy: Assurance) => {
-        const value = parseFloat(policy.premiumsByOthers.replace(/[^\d.-]/g, '')) || 0;
-        return sum + value;
-      }, 0),
-      collateralSession: filteredPolicies.reduce((sum: number, policy: Assurance) => {
-        const value = parseFloat(policy.collateralSession.replace(/[^\d.-]/g, '')) || 0;
-        return sum + value;
-      }, 0)
-    };
-  }, [filteredPolicies]);
+  // Hybrid view data preparation functions
+  const getSummaryItems = useCallback((totals: Record<string, number>, policies: Assurance[]) => [
+    { label: 'Total Death Benefit', value: `R ${totals.deathBenefit.toLocaleString()}` },
+    { label: 'Total Amount', value: `R ${totals.amount.toLocaleString()}` },
+    { label: 'Premiums by Others', value: `R ${totals.premiumsByOthers.toLocaleString()}` },
+    { label: 'Total Policies', value: policies.length.toString() }
+  ], []);
+
+  const getItemPreview = useCallback((policy: Assurance) => ({
+    id: policy.id,
+    title: formatTextValue(policy.description) || `Policy #${policy.id}`,
+    subtitle: `Owner: ${policy.owners[0] || 'Unassigned'}`,
+    primaryValue: policy.deathBenefit,
+    secondaryInfo: policy.amount !== 'R 0' ? `Amount: ${policy.amount}` : undefined
+  }), []);
+
+  // Prepare summary items and preview items
+  const summaryItems = useMemo(() => getSummaryItems(totals, filteredPolicies), [getSummaryItems, totals, filteredPolicies]);
+  const previewItems = useMemo(() => filteredPolicies.slice(0, 5).map(getItemPreview), [filteredPolicies, getItemPreview]);
+  const hasMoreItems = filteredPolicies.length > 5;
+  const remainingCount = filteredPolicies.length - 5;
 
   if (isLoading) {
     return (
@@ -559,8 +583,230 @@ export function AssuranceTable({ viewMode = 'table', onAddPolicy }: AssuranceTab
 
 
 
-  // For now, just render table view until we can properly implement hybrid view
-  return tableComponent;
+  // Summary cards for hybrid view
+  const summaryCards = (
+    <>
+      <HybridSummaryCard
+        title="Assurance Summary"
+        items={summaryItems}
+        variant="default"
+      />
+      <div className="space-y-3">
+        {previewItems.map((item) => (
+          <HybridItemPreviewCard
+            key={item.id}
+            title={item.title}
+            subtitle={item.subtitle}
+            primaryValue={item.primaryValue}
+            secondaryInfo={item.secondaryInfo}
+            variant="blue"
+          />
+        ))}
+        {hasMoreItems && (
+          <div className="text-center text-sm text-neutral-600">
+            +{remainingCount} more policies
+          </div>
+        )}
+      </div>
+    </>
+  );
+
+  // Detail forms for hybrid view
+  const detailForms = (
+    <>
+      {filteredPolicies.map((policy: Assurance) => (
+        <HybridDetailCard
+          key={`form-${policy.id}`}
+          title={formatTextValue(policy.description) || `Policy #${policy.id}`}
+          onDuplicate={() => handleDuplicatePolicy(policy)}
+          onDelete={() => handleDeletePolicy(policy.id)}
+        >
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {/* Basic Information */}
+            <div className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-neutral-700 mb-1">Description</label>
+                <input
+                  type="text"
+                  defaultValue={policy.description}
+                  className={`w-full table-input ${getValueClass(policy.description, 'text')}`}
+                  onFocus={handleDefaultValueFocus}
+                  onBlur={(e) => handleInputBlur(policy.id, 'description', e.target.value, e.target, 'description')}
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-neutral-700 mb-1">Death Benefit</label>
+                <input
+                  type="text"
+                  defaultValue={policy.deathBenefit}
+                  className={`w-full table-input ${getValueClass(policy.deathBenefit, 'currency')}`}
+                  onFocus={handleDefaultValueFocus}
+                  onBlur={(e) => handleInputBlur(policy.id, 'deathBenefit', e.target.value, e.target, 'deathBenefit')}
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-neutral-700 mb-1">Amount</label>
+                <input
+                  type="text"
+                  defaultValue={policy.amount}
+                  className={`w-full table-input ${getValueClass(policy.amount, 'currency')}`}
+                  onFocus={handleDefaultValueFocus}
+                  onBlur={(e) => handleInputBlur(policy.id, 'amount', e.target.value, e.target, 'amount')}
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-neutral-700 mb-1">Premiums by Others</label>
+                <input
+                  type="text"
+                  defaultValue={policy.premiumsByOthers}
+                  className={`w-full table-input ${getValueClass(policy.premiumsByOthers, 'currency')}`}
+                  onFocus={handleDefaultValueFocus}
+                  onBlur={(e) => handleInputBlur(policy.id, 'premiumsByOthers', e.target.value, e.target, 'premiumsByOthers')}
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-neutral-700 mb-1">Collateral Session</label>
+                <input
+                  type="text"
+                  defaultValue={policy.collateralSession}
+                  className={`w-full table-input ${getValueClass(policy.collateralSession, 'currency')}`}
+                  onFocus={handleDefaultValueFocus}
+                  onBlur={(e) => handleInputBlur(policy.id, 'collateralSession', e.target.value, e.target, 'collateralSession')}
+                />
+              </div>
+            </div>
+
+            {/* Entity Management */}
+            <div className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-neutral-700 mb-1">Life Assured</label>
+                <input
+                  type="text"
+                  defaultValue={policy.lifeAssured}
+                  className={`w-full table-input ${getValueClass(policy.lifeAssured, 'text')}`}
+                  onFocus={handleDefaultValueFocus}
+                  onBlur={(e) => handleInputBlur(policy.id, 'lifeAssured', e.target.value, e.target, 'lifeAssured')}
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-neutral-700 mb-1">Owners</label>
+                <EntityOwnerSelector
+                  policyId={policy.id}
+                  owners={policy.owners}
+                  ownershipPercentages={policy.ownershipPercentages || []}
+                  onOwnerChange={handleOwnerChange}
+                  onOwnershipPercentageChange={handleOwnershipPercentageChange}
+                  onAddOwner={handleAddOwner}
+                  onRemoveOwner={handleRemoveOwner}
+                  rowIndex={0}
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-neutral-700 mb-1">Beneficiaries</label>
+                <EntityBeneficiarySelector
+                  policyId={policy.id}
+                  beneficiaries={policy.beneficiaries}
+                  beneficiaryPercentages={policy.beneficiaryPercentages || []}
+                  onBeneficiaryChange={handleBeneficiaryChange}
+                  onBeneficiaryPercentageChange={handleBeneficiaryPercentageChange}
+                  onAddBeneficiary={handleAddBeneficiary}
+                  onRemoveBeneficiary={handleRemoveBeneficiary}
+                  rowIndex={0}
+                />
+              </div>
+
+              <div className="grid grid-cols-3 gap-2">
+                <div>
+                  <label className="block text-sm font-medium text-neutral-700 mb-1">Buy/Sell</label>
+                  <Select
+                    defaultValue={policy.buySell}
+                    onValueChange={(value) => handleSelectChange(policy.id, 'buySell', value)}
+                  >
+                    <SelectTrigger className="table-input">
+                      <SelectValue placeholder="Select" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="Yes">Yes</SelectItem>
+                      <SelectItem value="No">No</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-neutral-700 mb-1">Key Man</label>
+                  <Select
+                    defaultValue={policy.keyMan}
+                    onValueChange={(value) => handleSelectChange(policy.id, 'keyMan', value)}
+                  >
+                    <SelectTrigger className="table-input">
+                      <SelectValue placeholder="Select" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="Yes">Yes</SelectItem>
+                      <SelectItem value="No">No</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-neutral-700 mb-1">Excluded Estate Duty</label>
+                  <Select
+                    defaultValue={policy.excludedEstateDuty}
+                    onValueChange={(value) => handleSelectChange(policy.id, 'excludedEstateDuty', value)}
+                  >
+                    <SelectTrigger className="table-input">
+                      <SelectValue placeholder="Select" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="Yes">Yes</SelectItem>
+                      <SelectItem value="No">No</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-neutral-700 mb-1">Excluded Provisions</label>
+                <Select
+                  defaultValue={policy.excludedProvisions}
+                  onValueChange={(value) => handleSelectChange(policy.id, 'excludedProvisions', value)}
+                >
+                  <SelectTrigger className="table-input">
+                    <SelectValue placeholder="Select" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="Yes">Yes</SelectItem>
+                    <SelectItem value="No">No</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
+          </div>
+        </HybridDetailCard>
+      ))}
+    </>
+  );
+
+  // Use the global hybrid view wrapper
+  return (
+    <HybridViewWrapper
+      viewMode={viewMode}
+      tableComponent={tableComponent}
+      summaryCards={summaryCards}
+      detailForms={detailForms}
+      onAddItem={onAddPolicy}
+      addButtonLabel="Add Policy"
+      isUpdating={isUpdating}
+      isEmpty={filteredPolicies.length === 0}
+      emptyStateMessage="No assurance policies found"
+    />
+  );
 }
 
 export default AssuranceTable;
