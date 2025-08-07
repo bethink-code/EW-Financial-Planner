@@ -469,15 +469,23 @@ export function AssuranceTable({ viewMode = 'table', onAddPolicy }: AssuranceTab
 
   // Hybrid view data preparation functions
   const getItemPreview = useCallback((policy: Assurance, isSelected: boolean) => {
-    // Calculate total death benefit from array
-    const totalDeathBenefit = (policy.deathBenefits || []).reduce((sum, benefit) => {
-      return sum + (parseFloat(benefit?.replace(/[^\d.-]/g, '') || '0') || 0);
-    }, 0);
+    // Use the consolidated death benefit field rather than summing the array
+    // This matches what's displayed in the main table
+    const totalDeathBenefit = parseFloat(policy.deathBenefit?.replace(/[^\d.-]/g, '') || '0') || 0;
+    
+    // Format owners list - show all owners or indicate multiple
+    const ownersDisplay = (() => {
+      const owners = policy.owners || [];
+      if (owners.length === 0) return 'Unassigned';
+      if (owners.length === 1) return owners[0];
+      if (owners.length === 2) return `${owners[0]} & ${owners[1]}`;
+      return `${owners[0]} + ${owners.length - 1} more`;
+    })();
     
     return {
       id: policy.id,
       title: formatTextValue(policy.description) || `Policy #${policy.id}`,
-      subtitle: `Owner: ${policy.owners[0] || 'Unassigned'}`,
+      subtitle: `Owner: ${ownersDisplay}`,
       primaryValue: `R ${totalDeathBenefit.toLocaleString()}`,
       secondaryInfo: policy.amount !== 'R 0' ? `Amount: ${policy.amount}` : undefined,
       isSelected
