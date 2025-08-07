@@ -427,6 +427,8 @@ export function AssuranceTable({ viewMode = 'table', onAddPolicy }: AssuranceTab
                       key={`${policy.id}-${rowIndex}`} 
                       className={`hover:bg-neutral-50 ${
                         rowIndex === 0 && policyIndex > 0 ? 'policy-first-row' : ''
+                      } ${
+                        rowIndex === maxRows - 1 ? 'policy-last-row' : ''
                       }`}
                     >
                   {/* Actions - only show on first row */}

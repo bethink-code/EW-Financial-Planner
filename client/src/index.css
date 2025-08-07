@@ -771,6 +771,16 @@ th, td {
   .policy-first-row:first-child {
     border-top: none !important;
   }
+
+  /* Last row of each policy - add bottom margin for separation */
+  .policy-last-row {
+    margin-bottom: 20px;
+    border-bottom: 1px solid transparent;
+  }
+
+  .policy-last-row td {
+    padding-bottom: 20px !important;
+  }
   
   .table-total-row td {
     height: 2rem;
