@@ -405,6 +405,7 @@ export function AssuranceTable({ viewMode = 'table', onAddPolicy }: AssuranceTab
               <th className="table-header-base">Life Assured</th>
               <th className="table-header-base">Death Benefit</th>
               <th className="table-header-base">Beneficiary</th>
+              <th className="table-header-base">Benefit Split</th>
               <th className="table-header-base">Amount</th>
               <th className="table-header-base">Buy/Sell</th>
               <th className="table-header-base">Key Man</th>
@@ -547,6 +548,23 @@ export function AssuranceTable({ viewMode = 'table', onAddPolicy }: AssuranceTab
                     />
                   </td>
 
+                  {/* Benefit Split - calculated read-only field */}
+                  <td className="border border-neutral-300 p-1">
+                    {(() => {
+                      const currentPercentage = (policy.beneficiaryPercentages || ["100%"])[rowIndex] || "0%";
+                      const currentDeathBenefit = (policy.deathBenefits || ["R 0"])[rowIndex] || "R 0";
+                      const deathBenefitAmount = parseFloat(currentDeathBenefit.replace(/[^\d.-]/g, '')) || 0;
+                      const percentage = parseFloat(currentPercentage.replace('%', '')) || 0;
+                      const benefitSplit = Math.round((deathBenefitAmount * percentage) / 100);
+                      
+                      return (
+                        <div className="calculated-field min-w-[100px] max-w-[140px] text-right">
+                          R {benefitSplit.toLocaleString()}
+                        </div>
+                      );
+                    })()}
+                  </td>
+
                   {/* Amount - only show on first row */}
                   <td className="border border-neutral-300 p-1">
                     {rowIndex === 0 && (
@@ -653,6 +671,7 @@ export function AssuranceTable({ viewMode = 'table', onAddPolicy }: AssuranceTab
               <td className="totals-cell-label text-right" colSpan={4}>Totals</td>
               <td className="totals-cell-value">R {totals.deathBenefit.toLocaleString()}</td>
               <td className="totals-cell-label"></td>
+              <td className="totals-cell-value">R {totals.deathBenefit.toLocaleString()}</td>
               <td className="totals-cell-value">R {totals.amount.toLocaleString()}</td>
               <td className="totals-cell-label"></td>
               <td className="totals-cell-label"></td>
