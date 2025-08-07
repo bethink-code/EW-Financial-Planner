@@ -28,46 +28,43 @@ export function HybridItemPreviewCard({
   
   const getVariantClasses = () => {
     switch (variant) {
-      case 'blue':
-        return 'bg-blue-50 border-blue-200 text-blue-900';
-      case 'green':
-        return 'bg-green-50 border-green-200 text-green-900';
-      case 'orange':
-        return 'bg-orange-50 border-orange-200 text-orange-900';
       case 'active':
-        return 'bg-blue-100 border-blue-300 text-blue-900 ring-2 ring-blue-500';
+        return 'bg-white border-r border-neutral-200 border-l-4 border-l-orange-500 shadow-sm';
       default:
-        return 'bg-neutral-50 border-neutral-200 text-neutral-900';
+        return 'bg-neutral-50 border-r border-neutral-200 hover:bg-white hover:shadow-sm';
     }
   };
 
-  const getSubtitleClasses = () => {
+  const getTextClasses = () => {
     switch (variant) {
-      case 'blue':
-        return 'text-blue-700';
-      case 'green':
-        return 'text-green-700';
-      case 'orange':
-        return 'text-orange-700';
       case 'active':
-        return 'text-blue-800';
+        return 'text-neutral-900';
       default:
         return 'text-neutral-700';
     }
   };
 
+  const getSubtitleClasses = () => {
+    switch (variant) {
+      case 'active':
+        return 'text-neutral-600';
+      default:
+        return 'text-neutral-500';
+    }
+  };
+
   return (
     <div 
-      className={`rounded-lg border p-3 transition-all ${getVariantClasses()} ${
-        isClickable || onClick ? 'cursor-pointer hover:shadow-md transform hover:scale-105' : ''
+      className={`border-b border-neutral-100 p-4 transition-all ${getVariantClasses()} ${
+        isClickable || onClick ? 'cursor-pointer' : ''
       } ${className}`}
       onClick={onClick}
     >
-      <h4 className="font-medium text-sm mb-1">{title}</h4>
+      <h4 className={`font-medium text-sm mb-1 ${getTextClasses()}`}>{title}</h4>
       {subtitle && (
         <div className={`text-xs mb-1 ${getSubtitleClasses()}`}>{subtitle}</div>
       )}
-      <div className="font-semibold text-sm">{primaryValue}</div>
+      <div className={`font-semibold text-sm ${getTextClasses()}`}>{primaryValue}</div>
       {secondaryInfo && (
         <div className={`text-xs mt-1 ${getSubtitleClasses()}`}>{secondaryInfo}</div>
       )}
