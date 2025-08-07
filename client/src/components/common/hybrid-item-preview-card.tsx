@@ -7,7 +7,8 @@ interface HybridItemPreviewCardProps {
   secondaryInfo?: string;
   onClick?: () => void;
   className?: string;
-  variant?: 'default' | 'blue' | 'green' | 'orange';
+  variant?: 'default' | 'blue' | 'green' | 'orange' | 'active';
+  isClickable?: boolean;
 }
 
 /**
@@ -21,7 +22,8 @@ export function HybridItemPreviewCard({
   secondaryInfo, 
   onClick, 
   className = "",
-  variant = 'blue'
+  variant = 'blue',
+  isClickable = false
 }: HybridItemPreviewCardProps) {
   
   const getVariantClasses = () => {
@@ -32,6 +34,8 @@ export function HybridItemPreviewCard({
         return 'bg-green-50 border-green-200 text-green-900';
       case 'orange':
         return 'bg-orange-50 border-orange-200 text-orange-900';
+      case 'active':
+        return 'bg-blue-100 border-blue-300 text-blue-900 ring-2 ring-blue-500';
       default:
         return 'bg-neutral-50 border-neutral-200 text-neutral-900';
     }
@@ -45,6 +49,8 @@ export function HybridItemPreviewCard({
         return 'text-green-700';
       case 'orange':
         return 'text-orange-700';
+      case 'active':
+        return 'text-blue-800';
       default:
         return 'text-neutral-700';
     }
@@ -52,8 +58,8 @@ export function HybridItemPreviewCard({
 
   return (
     <div 
-      className={`rounded-lg border p-3 transition-colors ${getVariantClasses()} ${
-        onClick ? 'cursor-pointer hover:opacity-80' : ''
+      className={`rounded-lg border p-3 transition-all ${getVariantClasses()} ${
+        isClickable || onClick ? 'cursor-pointer hover:shadow-md transform hover:scale-105' : ''
       } ${className}`}
       onClick={onClick}
     >

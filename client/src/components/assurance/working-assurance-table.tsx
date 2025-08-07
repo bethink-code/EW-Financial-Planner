@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useMemo, memo } from "react";
+import React, { useState, useCallback, useMemo, useEffect, memo } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { Plus, Trash2, Copy, X } from "lucide-react";
 import { getFieldClass, getFieldWidth } from "@/lib/design-tokens";
@@ -299,19 +299,37 @@ export function AssuranceTable({ viewMode = 'table', onAddPolicy }: AssuranceTab
   // Calculate totals for this render
   const totals = useMemo(() => getTotals(filteredPolicies), [filteredPolicies, getTotals]);
 
+  // Selection state for hybrid view
+  const [selectedPolicyId, setSelectedPolicyId] = useState<number | null>(null);
+
+  // Set default selection to first policy when entering hybrid view
+  useEffect(() => {
+    if (viewMode === 'hybrid' && filteredPolicies.length > 0 && selectedPolicyId === null) {
+      setSelectedPolicyId(filteredPolicies[0].id);
+    }
+  }, [viewMode, filteredPolicies, selectedPolicyId]);
+
   // Hybrid view data preparation functions
-  const getItemPreview = useCallback((policy: Assurance) => ({
+  const getItemPreview = useCallback((policy: Assurance, isSelected: boolean) => ({
     id: policy.id,
     title: formatTextValue(policy.description) || `Policy #${policy.id}`,
     subtitle: `Owner: ${policy.owners[0] || 'Unassigned'}`,
     primaryValue: policy.deathBenefit,
-    secondaryInfo: policy.amount !== 'R 0' ? `Amount: ${policy.amount}` : undefined
+    secondaryInfo: policy.amount !== 'R 0' ? `Amount: ${policy.amount}` : undefined,
+    isSelected
   }), []);
 
-  // Prepare preview items
-  const previewItems = useMemo(() => filteredPolicies.slice(0, 5).map(getItemPreview), [filteredPolicies, getItemPreview]);
-  const hasMoreItems = filteredPolicies.length > 5;
-  const remainingCount = filteredPolicies.length - 5;
+  // Prepare preview items with selection state
+  const previewItems = useMemo(() => 
+    filteredPolicies.map(policy => getItemPreview(policy, policy.id === selectedPolicyId)), 
+    [filteredPolicies, getItemPreview, selectedPolicyId]
+  );
+
+  // Get selected policy for detail view
+  const selectedPolicy = useMemo(() => 
+    filteredPolicies.find(policy => policy.id === selectedPolicyId), 
+    [filteredPolicies, selectedPolicyId]
+  );
 
   if (isLoading) {
     return (
@@ -575,153 +593,150 @@ export function AssuranceTable({ viewMode = 'table', onAddPolicy }: AssuranceTab
 
 
 
-  // Summary cards for hybrid view - only policy previews, no duplicate summary
+  // Summary cards for hybrid view - clickable policy tabs
   const summaryCards = (
     <div className="space-y-3">
-      {previewItems.map((item: { id: number; title: string; subtitle: string; primaryValue: string; secondaryInfo?: string }) => (
+      {previewItems.map((item) => (
         <HybridItemPreviewCard
           key={item.id}
           title={item.title}
           subtitle={item.subtitle}
           primaryValue={item.primaryValue}
           secondaryInfo={item.secondaryInfo}
-          variant="blue"
+          variant={item.isSelected ? "active" : "blue"}
+          onClick={() => setSelectedPolicyId(item.id)}
+          isClickable={true}
         />
       ))}
-      {hasMoreItems && (
-        <div className="text-center text-sm text-neutral-600">
-          +{remainingCount} more policies
-        </div>
-      )}
     </div>
   );
 
-  // Detail forms for hybrid view
-  const detailForms = (
-    <>
-      {filteredPolicies.map((policy: Assurance) => (
-        <HybridDetailCard
-          key={`form-${policy.id}`}
-          title={formatTextValue(policy.description) || `Policy #${policy.id}`}
-          onDuplicate={() => handleDuplicatePolicy(policy)}
-          onDelete={() => handleDeletePolicy(policy.id)}
-        >
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {/* Basic Information */}
-            <div className="space-y-4">
-              <div>
-                <label className="block text-sm font-medium text-neutral-700 mb-1">Description</label>
-                <input
-                  type="text"
-                  defaultValue={formatTextValue(policy.description)}
-                  placeholder="Enter details ..."
-                  className={`w-full table-input ${getFieldClass('text')} ${getValueClass(policy.description, 'text')}`}
-                  onFocus={handleDefaultValueFocus}
-                  onBlur={(e) => handleUpdatePolicy(policy.id, 'description', e.target.value)}
-                />
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-neutral-700 mb-1">Death Benefit</label>
-                <input
-                  type="text"
-                  defaultValue={policy.deathBenefit}
-                  className={`w-full table-input ${getValueClass(policy.deathBenefit, 'currency')}`}
-                  onFocus={handleDefaultValueFocus}
-                  onBlur={(e) => handleInputBlur(policy.id, 'deathBenefit', e.target.value, e.target, 'deathBenefit')}
-                />
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-neutral-700 mb-1">Amount</label>
-                <input
-                  type="text"
-                  defaultValue={policy.amount}
-                  className={`w-full table-input ${getValueClass(policy.amount, 'currency')}`}
-                  onFocus={handleDefaultValueFocus}
-                  onBlur={(e) => handleInputBlur(policy.id, 'amount', e.target.value, e.target, 'amount')}
-                />
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-neutral-700 mb-1">Premiums by Others</label>
-                <input
-                  type="text"
-                  defaultValue={policy.premiumsByOthers}
-                  className={`w-full table-input ${getValueClass(policy.premiumsByOthers, 'currency')}`}
-                  onFocus={handleDefaultValueFocus}
-                  onBlur={(e) => handleInputBlur(policy.id, 'premiumsByOthers', e.target.value, e.target, 'premiumsByOthers')}
-                />
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-neutral-700 mb-1">Collateral Session</label>
-                <input
-                  type="text"
-                  defaultValue={policy.collateralSession}
-                  className={`w-full table-input ${getValueClass(policy.collateralSession, 'currency')}`}
-                  onFocus={handleDefaultValueFocus}
-                  onBlur={(e) => handleInputBlur(policy.id, 'collateralSession', e.target.value, e.target, 'collateralSession')}
-                />
-              </div>
-            </div>
-
-            {/* Entity Management */}
-            <div className="space-y-4">
-              <div>
-                <label className="block text-sm font-medium text-neutral-700 mb-1">Benefit Split</label>
-                <input
-                  type="text"
-                  defaultValue={policy.benefitSplit}
-                  className={`w-full table-input ${getValueClass(policy.benefitSplit, 'text')}`}
-                  onFocus={handleDefaultValueFocus}
-                  onBlur={(e) => handleInputBlur(policy.id, 'benefitSplit', e.target.value, e.target, 'benefitSplit')}
-                />
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-neutral-700 mb-1">Owners</label>
-                <EntityOwnerSelector
-                  policyId={policy.id}
-                  owners={policy.owners}
-                  ownershipPercentages={policy.ownershipPercentages || []}
-                  onOwnerChange={handleOwnerChange}
-                  onOwnershipPercentageChange={handleOwnershipPercentageChange}
-                  onAddOwner={handleAddOwner}
-                  onRemoveOwner={handleRemoveOwner}
-                  rowIndex={0}
-                />
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-neutral-700 mb-1">Beneficiaries</label>
-                <EntityBeneficiarySelector
-                  policyId={policy.id}
-                  beneficiaries={policy.beneficiaries}
-                  beneficiaryPercentages={policy.beneficiaryPercentages || []}
-                  onBeneficiaryChange={handleBeneficiaryChange}
-                  onBeneficiaryPercentageChange={handleBeneficiaryPercentageChange}
-                  onAddBeneficiary={handleAddBeneficiary}
-                  onRemoveBeneficiary={handleRemoveBeneficiary}
-                  rowIndex={0}
-                />
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-neutral-700 mb-1">Additional Info</label>
-                <input
-                  type="text"
-                  defaultValue={policy.additionalInfo}
-                  className={`w-full table-input ${getValueClass(policy.additionalInfo, 'text')}`}
-                  onFocus={handleDefaultValueFocus}
-                  onBlur={(e) => handleInputBlur(policy.id, 'additionalInfo', e.target.value, e.target, 'additionalInfo')}
-                />
-              </div>
-            </div>
+  // Detail form for selected policy only
+  const detailForms = selectedPolicy ? (
+    <HybridDetailCard
+      key={`form-${selectedPolicy.id}`}
+      title={formatTextValue(selectedPolicy.description) || `Policy #${selectedPolicy.id}`}
+      onDuplicate={() => handleDuplicatePolicy(selectedPolicy)}
+      onDelete={() => handleDeletePolicy(selectedPolicy.id)}
+    >
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        {/* Basic Information */}
+        <div className="space-y-4">
+          <div>
+            <label className="block text-sm font-medium text-neutral-700 mb-1">Description</label>
+            <input
+              type="text"
+              defaultValue={formatTextValue(selectedPolicy.description)}
+              placeholder="Enter details ..."
+              className={`w-full table-input ${getFieldClass('text')} ${getValueClass(selectedPolicy.description, 'text')}`}
+              onFocus={handleDefaultValueFocus}
+              onBlur={(e) => handleUpdatePolicy(selectedPolicy.id, 'description', e.target.value)}
+            />
           </div>
-        </HybridDetailCard>
-      ))}
-    </>
+
+          <div>
+            <label className="block text-sm font-medium text-neutral-700 mb-1">Death Benefit</label>
+            <input
+              type="text"
+              defaultValue={selectedPolicy.deathBenefit}
+              className={`w-full table-input ${getValueClass(selectedPolicy.deathBenefit, 'currency')}`}
+              onFocus={handleDefaultValueFocus}
+              onBlur={(e) => handleInputBlur(selectedPolicy.id, 'deathBenefit', e.target.value, e.target, 'deathBenefit')}
+            />
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-neutral-700 mb-1">Amount</label>
+            <input
+              type="text"
+              defaultValue={selectedPolicy.amount}
+              className={`w-full table-input ${getValueClass(selectedPolicy.amount, 'currency')}`}
+              onFocus={handleDefaultValueFocus}
+              onBlur={(e) => handleInputBlur(selectedPolicy.id, 'amount', e.target.value, e.target, 'amount')}
+            />
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-neutral-700 mb-1">Premiums by Others</label>
+            <input
+              type="text"
+              defaultValue={selectedPolicy.premiumsByOthers}
+              className={`w-full table-input ${getValueClass(selectedPolicy.premiumsByOthers, 'currency')}`}
+              onFocus={handleDefaultValueFocus}
+              onBlur={(e) => handleInputBlur(selectedPolicy.id, 'premiumsByOthers', e.target.value, e.target, 'premiumsByOthers')}
+            />
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-neutral-700 mb-1">Collateral Session</label>
+            <input
+              type="text"
+              defaultValue={selectedPolicy.collateralSession}
+              className={`w-full table-input ${getValueClass(selectedPolicy.collateralSession, 'currency')}`}
+              onFocus={handleDefaultValueFocus}
+              onBlur={(e) => handleInputBlur(selectedPolicy.id, 'collateralSession', e.target.value, e.target, 'collateralSession')}
+            />
+          </div>
+        </div>
+
+        {/* Entity Management */}
+        <div className="space-y-4">
+          <div>
+            <label className="block text-sm font-medium text-neutral-700 mb-1">Benefit Split</label>
+            <input
+              type="text"
+              defaultValue={selectedPolicy.benefitSplit}
+              className={`w-full table-input ${getValueClass(selectedPolicy.benefitSplit, 'text')}`}
+              onFocus={handleDefaultValueFocus}
+              onBlur={(e) => handleInputBlur(selectedPolicy.id, 'benefitSplit', e.target.value, e.target, 'benefitSplit')}
+            />
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-neutral-700 mb-1">Owners</label>
+            <EntityOwnerSelector
+              policyId={selectedPolicy.id}
+              owners={selectedPolicy.owners}
+              ownershipPercentages={selectedPolicy.ownershipPercentages || []}
+              onOwnerChange={handleOwnerChange}
+              onOwnershipPercentageChange={handleOwnershipPercentageChange}
+              onAddOwner={handleAddOwner}
+              onRemoveOwner={handleRemoveOwner}
+              rowIndex={0}
+            />
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-neutral-700 mb-1">Beneficiaries</label>
+            <EntityBeneficiarySelector
+              policyId={selectedPolicy.id}
+              beneficiaries={selectedPolicy.beneficiaries}
+              beneficiaryPercentages={selectedPolicy.beneficiaryPercentages || []}
+              onBeneficiaryChange={handleBeneficiaryChange}
+              onBeneficiaryPercentageChange={handleBeneficiaryPercentageChange}
+              onAddBeneficiary={handleAddBeneficiary}
+              onRemoveBeneficiary={handleRemoveBeneficiary}
+              rowIndex={0}
+            />
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-neutral-700 mb-1">Additional Info</label>
+            <input
+              type="text"
+              defaultValue={selectedPolicy.additionalInfo}
+              className={`w-full table-input ${getValueClass(selectedPolicy.additionalInfo, 'text')}`}
+              onFocus={handleDefaultValueFocus}
+              onBlur={(e) => handleInputBlur(selectedPolicy.id, 'additionalInfo', e.target.value, e.target, 'additionalInfo')}
+            />
+          </div>
+        </div>
+      </div>
+    </HybridDetailCard>
+  ) : (
+    <div className="text-center py-8">
+      <p className="text-neutral-500">Select a policy from the left to view details</p>
+    </div>
   );
 
   // Use the global hybrid view wrapper
