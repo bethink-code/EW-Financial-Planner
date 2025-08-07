@@ -426,6 +426,20 @@ export function AssuranceTable({ viewMode = 'table', onAddPolicy }: AssuranceTab
       }, 0);
       return sum + deathBenefitTotal;
     }, 0),
+    benefitSplit: policies.reduce((sum, policy) => {
+      // Calculate total benefit split for this policy
+      const totalDeathBenefit = (policy.deathBenefits || []).reduce((benefitSum, benefit) => {
+        return benefitSum + (parseFloat(benefit?.replace(/[^\d.-]/g, '') || '0') || 0);
+      }, 0);
+      
+      const policyBenefitSplitTotal = (policy.beneficiaryPercentages || []).reduce((benefitSum, percentage) => {
+        const percentageValue = parseFloat(percentage.replace('%', '')) || 0;
+        const benefitSplit = Math.round((totalDeathBenefit * percentageValue) / 100);
+        return benefitSum + benefitSplit;
+      }, 0);
+      
+      return sum + policyBenefitSplitTotal;
+    }, 0),
     amount: policies.reduce((sum, policy) => {
       const value = parseFloat(policy.amount.replace(/[^\d.-]/g, '')) || 0;
       return sum + value;
@@ -525,7 +539,7 @@ export function AssuranceTable({ viewMode = 'table', onAddPolicy }: AssuranceTab
             </tr>
           </thead>
           <tbody className="divide-y divide-neutral-200">
-            {filteredPolicies.map((policy: Assurance, policyIndex) => {
+            {filteredPolicies.map((policy: Assurance, policyIndex: number) => {
               // Calculate max rows needed for this policy
               const maxRows = Math.max(policy.owners.length, policy.beneficiaries.length);
               
