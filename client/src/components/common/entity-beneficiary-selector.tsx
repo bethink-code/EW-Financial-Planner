@@ -117,7 +117,8 @@ export default function EntityBeneficiarySelector({
           value={currentBeneficiary}
           onChange={(e) => handleBeneficiarySelect(e.target.value, beneficiaryIndex)}
           disabled={disabled}
-          className="table-input table-dropdown flex-1"
+          className="table-input table-dropdown"
+          style={{minWidth: "150px", maxWidth: "200px"}}
         >
           <option value="">Select beneficiary...</option>
           {entities.map((entity) => (
@@ -132,9 +133,10 @@ export default function EntityBeneficiarySelector({
           type="text"
           defaultValue={currentPercentage}
           placeholder="0%"
-          className={`table-input ${getFieldClass('percentage')} w-16 text-center ${getValueClass(currentPercentage, 'percentage')} ${
+          className={`table-input ${getFieldClass('percentage')} text-center ${getValueClass(currentPercentage, 'percentage')} ${
             isInvalidTotal ? 'border-red-500 bg-red-50' : ''
           }`}
+          style={{minWidth: "50px", maxWidth: "65px"}}
           onFocus={(e) => {
             handleDefaultValueFocus(e);
             // Remove % sign for editing but keep the number
