@@ -201,19 +201,19 @@ export function AssuranceDetailForm({
           <FormField label="Beneficiaries & Controls">
             {/* Use actual table element with overflow wrapper for wide dropdown */}
             <div className="w-full overflow-x-auto">
-              <table className="border-collapse" style={{width: "max-content"}}>
+              <table className="border-collapse w-full">
               <thead>
                 <tr className="bg-neutral-100 border border-neutral-300">
-                  <th className="text-left text-xs font-medium text-neutral-700 px-2 py-2 border-r border-neutral-300">
+                  <th className="text-left text-xs font-medium text-neutral-700 px-2 py-2 border-r border-neutral-300" style={{width: "300px"}}>
                     Beneficiary & Split
                   </th>
-                  <th className="text-center text-xs font-medium text-neutral-700 px-2 py-2 border-r border-neutral-300">
+                  <th className="text-center text-xs font-medium text-neutral-700 px-2 py-2 border-r border-neutral-300" style={{width: "120px"}}>
                     Amount
                   </th>
-                  <th className="text-center text-xs font-medium text-neutral-700 px-2 py-2 border-r border-neutral-300">
+                  <th className="text-center text-xs font-medium text-neutral-700 px-2 py-2 border-r border-neutral-300" style={{width: "60px"}}>
                     Toggle
                   </th>
-                  <th className="text-center text-xs font-medium text-neutral-700 px-2 py-2">
+                  <th className="text-center text-xs font-medium text-neutral-700 px-2 py-2" style={{width: "80px"}}>
                     Years/%
                   </th>
                 </tr>
@@ -221,7 +221,7 @@ export function AssuranceDetailForm({
               <tbody>
                   {Array.from({ length: Math.max(policy.owners.length, policy.beneficiaries.length) }, (_, rowIndex) => (
                     <tr key={`beneficiary-table-row-${rowIndex}`} className="border-b border-neutral-200 bg-white">
-                      <td className="px-1 py-1 border-r border-neutral-200">
+                      <td className="px-1 py-1 border-r border-neutral-200" style={{width: "300px"}}>
                         <EntityBeneficiarySelector
                           policyId={policy.id}
                           beneficiaries={policy.beneficiaries}
@@ -234,19 +234,19 @@ export function AssuranceDetailForm({
                           disabled={disabled}
                         />
                       </td>
-                      <td className="px-1 py-1 border-r border-neutral-200" style={{width: "100px"}}>
+                      <td className="px-1 py-1 border-r border-neutral-200" style={{width: "120px"}}>
                         <input
                           key={`amount-${policy.id}-${rowIndex}`}
                           type="text"
                           defaultValue={policy.amount || "R 0"}
                           className={`${getFieldClass('amount')} ${getCellClass('amount')} ${getValueClass(policy.amount || "R 0", 'amount')}`}
-                          style={{minWidth: "100px", maxWidth: "140px"}}
+                          style={{width: "100%"}}
                           onFocus={handleDefaultValueFocus}
                           onBlur={(e) => handleTextFieldBlur('amount', e.target.value)}
                           disabled={disabled}
                         />
                       </td>
-                      <td className="px-1 py-1 border-r border-neutral-200" style={{width: "45px"}}>
+                      <td className="px-1 py-1 border-r border-neutral-200" style={{width: "60px"}}>
                         <button
                           type="button"
                           onClick={() => {
@@ -261,7 +261,7 @@ export function AssuranceDetailForm({
                           {isAmountYearsMode(policy, rowIndex) ? 'Y' : '%'}
                         </button>
                       </td>
-                      <td className="px-1 py-1" style={{width: "90px"}}>
+                      <td className="px-1 py-1" style={{width: "80px"}}>
                         {isAmountYearsMode(policy, rowIndex) ? (
                           // Years Mode
                           <input
