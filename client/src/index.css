@@ -672,7 +672,6 @@ th, td {
   
   /* Input fields for editable content */
   .table-input {
-    width: auto;
     height: 2.3rem !important; /* Match dropdown height for consistency */
     padding: 0.25rem 0.5rem !important; /* Reduced padding to match p-1 for consistent row height */
     background-color: hsl(var(--primary) / 0.05);
@@ -716,7 +715,6 @@ th, td {
   select.table-input,
   .table-dropdown,
   select[class*="table"] {
-    width: auto;
     height: 2.3rem !important;
     padding: 0 0.5rem !important; /* Reduced padding to match input fields */
     background-color: hsl(var(--primary) / 0.05);
