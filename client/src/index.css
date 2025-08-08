@@ -1113,25 +1113,22 @@ th, td {
     border-bottom: none !important;
   }
   
-  /* TEST: Identify double border sources with colors */
+  /* FIX: Remove borders from entity selector elements to prevent double borders */
   
-  /* EntityOwnerSelector container td elements */
-  td:has(.table-dropdown) {
-    border: 2px solid purple !important;
+  /* Remove borders from td elements that contain dropdowns/inputs */
+  td:has(.table-dropdown),
+  td:has(.table-input) {
+    border-top: none !important;
+    border-bottom: none !important;
+    border-left: none !important;
+    border-right: none !important;
   }
   
-  /* The actual dropdown/input elements */
-  .table-input {
-    border: 2px solid orange !important;
-  }
-  
+  /* Remove borders from the dropdown and input elements themselves */
+  .table-input,
   .table-dropdown {
-    border: 2px solid green !important;
-  }
-  
-  /* Any nested td elements (which shouldn't exist but might) */
-  td td {
-    border: 3px solid red !important;
+    border: none !important;
+    background-color: hsl(var(--primary) / 0.05) !important;
   }
   
   /* Removed conflicting tbody border rules to prevent double borders */
