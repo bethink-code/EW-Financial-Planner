@@ -128,17 +128,38 @@ export function DefinedBenefitFundDetailForm({ fund, onDelete }: DefinedBenefitF
             <label className="block text-sm font-medium text-gray-700 mb-2">
               Owners & Ownership Percentages
             </label>
-            <EntityOwnerSelector
-              policyId={fund.id}
-              owners={fund.owners || []}
-              ownershipPercentages={fund.ownershipPercentages || []}
-              onOwnerChange={handleOwnerChange}
-              onOwnershipPercentageChange={handleOwnershipPercentageChange}
-              onAddOwner={handleAddOwner}
-              onRemoveOwner={handleRemoveOwner}
-              rowIndex={0}
-              disabled={isUpdating}
-            />
+            <table className="w-full border border-neutral-200 rounded-lg overflow-hidden">
+              <thead>
+                <tr className="bg-neutral-50">
+                  <th className="table-header-12 px-1 py-2 border-r border-neutral-200 text-left font-normal text-neutral-600" style={{ width: '200px' }}>
+                    OWNER NAME
+                  </th>
+                  <th className="table-header-12 px-1 py-2 border-r border-neutral-200 text-right font-normal text-neutral-600" style={{ width: '100px' }}>
+                    OWNERSHIP %
+                  </th>
+                  <th className="table-header-12 px-1 py-2 border border-neutral-200 text-center font-normal text-neutral-600" style={{ width: '80px' }}>
+                    ACTIONS
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                {Array.from({ length: Math.max(fund.owners?.length || 1, 1) }, (_, rowIndex) => (
+                  <tr key={`owner-table-row-${rowIndex}`} className="border-b border-neutral-200 bg-white">
+                    <EntityOwnerSelector
+                      policyId={fund.id}
+                      owners={fund.owners || []}
+                      ownershipPercentages={fund.ownershipPercentages || []}
+                      onOwnerChange={handleOwnerChange}
+                      onOwnershipPercentageChange={handleOwnershipPercentageChange}
+                      onAddOwner={handleAddOwner}
+                      onRemoveOwner={handleRemoveOwner}
+                      rowIndex={rowIndex}
+                      disabled={isUpdating}
+                    />
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           </div>
         </div>
       </div>
