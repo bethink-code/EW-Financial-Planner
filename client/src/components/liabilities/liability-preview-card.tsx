@@ -1,6 +1,7 @@
 import React from 'react';
 import { Liabilities } from '@shared/liabilities-schema';
 import { HybridItemPreviewCard } from '@/components/common/hybrid-item-preview-card';
+import { parseEntityOwnership } from '@/lib/entity-columns-utils';
 
 interface LiabilityPreviewCardProps {
   liability: Liabilities;
@@ -11,17 +12,13 @@ interface LiabilityPreviewCardProps {
 }
 
 export function LiabilityPreviewCard({ liability, isActive, onClick, isFirst = false, isLast = false }: LiabilityPreviewCardProps) {
-  // Create owner lines from individual ownership fields
-  const ownerFields = [
-    { field: 'peterLambie', name: 'Peter Lambie' },
-    { field: 'victoriaLambie', name: 'Victoria Lambie' },
-    { field: 'juniorLambie', name: 'Junior Lambie' },
-    { field: 'lambiesFamilyTrust', name: 'Lambies Family Trust' }
-  ];
+  // Parse entity ownership from JSON
+  const ownership = parseEntityOwnership(liability.entityOwnership);
   
-  const ownerLines = ownerFields
-    .filter(owner => liability[owner.field as keyof Liabilities] && liability[owner.field as keyof Liabilities] !== '0%')
-    .map(owner => `Owner: ${owner.name} (${liability[owner.field as keyof Liabilities]})`)
+  // Create owner lines from dynamic entity ownership
+  const ownerLines = Object.entries(ownership)
+    .filter(([entityName, percentage]) => percentage && percentage !== '0%')
+    .map(([entityName, percentage]) => `Owner: ${entityName} (${percentage})`)
     .join('\n');
   
   // Create subtitle with ownership info and category

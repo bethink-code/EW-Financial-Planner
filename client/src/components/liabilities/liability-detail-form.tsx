@@ -1,10 +1,11 @@
-import { useState, useCallback } from 'react';
-import { useMutation } from '@tanstack/react-query';
+import { useState, useCallback, useMemo } from 'react';
+import { useMutation, useQuery } from '@tanstack/react-query';
 import { Liabilities } from '@shared/liabilities-schema';
 import { queryClient } from '@/lib/queryClient';
 import { ActionButtonGroup, DeleteButton } from '@/components/ui/action-buttons';
 import { FieldGroup, FormField } from '@/components/common/grouped-detail-form';
 import { formatCurrencyValue, formatPercentageValue, getValueClass, handleDefaultValueFocus } from '@/lib/formatting';
+import { parseEntityOwnership, setEntityOwnership, getEntityDisplayName, type ClientEntity } from '@/lib/entity-columns-utils';
 import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
@@ -16,6 +17,16 @@ interface LiabilityDetailFormProps {
 
 export function LiabilityDetailForm({ liability, onDelete }: LiabilityDetailFormProps) {
   const [isUpdating, setIsUpdating] = useState(false);
+
+  // Query for client entities to build ownership fields
+  const { data: clientEntities = [] } = useQuery<ClientEntity[]>({
+    queryKey: ['/api/client-details'],
+    select: (data: any[]) => data.map(entity => ({
+      id: entity.id,
+      entityName: entity.entityName,
+      entityType: entity.entityType
+    }))
+  });
 
   // Update mutation
   const updateMutation = useMutation({
@@ -44,8 +55,6 @@ export function LiabilityDetailForm({ liability, onDelete }: LiabilityDetailForm
     let formattedValue: string;
     if (['debtAmount', 'estate', 'others', 'client'].includes(field)) {
       formattedValue = formatCurrencyValue(value);
-    } else if (['peterLambie', 'victoriaLambie', 'juniorLambie', 'lambiesFamilyTrust'].includes(field)) {
-      formattedValue = formatPercentageValue(value);
     } else {
       formattedValue = value;
     }
@@ -58,9 +67,18 @@ export function LiabilityDetailForm({ liability, onDelete }: LiabilityDetailForm
     }
   }, [handleUpdate]);
 
+  const handleOwnershipChange = useCallback((entityDisplayName: string, value: string) => {
+    const formattedValue = formatPercentageValue(value);
+    const newOwnership = setEntityOwnership(liability.entityOwnership, entityDisplayName, formattedValue);
+    handleUpdate('entityOwnership', newOwnership);
+  }, [liability.entityOwnership, handleUpdate]);
+
   const handleBooleanChange = useCallback((field: keyof Liabilities, checked: boolean) => {
     handleUpdate(field, checked);
   }, [handleUpdate]);
+
+  // Parse current ownership
+  const ownership = useMemo(() => parseEntityOwnership(liability.entityOwnership), [liability.entityOwnership]);
 
   return (
     <div className="space-y-12 p-6 bg-white">
@@ -176,66 +194,33 @@ export function LiabilityDetailForm({ liability, onDelete }: LiabilityDetailForm
               </tr>
             </thead>
             <tbody>
-              <tr className="border-b border-neutral-100">
-                <td className="px-4 py-3 text-sm text-neutral-900">Peter Lambie</td>
-                <td className="px-4 py-3">
-                  <input
-                    type="text"
-                    defaultValue={liability.peterLambie || ''}
-                    placeholder="0%"
-                    className={`table-input ${liability.peterLambie && liability.peterLambie !== '0%' ? '' : 'text-neutral-400'}`}
-                    style={{ width: 'fit-content', minWidth: '80px' }}
-                    onFocus={handleDefaultValueFocus}
-                    onBlur={(e) => handleInputBlur('peterLambie', e.target.value)}
-                    disabled={isUpdating}
-                  />
-                </td>
-              </tr>
-              <tr className="border-b border-neutral-100">
-                <td className="px-4 py-3 text-sm text-neutral-900">Victoria Lambie</td>
-                <td className="px-4 py-3">
-                  <input
-                    type="text"
-                    defaultValue={liability.victoriaLambie || ''}
-                    placeholder="0%"
-                    className={`table-input ${liability.victoriaLambie && liability.victoriaLambie !== '0%' ? '' : 'text-neutral-400'}`}
-                    style={{ width: 'fit-content', minWidth: '80px' }}
-                    onFocus={handleDefaultValueFocus}
-                    onBlur={(e) => handleInputBlur('victoriaLambie', e.target.value)}
-                    disabled={isUpdating}
-                  />
-                </td>
-              </tr>
-              <tr className="border-b border-neutral-100">
-                <td className="px-4 py-3 text-sm text-neutral-900">Junior Lambie</td>
-                <td className="px-4 py-3">
-                  <input
-                    type="text"
-                    defaultValue={liability.juniorLambie || ''}
-                    placeholder="0%"
-                    className={`table-input ${liability.juniorLambie && liability.juniorLambie !== '0%' ? '' : 'text-neutral-400'}`}
-                    style={{ width: 'fit-content', minWidth: '80px' }}
-                    onFocus={handleDefaultValueFocus}
-                    onBlur={(e) => handleInputBlur('juniorLambie', e.target.value)}
-                    disabled={isUpdating}
-                  />
-                </td>
-              </tr>
-              <tr>
-                <td className="px-4 py-3 text-sm text-neutral-900">Lambies Family Trust</td>
-                <td className="px-4 py-3">
-                  <input
-                    type="text"
-                    defaultValue={liability.lambiesFamilyTrust || ''}
-                    placeholder="0%"
-                    className={`table-input ${liability.lambiesFamilyTrust && liability.lambiesFamilyTrust !== '0%' ? '' : 'text-neutral-400'}`}
-                    style={{ width: 'fit-content', minWidth: '80px' }}
-                    onFocus={handleDefaultValueFocus}
-                    onBlur={(e) => handleInputBlur('lambiesFamilyTrust', e.target.value)}
-                    disabled={isUpdating}
-                  />
-                </td>
-              </tr>
+              {clientEntities.map((entity, index) => {
+                const entityDisplayName = getEntityDisplayName(entity);
+                const value = ownership[entityDisplayName] || '0%';
+                const isLast = index === clientEntities.length - 1;
+                
+                return (
+                  <tr key={entity.id} className={isLast ? '' : 'border-b border-neutral-100'}>
+                    <td className="px-4 py-3 text-sm text-neutral-900">{entityDisplayName}</td>
+                    <td className="px-4 py-3">
+                      <input
+                        type="text"
+                        defaultValue={value}
+                        placeholder="0%"
+                        className={`table-input ${value && value !== '0%' ? '' : 'text-neutral-400'}`}
+                        style={{ width: 'fit-content', minWidth: '80px' }}
+                        onFocus={handleDefaultValueFocus}
+                        onBlur={(e) => {
+                          const formattedValue = formatPercentageValue(e.target.value);
+                          handleOwnershipChange(entityDisplayName, e.target.value);
+                          setTimeout(() => { e.target.value = formattedValue; }, 0);
+                        }}
+                        disabled={isUpdating}
+                      />
+                    </td>
+                  </tr>
+                );
+              })}
             </tbody>
           </table>
         </div>

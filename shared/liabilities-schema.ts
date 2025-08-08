@@ -14,11 +14,8 @@ export const liabilities = pgTable("liabilities", {
   // Debt Details
   debtAmount: text("debt_amount").notNull().default("R 0"),
   
-  // Owner(s) Section - Individual ownership percentages
-  peterLambie: text("peter_lambie").notNull().default("0%"),
-  victoriaLambie: text("victoria_lambie").notNull().default("0%"),
-  juniorLambie: text("junior_lambie").notNull().default("0%"),
-  lambiesFamilyTrust: text("lambies_family_trust").notNull().default("0%"),
+  // Dynamic ownership percentages - stored as JSON object matching client entities
+  entityOwnership: text("entity_ownership").notNull().default('{}'), // JSON object: {"Garth Shoebridge": "0%", "Beryl Shuttleworth": "0%", ...}
   
   // Client's liabilities settled by
   estate: text("estate").notNull().default("R 0"),
