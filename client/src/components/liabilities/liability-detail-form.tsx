@@ -161,60 +161,83 @@ export function LiabilityDetailForm({ liability, onDelete }: LiabilityDetailForm
         </div>
       </FieldGroup>
 
-      {/* Group 3: Owner(s) */}
-      <FieldGroup title="Owner(s)">
-        <div className="grid grid-cols-2 gap-x-6 gap-y-4">
-          <FormField label="Peter Lambie">
-            <input
-              type="text"
-              defaultValue={liability.peterLambie || ''}
-              placeholder="0%"
-              className={`table-input ${liability.peterLambie && liability.peterLambie !== '0%' ? '' : 'text-neutral-400'}`}
-              style={{ width: 'fit-content', minWidth: '80px' }}
-              onFocus={handleDefaultValueFocus}
-              onBlur={(e) => handleInputBlur('peterLambie', e.target.value)}
-              disabled={isUpdating}
-            />
-          </FormField>
-
-          <FormField label="Victoria Lambie">
-            <input
-              type="text"
-              defaultValue={liability.victoriaLambie || ''}
-              placeholder="0%"
-              className={`table-input ${liability.victoriaLambie && liability.victoriaLambie !== '0%' ? '' : 'text-neutral-400'}`}
-              style={{ width: 'fit-content', minWidth: '80px' }}
-              onFocus={handleDefaultValueFocus}
-              onBlur={(e) => handleInputBlur('victoriaLambie', e.target.value)}
-              disabled={isUpdating}
-            />
-          </FormField>
-
-          <FormField label="Junior Lambie">
-            <input
-              type="text"
-              defaultValue={liability.juniorLambie || ''}
-              placeholder="0%"
-              className={`table-input ${liability.juniorLambie && liability.juniorLambie !== '0%' ? '' : 'text-neutral-400'}`}
-              style={{ width: 'fit-content', minWidth: '80px' }}
-              onFocus={handleDefaultValueFocus}
-              onBlur={(e) => handleInputBlur('juniorLambie', e.target.value)}
-              disabled={isUpdating}
-            />
-          </FormField>
-
-          <FormField label="Lambies Family Trust">
-            <input
-              type="text"
-              defaultValue={liability.lambiesFamilyTrust || ''}
-              placeholder="0%"
-              className={`table-input ${liability.lambiesFamilyTrust && liability.lambiesFamilyTrust !== '0%' ? '' : 'text-neutral-400'}`}
-              style={{ width: 'fit-content', minWidth: '80px' }}
-              onFocus={handleDefaultValueFocus}
-              onBlur={(e) => handleInputBlur('lambiesFamilyTrust', e.target.value)}
-              disabled={isUpdating}
-            />
-          </FormField>
+      {/* Group 3: Ownership Split */}
+      <FieldGroup title="Ownership Split">
+        <div className="overflow-hidden rounded-lg border border-neutral-200">
+          <table className="w-full border-collapse">
+            <thead>
+              <tr className="bg-neutral-50">
+                <th className="px-4 py-3 text-left text-sm font-medium text-neutral-700 border-b border-neutral-200">
+                  Owner
+                </th>
+                <th className="px-4 py-3 text-left text-sm font-medium text-neutral-700 border-b border-neutral-200">
+                  Percentage
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr className="border-b border-neutral-100">
+                <td className="px-4 py-3 text-sm text-neutral-900">Peter Lambie</td>
+                <td className="px-4 py-3">
+                  <input
+                    type="text"
+                    defaultValue={liability.peterLambie || ''}
+                    placeholder="0%"
+                    className={`table-input ${liability.peterLambie && liability.peterLambie !== '0%' ? '' : 'text-neutral-400'}`}
+                    style={{ width: 'fit-content', minWidth: '80px' }}
+                    onFocus={handleDefaultValueFocus}
+                    onBlur={(e) => handleInputBlur('peterLambie', e.target.value)}
+                    disabled={isUpdating}
+                  />
+                </td>
+              </tr>
+              <tr className="border-b border-neutral-100">
+                <td className="px-4 py-3 text-sm text-neutral-900">Victoria Lambie</td>
+                <td className="px-4 py-3">
+                  <input
+                    type="text"
+                    defaultValue={liability.victoriaLambie || ''}
+                    placeholder="0%"
+                    className={`table-input ${liability.victoriaLambie && liability.victoriaLambie !== '0%' ? '' : 'text-neutral-400'}`}
+                    style={{ width: 'fit-content', minWidth: '80px' }}
+                    onFocus={handleDefaultValueFocus}
+                    onBlur={(e) => handleInputBlur('victoriaLambie', e.target.value)}
+                    disabled={isUpdating}
+                  />
+                </td>
+              </tr>
+              <tr className="border-b border-neutral-100">
+                <td className="px-4 py-3 text-sm text-neutral-900">Junior Lambie</td>
+                <td className="px-4 py-3">
+                  <input
+                    type="text"
+                    defaultValue={liability.juniorLambie || ''}
+                    placeholder="0%"
+                    className={`table-input ${liability.juniorLambie && liability.juniorLambie !== '0%' ? '' : 'text-neutral-400'}`}
+                    style={{ width: 'fit-content', minWidth: '80px' }}
+                    onFocus={handleDefaultValueFocus}
+                    onBlur={(e) => handleInputBlur('juniorLambie', e.target.value)}
+                    disabled={isUpdating}
+                  />
+                </td>
+              </tr>
+              <tr>
+                <td className="px-4 py-3 text-sm text-neutral-900">Lambies Family Trust</td>
+                <td className="px-4 py-3">
+                  <input
+                    type="text"
+                    defaultValue={liability.lambiesFamilyTrust || ''}
+                    placeholder="0%"
+                    className={`table-input ${liability.lambiesFamilyTrust && liability.lambiesFamilyTrust !== '0%' ? '' : 'text-neutral-400'}`}
+                    style={{ width: 'fit-content', minWidth: '80px' }}
+                    onFocus={handleDefaultValueFocus}
+                    onBlur={(e) => handleInputBlur('lambiesFamilyTrust', e.target.value)}
+                    disabled={isUpdating}
+                  />
+                </td>
+              </tr>
+            </tbody>
+          </table>
         </div>
       </FieldGroup>
 
