@@ -1098,8 +1098,20 @@ th, td {
     border-left: none !important;
   }
 
-  /* Restore row borders using Tailwind divide-y pattern to separate major units */
+  /* COMPREHENSIVE TABLE BORDER SYSTEM - Consistent across all calculators */
+  
+  /* Primary rule: Restore Tailwind divide-y functionality for all tables */
   .divide-y > :not([hidden]) ~ :not([hidden]) {
+    border-top: 1px solid #e5e7eb !important;
+  }
+  
+  /* More specific rule for table bodies with divide-y class */
+  tbody.divide-y > tr + tr {
+    border-top: 1px solid #e5e7eb !important;
+  }
+  
+  /* Fallback for tables without divide-y class */
+  tbody > tr + tr {
     border-top: 1px solid #e5e7eb !important;
   }
   
@@ -1108,14 +1120,11 @@ th, td {
     border-top: 1px solid #e5e7eb !important;
   }
   
-  /* More specific rule for table rows within divide-y containers */
-  tbody.divide-y > tr:not(:first-child) {
-    border-top: 1px solid #e5e7eb !important;
-  }
-  
-  /* Additional row border support for tables without divide-y class */
-  tbody > tr:not(:first-child) {
-    border-top: 1px solid #e5e7eb !important;
+  /* Override for Tailwind's divide-neutral-200 class to ensure visibility */
+  .divide-neutral-200 > :not([hidden]) ~ :not([hidden]) {
+    border-top-color: #e5e7eb !important;
+    border-top-width: 1px !important;
+    border-top-style: solid !important;
   }
   
   /* Removed conflicting tbody border rules to prevent double borders */
