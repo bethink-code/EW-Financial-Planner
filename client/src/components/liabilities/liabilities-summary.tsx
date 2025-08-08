@@ -13,30 +13,36 @@ export function LiabilitiesSummary() {
 
   // Calculate summary by category groups and NET assets
   const summary = React.useMemo(() => {
-    // Calculate total assets value
-    const totalAssetsValue = assets.reduce((sum: number, asset: Assets) => {
-      const amount = parseFloat(asset.marketValue?.replace(/[^\d.-]/g, '') || '0') || 0;
-      return sum + amount;
-    }, 0);
+    // Calculate total assets value (only included items)
+    const totalAssetsValue = assets
+      .filter(asset => asset.included)
+      .reduce((sum: number, asset: Assets) => {
+        const amount = parseFloat(asset.marketValue?.replace(/[^\d.-]/g, '') || '0') || 0;
+        return sum + amount;
+      }, 0);
 
-    // Calculate total liabilities value
-    const totalLiabilitiesValue = liabilities.reduce((sum: number, liability: Liabilities) => {
-      const amount = parseFloat(liability.debtAmount?.replace(/[^\d.-]/g, '') || '0') || 0;
-      return sum + amount;
-    }, 0);
+    // Calculate total liabilities value (only included items)
+    const totalLiabilitiesValue = liabilities
+      .filter(liability => liability.included)
+      .reduce((sum: number, liability: Liabilities) => {
+        const amount = parseFloat(liability.debtAmount?.replace(/[^\d.-]/g, '') || '0') || 0;
+        return sum + amount;
+      }, 0);
 
     // Calculate NET assets (assets minus liabilities)
     const netAssets = totalAssetsValue - totalLiabilitiesValue;
 
-    // Group liabilities by section
-    const groupedLiabilities = liabilities.reduce((groups, liability) => {
-      const section = liability.section || 'Other';
-      if (!groups[section]) {
-        groups[section] = [];
-      }
-      groups[section].push(liability);
-      return groups;
-    }, {} as Record<string, Liabilities[]>);
+    // Group liabilities by section (only included items)
+    const groupedLiabilities = liabilities
+      .filter(liability => liability.included)
+      .reduce((groups, liability) => {
+        const section = liability.section || 'Other';
+        if (!groups[section]) {
+          groups[section] = [];
+        }
+        groups[section].push(liability);
+        return groups;
+      }, {} as Record<string, Liabilities[]>);
 
     // Calculate totals by section
     const sectionTotals = Object.entries(groupedLiabilities).map(([sectionName, sectionLiabilities]) => {
