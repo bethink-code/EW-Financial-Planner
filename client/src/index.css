@@ -1098,33 +1098,23 @@ th, td {
     border-left: none !important;
   }
 
-  /* COMPREHENSIVE TABLE BORDER SYSTEM - Consistent across all calculators */
-  
-  /* Primary rule: Restore Tailwind divide-y functionality for all tables */
-  .divide-y > :not([hidden]) ~ :not([hidden]) {
-    border-top: 1px solid #e5e7eb !important;
+  /* RESTORE: Global tbody borders for row separation between major units */
+  tbody tr {
+    border-bottom: 1px solid #e5e7eb !important;
   }
   
-  /* More specific rule for table bodies with divide-y class */
-  tbody.divide-y > tr + tr {
-    border-top: 1px solid #e5e7eb !important;
+  /* FIX: Remove borders from entity selector inputs to prevent double borders */
+  .table-input,
+  .table-dropdown {
+    border: none !important;
+    background-color: transparent !important;
   }
   
-  /* Fallback for tables without divide-y class */
-  tbody > tr + tr {
-    border-top: 1px solid #e5e7eb !important;
-  }
-  
-  /* Specific border for policy/fund separation in retirement funds */
-  .policy-first-row {
-    border-top: 1px solid #e5e7eb !important;
-  }
-  
-  /* Override for Tailwind's divide-neutral-200 class to ensure visibility */
-  .divide-neutral-200 > :not([hidden]) ~ :not([hidden]) {
-    border-top-color: #e5e7eb !important;
-    border-top-width: 1px !important;
-    border-top-style: solid !important;
+  /* Special styling for entity selector inputs within table cells */
+  td .table-input,
+  td .table-dropdown {
+    border: none !important;
+    background-color: hsl(var(--primary) / 0.05) !important;
   }
   
   /* Removed conflicting tbody border rules to prevent double borders */
