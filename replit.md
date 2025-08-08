@@ -5,11 +5,13 @@ This is a full-stack web application for managing retirement funds. It provides 
 
 ## Recent Major Accomplishments
 - **January 2025**: Completed Global Hybrid View Pattern framework with comprehensive implementation guide
+- **January 8, 2025**: Successfully rolled out hybrid view to Defined Benefit Funds with lessons learned documentation
 - **Border Management**: Resolved all double border issues across hybrid view interfaces with proper CSS classes and component props
 - **Pattern Documentation**: Created `GLOBAL_HYBRID_VIEW_PATTERN.md` - definitive guide for implementing hybrid views in any new calculator
 - **Universal Field Groupings**: Established 4 reusable logical groupings adaptable across all financial calculators
 - **CSS Framework**: Added hybrid view CSS classes for consistent tab styling and border management
-- **Implementation Template**: Both Assurance and Retirement Funds serve as working examples of the complete pattern
+- **Implementation Template**: Assurance, Retirement Funds, and Defined Benefit Funds serve as working examples of the complete pattern
+- **Common Pitfalls Documentation**: Captured recurring implementation mistakes and solutions for future hybrid view rollouts
 
 ## User Preferences
 Preferred communication style: Simple, everyday language.
@@ -62,7 +64,44 @@ Client requests data via TanStack Query hooks. Express routes handle CRUD operat
 - **Global Entity Management System**: Dynamic entity management with percentage validation and automatic Primary entity defaults across major calculation tables. This includes reusable global components for owner/beneficiary selection and primary entity default utility functions.
 - **Years/% Toggle Pattern**: Reusable toggle pattern for specific fields to switch between year and percentage input, successfully implemented in Defined Benefit Funds and Assurance tables. In Assurance, each beneficiary row has independent toggle controls with per-beneficiary arrays (amountToggles, amountYearsValues, amountIncreaseValues) for Amount field toggle functionality. Pattern includes Elite Wealth blue styling, automatic array synchronization during beneficiary add/remove operations, and proper validation helper functions.
 - **Global Loading System**: Comprehensive loading indicators with Elite Wealth primary blue branding, providing visual feedback during CRUD operations through a global progress bar and enhanced loading mutations.
-- **Global Hybrid View Pattern**: Battle-tested implementation framework with mandatory protocols in `GLOBAL_HYBRID_VIEW_PATTERN.md`. Provides 80% reusable infrastructure with strict border management rules (`isFirst`/`isLast` props required), no-spacing tab containers, clean detail forms, and 4 universal field groupings. Includes implementation checklist, visual testing protocol, and copy-paste templates. Successfully deployed across Assurance and Retirement Funds with zero border issues. Preview cards use separate lines (`\n`) for multiple entity types (e.g., "Cover Beneficiaries: 2\nFund Beneficiaries: 1") for improved readability. Global CSS fixes prevent double borders at table bottoms. **Title Styling Standards**: Mandatory typography pattern (`text-lg font-semibold text-neutral-800`) ensures consistent individual item name display across all calculators, with header layout including title left and action buttons right.
+- **Global Hybrid View Pattern**: Battle-tested implementation framework with mandatory protocols in `GLOBAL_HYBRID_VIEW_PATTERN.md`. Provides 80% reusable infrastructure with strict border management rules (`isFirst`/`isLast` props required), no-spacing tab containers, clean detail forms, and 4 universal field groupings. Includes implementation checklist, visual testing protocol, and copy-paste templates. Successfully deployed across Assurance, Retirement Funds, and Defined Benefit Funds with zero border issues. Preview cards use separate lines (`\n`) for multiple entity types (e.g., "Cover Beneficiaries: 2\nFund Beneficiaries: 1") for improved readability. Global CSS fixes prevent double borders at table bottoms. **Title Styling Standards**: Mandatory typography pattern (`text-lg font-semibold text-neutral-800`) ensures consistent individual item name display across all calculators, with header layout including title left and action buttons right.
+
+## Critical Implementation Patterns & Common Pitfalls
+
+### Hybrid View Implementation Checklist
+**ALWAYS follow this checklist when rolling out hybrid views to new calculators:**
+
+#### 1. Preview Card Implementation 
+- **MUST use `HybridItemPreviewCard` component** - Never create custom card layout
+- **Multiple owners on separate lines**: Use `validOwners.map(owner => 'Owner: ${owner}').join('\n')` pattern
+- **Pass `isFirst`/`isLast` props** for proper border management
+- **Separate lines for different entity types**: Use `\n` between owner info and other details
+
+#### 2. Detail Form Structure
+- **MUST use `FieldGroup` and `FormField` components** - Never use custom div/label structure
+- **Required imports**: `import { FieldGroup, FormField } from '@/components/common/grouped-detail-form'`
+- **Input styling**: Use `table-input` class with conditional text color and fit-content sizing
+- **Placeholders**: "Enter details...", "R 0", "0%", "0 years" with `text-neutral-400` for empty values
+
+#### 3. EntityOwnerSelector Usage
+- **MUST be within table structure** - EntityOwnerSelector renders `<td>` elements
+- **Required table structure**: `<table><thead><tbody><tr><EntityOwnerSelector /></tr></tbody></table>`
+- **Never use in div containers** - Causes HTML validation errors
+- **Table styling**: Use `border-collapse`, fixed width, and proper column headers
+
+#### 4. Field Grouping Pattern
+- **Group 1: Overview** - Description, owners, primary identifiers
+- **Group 2: Main Details** - Core calculation fields
+- **Group 3: Additional/Specialized** - Toggle features, advanced options
+- **Group 4: Beneficiaries** (if applicable) - Beneficiary management tables
+
+### Common Mistakes to Avoid
+1. **Preview Card**: Using custom layout instead of `HybridItemPreviewCard`
+2. **Owner Display**: Showing count instead of listing each owner on separate lines  
+3. **Detail Form**: Using div/input instead of `FieldGroup`/`FormField` components
+4. **EntityOwnerSelector**: Placing in div instead of table row
+5. **Input Styling**: Custom CSS classes instead of `table-input` pattern
+6. **Border Management**: Forgetting `isFirst`/`isLast` props on preview cards
 
 ## External Dependencies
 
