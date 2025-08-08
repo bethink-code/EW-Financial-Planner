@@ -1098,7 +1098,15 @@ th, td {
     border-left: none !important;
   }
 
-  /* All conflicting tbody border rules removed to prevent double borders */
+  /* Restore row borders using Tailwind divide-y pattern to separate major units */
+  .divide-y > :not([hidden]) ~ :not([hidden]) {
+    border-top: 1px solid #e5e7eb !important;
+  }
+  
+  /* Additional row border support for tables without divide-y class */
+  tbody > tr:not(:first-child) {
+    border-top: 1px solid #e5e7eb !important;
+  }
   
   /* Removed conflicting tbody border rules to prevent double borders */
   
