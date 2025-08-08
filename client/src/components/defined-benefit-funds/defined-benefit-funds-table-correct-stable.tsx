@@ -319,21 +319,24 @@ export default function DefinedBenefitFundsTable({ onAddFund }: DefinedBenefitFu
         <thead>
           {/* First Header Row - Section Groups */}
           <tr className="double-row-header-first">
-            <th className="section-start table-actions-cell" rowSpan={2}>
+            <th className="section-start" colSpan={4}>
+              Overview
               {onAddFund && (
-                <TableHeaderAddButton
-                  onClick={onAddFund}
-                  title="Add new fund"
-                />
+                <div className="float-right">
+                  <TableHeaderAddButton
+                    onClick={onAddFund}
+                    title="Add new fund"
+                  />
+                </div>
               )}
             </th>
-            <th className="section-start" colSpan={3}>Overview</th>
             <th className="section-start" colSpan={4}>Fund Details</th>
             <th className="section-start" colSpan={3}>Pension Income at Death</th>
           </tr>
           {/* Second Header Row - Individual Fields */}
           <tr className="double-row-header-second">
             <th className="section-start">Description</th>
+            <th>Actions</th>
             <th>Owner Name</th>
             <th>Ownership %</th>
             <th className="section-start">Years of Service</th>
@@ -353,21 +356,6 @@ export default function DefinedBenefitFundsTable({ onAddFund }: DefinedBenefitFu
               <SafeFragment key={fund.id}>
                 {fund.owners.map((owner: string, rowIndex: number) => (
                   <tr key={`${fund.id}-${rowIndex}`} className="hover:bg-neutral-50">
-                    {/* Actions Section - Only show on first row */}
-                    {rowIndex === 0 && (
-                      <td className="table-actions-cell pt-2 p-1 text-center section-start align-top" rowSpan={maxRows}>
-                        <ActionButtonGroup>
-                          <DuplicateButton
-                            onClick={() => handleDuplicateFund(fund)}
-                            disabled={isUpdating}
-                          />
-                          <DeleteButton
-                            onClick={() => handleDeleteFund(fund.id)}
-                            disabled={isUpdating}
-                          />
-                        </ActionButtonGroup>
-                      </td>
-                    )}
                     
                     {/* Overview Section - Only show on first row */}
                     {rowIndex === 0 && (
