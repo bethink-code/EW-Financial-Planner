@@ -1,10 +1,12 @@
 import React, { useState, useCallback } from "react";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import VoluntaryInvestmentsTable from "../components/voluntary-investments/voluntary-investments-table";
+import { VoluntaryInvestmentHybridTable } from "../components/voluntary-investments/voluntary-investment-hybrid-table";
 import { VoluntaryInvestmentsSummary } from "@/components/voluntary-investments/voluntary-investments-summary";
 import { CalculatorHeader } from "@/components/ui/calculator-header";
 import { apiRequest, queryClient } from "@/lib/queryClient";
-import type { InsertVoluntaryInvestment } from "@shared/schema";
+import { getDefaultOwners, getDefaultOwnershipPercentages } from "@/lib/entity-utils";
+import type { InsertVoluntaryInvestment, ClientDetails } from "@shared/schema";
 
 type ViewMode = "table" | "hybrid";
 
@@ -21,10 +23,28 @@ export default function VoluntaryInvestments() {
     }
   });
 
-  // Add new investment mutation
+  // Fetch client details for default entity
+  const { data: clientDetails = [] } = useQuery<ClientDetails[]>({
+    queryKey: ["/api/client-details"]
+  });
+
+  // Add new investment mutation with Primary entity default
   const addMutation = useMutation({
     mutationFn: async () => {
-      const newInvestment = {}; // Send empty object to use database defaults
+      const newInvestment: InsertVoluntaryInvestment = {
+        description: "",
+        owners: getDefaultOwners(clientDetails),
+        ownershipPercentages: getDefaultOwnershipPercentages(),
+        baseCost: "R 0",
+        marketValue: "R 0",
+        liquidationPercentage: "0%",
+        spouse: "R 0",
+        others: "R 0",
+        excludedFromJointEstate: false,
+        excludedFromEstateDuty: false,
+        excludedFromCGT: false,
+        excludedFromExecutorsFees: false
+      };
       return apiRequest("POST", "/api/voluntary-investments", newInvestment);
     },
     onSuccess: () => {
@@ -60,7 +80,11 @@ export default function VoluntaryInvestments() {
           
           {/* Table with full width and margin */}
           <div className="table-container-wrapper">
-            <VoluntaryInvestmentsTable viewMode={viewMode} onAddInvestment={handleAddInvestment} />
+            {viewMode === 'hybrid' ? (
+              <VoluntaryInvestmentHybridTable onAddInvestment={handleAddInvestment} />
+            ) : (
+              <VoluntaryInvestmentsTable viewMode={viewMode} onAddInvestment={handleAddInvestment} />
+            )}
           </div>
         </CalculatorHeader>
       </div>
