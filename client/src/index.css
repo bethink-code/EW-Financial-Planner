@@ -1113,16 +1113,6 @@ th, td {
     border-bottom: none !important;
   }
   
-  /* FIX: Remove borders from entity selector elements to prevent double borders */
-  
-  /* Remove borders from td elements that contain dropdowns/inputs */
-  td:has(.table-dropdown),
-  td:has(.table-input) {
-    border-top: none !important;
-    border-bottom: none !important;
-    border-left: none !important;
-    border-right: none !important;
-  }
   
   /* Remove borders from the dropdown and input elements themselves */
   .table-input,
