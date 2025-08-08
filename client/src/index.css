@@ -1098,24 +1098,19 @@ th, td {
     border-left: none !important;
   }
 
-  /* RESTORE: Global tbody borders for row separation between major units */
-  table tbody tr {
-    border-bottom: 1px solid #e5e7eb !important;
+  /* TEST: Bright red border-top to see if ANY borders work */
+  table tbody tr:not(:first-child) {
+    border-top: 2px solid red !important;
   }
   
-  /* Higher specificity to ensure borders show */
-  html body table tbody tr {
-    border-bottom: 1px solid #e5e7eb !important;
+  /* More specific test */
+  html body table tbody tr:not(:first-child) {
+    border-top: 2px solid red !important;
   }
   
-  /* Override Tailwind divide-y classes that might be preventing borders */
-  tbody.divide-y > tr {
-    border-bottom: 1px solid #e5e7eb !important;
-  }
-  
-  /* Nuclear option: Maximum specificity for tbody borders */
-  html body div table tbody.divide-y tr {
-    border-bottom: 1px solid #e5e7eb !important;
+  /* Test with class selectors */
+  tbody.divide-y > tr:not(:first-child) {
+    border-top: 2px solid red !important;
   }
   
   /* FIX: Remove borders from entity selector inputs to prevent double borders */
