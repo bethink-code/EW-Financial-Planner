@@ -107,12 +107,12 @@ export default function EntityOwnerSelector({
   return (
     <>
       {/* Actions Column */}
-      <td className="px-1 py-1" style={{ width: '60px' }}>
+      <td className="px-1 py-1 border-r border-neutral-200" style={{ width: '60px' }}>
         {actionButton}
       </td>
       
       {/* Owner Column */}
-      <td className="px-1 py-1" style={{ width: '300px' }}>
+      <td className="px-1 py-1 border-r border-neutral-200" style={{ width: '300px' }}>
         <select
           value={currentOwner}
           onChange={(e) => handleOwnerSelect(e.target.value, ownerIndex)}
@@ -129,7 +129,7 @@ export default function EntityOwnerSelector({
       </td>
 
       {/* Ownership % Column */}
-      <td className="px-1 py-1" style={{ width: '80px' }}>
+      <td className="px-1 py-1 border-r border-neutral-200" style={{ width: '80px' }}>
         <input
           type="text"
           defaultValue={currentPercentage}

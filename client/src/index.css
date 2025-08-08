@@ -348,12 +348,15 @@ th, td {
     border-spacing: 0 !important;
   }
 
-  /* FIX: Only remove bottom border on the very last row to prevent double borders with table edge */
-  table tbody tr:last-child {
+  /* FIX: Prevent double borders at table bottom */
+  table tbody tr:last-child td {
     border-bottom: none !important;
   }
 
-  /* Removed global tbody tr borders to prevent conflicts with entity selectors */
+  /* FIX: Ensure consistent thin borders for all table edges */
+  table tbody tr {
+    border-bottom: 1px solid #e5e7eb !important;
+  }
 
   /* FIX: Remove shadcn/ui default row borders that cause double borders */
   .border-b {
@@ -750,7 +753,7 @@ th, td {
     height: 2.3rem !important; /* Match dropdown height for consistency */
     padding: 0.25rem 0.5rem !important; /* Reduced padding to match p-1 for consistent row height */
     background-color: hsl(var(--primary) / 0.05);
-    border: none !important; /* Remove border to prevent double borders in tables */
+    border: 1px solid hsl(var(--border));
     outline: none;
     font-size: 0.875rem !important; /* 14px standardized font size */
     text-align: left;
@@ -793,7 +796,7 @@ th, td {
     height: 2.3rem !important;
     padding: 0 0.5rem !important; /* Reduced padding to match input fields */
     background-color: hsl(var(--primary) / 0.05);
-    border: none !important; /* Remove border to prevent double borders in tables */
+    border: 1px solid hsl(var(--border));
     outline: none;
     font-size: 0.875rem;
     text-align: left;
@@ -1098,30 +1101,31 @@ th, td {
     border-left: none !important;
   }
 
-  /* WORKING: Borders on table cells to separate major units */
-  table tbody tr:not(:first-child) td {
-    border-top: 1px solid #e5e7eb !important;
+  /* CRITICAL: Row borders with absolute maximum specificity - no conflicts allowed */
+  html body table tbody tr {
+    border-bottom: 1px solid #e5e7eb !important;
   }
   
-  /* Higher specificity for divide-y tables */
-  html body div table tbody.divide-y tr:not(:first-child) td {
-    border-top: 1px solid #e5e7eb !important;
+  /* Alternative approach: Apply border to table cells directly */
+  html body table tbody tr td {
+    border-bottom: 1px solid #e5e7eb !important;
   }
   
-  /* Remove borders from last row to prevent double border with table edge */
-  table tbody tr:last-child td {
-    border-bottom: none !important;
+  /* Nuclear option: Override ALL possible border conflicts */
+  tbody tr,
+  tbody tr td,
+  table tbody tr,
+  table tbody tr td,
+  .table tbody tr,
+  .table tbody tr td {
+    border-bottom: 1px solid #e5e7eb !important;
   }
   
-  
-  /* Remove borders from the dropdown and input elements themselves */
-  .table-input,
-  .table-dropdown {
-    border: none !important;
-    background-color: hsl(var(--primary) / 0.05) !important;
+  /* Force override any "border: none" rules specifically for tbody */
+  tbody tr:not(.no-border),
+  tbody tr td:not(.no-border) {
+    border-bottom: 1px solid #e5e7eb !important;
   }
-  
-  /* Removed conflicting tbody border rules to prevent double borders */
   
   /* Section end borders for right side separators */
   thead th.section-end,
