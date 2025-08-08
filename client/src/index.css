@@ -1103,6 +1103,11 @@ th, td {
     border-top: 1px solid #e5e7eb !important;
   }
   
+  /* Specific border for policy/fund separation in retirement funds */
+  .policy-first-row {
+    border-top: 1px solid #e5e7eb !important;
+  }
+  
   /* More specific rule for table rows within divide-y containers */
   tbody.divide-y > tr:not(:first-child) {
     border-top: 1px solid #e5e7eb !important;
