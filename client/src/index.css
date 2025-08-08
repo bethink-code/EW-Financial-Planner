@@ -753,7 +753,7 @@ th, td {
     height: 2.3rem !important; /* Match dropdown height for consistency */
     padding: 0.25rem 0.5rem !important; /* Reduced padding to match p-1 for consistent row height */
     background-color: hsl(var(--primary) / 0.05);
-    border: 1px solid hsl(var(--border));
+    border: none !important; /* Remove border to prevent double borders in tables */
     outline: none;
     font-size: 0.875rem !important; /* 14px standardized font size */
     text-align: left;
@@ -796,7 +796,7 @@ th, td {
     height: 2.3rem !important;
     padding: 0 0.5rem !important; /* Reduced padding to match input fields */
     background-color: hsl(var(--primary) / 0.05);
-    border: 1px solid hsl(var(--border));
+    border: none !important; /* Remove border to prevent double borders in tables */
     outline: none;
     font-size: 0.875rem;
     text-align: left;
