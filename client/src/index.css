@@ -348,8 +348,8 @@ th, td {
     border-spacing: 0 !important;
   }
 
-  /* FIX: Prevent double borders at main table bottom (not nested tables) */
-  table:not(.nested-table) tbody tr:last-child td {
+  /* FIX: Only remove bottom border on the very last row to prevent double borders with table edge */
+  table tbody tr:last-child {
     border-bottom: none !important;
   }
 
@@ -1099,7 +1099,12 @@ th, td {
   }
 
   /* RESTORE: Global tbody borders for row separation between major units */
-  tbody tr {
+  table tbody tr {
+    border-bottom: 1px solid #e5e7eb !important;
+  }
+  
+  /* Higher specificity to ensure borders show */
+  html body table tbody tr {
     border-bottom: 1px solid #e5e7eb !important;
   }
   
