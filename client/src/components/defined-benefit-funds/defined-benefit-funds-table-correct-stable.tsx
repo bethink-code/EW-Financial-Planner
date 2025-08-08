@@ -374,6 +374,16 @@ export default function DefinedBenefitFundsTable({ onAddFund }: DefinedBenefitFu
                       </td>
                     )}
                     
+                    {/* Main Actions Column - Only show on first row */}
+                    {rowIndex === 0 && (
+                      <td className="table-actions-cell p-2 text-center align-top" rowSpan={maxRows}>
+                        <ActionButtonGroup>
+                          <DuplicateButton onClick={() => handleDuplicateFund(fund)} disabled={isUpdating} />
+                          <DeleteButton onClick={() => handleDeleteFund(fund.id)} disabled={isUpdating} />
+                        </ActionButtonGroup>
+                      </td>
+                    )}
+                    
                     {/* Owner with Entity Selector and Percentage - EntityOwnerSelector renders its own <td> elements */}
                     <EntityOwnerSelector
                       policyId={fund.id}
