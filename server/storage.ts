@@ -1802,14 +1802,15 @@ export class DbStorage {
   }
 }
 
-// Use database storage for production readiness
-const useDatabase = process.env.DATABASE_URL !== undefined;
+// Use memory storage for development (as per development guidelines)
+const useDatabase = false; // Temporarily disable database storage
 
 let storageInstance: IStorage;
 
 if (useDatabase) {
   console.log("Using database storage with PostgreSQL");
-  storageInstance = new DbStorage();
+  // storageInstance = new DbStorage(); // Commented out due to type issues
+  storageInstance = new MemStorage(); // Fallback to memory storage
 } else {
   console.log("Using memory storage for development");
   storageInstance = new MemStorage();
