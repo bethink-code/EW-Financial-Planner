@@ -116,6 +116,8 @@ export function DefinedBenefitFundHybridTable({ searchTerm, onAddFund }: Defined
               fund={fund}
               isActive={activeFund?.id === fund.id}
               onClick={() => setActiveFundId(fund.id)}
+              isFirst={index === 0}
+              isLast={index === filteredFunds.length - 1}
             />
           ))}
         </div>

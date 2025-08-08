@@ -1,56 +1,45 @@
+import React from 'react';
 import { DefinedBenefitFund } from '@shared/schema';
+import { HybridItemPreviewCard } from '@/components/common/hybrid-item-preview-card';
 
 interface DefinedBenefitFundPreviewCardProps {
   fund: DefinedBenefitFund;
   isActive: boolean;
   onClick: () => void;
+  isFirst?: boolean;
+  isLast?: boolean;
 }
 
-export function DefinedBenefitFundPreviewCard({ fund, isActive, onClick }: DefinedBenefitFundPreviewCardProps) {
-  // Format owners display (multiple entity types on separate lines)
-  const ownersDisplay = fund.owners?.length > 1 
-    ? `Owners: ${fund.owners.length}\nMultiple ownership`
-    : `Owner: ${fund.owners?.[0] || 'Not specified'}`;
-
-  // Format fund summary
-  const monthlySalary = fund.finalMonthlySalary && fund.finalMonthlySalary !== 'R 0' 
-    ? fund.finalMonthlySalary 
-    : 'R 0';
+export function DefinedBenefitFundPreviewCard({ fund, isActive, onClick, isFirst = false, isLast = false }: DefinedBenefitFundPreviewCardProps) {
+  // Create subtitle with owners listed on separate lines
+  const validOwners = fund.owners?.filter(owner => owner && owner.trim() !== '') || [];
+  const ownerLines = validOwners.length > 0 
+    ? validOwners.map(owner => `Owner: ${owner}`).join('\n')
+    : 'Owner: Not specified';
   
-  const deathBenefit = fund.deathLumpSum && fund.deathLumpSum !== 'R 0' 
-    ? fund.deathLumpSum 
-    : 'R 0';
+  // Format years of service info
+  const yearsInfo = fund.yearsOfService && fund.yearsOfService !== '0 years' 
+    ? `Service: ${fund.yearsOfService}` 
+    : 'Service: Not specified';
+  
+  const subtitle = `${ownerLines}\n${yearsInfo}`;
+  
+  // Create secondary info with financial details
+  const monthlySalary = fund.finalMonthlySalary || 'R 0';
+  const deathBenefit = fund.deathLumpSum || 'R 0';
+  const secondaryInfo = `Monthly: ${monthlySalary} | Death: ${deathBenefit}`;
 
   return (
-    <div 
-      className={`p-4 border-l-4 cursor-pointer transition-all duration-200 ${
-        isActive 
-          ? 'border-l-orange-500 bg-blue-50 shadow-sm' 
-          : 'border-l-gray-200 bg-white hover:bg-gray-50'
-      }`}
+    <HybridItemPreviewCard
+      title={fund.description || 'Untitled Fund'}
+      subtitle={subtitle}
+      primaryValue={fund.pensionIncomeAmount || 'R 0'}
+      secondaryInfo={secondaryInfo}
+      variant={isActive ? 'active' : 'default'}
       onClick={onClick}
-    >
-      <div className="space-y-2">
-        {/* Fund name/description */}
-        <h3 className="font-medium text-gray-900 leading-tight">
-          {fund.description || 'Untitled Fund'}
-        </h3>
-        
-        {/* Owners info with line breaks */}
-        <div className="text-sm text-gray-600 whitespace-pre-line">
-          {ownersDisplay}
-        </div>
-        
-        {/* Fund values */}
-        <div className="space-y-1">
-          <div className="text-sm font-medium text-gray-900">
-            {monthlySalary}
-          </div>
-          <div className="text-xs text-gray-500">
-            Monthly Salary: {monthlySalary} | Death Benefit: {deathBenefit}
-          </div>
-        </div>
-      </div>
-    </div>
+      isClickable={true}
+      isFirst={isFirst}
+      isLast={isLast}
+    />
   );
 }
