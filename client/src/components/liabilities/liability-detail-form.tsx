@@ -181,7 +181,7 @@ export function LiabilityDetailForm({ liability, onDelete }: LiabilityDetailForm
 
       {/* Group 3: Ownership Split */}
       <FieldGroup title="Ownership Split">
-        <div className="overflow-hidden rounded-lg border border-neutral-200">
+        <div className="overflow-hidden rounded-lg">
           <table className="w-full border-collapse">
             <thead>
               <tr className="bg-neutral-50">
