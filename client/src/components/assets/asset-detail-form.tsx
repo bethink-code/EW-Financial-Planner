@@ -168,30 +168,48 @@ export function AssetDetailForm({ asset, onDelete }: AssetDetailFormProps) {
 
       {/* Group 3: Ownership Split */}
       <FieldGroup title="Ownership Split">
-        <div className="grid grid-cols-2 gap-x-6 gap-y-4">
-          {clientEntities.map((entity) => {
-            const entityDisplayName = getEntityDisplayName(entity);
-            const value = ownership[entityDisplayName] || '0%';
-            
-            return (
-              <FormField key={entity.id} label={entityDisplayName}>
-                <input
-                  type="text"
-                  defaultValue={value}
-                  placeholder="0%"
-                  className={`table-input ${value && value !== '0%' ? '' : 'text-neutral-400'}`}
-                  style={{ width: 'fit-content', minWidth: '80px' }}
-                  onFocus={handleDefaultValueFocus}
-                  onBlur={(e) => {
-                    const formattedValue = formatPercentageValue(e.target.value);
-                    handleOwnershipChange(entityDisplayName, e.target.value);
-                    setTimeout(() => { e.target.value = formattedValue; }, 0);
-                  }}
-                  disabled={isUpdating}
-                />
-              </FormField>
-            );
-          })}
+        <div className="overflow-hidden rounded-lg border border-neutral-200">
+          <table className="w-full border-collapse">
+            <thead>
+              <tr className="bg-neutral-50">
+                <th className="px-4 py-3 text-left text-sm font-medium text-neutral-700 border-b border-neutral-200">
+                  Owner
+                </th>
+                <th className="px-4 py-3 text-left text-sm font-medium text-neutral-700 border-b border-neutral-200">
+                  Percentage
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              {clientEntities.map((entity, index) => {
+                const entityDisplayName = getEntityDisplayName(entity);
+                const value = ownership[entityDisplayName] || '0%';
+                const isLast = index === clientEntities.length - 1;
+                
+                return (
+                  <tr key={entity.id} className={isLast ? '' : 'border-b border-neutral-100'}>
+                    <td className="px-4 py-3 text-sm text-neutral-900">{entityDisplayName}</td>
+                    <td className="px-4 py-3">
+                      <input
+                        type="text"
+                        defaultValue={value}
+                        placeholder="0%"
+                        className={`table-input ${value && value !== '0%' ? '' : 'text-neutral-400'}`}
+                        style={{ width: 'fit-content', minWidth: '80px' }}
+                        onFocus={handleDefaultValueFocus}
+                        onBlur={(e) => {
+                          const formattedValue = formatPercentageValue(e.target.value);
+                          handleOwnershipChange(entityDisplayName, e.target.value);
+                          setTimeout(() => { e.target.value = formattedValue; }, 0);
+                        }}
+                        disabled={isUpdating}
+                      />
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
         </div>
       </FieldGroup>
 
