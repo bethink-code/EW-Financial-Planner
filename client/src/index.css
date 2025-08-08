@@ -1103,6 +1103,11 @@ th, td {
     border-top: 1px solid #e5e7eb !important;
   }
   
+  /* More specific rule for table rows within divide-y containers */
+  tbody.divide-y > tr:not(:first-child) {
+    border-top: 1px solid #e5e7eb !important;
+  }
+  
   /* Additional row border support for tables without divide-y class */
   tbody > tr:not(:first-child) {
     border-top: 1px solid #e5e7eb !important;
