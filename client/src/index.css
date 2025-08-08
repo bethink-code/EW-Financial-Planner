@@ -348,13 +348,13 @@ th, td {
     border-spacing: 0 !important;
   }
 
-  /* FIX: Prevent double borders at table bottom */
-  table tbody tr:last-child td {
+  /* FIX: Prevent double borders at main table bottom (not nested tables) */
+  table:not(.nested-table) tbody tr:last-child td {
     border-bottom: none !important;
   }
 
-  /* FIX: Ensure consistent thin borders for all table edges */
-  table tbody tr {
+  /* FIX: Ensure consistent thin borders for main table edges (not nested tables) */
+  table:not(.nested-table) tbody tr {
     border-bottom: 1px solid #e5e7eb !important;
   }
 
