@@ -4,6 +4,7 @@ import { DefinedBenefitFund } from '@shared/schema';
 import { queryClient } from '@/lib/queryClient';
 import EntityOwnerSelector from '@/components/common/entity-owner-selector';
 import { ActionButtonGroup, DeleteButton } from '@/components/ui/action-buttons';
+import { FieldGroup, FormField } from '@/components/common/grouped-detail-form';
 import { formatCurrencyValue, formatPercentageValue, formatYearsValue, getValueClass, handleDefaultValueFocus } from '@/lib/formatting';
 import { getFieldClass } from '@/lib/field-types';
 import { Switch } from '@/components/ui/switch';
@@ -105,40 +106,34 @@ export function DefinedBenefitFundDetailForm({ fund, onDelete }: DefinedBenefitF
         </ActionButtonGroup>
       </div>
 
-      {/* Overview Section */}
-      <div className="space-y-6">
-        <h3 className="text-sm font-medium text-neutral-600 uppercase tracking-wide">Overview</h3>
-        
-        <div className="grid gap-6">
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Fund Description
-            </label>
+      {/* Group 1: Overview */}
+      <FieldGroup title="Overview">
+        <div className="space-y-4">
+          <FormField label="Fund Description">
             <input
               type="text"
-              defaultValue={fund.description}
-              className={`w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent ${getValueClass(fund.description, 'text')}`}
+              defaultValue={fund.description || ''}
+              placeholder="Enter details ..."
+              className={`table-input ${fund.description ? '' : 'text-neutral-400'}`}
+              style={{ width: 'fit-content', minWidth: '200px' }}
               onFocus={handleDefaultValueFocus}
               onBlur={(e) => handleInputBlur('description', e.target.value)}
               disabled={isUpdating}
             />
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Owners & Ownership Percentages
-            </label>
-            <table className="w-full border border-neutral-200 rounded-lg overflow-hidden">
+          </FormField>
+          
+          <FormField label="Owners & Ownership Percentages">
+            <table className="border-collapse" style={{ tableLayout: 'fixed', width: 'fit-content', minWidth: '380px' }}>
               <thead>
                 <tr className="bg-neutral-50">
-                  <th className="table-header-12 px-1 py-2 border-r border-neutral-200 text-left font-normal text-neutral-600" style={{ width: '200px' }}>
+                  <th className="table-header-12 px-1 py-2 border border-neutral-200 text-center font-normal text-neutral-600" style={{ width: '60px' }}>
+                    ACTIONS
+                  </th>
+                  <th className="table-header-12 px-1 py-2 border border-neutral-200 text-left font-normal text-neutral-600" style={{ width: '200px' }}>
                     OWNER NAME
                   </th>
-                  <th className="table-header-12 px-1 py-2 border-r border-neutral-200 text-right font-normal text-neutral-600" style={{ width: '100px' }}>
+                  <th className="table-header-12 px-1 py-2 border border-neutral-200 text-right font-normal text-neutral-600" style={{ width: '120px' }}>
                     OWNERSHIP %
-                  </th>
-                  <th className="table-header-12 px-1 py-2 border border-neutral-200 text-center font-normal text-neutral-600" style={{ width: '80px' }}>
-                    ACTIONS
                   </th>
                 </tr>
               </thead>
@@ -160,109 +155,101 @@ export function DefinedBenefitFundDetailForm({ fund, onDelete }: DefinedBenefitF
                 ))}
               </tbody>
             </table>
-          </div>
+          </FormField>
         </div>
-      </div>
+      </FieldGroup>
 
-      {/* Fund Details Section */}
-      <div className="space-y-6">
-        <h3 className="text-sm font-medium text-neutral-600 uppercase tracking-wide">Fund Details</h3>
-        
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Years of Service
-            </label>
+      {/* Group 2: Fund Details */}
+      <FieldGroup title="Fund Details">
+        <div className="grid grid-cols-2 gap-x-6 gap-y-4">
+          <FormField label="Years of Service">
             <input
               type="text"
-              defaultValue={fund.yearsOfService}
-              className={`w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent ${getValueClass(fund.yearsOfService, 'years')}`}
+              defaultValue={fund.yearsOfService || ''}
+              placeholder="0 years"
+              className={`table-input ${fund.yearsOfService ? '' : 'text-neutral-400'}`}
+              style={{ width: 'fit-content', minWidth: '120px' }}
               onFocus={handleDefaultValueFocus}
               onBlur={(e) => handleInputBlur('yearsOfService', e.target.value)}
               disabled={isUpdating}
             />
-          </div>
+          </FormField>
 
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Final Monthly Salary
-            </label>
+          <FormField label="Final Monthly Salary">
             <input
               type="text"
-              defaultValue={fund.finalMonthlySalary}
-              className={`w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent ${getValueClass(fund.finalMonthlySalary, 'currency')}`}
+              defaultValue={fund.finalMonthlySalary || ''}
+              placeholder="R 0"
+              className={`table-input ${fund.finalMonthlySalary ? '' : 'text-neutral-400'}`}
+              style={{ width: 'fit-content', minWidth: '120px' }}
               onFocus={handleDefaultValueFocus}
               onBlur={(e) => handleInputBlur('finalMonthlySalary', e.target.value)}
               disabled={isUpdating}
             />
-          </div>
+          </FormField>
 
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Death Lump Sum
-            </label>
+          <FormField label="Death Lump Sum">
             <input
               type="text"
-              defaultValue={fund.deathLumpSum}
-              className={`w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent ${getValueClass(fund.deathLumpSum, 'currency')}`}
+              defaultValue={fund.deathLumpSum || ''}
+              placeholder="R 0"
+              className={`table-input ${fund.deathLumpSum ? '' : 'text-neutral-400'}`}
+              style={{ width: 'fit-content', minWidth: '120px' }}
               onFocus={handleDefaultValueFocus}
               onBlur={(e) => handleInputBlur('deathLumpSum', e.target.value)}
               disabled={isUpdating}
             />
-          </div>
+          </FormField>
 
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Additional Tax Free Amount
-            </label>
+          <FormField label="Additional Tax Free Amount">
             <input
               type="text"
-              defaultValue={fund.additionalTaxFreeAmount}
-              className={`w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent ${getValueClass(fund.additionalTaxFreeAmount, 'currency')}`}
+              defaultValue={fund.additionalTaxFreeAmount || ''}
+              placeholder="R 0"
+              className={`table-input ${fund.additionalTaxFreeAmount ? '' : 'text-neutral-400'}`}
+              style={{ width: 'fit-content', minWidth: '120px' }}
               onFocus={handleDefaultValueFocus}
               onBlur={(e) => handleInputBlur('additionalTaxFreeAmount', e.target.value)}
               disabled={isUpdating}
             />
-          </div>
+          </FormField>
         </div>
-      </div>
+      </FieldGroup>
 
-      {/* Pension Income at Death Section */}
-      <div className="space-y-6">
-        <h3 className="text-sm font-medium text-neutral-600 uppercase tracking-wide">Pension Income at Death</h3>
-        
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Amount
-            </label>
-            <input
-              type="text"
-              defaultValue={fund.pensionIncomeAmount}
-              className={`w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent ${getValueClass(fund.pensionIncomeAmount, 'currency')}`}
-              onFocus={handleDefaultValueFocus}
-              onBlur={(e) => handleInputBlur('pensionIncomeAmount', e.target.value)}
-              disabled={isUpdating}
-            />
-          </div>
+      {/* Group 3: Pension Income at Death */}
+      <FieldGroup title="Pension Income at Death">
+        <div className="space-y-4">
+          <div className="grid grid-cols-2 gap-x-6 gap-y-4">
+            <FormField label="Amount">
+              <input
+                type="text"
+                defaultValue={fund.pensionIncomeAmount || ''}
+                placeholder="R 0"
+                className={`table-input ${fund.pensionIncomeAmount ? '' : 'text-neutral-400'}`}
+                style={{ width: 'fit-content', minWidth: '120px' }}
+                onFocus={handleDefaultValueFocus}
+                onBlur={(e) => handleInputBlur('pensionIncomeAmount', e.target.value)}
+                disabled={isUpdating}
+              />
+            </FormField>
 
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Increase
-            </label>
-            <input
-              type="text"
-              defaultValue={fund.pensionIncomeIncrease}
-              className={`w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent ${getValueClass(fund.pensionIncomeIncrease, 'percentage')}`}
-              onFocus={handleDefaultValueFocus}
-              onBlur={(e) => handleInputBlur('pensionIncomeIncrease', e.target.value)}
-              disabled={isUpdating}
-            />
+            <FormField label="Increase">
+              <input
+                type="text"
+                defaultValue={fund.pensionIncomeIncrease || ''}
+                placeholder="0%"
+                className={`table-input ${fund.pensionIncomeIncrease ? '' : 'text-neutral-400'}`}
+                style={{ width: 'fit-content', minWidth: '120px' }}
+                onFocus={handleDefaultValueFocus}
+                onBlur={(e) => handleInputBlur('pensionIncomeIncrease', e.target.value)}
+                disabled={isUpdating}
+              />
+            </FormField>
           </div>
 
           {/* Years/Percentage Toggle */}
-          <div className="md:col-span-2">
-            <div className="flex items-center space-x-3 mb-4">
+          <div className="space-y-4">
+            <div className="flex items-center space-x-3">
               <Switch
                 id="pension-toggle"
                 checked={fund.pensionIncomeCheckbox}
@@ -276,23 +263,22 @@ export function DefinedBenefitFundDetailForm({ fund, onDelete }: DefinedBenefitF
             </div>
 
             {fund.pensionIncomeCheckbox && (
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Pension Income Years
-                </label>
+              <FormField label="Pension Income Years">
                 <input
                   type="text"
-                  defaultValue={fund.pensionIncomeYears}
-                  className={`w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent ${getValueClass(fund.pensionIncomeYears, 'years')}`}
+                  defaultValue={fund.pensionIncomeYears || ''}
+                  placeholder="0 years"
+                  className={`table-input ${fund.pensionIncomeYears ? '' : 'text-neutral-400'}`}
+                  style={{ width: 'fit-content', minWidth: '120px' }}
                   onFocus={handleDefaultValueFocus}
                   onBlur={(e) => handleInputBlur('pensionIncomeYears', e.target.value)}
                   disabled={isUpdating}
                 />
-              </div>
+              </FormField>
             )}
           </div>
         </div>
-      </div>
+      </FieldGroup>
     </div>
   );
 }
