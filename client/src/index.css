@@ -1098,19 +1098,19 @@ th, td {
     border-left: none !important;
   }
 
-  /* TEST: Bright red border-top to see if ANY borders work */
+  /* TEST: Try borders on table cells instead of rows */
+  table tbody tr:not(:first-child) td {
+    border-top: 2px solid red !important;
+  }
+  
+  /* TEST: Try outline instead of border */
   table tbody tr:not(:first-child) {
-    border-top: 2px solid red !important;
+    outline: 2px solid blue !important;
   }
   
-  /* More specific test */
-  html body table tbody tr:not(:first-child) {
-    border-top: 2px solid red !important;
-  }
-  
-  /* Test with class selectors */
-  tbody.divide-y > tr:not(:first-child) {
-    border-top: 2px solid red !important;
+  /* TEST: Maximum specificity on cells */
+  html body div table tbody.divide-y tr:not(:first-child) td {
+    border-top: 3px solid green !important;
   }
   
   /* FIX: Remove borders from entity selector inputs to prevent double borders */
