@@ -353,10 +353,7 @@ th, td {
     border-bottom: none !important;
   }
 
-  /* FIX: Ensure consistent thin borders for main table edges (not nested tables) */
-  table:not(.nested-table) tbody tr {
-    border-bottom: 1px solid #e5e7eb !important;
-  }
+  /* Removed global tbody tr borders to prevent conflicts with entity selectors */
 
   /* FIX: Remove shadcn/ui default row borders that cause double borders */
   .border-b {
