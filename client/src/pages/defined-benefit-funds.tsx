@@ -1,6 +1,7 @@
 import React, { useState, useCallback } from "react";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import DefinedBenefitFundsTable from "../components/defined-benefit-funds/defined-benefit-funds-table-correct-stable";
+import { DefinedBenefitFundHybridTable } from "../components/defined-benefit-funds/defined-benefit-fund-hybrid-table";
 import { DefinedBenefitFundsSummary } from "@/components/defined-benefit-funds/defined-benefit-funds-summary";
 import { CalculatorHeader } from "@/components/ui/calculator-header";
 import { apiRequest, queryClient } from "@/lib/queryClient";
@@ -76,7 +77,11 @@ export default function DefinedBenefitFunds() {
           
           {/* Table with full width and margin */}
           <div className="table-container-wrapper">
-            <DefinedBenefitFundsTable onAddFund={handleAddFund} />
+            {viewMode === 'hybrid' ? (
+              <DefinedBenefitFundHybridTable onAddFund={handleAddFund} />
+            ) : (
+              <DefinedBenefitFundsTable onAddFund={handleAddFund} />
+            )}
           </div>
         </CalculatorHeader>
       </div>
