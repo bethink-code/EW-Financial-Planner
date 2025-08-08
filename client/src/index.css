@@ -1098,19 +1098,19 @@ th, td {
     border-left: none !important;
   }
 
-  /* TEST: Try borders on table cells instead of rows */
+  /* WORKING: Borders on table cells to separate major units */
   table tbody tr:not(:first-child) td {
-    border-top: 2px solid red !important;
+    border-top: 1px solid #e5e7eb !important;
   }
   
-  /* TEST: Try outline instead of border */
-  table tbody tr:not(:first-child) {
-    outline: 2px solid blue !important;
-  }
-  
-  /* TEST: Maximum specificity on cells */
+  /* Higher specificity for divide-y tables */
   html body div table tbody.divide-y tr:not(:first-child) td {
-    border-top: 3px solid green !important;
+    border-top: 1px solid #e5e7eb !important;
+  }
+  
+  /* Remove borders from last row to prevent double border with table edge */
+  table tbody tr:last-child td {
+    border-bottom: none !important;
   }
   
   /* FIX: Remove borders from entity selector inputs to prevent double borders */
