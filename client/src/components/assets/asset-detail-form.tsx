@@ -8,6 +8,7 @@ import { formatCurrencyValue, formatPercentageValue, getValueClass, handleDefaul
 import { parseEntityOwnership, setEntityOwnership, getEntityDisplayName, type ClientEntity } from '@/lib/entity-columns-utils';
 import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 
 interface AssetDetailFormProps {
   asset: Assets;
@@ -111,16 +112,24 @@ export function AssetDetailForm({ asset, onDelete }: AssetDetailFormProps) {
           </FormField>
           
           <FormField label="Category">
-            <input
-              type="text"
-              defaultValue={asset.section?.replace('_', ' ') || ''}
-              placeholder="Enter category ..."
-              className={`table-input ${asset.section ? '' : 'text-neutral-400'}`}
-              style={{ width: 'fit-content', minWidth: '150px' }}
-              onFocus={handleDefaultValueFocus}
-              onBlur={(e) => handleInputBlur('section', e.target.value.toUpperCase().replace(' ', '_'))}
+            <Select
+              value={asset.section || ''}
+              onValueChange={(value) => handleUpdate('section', value)}
               disabled={isUpdating}
-            />
+            >
+              <SelectTrigger style={{ width: 'fit-content', minWidth: '150px' }}>
+                <SelectValue placeholder="Select category..." />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="PROPERTY">Property</SelectItem>
+                <SelectItem value="VEHICLES">Vehicles</SelectItem>
+                <SelectItem value="INVESTMENTS">Investments</SelectItem>
+                <SelectItem value="CASH">Cash & Bank</SelectItem>
+                <SelectItem value="PERSONAL">Personal Assets</SelectItem>
+                <SelectItem value="BUSINESS">Business Assets</SelectItem>
+                <SelectItem value="OTHER">Other Assets</SelectItem>
+              </SelectContent>
+            </Select>
           </FormField>
         </div>
       </FieldGroup>

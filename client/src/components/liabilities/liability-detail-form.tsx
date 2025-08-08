@@ -7,6 +7,7 @@ import { FieldGroup, FormField } from '@/components/common/grouped-detail-form';
 import { formatCurrencyValue, formatPercentageValue, getValueClass, handleDefaultValueFocus } from '@/lib/formatting';
 import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 
 interface LiabilityDetailFormProps {
   liability: Liabilities;
@@ -93,16 +94,24 @@ export function LiabilityDetailForm({ liability, onDelete }: LiabilityDetailForm
           </FormField>
           
           <FormField label="Category">
-            <input
-              type="text"
-              defaultValue={liability.category || ''}
-              placeholder="Enter category ..."
-              className={`table-input ${liability.category ? '' : 'text-neutral-400'}`}
-              style={{ width: 'fit-content', minWidth: '150px' }}
-              onFocus={handleDefaultValueFocus}
-              onBlur={(e) => handleInputBlur('category', e.target.value)}
+            <Select
+              value={liability.category || ''}
+              onValueChange={(value) => handleUpdate('category', value)}
               disabled={isUpdating}
-            />
+            >
+              <SelectTrigger style={{ width: 'fit-content', minWidth: '150px' }}>
+                <SelectValue placeholder="Select category..." />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="BONDS">Home Bond</SelectItem>
+                <SelectItem value="VEHICLE_FINANCE">Vehicle Finance</SelectItem>
+                <SelectItem value="CREDIT_CARDS">Credit Cards</SelectItem>
+                <SelectItem value="PERSONAL_LOANS">Personal Loans</SelectItem>
+                <SelectItem value="BUSINESS_LOANS">Business Loans</SelectItem>
+                <SelectItem value="SHORT_TERM_DEBT">Short Term Debt</SelectItem>
+                <SelectItem value="OTHER_DEBT">Other Debt</SelectItem>
+              </SelectContent>
+            </Select>
           </FormField>
           
           <FormField label="Currency">
