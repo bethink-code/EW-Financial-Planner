@@ -668,7 +668,7 @@ th, td {
     height: 2.5rem !important;
     max-height: 2.5rem !important;
     text-align: center !important;
-    vertical-align: middle !important;
+    vertical-align: top !important;
     border: none !important;
     line-height: 1.2 !important;
   }
@@ -680,7 +680,7 @@ th, td {
     max-width: 300px !important;
     height: 2.5rem !important;
     max-height: 2.5rem !important;
-    vertical-align: middle !important;
+    vertical-align: top !important;
     border: none !important;
     line-height: 1.2 !important;
   }
@@ -693,9 +693,17 @@ th, td {
     height: 2.5rem !important;
     max-height: 2.5rem !important;
     text-align: center !important;
-    vertical-align: middle !important;
+    vertical-align: top !important;
     border: none !important;
     line-height: 1.2 !important;
+  }
+
+  /* Ensure form elements inside EntityOwnerSelector cells align to top */
+  td.table-cell-owner select,
+  td.table-cell-percentage input,
+  td.table-cell-actions button {
+    vertical-align: top !important;
+    margin-top: 0 !important;
   }
 
   .totals-cell-value {
