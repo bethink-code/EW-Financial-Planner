@@ -663,20 +663,18 @@ export function AssuranceTable({ viewMode = 'table', onAddPolicy }: AssuranceTab
 
 
 
-                  {/* Beneficiary */}
-                  <td className="border border-neutral-300 p-1">
-                    <EntityBeneficiarySelector
-                      policyId={policy.id}
-                      beneficiaries={policy.beneficiaries}
-                      beneficiaryPercentages={policy.beneficiaryPercentages || ["100%"]}
-                      onBeneficiaryChange={handleBeneficiaryChange}
-                      onBeneficiaryPercentageChange={handleBeneficiaryPercentageChange}
-                      onAddBeneficiary={handleAddBeneficiary}
-                      onRemoveBeneficiary={handleRemoveBeneficiary}
-                      rowIndex={rowIndex}
-                      disabled={updateMutation.isPending}
-                    />
-                  </td>
+                  {/* Beneficiary - EntityBeneficiarySelector renders its own td elements */}
+                  <EntityBeneficiarySelector
+                    policyId={policy.id}
+                    beneficiaries={policy.beneficiaries}
+                    beneficiaryPercentages={policy.beneficiaryPercentages || ["100%"]}
+                    onBeneficiaryChange={handleBeneficiaryChange}
+                    onBeneficiaryPercentageChange={handleBeneficiaryPercentageChange}
+                    onAddBeneficiary={handleAddBeneficiary}
+                    onRemoveBeneficiary={handleRemoveBeneficiary}
+                    rowIndex={rowIndex}
+                    disabled={updateMutation.isPending}
+                  />
 
                   {/* Benefit Split - calculated read-only field */}
                   <td className="border border-neutral-300 p-1">

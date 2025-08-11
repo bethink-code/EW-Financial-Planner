@@ -659,31 +659,17 @@ th, td {
     line-height: 1.3rem !important;
   }
 
-  /* EntityOwnerSelector Table Cell Styling - Clean and Simple */
-  td.table-cell-actions {
-    padding: 0.25rem !important;
-    width: 60px !important;
-    min-width: 60px !important;
-    max-width: 60px !important;
-    text-align: center !important;
-    border: none !important;
+  /* EntityOwnerSelector - Only essential width control */
+  .table-cell-actions {
+    width: 60px;
   }
 
-  td.table-cell-owner {
-    padding: 0.25rem !important;
-    width: 300px !important;
-    min-width: 300px !important;
-    max-width: 300px !important;
-    border: none !important;
+  .table-cell-owner {
+    width: 300px;
   }
 
-  td.table-cell-percentage {
-    padding: 0.25rem !important;
-    width: 80px !important;
-    min-width: 80px !important;
-    max-width: 80px !important;
-    text-align: center !important;
-    border: none !important;
+  .table-cell-percentage {
+    width: 80px;
   }
 
   .totals-cell-value {
