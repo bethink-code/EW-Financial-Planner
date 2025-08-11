@@ -774,23 +774,20 @@ th, td {
     box-sizing: border-box !important;
   }
 
-  /* FINAL OVERRIDE: Target the exact visual styling visible in browser inspector */
-  /* This specifically addresses the border-bottom-color, border-bottom-style, border-bottom-width issue */
+  /* CLEAN OVERRIDE: Remove all borders from EntityOwnerSelector cells */
   td.table-cell-actions,
   td.table-cell-owner,
   td.table-cell-percentage {
-    border-bottom-color: #e5e7eb !important;
-    border-bottom-style: solid !important;
-    border-bottom-width: 1px !important;
-    border-top-color: transparent !important;
-    border-top-style: none !important;
-    border-top-width: 0px !important;
-    border-left-color: transparent !important;
-    border-left-style: none !important;
-    border-left-width: 0px !important;
-    border-right-color: hsl(var(--neutral-200)) !important;
-    border-right-style: solid !important;
-    border-right-width: 1px !important;
+    border: none !important;
+    border-top: none !important;
+    border-right: none !important;
+    border-bottom: none !important;
+    border-left: none !important;
+    border-color: transparent !important;
+    border-style: none !important;
+    border-width: 0 !important;
+    outline: none !important;
+    box-shadow: none !important;
   }
 
   table tbody tr td.table-cell-percentage,
