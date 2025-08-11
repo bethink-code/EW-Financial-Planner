@@ -678,16 +678,25 @@ th, td {
     vertical-align: middle !important;
   }
 
+  /* ULTRA-SPECIFIC FIX FOR table-cell-owner */
   table tbody tr td.table-cell-owner,
   tbody tr td.table-cell-owner,
   tr td.table-cell-owner,
-  td.table-cell-owner {
+  td.table-cell-owner,
+  html body table tbody tr td.table-cell-owner {
     padding: 0.25rem !important;
-    border: 0 !important;
+    border-width: 0 !important;
+    border-style: none !important;
+    border-color: transparent !important;
+    border: none !important;
     border-right: 1px solid hsl(var(--neutral-200)) !important;
     border-bottom: 1px solid #e5e7eb !important;
-    border-top: 0 !important;
-    border-left: 0 !important;
+    border-top: none !important;
+    border-left: none !important;
+    border-top-width: 0 !important;
+    border-left-width: 0 !important;
+    border-bottom-width: 1px !important;
+    border-right-width: 1px !important;
     width: 300px !important;
     min-width: 300px !important;
     max-width: 300px !important;
