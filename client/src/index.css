@@ -717,6 +717,41 @@ th, td {
     border-top-width: 0 !important;
   }
 
+  /* SPECIAL OVERRIDE for detail form tables that use inline styles */
+  /* This targets the specific table structure in AssuranceDetailForm */
+  .border-collapse tbody tr td.table-cell-actions,
+  .border-collapse tbody tr td.table-cell-owner,
+  .border-collapse tbody tr td.table-cell-percentage,
+  table.border-collapse tbody tr td.table-cell-actions,
+  table.border-collapse tbody tr td.table-cell-owner,
+  table.border-collapse tbody tr td.table-cell-percentage {
+    border: 0 !important;
+    border-right: 1px solid hsl(var(--neutral-200)) !important;
+    border-bottom: 1px solid #e5e7eb !important;
+    border-top: none !important;
+    border-left: none !important;
+    padding: 0.25rem !important;
+  }
+
+  /* Override inline width styles in detail forms */
+  .border-collapse tbody tr td.table-cell-actions[style] {
+    width: 60px !important;
+    min-width: 60px !important;
+    max-width: 60px !important;
+  }
+
+  .border-collapse tbody tr td.table-cell-owner[style] {
+    width: 300px !important;
+    min-width: 300px !important;
+    max-width: 300px !important;
+  }
+
+  .border-collapse tbody tr td.table-cell-percentage[style] {
+    width: 80px !important;
+    min-width: 80px !important;
+    max-width: 80px !important;
+  }
+
   table tbody tr td.table-cell-percentage,
   tbody tr td.table-cell-percentage,
   tr td.table-cell-percentage,
