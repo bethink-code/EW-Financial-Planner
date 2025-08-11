@@ -527,7 +527,9 @@ export function AssuranceTable({ viewMode = 'table', onAddPolicy }: AssuranceTab
                 )}
               </th>
               <th className="table-header-base">Description</th>
-              <th className="table-header-base">Owner</th>
+              <th className="table-header-base">Actions</th>
+              <th className="table-header-base">Owner Name</th>
+              <th className="table-header-base">Ownership %</th>
               <th className="table-header-base">Life Assured</th>
               <th className="table-header-base">Death Benefit</th>
               <th className="table-header-base">Beneficiary</th>
@@ -590,20 +592,18 @@ export function AssuranceTable({ viewMode = 'table', onAddPolicy }: AssuranceTab
                     </td>
                   )}
 
-                  {/* Owner */}
-                  <td className="border border-neutral-300 p-1">
-                    <EntityOwnerSelector
-                      policyId={policy.id}
-                      owners={policy.owners}
-                      ownershipPercentages={policy.ownershipPercentages || ["100%"]}
-                      onOwnerChange={handleOwnerChange}
-                      onOwnershipPercentageChange={handleOwnershipPercentageChange}
-                      onAddOwner={handleAddOwner}
-                      onRemoveOwner={handleRemoveOwner}
-                      rowIndex={rowIndex}
-                      disabled={updateMutation.isPending}
-                    />
-                  </td>
+                  {/* Owner - EntityOwnerSelector renders its own td elements */}
+                  <EntityOwnerSelector
+                    policyId={policy.id}
+                    owners={policy.owners}
+                    ownershipPercentages={policy.ownershipPercentages || ["100%"]}
+                    onOwnerChange={handleOwnerChange}
+                    onOwnershipPercentageChange={handleOwnershipPercentageChange}
+                    onAddOwner={handleAddOwner}
+                    onRemoveOwner={handleRemoveOwner}
+                    rowIndex={rowIndex}
+                    disabled={updateMutation.isPending}
+                  />
 
                   {/* Life Assured */}
                   <td className="border border-neutral-300 p-1">

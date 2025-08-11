@@ -352,7 +352,9 @@ export function NewRetirementTable({
  {/* Individual column headers */}
  <tr className="double-row-header-second">
  <th className="section-start">Description</th>
- <th>Owners</th>
+ <th>Actions</th>
+ <th>Owner Name</th>
+ <th>Ownership %</th>
  <th className="section-start">Cover Amount</th>
  <th>Beneficiaries</th>
  <th>Cover Split</th>
@@ -419,8 +421,7 @@ export function NewRetirementTable({
  </td>
  )}
 
- {/* Overview - Owner */}
- <td className="p-1 align-top">
+ {/* Overview - Owner - EntityOwnerSelector renders its own td elements */}
  {rowIndex < (fund.owners?.length || 0) && (
  <EntityOwnerSelector
  policyId={fund.id}
@@ -434,7 +435,6 @@ export function NewRetirementTable({
  disabled={isUpdating}
  />
  )}
- </td>
 
  {/* Unapproved Life Cover - Cover Amount */}
  {rowIndex === 0 && (

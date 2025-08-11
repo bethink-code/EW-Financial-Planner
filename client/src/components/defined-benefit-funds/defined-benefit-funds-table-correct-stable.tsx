@@ -334,6 +334,7 @@ export default function DefinedBenefitFundsTable({ onAddFund }: DefinedBenefitFu
           {/* Second Header Row - Individual Fields */}
           <tr className="double-row-header-second">
             <th className="section-start">Description</th>
+            <th>Actions</th>
             <th>Owner Name</th>
             <th>Ownership %</th>
             <th className="section-start">Years of Service</th>
@@ -386,20 +387,18 @@ export default function DefinedBenefitFundsTable({ onAddFund }: DefinedBenefitFu
                       </td>
                     )}
                     
-                    {/* Owner with Entity Selector and Percentage */}
-                    <td className="p-1 align-top" colSpan={2}>
-                      <EntityOwnerSelector
-                        policyId={fund.id}
-                        owners={fund.owners}
-                        ownershipPercentages={fund.ownershipPercentages || ["100%"]}
-                        onOwnerChange={handleOwnerChange}
-                        onOwnershipPercentageChange={handleOwnershipPercentageChange}
-                        onAddOwner={handleAddOwner}
-                        onRemoveOwner={handleRemoveOwner}
-                        rowIndex={rowIndex}
-                        disabled={updateMutation.isPending}
-                      />
-                    </td>
+                    {/* Owner with Entity Selector and Percentage - No wrapper td needed */}
+                    <EntityOwnerSelector
+                      policyId={fund.id}
+                      owners={fund.owners}
+                      ownershipPercentages={fund.ownershipPercentages || ["100%"]}
+                      onOwnerChange={handleOwnerChange}
+                      onOwnershipPercentageChange={handleOwnershipPercentageChange}
+                      onAddOwner={handleAddOwner}
+                      onRemoveOwner={handleRemoveOwner}
+                      rowIndex={rowIndex}
+                      disabled={updateMutation.isPending}
+                    />
                     
                     {/* Fund Details Section - Only show on first row */}
                     {rowIndex === 0 && (
