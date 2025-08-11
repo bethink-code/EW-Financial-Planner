@@ -752,6 +752,47 @@ th, td {
     max-width: 80px !important;
   }
 
+  /* NUCLEAR OPTION: Force remove ALL borders and styling from EntityOwnerSelector cells */
+  /* This should override ANY conflicting CSS regardless of specificity */
+  html body div table tbody tr td.table-cell-actions,
+  html body div table tbody tr td.table-cell-owner,
+  html body div table tbody tr td.table-cell-percentage,
+  html body div table.border-collapse tbody tr td.table-cell-actions,
+  html body div table.border-collapse tbody tr td.table-cell-owner,
+  html body div table.border-collapse tbody tr td.table-cell-percentage,
+  html body table tbody tr td.table-cell-actions,
+  html body table tbody tr td.table-cell-owner,
+  html body table tbody tr td.table-cell-percentage {
+    border-top: 0 !important;
+    border-left: 0 !important;
+    border-bottom: 1px solid #e5e7eb !important;
+    border-right: 1px solid hsl(var(--neutral-200)) !important;
+    border-style: solid !important;
+    border-width: 0 1px 1px 0 !important;
+    border-color: transparent hsl(var(--neutral-200)) #e5e7eb transparent !important;
+    padding: 0.25rem !important;
+    box-sizing: border-box !important;
+  }
+
+  /* FINAL OVERRIDE: Target the exact visual styling visible in browser inspector */
+  /* This specifically addresses the border-bottom-color, border-bottom-style, border-bottom-width issue */
+  td.table-cell-actions,
+  td.table-cell-owner,
+  td.table-cell-percentage {
+    border-bottom-color: #e5e7eb !important;
+    border-bottom-style: solid !important;
+    border-bottom-width: 1px !important;
+    border-top-color: transparent !important;
+    border-top-style: none !important;
+    border-top-width: 0px !important;
+    border-left-color: transparent !important;
+    border-left-style: none !important;
+    border-left-width: 0px !important;
+    border-right-color: hsl(var(--neutral-200)) !important;
+    border-right-style: solid !important;
+    border-right-width: 1px !important;
+  }
+
   table tbody tr td.table-cell-percentage,
   tbody tr td.table-cell-percentage,
   tr td.table-cell-percentage,
