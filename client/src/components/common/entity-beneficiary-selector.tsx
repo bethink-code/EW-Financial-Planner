@@ -109,12 +109,12 @@ export default function EntityBeneficiarySelector({
   return (
     <>
       {/* Actions Column */}
-      <td>
+      <td className="px-1 py-1 border-r border-neutral-200" style={{ width: '60px' }}>
         {actionButton}
       </td>
       
       {/* Beneficiary Column */}
-      <td>
+      <td className="px-1 py-1 border-r border-neutral-200" style={{ width: '300px' }}>
         <select
           value={currentBeneficiary}
           onChange={(e) => handleBeneficiarySelect(e.target.value, beneficiaryIndex)}
@@ -131,7 +131,7 @@ export default function EntityBeneficiarySelector({
       </td>
 
       {/* Benefit % Column */}
-      <td>
+      <td className="px-1 py-1 border-r border-neutral-200" style={{ width: '80px' }}>
         <input
           type="text"
           defaultValue={currentPercentage}
@@ -139,6 +139,7 @@ export default function EntityBeneficiarySelector({
           className={`table-input ${getFieldClass('percentage')} text-center ${getValueClass(currentPercentage, 'percentage')} ${
             isInvalidTotal ? 'border-red-500 bg-red-50' : ''
           }`}
+          style={{minWidth: "50px", maxWidth: "65px"}}
           onFocus={(e) => {
             handleDefaultValueFocus(e);
             // Remove % sign for editing but keep the number

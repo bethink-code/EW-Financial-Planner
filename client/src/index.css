@@ -393,13 +393,13 @@ th, td {
   /* Add spacing to table cells for better field separation */
   td {
     padding: 0.5rem 0.75rem;
-    vertical-align: top;
+    vertical-align: middle;
     min-height: 2.7rem; /* Increased to accommodate taller input fields */
   }
   
   th {
     padding: 0.75rem 0.75rem;
-    vertical-align: top;
+    vertical-align: middle;
     min-height: 2.7rem; /* Match body cell height */
   }
 
@@ -659,8 +659,6 @@ th, td {
     line-height: 1.3rem !important;
   }
 
-
-
   .totals-cell-value {
     text-align: right !important;
     font-family: inherit !important;
@@ -858,7 +856,7 @@ th, td {
     border-bottom: 1px solid transparent;
   }
 
-  .policy-last-row td:not(.table-cell-actions):not(.table-cell-owner):not(.table-cell-percentage) {
+  .policy-last-row td {
     padding-bottom: 20px !important;
   }
   

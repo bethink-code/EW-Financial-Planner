@@ -590,18 +590,20 @@ export function AssuranceTable({ viewMode = 'table', onAddPolicy }: AssuranceTab
                     </td>
                   )}
 
-                  {/* Owner - EntityOwnerSelector renders its own td elements */}
-                  <EntityOwnerSelector
-                    policyId={policy.id}
-                    owners={policy.owners}
-                    ownershipPercentages={policy.ownershipPercentages || ["100%"]}
-                    onOwnerChange={handleOwnerChange}
-                    onOwnershipPercentageChange={handleOwnershipPercentageChange}
-                    onAddOwner={handleAddOwner}
-                    onRemoveOwner={handleRemoveOwner}
-                    rowIndex={rowIndex}
-                    disabled={updateMutation.isPending}
-                  />
+                  {/* Owner */}
+                  <td className="border border-neutral-300 p-1">
+                    <EntityOwnerSelector
+                      policyId={policy.id}
+                      owners={policy.owners}
+                      ownershipPercentages={policy.ownershipPercentages || ["100%"]}
+                      onOwnerChange={handleOwnerChange}
+                      onOwnershipPercentageChange={handleOwnershipPercentageChange}
+                      onAddOwner={handleAddOwner}
+                      onRemoveOwner={handleRemoveOwner}
+                      rowIndex={rowIndex}
+                      disabled={updateMutation.isPending}
+                    />
+                  </td>
 
                   {/* Life Assured */}
                   <td className="border border-neutral-300 p-1">
@@ -663,18 +665,20 @@ export function AssuranceTable({ viewMode = 'table', onAddPolicy }: AssuranceTab
 
 
 
-                  {/* Beneficiary - EntityBeneficiarySelector renders its own td elements */}
-                  <EntityBeneficiarySelector
-                    policyId={policy.id}
-                    beneficiaries={policy.beneficiaries}
-                    beneficiaryPercentages={policy.beneficiaryPercentages || ["100%"]}
-                    onBeneficiaryChange={handleBeneficiaryChange}
-                    onBeneficiaryPercentageChange={handleBeneficiaryPercentageChange}
-                    onAddBeneficiary={handleAddBeneficiary}
-                    onRemoveBeneficiary={handleRemoveBeneficiary}
-                    rowIndex={rowIndex}
-                    disabled={updateMutation.isPending}
-                  />
+                  {/* Beneficiary */}
+                  <td className="border border-neutral-300 p-1">
+                    <EntityBeneficiarySelector
+                      policyId={policy.id}
+                      beneficiaries={policy.beneficiaries}
+                      beneficiaryPercentages={policy.beneficiaryPercentages || ["100%"]}
+                      onBeneficiaryChange={handleBeneficiaryChange}
+                      onBeneficiaryPercentageChange={handleBeneficiaryPercentageChange}
+                      onAddBeneficiary={handleAddBeneficiary}
+                      onRemoveBeneficiary={handleRemoveBeneficiary}
+                      rowIndex={rowIndex}
+                      disabled={updateMutation.isPending}
+                    />
+                  </td>
 
                   {/* Benefit Split - calculated read-only field */}
                   <td className="border border-neutral-300 p-1">

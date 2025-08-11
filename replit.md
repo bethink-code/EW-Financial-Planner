@@ -6,14 +6,12 @@ This is a full-stack web application for managing retirement funds. It provides 
 ## Recent Major Accomplishments
 - **January 2025**: Completed Global Hybrid View Pattern framework with comprehensive implementation guide
 - **January 8, 2025**: Successfully rolled out hybrid view to Defined Benefit Funds with lessons learned documentation
-- **January 11, 2025**: Fixed EntityOwnerSelector inline CSS conflicts with global CSS pattern approach - eliminated visual border issues across all tables
 - **Border Management**: Resolved all double border issues across hybrid view interfaces with proper CSS classes and component props
 - **Pattern Documentation**: Created `GLOBAL_HYBRID_VIEW_PATTERN.md` - definitive guide for implementing hybrid views in any new calculator
 - **Universal Field Groupings**: Established 4 reusable logical groupings adaptable across all financial calculators
-- **CSS Framework**: Added hybrid view CSS classes for consistent tab styling and border management, plus EntityOwnerSelector global styling
+- **CSS Framework**: Added hybrid view CSS classes for consistent tab styling and border management
 - **Implementation Template**: Assurance, Retirement Funds, and Defined Benefit Funds serve as working examples of the complete pattern
 - **Common Pitfalls Documentation**: Captured recurring implementation mistakes and solutions for future hybrid view rollouts
-- **CSS Specificity Management**: Implemented comprehensive CSS override system for EntityOwnerSelector component with nuclear-level specificity rules
 
 ## User Preferences
 Preferred communication style: Simple, everyday language.
