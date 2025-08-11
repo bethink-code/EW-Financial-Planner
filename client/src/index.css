@@ -703,6 +703,20 @@ th, td {
     vertical-align: middle !important;
   }
 
+  /* Remove top border from first row EntityOwnerSelector cells to prevent double border */
+  table tbody tr:first-child td.table-cell-owner,
+  tbody tr:first-child td.table-cell-owner,
+  tr:first-child td.table-cell-owner,
+  table tbody tr:first-child td.table-cell-actions,
+  tbody tr:first-child td.table-cell-actions,
+  tr:first-child td.table-cell-actions,
+  table tbody tr:first-child td.table-cell-percentage,
+  tbody tr:first-child td.table-cell-percentage,
+  tr:first-child td.table-cell-percentage {
+    border-top: none !important;
+    border-top-width: 0 !important;
+  }
+
   table tbody tr td.table-cell-percentage,
   tbody tr td.table-cell-percentage,
   tr td.table-cell-percentage,
