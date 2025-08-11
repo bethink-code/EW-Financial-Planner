@@ -660,9 +660,12 @@ th, td {
   }
 
   /* EntityOwnerSelector Table Cell Styling - Global CSS Pattern */
+  /* Override all conflicting border rules for EntityOwnerSelector cells */
   .table-cell-actions {
     padding: 0.25rem !important;
+    border: none !important;
     border-right: 1px solid hsl(var(--neutral-200)) !important;
+    border-bottom: 1px solid #e5e7eb !important;
     width: 60px !important;
     min-width: 60px !important;
     max-width: 60px !important;
@@ -672,7 +675,9 @@ th, td {
 
   .table-cell-owner {
     padding: 0.25rem !important;
+    border: none !important;
     border-right: 1px solid hsl(var(--neutral-200)) !important;
+    border-bottom: 1px solid #e5e7eb !important;
     width: 300px !important;
     min-width: 300px !important;
     max-width: 300px !important;
@@ -681,7 +686,9 @@ th, td {
 
   .table-cell-percentage {
     padding: 0.25rem !important;
+    border: none !important;
     border-right: 1px solid hsl(var(--neutral-200)) !important;
+    border-bottom: 1px solid #e5e7eb !important;
     width: 80px !important;
     min-width: 80px !important;
     max-width: 80px !important;
