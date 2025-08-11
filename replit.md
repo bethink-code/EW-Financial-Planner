@@ -65,6 +65,7 @@ Client requests data via TanStack Query hooks. Express routes handle CRUD operat
 - **Years/% Toggle Pattern**: Reusable toggle pattern for specific fields to switch between year and percentage input, successfully implemented in Defined Benefit Funds and Assurance tables. In Assurance, each beneficiary row has independent toggle controls with per-beneficiary arrays (amountToggles, amountYearsValues, amountIncreaseValues) for Amount field toggle functionality. Pattern includes Elite Wealth blue styling, automatic array synchronization during beneficiary add/remove operations, and proper validation helper functions.
 - **Global Loading System**: Comprehensive loading indicators with Elite Wealth primary blue branding, providing visual feedback during CRUD operations through a global progress bar and enhanced loading mutations.
 - **Global Hybrid View Pattern**: Battle-tested implementation framework with mandatory protocols in `GLOBAL_HYBRID_VIEW_PATTERN.md`. Provides 80% reusable infrastructure with strict border management rules (`isFirst`/`isLast` props required), no-spacing tab containers, clean detail forms, and 4 universal field groupings. Includes implementation checklist, visual testing protocol, and copy-paste templates. Successfully deployed across Assurance, Retirement Funds, and Defined Benefit Funds with zero border issues. Preview cards use separate lines (`\n`) for multiple entity types (e.g., "Cover Beneficiaries: 2\nFund Beneficiaries: 1") for improved readability. Global CSS fixes prevent double borders at table bottoms. **Title Styling Standards**: Mandatory typography pattern (`text-lg font-semibold text-neutral-800`) ensures consistent individual item name display across all calculators, with header layout including title left and action buttons right.
+- **Global EntitySelector Pattern**: Critical implementation rule established - EntityOwnerSelector and EntityBeneficiarySelector components render their own `<td>` elements and must NEVER be wrapped in additional `<td>` elements to avoid DOM nesting warnings. Pattern documented in `GLOBAL_ENTITY_PATTERN_GUIDE.md` with correct table header structures (3 columns each: Actions, Name, Percentage). Successfully implemented across all three main calculator tables with zero DOM validation issues.
 
 ## Critical Implementation Patterns & Common Pitfalls
 
@@ -102,6 +103,8 @@ Client requests data via TanStack Query hooks. Express routes handle CRUD operat
 4. **EntityOwnerSelector**: Placing in div instead of table row
 5. **Input Styling**: Custom CSS classes instead of `table-input` pattern
 6. **Border Management**: Forgetting `isFirst`/`isLast` props on preview cards
+7. **EntitySelector Wrapping**: NEVER wrap EntityOwnerSelector or EntityBeneficiarySelector in `<td>` elements - they render their own table cells and wrapping causes DOM nesting warnings
+8. **Table Header Mismatch**: Update table headers to 3 columns when using EntitySelectors (Actions, Name, Percentage)
 
 ## External Dependencies
 

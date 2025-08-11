@@ -84,7 +84,14 @@ export default function EntityBeneficiarySelector({
     onBeneficiaryPercentageChange(policyId, beneficiaryIndex, formattedPercentage);
   }, [policyId, beneficiaryIndex, onBeneficiaryPercentageChange]);
   if (beneficiaryIndex >= beneficiaries.length) {
-    return <div className="p-2"></div>; // Empty cell for rows beyond beneficiaries count
+    // Return empty table cells for rows beyond beneficiaries count
+    return (
+      <>
+        <td className="px-1 py-1 border-r border-neutral-200" style={{ width: '60px' }}></td>
+        <td className="px-1 py-1 border-r border-neutral-200" style={{ width: '300px' }}></td>
+        <td className="px-1 py-1 border-r border-neutral-200" style={{ width: '80px' }}></td>
+      </>
+    );
   }
 
   const currentBeneficiary = beneficiaries[beneficiaryIndex];

@@ -81,7 +81,52 @@ This is the definitive guide for implementing hybrid view functionality across a
 <div className="space-y-12 p-6 bg-white">
 ```
 
-### 2. Implementation Steps for New Calculators
+### 2. EntitySelector Integration Pattern
+
+#### CRITICAL: EntityOwnerSelector and EntityBeneficiarySelector Usage
+When using these components in hybrid view detail forms, follow these exact patterns:
+
+**For Detail Forms (NOT in table structures):**
+```typescript
+<FieldGroup title="OWNERS & LIFE ASSURED & BENEFITS">
+  <FormField label="Owners">
+    <table className="w-full border-collapse">
+      <thead>
+        <tr>
+          <th className="text-left">Actions</th>
+          <th className="text-left">Owner Name</th>
+          <th className="text-left">Ownership %</th>
+        </tr>
+      </thead>
+      <tbody>
+        {Array.from({ length: Math.max(item.owners.length, 1) }, (_, index) => (
+          <tr key={index}>
+            <EntityOwnerSelector
+              policyId={item.id}
+              owners={item.owners}
+              ownershipPercentages={item.ownershipPercentages}
+              onOwnerChange={onOwnerChange}
+              onOwnershipPercentageChange={onOwnershipPercentageChange}
+              onAddOwner={onAddOwner}
+              onRemoveOwner={onRemoveOwner}
+              rowIndex={index}
+              disabled={disabled}
+            />
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  </FormField>
+</FieldGroup>
+```
+
+**Key Rules:**
+1. **EntityOwnerSelector/EntityBeneficiarySelector render their own `<td>` elements**
+2. **NEVER wrap them in additional `<td>` elements** - causes DOM nesting warnings
+3. **Use proper table structure** - components must be in `<tr>` elements within `<tbody>`
+4. **Update table headers** to match the 3-column structure (Actions, Name, Percentage)
+
+### 3. Implementation Steps for New Calculators
 
 #### Step 1: Create Preview Data Mapping
 ```typescript

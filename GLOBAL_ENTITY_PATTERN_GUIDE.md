@@ -80,38 +80,81 @@ const handleRemoveOwner = useCallback((id: number, ownerIndex: number) => {
 }, [policies, handleUpdatePolicy]);
 ```
 
-#### Replace Table Cells
-Replace text input cells with:
-```typescript
-{/* Owner */}
-<td className="border border-neutral-300 p-1">
-  <EntityOwnerSelector
-    policyId={policy.id}
-    owners={policy.owners}
-    ownershipPercentages={policy.ownershipPercentages || ["100%"]}
-    onOwnerChange={handleOwnerChange}
-    onOwnershipPercentageChange={handleOwnershipPercentageChange}
-    onAddOwner={handleAddOwner}
-    onRemoveOwner={handleRemoveOwner}
-    rowIndex={rowIndex}
-    disabled={updateMutation.isPending}
-  />
-</td>
+#### Replace Table Cells - CRITICAL PATTERN
+**IMPORTANT**: EntityOwnerSelector and EntityBeneficiarySelector render their own `<td>` elements. DO NOT wrap them in additional `<td>` elements to avoid DOM nesting warnings.
 
-{/* Beneficiary */}
+**CORRECT Pattern** (No wrapper td elements):
+```typescript
+{/* Owner - EntityOwnerSelector renders its own td elements */}
+<EntityOwnerSelector
+  policyId={policy.id}
+  owners={policy.owners}
+  ownershipPercentages={policy.ownershipPercentages || ["100%"]}
+  onOwnerChange={handleOwnerChange}
+  onOwnershipPercentageChange={handleOwnershipPercentageChange}
+  onAddOwner={handleAddOwner}
+  onRemoveOwner={handleRemoveOwner}
+  rowIndex={rowIndex}
+  disabled={updateMutation.isPending}
+/>
+
+{/* Beneficiary - EntityBeneficiarySelector renders its own td elements */}
+<EntityBeneficiarySelector
+  policyId={policy.id}
+  beneficiaries={policy.beneficiaries}
+  beneficiaryPercentages={policy.beneficiaryPercentages || ["100%"]}
+  onBeneficiaryChange={handleBeneficiaryChange}
+  onBeneficiaryPercentageChange={handleBeneficiaryPercentageChange}
+  onAddBeneficiary={handleAddBeneficiary}
+  onRemoveBeneficiary={handleRemoveBeneficiary}
+  rowIndex={rowIndex}
+  disabled={updateMutation.isPending}
+/>
+```
+
+**WRONG Pattern** (DO NOT USE - causes DOM nesting warnings):
+```typescript
+{/* WRONG - DO NOT WRAP IN td ELEMENTS */}
 <td className="border border-neutral-300 p-1">
-  <EntityBeneficiarySelector
-    policyId={policy.id}
-    beneficiaries={policy.beneficiaries}
-    beneficiaryPercentages={policy.beneficiaryPercentages || ["100%"]}
-    onBeneficiaryChange={handleBeneficiaryChange}
-    onBeneficiaryPercentageChange={handleBeneficiaryPercentageChange}
-    onAddBeneficiary={handleAddBeneficiary}
-    onRemoveBeneficiary={handleRemoveBeneficiary}
-    rowIndex={rowIndex}
-    disabled={updateMutation.isPending}
-  />
+  <EntityOwnerSelector ... />
 </td>
+```
+
+### 5. Table Header Structure
+When using EntityOwnerSelector and EntityBeneficiarySelector, update table headers to match the column structure:
+
+**EntityOwnerSelector requires 3 columns:**
+```typescript
+<th>Actions</th>
+<th>Owner Name</th>  
+<th>Ownership %</th>
+```
+
+**EntityBeneficiarySelector requires 3 columns:**
+```typescript
+<th>Actions</th>
+<th>Beneficiary Name</th>
+<th>Benefit Split</th>
+```
+
+**Example Complete Header:**
+```typescript
+<thead>
+  <tr>
+    <th>Description</th>
+    {/* EntityOwnerSelector columns */}
+    <th>Actions</th>
+    <th>Owner Name</th>
+    <th>Ownership %</th>
+    {/* Other fields */}
+    <th>Cover Amount</th>
+    {/* EntityBeneficiarySelector columns */}
+    <th>Actions</th>
+    <th>Beneficiary Name</th>
+    <th>Benefit Split</th>
+    <th>Cover Split</th>
+  </tr>
+</thead>
 ```
 
 ### 4. Array Fields Update
