@@ -665,9 +665,12 @@ th, td {
     width: 60px !important;
     min-width: 60px !important;
     max-width: 60px !important;
+    height: 2.5rem !important;
+    max-height: 2.5rem !important;
     text-align: center !important;
     vertical-align: middle !important;
     border: none !important;
+    line-height: 1.2 !important;
   }
 
   .table-cell-owner {
@@ -675,8 +678,11 @@ th, td {
     width: 300px !important;
     min-width: 300px !important;
     max-width: 300px !important;
+    height: 2.5rem !important;
+    max-height: 2.5rem !important;
     vertical-align: middle !important;
     border: none !important;
+    line-height: 1.2 !important;
   }
 
   .table-cell-percentage {
@@ -684,9 +690,12 @@ th, td {
     width: 80px !important;
     min-width: 80px !important;
     max-width: 80px !important;
+    height: 2.5rem !important;
+    max-height: 2.5rem !important;
     text-align: center !important;
     vertical-align: middle !important;
     border: none !important;
+    line-height: 1.2 !important;
   }
 
   .totals-cell-value {
