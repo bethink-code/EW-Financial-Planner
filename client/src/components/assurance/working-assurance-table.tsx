@@ -590,20 +590,18 @@ export function AssuranceTable({ viewMode = 'table', onAddPolicy }: AssuranceTab
                     </td>
                   )}
 
-                  {/* Owner */}
-                  <td className="border border-neutral-300 p-1">
-                    <EntityOwnerSelector
-                      policyId={policy.id}
-                      owners={policy.owners}
-                      ownershipPercentages={policy.ownershipPercentages || ["100%"]}
-                      onOwnerChange={handleOwnerChange}
-                      onOwnershipPercentageChange={handleOwnershipPercentageChange}
-                      onAddOwner={handleAddOwner}
-                      onRemoveOwner={handleRemoveOwner}
-                      rowIndex={rowIndex}
-                      disabled={updateMutation.isPending}
-                    />
-                  </td>
+                  {/* Owner - EntityOwnerSelector renders its own td elements */}
+                  <EntityOwnerSelector
+                    policyId={policy.id}
+                    owners={policy.owners}
+                    ownershipPercentages={policy.ownershipPercentages || ["100%"]}
+                    onOwnerChange={handleOwnerChange}
+                    onOwnershipPercentageChange={handleOwnershipPercentageChange}
+                    onAddOwner={handleAddOwner}
+                    onRemoveOwner={handleRemoveOwner}
+                    rowIndex={rowIndex}
+                    disabled={updateMutation.isPending}
+                  />
 
                   {/* Life Assured */}
                   <td className="border border-neutral-300 p-1">
