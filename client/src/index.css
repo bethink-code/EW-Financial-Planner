@@ -659,152 +659,34 @@ th, td {
     line-height: 1.3rem !important;
   }
 
-  /* EntityOwnerSelector Table Cell Styling - Global CSS Pattern */
-  /* Ultra-specific selectors to override ALL conflicting CSS rules */
-  table tbody tr td.table-cell-actions,
-  tbody tr td.table-cell-actions,
-  tr td.table-cell-actions,
-  td.table-cell-actions {
+  /* EntityOwnerSelector Table Cell Styling - Clean Global CSS Pattern */
+  .table-cell-actions {
     padding: 0.25rem !important;
-    border: 0 !important;
-    border-right: 1px solid hsl(var(--neutral-200)) !important;
-    border-bottom: 1px solid #e5e7eb !important;
-    border-top: 0 !important;
-    border-left: 0 !important;
     width: 60px !important;
     min-width: 60px !important;
     max-width: 60px !important;
     text-align: center !important;
     vertical-align: middle !important;
+    border: none !important;
   }
 
-  /* ULTRA-SPECIFIC FIX FOR table-cell-owner */
-  table tbody tr td.table-cell-owner,
-  tbody tr td.table-cell-owner,
-  tr td.table-cell-owner,
-  td.table-cell-owner,
-  html body table tbody tr td.table-cell-owner {
+  .table-cell-owner {
     padding: 0.25rem !important;
-    border-width: 0 !important;
-    border-style: none !important;
-    border-color: transparent !important;
-    border: none !important;
-    border-right: 1px solid hsl(var(--neutral-200)) !important;
-    border-bottom: 1px solid #e5e7eb !important;
-    border-top: none !important;
-    border-left: none !important;
-    border-top-width: 0 !important;
-    border-left-width: 0 !important;
-    border-bottom-width: 1px !important;
-    border-right-width: 1px !important;
     width: 300px !important;
     min-width: 300px !important;
     max-width: 300px !important;
     vertical-align: middle !important;
-  }
-
-  /* Remove top border from first row EntityOwnerSelector cells to prevent double border */
-  table tbody tr:first-child td.table-cell-owner,
-  tbody tr:first-child td.table-cell-owner,
-  tr:first-child td.table-cell-owner,
-  table tbody tr:first-child td.table-cell-actions,
-  tbody tr:first-child td.table-cell-actions,
-  tr:first-child td.table-cell-actions,
-  table tbody tr:first-child td.table-cell-percentage,
-  tbody tr:first-child td.table-cell-percentage,
-  tr:first-child td.table-cell-percentage {
-    border-top: none !important;
-    border-top-width: 0 !important;
-  }
-
-  /* SPECIAL OVERRIDE for detail form tables that use inline styles */
-  /* This targets the specific table structure in AssuranceDetailForm */
-  .border-collapse tbody tr td.table-cell-actions,
-  .border-collapse tbody tr td.table-cell-owner,
-  .border-collapse tbody tr td.table-cell-percentage,
-  table.border-collapse tbody tr td.table-cell-actions,
-  table.border-collapse tbody tr td.table-cell-owner,
-  table.border-collapse tbody tr td.table-cell-percentage {
-    border: 0 !important;
-    border-right: 1px solid hsl(var(--neutral-200)) !important;
-    border-bottom: 1px solid #e5e7eb !important;
-    border-top: none !important;
-    border-left: none !important;
-    padding: 0.25rem !important;
-  }
-
-  /* Override inline width styles in detail forms */
-  .border-collapse tbody tr td.table-cell-actions[style] {
-    width: 60px !important;
-    min-width: 60px !important;
-    max-width: 60px !important;
-  }
-
-  .border-collapse tbody tr td.table-cell-owner[style] {
-    width: 300px !important;
-    min-width: 300px !important;
-    max-width: 300px !important;
-  }
-
-  .border-collapse tbody tr td.table-cell-percentage[style] {
-    width: 80px !important;
-    min-width: 80px !important;
-    max-width: 80px !important;
-  }
-
-  /* NUCLEAR OPTION: Force remove ALL borders and styling from EntityOwnerSelector cells */
-  /* This should override ANY conflicting CSS regardless of specificity */
-  html body div table tbody tr td.table-cell-actions,
-  html body div table tbody tr td.table-cell-owner,
-  html body div table tbody tr td.table-cell-percentage,
-  html body div table.border-collapse tbody tr td.table-cell-actions,
-  html body div table.border-collapse tbody tr td.table-cell-owner,
-  html body div table.border-collapse tbody tr td.table-cell-percentage,
-  html body table tbody tr td.table-cell-actions,
-  html body table tbody tr td.table-cell-owner,
-  html body table tbody tr td.table-cell-percentage {
-    border-top: 0 !important;
-    border-left: 0 !important;
-    border-bottom: 1px solid #e5e7eb !important;
-    border-right: 1px solid hsl(var(--neutral-200)) !important;
-    border-style: solid !important;
-    border-width: 0 1px 1px 0 !important;
-    border-color: transparent hsl(var(--neutral-200)) #e5e7eb transparent !important;
-    padding: 0.25rem !important;
-    box-sizing: border-box !important;
-  }
-
-  /* CLEAN OVERRIDE: Remove all borders from EntityOwnerSelector cells */
-  td.table-cell-actions,
-  td.table-cell-owner,
-  td.table-cell-percentage {
     border: none !important;
-    border-top: none !important;
-    border-right: none !important;
-    border-bottom: none !important;
-    border-left: none !important;
-    border-color: transparent !important;
-    border-style: none !important;
-    border-width: 0 !important;
-    outline: none !important;
-    box-shadow: none !important;
   }
 
-  table tbody tr td.table-cell-percentage,
-  tbody tr td.table-cell-percentage,
-  tr td.table-cell-percentage,
-  td.table-cell-percentage {
+  .table-cell-percentage {
     padding: 0.25rem !important;
-    border: 0 !important;
-    border-right: 1px solid hsl(var(--neutral-200)) !important;
-    border-bottom: 1px solid #e5e7eb !important;
-    border-top: 0 !important;
-    border-left: 0 !important;
     width: 80px !important;
     min-width: 80px !important;
     max-width: 80px !important;
     text-align: center !important;
     vertical-align: middle !important;
+    border: none !important;
   }
 
   .totals-cell-value {
