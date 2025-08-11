@@ -660,12 +660,17 @@ th, td {
   }
 
   /* EntityOwnerSelector Table Cell Styling - Global CSS Pattern */
-  /* Override all conflicting border rules for EntityOwnerSelector cells */
-  .table-cell-actions {
+  /* Ultra-specific selectors to override ALL conflicting CSS rules */
+  table tbody tr td.table-cell-actions,
+  tbody tr td.table-cell-actions,
+  tr td.table-cell-actions,
+  td.table-cell-actions {
     padding: 0.25rem !important;
-    border: none !important;
+    border: 0 !important;
     border-right: 1px solid hsl(var(--neutral-200)) !important;
     border-bottom: 1px solid #e5e7eb !important;
+    border-top: 0 !important;
+    border-left: 0 !important;
     width: 60px !important;
     min-width: 60px !important;
     max-width: 60px !important;
@@ -673,22 +678,32 @@ th, td {
     vertical-align: middle !important;
   }
 
-  .table-cell-owner {
+  table tbody tr td.table-cell-owner,
+  tbody tr td.table-cell-owner,
+  tr td.table-cell-owner,
+  td.table-cell-owner {
     padding: 0.25rem !important;
-    border: none !important;
+    border: 0 !important;
     border-right: 1px solid hsl(var(--neutral-200)) !important;
     border-bottom: 1px solid #e5e7eb !important;
+    border-top: 0 !important;
+    border-left: 0 !important;
     width: 300px !important;
     min-width: 300px !important;
     max-width: 300px !important;
     vertical-align: middle !important;
   }
 
-  .table-cell-percentage {
+  table tbody tr td.table-cell-percentage,
+  tbody tr td.table-cell-percentage,
+  tr td.table-cell-percentage,
+  td.table-cell-percentage {
     padding: 0.25rem !important;
-    border: none !important;
+    border: 0 !important;
     border-right: 1px solid hsl(var(--neutral-200)) !important;
     border-bottom: 1px solid #e5e7eb !important;
+    border-top: 0 !important;
+    border-left: 0 !important;
     width: 80px !important;
     min-width: 80px !important;
     max-width: 80px !important;
