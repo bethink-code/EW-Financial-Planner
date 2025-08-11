@@ -532,7 +532,8 @@ export function AssuranceTable({ viewMode = 'table', onAddPolicy }: AssuranceTab
               <th className="table-header-base">Ownership %</th>
               <th className="table-header-base">Life Assured</th>
               <th className="table-header-base">Death Benefit</th>
-              <th className="table-header-base">Beneficiary</th>
+              <th className="table-header-base">Actions</th>
+              <th className="table-header-base">Beneficiary Name</th>
               <th className="table-header-base">Benefit Split</th>
               <th className="table-header-base">Amount</th>
               <th className="table-header-base">Toggle</th>
@@ -665,20 +666,18 @@ export function AssuranceTable({ viewMode = 'table', onAddPolicy }: AssuranceTab
 
 
 
-                  {/* Beneficiary */}
-                  <td className="border border-neutral-300 p-1">
-                    <EntityBeneficiarySelector
-                      policyId={policy.id}
-                      beneficiaries={policy.beneficiaries}
-                      beneficiaryPercentages={policy.beneficiaryPercentages || ["100%"]}
-                      onBeneficiaryChange={handleBeneficiaryChange}
-                      onBeneficiaryPercentageChange={handleBeneficiaryPercentageChange}
-                      onAddBeneficiary={handleAddBeneficiary}
-                      onRemoveBeneficiary={handleRemoveBeneficiary}
-                      rowIndex={rowIndex}
-                      disabled={updateMutation.isPending}
-                    />
-                  </td>
+                  {/* Beneficiary - EntityBeneficiarySelector renders its own td elements */}
+                  <EntityBeneficiarySelector
+                    policyId={policy.id}
+                    beneficiaries={policy.beneficiaries}
+                    beneficiaryPercentages={policy.beneficiaryPercentages || ["100%"]}
+                    onBeneficiaryChange={handleBeneficiaryChange}
+                    onBeneficiaryPercentageChange={handleBeneficiaryPercentageChange}
+                    onAddBeneficiary={handleAddBeneficiary}
+                    onRemoveBeneficiary={handleRemoveBeneficiary}
+                    rowIndex={rowIndex}
+                    disabled={updateMutation.isPending}
+                  />
 
                   {/* Benefit Split - calculated read-only field */}
                   <td className="border border-neutral-300 p-1">

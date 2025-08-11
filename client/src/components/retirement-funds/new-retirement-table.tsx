@@ -356,7 +356,9 @@ export function NewRetirementTable({
  <th>Owner Name</th>
  <th>Ownership %</th>
  <th className="section-start">Cover Amount</th>
- <th>Beneficiaries</th>
+ <th>Actions</th>
+ <th>Beneficiary Name</th>
+ <th>Benefit Split</th>
  <th>Cover Split</th>
  <th className="section-start">Monthly Income</th>
  <th>Toggle</th>
@@ -453,8 +455,7 @@ export function NewRetirementTable({
  </td>
  )}
 
- {/* Unapproved Life Cover - Beneficiary */}
- <td className="p-1 align-top">
+ {/* Unapproved Life Cover - Beneficiary - EntityBeneficiarySelector renders its own td elements */}
  {rowIndex < (fund.unapprovedBeneficiaries?.length || 0) && (
  <EntityBeneficiarySelector
  policyId={fund.id}
@@ -468,7 +469,6 @@ export function NewRetirementTable({
  disabled={isUpdating}
  />
  )}
- </td>
 
 
 
