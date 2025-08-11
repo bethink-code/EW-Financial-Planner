@@ -393,13 +393,13 @@ th, td {
   /* Add spacing to table cells for better field separation */
   td {
     padding: 0.5rem 0.75rem;
-    vertical-align: middle;
+    vertical-align: top;
     min-height: 2.7rem; /* Increased to accommodate taller input fields */
   }
   
   th {
     padding: 0.75rem 0.75rem;
-    vertical-align: middle;
+    vertical-align: top;
     min-height: 2.7rem; /* Match body cell height */
   }
 
@@ -659,18 +659,14 @@ th, td {
     line-height: 1.3rem !important;
   }
 
-  /* EntityOwnerSelector Table Cell Styling - Override global td padding */
+  /* EntityOwnerSelector Table Cell Styling - Clean and Simple */
   td.table-cell-actions {
     padding: 0.25rem !important;
     width: 60px !important;
     min-width: 60px !important;
     max-width: 60px !important;
-    height: 2.5rem !important;
-    max-height: 2.5rem !important;
     text-align: center !important;
-    vertical-align: top !important;
     border: none !important;
-    line-height: 1.2 !important;
   }
 
   td.table-cell-owner {
@@ -678,11 +674,7 @@ th, td {
     width: 300px !important;
     min-width: 300px !important;
     max-width: 300px !important;
-    height: 2.5rem !important;
-    max-height: 2.5rem !important;
-    vertical-align: top !important;
     border: none !important;
-    line-height: 1.2 !important;
   }
 
   td.table-cell-percentage {
@@ -690,20 +682,8 @@ th, td {
     width: 80px !important;
     min-width: 80px !important;
     max-width: 80px !important;
-    height: 2.5rem !important;
-    max-height: 2.5rem !important;
     text-align: center !important;
-    vertical-align: top !important;
     border: none !important;
-    line-height: 1.2 !important;
-  }
-
-  /* Ensure form elements inside EntityOwnerSelector cells align to top */
-  td.table-cell-owner select,
-  td.table-cell-percentage input,
-  td.table-cell-actions button {
-    vertical-align: top !important;
-    margin-top: 0 !important;
   }
 
   .totals-cell-value {
