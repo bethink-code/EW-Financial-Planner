@@ -659,18 +659,7 @@ th, td {
     line-height: 1.3rem !important;
   }
 
-  /* EntityOwnerSelector - Only essential width control */
-  .table-cell-actions {
-    width: 60px;
-  }
 
-  .table-cell-owner {
-    width: 300px;
-  }
-
-  .table-cell-percentage {
-    width: 80px;
-  }
 
   .totals-cell-value {
     text-align: right !important;

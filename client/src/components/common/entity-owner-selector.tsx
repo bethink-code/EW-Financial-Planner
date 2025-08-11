@@ -107,12 +107,12 @@ export default function EntityOwnerSelector({
   return (
     <>
       {/* Actions Column */}
-      <td className="table-cell-actions">
+      <td>
         {actionButton}
       </td>
       
       {/* Owner Column */}
-      <td className="table-cell-owner">
+      <td>
         <select
           value={currentOwner}
           onChange={(e) => handleOwnerSelect(e.target.value, ownerIndex)}
@@ -129,7 +129,7 @@ export default function EntityOwnerSelector({
       </td>
 
       {/* Ownership % Column */}
-      <td className="table-cell-percentage">
+      <td>
         <input
           type="text"
           defaultValue={currentPercentage}
