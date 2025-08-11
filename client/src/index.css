@@ -895,7 +895,7 @@ th, td {
     border-bottom: 1px solid transparent;
   }
 
-  .policy-last-row td {
+  .policy-last-row td:not(.table-cell-actions):not(.table-cell-owner):not(.table-cell-percentage) {
     padding-bottom: 20px !important;
   }
   
