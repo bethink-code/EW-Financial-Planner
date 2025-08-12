@@ -712,10 +712,9 @@ export function NewRetirementTable({
  <tfoot>
  <tr>
  <td className="totals-cell-label section-start"></td>
- <td className="totals-cell-label text-right section-start" colSpan={3}>Totals</td>
+ <td className="totals-cell-label text-right section-start" colSpan={4}>Totals</td>
  <td className="totals-cell-value">{formatTotal(totals.coverAmount)}</td>
  <td className="totals-cell-label section-start"></td>
- <td className="totals-cell-label"></td>
  <td className="totals-cell-label"></td>
  <td className="totals-cell-label"></td>
  <td className="totals-cell-value section-start">{formatTotal(totals.monthlyIncome)}</td>
