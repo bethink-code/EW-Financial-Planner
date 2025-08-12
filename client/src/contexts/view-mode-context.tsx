@@ -21,7 +21,6 @@ export function ViewModeProvider({ children }: ViewModeProviderProps) {
   const [viewMode, setViewModeState] = useState<ViewMode>(() => {
     if (typeof window !== 'undefined') {
       const stored = localStorage.getItem(VIEW_MODE_STORAGE_KEY);
-      console.log('ViewMode initialized from localStorage:', stored);
       return (stored === 'table' || stored === 'hybrid') ? stored : 'table';
     }
     return 'table';
@@ -29,11 +28,9 @@ export function ViewModeProvider({ children }: ViewModeProviderProps) {
   
   // Persist view mode to localStorage whenever it changes
   const setViewMode = (mode: ViewMode) => {
-    console.log('ViewMode changing from', viewMode, 'to', mode);
     setViewModeState(mode);
     if (typeof window !== 'undefined') {
       localStorage.setItem(VIEW_MODE_STORAGE_KEY, mode);
-      console.log('ViewMode saved to localStorage:', mode);
     }
   };
   
