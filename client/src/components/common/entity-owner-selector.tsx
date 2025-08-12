@@ -85,9 +85,9 @@ export default function EntityOwnerSelector({
     // Return empty table cells for rows beyond owners count
     return (
       <>
-        <td className="p-1 align-top border-r border-neutral-200" style={{ width: '60px' }}></td>
-        <td className="p-1 align-top border-r border-neutral-200" style={{ width: '300px' }}></td>
-        <td className="p-1 align-top border-r border-neutral-200" style={{ width: '80px' }}></td>
+        <td className="px-1 py-0.5 align-top border-r border-neutral-200" style={{ width: '60px' }}></td>
+        <td className="px-1 py-0.5 align-top border-r border-neutral-200" style={{ width: '300px' }}></td>
+        <td className="px-1 py-0.5 align-top border-r border-neutral-200" style={{ width: '80px' }}></td>
       </>
     );
   }
@@ -114,14 +114,14 @@ export default function EntityOwnerSelector({
   return (
     <>
       {/* Actions Column */}
-      <td className="p-1 align-top border-r border-neutral-200" style={{ width: '60px' }}>
+      <td className="px-1 py-0.5 align-top border-r border-neutral-200" style={{ width: '60px' }}>
         <div className="pt-0.5">
           {actionButton}
         </div>
       </td>
       
       {/* Owner Column */}
-      <td className="p-1 align-top border-r border-neutral-200" style={{ width: '300px' }}>
+      <td className="px-1 py-0.5 align-top border-r border-neutral-200" style={{ width: '300px' }}>
         <select
           value={currentOwner}
           onChange={(e) => handleOwnerSelect(e.target.value, ownerIndex)}
@@ -138,7 +138,7 @@ export default function EntityOwnerSelector({
       </td>
 
       {/* Ownership % Column */}
-      <td className="p-1 align-top border-r border-neutral-200" style={{ width: '80px' }}>
+      <td className="px-1 py-0.5 align-top border-r border-neutral-200" style={{ width: '80px' }}>
         <input
           type="text"
           defaultValue={currentPercentage}
