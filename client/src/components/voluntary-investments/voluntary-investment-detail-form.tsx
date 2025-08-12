@@ -158,7 +158,7 @@ export function VoluntaryInvestmentDetailForm({ investment, onDelete }: Voluntar
 
       {/* Group 2: Investment Details */}
       <FieldGroup title="Investment Details">
-        <div className="grid grid-cols-2 gap-x-6 gap-y-4">
+        <div className="grid grid-cols-2 gap-x-3 gap-y-4" style={{ width: 'fit-content' }}>
           <FormField label="Base Cost">
             <input
               type="text"
