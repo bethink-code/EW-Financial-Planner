@@ -59,12 +59,12 @@ function Router() {
   return (
     <div className="min-h-screen bg-gray-50">
       <Switch>
-        {/* Default route - redirect to assurance */}
-        <Route path="/">
-          <NavigationLayout>
-            <Assurance />
-          </NavigationLayout>
-        </Route>
+        {/* Default route - redirect to assurance with proper context */}
+        <Route path="/" component={() => {
+          // Redirect to assurance with proper navigation context
+          window.location.href = '/assurance';
+          return null;
+        }} />
           
           {/* Existing calculator routes with navigation */}
           <Route path="/assurance">

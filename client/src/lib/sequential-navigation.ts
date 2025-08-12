@@ -116,7 +116,14 @@ export function getCurrentNavItem(currentPath: string): SequentialNavItem | null
   // If no exact match, try to find a partial match
   if (!currentItem) {
     currentItem = allItems.find(item => 
-      currentPath.includes(item.path) || item.path.includes(currentPath)
+      currentPath.includes(item.path) && item.path !== '/'
+    );
+  }
+  
+  // If still no match and we're on a calculator route, try reverse matching
+  if (!currentItem) {
+    currentItem = allItems.find(item => 
+      item.path.includes(currentPath) && currentPath !== '/'
     );
   }
   

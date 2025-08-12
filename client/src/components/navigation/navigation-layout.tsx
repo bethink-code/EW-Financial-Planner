@@ -20,7 +20,7 @@ export function NavigationLayout({ children }: NavigationLayoutProps) {
     return <>{children}</>;
   }
   
-  // Determine current step based on URL
+  // Determine current step based on URL with better calculator route matching
   const currentStep = currentNeed.steps.find(step => {
     // Direct path match
     if (location.includes(step.path)) return true;
@@ -38,6 +38,19 @@ export function NavigationLayout({ children }: NavigationLayoutProps) {
       location === '/client-details' || 
       location.includes('/residue') || 
       location.includes('/additional-estate-duty-items')
+    )) return true;
+    
+    // Special case for build step - check if we're on any calculator pages
+    if (step.id === 'build' && (
+      location === '/assurance' ||
+      location === '/new-retirement-funds' ||
+      location === '/defined-benefit-funds' ||
+      location === '/voluntary-investments' ||
+      location === '/assets' ||
+      location === '/liabilities' ||
+      location === '/income-needs' ||
+      location === '/lump-sum-bequests' ||
+      location === '/income-provisions'
     )) return true;
     
     return false;
