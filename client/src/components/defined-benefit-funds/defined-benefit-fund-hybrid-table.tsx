@@ -80,10 +80,30 @@ export function DefinedBenefitFundHybridTable({ searchTerm, onAddFund }: Defined
     },
   });
 
+  // Duplicate fund mutation
+  const duplicateMutation = useMutation({
+    mutationFn: async (fund: DefinedBenefitFund) => {
+      const { id, ...fundWithoutId } = fund;
+      const duplicatedFund = {
+        ...fundWithoutId,
+        description: `${fund.description} (Copy)`,
+      };
+      return await apiRequest("POST", "/api/defined-benefit-funds", duplicatedFund);
+    },
+    onSuccess: (newFund: DefinedBenefitFund) => {
+      queryClient.invalidateQueries({ queryKey: ["/api/defined-benefit-funds"] });
+      setActiveFundId(newFund.id);
+    },
+  });
+
   const handleDeleteFund = (id: number) => {
     if (window.confirm('Are you sure you want to delete this defined benefit fund?')) {
       deleteMutation.mutate(id);
     }
+  };
+
+  const handleDuplicateFund = (fund: DefinedBenefitFund) => {
+    duplicateMutation.mutate(fund);
   };
 
   if (isLoading) {
@@ -142,6 +162,7 @@ export function DefinedBenefitFundHybridTable({ searchTerm, onAddFund }: Defined
           <DefinedBenefitFundDetailForm
             fund={activeFund}
             onDelete={handleDeleteFund}
+            onDuplicate={handleDuplicateFund}
           />
         ) : (
           <div className="p-6 text-center text-gray-500">
