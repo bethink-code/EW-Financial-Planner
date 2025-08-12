@@ -342,8 +342,8 @@ export function NewRetirementTable({
      />
    )}
  </th>
- <th className="section-start" colSpan={4}>Overview</th>
- <th className="section-start" colSpan={4}>Unapproved Life Cover</th>
+ <th className="section-start" colSpan={5}>Overview</th>
+ <th className="section-start" colSpan={3}>Unapproved Life Cover</th>
  <th className="section-start" colSpan={3}>Monthly Death Benefit</th>
  <th className="section-start" colSpan={3}>Approved Life Cover</th>
  <th className="section-start" colSpan={6}>Fund Value Beneficiaries</th>
@@ -355,8 +355,8 @@ export function NewRetirementTable({
  <th>Actions</th>
  <th>Owner Name</th>
  <th>Ownership %</th>
- <th className="section-start">Cover Amount</th>
- <th>Actions</th>
+ <th>Cover Amount</th>
+ <th className="section-start">Actions</th>
  <th>Beneficiary Name</th>
  <th>Benefit Split</th>
  <th>Cover Split</th>
@@ -438,9 +438,9 @@ export function NewRetirementTable({
  />
  )}
 
- {/* Unapproved Life Cover - Cover Amount */}
+ {/* Overview - Cover Amount */}
  {rowIndex === 0 && (
- <td className="p-1 section-start align-top" rowSpan={maxRows}>
+ <td className="p-1 align-top" rowSpan={maxRows}>
  <input
  key={`cover-amount-${fund.id}`}
  type="text"
@@ -712,20 +712,19 @@ export function NewRetirementTable({
  <tfoot>
  <tr>
  <td className="totals-cell-label section-start"></td>
- <td className="totals-cell-label text-right section-start" colSpan={2}>Totals</td>
- <td className="totals-cell-value section-start">{formatTotal(totals.coverAmount)}</td>
+ <td className="totals-cell-label text-right section-start" colSpan={3}>Totals</td>
+ <td className="totals-cell-value">{formatTotal(totals.coverAmount)}</td>
+ <td className="totals-cell-label section-start"></td>
  <td className="totals-cell-label"></td>
  <td className="totals-cell-label"></td>
  <td className="totals-cell-label"></td>
  <td className="totals-cell-value section-start">{formatTotal(totals.monthlyIncome)}</td>
  <td className="totals-cell-label"></td>
  <td className="totals-cell-label"></td>
- <td className="totals-cell-label"></td>
  <td className="totals-cell-value section-start">{formatTotal(totals.approvedLifeCover)}</td>
  <td className="totals-cell-value">{formatTotal(totals.fundValue)}</td>
  <td className="totals-cell-value">{formatTotal(totals.fundValueAtDeath)}</td>
  <td className="totals-cell-label section-start"></td>
- <td className="totals-cell-label"></td>
  <td className="totals-cell-label"></td>
  <td className="totals-cell-label"></td>
  <td className="totals-cell-label"></td>
