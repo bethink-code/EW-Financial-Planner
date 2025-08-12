@@ -202,7 +202,7 @@ export function VoluntaryInvestmentDetailForm({ investment, onDelete }: Voluntar
 
       {/* Group 3: Bequeath To */}
       <FieldGroup title="Bequeath To">
-        <div className="grid grid-cols-2 gap-x-6 gap-y-4">
+        <div className="grid grid-cols-2 gap-x-3 gap-y-4" style={{ width: 'fit-content' }}>
           <FormField label="Spouse">
             <input
               type="text"
@@ -234,7 +234,7 @@ export function VoluntaryInvestmentDetailForm({ investment, onDelete }: Voluntar
       {/* Group 4: Exclusions */}
       <FieldGroup title="Exclusions">
         <div className="space-y-4">
-          <div className="grid grid-cols-2 gap-x-6 gap-y-4">
+          <div className="grid grid-cols-2 gap-x-3 gap-y-4" style={{ width: 'fit-content' }}>
             <FormField label="Excluded from Joint Estate">
               <div className="flex items-center space-x-3">
                 <Switch

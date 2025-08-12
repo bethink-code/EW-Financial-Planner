@@ -149,7 +149,7 @@ export function LiabilityDetailForm({ liability, onDelete }: LiabilityDetailForm
 
       {/* Group 2: Debt Details */}
       <FieldGroup title="Debt Details">
-        <div className="grid grid-cols-2 gap-x-6 gap-y-4">
+        <div className="grid grid-cols-2 gap-x-3 gap-y-4" style={{ width: 'fit-content' }}>
           <FormField label="Debt Amount">
             <input
               type="text"
@@ -228,7 +228,7 @@ export function LiabilityDetailForm({ liability, onDelete }: LiabilityDetailForm
 
       {/* Group 4: Settlement */}
       <FieldGroup title="Settlement">
-        <div className="grid grid-cols-3 gap-x-6 gap-y-4">
+        <div className="grid grid-cols-3 gap-x-3 gap-y-4" style={{ width: 'fit-content' }}>
           <FormField label="Estate">
             <input
               type="text"

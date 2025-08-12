@@ -88,7 +88,20 @@ When applying this pattern to new EntitySelector components:
 5. ✅ Verify visual cohesion with existing components
 6. ✅ Confirm table alignment remains intact
 
+## Hybrid View Column Spacing - Global Rollout
+
+### Components Updated with Column Spacing Optimization:
+- **Defined Benefit Funds**: `defined-benefit-fund-detail-form.tsx` ✅ 
+- **Voluntary Investments**: `voluntary-investment-detail-form.tsx` ✅
+- **Assets**: `asset-detail-form.tsx` ✅ 
+- **Liabilities**: `liability-detail-form.tsx` ✅ 
+- **EntitySelector Components**: EntityOwnerSelector, EntityBeneficiarySelector ✅
+
+### Global Pattern Applied:
+All side-by-side column layouts now use `gap-x-3` (12px) instead of `gap-x-6` (24px) with `style={{ width: 'fit-content' }}` for compact, professional field grouping.
+
 ## Pattern Status
 - **Created**: January 12, 2025
-- **Components Updated**: EntityOwnerSelector, EntityBeneficiarySelector
-- **Status**: ✅ Active Pattern - Ready for Reuse
+- **Global Rollout**: January 12, 2025 - Applied across all hybrid view detail forms
+- **Components Updated**: EntitySelector spacing + 4 main detail form components
+- **Status**: ✅ Active Pattern - Globally Applied

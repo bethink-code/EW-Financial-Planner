@@ -136,7 +136,7 @@ export function AssetDetailForm({ asset, onDelete }: AssetDetailFormProps) {
 
       {/* Group 2: Asset Details */}
       <FieldGroup title="Asset Details">
-        <div className="grid grid-cols-2 gap-x-6 gap-y-4">
+        <div className="grid grid-cols-2 gap-x-3 gap-y-4" style={{ width: 'fit-content' }}>
           <FormField label="Market Value">
             <input
               type="text"
@@ -215,7 +215,7 @@ export function AssetDetailForm({ asset, onDelete }: AssetDetailFormProps) {
 
       {/* Group 4: Distribution */}
       <FieldGroup title="Distribution">
-        <div className="grid grid-cols-3 gap-x-6 gap-y-4">
+        <div className="grid grid-cols-3 gap-x-3 gap-y-4" style={{ width: 'fit-content' }}>
           <FormField label="Estate">
             <input
               type="text"
