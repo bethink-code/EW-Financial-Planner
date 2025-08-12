@@ -223,7 +223,7 @@ export function IncomeProvisionsHybridTable({ onAddProvision, searchTerm = "" }:
           </FieldGroup>
 
         {/* Group 2: Income Provision Details */}
-        <FieldGroup title="Income Provision Details">
+        <FieldGroup title="Income Provision Details" className="mt-6">
             <div className="flex gap-3 flex-wrap">
               <FormField label="Amount">
                 <input
@@ -290,7 +290,7 @@ export function IncomeProvisionsHybridTable({ onAddProvision, searchTerm = "" }:
           </FieldGroup>
 
           {/* Group 3: Additional Details */}
-          <FieldGroup title="Additional Details">
+          <FieldGroup title="Additional Details" className="mt-6">
             <div className="flex gap-3">
               <FormField label="CPI Linked">
                 <div className="flex items-center">
