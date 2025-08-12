@@ -1,4 +1,4 @@
-import { useState, useCallback, useMemo } from 'react';
+import { useState, useCallback, useMemo, useEffect } from 'react';
 import { useQuery, useMutation } from '@tanstack/react-query';
 import { queryClient } from '@/lib/queryClient';
 import { IncomeNeeds, InsertIncomeNeeds } from '@shared/schema';
@@ -7,6 +7,9 @@ import { TableHeaderAddButton } from '@/components/ui/table-header-add-button';
 import { getFieldClass, getCellClass } from '@/lib/field-types';
 import { formatCurrencyValue, formatPercentageValue, formatYearsValue, formatTextValue, getValueClass, handleDefaultValueFocus } from '@/lib/formatting';
 import { type ClientEntity } from '@/lib/entity-columns-utils';
+import { HybridViewWrapper } from '@/components/common/hybrid-view-wrapper';
+import { IncomeNeedPreviewCard } from './income-need-preview-card';
+import { IncomeNeedDetailForm } from './income-need-detail-form';
 
 interface IncomeNeedsTableProps {
   viewMode: 'table' | 'hybrid';
@@ -16,6 +19,7 @@ interface IncomeNeedsTableProps {
 
 function IncomeNeedsTable({ viewMode, searchTerm, onAddIncomeNeed }: IncomeNeedsTableProps) {
   const [isUpdating, setIsUpdating] = useState(false);
+  const [selectedIncomeNeedId, setSelectedIncomeNeedId] = useState<number | null>(null);
 
   const { data: incomeNeeds = [], isLoading, error } = useQuery<IncomeNeeds[]>({
     queryKey: ['/api/income-needs'],
@@ -30,6 +34,25 @@ function IncomeNeedsTable({ viewMode, searchTerm, onAddIncomeNeed }: IncomeNeeds
       entityType: entity.entityType
     }))
   });
+
+  // Filter income needs based on search term
+  const filteredIncomeNeeds = useMemo(() => {
+    if (!searchTerm) return incomeNeeds;
+    const lowerSearchTerm = searchTerm.toLowerCase();
+    return incomeNeeds.filter(incomeNeed =>
+      incomeNeed.description?.toLowerCase().includes(lowerSearchTerm) ||
+      incomeNeed.personName?.toLowerCase().includes(lowerSearchTerm) ||
+      incomeNeed.amount?.toLowerCase().includes(lowerSearchTerm) ||
+      incomeNeed.frequency?.toLowerCase().includes(lowerSearchTerm)
+    );
+  }, [incomeNeeds, searchTerm]);
+
+  // Auto-select first item in hybrid view
+  useEffect(() => {
+    if (viewMode === 'hybrid' && filteredIncomeNeeds.length > 0 && !selectedIncomeNeedId) {
+      setSelectedIncomeNeedId(filteredIncomeNeeds[0].id);
+    }
+  }, [viewMode, filteredIncomeNeeds, selectedIncomeNeedId]);
 
   const addMutation = useMutation({
     mutationFn: async (): Promise<IncomeNeeds> => {
@@ -110,19 +133,25 @@ function IncomeNeedsTable({ viewMode, searchTerm, onAddIncomeNeed }: IncomeNeeds
     }
   });
 
+  // Calculate totals for filtered income needs
   const totals = useMemo(() => {
     return {
-      count: incomeNeeds.length,
-      amount: incomeNeeds.reduce((sum: number, incomeNeed: IncomeNeeds) => {
+      count: filteredIncomeNeeds.length,
+      amount: filteredIncomeNeeds.reduce((sum: number, incomeNeed: IncomeNeeds) => {
         const value = parseFloat((incomeNeed.amount || '').replace(/[^\d.-]/g, '')) || 0;
         return sum + value;
       }, 0),
-      capitalisedAmount: incomeNeeds.reduce((sum: number, incomeNeed: IncomeNeeds) => {
+      capitalisedAmount: filteredIncomeNeeds.reduce((sum: number, incomeNeed: IncomeNeeds) => {
         const value = parseFloat((incomeNeed.capitalisedAmount || '').replace(/[^\d.-]/g, '')) || 0;
         return sum + value;
       }, 0),
     };
-  }, [incomeNeeds]);
+  }, [filteredIncomeNeeds]);
+
+  // Get selected income need for hybrid view
+  const selectedIncomeNeed = selectedIncomeNeedId 
+    ? filteredIncomeNeeds.find(inc => inc.id === selectedIncomeNeedId)
+    : null;
 
   const handleUpdateIncomeNeed = useCallback((id: number, field: keyof IncomeNeeds, value: string | boolean | string[]) => {
     setIsUpdating(true);
@@ -160,9 +189,18 @@ function IncomeNeedsTable({ viewMode, searchTerm, onAddIncomeNeed }: IncomeNeeds
 
   const handleDeleteIncomeNeed = useCallback((id: number) => {
     if (window.confirm('Are you sure you want to delete this income need?')) {
+      // If deleting the selected item in hybrid view, clear selection
+      if (id === selectedIncomeNeedId) {
+        setSelectedIncomeNeedId(null);
+      }
       deleteMutation.mutate(id);
     }
-  }, [deleteMutation]);
+  }, [deleteMutation, selectedIncomeNeedId]);
+
+  const handleDuplicateIncomeNeed = useCallback((incomeNeed: IncomeNeeds) => {
+    setIsUpdating(true);
+    addMutation.mutate();
+  }, [addMutation]);
 
   if (isLoading) {
     return <div className="flex justify-center">Loading income needs...</div>;
@@ -201,7 +239,7 @@ function IncomeNeedsTable({ viewMode, searchTerm, onAddIncomeNeed }: IncomeNeeds
           </tr>
         </thead>
         <tbody className="divide-y divide-neutral-200">
-          {incomeNeeds.map((incomeNeed: IncomeNeeds, index) => (
+          {filteredIncomeNeeds.map((incomeNeed: IncomeNeeds, index) => (
             <tr key={incomeNeed.id} className="hover:bg-neutral-50">
               <td className="table-actions-cell p-1 text-center section-start">
                 <ActionButtonGroup>
@@ -332,241 +370,82 @@ function IncomeNeedsTable({ viewMode, searchTerm, onAddIncomeNeed }: IncomeNeeds
       </table>
     </div>
   ) : (
-    // Hybrid View - Left sidebar with summary cards + Right side detailed form
-    <div className="flex gap-6">
-      {/* Left Sidebar - Summary Cards */}
-      <div className="w-80 flex-shrink-0 space-y-4">
-        {/* Totals Summary Card */}
-        <div className="bg-white rounded-lg shadow-sm border border-neutral-200 p-4">
-          <h3 className="text-lg font-semibold text-neutral-800 mb-3">Income Summary</h3>
-          <div className="space-y-2">
-            <div className="flex justify-between">
-              <span className="text-sm text-neutral-600">Total Income:</span>
-              <span className="font-semibold">R {totals.amount.toLocaleString()}</span>
-            </div>
-            <div className="flex justify-between">
-              <span className="text-sm text-neutral-600">Capitalised Amount:</span>
-              <span className="font-semibold">R {totals.capitalisedAmount.toLocaleString()}</span>
-            </div>
-            <div className="flex justify-between">
-              <span className="text-sm text-neutral-600">Total Items:</span>
-              <span className="font-semibold">{incomeNeeds.length}</span>
+    // Hybrid View - Following Global Hybrid View Pattern
+    <HybridViewWrapper
+      viewMode={viewMode}
+      tableComponent={null}
+      summaryCards={[
+        {
+          title: "Income Summary",
+          items: [
+            { label: "Total Income", value: `R ${totals.amount.toLocaleString()}` },
+            { label: "Capitalised Amount", value: `R ${totals.capitalisedAmount.toLocaleString()}` },
+            { label: "Total Items", value: totals.count.toString() }
+          ]
+        }
+      ]}
+      detailForms={
+        <div className="hybrid-tabs-container">
+          {/* Preview Cards */}
+          <div className="hybrid-tabs-section">
+            {onAddIncomeNeed && (
+              <div className="hybrid-add-button-container">
+                <AddButton 
+                  onClick={onAddIncomeNeed} 
+                  disabled={isUpdating}
+                  title="Add New Income Need"
+                />
+              </div>
+            )}
+            <div className="hybrid-tabs-list">
+              {filteredIncomeNeeds.map((incomeNeed, index) => (
+                <IncomeNeedPreviewCard
+                  key={incomeNeed.id}
+                  incomeNeed={incomeNeed}
+                  isActive={selectedIncomeNeedId === incomeNeed.id}
+                  onClick={() => setSelectedIncomeNeedId(incomeNeed.id)}
+                  isFirst={index === 0}
+                  isLast={index === filteredIncomeNeeds.length - 1}
+                />
+              ))}
             </div>
           </div>
-        </div>
 
-        {/* Income Needs Cards */}
-        <div className="space-y-3">
-          {incomeNeeds.slice(0, 5).map((incomeNeed: IncomeNeeds) => (
-            <div key={`summary-${incomeNeed.id}`} className="bg-green-50 rounded-lg border border-green-200 p-3">
-              <h4 className="font-medium text-green-900 text-sm mb-1">
-                {formatTextValue(incomeNeed.description) || `Income #${incomeNeed.id}`}
-              </h4>
-              <div className="text-xs text-green-700 mb-1">
-                {incomeNeed.frequency || 'monthly'}
+          {/* Detail Form */}
+          <div className="hybrid-detail-section">
+            {selectedIncomeNeed ? (
+              <IncomeNeedDetailForm
+                incomeNeed={selectedIncomeNeed}
+                onDelete={handleDeleteIncomeNeed}
+                onDuplicate={handleDuplicateIncomeNeed}
+              />
+            ) : filteredIncomeNeeds.length === 0 ? (
+              <div className="hybrid-empty-state">
+                <h3 className="text-lg font-medium text-neutral-500 mb-2">No Income Needs Found</h3>
+                <p className="text-neutral-400 mb-4">
+                  {searchTerm ? 'No income needs match your search criteria.' : 'Start by adding your first income need.'}
+                </p>
+                {onAddIncomeNeed && (
+                  <AddButton 
+                    onClick={onAddIncomeNeed} 
+                    disabled={isUpdating}
+                    title="Add Income Need"
+                  />
+                )}
               </div>
-              <div className="font-semibold text-green-900 text-sm">
-                {incomeNeed.amount}
+            ) : (
+              <div className="hybrid-select-state">
+                <h3 className="text-lg font-medium text-neutral-500 mb-2">Select an Income Need</h3>
+                <p className="text-neutral-400">Choose an income need from the tabs above to view and edit details.</p>
               </div>
-            </div>
-          ))}
-          {incomeNeeds.length > 5 && (
-            <div className="text-center text-sm text-neutral-600">
-              +{incomeNeeds.length - 5} more items
-            </div>
-          )}
-        </div>
-        
-        {/* Add Income Need Button */}
-        {onAddIncomeNeed && (
-          <button
-            onClick={onAddIncomeNeed}
-            disabled={isUpdating}
-            className="w-full inline-flex items-center justify-center px-4 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed"
-          >
-            <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
-            </svg>
-            Add New Income Need
-          </button>
-        )}
-      </div>
-
-      {/* Right Side - Detailed Forms */}
-      <div className="flex-1 space-y-4">
-        <div className="bg-white rounded-lg shadow-sm border border-neutral-200">
-          {/* Section Header */}
-          <div className="bg-green-50 px-6 py-4 border-b border-neutral-200">
-            <h3 className="text-lg font-medium text-neutral-700">
-              Income Needs ({incomeNeeds.length})
-            </h3>
-          </div>
-          
-          {/* Income needs in form view */}
-          <div className="p-6 space-y-6">
-            {incomeNeeds.map((incomeNeed: IncomeNeeds) => (
-              <div key={`hybrid-${incomeNeed.id}`} className="border border-gray-200 rounded-lg p-4 space-y-4">
-                {/* Income Need Header with Actions */}
-                <div className="flex justify-between items-start">
-                  <div>
-                    <h4 className="font-medium text-neutral-800 text-lg">
-                      {formatTextValue(incomeNeed.description) || `Income Need #${incomeNeed.id}`}
-                    </h4>
-                    <p className="text-sm text-neutral-600 mt-1">
-                      Amount: <span className="font-semibold">{incomeNeed.amount}</span> | 
-                      Frequency: <span className="font-semibold">{incomeNeed.frequency}</span>
-                    </p>
-                  </div>
-                  <ActionButtonGroup>
-                    <DuplicateButton
-                      onClick={() => addMutation.mutate()}
-                      disabled={isUpdating}
-                    />
-                    <DeleteButton
-                      onClick={() => handleDeleteIncomeNeed(incomeNeed.id)}
-                      disabled={isUpdating}
-                    />
-                  </ActionButtonGroup>
-                </div>
-                
-                {/* Income Details Grid */}
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                  {/* Description */}
-                  <div>
-                    <label className="block text-sm font-medium text-neutral-700 mb-2">
-                      Description
-                    </label>
-                    <input
-                      type="text"
-                      defaultValue={formatTextValue(incomeNeed.description)}
-                      className={`w-full px-3 py-2 border border-neutral-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent ${getValueClass(incomeNeed.description, 'text')}`}
-                      onFocus={handleDefaultValueFocus}
-                      onBlur={(e) => handleInputBlur(incomeNeed.id, 'description', e.target.value)}
-                      disabled={isUpdating}
-                    />
-                  </div>
-                  
-                  {/* Amount */}
-                  <div>
-                    <label className="block text-sm font-medium text-neutral-700 mb-2">
-                      Amount
-                    </label>
-                    <input
-                      key={`hybrid-amount-${incomeNeed.id}-${incomeNeed.amount}`}
-                      type="text"
-                      defaultValue={incomeNeed.amount}
-                      className={`w-full px-3 py-2 border border-neutral-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent ${getValueClass(incomeNeed.amount, 'currency')}`}
-                      onFocus={handleDefaultValueFocus}
-                      onBlur={(e) => handleInputBlur(incomeNeed.id, 'amount', e.target.value)}
-                      disabled={isUpdating}
-                    />
-                  </div>
-                  
-                  {/* Frequency */}
-                  <div>
-                    <label className="block text-sm font-medium text-neutral-700 mb-2">
-                      Frequency
-                    </label>
-                    <select
-                      defaultValue={incomeNeed.frequency}
-                      className="w-full px-3 py-2 border border-neutral-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                      onChange={(e) => handleInputBlur(incomeNeed.id, 'frequency', e.target.value)}
-                      disabled={isUpdating}
-                    >
-                      <option value="monthly">Monthly</option>
-                      <option value="annually">Annually</option>
-                      <option value="quarterly">Quarterly</option>
-                    </select>
-                  </div>
-                </div>
-                
-                {/* Income Period and Adjustments */}
-                <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-                  <div>
-                    <label className="block text-sm font-medium text-neutral-700 mb-2">
-                      Period From
-                    </label>
-                    <input
-                      key={`hybrid-periodFrom-${incomeNeed.id}-${incomeNeed.periodFrom}`}
-                      type="text"
-                      defaultValue={incomeNeed.periodFrom}
-                      className={`w-full px-2 py-1 text-sm border border-neutral-300 rounded focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-transparent ${getValueClass(incomeNeed.periodFrom, 'years')}`}
-                      onFocus={handleDefaultValueFocus}
-                      onBlur={(e) => handleInputBlur(incomeNeed.id, 'periodFrom', e.target.value)}
-                      disabled={isUpdating}
-                    />
-                  </div>
-                  
-                  <div>
-                    <label className="block text-sm font-medium text-neutral-700 mb-2">
-                      Period To
-                    </label>
-                    <input
-                      key={`hybrid-periodTo-${incomeNeed.id}-${incomeNeed.periodTo}`}
-                      type="text"
-                      defaultValue={incomeNeed.periodTo}
-                      className={`w-full px-2 py-1 text-sm border border-neutral-300 rounded focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-transparent ${getValueClass(incomeNeed.periodTo, 'years')}`}
-                      onFocus={handleDefaultValueFocus}
-                      onBlur={(e) => handleInputBlur(incomeNeed.id, 'periodTo', e.target.value)}
-                      disabled={isUpdating}
-                    />
-                  </div>
-                  
-                  <div>
-                    <label className="block text-sm font-medium text-neutral-700 mb-2">
-                      Discount Rate
-                    </label>
-                    <input
-                      key={`hybrid-discountRate-${incomeNeed.id}-${incomeNeed.discountRate}`}
-                      type="text"
-                      defaultValue={incomeNeed.discountRate}
-                      className={`w-full px-2 py-1 text-sm border border-neutral-300 rounded focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-transparent ${getValueClass(incomeNeed.discountRate, 'percentage')}`}
-                      onFocus={handleDefaultValueFocus}
-                      onBlur={(e) => handleInputBlur(incomeNeed.id, 'discountRate', e.target.value)}
-                      disabled={isUpdating}
-                    />
-                  </div>
-                  
-                  <div>
-                    <label className="block text-sm font-medium text-neutral-700 mb-2">
-                      CPI Adjustment
-                    </label>
-                    <div className="flex items-center mt-2">
-                      <input
-                        type="checkbox"
-                        checked={incomeNeed.cpi}
-                        className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
-                        onChange={(e) => handleUpdateIncomeNeed(incomeNeed.id, 'cpi', e.target.checked)}
-                        disabled={isUpdating}
-                      />
-                      <span className="ml-2 text-sm text-gray-600">Apply CPI</span>
-                    </div>
-                  </div>
-                </div>
-                
-                {/* Calculated Field */}
-                <div className="pt-3 border-t border-gray-200">
-                  <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-                    <div className="md:col-start-4">
-                      <label className="block text-sm font-medium text-neutral-700 mb-2">
-                        Capitalised Amount
-                      </label>
-                      <input
-                        key={`hybrid-capitalisedAmount-${incomeNeed.id}-${incomeNeed.capitalisedAmount}`}
-                        type="text"
-                        defaultValue={incomeNeed.capitalisedAmount}
-                        className="calculated-field w-full px-2 py-1 text-sm border-0 bg-transparent focus:outline-none"
-                        readOnly
-                      />
-                    </div>
-                  </div>
-                </div>
-              </div>
-            ))}
+            )}
           </div>
         </div>
-      </div>
-    </div>
+      }
+      isUpdating={isUpdating}
+      isEmpty={filteredIncomeNeeds.length === 0}
+      emptyStateMessage={searchTerm ? "No income needs match your search criteria." : "No income needs found. Add your first income need to get started."}
+    />
   );
 }
 
