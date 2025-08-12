@@ -17,12 +17,20 @@ interface LumpSumHybridTableProps {
 
 export function LumpSumHybridTable({ onAddBequest }: LumpSumHybridTableProps) {
   const { isLoading: globalLoading } = useLoading();
+  const [selectedBequestId, setSelectedBequestId] = React.useState<number | null>(null);
 
   const { data: bequests = [], isLoading } = useQuery<LumpSumBequest[]>({
     queryKey: ['/api/lump-sum-bequests'],
   });
 
   const debouncedUpdate = useDebouncedUpdate();
+
+  // Auto-select first item when data loads
+  React.useEffect(() => {
+    if (bequests.length > 0 && selectedBequestId === null) {
+      setSelectedBequestId(bequests[0].id);
+    }
+  }, [bequests, selectedBequestId]);
 
   const deleteMutation = useMutation({
     mutationFn: async (id: number) => {
@@ -78,6 +86,7 @@ export function LumpSumHybridTable({ onAddBequest }: LumpSumHybridTableProps) {
   const summaryCards = bequests.map((bequest, index) => {
     const isFirst = index === 0;
     const isLast = index === bequests.length - 1;
+    const isActive = bequest.id === selectedBequestId;
 
     // Generate preview content
     const title = bequest.description && bequest.description.trim() !== '' && bequest.description !== 'Enter details ...' 
@@ -112,76 +121,84 @@ export function LumpSumHybridTable({ onAddBequest }: LumpSumHybridTableProps) {
       <HybridItemPreviewCard
         key={bequest.id}
         title={title}
-        primaryValue={preview}
+        subtitle={preview}
+        primaryValue={bequest.amount || 'R 0'}
+        variant={isActive ? 'active' : 'blue'}
+        isClickable={true}
         isFirst={isFirst}
         isLast={isLast}
+        onClick={() => setSelectedBequestId(bequest.id)}
       />
     );
   });
 
-  // Generate detail forms
-  const detailForms = (
-    <GroupedDetailForm>
-      {bequests.map((bequest) => (
-        <div key={bequest.id}>
-          {/* Header with Actions */}
-          <div className="flex justify-between items-start mb-6">
-            <h2 className="text-lg font-semibold text-neutral-800">
-              {bequest.description || 'Untitled Bequest'}
-            </h2>
-            <div className="flex gap-2">
-              <Button 
-                variant="outline" 
-                size="sm"
-                onClick={() => handleDuplicate(bequest)}
-                disabled={isUpdating}
-              >
-                Duplicate
-              </Button>
-              <Button 
-                variant="outline" 
-                size="sm"
-                onClick={() => handleDelete(bequest.id)}
-                disabled={isUpdating}
-              >
-                Delete
-              </Button>
-            </div>
-          </div>
+  // Get selected bequest for detail form
+  const selectedBequest = selectedBequestId 
+    ? bequests.find(bequest => bequest.id === selectedBequestId)
+    : null;
 
-          {/* Group 1: Overview */}
-          <FieldGroup title="Overview">
+  // Generate detail forms - only show selected item
+  const detailForms = selectedBequest ? (
+    <GroupedDetailForm>
+      <div key={selectedBequest.id}>
+        {/* Header with Actions */}
+        <div className="flex justify-between items-start mb-6">
+          <h2 className="text-lg font-semibold text-neutral-800">
+            {selectedBequest.description || 'Untitled Bequest'}
+          </h2>
+          <div className="flex gap-2">
+            <Button 
+              variant="outline" 
+              size="sm"
+              onClick={() => handleDuplicate(selectedBequest)}
+              disabled={isUpdating}
+            >
+              Duplicate
+            </Button>
+            <Button 
+              variant="outline" 
+              size="sm"
+              onClick={() => handleDelete(selectedBequest.id)}
+              disabled={isUpdating}
+            >
+              Delete
+            </Button>
+          </div>
+        </div>
+
+        {/* Group 1: Overview */}
+        <FieldGroup title="Overview">
             <div className="flex gap-3">
               <FormField label="Description">
                 <input
                   type="text"
-                  defaultValue={formatTextValue(bequest.description)}
-                  className={`table-input ${getValueClass(bequest.description, 'text')}`}
+                  defaultValue={formatTextValue(selectedBequest.description)}
+                  className={`table-input ${getValueClass(selectedBequest.description, 'text')}`}
                   style={{ width: 'fit-content', minWidth: '120px' }}
                   onFocus={handleDefaultValueFocus}
-                  onBlur={(e) => handleFieldUpdate(bequest.id, 'description', e.target.value)}
+                  onBlur={(e) => handleFieldUpdate(selectedBequest.id, 'description', e.target.value)}
                 />
               </FormField>
               
               <FormField label="Entity">
                 <input
                   type="text"
-                  defaultValue={formatTextValue(bequest.entity)}
-                  className={`table-input ${getValueClass(bequest.entity, 'text')}`}
+                  defaultValue={formatTextValue(selectedBequest.entity)}
+                  className={`table-input ${getValueClass(selectedBequest.entity, 'text')}`}
                   style={{ width: 'fit-content', minWidth: '120px' }}
                   onFocus={handleDefaultValueFocus}
-                  onBlur={(e) => handleFieldUpdate(bequest.id, 'entity', e.target.value)}
+                  onBlur={(e) => handleFieldUpdate(selectedBequest.id, 'entity', e.target.value)}
                 />
               </FormField>
               
               <FormField label="Start">
                 <input
                   type="text"
-                  defaultValue={formatTextValue(bequest.start)}
-                  className={`table-input ${getValueClass(bequest.start, 'text')}`}
+                  defaultValue={formatTextValue(selectedBequest.start)}
+                  className={`table-input ${getValueClass(selectedBequest.start, 'text')}`}
                   style={{ width: 'fit-content', minWidth: '80px' }}
                   onFocus={handleDefaultValueFocus}
-                  onBlur={(e) => handleFieldUpdate(bequest.id, 'start', e.target.value)}
+                  onBlur={(e) => handleFieldUpdate(selectedBequest.id, 'start', e.target.value)}
                 />
               </FormField>
             </div>
@@ -193,20 +210,20 @@ export function LumpSumHybridTable({ onAddBequest }: LumpSumHybridTableProps) {
               <FormField label="Amount">
                 <input
                   type="text"
-                  defaultValue={bequest.amount}
-                  className={`table-input ${getValueClass(bequest.amount, 'currency')}`}
+                  defaultValue={selectedBequest.amount}
+                  className={`table-input ${getValueClass(selectedBequest.amount, 'currency')}`}
                   style={{ width: 'fit-content', minWidth: '100px' }}
-                  onBlur={(e) => handleFieldUpdate(bequest.id, 'amount', e.target.value)}
+                  onBlur={(e) => handleFieldUpdate(selectedBequest.id, 'amount', e.target.value)}
                 />
               </FormField>
               
               <FormField label="Increase %">
                 <input
                   type="text"
-                  defaultValue={bequest.increasePercentage}
-                  className={`table-input ${getValueClass(bequest.increasePercentage, 'percentage')}`}
+                  defaultValue={selectedBequest.increasePercentage}
+                  className={`table-input ${getValueClass(selectedBequest.increasePercentage, 'percentage')}`}
                   style={{ width: 'fit-content', minWidth: '60px' }}
-                  onBlur={(e) => handleFieldUpdate(bequest.id, 'increasePercentage', e.target.value)}
+                  onBlur={(e) => handleFieldUpdate(selectedBequest.id, 'increasePercentage', e.target.value)}
                 />
               </FormField>
               
@@ -214,12 +231,12 @@ export function LumpSumHybridTable({ onAddBequest }: LumpSumHybridTableProps) {
                 <div className="flex items-center">
                   <input
                     type="checkbox"
-                    checked={bequest.cpi}
-                    onChange={(e) => handleFieldUpdate(bequest.id, 'cpi', e.target.checked)}
+                    checked={selectedBequest.cpi}
+                    onChange={(e) => handleFieldUpdate(selectedBequest.id, 'cpi', e.target.checked)}
                     className="h-4 w-4 text-primary focus:ring-primary border-gray-300 rounded"
                   />
                   <label className="ml-2 text-sm text-gray-700">
-                    {bequest.cpi ? 'Yes' : 'No'}
+                    {selectedBequest.cpi ? 'Yes' : 'No'}
                   </label>
                 </div>
               </FormField>
@@ -232,7 +249,7 @@ export function LumpSumHybridTable({ onAddBequest }: LumpSumHybridTableProps) {
               <FormField label="Value at Death">
                 <input
                   type="text"
-                  defaultValue={bequest.valueAtDeath}
+                  defaultValue={selectedBequest.valueAtDeath}
                   className="calculated-field"
                   style={{ width: 'fit-content', minWidth: '100px' }}
                   readOnly
@@ -242,9 +259,8 @@ export function LumpSumHybridTable({ onAddBequest }: LumpSumHybridTableProps) {
             </div>
           </FieldGroup>
         </div>
-      ))}
     </GroupedDetailForm>
-  );
+  ) : null;
 
   if (isLoading) {
     return <div className="text-center py-4">Loading bequests...</div>;
