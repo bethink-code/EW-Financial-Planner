@@ -374,27 +374,7 @@ function IncomeNeedsTable({ viewMode, searchTerm, onAddIncomeNeed }: IncomeNeeds
     <HybridViewWrapper
       viewMode={viewMode}
       tableComponent={null}
-      summaryCards={
-        <div className="p-4">
-          <div className="bg-white rounded-lg border border-neutral-200 p-4 mb-4">
-            <h3 className="text-lg font-semibold text-neutral-800 mb-3">Income Summary</h3>
-            <div className="space-y-2">
-              <div className="flex justify-between">
-                <span className="text-neutral-600">Total Income:</span>
-                <span className="font-medium">R {totals.amount.toLocaleString()}</span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-neutral-600">Capitalised Amount:</span>
-                <span className="font-medium">R {totals.capitalisedAmount.toLocaleString()}</span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-neutral-600">Total Items:</span>
-                <span className="font-medium">{totals.count}</span>
-              </div>
-            </div>
-          </div>
-        </div>
-      }
+      summaryCards={null}
       detailForms={
         <div className="flex border-t border-neutral-200">
           {/* Left Section - Preview Cards (Tabs) */}
