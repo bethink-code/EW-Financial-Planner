@@ -197,6 +197,7 @@ export default function NewRetirementFunds() {
                 onUpdate={handleFieldUpdate}
                 onDuplicate={handleDuplicateFund}
                 onDelete={handleRemoveFund}
+                onAddFund={handleAddFund}
                 disabled={updateMutation.isPending || addMutation.isPending}
               />
             )}
