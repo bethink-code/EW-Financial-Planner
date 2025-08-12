@@ -424,7 +424,7 @@ export function NewRetirementTable({
  )}
 
  {/* Overview - Owner - EntityOwnerSelector renders its own td elements */}
- {rowIndex < (fund.owners?.length || 0) && (
+ {rowIndex < (fund.owners?.length || 0) ? (
  <EntityOwnerSelector
  policyId={fund.id}
  owners={fund.owners || []}
@@ -436,6 +436,13 @@ export function NewRetirementTable({
  rowIndex={rowIndex}
  disabled={isUpdating}
  />
+ ) : (
+ // Empty cells for rows without owners (EntityOwnerSelector provides 3 columns)
+ <>
+ <td className="p-1 align-top"></td>
+ <td className="p-1 align-top"></td>
+ <td className="p-1 align-top"></td>
+ </>
  )}
 
  {/* Overview - Cover Amount */}
@@ -456,7 +463,7 @@ export function NewRetirementTable({
  )}
 
  {/* Unapproved Life Cover - Beneficiary - EntityBeneficiarySelector renders its own td elements */}
- {rowIndex < (fund.unapprovedBeneficiaries?.length || 0) && (
+ {rowIndex < (fund.unapprovedBeneficiaries?.length || 0) ? (
  <EntityBeneficiarySelector
  policyId={fund.id}
  beneficiaries={fund.unapprovedBeneficiaries || []}
@@ -468,9 +475,14 @@ export function NewRetirementTable({
  rowIndex={rowIndex}
  disabled={isUpdating}
  />
+ ) : (
+ // Empty cells for rows without beneficiaries (EntityBeneficiarySelector provides 3 columns)
+ <>
+ <td className="p-1 section-start align-top"></td>
+ <td className="p-1 align-top"></td>
+ <td className="p-1 align-top"></td>
+ </>
  )}
-
-
 
  {/* Unapproved Life Cover - Cover Split (Calculated) */}
  <td className="p-1 bg-neutral-100 text-right align-top">
@@ -604,7 +616,7 @@ export function NewRetirementTable({
  )}
 
  {/* Fund Value Beneficiaries - Beneficiary - EntityBeneficiarySelector renders its own td elements */}
- {rowIndex < (fund.fundValueBeneficiaries?.length || 0) && (
+ {rowIndex < (fund.fundValueBeneficiaries?.length || 0) ? (
  <EntityBeneficiarySelector
  policyId={fund.id}
  beneficiaries={fund.fundValueBeneficiaries || []}
@@ -616,9 +628,14 @@ export function NewRetirementTable({
  rowIndex={rowIndex}
  disabled={isUpdating}
  />
+ ) : (
+ // Empty cells for rows without beneficiaries (EntityBeneficiarySelector provides 3 columns)
+ <>
+ <td className="p-1 section-start align-top"></td>
+ <td className="p-1 align-top"></td>
+ <td className="p-1 align-top"></td>
+ </>
  )}
-
-
 
  {/* Fund Value Beneficiaries - Cover (Calculated) */}
  <td className="p-1 bg-neutral-100 text-right align-top">
