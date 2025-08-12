@@ -5,7 +5,7 @@ import { GroupedDetailForm, FieldGroup, FormField } from '@/components/common/gr
 import EntityOwnerSelector from '@/components/common/entity-owner-selector';
 import EntityBeneficiarySelector from '@/components/common/entity-beneficiary-selector';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { ActionButtonGroup, DuplicateButton, DeleteButton } from '@/components/ui/action-buttons';
+import { Button } from '@/components/ui/button';
 import { handleDefaultValueFocus, formatYearsValue, formatPercentageValue, getValueClass } from '@/lib/formatting';
 import { getFieldClass } from '@/lib/design-tokens';
 import { getCellClass } from '@/lib/field-types';
@@ -106,16 +106,24 @@ export function AssuranceDetailForm({
         <h2 className="text-lg font-semibold text-neutral-800">
           {policy.description || 'Untitled Policy'}
         </h2>
-        <ActionButtonGroup>
-          <DuplicateButton 
+        <div className="flex gap-2">
+          <Button 
+            variant="outline" 
+            size="sm"
             onClick={() => onDuplicate(policy)} 
             disabled={disabled}
-          />
-          <DeleteButton 
+          >
+            Duplicate
+          </Button>
+          <Button 
+            variant="outline" 
+            size="sm"
             onClick={() => onDelete(policy.id)} 
             disabled={disabled}
-          />
-        </ActionButtonGroup>
+          >
+            Delete
+          </Button>
+        </div>
       </div>
 
       {/* Group 1: Overview (Owner → Life Assured → Death Benefit) */}
