@@ -4,7 +4,7 @@ import { IncomeProvisions } from '@shared/schema';
 import { apiRequest, queryClient } from '@/lib/queryClient';
 import { HybridViewWrapper } from '@/components/common/hybrid-view-wrapper';
 import { HybridItemPreviewCard } from '@/components/common/hybrid-item-preview-card';
-import { FieldGroup, FormField } from '@/components/common/grouped-detail-form';
+import { FieldGroup, FormField, GroupedDetailForm } from '@/components/common/grouped-detail-form';
 import { useDebouncedUpdate } from '@/hooks/use-debounced-update';
 import { formatTextValue, getValueClass, handleDefaultValueFocus } from '@/lib/formatting';
 import { useLoading } from '@/contexts/loading-context';
@@ -123,134 +123,173 @@ export function IncomeProvisionsHybridTable({ onAddProvision, searchTerm = "" }:
   });
 
   // Generate detail forms
-  const detailForms = filteredProvisions.map((provision) => (
-    <div key={provision.id} className="space-y-6">
-      {/* Group 1: Overview */}
-      <FieldGroup title="Overview">
-        <div className="grid grid-cols-2 gap-x-3 w-fit">
-          <FormField label="Description">
-            <input
-              type="text"
-              defaultValue={formatTextValue(provision.description)}
-              className={`table-input w-fit ${getValueClass(provision.description, 'text')}`}
-              onFocus={handleDefaultValueFocus}
-              onBlur={(e) => handleFieldUpdate(provision.id, 'description', e.target.value)}
-            />
-          </FormField>
-          
-          <FormField label="Entity">
-            <input
-              type="text"
-              defaultValue={formatTextValue(provision.personName)}
-              className={`table-input w-fit ${getValueClass(provision.personName, 'text')}`}
-              onFocus={handleDefaultValueFocus}
-              onBlur={(e) => handleFieldUpdate(provision.id, 'personName', e.target.value)}
-            />
-          </FormField>
-        </div>
-      </FieldGroup>
-
-      {/* Group 2: Income Provision Details */}
-      <FieldGroup title="Income Provision Details">
-        <div className="grid grid-cols-3 gap-x-3 w-fit">
-          <FormField label="Amount">
-            <input
-              type="text"
-              defaultValue={provision.amount}
-              className={`table-input w-fit ${getValueClass(provision.amount, 'currency')}`}
-              onBlur={(e) => handleFieldUpdate(provision.id, 'amount', e.target.value)}
-            />
-          </FormField>
-          
-          <FormField label="Start">
-            <input
-              type="text"
-              defaultValue={formatTextValue(provision.startDate)}
-              className={`table-input w-fit ${getValueClass(provision.startDate, 'text')}`}
-              onFocus={handleDefaultValueFocus}
-              onBlur={(e) => handleFieldUpdate(provision.id, 'startDate', e.target.value)}
-            />
-          </FormField>
-          
-          <FormField label="Term (years)">
-            <input
-              type="text"
-              defaultValue={provision.termYears}
-              className={`table-input w-fit ${getValueClass(provision.termYears, 'years')}`}
-              onBlur={(e) => handleFieldUpdate(provision.id, 'termYears', e.target.value)}
-            />
-          </FormField>
-          
-          <FormField label="Increase %">
-            <input
-              type="text"
-              defaultValue={provision.increasePercentage}
-              className={`table-input w-fit ${getValueClass(provision.increasePercentage, 'percentage')}`}
-              onBlur={(e) => handleFieldUpdate(provision.id, 'increasePercentage', e.target.value)}
-            />
-          </FormField>
-          
-          <FormField label="Frequency">
-            <input
-              type="text"
-              defaultValue={formatTextValue(provision.frequency)}
-              className={`table-input w-fit ${getValueClass(provision.frequency, 'text')}`}
-              onFocus={handleDefaultValueFocus}
-              onBlur={(e) => handleFieldUpdate(provision.id, 'frequency', e.target.value)}
-            />
-          </FormField>
-          
-          <FormField label="Tax %">
-            <input
-              type="text"
-              defaultValue={provision.taxPercentage}
-              className={`table-input w-fit ${getValueClass(provision.taxPercentage, 'percentage')}`}
-              onBlur={(e) => handleFieldUpdate(provision.id, 'taxPercentage', e.target.value)}
-            />
-          </FormField>
-        </div>
-      </FieldGroup>
-
-      {/* Group 3: Additional Details */}
-      <FieldGroup title="Additional Details">
-        <div className="grid grid-cols-2 gap-x-3 w-fit">
-          <FormField label="CPI Linked">
-            <div className="flex items-center">
-              <input
-                type="checkbox"
-                checked={provision.cpi}
-                onChange={(e) => handleFieldUpdate(provision.id, 'cpi', e.target.checked)}
-                className="h-4 w-4 text-primary focus:ring-primary border-gray-300 rounded"
-              />
-              <label className="ml-2 text-sm text-gray-700">
-                {provision.cpi ? 'Yes' : 'No'}
-              </label>
+  const detailForms = (
+    <GroupedDetailForm>
+      {filteredProvisions.map((provision) => (
+        <div key={provision.id}>
+          {/* Header with Actions */}
+          <div className="flex justify-between items-start mb-6">
+            <h2 className="text-lg font-semibold text-neutral-800">
+              {provision.description || 'Untitled Provision'}
+            </h2>
+            <div className="flex gap-2">
+              <Button 
+                variant="outline" 
+                size="sm"
+                onClick={() => onDuplicate(provision)}
+                disabled={isUpdating}
+              >
+                Duplicate
+              </Button>
+              <Button 
+                variant="outline" 
+                size="sm"
+                onClick={() => onDelete(provision.id)}
+                disabled={isUpdating}
+              >
+                Delete
+              </Button>
             </div>
-          </FormField>
-          
-          <FormField label="Tax Rate">
-            <input
-              type="text"
-              defaultValue={formatTextValue(provision.taxRate)}
-              className={`table-input w-fit ${getValueClass(provision.taxRate, 'text')}`}
-              onFocus={handleDefaultValueFocus}
-              onBlur={(e) => handleFieldUpdate(provision.id, 'taxRate', e.target.value)}
-            />
-          </FormField>
-          
-          <FormField label="Capitalised Amount" className="col-span-2">
-            <input
-              type="text"
-              defaultValue={calculateCapitalisedAmount(provision)}
-              className="calculated-field w-fit"
-              readOnly
-              disabled
-            />
-          </FormField>
+          </div>
+
+          {/* Group 1: Overview */}
+          <FieldGroup title="Overview">
+            <div className="flex gap-3">
+              <FormField label="Description">
+                <input
+                  type="text"
+                  defaultValue={formatTextValue(provision.description)}
+                  className={`table-input ${getValueClass(provision.description, 'text')}`}
+                  style={{ width: 'fit-content', minWidth: '120px' }}
+                  onFocus={handleDefaultValueFocus}
+                  onBlur={(e) => handleFieldUpdate(provision.id, 'description', e.target.value)}
+                />
+              </FormField>
+              
+              <FormField label="Entity">
+                <input
+                  type="text"
+                  defaultValue={formatTextValue(provision.personName)}
+                  className={`table-input ${getValueClass(provision.personName, 'text')}`}
+                  style={{ width: 'fit-content', minWidth: '120px' }}
+                  onFocus={handleDefaultValueFocus}
+                  onBlur={(e) => handleFieldUpdate(provision.id, 'personName', e.target.value)}
+                />
+              </FormField>
+            </div>
+          </FieldGroup>
+
+          {/* Group 2: Income Provision Details */}
+          <FieldGroup title="Income Provision Details">
+            <div className="flex gap-3 flex-wrap">
+              <FormField label="Amount">
+                <input
+                  type="text"
+                  defaultValue={provision.amount}
+                  className={`table-input ${getValueClass(provision.amount, 'currency')}`}
+                  style={{ width: 'fit-content', minWidth: '100px' }}
+                  onBlur={(e) => handleFieldUpdate(provision.id, 'amount', e.target.value)}
+                />
+              </FormField>
+              
+              <FormField label="Start">
+                <input
+                  type="text"
+                  defaultValue={formatTextValue(provision.startDate)}
+                  className={`table-input ${getValueClass(provision.startDate, 'text')}`}
+                  style={{ width: 'fit-content', minWidth: '80px' }}
+                  onFocus={handleDefaultValueFocus}
+                  onBlur={(e) => handleFieldUpdate(provision.id, 'startDate', e.target.value)}
+                />
+              </FormField>
+              
+              <FormField label="Term (years)">
+                <input
+                  type="text"
+                  defaultValue={provision.termYears}
+                  className={`table-input ${getValueClass(provision.termYears, 'years')}`}
+                  style={{ width: 'fit-content', minWidth: '80px' }}
+                  onBlur={(e) => handleFieldUpdate(provision.id, 'termYears', e.target.value)}
+                />
+              </FormField>
+              
+              <FormField label="Increase %">
+                <input
+                  type="text"
+                  defaultValue={provision.increasePercentage}
+                  className={`table-input ${getValueClass(provision.increasePercentage, 'percentage')}`}
+                  style={{ width: 'fit-content', minWidth: '60px' }}
+                  onBlur={(e) => handleFieldUpdate(provision.id, 'increasePercentage', e.target.value)}
+                />
+              </FormField>
+              
+              <FormField label="Frequency">
+                <input
+                  type="text"
+                  defaultValue={formatTextValue(provision.frequency)}
+                  className={`table-input ${getValueClass(provision.frequency, 'text')}`}
+                  style={{ width: 'fit-content', minWidth: '80px' }}
+                  onFocus={handleDefaultValueFocus}
+                  onBlur={(e) => handleFieldUpdate(provision.id, 'frequency', e.target.value)}
+                />
+              </FormField>
+              
+              <FormField label="Tax %">
+                <input
+                  type="text"
+                  defaultValue={provision.taxPercentage}
+                  className={`table-input ${getValueClass(provision.taxPercentage, 'percentage')}`}
+                  style={{ width: 'fit-content', minWidth: '60px' }}
+                  onBlur={(e) => handleFieldUpdate(provision.id, 'taxPercentage', e.target.value)}
+                />
+              </FormField>
+            </div>
+          </FieldGroup>
+
+          {/* Group 3: Additional Details */}
+          <FieldGroup title="Additional Details">
+            <div className="flex gap-3">
+              <FormField label="CPI Linked">
+                <div className="flex items-center">
+                  <input
+                    type="checkbox"
+                    checked={provision.cpi}
+                    onChange={(e) => handleFieldUpdate(provision.id, 'cpi', e.target.checked)}
+                    className="h-4 w-4 text-primary focus:ring-primary border-gray-300 rounded"
+                  />
+                  <label className="ml-2 text-sm text-gray-700">
+                    {provision.cpi ? 'Yes' : 'No'}
+                  </label>
+                </div>
+              </FormField>
+              
+              <FormField label="Tax Rate">
+                <input
+                  type="text"
+                  defaultValue={formatTextValue(provision.taxRate)}
+                  className={`table-input ${getValueClass(provision.taxRate, 'text')}`}
+                  style={{ width: 'fit-content', minWidth: '80px' }}
+                  onFocus={handleDefaultValueFocus}
+                  onBlur={(e) => handleFieldUpdate(provision.id, 'taxRate', e.target.value)}
+                />
+              </FormField>
+              
+              <FormField label="Capitalised Amount">
+                <input
+                  type="text"
+                  defaultValue={calculateCapitalisedAmount(provision)}
+                  className="calculated-field"
+                  style={{ width: 'fit-content', minWidth: '100px' }}
+                  readOnly
+                  disabled
+                />
+              </FormField>
+            </div>
+          </FieldGroup>
         </div>
-      </FieldGroup>
-    </div>
-  ));
+      ))}
+    </GroupedDetailForm>
+  );
 
   if (isLoading) {
     return <div className="text-center py-4">Loading provisions...</div>;

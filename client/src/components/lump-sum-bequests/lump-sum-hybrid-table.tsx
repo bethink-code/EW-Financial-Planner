@@ -4,7 +4,7 @@ import { LumpSumBequest, InsertLumpSumBequest } from '@shared/schema';
 import { apiRequest, queryClient } from '@/lib/queryClient';
 import { HybridViewWrapper } from '@/components/common/hybrid-view-wrapper';
 import { HybridItemPreviewCard } from '@/components/common/hybrid-item-preview-card';
-import { FieldGroup, FormField } from '@/components/common/grouped-detail-form';
+import { FieldGroup, FormField, GroupedDetailForm } from '@/components/common/grouped-detail-form';
 import { useDebouncedUpdate } from '@/hooks/use-debounced-update';
 import { formatTextValue, getValueClass, handleDefaultValueFocus } from '@/lib/formatting';
 import { useLoading } from '@/contexts/loading-context';
@@ -111,96 +111,131 @@ export function LumpSumHybridTable({ onAddBequest }: LumpSumHybridTableProps) {
   });
 
   // Generate detail forms
-  const detailForms = bequests.map((bequest) => (
-    <div key={bequest.id} className="space-y-6">
-      {/* Group 1: Overview */}
-      <FieldGroup title="Overview">
-        <div className="grid grid-cols-2 gap-x-3 w-fit">
-          <FormField label="Description">
-            <input
-              type="text"
-              defaultValue={formatTextValue(bequest.description)}
-              className={`table-input w-fit ${getValueClass(bequest.description, 'text')}`}
-              onFocus={handleDefaultValueFocus}
-              onBlur={(e) => handleFieldUpdate(bequest.id, 'description', e.target.value)}
-            />
-          </FormField>
-          
-          <FormField label="Entity">
-            <input
-              type="text"
-              defaultValue={formatTextValue(bequest.entity)}
-              className={`table-input w-fit ${getValueClass(bequest.entity, 'text')}`}
-              onFocus={handleDefaultValueFocus}
-              onBlur={(e) => handleFieldUpdate(bequest.id, 'entity', e.target.value)}
-            />
-          </FormField>
-          
-          <FormField label="Start" className="col-span-1">
-            <input
-              type="text"
-              defaultValue={formatTextValue(bequest.start)}
-              className={`table-input w-fit ${getValueClass(bequest.start, 'text')}`}
-              onFocus={handleDefaultValueFocus}
-              onBlur={(e) => handleFieldUpdate(bequest.id, 'start', e.target.value)}
-            />
-          </FormField>
-        </div>
-      </FieldGroup>
-
-      {/* Group 2: Need Details */}
-      <FieldGroup title="Need Details">
-        <div className="grid grid-cols-2 gap-x-3 w-fit">
-          <FormField label="Amount">
-            <input
-              type="text"
-              defaultValue={bequest.amount}
-              className={`table-input w-fit ${getValueClass(bequest.amount, 'currency')}`}
-              onBlur={(e) => handleFieldUpdate(bequest.id, 'amount', e.target.value)}
-            />
-          </FormField>
-          
-          <FormField label="Increase %">
-            <input
-              type="text"
-              defaultValue={bequest.increasePercentage}
-              className={`table-input w-fit ${getValueClass(bequest.increasePercentage, 'percentage')}`}
-              onBlur={(e) => handleFieldUpdate(bequest.id, 'increasePercentage', e.target.value)}
-            />
-          </FormField>
-          
-          <FormField label="CPI Linked" className="col-span-2">
-            <div className="flex items-center">
-              <input
-                type="checkbox"
-                checked={bequest.cpi}
-                onChange={(e) => handleFieldUpdate(bequest.id, 'cpi', e.target.checked)}
-                className="h-4 w-4 text-primary focus:ring-primary border-gray-300 rounded"
-              />
-              <label className="ml-2 text-sm text-gray-700">
-                {bequest.cpi ? 'Yes' : 'No'}
-              </label>
+  const detailForms = (
+    <GroupedDetailForm>
+      {bequests.map((bequest) => (
+        <div key={bequest.id}>
+          {/* Header with Actions */}
+          <div className="flex justify-between items-start mb-6">
+            <h2 className="text-lg font-semibold text-neutral-800">
+              {bequest.description || 'Untitled Bequest'}
+            </h2>
+            <div className="flex gap-2">
+              <Button 
+                variant="outline" 
+                size="sm"
+                onClick={() => onDuplicate(bequest)}
+                disabled={isUpdating}
+              >
+                Duplicate
+              </Button>
+              <Button 
+                variant="outline" 
+                size="sm"
+                onClick={() => onDelete(bequest.id)}
+                disabled={isUpdating}
+              >
+                Delete
+              </Button>
             </div>
-          </FormField>
-        </div>
-      </FieldGroup>
+          </div>
 
-      {/* Group 3: Calculation */}
-      <FieldGroup title="Calculation">
-        <div className="grid grid-cols-1 gap-x-3 w-fit">
-          <FormField label="Value at Death">
-            <input
-              type="text"
-              defaultValue={bequest.valueAtDeath}
-              className="calculated-field w-fit"
-              readOnly
-              disabled
-            />
-          </FormField>
+          {/* Group 1: Overview */}
+          <FieldGroup title="Overview">
+            <div className="flex gap-3">
+              <FormField label="Description">
+                <input
+                  type="text"
+                  defaultValue={formatTextValue(bequest.description)}
+                  className={`table-input ${getValueClass(bequest.description, 'text')}`}
+                  style={{ width: 'fit-content', minWidth: '120px' }}
+                  onFocus={handleDefaultValueFocus}
+                  onBlur={(e) => handleFieldUpdate(bequest.id, 'description', e.target.value)}
+                />
+              </FormField>
+              
+              <FormField label="Entity">
+                <input
+                  type="text"
+                  defaultValue={formatTextValue(bequest.entity)}
+                  className={`table-input ${getValueClass(bequest.entity, 'text')}`}
+                  style={{ width: 'fit-content', minWidth: '120px' }}
+                  onFocus={handleDefaultValueFocus}
+                  onBlur={(e) => handleFieldUpdate(bequest.id, 'entity', e.target.value)}
+                />
+              </FormField>
+              
+              <FormField label="Start">
+                <input
+                  type="text"
+                  defaultValue={formatTextValue(bequest.start)}
+                  className={`table-input ${getValueClass(bequest.start, 'text')}`}
+                  style={{ width: 'fit-content', minWidth: '80px' }}
+                  onFocus={handleDefaultValueFocus}
+                  onBlur={(e) => handleFieldUpdate(bequest.id, 'start', e.target.value)}
+                />
+              </FormField>
+            </div>
+          </FieldGroup>
+
+          {/* Group 2: Need Details */}
+          <FieldGroup title="Need Details">
+            <div className="flex gap-3">
+              <FormField label="Amount">
+                <input
+                  type="text"
+                  defaultValue={bequest.amount}
+                  className={`table-input ${getValueClass(bequest.amount, 'currency')}`}
+                  style={{ width: 'fit-content', minWidth: '100px' }}
+                  onBlur={(e) => handleFieldUpdate(bequest.id, 'amount', e.target.value)}
+                />
+              </FormField>
+              
+              <FormField label="Increase %">
+                <input
+                  type="text"
+                  defaultValue={bequest.increasePercentage}
+                  className={`table-input ${getValueClass(bequest.increasePercentage, 'percentage')}`}
+                  style={{ width: 'fit-content', minWidth: '60px' }}
+                  onBlur={(e) => handleFieldUpdate(bequest.id, 'increasePercentage', e.target.value)}
+                />
+              </FormField>
+              
+              <FormField label="CPI Linked">
+                <div className="flex items-center">
+                  <input
+                    type="checkbox"
+                    checked={bequest.cpi}
+                    onChange={(e) => handleFieldUpdate(bequest.id, 'cpi', e.target.checked)}
+                    className="h-4 w-4 text-primary focus:ring-primary border-gray-300 rounded"
+                  />
+                  <label className="ml-2 text-sm text-gray-700">
+                    {bequest.cpi ? 'Yes' : 'No'}
+                  </label>
+                </div>
+              </FormField>
+            </div>
+          </FieldGroup>
+
+          {/* Group 3: Calculation */}
+          <FieldGroup title="Calculation">
+            <div className="flex gap-3">
+              <FormField label="Value at Death">
+                <input
+                  type="text"
+                  defaultValue={bequest.valueAtDeath}
+                  className="calculated-field"
+                  style={{ width: 'fit-content', minWidth: '100px' }}
+                  readOnly
+                  disabled
+                />
+              </FormField>
+            </div>
+          </FieldGroup>
         </div>
-      </FieldGroup>
-    </div>
-  ));
+      ))}
+    </GroupedDetailForm>
+  );
 
   if (isLoading) {
     return <div className="text-center py-4">Loading bequests...</div>;
