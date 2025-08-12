@@ -603,8 +603,7 @@ export function NewRetirementTable({
  </td>
  )}
 
- {/* Fund Value Beneficiaries - Beneficiary */}
- <td className="p-1 section-start align-top">
+ {/* Fund Value Beneficiaries - Beneficiary - EntityBeneficiarySelector renders its own td elements */}
  {rowIndex < (fund.fundValueBeneficiaries?.length || 0) && (
  <EntityBeneficiarySelector
  policyId={fund.id}
@@ -618,7 +617,6 @@ export function NewRetirementTable({
  disabled={isUpdating}
  />
  )}
- </td>
 
 
 

@@ -82,7 +82,14 @@ export default function EntityOwnerSelector({
   }, [policyId, ownerIndex, onOwnershipPercentageChange]);
 
   if (ownerIndex >= owners.length) {
-    return <div className="p-2"></div>; // Empty cell for rows beyond owners count
+    // Return empty table cells for rows beyond owners count
+    return (
+      <>
+        <td className="p-1 align-top border-r border-neutral-200" style={{ width: '60px' }}></td>
+        <td className="p-1 align-top border-r border-neutral-200" style={{ width: '300px' }}></td>
+        <td className="p-1 align-top border-r border-neutral-200" style={{ width: '80px' }}></td>
+      </>
+    );
   }
 
   const currentOwner = owners[ownerIndex];
@@ -107,12 +114,14 @@ export default function EntityOwnerSelector({
   return (
     <>
       {/* Actions Column */}
-      <td className="px-1 py-1 border-r border-neutral-200" style={{ width: '60px' }}>
-        {actionButton}
+      <td className="p-1 align-top border-r border-neutral-200" style={{ width: '60px' }}>
+        <div className="pt-0.5">
+          {actionButton}
+        </div>
       </td>
       
       {/* Owner Column */}
-      <td className="px-1 py-1 border-r border-neutral-200" style={{ width: '300px' }}>
+      <td className="p-1 align-top border-r border-neutral-200" style={{ width: '300px' }}>
         <select
           value={currentOwner}
           onChange={(e) => handleOwnerSelect(e.target.value, ownerIndex)}
@@ -129,7 +138,7 @@ export default function EntityOwnerSelector({
       </td>
 
       {/* Ownership % Column */}
-      <td className="px-1 py-1 border-r border-neutral-200" style={{ width: '80px' }}>
+      <td className="p-1 align-top border-r border-neutral-200" style={{ width: '80px' }}>
         <input
           type="text"
           defaultValue={currentPercentage}
