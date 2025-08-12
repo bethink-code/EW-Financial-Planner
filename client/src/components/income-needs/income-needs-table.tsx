@@ -10,6 +10,8 @@ import { type ClientEntity } from '@/lib/entity-columns-utils';
 import { HybridViewWrapper } from '@/components/common/hybrid-view-wrapper';
 import { IncomeNeedPreviewCard } from './income-need-preview-card';
 import { IncomeNeedDetailForm } from './income-need-detail-form';
+import { Button } from '@/components/ui/button';
+import { Plus } from 'lucide-react';
 
 interface IncomeNeedsTableProps {
   viewMode: 'table' | 'hybrid';
@@ -378,10 +380,15 @@ function IncomeNeedsTable({ viewMode, searchTerm, onAddIncomeNeed }: IncomeNeeds
         <div>
           {onAddIncomeNeed && (
             <div className="hybrid-add-button-container p-4 border-b border-neutral-200">
-              <AddButton 
-                onClick={onAddIncomeNeed} 
+              <Button
+                onClick={onAddIncomeNeed}
                 disabled={isUpdating}
-              />
+                className="bg-white text-gray-700 border border-neutral-200 hover:bg-gray-50 hover:text-gray-900 font-normal"
+                size="sm"
+              >
+                <Plus className="h-4 w-4 mr-2" />
+                Add Need
+              </Button>
             </div>
           )}
           <div className="hybrid-tabs-list">

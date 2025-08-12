@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { RetirementFund, UpdateRetirementFund } from '@shared/schema';
-import { AddButton } from '@/components/ui/action-buttons';
-
 import { RetirementFundPreviewCard } from './retirement-fund-preview-card';
 import { RetirementFundDetailForm } from './retirement-fund-detail-form';
+import { Button } from '@/components/ui/button';
+import { Plus } from 'lucide-react';
 
 interface RetirementFundHybridTableProps {
   funds: RetirementFund[];
@@ -59,10 +59,15 @@ export function RetirementFundHybridTable({
       <div className="w-80 flex-shrink-0 border-r border-neutral-200 bg-neutral-50">
         {onAddFund && (
           <div className="hybrid-add-button-container p-4 border-b border-neutral-200">
-            <AddButton 
-              onClick={onAddFund} 
+            <Button
+              onClick={onAddFund}
               disabled={disabled}
-            />
+              className="bg-white text-gray-700 border border-neutral-200 hover:bg-gray-50 hover:text-gray-900 font-normal"
+              size="sm"
+            >
+              <Plus className="h-4 w-4 mr-2" />
+              Add Fund
+            </Button>
           </div>
         )}
         <div className="hybrid-tabs-list">

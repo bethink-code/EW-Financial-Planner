@@ -4,6 +4,8 @@ import { Liabilities, InsertLiabilities } from '@shared/liabilities-schema';
 import { queryClient, apiRequest } from '@/lib/queryClient';
 import { LiabilityPreviewCard } from './liability-preview-card';
 import { LiabilityDetailForm } from './liability-detail-form';
+import { Button } from '@/components/ui/button';
+import { Plus } from 'lucide-react';
 
 interface LiabilityHybridTableProps {
   searchTerm?: string;
@@ -107,17 +109,31 @@ export function LiabilityHybridTable({ searchTerm, onAddLiability }: LiabilityHy
     <div className="flex border-t border-neutral-200">
       {/* Left Sidebar - Preview Cards */}
       <div className="w-80 flex-shrink-0 border-r border-neutral-200 bg-neutral-50">
-        <div className="space-y-0">
-          {filteredLiabilities.map((liability, index) => (
-            <LiabilityPreviewCard
-              key={liability.id}
-              liability={liability}
-              isActive={activeLiability?.id === liability.id}
-              onClick={() => setActiveLiabilityId(liability.id)}
-              isFirst={index === 0}
-              isLast={index === filteredLiabilities.length - 1}
-            />
-          ))}
+        {onAddLiability && (
+          <div className="hybrid-add-button-container p-4 border-b border-neutral-200">
+            <Button
+              onClick={onAddLiability}
+              className="bg-white text-gray-700 border border-neutral-200 hover:bg-gray-50 hover:text-gray-900 font-normal"
+              size="sm"
+            >
+              <Plus className="h-4 w-4 mr-2" />
+              Add Liability
+            </Button>
+          </div>
+        )}
+        <div className="hybrid-tabs-list">
+          <div className="space-y-0">
+            {filteredLiabilities.map((liability, index) => (
+              <LiabilityPreviewCard
+                key={liability.id}
+                liability={liability}
+                isActive={activeLiability?.id === liability.id}
+                onClick={() => setActiveLiabilityId(liability.id)}
+                isFirst={index === 0}
+                isLast={index === filteredLiabilities.length - 1}
+              />
+            ))}
+          </div>
         </div>
       </div>
 

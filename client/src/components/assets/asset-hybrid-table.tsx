@@ -4,6 +4,8 @@ import { Assets, InsertAssets } from '@shared/assets-schema';
 import { queryClient, apiRequest } from '@/lib/queryClient';
 import { AssetPreviewCard } from './asset-preview-card';
 import { AssetDetailForm } from './asset-detail-form';
+import { Button } from '@/components/ui/button';
+import { Plus } from 'lucide-react';
 
 interface AssetHybridTableProps {
   searchTerm?: string;
@@ -105,17 +107,31 @@ export function AssetHybridTable({ searchTerm, onAddAsset }: AssetHybridTablePro
     <div className="flex border-t border-neutral-200">
       {/* Left Sidebar - Preview Cards */}
       <div className="w-80 flex-shrink-0 border-r border-neutral-200 bg-neutral-50">
-        <div className="space-y-0">
-          {filteredAssets.map((asset, index) => (
-            <AssetPreviewCard
-              key={asset.id}
-              asset={asset}
-              isActive={activeAsset?.id === asset.id}
-              onClick={() => setActiveAssetId(asset.id)}
-              isFirst={index === 0}
-              isLast={index === filteredAssets.length - 1}
-            />
-          ))}
+        {onAddAsset && (
+          <div className="hybrid-add-button-container p-4 border-b border-neutral-200">
+            <Button
+              onClick={onAddAsset}
+              className="bg-white text-gray-700 border border-neutral-200 hover:bg-gray-50 hover:text-gray-900 font-normal"
+              size="sm"
+            >
+              <Plus className="h-4 w-4 mr-2" />
+              Add Asset
+            </Button>
+          </div>
+        )}
+        <div className="hybrid-tabs-list">
+          <div className="space-y-0">
+            {filteredAssets.map((asset, index) => (
+              <AssetPreviewCard
+                key={asset.id}
+                asset={asset}
+                isActive={activeAsset?.id === asset.id}
+                onClick={() => setActiveAssetId(asset.id)}
+                isFirst={index === 0}
+                isLast={index === filteredAssets.length - 1}
+              />
+            ))}
+          </div>
         </div>
       </div>
 
