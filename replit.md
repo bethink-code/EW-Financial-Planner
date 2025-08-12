@@ -4,6 +4,10 @@
 This is a full-stack web application for managing retirement funds. It provides robust capabilities for viewing, editing, and searching retirement fund data through a modern React frontend and an Express.js backend. The system supports multiple viewing modes, including grouped table, cards, and detailed views, with real-time editing and search functionalities. The project's vision is to provide a comprehensive and intuitive platform for financial planning, with high market potential in personal and professional financial management.
 
 ## Recent Major Accomplishments
+- **January 12, 2025**: Completed comprehensive retirement funds table restructuring with proper column alignment and EntitySelector integration
+- **EntitySelector Architecture**: Resolved all DOM nesting validation issues by establishing that EntityOwnerSelector and EntityBeneficiarySelector components render their own `<td>` elements and must never be wrapped
+- **Table Structure Optimization**: Successfully moved Cover Amount to Overview section, fixed all column header alignments, and added missing Fund Value Beneficiaries columns
+- **Column Alignment Fix**: Implemented proper empty cell handling for rows without EntitySelector data to maintain table structure consistency
 - **January 2025**: Completed Global Hybrid View Pattern framework with comprehensive implementation guide
 - **January 8, 2025**: Successfully rolled out hybrid view to Defined Benefit Funds with lessons learned documentation
 - **Border Management**: Resolved all double border issues across hybrid view interfaces with proper CSS classes and component props
