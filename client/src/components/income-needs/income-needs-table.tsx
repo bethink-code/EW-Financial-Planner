@@ -396,34 +396,35 @@ function IncomeNeedsTable({ viewMode, searchTerm, onAddIncomeNeed }: IncomeNeeds
         </div>
       }
       detailForms={
-        <div className="hybrid-tabs-container">
-          {/* Preview Cards */}
-          <div className="hybrid-tabs-section">
-            {onAddIncomeNeed && (
-              <div className="hybrid-add-button-container">
-                <AddButton 
-                  onClick={onAddIncomeNeed} 
-                  disabled={isUpdating}
-                  title="Add New Income Need"
-                />
+        <div className="flex border-t border-neutral-200">
+          {/* Left Section - Preview Cards (Tabs) */}
+          <div className="w-80 flex-shrink-0 border-r border-neutral-200 bg-neutral-50">
+            <div className="hybrid-tabs-container">
+              {onAddIncomeNeed && (
+                <div className="hybrid-add-button-container p-4 border-b border-neutral-200">
+                  <AddButton 
+                    onClick={onAddIncomeNeed} 
+                    disabled={isUpdating}
+                  />
+                </div>
+              )}
+              <div className="hybrid-tabs-list">
+                {filteredIncomeNeeds.map((incomeNeed, index) => (
+                  <IncomeNeedPreviewCard
+                    key={incomeNeed.id}
+                    incomeNeed={incomeNeed}
+                    isActive={selectedIncomeNeedId === incomeNeed.id}
+                    onClick={() => setSelectedIncomeNeedId(incomeNeed.id)}
+                    isFirst={index === 0}
+                    isLast={index === filteredIncomeNeeds.length - 1}
+                  />
+                ))}
               </div>
-            )}
-            <div className="hybrid-tabs-list">
-              {filteredIncomeNeeds.map((incomeNeed, index) => (
-                <IncomeNeedPreviewCard
-                  key={incomeNeed.id}
-                  incomeNeed={incomeNeed}
-                  isActive={selectedIncomeNeedId === incomeNeed.id}
-                  onClick={() => setSelectedIncomeNeedId(incomeNeed.id)}
-                  isFirst={index === 0}
-                  isLast={index === filteredIncomeNeeds.length - 1}
-                />
-              ))}
             </div>
           </div>
 
-          {/* Detail Form */}
-          <div className="hybrid-detail-section">
+          {/* Right Section - Detail Form */}
+          <div className="flex-1">
             {selectedIncomeNeed ? (
               <IncomeNeedDetailForm
                 incomeNeed={selectedIncomeNeed}
@@ -431,7 +432,7 @@ function IncomeNeedsTable({ viewMode, searchTerm, onAddIncomeNeed }: IncomeNeeds
                 onDuplicate={handleDuplicateIncomeNeed}
               />
             ) : filteredIncomeNeeds.length === 0 ? (
-              <div className="hybrid-empty-state">
+              <div className="hybrid-empty-state text-center py-8">
                 <h3 className="text-lg font-medium text-neutral-500 mb-2">No Income Needs Found</h3>
                 <p className="text-neutral-400 mb-4">
                   {searchTerm ? 'No income needs match your search criteria.' : 'Start by adding your first income need.'}
@@ -440,14 +441,13 @@ function IncomeNeedsTable({ viewMode, searchTerm, onAddIncomeNeed }: IncomeNeeds
                   <AddButton 
                     onClick={onAddIncomeNeed} 
                     disabled={isUpdating}
-                    title="Add Income Need"
                   />
                 )}
               </div>
             ) : (
-              <div className="hybrid-select-state">
+              <div className="hybrid-select-state text-center py-8">
                 <h3 className="text-lg font-medium text-neutral-500 mb-2">Select an Income Need</h3>
-                <p className="text-neutral-400">Choose an income need from the tabs above to view and edit details.</p>
+                <p className="text-neutral-400">Choose an income need from the tabs on the left to view and edit details.</p>
               </div>
             )}
           </div>
