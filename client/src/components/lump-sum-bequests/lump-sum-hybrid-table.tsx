@@ -23,14 +23,25 @@ export function LumpSumHybridTable({ onAddBequest }: LumpSumHybridTableProps) {
     queryKey: ['/api/lump-sum-bequests'],
   });
 
-  const debouncedUpdate = useDebouncedUpdate();
-
   // Auto-select first item when data loads
   React.useEffect(() => {
     if (bequests.length > 0 && selectedBequestId === null) {
       setSelectedBequestId(bequests[0].id);
     }
   }, [bequests, selectedBequestId]);
+
+  const updateMutation = useMutation({
+    mutationFn: async ({ id, updates }: { id: number; updates: Partial<LumpSumBequest> }) => {
+      return apiRequest('PATCH', `/api/lump-sum-bequests/${id}`, updates);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['/api/lump-sum-bequests'] });
+    },
+  });
+
+  const debouncedUpdate = useDebouncedUpdate((id: number, field: keyof LumpSumBequest, value: string | boolean) => {
+    updateMutation.mutate({ id, updates: { [field]: value } });
+  });
 
   const deleteMutation = useMutation({
     mutationFn: async (id: number) => {
@@ -60,7 +71,7 @@ export function LumpSumHybridTable({ onAddBequest }: LumpSumHybridTableProps) {
   });
 
   const handleFieldUpdate = (id: number, field: keyof LumpSumBequest, value: string | boolean) => {
-    debouncedUpdate('/api/lump-sum-bequests', ['/api/lump-sum-bequests'], id, { [field]: value });
+    debouncedUpdate(id, field, value);
   };
 
   const handleDelete = (id: number) => {

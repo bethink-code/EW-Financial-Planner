@@ -24,8 +24,6 @@ export function IncomeProvisionsHybridTable({ onAddProvision, searchTerm = "" }:
     queryKey: ['/api/income-provisions'],
   });
 
-  const debouncedUpdate = useDebouncedUpdate();
-
   // Filter provisions based on search term
   const filteredProvisions = provisions.filter(provision => {
     if (!searchTerm) return true;
@@ -44,6 +42,19 @@ export function IncomeProvisionsHybridTable({ onAddProvision, searchTerm = "" }:
       setSelectedProvisionId(filteredProvisions[0].id);
     }
   }, [filteredProvisions, selectedProvisionId]);
+
+  const updateMutation = useMutation({
+    mutationFn: async ({ id, updates }: { id: number; updates: Partial<IncomeProvisions> }) => {
+      return apiRequest('PATCH', `/api/income-provisions/${id}`, updates);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['/api/income-provisions'] });
+    },
+  });
+
+  const debouncedUpdate = useDebouncedUpdate((id: number, field: keyof IncomeProvisions, value: string | boolean | number) => {
+    updateMutation.mutate({ id, updates: { [field]: value } });
+  });
 
   const deleteMutation = useMutation({
     mutationFn: async (id: number) => {
@@ -65,7 +76,7 @@ export function IncomeProvisionsHybridTable({ onAddProvision, searchTerm = "" }:
   });
 
   const handleFieldUpdate = (id: number, field: keyof IncomeProvisions, value: string | boolean | number) => {
-    debouncedUpdate('/api/income-provisions', ['/api/income-provisions'], id, { [field]: value });
+    debouncedUpdate(id, field, value);
   };
 
   const handleDelete = (id: number) => {
