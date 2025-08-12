@@ -1,7 +1,7 @@
 # Retirement Funds Management System
 
 ## Overview
-This full-stack web application, built with a React frontend and an Express.js backend, manages retirement funds. It offers robust capabilities for viewing, editing, and searching retirement fund data, supporting multiple viewing modes including grouped table, cards, and detailed views with real-time functionalities. The project aims to be a comprehensive and intuitive platform for financial planning, with significant market potential in personal and professional financial management.
+This full-stack web application, built with a React frontend and an Express.js backend, manages retirement funds and comprehensive financial planning data. It features 9 calculator views (assets, liabilities, defined benefit funds, assurance, retirement funds, income needs, lump sum bequests, income provisions, voluntary investments) with robust capabilities for viewing, editing, and searching financial data. The application supports multiple viewing modes including grouped table and hybrid views with real-time functionalities, standardized navigation patterns, and consistent UI alignment across all calculator components.
 
 ## User Preferences
 Preferred communication style: Simple, everyday language.
@@ -58,6 +58,7 @@ Client requests data via TanStack Query hooks. Express routes handle CRUD operat
 - **Hybrid View Column Spacing Pattern**: Global spacing optimization for side-by-side column layouts in hybrid view detail forms (`gap-x-3` with `width: fit-content`).
 - **Preview Card Data Consistency Pattern**: Resolved owner/beneficiary count mismatches by implementing consistent empty string filtering across all preview card components.
 - **Hybrid View Width Alignment Pattern**: Universal implementation across all 9 calculator components with `w-[1320px]` constraint to perfectly align with navigation element. Pattern structure: `<div className="w-full px-6 py-6"><div className="w-[1320px]">[Content]</div></div>` ensures consistent layout and professional appearance while table view can extend horizontally.
+- **Navigation Context Fixes**: Resolved routing confusion with improved default route handling, enhanced step detection for calculator pages in "build" step, and fixed sequential navigation matching to prevent context loss when using bottom navigation arrows.
 
 ## External Dependencies
 
