@@ -1,8 +1,9 @@
 import { useState, useMemo } from 'react';
 import { useQuery, useMutation } from '@tanstack/react-query';
+import { Plus } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 import { VoluntaryInvestment, InsertVoluntaryInvestment } from '@shared/schema';
 import { queryClient, apiRequest } from '@/lib/queryClient';
-import { AddButton } from '@/components/ui/action-buttons';
 import { VoluntaryInvestmentPreviewCard } from './voluntary-investment-preview-card';
 import { VoluntaryInvestmentDetailForm } from './voluntary-investment-detail-form';
 import { getDefaultOwners, getDefaultOwnershipPercentages } from '@/lib/entity-utils';
@@ -118,10 +119,15 @@ export function VoluntaryInvestmentHybridTable({ searchTerm, onAddInvestment }: 
       {/* Left Sidebar - Preview Cards */}
       <div className="w-80 flex-shrink-0 border-r border-neutral-200 bg-neutral-50">
         <div className="hybrid-add-button-container p-4 border-b border-neutral-200">
-          <AddButton 
-            onClick={() => addMutation.mutate()} 
+          <Button
+            onClick={() => addMutation.mutate()}
             disabled={addMutation.isPending}
-          />
+            className="bg-white text-gray-700 border border-neutral-200 hover:bg-gray-50 hover:text-gray-900 font-normal"
+            size="sm"
+          >
+            <Plus className="h-4 w-4 mr-2" />
+            Add Investment
+          </Button>
         </div>
         <div className="hybrid-tabs-list">
           {filteredInvestments.map((investment, index) => (
