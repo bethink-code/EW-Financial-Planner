@@ -210,6 +210,24 @@ SET ownership_percentages = (array of appropriate length),
 - `/income-provisions`
 - `/additional-estate-duty-items`
 
+## Spacing Optimization Pattern
+EntitySelector components use optimized horizontal spacing for cohesive UI appearance:
+
+### Horizontal Padding Classes:
+- **Actions Column**: `pr-0.5 pl-1 py-1` - Reduced right padding to bring closer to name field
+- **Name Column**: `px-0.5 py-1` - Minimal horizontal padding for tight visual grouping
+- **Percentage Column**: `pl-0.5 pr-1 py-1` - Reduced left padding to stay close to name field
+- **Empty Cells**: Standard `p-1` padding maintained for consistency
+
+### Key Benefits:
+- Creates cohesive UI units for each EntitySelector
+- Maintains proper vertical alignment with table content
+- Preserves DOM structure and validation compliance
+- Consistent spacing across all EntitySelector variants
+
+See `ENTITY_SELECTOR_SPACING_PATTERN.md` for complete implementation template and rollout checklist.
+
 ## Implementation Status
-✅ **Completed**: `/assurance` table
+✅ **Completed**: `/assurance` table, `/retirement-funds` table
+✅ **EntitySelector Spacing**: Applied to EntityOwnerSelector, EntityBeneficiarySelector
 🔄 **Ready for Global Deployment**: Pattern established and tested
