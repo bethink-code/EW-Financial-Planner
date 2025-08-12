@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, ReactNode } from 'react';
+import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 
 export type ViewMode = 'table' | 'hybrid';
 
@@ -13,8 +13,26 @@ interface ViewModeProviderProps {
   children: ReactNode;
 }
 
+// Storage key for view mode persistence
+const VIEW_MODE_STORAGE_KEY = 'calculator-view-mode';
+
 export function ViewModeProvider({ children }: ViewModeProviderProps) {
-  const [viewMode, setViewMode] = useState<ViewMode>('table');
+  // Initialize from localStorage or default to 'table'
+  const [viewMode, setViewModeState] = useState<ViewMode>(() => {
+    if (typeof window !== 'undefined') {
+      const stored = localStorage.getItem(VIEW_MODE_STORAGE_KEY);
+      return (stored as ViewMode) || 'table';
+    }
+    return 'table';
+  });
+  
+  // Persist view mode to localStorage whenever it changes
+  const setViewMode = (mode: ViewMode) => {
+    setViewModeState(mode);
+    if (typeof window !== 'undefined') {
+      localStorage.setItem(VIEW_MODE_STORAGE_KEY, mode);
+    }
+  };
   
   return (
     <ViewModeContext.Provider value={{ viewMode, setViewMode }}>
