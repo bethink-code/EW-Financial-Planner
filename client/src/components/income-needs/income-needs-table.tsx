@@ -6,6 +6,7 @@ import { AddButton, ActionButtonGroup, DuplicateButton, DeleteButton } from '@/c
 import { TableHeaderAddButton } from '@/components/ui/table-header-add-button';
 import { getFieldClass, getCellClass } from '@/lib/field-types';
 import { formatCurrencyValue, formatPercentageValue, formatYearsValue, formatTextValue, getValueClass, handleDefaultValueFocus } from '@/lib/formatting';
+import { type ClientEntity } from '@/lib/entity-columns-utils';
 
 interface IncomeNeedsTableProps {
   viewMode: 'table' | 'hybrid';
@@ -20,11 +21,21 @@ function IncomeNeedsTable({ viewMode, searchTerm, onAddIncomeNeed }: IncomeNeeds
     queryKey: ['/api/income-needs'],
   });
 
+  // Query for client entities to populate Entity dropdown
+  const { data: clientEntities = [] } = useQuery<ClientEntity[]>({
+    queryKey: ['/api/client-details'],
+    select: (data: any[]) => data.map(entity => ({
+      id: entity.id,
+      entityName: entity.entityName,
+      entityType: entity.entityType
+    }))
+  });
+
   const addMutation = useMutation({
     mutationFn: async (): Promise<IncomeNeeds> => {
       const newIncomeNeed: InsertIncomeNeeds = {
         description:"",
-        personName:"Enter details ...",
+        personName:"",
         startDate:"Enter details ...",
         termYears:"0",
         increasePercentage:"0%",
@@ -211,14 +222,19 @@ function IncomeNeedsTable({ viewMode, searchTerm, onAddIncomeNeed }: IncomeNeeds
               </td>
               
               <td className="p-1 text-left">
-                <input
-                  type="text"
-                  defaultValue={formatTextValue(incomeNeed.personName)}
-                  className={`table-input ${getFieldClass('text')} ${getValueClass(incomeNeed.personName, 'text')}`}
-                  onFocus={handleDefaultValueFocus}
-                  onBlur={(e) => handleInputBlur(incomeNeed.id, 'personName', e.target.value)}
+                <select
+                  defaultValue={incomeNeed.personName || ''}
+                  className={`table-input table-dropdown ${getValueClass(incomeNeed.personName, 'text')}`}
+                  onChange={(e) => handleInputBlur(incomeNeed.id, 'personName', e.target.value)}
                   disabled={isUpdating}
-                />
+                >
+                  <option value="">Select entity...</option>
+                  {clientEntities.map((entity) => (
+                    <option key={entity.id} value={entity.entityName}>
+                      {entity.entityName} ({entity.entityType})
+                    </option>
+                  ))}
+                </select>
               </td>
               
               <td className="p-1 text-right section-start">
