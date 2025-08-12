@@ -127,121 +127,127 @@ export function IncomeProvisionsHybridTable({ onAddProvision, searchTerm = "" }:
     <div key={provision.id} className="space-y-6">
       {/* Group 1: Overview */}
       <FieldGroup title="Overview">
-        <FormField label="Description" className="col-span-2">
-          <input
-            type="text"
-            defaultValue={formatTextValue(provision.description)}
-            className={`table-input ${getValueClass(provision.description, 'text')}`}
-            onFocus={handleDefaultValueFocus}
-            onBlur={(e) => handleFieldUpdate(provision.id, 'description', e.target.value)}
-          />
-        </FormField>
-        
-        <FormField label="Entity">
-          <input
-            type="text"
-            defaultValue={formatTextValue(provision.personName)}
-            className={`table-input ${getValueClass(provision.personName, 'text')}`}
-            onFocus={handleDefaultValueFocus}
-            onBlur={(e) => handleFieldUpdate(provision.id, 'personName', e.target.value)}
-          />
-        </FormField>
+        <div className="grid grid-cols-2 gap-x-3 w-fit">
+          <FormField label="Description">
+            <input
+              type="text"
+              defaultValue={formatTextValue(provision.description)}
+              className={`table-input w-fit ${getValueClass(provision.description, 'text')}`}
+              onFocus={handleDefaultValueFocus}
+              onBlur={(e) => handleFieldUpdate(provision.id, 'description', e.target.value)}
+            />
+          </FormField>
+          
+          <FormField label="Entity">
+            <input
+              type="text"
+              defaultValue={formatTextValue(provision.personName)}
+              className={`table-input w-fit ${getValueClass(provision.personName, 'text')}`}
+              onFocus={handleDefaultValueFocus}
+              onBlur={(e) => handleFieldUpdate(provision.id, 'personName', e.target.value)}
+            />
+          </FormField>
+        </div>
       </FieldGroup>
 
       {/* Group 2: Income Provision Details */}
       <FieldGroup title="Income Provision Details">
-        <FormField label="Amount">
-          <input
-            type="text"
-            defaultValue={provision.amount}
-            className={`table-input ${getValueClass(provision.amount, 'currency')}`}
-            onBlur={(e) => handleFieldUpdate(provision.id, 'amount', e.target.value)}
-          />
-        </FormField>
-        
-        <FormField label="Start">
-          <input
-            type="text"
-            defaultValue={formatTextValue(provision.startDate)}
-            className={`table-input ${getValueClass(provision.startDate, 'text')}`}
-            onFocus={handleDefaultValueFocus}
-            onBlur={(e) => handleFieldUpdate(provision.id, 'startDate', e.target.value)}
-          />
-        </FormField>
-        
-        <FormField label="Term (years)">
-          <input
-            type="text"
-            defaultValue={provision.termYears}
-            className={`table-input ${getValueClass(provision.termYears, 'years')}`}
-            onBlur={(e) => handleFieldUpdate(provision.id, 'termYears', e.target.value)}
-          />
-        </FormField>
-        
-        <FormField label="Increase %">
-          <input
-            type="text"
-            defaultValue={provision.increasePercentage}
-            className={`table-input ${getValueClass(provision.increasePercentage, 'percentage')}`}
-            onBlur={(e) => handleFieldUpdate(provision.id, 'increasePercentage', e.target.value)}
-          />
-        </FormField>
-        
-        <FormField label="Frequency">
-          <input
-            type="text"
-            defaultValue={formatTextValue(provision.frequency)}
-            className={`table-input ${getValueClass(provision.frequency, 'text')}`}
-            onFocus={handleDefaultValueFocus}
-            onBlur={(e) => handleFieldUpdate(provision.id, 'frequency', e.target.value)}
-          />
-        </FormField>
-        
-        <FormField label="Tax %">
-          <input
-            type="text"
-            defaultValue={provision.taxPercentage}
-            className={`table-input ${getValueClass(provision.taxPercentage, 'percentage')}`}
-            onBlur={(e) => handleFieldUpdate(provision.id, 'taxPercentage', e.target.value)}
-          />
-        </FormField>
+        <div className="grid grid-cols-3 gap-x-3 w-fit">
+          <FormField label="Amount">
+            <input
+              type="text"
+              defaultValue={provision.amount}
+              className={`table-input w-fit ${getValueClass(provision.amount, 'currency')}`}
+              onBlur={(e) => handleFieldUpdate(provision.id, 'amount', e.target.value)}
+            />
+          </FormField>
+          
+          <FormField label="Start">
+            <input
+              type="text"
+              defaultValue={formatTextValue(provision.startDate)}
+              className={`table-input w-fit ${getValueClass(provision.startDate, 'text')}`}
+              onFocus={handleDefaultValueFocus}
+              onBlur={(e) => handleFieldUpdate(provision.id, 'startDate', e.target.value)}
+            />
+          </FormField>
+          
+          <FormField label="Term (years)">
+            <input
+              type="text"
+              defaultValue={provision.termYears}
+              className={`table-input w-fit ${getValueClass(provision.termYears, 'years')}`}
+              onBlur={(e) => handleFieldUpdate(provision.id, 'termYears', e.target.value)}
+            />
+          </FormField>
+          
+          <FormField label="Increase %">
+            <input
+              type="text"
+              defaultValue={provision.increasePercentage}
+              className={`table-input w-fit ${getValueClass(provision.increasePercentage, 'percentage')}`}
+              onBlur={(e) => handleFieldUpdate(provision.id, 'increasePercentage', e.target.value)}
+            />
+          </FormField>
+          
+          <FormField label="Frequency">
+            <input
+              type="text"
+              defaultValue={formatTextValue(provision.frequency)}
+              className={`table-input w-fit ${getValueClass(provision.frequency, 'text')}`}
+              onFocus={handleDefaultValueFocus}
+              onBlur={(e) => handleFieldUpdate(provision.id, 'frequency', e.target.value)}
+            />
+          </FormField>
+          
+          <FormField label="Tax %">
+            <input
+              type="text"
+              defaultValue={provision.taxPercentage}
+              className={`table-input w-fit ${getValueClass(provision.taxPercentage, 'percentage')}`}
+              onBlur={(e) => handleFieldUpdate(provision.id, 'taxPercentage', e.target.value)}
+            />
+          </FormField>
+        </div>
       </FieldGroup>
 
       {/* Group 3: Additional Details */}
       <FieldGroup title="Additional Details">
-        <FormField label="CPI Linked">
-          <div className="flex items-center">
+        <div className="grid grid-cols-2 gap-x-3 w-fit">
+          <FormField label="CPI Linked">
+            <div className="flex items-center">
+              <input
+                type="checkbox"
+                checked={provision.cpi}
+                onChange={(e) => handleFieldUpdate(provision.id, 'cpi', e.target.checked)}
+                className="h-4 w-4 text-primary focus:ring-primary border-gray-300 rounded"
+              />
+              <label className="ml-2 text-sm text-gray-700">
+                {provision.cpi ? 'Yes' : 'No'}
+              </label>
+            </div>
+          </FormField>
+          
+          <FormField label="Tax Rate">
             <input
-              type="checkbox"
-              checked={provision.cpi}
-              onChange={(e) => handleFieldUpdate(provision.id, 'cpi', e.target.checked)}
-              className="h-4 w-4 text-primary focus:ring-primary border-gray-300 rounded"
+              type="text"
+              defaultValue={formatTextValue(provision.taxRate)}
+              className={`table-input w-fit ${getValueClass(provision.taxRate, 'text')}`}
+              onFocus={handleDefaultValueFocus}
+              onBlur={(e) => handleFieldUpdate(provision.id, 'taxRate', e.target.value)}
             />
-            <label className="ml-2 text-sm text-gray-700">
-              {provision.cpi ? 'Yes' : 'No'}
-            </label>
-          </div>
-        </FormField>
-        
-        <FormField label="Tax Rate">
-          <input
-            type="text"
-            defaultValue={formatTextValue(provision.taxRate)}
-            className={`table-input ${getValueClass(provision.taxRate, 'text')}`}
-            onFocus={handleDefaultValueFocus}
-            onBlur={(e) => handleFieldUpdate(provision.id, 'taxRate', e.target.value)}
-          />
-        </FormField>
-        
-        <FormField label="Capitalised Amount" className="col-span-2">
-          <input
-            type="text"
-            defaultValue={calculateCapitalisedAmount(provision)}
-            className="calculated-field"
-            readOnly
-            disabled
-          />
-        </FormField>
+          </FormField>
+          
+          <FormField label="Capitalised Amount" className="col-span-2">
+            <input
+              type="text"
+              defaultValue={calculateCapitalisedAmount(provision)}
+              className="calculated-field w-fit"
+              readOnly
+              disabled
+            />
+          </FormField>
+        </div>
       </FieldGroup>
     </div>
   ));

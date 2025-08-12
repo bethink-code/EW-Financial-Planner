@@ -115,83 +115,89 @@ export function LumpSumHybridTable({ onAddBequest }: LumpSumHybridTableProps) {
     <div key={bequest.id} className="space-y-6">
       {/* Group 1: Overview */}
       <FieldGroup title="Overview">
-        <FormField label="Description" className="col-span-2">
-          <input
-            type="text"
-            defaultValue={formatTextValue(bequest.description)}
-            className={`table-input ${getValueClass(bequest.description, 'text')}`}
-            onFocus={handleDefaultValueFocus}
-            onBlur={(e) => handleFieldUpdate(bequest.id, 'description', e.target.value)}
-          />
-        </FormField>
-        
-        <FormField label="Entity">
-          <input
-            type="text"
-            defaultValue={formatTextValue(bequest.entity)}
-            className={`table-input ${getValueClass(bequest.entity, 'text')}`}
-            onFocus={handleDefaultValueFocus}
-            onBlur={(e) => handleFieldUpdate(bequest.id, 'entity', e.target.value)}
-          />
-        </FormField>
-        
-        <FormField label="Start">
-          <input
-            type="text"
-            defaultValue={formatTextValue(bequest.start)}
-            className={`table-input ${getValueClass(bequest.start, 'text')}`}
-            onFocus={handleDefaultValueFocus}
-            onBlur={(e) => handleFieldUpdate(bequest.id, 'start', e.target.value)}
-          />
-        </FormField>
+        <div className="grid grid-cols-2 gap-x-3 w-fit">
+          <FormField label="Description">
+            <input
+              type="text"
+              defaultValue={formatTextValue(bequest.description)}
+              className={`table-input w-fit ${getValueClass(bequest.description, 'text')}`}
+              onFocus={handleDefaultValueFocus}
+              onBlur={(e) => handleFieldUpdate(bequest.id, 'description', e.target.value)}
+            />
+          </FormField>
+          
+          <FormField label="Entity">
+            <input
+              type="text"
+              defaultValue={formatTextValue(bequest.entity)}
+              className={`table-input w-fit ${getValueClass(bequest.entity, 'text')}`}
+              onFocus={handleDefaultValueFocus}
+              onBlur={(e) => handleFieldUpdate(bequest.id, 'entity', e.target.value)}
+            />
+          </FormField>
+          
+          <FormField label="Start" className="col-span-1">
+            <input
+              type="text"
+              defaultValue={formatTextValue(bequest.start)}
+              className={`table-input w-fit ${getValueClass(bequest.start, 'text')}`}
+              onFocus={handleDefaultValueFocus}
+              onBlur={(e) => handleFieldUpdate(bequest.id, 'start', e.target.value)}
+            />
+          </FormField>
+        </div>
       </FieldGroup>
 
       {/* Group 2: Need Details */}
       <FieldGroup title="Need Details">
-        <FormField label="Amount">
-          <input
-            type="text"
-            defaultValue={bequest.amount}
-            className={`table-input ${getValueClass(bequest.amount, 'currency')}`}
-            onBlur={(e) => handleFieldUpdate(bequest.id, 'amount', e.target.value)}
-          />
-        </FormField>
-        
-        <FormField label="Increase %">
-          <input
-            type="text"
-            defaultValue={bequest.increasePercentage}
-            className={`table-input ${getValueClass(bequest.increasePercentage, 'percentage')}`}
-            onBlur={(e) => handleFieldUpdate(bequest.id, 'increasePercentage', e.target.value)}
-          />
-        </FormField>
-        
-        <FormField label="CPI Linked" className="col-span-2">
-          <div className="flex items-center">
+        <div className="grid grid-cols-2 gap-x-3 w-fit">
+          <FormField label="Amount">
             <input
-              type="checkbox"
-              checked={bequest.cpi}
-              onChange={(e) => handleFieldUpdate(bequest.id, 'cpi', e.target.checked)}
-              className="h-4 w-4 text-primary focus:ring-primary border-gray-300 rounded"
+              type="text"
+              defaultValue={bequest.amount}
+              className={`table-input w-fit ${getValueClass(bequest.amount, 'currency')}`}
+              onBlur={(e) => handleFieldUpdate(bequest.id, 'amount', e.target.value)}
             />
-            <label className="ml-2 text-sm text-gray-700">
-              {bequest.cpi ? 'Yes' : 'No'}
-            </label>
-          </div>
-        </FormField>
+          </FormField>
+          
+          <FormField label="Increase %">
+            <input
+              type="text"
+              defaultValue={bequest.increasePercentage}
+              className={`table-input w-fit ${getValueClass(bequest.increasePercentage, 'percentage')}`}
+              onBlur={(e) => handleFieldUpdate(bequest.id, 'increasePercentage', e.target.value)}
+            />
+          </FormField>
+          
+          <FormField label="CPI Linked" className="col-span-2">
+            <div className="flex items-center">
+              <input
+                type="checkbox"
+                checked={bequest.cpi}
+                onChange={(e) => handleFieldUpdate(bequest.id, 'cpi', e.target.checked)}
+                className="h-4 w-4 text-primary focus:ring-primary border-gray-300 rounded"
+              />
+              <label className="ml-2 text-sm text-gray-700">
+                {bequest.cpi ? 'Yes' : 'No'}
+              </label>
+            </div>
+          </FormField>
+        </div>
       </FieldGroup>
 
       {/* Group 3: Calculation */}
       <FieldGroup title="Calculation">
-        <FormField label="Value at Death">
-          <input
-            type="text"
-            defaultValue={bequest.valueAtDeath}
-            className="calculated-field"
-            readOnly
-            disabled
-          />
-        </FormField>
+        <div className="grid grid-cols-1 gap-x-3 w-fit">
+          <FormField label="Value at Death">
+            <input
+              type="text"
+              defaultValue={bequest.valueAtDeath}
+              className="calculated-field w-fit"
+              readOnly
+              disabled
+            />
+          </FormField>
+        </div>
       </FieldGroup>
     </div>
   ));
