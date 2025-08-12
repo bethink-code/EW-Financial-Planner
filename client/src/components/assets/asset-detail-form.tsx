@@ -2,20 +2,21 @@ import { useState, useCallback, useMemo } from 'react';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { Assets } from '@shared/assets-schema';
 import { queryClient } from '@/lib/queryClient';
-import { ActionButtonGroup, DeleteButton } from '@/components/ui/action-buttons';
 import { FieldGroup, FormField } from '@/components/common/grouped-detail-form';
 import { formatCurrencyValue, formatPercentageValue, getValueClass, handleDefaultValueFocus } from '@/lib/formatting';
 import { parseEntityOwnership, setEntityOwnership, getEntityDisplayName, type ClientEntity } from '@/lib/entity-columns-utils';
 import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Button } from '@/components/ui/button';
 
 interface AssetDetailFormProps {
   asset: Assets;
   onDelete: (id: number) => void;
+  onDuplicate?: (asset: Assets) => void;
 }
 
-export function AssetDetailForm({ asset, onDelete }: AssetDetailFormProps) {
+export function AssetDetailForm({ asset, onDelete, onDuplicate }: AssetDetailFormProps) {
   const [isUpdating, setIsUpdating] = useState(false);
 
   // Query for client entities to build ownership fields
@@ -87,12 +88,26 @@ export function AssetDetailForm({ asset, onDelete }: AssetDetailFormProps) {
         <h2 className="text-lg font-semibold text-neutral-800">
           {asset.description || 'Untitled Asset'}
         </h2>
-        <ActionButtonGroup>
-          <DeleteButton
+        <div className="flex gap-2">
+          {onDuplicate && (
+            <Button 
+              variant="outline" 
+              size="sm"
+              onClick={() => onDuplicate(asset)}
+              disabled={isUpdating}
+            >
+              Duplicate
+            </Button>
+          )}
+          <Button 
+            variant="outline" 
+            size="sm"
             onClick={() => onDelete(asset.id)}
             disabled={isUpdating}
-          />
-        </ActionButtonGroup>
+          >
+            Delete
+          </Button>
+        </div>
       </div>
 
       {/* Group 1: Overview */}

@@ -2,20 +2,21 @@ import { useState, useCallback, useMemo } from 'react';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { Liabilities } from '@shared/liabilities-schema';
 import { queryClient } from '@/lib/queryClient';
-import { ActionButtonGroup, DeleteButton } from '@/components/ui/action-buttons';
 import { FieldGroup, FormField } from '@/components/common/grouped-detail-form';
 import { formatCurrencyValue, formatPercentageValue, getValueClass, handleDefaultValueFocus } from '@/lib/formatting';
 import { parseEntityOwnership, setEntityOwnership, getEntityDisplayName, type ClientEntity } from '@/lib/entity-columns-utils';
 import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Button } from '@/components/ui/button';
 
 interface LiabilityDetailFormProps {
   liability: Liabilities;
   onDelete: (id: number) => void;
+  onDuplicate?: (liability: Liabilities) => void;
 }
 
-export function LiabilityDetailForm({ liability, onDelete }: LiabilityDetailFormProps) {
+export function LiabilityDetailForm({ liability, onDelete, onDuplicate }: LiabilityDetailFormProps) {
   const [isUpdating, setIsUpdating] = useState(false);
 
   // Query for client entities to build ownership fields
@@ -87,12 +88,26 @@ export function LiabilityDetailForm({ liability, onDelete }: LiabilityDetailForm
         <h2 className="text-lg font-semibold text-neutral-800">
           {liability.description || 'Untitled Liability'}
         </h2>
-        <ActionButtonGroup>
-          <DeleteButton
+        <div className="flex gap-2">
+          {onDuplicate && (
+            <Button 
+              variant="outline" 
+              size="sm"
+              onClick={() => onDuplicate(liability)}
+              disabled={isUpdating}
+            >
+              Duplicate
+            </Button>
+          )}
+          <Button 
+            variant="outline" 
+            size="sm"
             onClick={() => onDelete(liability.id)}
             disabled={isUpdating}
-          />
-        </ActionButtonGroup>
+          >
+            Delete
+          </Button>
+        </div>
       </div>
 
       {/* Group 1: Overview */}

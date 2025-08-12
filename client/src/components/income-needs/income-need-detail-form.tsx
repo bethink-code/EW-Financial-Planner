@@ -2,10 +2,10 @@ import { useState, useCallback } from 'react';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { IncomeNeeds } from '@shared/schema';
 import { queryClient } from '@/lib/queryClient';
-import { ActionButtonGroup, DeleteButton, DuplicateButton } from '@/components/ui/action-buttons';
 import { FieldGroup, FormField } from '@/components/common/grouped-detail-form';
 import { formatCurrencyValue, formatPercentageValue, formatYearsValue, formatTextValue, getValueClass, handleDefaultValueFocus } from '@/lib/formatting';
 import { type ClientEntity } from '@/lib/entity-columns-utils';
+import { Button } from '@/components/ui/button';
 
 interface IncomeNeedDetailFormProps {
   incomeNeed: IncomeNeeds;
@@ -88,16 +88,24 @@ export function IncomeNeedDetailForm({ incomeNeed, onDelete, onDuplicate }: Inco
         <h2 className="text-lg font-semibold text-neutral-800">
           {incomeNeed.description || 'Untitled Income Need'}
         </h2>
-        <ActionButtonGroup>
-          <DuplicateButton 
-            onClick={() => onDuplicate(incomeNeed)} 
+        <div className="flex gap-2">
+          <Button 
+            variant="outline" 
+            size="sm"
+            onClick={() => onDuplicate(incomeNeed)}
             disabled={disabled}
-          />
-          <DeleteButton 
-            onClick={() => onDelete(incomeNeed.id)} 
+          >
+            Duplicate
+          </Button>
+          <Button 
+            variant="outline" 
+            size="sm"
+            onClick={() => onDelete(incomeNeed.id)}
             disabled={disabled}
-          />
-        </ActionButtonGroup>
+          >
+            Delete
+          </Button>
+        </div>
       </div>
 
       {/* Group 1: Overview */}

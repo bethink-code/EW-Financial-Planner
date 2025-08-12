@@ -3,18 +3,19 @@ import { useMutation } from '@tanstack/react-query';
 import { VoluntaryInvestment } from '@shared/schema';
 import { queryClient } from '@/lib/queryClient';
 import EntityOwnerSelector from '@/components/common/entity-owner-selector';
-import { ActionButtonGroup, DeleteButton } from '@/components/ui/action-buttons';
 import { FieldGroup, FormField } from '@/components/common/grouped-detail-form';
 import { formatCurrencyValue, formatPercentageValue, getValueClass, handleDefaultValueFocus } from '@/lib/formatting';
 import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
+import { Button } from '@/components/ui/button';
 
 interface VoluntaryInvestmentDetailFormProps {
   investment: VoluntaryInvestment;
   onDelete: (id: number) => void;
+  onDuplicate?: (investment: VoluntaryInvestment) => void;
 }
 
-export function VoluntaryInvestmentDetailForm({ investment, onDelete }: VoluntaryInvestmentDetailFormProps) {
+export function VoluntaryInvestmentDetailForm({ investment, onDelete, onDuplicate }: VoluntaryInvestmentDetailFormProps) {
   const [isUpdating, setIsUpdating] = useState(false);
 
   // Update mutation
@@ -95,12 +96,26 @@ export function VoluntaryInvestmentDetailForm({ investment, onDelete }: Voluntar
         <h2 className="text-lg font-semibold text-neutral-800">
           {investment.description || 'Untitled Investment'}
         </h2>
-        <ActionButtonGroup>
-          <DeleteButton
+        <div className="flex gap-2">
+          {onDuplicate && (
+            <Button 
+              variant="outline" 
+              size="sm"
+              onClick={() => onDuplicate(investment)}
+              disabled={isUpdating}
+            >
+              Duplicate
+            </Button>
+          )}
+          <Button 
+            variant="outline" 
+            size="sm"
             onClick={() => onDelete(investment.id)}
             disabled={isUpdating}
-          />
-        </ActionButtonGroup>
+          >
+            Delete
+          </Button>
+        </div>
       </div>
 
       {/* Group 1: Overview */}

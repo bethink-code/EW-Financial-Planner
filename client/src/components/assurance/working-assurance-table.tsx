@@ -901,6 +901,20 @@ export function AssuranceTable({ viewMode = 'table', onAddPolicy }: AssuranceTab
   // Summary cards for hybrid view - clickable policy tabs
   const summaryCards = (
     <div>
+      {/* Add Policy Button - Mandatory Pattern */}
+      {onAddPolicy && (
+        <div className="hybrid-add-button-container p-4 border-b border-neutral-200">
+          <Button
+            onClick={onAddPolicy}
+            className="bg-white text-gray-700 border border-neutral-200 hover:bg-gray-50 hover:text-gray-900 font-normal"
+            size="sm"
+          >
+            <Plus className="h-4 w-4 mr-2" />
+            Add Policy
+          </Button>
+        </div>
+      )}
+      
       {previewItems.map((item: {
         id: number;
         title: string;

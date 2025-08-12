@@ -3,19 +3,20 @@ import { useMutation } from '@tanstack/react-query';
 import { DefinedBenefitFund } from '@shared/schema';
 import { queryClient } from '@/lib/queryClient';
 import EntityOwnerSelector from '@/components/common/entity-owner-selector';
-import { ActionButtonGroup, DeleteButton } from '@/components/ui/action-buttons';
 import { FieldGroup, FormField } from '@/components/common/grouped-detail-form';
 import { formatCurrencyValue, formatPercentageValue, formatYearsValue, getValueClass, handleDefaultValueFocus } from '@/lib/formatting';
 import { getFieldClass } from '@/lib/field-types';
 import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
+import { Button } from '@/components/ui/button';
 
 interface DefinedBenefitFundDetailFormProps {
   fund: DefinedBenefitFund;
   onDelete: (id: number) => void;
+  onDuplicate?: (fund: DefinedBenefitFund) => void;
 }
 
-export function DefinedBenefitFundDetailForm({ fund, onDelete }: DefinedBenefitFundDetailFormProps) {
+export function DefinedBenefitFundDetailForm({ fund, onDelete, onDuplicate }: DefinedBenefitFundDetailFormProps) {
   const [isUpdating, setIsUpdating] = useState(false);
 
   // Update mutation
@@ -98,12 +99,26 @@ export function DefinedBenefitFundDetailForm({ fund, onDelete }: DefinedBenefitF
         <h2 className="text-lg font-semibold text-neutral-800">
           {fund.description || 'Untitled Fund'}
         </h2>
-        <ActionButtonGroup>
-          <DeleteButton
+        <div className="flex gap-2">
+          {onDuplicate && (
+            <Button 
+              variant="outline" 
+              size="sm"
+              onClick={() => onDuplicate(fund)}
+              disabled={isUpdating}
+            >
+              Duplicate
+            </Button>
+          )}
+          <Button 
+            variant="outline" 
+            size="sm"
             onClick={() => onDelete(fund.id)}
             disabled={isUpdating}
-          />
-        </ActionButtonGroup>
+          >
+            Delete
+          </Button>
+        </div>
       </div>
 
       {/* Group 1: Overview */}
