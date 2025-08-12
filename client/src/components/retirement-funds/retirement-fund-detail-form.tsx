@@ -2,7 +2,7 @@ import React from 'react';
 import { RetirementFund, UpdateRetirementFund } from '@shared/schema';
 import { useQuery } from '@tanstack/react-query';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { ActionButtonGroup, DuplicateButton, DeleteButton } from '@/components/ui/action-buttons';
+import { Button } from '@/components/ui/button';
 import EntityOwnerSelector from '@/components/common/entity-owner-selector';
 import EntityBeneficiarySelector from '@/components/common/entity-beneficiary-selector';
 import { FieldGroup, FormField } from '@/components/common/grouped-detail-form';
@@ -148,16 +148,24 @@ export function RetirementFundDetailForm({
         <h2 className="text-lg font-semibold text-neutral-800">
           {fund.description || 'Untitled Fund'}
         </h2>
-        <ActionButtonGroup>
-          <DuplicateButton 
+        <div className="flex gap-2">
+          <Button 
+            variant="outline" 
+            size="sm"
             onClick={() => onDuplicate(fund)} 
             disabled={disabled}
-          />
-          <DeleteButton 
+          >
+            Duplicate
+          </Button>
+          <Button 
+            variant="outline" 
+            size="sm"
             onClick={() => onDelete(fund.id)} 
             disabled={disabled}
-          />
-        </ActionButtonGroup>
+          >
+            Delete
+          </Button>
+        </div>
       </div>
 
       {/* Group 1: Overview (Owner → Fund → Benefits) */}
