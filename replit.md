@@ -57,6 +57,7 @@ Client requests data via TanStack Query hooks. Express routes handle CRUD operat
 - **EntitySelector Spacing Optimization**: Implemented horizontal spacing optimization using asymmetric padding for cohesive UI units.
 - **Hybrid View Column Spacing Pattern**: Global spacing optimization for side-by-side column layouts in hybrid view detail forms (`gap-x-3` with `width: fit-content`).
 - **Preview Card Data Consistency Pattern**: Resolved owner/beneficiary count mismatches by implementing consistent empty string filtering across all preview card components.
+- **Hybrid View Width Alignment Pattern**: Universal implementation across all 9 calculator components with `w-[1320px]` constraint to perfectly align with navigation element. Pattern structure: `<div className="w-full px-6 py-6"><div className="w-[1320px]">[Content]</div></div>` ensures consistent layout and professional appearance while table view can extend horizontally.
 
 ## External Dependencies
 

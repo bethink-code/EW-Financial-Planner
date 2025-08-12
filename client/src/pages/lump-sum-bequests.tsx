@@ -51,8 +51,9 @@ export default function LumpSumBequests() {
   return (
     <div className="">
       <div className="w-full px-6 py-6">
-        {/* Combined Header, Summary and Table */}
-        <CalculatorHeader
+        <div className="w-[1320px]">
+          {/* Combined Header, Summary and Table */}
+          <CalculatorHeader
           title="Lump Sum Needs and Cash Bequests"
           onAddItem={handleAddBequest}
           addButtonText="Add Bequest"
@@ -75,6 +76,7 @@ export default function LumpSumBequests() {
             )}
           </div>
         </CalculatorHeader>
+        </div>
       </div>
     </div>
   );

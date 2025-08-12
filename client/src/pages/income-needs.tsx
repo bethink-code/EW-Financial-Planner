@@ -42,8 +42,9 @@ export default function IncomeNeeds() {
   return (
     <div className="">
       <div className="w-full px-6 py-6">
-        {/* Combined Header, Summary and Table */}
-        <CalculatorHeader
+        <div className="w-[1320px]">
+          {/* Combined Header, Summary and Table */}
+          <CalculatorHeader
           title="Income Needs"
           onAddItem={handleAddNeed}
           addButtonText="Add Need"
@@ -62,6 +63,7 @@ export default function IncomeNeeds() {
             <IncomeNeedsTable viewMode={viewMode} onAddIncomeNeed={handleAddNeed} />
           </div>
         </CalculatorHeader>
+        </div>
       </div>
     </div>
   );

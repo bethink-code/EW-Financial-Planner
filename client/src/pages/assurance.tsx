@@ -74,9 +74,10 @@ export default function Assurance() {
 
   return (
     <div className="">
-      <div className="w-full px-6">
-        {/* Combined Header, Summary and Table */}
-        <CalculatorHeader
+      <div className="w-full px-6 py-6">
+        <div className="w-[1320px]">
+          {/* Combined Header, Summary and Table */}
+          <CalculatorHeader
           title="Assurance"
           onAddItem={handleAddPolicy}
           addButtonText="Add Policy"
@@ -97,6 +98,7 @@ export default function Assurance() {
             <AssuranceTable viewMode={viewMode} onAddPolicy={handleAddPolicy} />
           </div>
         </CalculatorHeader>
+        </div>
       </div>
     </div>
   );
