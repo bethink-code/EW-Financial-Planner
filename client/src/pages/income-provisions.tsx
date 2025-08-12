@@ -1,6 +1,7 @@
 import React, { useState, useCallback } from "react";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import IncomeProvisionsTable from "../components/income-provisions/income-provisions-table-new";
+import { IncomeProvisionsHybridTable } from "@/components/income-provisions/income-provisions-hybrid-table";
 import { IncomeProvisionsSummary } from "@/components/income-provisions/income-provisions-summary";
 import { CalculatorHeader } from "@/components/ui/calculator-header";
 import { apiRequest, queryClient } from "@/lib/queryClient";
@@ -60,7 +61,11 @@ export default function IncomeProvisions() {
           
           {/* Table with full width and margin */}
           <div className="table-container-wrapper">
-            <IncomeProvisionsTable viewMode={viewMode} searchTerm={searchTerm} onAddProvision={handleAddProvision} />
+            {viewMode === 'hybrid' ? (
+              <IncomeProvisionsHybridTable onAddProvision={handleAddProvision} searchTerm={searchTerm} />
+            ) : (
+              <IncomeProvisionsTable viewMode={viewMode} searchTerm={searchTerm} onAddProvision={handleAddProvision} />
+            )}
           </div>
         </CalculatorHeader>
       </div>

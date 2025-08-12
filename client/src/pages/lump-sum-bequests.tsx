@@ -1,15 +1,15 @@
 import { useState, useCallback } from "react";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { LumpSumTable } from "@/components/lump-sum-bequests/lump-sum-table";
+import { LumpSumHybridTable } from "@/components/lump-sum-bequests/lump-sum-hybrid-table";
 import { LumpSumSummary } from "@/components/lump-sum-bequests/lump-sum-summary";
 import { CalculatorHeader } from "@/components/ui/calculator-header";
 import { apiRequest, queryClient } from "@/lib/queryClient";
 import type { InsertLumpSumBequest } from "@shared/schema";
-
-type ViewMode = "table" | "hybrid";
+import { useViewMode } from '@/contexts/view-mode-context';
 
 export default function LumpSumBequests() {
-  const [viewMode, setViewMode] = useState<ViewMode>("table");
+  const { viewMode, setViewMode } = useViewMode();
 
   // Fetch bequests for count
   const { data: bequests = [] } = useQuery({
@@ -40,9 +40,9 @@ export default function LumpSumBequests() {
     },
   });
 
-  const handleViewModeChange = useCallback((newMode: ViewMode) => {
+  const handleViewModeChange = useCallback((newMode: 'table' | 'hybrid') => {
     setViewMode(newMode);
-  }, []);
+  }, [setViewMode]);
 
   const handleAddBequest = useCallback(() => {
     addMutation.mutate();
@@ -68,7 +68,11 @@ export default function LumpSumBequests() {
           
           {/* Table with full width and margin */}
           <div className="table-container-wrapper">
-            <LumpSumTable viewMode={viewMode} onAddBequest={handleAddBequest} />
+            {viewMode === 'hybrid' ? (
+              <LumpSumHybridTable onAddBequest={handleAddBequest} />
+            ) : (
+              <LumpSumTable viewMode={viewMode} onAddBequest={handleAddBequest} />
+            )}
           </div>
         </CalculatorHeader>
       </div>
