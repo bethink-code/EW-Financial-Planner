@@ -161,7 +161,7 @@ export function DefinedBenefitFundDetailForm({ fund, onDelete }: DefinedBenefitF
 
       {/* Group 2: Fund Details */}
       <FieldGroup title="Fund Details">
-        <div className="grid grid-cols-2 gap-x-6 gap-y-4">
+        <div className="grid grid-cols-2 gap-x-3 gap-y-4" style={{ width: 'fit-content' }}>
           <FormField label="Years of Service">
             <input
               type="text"
@@ -219,7 +219,7 @@ export function DefinedBenefitFundDetailForm({ fund, onDelete }: DefinedBenefitF
       {/* Group 3: Pension Income at Death */}
       <FieldGroup title="Pension Income at Death">
         <div className="space-y-4">
-          <div className="grid grid-cols-2 gap-x-6 gap-y-4">
+          <div className="grid grid-cols-2 gap-x-3 gap-y-4" style={{ width: 'fit-content' }}>
             <FormField label="Amount">
               <input
                 type="text"
