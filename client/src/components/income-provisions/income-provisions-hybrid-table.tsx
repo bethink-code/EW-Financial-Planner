@@ -64,11 +64,11 @@ export function IncomeProvisionsHybridTable({ onAddProvision, searchTerm = "" }:
     deleteMutation.mutate(id);
   };
 
-  const handleDuplicate = () => {
+  const handleDuplicate = (provision: IncomeProvisions) => {
     addMutation.mutate();
   };
 
-
+  const isUpdating = deleteMutation.isPending || addMutation.isPending;
 
   // Calculate capitalised amount (simplified version)
   const calculateCapitalisedAmount = (provision: IncomeProvisions): string => {
@@ -136,7 +136,7 @@ export function IncomeProvisionsHybridTable({ onAddProvision, searchTerm = "" }:
               <Button 
                 variant="outline" 
                 size="sm"
-                onClick={() => onDuplicate(provision)}
+                onClick={() => handleDuplicate(provision)}
                 disabled={isUpdating}
               >
                 Duplicate
@@ -144,7 +144,7 @@ export function IncomeProvisionsHybridTable({ onAddProvision, searchTerm = "" }:
               <Button 
                 variant="outline" 
                 size="sm"
-                onClick={() => onDelete(provision.id)}
+                onClick={() => handleDelete(provision.id)}
                 disabled={isUpdating}
               >
                 Delete

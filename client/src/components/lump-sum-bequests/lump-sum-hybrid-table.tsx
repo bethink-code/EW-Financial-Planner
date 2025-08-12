@@ -59,11 +59,20 @@ export function LumpSumHybridTable({ onAddBequest }: LumpSumHybridTableProps) {
     deleteMutation.mutate(id);
   };
 
-  const handleDuplicate = () => {
+  const handleDuplicate = (bequest: LumpSumBequest) => {
+    const duplicate: InsertLumpSumBequest = {
+      description: bequest.description,
+      entity: bequest.entity,
+      start: bequest.start,
+      amount: bequest.amount,
+      increasePercentage: bequest.increasePercentage,
+      cpi: bequest.cpi,
+      valueAtDeath: bequest.valueAtDeath
+    };
     addMutation.mutate();
   };
 
-
+  const isUpdating = deleteMutation.isPending || addMutation.isPending;
 
   // Generate preview cards
   const summaryCards = bequests.map((bequest, index) => {
@@ -124,7 +133,7 @@ export function LumpSumHybridTable({ onAddBequest }: LumpSumHybridTableProps) {
               <Button 
                 variant="outline" 
                 size="sm"
-                onClick={() => onDuplicate(bequest)}
+                onClick={() => handleDuplicate(bequest)}
                 disabled={isUpdating}
               >
                 Duplicate
@@ -132,7 +141,7 @@ export function LumpSumHybridTable({ onAddBequest }: LumpSumHybridTableProps) {
               <Button 
                 variant="outline" 
                 size="sm"
-                onClick={() => onDelete(bequest.id)}
+                onClick={() => handleDelete(bequest.id)}
                 disabled={isUpdating}
               >
                 Delete
