@@ -43,7 +43,7 @@ export default function IncomeProvisions() {
 
   return (
     <div className="">
-      <div className="w-full px-6 py-6 max-w-[1320px] mx-auto">
+      <div className="w-full px-6 py-6">
         {/* Combined Header, Summary and Table */}
         <CalculatorHeader
           title="Income Provisions"
