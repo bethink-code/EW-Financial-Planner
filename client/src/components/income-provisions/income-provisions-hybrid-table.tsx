@@ -75,6 +75,21 @@ export function IncomeProvisionsHybridTable({ onAddProvision, searchTerm = "" }:
     },
   });
 
+  const duplicateMutation = useMutation({
+    mutationFn: async (provision: IncomeProvisions) => {
+      const { id, ...provisionWithoutId } = provision;
+      const duplicatedProvision = {
+        ...provisionWithoutId,
+        description: `${provision.description || 'Provision'} (Copy)`,
+      };
+      return apiRequest('POST', '/api/income-provisions', duplicatedProvision);
+    },
+    onSuccess: (newProvision: IncomeProvisions) => {
+      queryClient.invalidateQueries({ queryKey: ['/api/income-provisions'] });
+      setSelectedProvisionId(newProvision.id);
+    },
+  });
+
   const handleFieldUpdate = (id: number, field: keyof IncomeProvisions, value: string | boolean | number) => {
     debouncedUpdate(id, field, value);
   };
@@ -84,10 +99,10 @@ export function IncomeProvisionsHybridTable({ onAddProvision, searchTerm = "" }:
   };
 
   const handleDuplicate = (provision: IncomeProvisions) => {
-    addMutation.mutate();
+    duplicateMutation.mutate(provision);
   };
 
-  const isUpdating = deleteMutation.isPending || addMutation.isPending;
+  const isUpdating = deleteMutation.isPending || addMutation.isPending || duplicateMutation.isPending;
 
   // Calculate capitalised amount (simplified version)
   const calculateCapitalisedAmount = (provision: IncomeProvisions): string => {
