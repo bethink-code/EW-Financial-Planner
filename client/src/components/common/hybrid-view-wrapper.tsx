@@ -43,7 +43,7 @@ export function HybridViewWrapper({
 
   // Render hybrid view - Left sidebar with summary cards + Right side detailed forms
   return (
-    <div className="flex border-t border-neutral-200">
+    <div className="flex border-t border-neutral-200 max-w-full overflow-hidden">
       {/* Left Sidebar - Summary Cards (Tabs) */}
       <div className="w-80 flex-shrink-0 border-r border-neutral-200 bg-neutral-50">
         {summaryCards}
