@@ -312,29 +312,31 @@ export function IncomeProvisionsHybridTable({ onAddProvision, searchTerm = "" }:
   }
 
   return (
-    <div className="space-y-4">
-      {/* Add Button */}
-      {onAddProvision && (
-        <div className="hybrid-add-button-container p-4 border-b border-neutral-200">
-          <Button
-            onClick={onAddProvision}
-            className="bg-white text-gray-700 border border-neutral-200 hover:bg-gray-50 hover:text-gray-900 font-normal"
-            size="sm"
-          >
-            <Plus className="h-4 w-4 mr-2" />
-            Add Provision
-          </Button>
+    <HybridViewWrapper
+      viewMode="hybrid"
+      tableComponent={null}
+      summaryCards={
+        <div>
+          {onAddProvision && (
+            <div className="hybrid-add-button-container p-4 border-b border-neutral-200">
+              <Button
+                onClick={onAddProvision}
+                className="bg-white text-gray-700 border border-neutral-200 hover:bg-gray-50 hover:text-gray-900 font-normal"
+                size="sm"
+              >
+                <Plus className="h-4 w-4 mr-2" />
+                Add Provision
+              </Button>
+            </div>
+          )}
+          <div className="hybrid-tabs-list">
+            {summaryCards}
+          </div>
         </div>
-      )}
-
-      <HybridViewWrapper
-        viewMode="hybrid"
-        tableComponent={null}
-        summaryCards={summaryCards}
-        detailForms={detailForms}
-        isEmpty={filteredProvisions.length === 0}
-        emptyStateMessage="No provisions added yet. Click 'Add Provision' to create your first income provision."
-      />
-    </div>
+      }
+      detailForms={detailForms}
+      isEmpty={filteredProvisions.length === 0}
+      emptyStateMessage="No provisions added yet. Click 'Add Provision' to create your first income provision."
+    />
   );
 }

@@ -267,29 +267,31 @@ export function LumpSumHybridTable({ onAddBequest }: LumpSumHybridTableProps) {
   }
 
   return (
-    <div className="space-y-4">
-      {/* Add Button */}
-      {onAddBequest && (
-        <div className="hybrid-add-button-container p-4 border-b border-neutral-200">
-          <Button
-            onClick={onAddBequest}
-            className="bg-white text-gray-700 border border-neutral-200 hover:bg-gray-50 hover:text-gray-900 font-normal"
-            size="sm"
-          >
-            <Plus className="h-4 w-4 mr-2" />
-            Add Bequest
-          </Button>
+    <HybridViewWrapper
+      viewMode="hybrid"
+      tableComponent={null}
+      summaryCards={
+        <div>
+          {onAddBequest && (
+            <div className="hybrid-add-button-container p-4 border-b border-neutral-200">
+              <Button
+                onClick={onAddBequest}
+                className="bg-white text-gray-700 border border-neutral-200 hover:bg-gray-50 hover:text-gray-900 font-normal"
+                size="sm"
+              >
+                <Plus className="h-4 w-4 mr-2" />
+                Add Bequest
+              </Button>
+            </div>
+          )}
+          <div className="hybrid-tabs-list">
+            {summaryCards}
+          </div>
         </div>
-      )}
-
-      <HybridViewWrapper
-        viewMode="hybrid"
-        tableComponent={null}
-        summaryCards={summaryCards}
-        detailForms={detailForms}
-        isEmpty={bequests.length === 0}
-        emptyStateMessage="No bequests added yet. Click 'Add Bequest' to create your first bequest."
-      />
-    </div>
+      }
+      detailForms={detailForms}
+      isEmpty={bequests.length === 0}
+      emptyStateMessage="No bequests added yet. Click 'Add Bequest' to create your first bequest."
+    />
   );
 }
