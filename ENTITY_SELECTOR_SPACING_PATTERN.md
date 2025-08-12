@@ -104,4 +104,6 @@ All side-by-side column layouts now use `gap-x-3` (12px) instead of `gap-x-6` (2
 - **Created**: January 12, 2025
 - **Global Rollout**: January 12, 2025 - Applied across all hybrid view detail forms
 - **Components Updated**: EntitySelector spacing + 4 main detail form components
-- **Status**: ✅ Active Pattern - Globally Applied
+- **Preview Card Fix**: January 12, 2025 - Resolved owner/beneficiary count consistency issues
+- **Data Consistency**: All preview cards now use proper empty string filtering (`item && item.trim() !== ''`)
+- **Status**: ✅ Active Pattern - Globally Applied with Complete Data Consistency
