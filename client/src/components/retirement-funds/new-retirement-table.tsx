@@ -342,8 +342,8 @@ export function NewRetirementTable({
      />
    )}
  </th>
- <th className="section-start" colSpan={2}>Overview</th>
- <th className="section-start" colSpan={3}>Unapproved Life Cover</th>
+ <th className="section-start" colSpan={4}>Overview</th>
+ <th className="section-start" colSpan={4}>Unapproved Life Cover</th>
  <th className="section-start" colSpan={3}>Monthly Death Benefit</th>
  <th className="section-start" colSpan={3}>Approved Life Cover</th>
  <th className="section-start" colSpan={6}>Fund Value Beneficiaries</th>
