@@ -343,7 +343,7 @@ export function NewRetirementTable({
    )}
  </th>
  <th className="section-start" colSpan={5}>Overview</th>
- <th className="section-start" colSpan={3}>Unapproved Life Cover</th>
+ <th className="section-start" colSpan={4}>Unapproved Life Cover</th>
  <th className="section-start" colSpan={3}>Monthly Death Benefit</th>
  <th className="section-start" colSpan={3}>Approved Life Cover</th>
  <th className="section-start" colSpan={6}>Fund Value Beneficiaries</th>
@@ -715,6 +715,7 @@ export function NewRetirementTable({
  <td className="totals-cell-label text-right section-start" colSpan={4}>Totals</td>
  <td className="totals-cell-value">{formatTotal(totals.coverAmount)}</td>
  <td className="totals-cell-label section-start"></td>
+ <td className="totals-cell-label"></td>
  <td className="totals-cell-label"></td>
  <td className="totals-cell-label"></td>
  <td className="totals-cell-value section-start">{formatTotal(totals.monthlyIncome)}</td>
