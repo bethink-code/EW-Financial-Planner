@@ -7,11 +7,10 @@ import { CalculatorHeader } from "@/components/ui/calculator-header";
 import { apiRequest, queryClient } from "@/lib/queryClient";
 import { getDefaultOwners, getDefaultOwnershipPercentages } from "@/lib/entity-utils";
 import type { InsertDefinedBenefitFund, ClientDetails } from "@shared/schema";
-
-type ViewMode = "table" | "hybrid";
+import { useViewMode } from '@/contexts/view-mode-context';
 
 export default function DefinedBenefitFunds() {
-  const [viewMode, setViewMode] = useState<ViewMode>("table");
+  const { viewMode, setViewMode } = useViewMode();
 
   // Fetch funds for count
   const { data: funds = [] } = useQuery({
@@ -49,9 +48,9 @@ export default function DefinedBenefitFunds() {
     },
   });
 
-  const handleViewModeChange = useCallback((newMode: ViewMode) => {
+  const handleViewModeChange = useCallback((newMode: 'table' | 'hybrid') => {
     setViewMode(newMode);
-  }, []);
+  }, [setViewMode]);
 
   const handleAddFund = useCallback(() => {
     addMutation.mutate();

@@ -9,9 +9,7 @@ import { AdditionalDetails } from "@/components/retirement-funds/additional-deta
 import { RetirementFundHybridTable } from "@/components/retirement-funds/retirement-fund-hybrid-table";
 import { useDebouncedUpdate } from "@/hooks/use-debounced-update";
 import { getDefaultOwners, getDefaultOwnershipPercentages, getDefaultBeneficiaries, getDefaultBeneficiaryPercentages } from "@/lib/entity-utils";
-
-
-type ViewMode = "table" | "hybrid";
+import { useViewMode } from '@/contexts/view-mode-context';
 
 interface ColumnVisibility {
   overview: boolean;
@@ -22,11 +20,11 @@ interface ColumnVisibility {
 }
 
 export default function NewRetirementFunds() {
-  const [viewMode, setViewMode] = useState<ViewMode>("table");
+  const { viewMode, setViewMode } = useViewMode();
   const [tableMode, setTableMode] = useState<"inputs" | "flows">("inputs");
 
   // Enhanced view mode change with transitions
-  const handleViewModeChange = useCallback((newMode: ViewMode) => {
+  const handleViewModeChange = useCallback((newMode: 'table' | 'hybrid') => {
     if (document.startViewTransition) {
       document.startViewTransition(() => {
         setViewMode(newMode);
@@ -34,7 +32,7 @@ export default function NewRetirementFunds() {
     } else {
       setViewMode(newMode);
     }
-  }, []);
+  }, [setViewMode]);
 
   const [columnVisibility, setColumnVisibility] = useState<ColumnVisibility>({
     overview: true,
