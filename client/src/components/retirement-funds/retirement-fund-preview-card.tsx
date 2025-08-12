@@ -17,8 +17,8 @@ export function RetirementFundPreviewCard({ fund, isActive, onClick, isFirst = f
     ? validOwners.map(owner => `Owner: ${owner}`).join('\n')
     : 'Owner: Not specified';
   
-  const unapprovedCount = fund.unapprovedBeneficiaries?.filter(b => b).length || 0;
-  const fundValueCount = fund.fundValueBeneficiaries?.filter(b => b).length || 0;
+  const unapprovedCount = fund.unapprovedBeneficiaries?.filter(b => b && b.trim() !== '').length || 0;
+  const fundValueCount = fund.fundValueBeneficiaries?.filter(b => b && b.trim() !== '').length || 0;
   const totalBeneficiaries = unapprovedCount + fundValueCount;
   
   // Show breakdown with each type on separate lines
