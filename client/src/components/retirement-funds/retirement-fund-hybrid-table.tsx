@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { RetirementFund, UpdateRetirementFund } from '@shared/schema';
+import { AddButton } from '@/components/ui/action-buttons';
 
 import { RetirementFundPreviewCard } from './retirement-fund-preview-card';
 import { RetirementFundDetailForm } from './retirement-fund-detail-form';
@@ -9,6 +10,7 @@ interface RetirementFundHybridTableProps {
   onUpdate: (id: number, field: keyof UpdateRetirementFund, value: any) => void;
   onDuplicate: (fund: RetirementFund) => void;
   onDelete: (id: number) => void;
+  onAddFund?: () => void;
   disabled?: boolean;
 }
 
@@ -17,6 +19,7 @@ export function RetirementFundHybridTable({
   onUpdate, 
   onDuplicate, 
   onDelete, 
+  onAddFund,
   disabled = false 
 }: RetirementFundHybridTableProps) {
   const [activeFundId, setActiveFundId] = useState<number | null>(
@@ -54,7 +57,17 @@ export function RetirementFundHybridTable({
     <div className="flex border-t border-neutral-200">
       {/* Left Sidebar - Preview Cards (Tabs) */}
       <div className="w-80 flex-shrink-0 border-r border-neutral-200 bg-neutral-50">
-        {previewCards}
+        {onAddFund && (
+          <div className="hybrid-add-button-container p-4 border-b border-neutral-200">
+            <AddButton 
+              onClick={onAddFund} 
+              disabled={disabled}
+            />
+          </div>
+        )}
+        <div className="hybrid-tabs-list">
+          {previewCards}
+        </div>
       </div>
 
       {/* Right Side - Detail Form */}

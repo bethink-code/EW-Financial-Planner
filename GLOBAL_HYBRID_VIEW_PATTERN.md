@@ -50,6 +50,32 @@ This is the definitive guide for implementing hybrid view functionality across a
 />
 ```
 
+#### **NEW: Add Button Pattern for Tabs**
+**MANDATORY for all hybrid views**: Include AddButton at the top of tabs section for improved UX
+
+```typescript
+summaryCards={
+  <div>
+    {onAddItem && (
+      <div className="hybrid-add-button-container p-4 border-b border-neutral-200">
+        <AddButton 
+          onClick={onAddItem} 
+          disabled={isUpdating}
+        />
+      </div>
+    )}
+    <div className="hybrid-tabs-list">
+      {filteredItems.map((item, index) => (
+        <HybridItemPreviewCard
+          key={item.id}
+          // ... other props
+        />
+      ))}
+    </div>
+  </div>
+}
+```
+
 #### C. GroupedDetailForm (Already Available)
 **Location**: `client/src/components/common/grouped-detail-form.tsx`
 **Purpose**: Structured form container with consistent spacing and field groupings

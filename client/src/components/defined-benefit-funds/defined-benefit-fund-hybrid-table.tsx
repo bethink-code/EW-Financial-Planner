@@ -2,6 +2,7 @@ import { useState, useMemo } from 'react';
 import { useQuery, useMutation } from '@tanstack/react-query';
 import { DefinedBenefitFund, InsertDefinedBenefitFund } from '@shared/schema';
 import { queryClient, apiRequest } from '@/lib/queryClient';
+import { AddButton } from '@/components/ui/action-buttons';
 import { DefinedBenefitFundPreviewCard } from './defined-benefit-fund-preview-card';
 import { DefinedBenefitFundDetailForm } from './defined-benefit-fund-detail-form';
 import { getDefaultOwners, getDefaultOwnershipPercentages } from '@/lib/entity-utils';
@@ -109,7 +110,13 @@ export function DefinedBenefitFundHybridTable({ searchTerm, onAddFund }: Defined
     <div className="flex border-t border-neutral-200">
       {/* Left Sidebar - Preview Cards */}
       <div className="w-80 flex-shrink-0 border-r border-neutral-200 bg-neutral-50">
-        <div className="space-y-0">
+        <div className="hybrid-add-button-container p-4 border-b border-neutral-200">
+          <AddButton 
+            onClick={() => addMutation.mutate()} 
+            disabled={addMutation.isPending}
+          />
+        </div>
+        <div className="hybrid-tabs-list">
           {filteredFunds.map((fund, index) => (
             <DefinedBenefitFundPreviewCard
               key={fund.id}
