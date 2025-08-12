@@ -346,7 +346,7 @@ export function NewRetirementTable({
  <th className="section-start" colSpan={4}>Unapproved Life Cover</th>
  <th className="section-start" colSpan={3}>Monthly Death Benefit</th>
  <th className="section-start" colSpan={3}>Approved Life Cover</th>
- <th className="section-start" colSpan={6}>Fund Value Beneficiaries</th>
+ <th className="section-start" colSpan={7}>Fund Value Beneficiaries</th>
  </tr>
  
  {/* Individual column headers */}
@@ -366,7 +366,9 @@ export function NewRetirementTable({
  <th className="section-start">Cover</th>
  <th>Fund Value</th>
  <th>Fund Value at Death</th>
- <th className="section-start">Beneficiary Name</th>
+ <th className="section-start">Actions</th>
+ <th>Beneficiary Name</th>
+ <th>Percentage</th>
  <th>Amount</th>
  <th>Lump Sum Taken</th>
  <th>Non-deductible Contribution</th>
@@ -637,7 +639,7 @@ export function NewRetirementTable({
  </>
  )}
 
- {/* Fund Value Beneficiaries - Cover (Calculated) */}
+ {/* Fund Value Beneficiaries - Amount (Calculated) */}
  <td className="p-1 bg-neutral-100 text-right align-top">
  {rowIndex < (fund.fundValueCoverSplits?.length || 0) && (
  <span className="calculated-field">
@@ -646,7 +648,7 @@ export function NewRetirementTable({
  )}
  </td>
 
- {/* Fund Value Beneficiaries - Lump Assessed */}
+ {/* Fund Value Beneficiaries - Lump Sum Taken */}
  {rowIndex === 0 && (
  <td className="p-1 align-top" rowSpan={maxRows}>
  <input
@@ -689,32 +691,29 @@ export function NewRetirementTable({
  </td>
  )}
 
- {/* Fund Value Beneficiaries - Checkbox */}
- {rowIndex === 0 && (
- <td className="p-1 text-center align-top" rowSpan={maxRows}>
- <input
- type="checkbox"
- checked={fund.livingAnnuityCheckbox}
- onChange={(e) => handleUpdateFund(fund.id, 'livingAnnuityCheckbox', e.target.checked)}
- className="text-xs"
- />
- </td>
- )}
-
- {/* Fund Value Beneficiaries - Income Term */}
+ {/* Fund Value Beneficiaries - Income Term with Checkbox */}
  {rowIndex === 0 && (
  <td className="p-1 align-top" rowSpan={maxRows}>
+ <div className="flex items-center gap-2">
  <input
  key={`income-term-${fund.id}`}
  type="text"
  defaultValue={formatYearsValue(fund.incomeTerm)}
- className={`table-input ${getFieldClass('years')} ${getValueClass(fund.incomeTerm, 'years')}`}
+ className={`table-input ${getFieldClass('years')} ${getValueClass(fund.incomeTerm, 'years')} flex-1`}
  onFocus={handleDefaultValueFocus}
  onBlur={(e) => {
  const value = e.target.value;
  handleUpdateFund(fund.id, 'incomeTerm', value);
  }}
  />
+ <input
+ type="checkbox"
+ checked={fund.livingAnnuityCheckbox}
+ onChange={(e) => handleUpdateFund(fund.id, 'livingAnnuityCheckbox', e.target.checked)}
+ className="text-xs"
+ title="Activate Income Term"
+ />
+ </div>
  </td>
  )}
  </tr>
@@ -742,6 +741,7 @@ export function NewRetirementTable({
  <td className="totals-cell-value">{formatTotal(totals.fundValue)}</td>
  <td className="totals-cell-value">{formatTotal(totals.fundValueAtDeath)}</td>
  <td className="totals-cell-label section-start"></td>
+ <td className="totals-cell-label"></td>
  <td className="totals-cell-label"></td>
  <td className="totals-cell-label"></td>
  <td className="totals-cell-label"></td>
