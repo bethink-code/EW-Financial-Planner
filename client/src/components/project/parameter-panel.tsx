@@ -156,7 +156,7 @@ export function ParameterPanel({ title, parameters, onParameterChange, section, 
   return (
     <>      
       {section === 'estate' && (
-        <table className="w-96 table-fixed border border-neutral-300 rounded-md">
+        <table className="w-88 table-fixed border border-neutral-300 rounded-md">
           <thead>
             <tr className="border-b border-neutral-300 bg-gray-50">
               <th className="px-2 py-2 text-sm font-medium text-neutral-600 uppercase tracking-wider text-left">Parameter</th>
@@ -189,7 +189,7 @@ export function ParameterPanel({ title, parameters, onParameterChange, section, 
       )}
         
         {section === 'dependants' && calculatedValues && (
-          <table className="w-96 table-fixed border border-neutral-300 rounded-md">
+          <table className="w-88 table-fixed border border-neutral-300 rounded-md">
             <thead>
               <tr className="border-b border-neutral-300 bg-gray-50">
                 <th className="px-2 py-2 text-sm font-medium text-neutral-600 uppercase tracking-wider text-left">Parameter</th>
@@ -290,7 +290,7 @@ export function ParameterPanel({ title, parameters, onParameterChange, section, 
 
         {section === 'income' && (
           <div>
-            <table className="w-96 table-fixed border border-neutral-300 rounded-md">
+            <table className="w-88 table-fixed border border-neutral-300 rounded-md">
               <thead>
                 <tr className="border-b border-neutral-300 bg-gray-50">
                   <th className="px-2 py-2 text-sm font-medium text-neutral-600 uppercase tracking-wider text-left">Income Source</th>
@@ -330,7 +330,7 @@ export function ParameterPanel({ title, parameters, onParameterChange, section, 
             
             <div className="mt-6">
               <h4 className="text-sm font-medium text-gray-600 mb-3">Monthly income position</h4>
-              <table className="w-96 table-fixed border border-neutral-300 rounded-md">
+              <table className="w-88 table-fixed border border-neutral-300 rounded-md">
                 <thead>
                   <tr className="border-b border-neutral-300 bg-gray-50">
                     <th className="px-2 py-2 text-sm font-medium text-neutral-600 uppercase tracking-wider text-left">Income Source</th>
