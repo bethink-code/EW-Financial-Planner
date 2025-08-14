@@ -394,7 +394,7 @@ export function NewRetirementTable({
  }`}>
  {/* Actions */}
  {rowIndex === 0 && (
- <td className="table-actions-cell p-1 text-center section-start align-top" rowSpan={maxRows}>
+ <td className="table-actions-cell px-0.5 py-0.5 text-center section-start align-top" rowSpan={maxRows}>
  <ActionButtonGroup>
  <DuplicateButton 
  onClick={() => onDuplicateFund(fund)} 
@@ -410,7 +410,7 @@ export function NewRetirementTable({
 
  {/* Overview - Description */}
  {rowIndex === 0 && (
- <td className="p-1 section-start align-top" rowSpan={maxRows}>
+ <td className="px-0.5 py-0.5 section-start align-top" rowSpan={maxRows}>
  <input
  key={`desc-${fund.id}`}
  type="text"
@@ -441,15 +441,15 @@ export function NewRetirementTable({
  ) : (
  // Empty cells for rows without owners (EntityOwnerSelector provides 3 columns)
  <>
- <td className="p-1 align-top"></td>
- <td className="p-1 align-top"></td>
- <td className="p-1 align-top"></td>
+ <td className="px-0.5 py-0.5 align-top"></td>
+ <td className="px-0.5 py-0.5 align-top"></td>
+ <td className="px-0.5 py-0.5 align-top"></td>
  </>
  )}
 
  {/* Overview - Cover Amount */}
  {rowIndex === 0 && (
- <td className="p-1 align-top" rowSpan={maxRows}>
+ <td className="px-0.5 py-0.5 align-top" rowSpan={maxRows}>
  <input
  key={`cover-amount-${fund.id}`}
  type="text"
@@ -480,14 +480,14 @@ export function NewRetirementTable({
  ) : (
  // Empty cells for rows without beneficiaries (EntityBeneficiarySelector provides 3 columns)
  <>
- <td className="p-1 section-start align-top"></td>
- <td className="p-1 align-top"></td>
- <td className="p-1 align-top"></td>
+ <td className="px-0.5 py-0.5 section-start align-top"></td>
+ <td className="px-0.5 py-0.5 align-top"></td>
+ <td className="px-0.5 py-0.5 align-top"></td>
  </>
  )}
 
  {/* Unapproved Life Cover - Cover Split (Calculated) */}
- <td className="p-1 bg-neutral-100 text-right align-top">
+ <td className="px-0.5 py-0.5 bg-neutral-100 text-right align-top">
  {rowIndex < (fund.unapprovedCoverSplits?.length || 0) && (
  <span className="calculated-field">
  {fund.unapprovedCoverSplits?.[rowIndex]}
@@ -497,7 +497,7 @@ export function NewRetirementTable({
 
  {/* Monthly Death Benefit - Monthly Income */}
  {rowIndex === 0 && (
- <td className="p-1 section-start align-top" rowSpan={maxRows}>
+ <td className="px-0.5 py-0.5 section-start align-top" rowSpan={maxRows}>
  <input
  key={`monthly-income-${fund.id}`}
  type="text"
@@ -532,7 +532,7 @@ export function NewRetirementTable({
 
  {/* Monthly Death Benefit - Dynamic Field (Years OR Percentage) */}
  {rowIndex === 0 && (
- <td className="p-1 align-top" rowSpan={maxRows}>
+ <td className="px-0.5 py-0.5 align-top" rowSpan={maxRows}>
  {isYearsMode(fund) ? (
  // Years Mode
  <input
@@ -573,7 +573,7 @@ export function NewRetirementTable({
 
  {/* Approved Life Cover - Cover */}
  {rowIndex === 0 && (
- <td className="p-1 section-start align-top" rowSpan={maxRows}>
+ <td className="px-0.5 py-0.5 section-start align-top" rowSpan={maxRows}>
  <input
  key={`approved-life-${fund.id}`}
  type="text"
@@ -590,7 +590,7 @@ export function NewRetirementTable({
 
  {/* Approved Life Cover - Fund Value */}
  {rowIndex === 0 && (
- <td className="p-1 align-top" rowSpan={maxRows}>
+ <td className="px-0.5 py-0.5 align-top" rowSpan={maxRows}>
  <input
  key={`fund-value-${fund.id}`}
  type="text"
@@ -610,7 +610,7 @@ export function NewRetirementTable({
 
  {/* Approved Life Cover - Fund Value at Death (Calculated) */}
  {rowIndex === 0 && (
- <td className="p-1 bg-neutral-100 text-right align-top" rowSpan={maxRows}>
+ <td className="px-0.5 py-0.5 bg-neutral-100 text-right align-top" rowSpan={maxRows}>
  <span className="calculated-field">
  {fund.fundValueAtDeath}
  </span>
@@ -633,14 +633,14 @@ export function NewRetirementTable({
  ) : (
  // Empty cells for rows without beneficiaries (EntityBeneficiarySelector provides 3 columns)
  <>
- <td className="p-1 section-start align-top"></td>
- <td className="p-1 align-top"></td>
- <td className="p-1 align-top"></td>
+ <td className="px-0.5 py-0.5 section-start align-top"></td>
+ <td className="px-0.5 py-0.5 align-top"></td>
+ <td className="px-0.5 py-0.5 align-top"></td>
  </>
  )}
 
  {/* Fund Value Beneficiaries - Amount (Calculated) */}
- <td className="p-1 bg-neutral-100 text-right align-top">
+ <td className="px-0.5 py-0.5 bg-neutral-100 text-right align-top">
  {rowIndex < (fund.fundValueCoverSplits?.length || 0) && (
  <span className="calculated-field">
  {fund.fundValueCoverSplits?.[rowIndex]}
@@ -650,7 +650,7 @@ export function NewRetirementTable({
 
  {/* Fund Value Beneficiaries - Lump Sum Taken */}
  {rowIndex === 0 && (
- <td className="p-1 align-top" rowSpan={maxRows}>
+ <td className="px-0.5 py-0.5 align-top" rowSpan={maxRows}>
  <input
  key={`lump-sum-${fund.id}`}
  type="text"
@@ -667,7 +667,7 @@ export function NewRetirementTable({
 
  {/* Fund Value Beneficiaries - Non Deductible */}
  {rowIndex === 0 && (
- <td className="p-1 align-top" rowSpan={maxRows}>
+ <td className="px-0.5 py-0.5 align-top" rowSpan={maxRows}>
  <input
  key={`non-deduct-${fund.id}`}
  type="text"
@@ -684,7 +684,7 @@ export function NewRetirementTable({
 
  {/* Fund Value Beneficiaries - Living Annuity (Calculated) */}
  {rowIndex === 0 && (
- <td className="p-1 bg-neutral-100 text-right align-top" rowSpan={maxRows}>
+ <td className="px-0.5 py-0.5 bg-neutral-100 text-right align-top" rowSpan={maxRows}>
  <span className="calculated-field">
  {fund.livingAnnuity}
  </span>
@@ -693,8 +693,8 @@ export function NewRetirementTable({
 
  {/* Fund Value Beneficiaries - Income Term with Checkbox */}
  {rowIndex === 0 && (
- <td className="p-1 align-top" rowSpan={maxRows}>
- <div className="flex items-center gap-2">
+ <td className="px-0.5 py-0.5 align-top" rowSpan={maxRows}>
+ <div className="flex items-center gap-1">
  <input
  key={`income-term-${fund.id}`}
  type="text"

@@ -87,9 +87,9 @@ export default function EntityBeneficiarySelector({
     // Return empty table cells for rows beyond beneficiaries count
     return (
       <>
-        <td className="p-1 align-top border-r border-neutral-200" style={{ width: '60px' }}></td>
-        <td className="p-1 align-top border-r border-neutral-200" style={{ width: '300px' }}></td>
-        <td className="p-1 align-top border-r border-neutral-200" style={{ width: '80px' }}></td>
+        <td className="px-0.25 py-0.5 align-top border-r border-neutral-200" style={{ width: '60px' }}></td>
+        <td className="px-0.25 py-0.5 align-top border-r border-neutral-200" style={{ width: '300px' }}></td>
+        <td className="px-0.25 py-0.5 align-top border-r border-neutral-200" style={{ width: '80px' }}></td>
       </>
     );
   }
@@ -120,14 +120,14 @@ export default function EntityBeneficiarySelector({
   return (
     <>
       {/* Actions Column */}
-      <td className="pr-0.5 pl-1 py-1 align-top border-r border-neutral-200" style={{ width: '60px' }}>
+      <td className="pr-0.25 pl-0.25 py-0.5 align-top border-r border-neutral-200" style={{ width: '60px' }}>
         <div className="pt-0.5">
           {actionButton}
         </div>
       </td>
       
       {/* Beneficiary Column */}
-      <td className="px-0.5 py-1 align-top border-r border-neutral-200" style={{ width: '300px' }}>
+      <td className="px-0.25 py-0.5 align-top border-r border-neutral-200" style={{ width: '300px' }}>
         <select
           value={currentDisplayValue}
           onChange={(e) => {
@@ -157,7 +157,7 @@ export default function EntityBeneficiarySelector({
       </td>
 
       {/* Benefit % Column */}
-      <td className="pl-0.5 pr-1 py-1 align-top border-r border-neutral-200" style={{ width: '80px' }}>
+      <td className="pl-0.25 pr-0.25 py-0.5 align-top border-r border-neutral-200" style={{ width: '80px' }}>
         <input
           type="text"
           defaultValue={currentPercentage}

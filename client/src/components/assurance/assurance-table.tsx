@@ -116,11 +116,11 @@ function AssuranceTable({ viewMode, searchTerm }: AssuranceTableProps) {
  const handleInputBlur = useCallback((id: number, field: keyof Assurance, value: string | string[]) => {
  let formattedValue: string;
  if (field === 'benefitSplit') {
- formattedValue = formatPercentageValue(value);
+ formattedValue = formatPercentageValue(Array.isArray(value) ? value.join('') : value);
  } else if (field === 'amount') {
- formattedValue = formatCurrencyValue(value);
+ formattedValue = formatCurrencyValue(Array.isArray(value) ? value.join('') : value);
  } else {
- formattedValue = value;
+ formattedValue = Array.isArray(value) ? value.join('') : value;
  }
  handleUpdateAssurance(id, field, formattedValue);
  
