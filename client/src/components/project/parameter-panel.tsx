@@ -154,12 +154,7 @@ export function ParameterPanel({ title, parameters, onParameterChange, section, 
   };
 
   return (
-    <>
-      {/* Simple header without card container */}
-      <div className="pb-3">
-        <h3 className="text-lg font-semibold text-gray-900">{title}</h3>
-      </div>
-      
+    <>      
       {section === 'estate' && (
         <table className="w-80 border border-neutral-300 rounded-md">
           <thead>

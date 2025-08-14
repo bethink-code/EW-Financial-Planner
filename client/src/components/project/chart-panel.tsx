@@ -42,12 +42,6 @@ export function ChartPanel({ title, data, chartType, description }: ChartPanelPr
 
   return (
     <div className="flex flex-col">
-      {/* Header */}
-      <div className="mb-4">
-        <h2 className="text-lg font-semibold text-gray-900">{title}</h2>
-        {description && <p className="text-sm text-gray-600 mt-1">{description}</p>}
-      </div>
-
       {/* Chart and Summary - Centered */}
       <div className="flex-1 flex flex-col items-center justify-center">
         {/* Chart */}
