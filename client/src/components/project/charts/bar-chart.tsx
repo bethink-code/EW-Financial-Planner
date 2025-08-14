@@ -1,4 +1,4 @@
-import { BarChart as RechartsBarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from 'recharts';
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell } from 'recharts';
 
 interface BarChartProps {
   data: {
@@ -10,17 +10,7 @@ interface BarChartProps {
   title: string;
 }
 
-export function BarChart({ data, title }: BarChartProps) {
-  const chartData = [
-    {
-      name: 'Capital',
-      Provided: data.provided,
-      Required: data.required,
-      Surplus: Math.max(data.surplus, 0),
-      Deficit: Math.max(-data.surplus, 0)
-    }
-  ];
-
+export function ProjectBarChart({ data, title }: BarChartProps) {
   const formatCurrency = (value: number) => {
     return new Intl.NumberFormat('en-ZA', {
       style: 'currency',
@@ -30,26 +20,28 @@ export function BarChart({ data, title }: BarChartProps) {
     }).format(value).replace('ZAR', 'R');
   };
 
-  const CustomTooltip = ({ active, payload, label }: any) => {
-    if (active && payload && payload.length) {
-      return (
-        <div className="bg-white p-3 border border-gray-200 rounded-lg shadow-lg">
-          <p className="font-medium mb-2">{title}</p>
-          {payload.map((entry: any, index: number) => (
-            <p key={index} className="text-sm" style={{ color: entry.color }}>
-              {entry.dataKey}: {formatCurrency(entry.value)}
-            </p>
-          ))}
-        </div>
-      );
+  const chartData = [
+    {
+      name: 'Provided',
+      value: data.provided,
+      color: '#3B82F6' // Blue
+    },
+    {
+      name: 'Required',
+      value: data.required,
+      color: '#EF4444' // Red
+    },
+    {
+      name: 'Surplus',
+      value: data.surplus,
+      color: data.surplus >= 0 ? '#10B981' : '#EF4444' // Green for positive, Red for negative
     }
-    return null;
-  };
+  ];
 
   return (
-    <div className="w-full h-full">
+    <div className="w-full h-64">
       <ResponsiveContainer width="100%" height="100%">
-        <RechartsBarChart
+        <BarChart
           data={chartData}
           margin={{
             top: 20,
@@ -57,23 +49,41 @@ export function BarChart({ data, title }: BarChartProps) {
             left: 20,
             bottom: 5,
           }}
+          barCategoryGap={20}
         >
-          <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
-          <XAxis dataKey="name" stroke="#6b7280" />
+          <CartesianGrid strokeDasharray="3 3" stroke="#E5E7EB" />
+          <XAxis 
+            dataKey="name" 
+            axisLine={false}
+            tickLine={false}
+            tick={{ fontSize: 12, fill: '#6B7280' }}
+          />
           <YAxis 
-            stroke="#6b7280"
+            axisLine={false}
+            tickLine={false}
+            tick={{ fontSize: 12, fill: '#6B7280' }}
             tickFormatter={(value) => formatCurrency(value)}
           />
-          <Tooltip content={<CustomTooltip />} />
-          <Legend />
-          <Bar dataKey="Provided" fill="#016991" name="Provided" />
-          <Bar dataKey="Required" fill="#6b7280" name="Required" />
-          {data.surplus >= 0 ? (
-            <Bar dataKey="Surplus" fill="#10b981" name="Surplus" />
-          ) : (
-            <Bar dataKey="Deficit" fill="#ef4444" name="Deficit" />
-          )}
-        </RechartsBarChart>
+          <Tooltip 
+            formatter={(value: number) => [formatCurrency(value), '']}
+            labelStyle={{ color: '#374151' }}
+            contentStyle={{
+              backgroundColor: 'white',
+              border: '1px solid #E5E7EB',
+              borderRadius: '8px',
+              boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)'
+            }}
+          />
+          <Bar 
+            dataKey="value" 
+            radius={[4, 4, 0, 0]}
+            maxBarSize={60}
+          >
+            {chartData.map((entry, index) => (
+              <Cell key={`cell-${index}`} fill={entry.color} />
+            ))}
+          </Bar>
+        </BarChart>
       </ResponsiveContainer>
     </div>
   );

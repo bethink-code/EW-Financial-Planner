@@ -1,4 +1,5 @@
 import { GaugeChart } from './charts/gauge-chart';
+import { ProjectBarChart } from './charts/bar-chart';
 import { UnifiedSummary } from './unified-summary';
 
 interface ChartPanelProps {
@@ -28,7 +29,7 @@ export function ChartPanel({ title, data, chartType, description }: ChartPanelPr
       case 'gauge':
         return <GaugeChart data={data} title={title} />;
       case 'bar':
-        return <div className="flex items-center justify-center h-64 text-gray-500">Bar Chart - Coming Soon</div>;
+        return <ProjectBarChart data={data} title={title} />;
       case 'line':
         return <div className="flex items-center justify-center h-64 text-gray-500">Line Chart - Coming Soon</div>;
       case 'pie':
