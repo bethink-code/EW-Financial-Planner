@@ -156,10 +156,10 @@ export function ParameterPanel({ title, parameters, onParameterChange, section }
       </div>
       
       {section === 'estate' && (
-        <div className="border border-neutral-200 rounded-md">
+        <div className="border border-neutral-300 rounded-md">
           <table className="w-full">
             <thead>
-              <tr className="border-b border-neutral-200 bg-gray-50">
+              <tr className="border-b border-neutral-300 bg-gray-50">
                 <th className="px-3 py-2 text-xs font-medium text-neutral-600 uppercase tracking-wider text-left">Parameter</th>
                 <th className="px-3 py-2 text-xs font-medium text-neutral-600 uppercase tracking-wider text-right">Value</th>
               </tr>
@@ -201,10 +201,10 @@ export function ParameterPanel({ title, parameters, onParameterChange, section }
       )}
         
         {section === 'dependants' && (
-          <div className="border border-neutral-200 rounded-md">
+          <div className="border border-neutral-300 rounded-md">
             <table className="w-full">
               <thead>
-                <tr className="border-b border-neutral-200 bg-gray-50">
+                <tr className="border-b border-neutral-300 bg-gray-50">
                   <th className="px-3 py-2 text-xs font-medium text-neutral-600 uppercase tracking-wider text-left">Parameter</th>
                   <th className="px-3 py-2 text-xs font-medium text-neutral-600 uppercase tracking-wider text-right">Value</th>
                 </tr>
@@ -253,10 +253,10 @@ export function ParameterPanel({ title, parameters, onParameterChange, section }
         )}
 
         {section === 'income' && (
-          <div className="border border-neutral-200 rounded-md">
+          <div className="border border-neutral-300 rounded-md">
             <table className="w-full">
               <thead>
-                <tr className="border-b border-neutral-200 bg-gray-50">
+                <tr className="border-b border-neutral-300 bg-gray-50">
                   <th className="px-3 py-2 text-xs font-medium text-neutral-600 uppercase tracking-wider text-left">Income Source</th>
                   <th className="px-3 py-2 text-xs font-medium text-neutral-600 uppercase tracking-wider text-right">Amount</th>
                 </tr>
