@@ -29,11 +29,11 @@ export function ProjectBarChart({ data, title }: BarChartProps) {
 
   return (
     <div className="w-full h-80 flex flex-col items-center justify-center">
-      <div className="flex items-end justify-center space-x-8 h-72">
+      <div className="flex items-end justify-center space-x-8" style={{ height: '240px' }}>
         {bars.map((bar, index) => (
-          <div key={index} className="flex flex-col items-center bar-chart-item h-full">
+          <div key={index} className="flex flex-col items-center bar-chart-item" style={{ height: '240px' }}>
             <div 
-              className="text-xs text-gray-600 mb-2 text-center bar-chart-label flex-shrink-0"
+              className="text-xs text-gray-600 mb-2 text-center bar-chart-label"
               style={{ 
                 animationDelay: `${index * 0.1}s`,
                 height: '20px'
@@ -41,7 +41,7 @@ export function ProjectBarChart({ data, title }: BarChartProps) {
             >
               {formatCurrency(bar.value)}
             </div>
-            <div className="flex-1 flex items-end">
+            <div className="flex-1 flex items-end" style={{ paddingBottom: '40px' }}>
               <div 
                 className="w-16 rounded-t-sm bar-chart-bar"
                 style={{ 
@@ -49,15 +49,15 @@ export function ProjectBarChart({ data, title }: BarChartProps) {
                   backgroundColor: bar.color,
                   minHeight: '10px',
                   animationDelay: `${index * 0.1}s`,
-                  maxHeight: '180px'
+                  maxHeight: '160px'
                 }}
               />
             </div>
             <div 
-              className="text-xs text-gray-700 mt-2 text-center font-medium bar-chart-label flex-shrink-0"
+              className="text-xs text-gray-700 text-center font-medium bar-chart-label absolute"
               style={{ 
                 animationDelay: `${index * 0.1}s`,
-                height: '20px'
+                bottom: '10px'
               }}
             >
               {bar.name}
