@@ -155,7 +155,7 @@ export function ParameterPanel({ title, parameters, onParameterChange, section }
       </div>
       
       {section === 'estate' && (
-        <table className="w-full border border-neutral-300 rounded-md">
+        <table className="w-80 border border-neutral-300 rounded-md">
           <thead>
             <tr className="border-b border-neutral-300 bg-gray-50">
               <th className="px-3 py-2 text-xs font-medium text-neutral-600 uppercase tracking-wider text-left">Parameter</th>
@@ -190,7 +190,7 @@ export function ParameterPanel({ title, parameters, onParameterChange, section }
       )}
         
         {section === 'dependants' && (
-          <table className="w-full border border-neutral-300 rounded-md">
+          <table className="w-80 border border-neutral-300 rounded-md">
             <thead>
               <tr className="border-b border-neutral-300 bg-gray-50">
                 <th className="px-3 py-2 text-xs font-medium text-neutral-600 uppercase tracking-wider text-left">Parameter</th>
