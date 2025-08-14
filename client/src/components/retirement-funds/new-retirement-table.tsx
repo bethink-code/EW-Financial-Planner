@@ -353,7 +353,7 @@ export function NewRetirementTable({
  <tr className="double-row-header-second">
  <th className="section-start table-col-description">Description</th>
  <th className="table-col-actions">Actions</th>
- <th className="table-col-owner-name">Owner Name</th>
+ <th>Owner Name</th>
  <th className="table-col-ownership-percent">Ownership %</th>
  <th className="table-col-currency">Cover Amount</th>
  <th className="section-start table-col-actions">Actions</th>
