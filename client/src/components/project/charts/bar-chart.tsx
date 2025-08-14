@@ -53,15 +53,7 @@ export function ProjectBarChart({ data, title }: BarChartProps) {
                 }}
               />
             </div>
-            <div 
-              className="text-xs text-gray-700 mt-2 text-center font-medium bar-chart-label"
-              style={{ 
-                animationDelay: `${index * 0.1}s`,
-                height: '20px'
-              }}
-            >
-              {bar.name}
-            </div>
+
           </div>
         ))}
       </div>
