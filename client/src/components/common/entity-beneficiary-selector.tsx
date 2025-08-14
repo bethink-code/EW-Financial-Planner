@@ -97,6 +97,10 @@ export default function EntityBeneficiarySelector({
   const currentBeneficiary = beneficiaries[beneficiaryIndex];
   const currentPercentage = beneficiaryPercentages[beneficiaryIndex] || "0%";
   const isInvalidTotal = Math.abs(percentageTotal - 100) > 0.01;
+  
+  // Find the entity to get full display name
+  const currentEntity = entities.find(entity => entity.entityName === currentBeneficiary);
+  const currentDisplayValue = currentEntity ? `${currentEntity.entityName} (${currentEntity.entityType})` : currentBeneficiary;
 
   // Action button comes FIRST in the code - using same styling as owner component
   const actionButton = rowIndex === 0 ? (
@@ -125,17 +129,31 @@ export default function EntityBeneficiarySelector({
       {/* Beneficiary Column */}
       <td className="px-0.5 py-1 align-top border-r border-neutral-200" style={{ width: '300px' }}>
         <select
-          value={currentBeneficiary}
-          onChange={(e) => handleBeneficiarySelect(e.target.value, beneficiaryIndex)}
+          value={currentDisplayValue}
+          onChange={(e) => {
+            // Extract entity name from the full display value
+            const selectedValue = e.target.value;
+            if (selectedValue === "" || selectedValue === "Select beneficiary...") {
+              handleBeneficiarySelect("", beneficiaryIndex);
+            } else {
+              // Extract just the entity name from "EntityName (EntityType)"
+              const entityName = selectedValue.replace(/\s*\([^)]*\)\s*$/, '');
+              handleBeneficiarySelect(entityName, beneficiaryIndex);
+            }
+          }}
           disabled={disabled}
           className="table-input table-dropdown w-full"
+          style={{ minWidth: '250px' }}
         >
           <option value="">Select beneficiary...</option>
-          {entities.map((entity) => (
-            <option key={entity.id} value={entity.entityName}>
-              {entity.entityName} ({entity.entityType})
-            </option>
-          ))}
+          {entities.map((entity) => {
+            const displayValue = `${entity.entityName} (${entity.entityType})`;
+            return (
+              <option key={entity.id} value={displayValue}>
+                {displayValue}
+              </option>
+            );
+          })}
         </select>
       </td>
 
