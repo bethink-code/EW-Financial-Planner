@@ -330,7 +330,7 @@ export function NewRetirementTable({
 
  return (
  <div className="space-y-6">
- <table style={{ tableLayout: 'fixed', width: '100%' }}>
+ <table style={{ tableLayout: 'fixed' }}>
  <thead>
  {/* Main section headers */}
  <tr className="double-row-header-first">
