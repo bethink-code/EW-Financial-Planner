@@ -183,7 +183,6 @@ html {
 
 .bar-chart-bar {
   animation: barGrowUp 0.8s cubic-bezier(0.4, 0, 0.2, 1) forwards;
-  transform: scaleY(0);
   transform-origin: bottom;
 }
 
@@ -195,11 +194,9 @@ html {
 @keyframes barItemFadeIn {
   from {
     opacity: 0;
-    transform: translateY(20px);
   }
   to {
     opacity: 1;
-    transform: translateY(0);
   }
 }
 
@@ -215,11 +212,9 @@ html {
 @keyframes labelFadeIn {
   from {
     opacity: 0;
-    transform: translateY(10px);
   }
   to {
     opacity: 1;
-    transform: translateY(0);
   }
 }
 
