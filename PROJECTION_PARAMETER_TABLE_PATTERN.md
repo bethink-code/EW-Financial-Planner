@@ -107,3 +107,41 @@ const rows = [
 - Hover effects provide good user feedback without being distracting
 
 This pattern eliminates the need for custom table implementations and ensures consistency across Estate Position, Dependants Position, Total Capital Position, and Income Position views.
+
+## Chart Integration
+
+### Custom CSS Bar Charts
+The projection system includes custom CSS-based bar charts that reliably render across all tabs:
+
+```tsx
+// Bar chart implementation with pure CSS
+<div className="w-full h-80 flex flex-col items-center justify-center">
+  <div className="flex items-end justify-center space-x-8 h-72">
+    {bars.map((bar, index) => (
+      <div key={index} className="flex flex-col items-center">
+        <div className="text-xs text-gray-600 mb-2 text-center">
+          {formatCurrency(bar.value)}
+        </div>
+        <div 
+          className="w-16 transition-all duration-300 rounded-t-sm"
+          style={{ 
+            height: `${Math.max(bar.value * scale, 10)}px`,
+            backgroundColor: bar.color,
+            minHeight: '10px'
+          }}
+        />
+        <div className="text-xs text-gray-700 mt-2 text-center font-medium">
+          {bar.name}
+        </div>
+      </div>
+    ))}
+  </div>
+</div>
+```
+
+**Features:**
+- **Pure CSS implementation**: No external library dependencies for reliable rendering
+- **Proportional scaling**: Bar heights scale based on largest value in dataset
+- **Three-bar display**: Provided (blue), Required (red), Surplus (green/red based on positive/negative)
+- **Currency formatting**: Values displayed above each bar with proper South African Rand formatting
+- **Responsive design**: Clean spacing with smooth transitions
