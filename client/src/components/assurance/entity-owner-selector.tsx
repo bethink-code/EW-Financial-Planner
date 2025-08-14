@@ -82,58 +82,64 @@ export function EntityOwnerSelector({
   };
 
   return (
-    <div className="flex items-center gap-1">
-      {/* Action Button FIRST - Same pattern as beneficiary component */}
-      {rowIndex === 0 ? (
-        <AddButton
-          onClick={() => onAddOwner(policyId)}
-          disabled={disabled}
-          size="sm"
-        />
-      ) : (
-        <DeleteButton
-          onClick={() => onRemoveOwner(policyId, rowIndex)}
-          disabled={disabled}
-          size="sm"
-        />
-      )}
+    <>
+      {/* Actions Column */}
+      <td className="border border-neutral-300 p-1 align-top">
+        {rowIndex === 0 ? (
+          <AddButton
+            onClick={() => onAddOwner(policyId)}
+            disabled={disabled}
+            size="sm"
+          />
+        ) : (
+          <DeleteButton
+            onClick={() => onRemoveOwner(policyId, rowIndex)}
+            disabled={disabled}
+            size="sm"
+          />
+        )}
+      </td>
       
-      {/* Entity Selector - Using native HTML select to avoid CSS conflicts */}
-      <select
-        value={currentOwnerName}
-        onChange={(e) => onOwnerChange(policyId, rowIndex, e.target.value)}
-        disabled={disabled}
-        className="table-input table-dropdown flex-1"
-      >
-        <option value="">Select owner...</option>
-        {entities.map((entity) => (
-          <option key={entity.id} value={entity.entityName}>
-            {entity.entityName} ({entity.entityType})
-          </option>
-        ))}
-      </select>
+      {/* Owner Name Column */}
+      <td className="border border-neutral-300 p-1">
+        <select
+          value={currentOwnerName}
+          onChange={(e) => onOwnerChange(policyId, rowIndex, e.target.value)}
+          disabled={disabled}
+          className="table-input table-dropdown w-full"
+        >
+          <option value="">Select owner...</option>
+          {entities.map((entity) => (
+            <option key={entity.id} value={entity.entityName}>
+              {entity.entityName} ({entity.entityType})
+            </option>
+          ))}
+        </select>
+      </td>
       
-      {/* Percentage Input with same behavior as beneficiary component */}
-      <input
-        type="text"
-        defaultValue={currentPercentage}
-        placeholder="0%"
-        className={`table-input ${getFieldClass('percentage')} w-16 text-center ${getValueClass(currentPercentage, 'percentage')}`}
-        onFocus={(e) => {
-          handleDefaultValueFocus(e);
-          // Remove % sign for editing but keep the number
-          const valueWithoutPercent = e.target.value.replace('%', '');
-          e.target.value = valueWithoutPercent;
-        }}
-        onBlur={(e) => {
-          handlePercentageChange(e.target.value);
-          // Restore the formatted value with % sign
-          const cleanValue = e.target.value.replace(/[^\d.]/g, '');
-          const numValue = parseFloat(cleanValue);
-          e.target.value = isNaN(numValue) ? "0%" : `${numValue}%`;
-        }}
-        disabled={disabled}
-      />
-    </div>
+      {/* Ownership Percentage Column */}
+      <td className="border border-neutral-300 p-1">
+        <input
+          type="text"
+          defaultValue={currentPercentage}
+          placeholder="0%"
+          className={`table-input ${getFieldClass('percentage')} w-full text-center ${getValueClass(currentPercentage, 'percentage')}`}
+          onFocus={(e) => {
+            handleDefaultValueFocus(e);
+            // Remove % sign for editing but keep the number
+            const valueWithoutPercent = e.target.value.replace('%', '');
+            e.target.value = valueWithoutPercent;
+          }}
+          onBlur={(e) => {
+            handlePercentageChange(e.target.value);
+            // Restore the formatted value with % sign
+            const cleanValue = e.target.value.replace(/[^\d.]/g, '');
+            const numValue = parseFloat(cleanValue);
+            e.target.value = isNaN(numValue) ? "0%" : `${numValue}%`;
+          }}
+          disabled={disabled}
+        />
+      </td>
+    </>
   );
 }
