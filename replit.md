@@ -4,7 +4,9 @@
 This full-stack web application, built with a React frontend and an Express.js backend, manages retirement funds and comprehensive financial planning data. It features 9 calculator views (assets, liabilities, defined benefit funds, assurance, retirement funds, income needs, lump sum bequests, income provisions, voluntary investments) with robust capabilities for viewing, editing, and searching financial data. The application supports multiple viewing modes including grouped table and hybrid views with real-time functionalities, standardized navigation patterns, and consistent UI alignment across all calculator components.
 
 ## User Preferences
-Preferred communication style: Simple, everyday language.
+- Preferred communication style: Simple, everyday language.
+- **CRITICAL**: Always run changes past the user first before implementing them. Never make changes without explicit approval.
+- User wants to be consulted on all modifications before they are executed.
 
 ## System Architecture
 The application is structured as a monorepo, separating client, server, and shared components.
