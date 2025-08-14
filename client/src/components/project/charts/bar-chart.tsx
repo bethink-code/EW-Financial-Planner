@@ -1,5 +1,3 @@
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
-
 interface BarChartProps {
   data: {
     provided: number;
@@ -20,56 +18,37 @@ export function ProjectBarChart({ data, title }: BarChartProps) {
     }).format(value).replace('ZAR', 'R');
   };
 
-  // Debug log to check data
-  console.log('Bar chart data:', data);
+  const maxValue = Math.max(data.provided, data.required, Math.abs(data.surplus));
+  const scale = 280 / maxValue; // 280px max bar height
 
-  const chartData = [
-    {
-      name: 'Provided',
-      value: Math.abs(data.provided || 0),
-      fill: '#3B82F6' // Blue
-    },
-    {
-      name: 'Required',
-      value: Math.abs(data.required || 0),
-      fill: '#EF4444' // Red
-    },
-    {
-      name: 'Surplus',
-      value: Math.abs(data.surplus || 0),
-      fill: data.surplus >= 0 ? '#10B981' : '#EF4444' // Green for positive, Red for negative
-    }
+  const bars = [
+    { name: 'Provided', value: data.provided, color: '#3B82F6' },
+    { name: 'Required', value: data.required, color: '#EF4444' },
+    { name: 'Surplus', value: Math.abs(data.surplus), color: data.surplus >= 0 ? '#10B981' : '#EF4444' }
   ];
 
-  console.log('Chart data:', chartData);
-
   return (
-    <div className="w-full" style={{ width: '100%', height: '320px' }}>
-      <ResponsiveContainer width="100%" height="100%">
-        <BarChart
-          data={chartData}
-          margin={{
-            top: 20,
-            right: 30,
-            left: 80,
-            bottom: 5,
-          }}
-        >
-          <CartesianGrid strokeDasharray="3 3" />
-          <XAxis 
-            dataKey="name" 
-            tick={{ fontSize: 12 }}
-          />
-          <YAxis 
-            tick={{ fontSize: 12 }}
-            tickFormatter={(value) => formatCurrency(value)}
-          />
-          <Tooltip 
-            formatter={(value: number) => [formatCurrency(value), '']}
-          />
-          <Bar dataKey="value" fill="#3B82F6" />
-        </BarChart>
-      </ResponsiveContainer>
+    <div className="w-full h-80 flex flex-col items-center justify-center">
+      <div className="flex items-end justify-center space-x-8 h-72">
+        {bars.map((bar, index) => (
+          <div key={index} className="flex flex-col items-center">
+            <div className="text-xs text-gray-600 mb-2 text-center">
+              {formatCurrency(bar.value)}
+            </div>
+            <div 
+              className="w-16 transition-all duration-300 rounded-t-sm"
+              style={{ 
+                height: `${Math.max(bar.value * scale, 10)}px`,
+                backgroundColor: bar.color,
+                minHeight: '10px'
+              }}
+            />
+            <div className="text-xs text-gray-700 mt-2 text-center font-medium">
+              {bar.name}
+            </div>
+          </div>
+        ))}
+      </div>
     </div>
   );
 }
