@@ -190,6 +190,7 @@ export default function ProjectStep() {
                       parameters={parameters}
                       onParameterChange={handleParameterChange}
                       section="dependants"
+                      calculatedValues={calculatedValues.dependantsPosition}
                     />
                   </div>
                 </div>

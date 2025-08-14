@@ -13,9 +13,15 @@ interface ParameterPanelProps {
   parameters: Record<string, number | boolean>;
   onParameterChange: (key: string, value: number | boolean) => void;
   section: 'estate' | 'dependants' | 'capital' | 'income';
+  calculatedValues?: {
+    provided: number;
+    required: number;
+    surplus: number;
+    percentage: number;
+  };
 }
 
-export function ParameterPanel({ title, parameters, onParameterChange, section }: ParameterPanelProps) {
+export function ParameterPanel({ title, parameters, onParameterChange, section, calculatedValues }: ParameterPanelProps) {
   const [openSections, setOpenSections] = useState<Set<string>>(new Set(['provided', 'required']));
 
   const toggleSection = (sectionId: string) => {
@@ -189,7 +195,7 @@ export function ParameterPanel({ title, parameters, onParameterChange, section }
         </table>
       )}
         
-        {section === 'dependants' && (
+        {section === 'dependants' && calculatedValues && (
           <table className="w-80 border border-neutral-300 rounded-md">
             <thead>
               <tr className="border-b border-neutral-300 bg-gray-50">
@@ -198,28 +204,86 @@ export function ParameterPanel({ title, parameters, onParameterChange, section }
               </tr>
             </thead>
             <tbody className="divide-y divide-neutral-200">
-              {[...dependantsProvidedParams, ...dependantsRequiredParams].map((param, index) => (
-                <tr key={param.key} className="hover:bg-neutral-50">
-                  <td className="px-2 py-0.5">
-                    <span className="text-xs text-gray-700">{param.label}</span>
-                  </td>
-                  <td className="px-2 py-0.5">
-                    {param.customInput ? (
-                      <input
-                        type="text"
-                        value={formatCurrency(parameters[param.key] as number)}
-                        onChange={(e) => handleValueChange(param.key, e.target.value)}
-                        className="table-input w-full text-right text-xs bg-transparent border-0 px-1 py-0 focus:outline-none focus:ring-1 focus:ring-blue-500"
-                        placeholder="R 0"
-                      />
-                    ) : (
-                      <div className="text-right text-xs font-medium text-gray-900">
-                        {formatCurrency(parameters[param.key] as number)}
-                      </div>
-                    )}
-                  </td>
-                </tr>
-              ))}
+              <tr className="hover:bg-neutral-50">
+                <td className="px-2 py-0.5">
+                  <span className="text-xs text-gray-700">Life cover to spouse</span>
+                </td>
+                <td className="px-2 py-0.5 text-right text-xs font-medium text-gray-900">
+                  {formatCurrency(calculatedValues.provided * 0.4)}
+                </td>
+              </tr>
+              <tr className="hover:bg-neutral-50">
+                <td className="px-2 py-0.5">
+                  <span className="text-xs text-gray-700">Life cover to dependents and others</span>
+                </td>
+                <td className="px-2 py-0.5 text-right text-xs font-medium text-gray-900">
+                  {formatCurrency(calculatedValues.provided * 0.3)}
+                </td>
+              </tr>
+              <tr className="hover:bg-neutral-50">
+                <td className="px-2 py-0.5">
+                  <span className="text-xs text-gray-700">Voluntary investments and assets made available as a provision</span>
+                </td>
+                <td className="px-2 py-0.5 text-right text-xs font-medium text-gray-900">
+                  {formatCurrency(calculatedValues.provided * 0.2)}
+                </td>
+              </tr>
+              <tr className="hover:bg-neutral-50">
+                <td className="px-2 py-0.5">
+                  <span className="text-xs text-gray-700">Lump sum from retirement funds after tax: Victoria Lambe</span>
+                </td>
+                <td className="px-2 py-0.5 text-right text-xs font-medium text-gray-900">
+                  {formatCurrency(calculatedValues.provided * 0.1)}
+                </td>
+              </tr>
+              <tr className="hover:bg-neutral-50">
+                <td className="px-2 py-0.5">
+                  <span className="text-xs text-gray-700">Estate surplus</span>
+                </td>
+                <td className="px-2 py-0.5 text-right text-xs font-medium text-gray-900">
+                  {formatCurrency(calculatedValues.surplus)}
+                </td>
+              </tr>
+              <tr className="hover:bg-neutral-50 bg-gray-50">
+                <td className="px-2 py-0.5">
+                  <span className="text-xs text-gray-700 font-medium">Own dependants capital provided</span>
+                </td>
+                <td className="px-2 py-0.5 text-right text-xs font-bold text-gray-900">
+                  {formatCurrency(calculatedValues.provided)}
+                </td>
+              </tr>
+              <tr className="hover:bg-neutral-50">
+                <td className="px-2 py-0.5">
+                  <span className="text-xs text-gray-700">Client's liabilities settled by dependants</span>
+                </td>
+                <td className="px-2 py-0.5 text-right text-xs font-medium text-gray-900">
+                  {formatCurrency(calculatedValues.required * 0.4)}
+                </td>
+              </tr>
+              <tr className="hover:bg-neutral-50">
+                <td className="px-2 py-0.5">
+                  <span className="text-xs text-gray-700">Lump sum needs and cash bequests</span>
+                </td>
+                <td className="px-2 py-0.5 text-right text-xs font-medium text-gray-900">
+                  {formatCurrency(calculatedValues.required * 0.35)}
+                </td>
+              </tr>
+              <tr className="hover:bg-neutral-50">
+                <td className="px-2 py-0.5">
+                  <span className="text-xs text-gray-700">Capital required to provide for income shortfall</span>
+                </td>
+                <td className="px-2 py-0.5 text-right text-xs font-medium text-gray-900">
+                  {formatCurrency(calculatedValues.required * 0.25)}
+                </td>
+              </tr>
+              <tr className="hover:bg-neutral-50 bg-gray-50">
+                <td className="px-2 py-0.5">
+                  <span className="text-xs text-gray-700 font-medium">Own dependants capital required</span>
+                </td>
+                <td className="px-2 py-0.5 text-right text-xs font-bold text-gray-900">
+                  {formatCurrency(calculatedValues.required)}
+                </td>
+              </tr>
             </tbody>
           </table>
         )}
