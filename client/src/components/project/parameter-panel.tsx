@@ -159,17 +159,17 @@ export function ParameterPanel({ title, parameters, onParameterChange, section, 
         <table className="w-80 border border-neutral-300 rounded-md">
           <thead>
             <tr className="border-b border-neutral-300 bg-gray-50">
-              <th className="px-2 py-1 text-sm font-medium text-neutral-600 uppercase tracking-wider text-left">Parameter</th>
-              <th className="px-2 py-1 text-sm font-medium text-neutral-600 uppercase tracking-wider text-right">Value</th>
+              <th className="px-2 py-2 text-sm font-medium text-neutral-600 uppercase tracking-wider text-left">Parameter</th>
+              <th className="px-2 py-2 text-sm font-medium text-neutral-600 uppercase tracking-wider text-right">Value</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-neutral-200">
             {[...estateProvidedParams, ...estateRequiredParams].map((param, index) => (
               <tr key={param.key} className="hover:bg-neutral-50">
-                <td className="px-2 py-1">
+                <td className="px-2 py-2">
                   <span className="text-sm text-gray-600">{param.label}</span>
                 </td>
-                <td className="px-2 py-1">
+                <td className="px-2 py-2">
                   {param.customInput ? (
                     <input
                       type="text"
@@ -194,88 +194,88 @@ export function ParameterPanel({ title, parameters, onParameterChange, section, 
           <table className="w-80 border border-neutral-300 rounded-md">
             <thead>
               <tr className="border-b border-neutral-300 bg-gray-50">
-                <th className="px-2 py-1 text-sm font-medium text-neutral-600 uppercase tracking-wider text-left">Parameter</th>
-                <th className="px-2 py-1 text-sm font-medium text-neutral-600 uppercase tracking-wider text-right">Value</th>
+                <th className="px-2 py-2 text-sm font-medium text-neutral-600 uppercase tracking-wider text-left">Parameter</th>
+                <th className="px-2 py-2 text-sm font-medium text-neutral-600 uppercase tracking-wider text-right">Value</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-neutral-200">
               <tr className="hover:bg-neutral-50">
-                <td className="px-2 py-1">
+                <td className="px-2 py-2">
                   <span className="text-sm text-gray-600">Life cover to spouse</span>
                 </td>
-                <td className="px-2 py-1 text-right text-sm font-medium text-gray-800">
+                <td className="px-2 py-2 text-right text-sm font-medium text-gray-800">
                   {formatCurrency(calculatedValues.provided * 0.4)}
                 </td>
               </tr>
               <tr className="hover:bg-neutral-50">
-                <td className="px-2 py-1">
+                <td className="px-2 py-2">
                   <span className="text-sm text-gray-600">Life cover to dependents and others</span>
                 </td>
-                <td className="px-2 py-1 text-right text-sm font-medium text-gray-800">
+                <td className="px-2 py-2 text-right text-sm font-medium text-gray-800">
                   {formatCurrency(calculatedValues.provided * 0.3)}
                 </td>
               </tr>
               <tr className="hover:bg-neutral-50">
-                <td className="px-2 py-1">
+                <td className="px-2 py-2">
                   <span className="text-sm text-gray-600">Voluntary investments and assets made available as a provision</span>
                 </td>
-                <td className="px-2 py-1 text-right text-sm font-medium text-gray-800">
+                <td className="px-2 py-2 text-right text-sm font-medium text-gray-800">
                   {formatCurrency(calculatedValues.provided * 0.2)}
                 </td>
               </tr>
               <tr className="hover:bg-neutral-50">
-                <td className="px-2 py-1">
+                <td className="px-2 py-2">
                   <span className="text-sm text-gray-600">Lump sum from retirement funds after tax: Victoria Lambe</span>
                 </td>
-                <td className="px-2 py-1 text-right text-sm font-medium text-gray-800">
+                <td className="px-2 py-2 text-right text-sm font-medium text-gray-800">
                   {formatCurrency(calculatedValues.provided * 0.1)}
                 </td>
               </tr>
               <tr className="hover:bg-neutral-50">
-                <td className="px-2 py-1">
+                <td className="px-2 py-2">
                   <span className="text-sm text-gray-600">Estate surplus</span>
                 </td>
-                <td className="px-2 py-1 text-right text-sm font-medium text-gray-800">
+                <td className="px-2 py-2 text-right text-sm font-medium text-gray-800">
                   {formatCurrency(calculatedValues.surplus)}
                 </td>
               </tr>
               <tr className="hover:bg-neutral-50 bg-gray-50">
-                <td className="px-2 py-1">
+                <td className="px-2 py-2">
                   <span className="text-sm text-gray-600 font-medium">Own dependants capital provided</span>
                 </td>
-                <td className="px-2 py-1 text-right text-sm font-bold text-gray-800">
+                <td className="px-2 py-2 text-right text-sm font-bold text-gray-800">
                   {formatCurrency(calculatedValues.provided)}
                 </td>
               </tr>
               <tr className="hover:bg-neutral-50">
-                <td className="px-2 py-1">
+                <td className="px-2 py-2">
                   <span className="text-sm text-gray-600">Client's liabilities settled by dependants</span>
                 </td>
-                <td className="px-2 py-1 text-right text-sm font-medium text-gray-800">
+                <td className="px-2 py-2 text-right text-sm font-medium text-gray-800">
                   {formatCurrency(calculatedValues.required * 0.4)}
                 </td>
               </tr>
               <tr className="hover:bg-neutral-50">
-                <td className="px-2 py-1">
+                <td className="px-2 py-2">
                   <span className="text-sm text-gray-600">Lump sum needs and cash bequests</span>
                 </td>
-                <td className="px-2 py-1 text-right text-sm font-medium text-gray-800">
+                <td className="px-2 py-2 text-right text-sm font-medium text-gray-800">
                   {formatCurrency(calculatedValues.required * 0.35)}
                 </td>
               </tr>
               <tr className="hover:bg-neutral-50">
-                <td className="px-2 py-1">
+                <td className="px-2 py-2">
                   <span className="text-sm text-gray-600">Capital required to provide for income shortfall</span>
                 </td>
-                <td className="px-2 py-1 text-right text-sm font-medium text-gray-800">
+                <td className="px-2 py-2 text-right text-sm font-medium text-gray-800">
                   {formatCurrency(calculatedValues.required * 0.25)}
                 </td>
               </tr>
               <tr className="hover:bg-neutral-50 bg-gray-50">
-                <td className="px-2 py-1">
+                <td className="px-2 py-2">
                   <span className="text-sm text-gray-600 font-medium">Own dependants capital required</span>
                 </td>
-                <td className="px-2 py-1 text-right text-sm font-bold text-gray-800">
+                <td className="px-2 py-2 text-right text-sm font-bold text-gray-800">
                   {formatCurrency(calculatedValues.required)}
                 </td>
               </tr>
@@ -295,34 +295,34 @@ export function ParameterPanel({ title, parameters, onParameterChange, section, 
             <table className="w-80 border border-neutral-300 rounded-md">
               <thead>
                 <tr className="border-b border-neutral-300 bg-gray-50">
-                  <th className="px-2 py-1 text-sm font-medium text-neutral-600 uppercase tracking-wider text-left">Income Source</th>
-                  <th className="px-2 py-1 text-sm font-medium text-neutral-600 uppercase tracking-wider text-right">Amount</th>
+                  <th className="px-2 py-2 text-sm font-medium text-neutral-600 uppercase tracking-wider text-left">Income Source</th>
+                  <th className="px-2 py-2 text-sm font-medium text-neutral-600 uppercase tracking-wider text-right">Amount</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-neutral-200">
                 <tr className="hover:bg-neutral-50">
-                  <td className="px-2 py-1">
+                  <td className="px-2 py-2">
                     <span className="text-sm text-gray-600">From retirement funds and existing living annuities after deducting income tax</span>
                   </td>
-                  <td className="px-2 py-1 text-right text-sm font-medium text-gray-800">R 29,193</td>
+                  <td className="px-2 py-2 text-right text-sm font-medium text-gray-800">R 29,193</td>
                 </tr>
                 <tr className="hover:bg-neutral-50">
-                  <td className="px-2 py-1">
+                  <td className="px-2 py-2">
                     <span className="text-sm text-gray-600">Defined benefit pension fund</span>
                   </td>
-                  <td className="px-2 py-1 text-right text-sm font-medium text-gray-800">R 0</td>
+                  <td className="px-2 py-2 text-right text-sm font-medium text-gray-800">R 0</td>
                 </tr>
                 <tr className="hover:bg-neutral-50">
-                  <td className="px-2 py-1">
+                  <td className="px-2 py-2">
                     <span className="text-sm text-gray-600">Monthly death benefit</span>
                   </td>
-                  <td className="px-2 py-1 text-right text-sm font-medium text-gray-800">R 0</td>
+                  <td className="px-2 py-2 text-right text-sm font-medium text-gray-800">R 0</td>
                 </tr>
                 <tr className="hover:bg-neutral-50">
-                  <td className="px-2 py-1">
+                  <td className="px-2 py-2">
                     <span className="text-sm text-gray-600">From existing capital provisions after deducting capital needs</span>
                   </td>
-                  <td className="px-2 py-1 text-right">
+                  <td className="px-2 py-2 text-right">
                     <div className="text-sm font-medium text-gray-600">R 6,895,118</div>
                     <div className="text-sm text-gray-500">R 35,571</div>
                   </td>
@@ -335,34 +335,34 @@ export function ParameterPanel({ title, parameters, onParameterChange, section, 
               <table className="w-80 border border-neutral-300 rounded-md">
                 <thead>
                   <tr className="border-b border-neutral-300 bg-gray-50">
-                    <th className="px-2 py-1 text-sm font-medium text-neutral-600 uppercase tracking-wider text-left">Income Source</th>
-                    <th className="px-2 py-1 text-sm font-medium text-neutral-600 uppercase tracking-wider text-right">Amount</th>
+                    <th className="px-2 py-2 text-sm font-medium text-neutral-600 uppercase tracking-wider text-left">Income Source</th>
+                    <th className="px-2 py-2 text-sm font-medium text-neutral-600 uppercase tracking-wider text-right">Amount</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-neutral-200">
                   <tr className="hover:bg-neutral-50">
-                    <td className="px-2 py-1">
+                    <td className="px-2 py-2">
                       <span className="text-sm text-gray-600">From retirement funds and existing living annuities after deducting income tax</span>
                     </td>
-                    <td className="px-2 py-1 text-right text-sm font-medium text-gray-800">R 29,193</td>
+                    <td className="px-2 py-2 text-right text-sm font-medium text-gray-800">R 29,193</td>
                   </tr>
                   <tr className="hover:bg-neutral-50">
-                    <td className="px-2 py-1">
+                    <td className="px-2 py-2">
                       <span className="text-sm text-gray-600">Defined benefit pension fund</span>
                     </td>
-                    <td className="px-2 py-1 text-right text-sm font-medium text-gray-800">R 0</td>
+                    <td className="px-2 py-2 text-right text-sm font-medium text-gray-800">R 0</td>
                   </tr>
                   <tr className="hover:bg-neutral-50">
-                    <td className="px-2 py-1">
+                    <td className="px-2 py-2">
                       <span className="text-sm text-gray-600">Monthly death benefit</span>
                     </td>
-                    <td className="px-2 py-1 text-right text-sm font-medium text-gray-800">R 0</td>
+                    <td className="px-2 py-2 text-right text-sm font-medium text-gray-800">R 0</td>
                   </tr>
                   <tr className="hover:bg-neutral-50">
-                    <td className="px-2 py-1">
+                    <td className="px-2 py-2">
                       <span className="text-sm text-gray-600">From existing capital provisions after deducting capital needs</span>
                     </td>
-                    <td className="px-2 py-1 text-right">
+                    <td className="px-2 py-2 text-right">
                       <div className="text-sm font-medium text-gray-600">R 6,895,118</div>
                       <div className="text-sm text-gray-500">R 35,571</div>
                     </td>
