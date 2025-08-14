@@ -148,7 +148,7 @@ export function ParameterPanel({ title, parameters, onParameterChange, section }
   };
 
   return (
-    <div className="h-fit">
+    <>
       {/* Simple header without card container */}
       <div className="pb-3">
         <h3 className="text-lg font-semibold text-gray-900">{title}</h3>
@@ -323,6 +323,6 @@ export function ParameterPanel({ title, parameters, onParameterChange, section }
             </div>
           </div>
         )}
-    </div>
+    </>
   );
 }
