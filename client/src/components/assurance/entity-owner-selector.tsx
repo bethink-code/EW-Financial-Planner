@@ -121,8 +121,7 @@ export function EntityOwnerSelector({
               }
             }}
             disabled={disabled}
-            className="table-input table-dropdown w-full"
-            style={{ minWidth: '250px' }}
+            className="table-input table-dropdown w-full min-w-[250px]"
           >
             <option value="">Select owner...</option>
             {entities.map((entity) => {
