@@ -169,7 +169,7 @@ export function ParameterPanel({ title, parameters, onParameterChange, section, 
                 <td className="px-2 py-2">
                   <span className="text-sm text-gray-600">{param.label}</span>
                 </td>
-                <td className="px-2 py-2">
+                <td className="px-2 py-2 text-right text-sm font-medium text-gray-800">
                   {param.customInput ? (
                     <input
                       type="text"
@@ -179,9 +179,7 @@ export function ParameterPanel({ title, parameters, onParameterChange, section, 
                       placeholder="R 0"
                     />
                   ) : (
-                    <div className="text-right text-sm font-medium text-gray-800">
-                      {formatCurrency(parameters[param.key] as number)}
-                    </div>
+                    formatCurrency(parameters[param.key] as number)
                   )}
                 </td>
               </tr>
