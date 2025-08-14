@@ -121,12 +121,12 @@ export default function EntityOwnerSelector({
       </td>
       
       {/* Owner Column */}
-      <td className="px-0.5 py-1 align-top border-r border-neutral-200" style={{ width: '300px' }}>
+      <td className="px-0.5 py-1 align-top border-r border-neutral-200">
         <select
           value={currentOwner}
           onChange={(e) => handleOwnerSelect(e.target.value, ownerIndex)}
           disabled={disabled}
-          className="table-input table-dropdown w-full"
+          className="table-input table-dropdown"
         >
           <option value="">Select owner...</option>
           {entities.map((entity) => (
