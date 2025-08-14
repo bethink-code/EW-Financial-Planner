@@ -339,8 +339,17 @@ th, td {
   }
   
   /* GLOBAL TABLE STYLING - Ultra Clean with Section Borders Only */
-  table {
+  table:not(.w-80) {
     width: auto !important;
+    background-color: white !important;
+    border-radius: 0.5rem !important;
+    border: 1px solid #e5e7eb !important;
+    border-collapse: separate !important;
+    border-spacing: 0 !important;
+  }
+  
+  /* Allow tables with w-80 class to maintain their fixed width */
+  table.w-80 {
     background-color: white !important;
     border-radius: 0.5rem !important;
     border: 1px solid #e5e7eb !important;
