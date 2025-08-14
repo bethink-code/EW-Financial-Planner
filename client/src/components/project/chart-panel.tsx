@@ -46,7 +46,7 @@ export function ChartPanel({ title, data, chartType, description }: ChartPanelPr
       {/* Chart and Summary - Centered */}
       <div className="flex-1 flex flex-col items-center justify-center">
         {/* Chart */}
-        <div className="h-80 flex items-center justify-center mt-8">
+        <div className="h-80 flex items-center justify-center mt-20">
           {renderChart()}
         </div>
 
