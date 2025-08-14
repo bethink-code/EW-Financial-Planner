@@ -175,6 +175,54 @@ html {
   }
 }
 
+/* Bar chart animation classes */
+.bar-chart-item {
+  animation: barItemFadeIn 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  opacity: 0;
+}
+
+.bar-chart-bar {
+  animation: barGrowUp 0.8s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  transform: scaleY(0);
+  transform-origin: bottom;
+}
+
+.bar-chart-label {
+  animation: labelFadeIn 0.4s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  opacity: 0;
+}
+
+@keyframes barItemFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes barGrowUp {
+  from {
+    transform: scaleY(0);
+  }
+  to {
+    transform: scaleY(1);
+  }
+}
+
+@keyframes labelFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 /* Smooth transitions for table columns and sections */
 th, td {
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);

@@ -31,19 +31,26 @@ export function ProjectBarChart({ data, title }: BarChartProps) {
     <div className="w-full h-80 flex flex-col items-center justify-center">
       <div className="flex items-end justify-center space-x-8 h-72">
         {bars.map((bar, index) => (
-          <div key={index} className="flex flex-col items-center">
-            <div className="text-xs text-gray-600 mb-2 text-center">
+          <div key={index} className="flex flex-col items-center bar-chart-item">
+            <div 
+              className="text-xs text-gray-600 mb-2 text-center bar-chart-label"
+              style={{ animationDelay: `${index * 0.1}s` }}
+            >
               {formatCurrency(bar.value)}
             </div>
             <div 
-              className="w-16 transition-all duration-300 rounded-t-sm"
+              className="w-16 rounded-t-sm bar-chart-bar"
               style={{ 
                 height: `${Math.max(bar.value * scale, 10)}px`,
                 backgroundColor: bar.color,
-                minHeight: '10px'
+                minHeight: '10px',
+                animationDelay: `${index * 0.1}s`
               }}
             />
-            <div className="text-xs text-gray-700 mt-2 text-center font-medium">
+            <div 
+              className="text-xs text-gray-700 mt-2 text-center font-medium bar-chart-label"
+              style={{ animationDelay: `${index * 0.1}s` }}
+            >
               {bar.name}
             </div>
           </div>
