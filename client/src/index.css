@@ -357,6 +357,16 @@ th, td {
     border-spacing: 0 !important;
   }
 
+  /* Custom parameter table width */
+  .parameter-table {
+    width: 600px !important;
+    background-color: white !important;
+    border-radius: 0.5rem !important;
+    border: 1px solid #e5e7eb !important;
+    border-collapse: separate !important;
+    border-spacing: 0 !important;
+  }
+
   /* FIX: Prevent double borders at table bottom */
   table tbody tr:last-child td {
     border-bottom: none !important;

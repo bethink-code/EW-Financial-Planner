@@ -35,7 +35,7 @@ This pattern is derived from the perfected Dependants Position implementation an
 ## Design Specifications
 
 ### Spacing & Layout
-- **Table width**: `w-[340px]` (340px) for optimal compact design with readability
+- **Table width**: `.parameter-table` custom CSS class (600px) for optimal readability and content display
 - **Cell padding**: `px-2 py-2` (8px horizontal, 8px vertical) - optimized for readability
 - **Border**: `border border-neutral-300 rounded-md` for clean separation
 - **Hover effects**: `hover:bg-neutral-50` for better UX
