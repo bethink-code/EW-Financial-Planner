@@ -154,7 +154,7 @@ export function ParameterPanel({ title, parameters, onParameterChange, section, 
   };
 
   return (
-    <>      
+    <div className="p-6">      
       {section === 'estate' && (
         <table className="parameter-table table-fixed">
           <thead>
@@ -439,6 +439,6 @@ export function ParameterPanel({ title, parameters, onParameterChange, section, 
             </div>
           </div>
         )}
-    </>
+    </div>
   );
 }

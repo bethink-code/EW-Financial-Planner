@@ -86,8 +86,8 @@ export default function ProjectStep() {
             className="mb-6"
           >
             {/* Tab Navigation and Content */}
-            <div className="px-6 py-4">
-            <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
+            <div className="px-6 py-6">
+            <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-8">
               {/* Custom Tab Navigation */}
               <div className="inline-flex bg-gray-100 rounded-lg p-1">
                 <div className="flex gap-1">
@@ -145,7 +145,7 @@ export default function ProjectStep() {
               </div>
 
               {/* Overview Tab - Shows all 4 gauges */}
-              <TabsContent value="overview">
+              <TabsContent value="overview" className="mt-8">
                 <OverviewDashboard 
                   data={calculatedValues}
                   chartType={chartType}
@@ -153,8 +153,8 @@ export default function ProjectStep() {
               </TabsContent>
 
               {/* Individual Position Tabs */}
-              <TabsContent value="estate">
-                <div className="grid grid-cols-2 gap-6">
+              <TabsContent value="estate" className="mt-8">
+                <div className="grid grid-cols-2 gap-8">
                   <div>
                     <ParameterPanel
                       title="Estate Position Parameters"
@@ -175,8 +175,8 @@ export default function ProjectStep() {
                 </div>
               </TabsContent>
 
-              <TabsContent value="dependants">
-                <div className="grid grid-cols-2 gap-6">
+              <TabsContent value="dependants" className="mt-8">
+                <div className="grid grid-cols-2 gap-8">
                   <div>
                     <ParameterPanel
                       title="Dependants Position Parameters"
@@ -197,8 +197,8 @@ export default function ProjectStep() {
                 </div>
               </TabsContent>
 
-              <TabsContent value="capital">
-                <div className="grid grid-cols-2 gap-6">
+              <TabsContent value="capital" className="mt-8">
+                <div className="grid grid-cols-2 gap-8">
                   <div>
                     <ParameterPanel
                       title="Total Capital Position Parameters"
@@ -219,8 +219,8 @@ export default function ProjectStep() {
                 </div>
               </TabsContent>
 
-              <TabsContent value="income">
-                <div className="grid grid-cols-2 gap-6">
+              <TabsContent value="income" className="mt-8">
+                <div className="grid grid-cols-2 gap-8">
                   <div>
                     <ParameterPanel
                       title="Income Position Parameters"
