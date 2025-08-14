@@ -529,7 +529,7 @@ export default function DefinedBenefitFundsTable({ onAddFund }: DefinedBenefitFu
         {/* Totals Footer */}
         <tfoot>
           <tr>
-            <td className="totals-cell-label text-right" colSpan={6}>Totals</td>
+            <td className="totals-cell-label text-right" colSpan={7}>Totals</td>
             <td className="totals-cell-value">R {totals.finalMonthlySalary.toLocaleString()}</td>
             <td className="totals-cell-value">R {totals.deathLumpSum.toLocaleString()}</td>
             <td className="totals-cell-value">R {totals.additionalTaxFreeAmount.toLocaleString()}</td>
