@@ -22,9 +22,9 @@ export function ProjectBarChart({ data, title }: BarChartProps) {
   const scale = 280 / maxValue; // 280px max bar height
 
   const bars = [
-    { name: 'Provided', value: data.provided, color: '#3B82F6' },
-    { name: 'Required', value: data.required, color: '#EF4444' },
-    { name: 'Surplus', value: Math.abs(data.surplus), color: data.surplus >= 0 ? '#10B981' : '#EF4444' }
+    { name: 'Provided', value: data.provided, color: 'var(--chart-primary-blue)' },
+    { name: 'Required', value: data.required, color: 'var(--chart-primary-orange)' },
+    { name: 'Surplus', value: Math.abs(data.surplus), color: data.surplus >= 0 ? 'var(--chart-primary-green)' : 'var(--chart-primary-pink)' }
   ];
 
   return (

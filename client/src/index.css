@@ -259,6 +259,20 @@ th, td {
   --neutral-200: hsl(220, 13%, 91%);
   --neutral-100: hsl(220, 14%, 96%);
   --neutral-50: hsl(210, 20%, 98%);
+  
+  /* Graph Color Palette - Secondary Colors */
+  --chart-primary-blue: #2196F3;
+  --chart-primary-orange: #FF9800;
+  --chart-primary-green: #4CAF50;
+  --chart-primary-pink: #E91E63;
+  
+  --chart-secondary-teal-dark: #0F7377;
+  --chart-secondary-teal: #5DADE2;
+  --chart-secondary-brown: #8D6E63;
+  --chart-secondary-purple: #9C27B0;
+  --chart-secondary-blue-dark: #3F51B5;
+  --chart-secondary-blue-light: #BBDEFB;
+  --chart-secondary-green-light: #A8E6CF;
 }
 
 .dark {
