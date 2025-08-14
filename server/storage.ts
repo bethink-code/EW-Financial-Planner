@@ -48,8 +48,9 @@ import {
   type UpdateEstatePositionParameters,
 } from "@shared/schema";
 import { assets, type Assets, type InsertAssets } from "@shared/assets-schema";
-import { drizzle } from "drizzle-orm/node-postgres";
-import { Pool } from "pg";
+import { Pool, neonConfig } from '@neondatabase/serverless';
+import { drizzle } from 'drizzle-orm/neon-serverless';
+import ws from "ws";
 import { eq, ilike, or, asc } from "drizzle-orm";
 
 export interface IStorage {
@@ -1054,18 +1055,9 @@ export class DbStorage {
     }
 
     try {
-      const pool = new Pool({
-        connectionString,
-        ssl: {
-          rejectUnauthorized: false,
-        },
-        // Add connection timeout and retry settings
-        connectionTimeoutMillis: 5000,
-        idleTimeoutMillis: 10000,
-        max: 10,
-      });
-
-      this.db = drizzle(pool);
+      neonConfig.webSocketConstructor = ws;
+      const pool = new Pool({ connectionString });
+      this.db = drizzle({ client: pool });
       console.log("Database connection established successfully");
     } catch (error) {
       console.error("Failed to establish database connection:", error);
