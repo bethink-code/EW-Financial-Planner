@@ -287,6 +287,7 @@ export class MemStorage implements IStorage {
       id,
       description: insertFund.description || null, // Store null for empty values
       owners: insertFund.owners || ["Donald Edwards"],
+      ownershipPercentages: insertFund.ownershipPercentages || ["100%"],
       coverAmount: insertFund.coverAmount || "R 0",
       unapprovedBeneficiaries: insertFund.unapprovedBeneficiaries || [""],
       unapprovedPercentageSplits: insertFund.unapprovedPercentageSplits || [
@@ -409,9 +410,16 @@ export class MemStorage implements IStorage {
       id,
       description: insertAssurance.description || "",
       owners: insertAssurance.owners || ["Donald Edwards"],
+      lifeAssured: insertAssurance.lifeAssured || [""],
+      deathBenefits: insertAssurance.deathBenefits || ["R 0"],
+      ownershipPercentages: insertAssurance.ownershipPercentages || ["100%"],
       beneficiaries: insertAssurance.beneficiaries || [""],
+      beneficiaryPercentages: insertAssurance.beneficiaryPercentages || ["100%"],
       deathBenefit: insertAssurance.deathBenefit || "R 0",
       amount: insertAssurance.amount || "R 0",
+      amountToggles: insertAssurance.amountToggles || [true],
+      amountYearsValues: insertAssurance.amountYearsValues || ["0 years"],
+      amountIncreaseValues: insertAssurance.amountIncreaseValues || ["0%"],
       premiumsByOthers: insertAssurance.premiumsByOthers || "R 0",
       collateralSession: insertAssurance.collateralSession || "R 0",
       benefitSplit: insertAssurance.benefitSplit || "0%",
@@ -471,6 +479,8 @@ export class MemStorage implements IStorage {
       deathLumpSum: fund.deathLumpSum || "R 0",
       additionalTaxFreeAmount: fund.additionalTaxFreeAmount || "R 0",
       pensionIncomeAmount: fund.pensionIncomeAmount || "R 0",
+      pensionIncomeCheckbox: fund.pensionIncomeCheckbox ?? true,
+      pensionIncomeYears: fund.pensionIncomeYears || "0 years",
       pensionIncomeIncrease: fund.pensionIncomeIncrease || "0%",
     };
 
@@ -745,17 +755,10 @@ export class MemStorage implements IStorage {
   ): Promise<AdditionalEstateDutyItems> {
     const newItem: AdditionalEstateDutyItems = {
       id: this.currentAdditionalEstateDutyItemId++,
-      category: item.category || "",
       description: item.description || "",
       amount: item.amount || "R 0",
-      increasePercentage: item.increasePercentage || "0%",
-      johnDoe: item.johnDoe || "0%",
-      janetteDoe: item.janetteDoe || "0%",
-      doeJunior: item.doeJunior || "0%",
-      doeFamilyTrust: item.doeFamilyTrust || "0%",
-      estate: item.estate || "R 0",
-      others: item.others || "R 0",
-      client: item.client || "R 0",
+      deduction: item.deduction ?? false,
+      excludeFromJointEstate: item.excludeFromJointEstate ?? false,
     };
 
     this.additionalEstateDutyItems.set(newItem.id, newItem);
@@ -787,8 +790,7 @@ export class MemStorage implements IStorage {
     const lowerQuery = query.toLowerCase();
     return allItems.filter(
       (item) =>
-        item.description.toLowerCase().includes(lowerQuery) ||
-        item.category.toLowerCase().includes(lowerQuery),
+        item.description.toLowerCase().includes(lowerQuery),
     );
   }
 
@@ -805,17 +807,14 @@ export class MemStorage implements IStorage {
     const newLiability: Liabilities = {
       id: this.currentLiabilityId++,
       description: liability.description || "Enter details...",
-      debtAmount: liability.debtAmount || "R 0",
       currency: liability.currency || "ZAR",
-      peterLambie: liability.peterLambie || "0%",
-      victoriaLambie: liability.victoriaLambie || "0%",
-      juniorLambie: liability.juniorLambie || "0%",
-      lambiesFamilyTrust: liability.lambiesFamilyTrust || "0%",
-      others: liability.others || "R 0",
+      debtAmount: liability.debtAmount || "R 0",
+      entityOwnership: liability.entityOwnership || "{}",
       estate: liability.estate || "R 0",
+      others: liability.others || "R 0",
       client: liability.client || "R 0",
-      section: liability.section || "Enter details...",
-      included: liability.included || true,
+      section: liability.section || "BONDS",
+      included: liability.included ?? true,
     };
 
     this.liabilities.set(newLiability.id, newLiability);
@@ -862,15 +861,12 @@ export class MemStorage implements IStorage {
       id: this.currentAssetId++,
       description: asset.description || "Enter details...",
       marketValue: asset.marketValue || "R 0",
-      johnDoe: asset.johnDoe || "0%",
-      janetteDoe: asset.janetteDoe || "0%",
-      doeJunior: asset.doeJunior || "0%",
-      doeFamilyTrust: asset.doeFamilyTrust || "0%",
-      others: asset.others || "R 0",
+      entityOwnership: asset.entityOwnership || "{}",
       estate: asset.estate || "R 0",
+      others: asset.others || "R 0",
       client: asset.client || "R 0",
-      section: asset.section || "Enter details...",
-      included: asset.included || true,
+      section: asset.section || "PROPERTY",
+      included: asset.included ?? true,
     };
 
     this.assets.set(newAsset.id, newAsset);
@@ -973,7 +969,24 @@ export class MemStorage implements IStorage {
   async createEstatePositionParameter(parameter: InsertEstatePositionParameters): Promise<EstatePositionParameters> {
     const newParameter: EstatePositionParameters = {
       id: this.currentEstatePositionParameterId++,
-      ...parameter,
+      lifeCoverToEstate: parameter.lifeCoverToEstate || "R 0",
+      voluntaryInvestments: parameter.voluntaryInvestments || "R 0",
+      accrualClaimFromSpouse: parameter.accrualClaimFromSpouse || "R 0",
+      dependantsSurplusUtilised: parameter.dependantsSurplusUtilised || "R 0",
+      ownEstateCapitalProvided: parameter.ownEstateCapitalProvided || "R 0",
+      estateDuty: parameter.estateDuty || "R 0",
+      executorsFees: parameter.executorsFees || "R 0",
+      settleClientLiabilities: parameter.settleClientLiabilities || "R 0",
+      capitalGainsTax: parameter.capitalGainsTax || "R 0",
+      mastersFee: parameter.mastersFee || "R 0",
+      deathBedFuneralExpenses: parameter.deathBedFuneralExpenses || "R 0",
+      conveyancingValuationFees: parameter.conveyancingValuationFees || "R 0",
+      accrualClaimToSpouse: parameter.accrualClaimToSpouse || "R 0",
+      ownEstateCapitalRequired: parameter.ownEstateCapitalRequired || "R 0",
+      surplus: parameter.surplus || "R 0",
+      estateSurplusUtilisedForDependants: parameter.estateSurplusUtilisedForDependants || "R 0",
+      estatePositionAfterAllocation: parameter.estatePositionAfterAllocation || "R 0",
+      lastUpdated: parameter.lastUpdated || new Date().toISOString(),
     };
     this.estatePositionParameters.set(newParameter.id, newParameter);
     return newParameter;
@@ -1132,17 +1145,10 @@ export class DbStorage {
     item: Partial<InsertAdditionalEstateDutyItems>,
   ): InsertAdditionalEstateDutyItems {
     return {
-      category: item.category || "",
       description: item.description || "",
       amount: item.amount || "R 0",
-      increasePercentage: item.increasePercentage || "0%",
-      johnDoe: item.johnDoe || "0%",
-      janetteDoe: item.janetteDoe || "0%",
-      doeJunior: item.doeJunior || "0%",
-      doeFamilyTrust: item.doeFamilyTrust || "0%",
-      estate: item.estate || "R 0",
-      others: item.others || "R 0",
-      client: item.client || "R 0",
+      deduction: item.deduction ?? false,
+      excludeFromJointEstate: item.excludeFromJointEstate ?? false,
     };
   }
 
