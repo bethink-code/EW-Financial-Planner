@@ -148,59 +148,154 @@ export function ParameterPanel({ title, parameters, onParameterChange, section }
   };
 
   return (
-    <Card className="h-fit">
-      <CardHeader className="pb-4">
-        <div>
-          <CardTitle className="text-lg">{title}</CardTitle>
-          <CardDescription>Adjust parameters to see real-time projections</CardDescription>
+    <div className="h-fit">
+      {/* Simple header without card container */}
+      <div className="pb-3">
+        <h3 className="text-lg font-semibold text-gray-900">{title}</h3>
+        <p className="text-sm text-gray-600 mt-1">Adjust parameters to see real-time projections</p>
+      </div>
+      
+      {section === 'estate' && (
+        <div className="border border-neutral-200 rounded-md">
+          <table className="w-full">
+            <thead>
+              <tr className="border-b border-neutral-200 bg-gray-50">
+                <th className="px-3 py-2 text-xs font-medium text-neutral-600 uppercase tracking-wider text-left">Parameter</th>
+                <th className="px-3 py-2 text-xs font-medium text-neutral-600 uppercase tracking-wider text-right">Value</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-neutral-200">
+              {[...estateProvidedParams, ...estateRequiredParams].map((param, index) => (
+                <tr key={param.key} className="hover:bg-neutral-50">
+                  <td className="px-3 py-2">
+                    <div className="flex items-center gap-2">
+                      {param.checkbox && (
+                        <Checkbox
+                          checked={true}
+                          className="h-4 w-4"
+                        />
+                      )}
+                      <span className="text-sm text-gray-700">{param.label}</span>
+                    </div>
+                  </td>
+                  <td className="px-3 py-2">
+                    {param.customInput ? (
+                      <input
+                        type="text"
+                        value={formatCurrency(parameters[param.key] as number)}
+                        onChange={(e) => handleValueChange(param.key, e.target.value)}
+                        className="table-input w-full text-right text-sm border border-neutral-300 rounded px-2 py-1"
+                        placeholder="R 0"
+                      />
+                    ) : (
+                      <div className="text-right text-sm font-medium text-gray-900">
+                        {formatCurrency(parameters[param.key] as number)}
+                      </div>
+                    )}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
-      </CardHeader>
-      <CardContent className="space-y-6">
-        {section === 'estate' && (
-          <div className="space-y-4">
-            {/* Flat list of all estate parameters without collapsible sections */}
-            {[...estateProvidedParams, ...estateRequiredParams].map((param) => (
-              <div key={param.key} className="flex items-center justify-between gap-3 py-2">
-                <div className="flex items-center gap-2 flex-1">
-                  {param.checkbox && (
-                    <Checkbox
-                      checked={true}
-                      className="h-4 w-4"
-                    />
-                  )}
-                  <Label className="text-sm text-gray-700 flex-1">{param.label}</Label>
-                </div>
-                {param.customInput ? (
-                  <Input
-                    value={formatCurrency(parameters[param.key] as number)}
-                    onChange={(e) => handleValueChange(param.key, e.target.value)}
-                    className="w-32 text-right text-sm"
-                    placeholder="R 0"
-                  />
-                ) : (
-                  <div className="w-32 text-right text-sm font-medium text-gray-900">
-                    {formatCurrency(parameters[param.key] as number)}
-                  </div>
-                )}
-              </div>
-            ))}
-          </div>
-        )}
+      )}
         
         {section === 'dependants' && (
-          <>
-            {renderParameterGroup('Capital Provided', dependantsProvidedParams, 'provided')}
-            {renderParameterGroup('Capital Required', dependantsRequiredParams, 'required')}
-          </>
+          <div className="border border-neutral-200 rounded-md">
+            <table className="w-full">
+              <thead>
+                <tr className="border-b border-neutral-200 bg-gray-50">
+                  <th className="px-3 py-2 text-xs font-medium text-neutral-600 uppercase tracking-wider text-left">Parameter</th>
+                  <th className="px-3 py-2 text-xs font-medium text-neutral-600 uppercase tracking-wider text-right">Value</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-neutral-200">
+                {[...dependantsProvidedParams, ...dependantsRequiredParams].map((param, index) => (
+                  <tr key={param.key} className="hover:bg-neutral-50">
+                    <td className="px-3 py-2">
+                      <div className="flex items-center gap-2">
+                        {param.checkbox && (
+                          <Checkbox
+                            checked={true}
+                            className="h-4 w-4"
+                          />
+                        )}
+                        <span className="text-sm text-gray-700">{param.label}</span>
+                      </div>
+                    </td>
+                    <td className="px-3 py-2">
+                      {param.customInput ? (
+                        <input
+                          type="text"
+                          value={formatCurrency(parameters[param.key] as number)}
+                          onChange={(e) => handleValueChange(param.key, e.target.value)}
+                          className="table-input w-full text-right text-sm border border-neutral-300 rounded px-2 py-1"
+                          placeholder="R 0"
+                        />
+                      ) : (
+                        <div className="text-right text-sm font-medium text-gray-900">
+                          {formatCurrency(parameters[param.key] as number)}
+                        </div>
+                      )}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         )}
 
         {section === 'capital' && (
-          <div className="space-y-4">
-            <div className="text-center p-6 bg-blue-50 rounded-lg">
-              <p className="text-sm text-gray-600">Total Capital Position combines Estate and Dependants positions</p>
-              <p className="text-xs text-gray-500 mt-2">Adjust parameters in Estate and Dependants tabs to see changes here</p>
-            </div>
+          <div className="text-center p-4 bg-blue-50 rounded-lg border border-blue-200">
+            <p className="text-sm text-gray-700">Total Capital Position combines Estate and Dependants positions</p>
+            <p className="text-xs text-gray-600 mt-1">Adjust parameters in Estate and Dependants tabs to see changes here</p>
           </div>
+        )}
+
+        {section === 'income' && (
+          <div className="border border-neutral-200 rounded-md">
+            <table className="w-full">
+              <thead>
+                <tr className="border-b border-neutral-200 bg-gray-50">
+                  <th className="px-3 py-2 text-xs font-medium text-neutral-600 uppercase tracking-wider text-left">Income Source</th>
+                  <th className="px-3 py-2 text-xs font-medium text-neutral-600 uppercase tracking-wider text-right">Amount</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-neutral-200">
+                <tr className="hover:bg-neutral-50">
+                  <td className="px-3 py-2">
+                    <span className="text-sm text-gray-700">From retirement funds and existing living annuities after deducting income tax</span>
+                  </td>
+                  <td className="px-3 py-2 text-right text-sm font-medium text-gray-900">R 29,193</td>
+                </tr>
+                <tr className="hover:bg-neutral-50">
+                  <td className="px-3 py-2">
+                    <span className="text-sm text-gray-700">Defined benefit pension fund</span>
+                  </td>
+                  <td className="px-3 py-2 text-right text-sm font-medium text-gray-900">R 0</td>
+                </tr>
+                <tr className="hover:bg-neutral-50">
+                  <td className="px-3 py-2">
+                    <span className="text-sm text-gray-700">Monthly death benefit</span>
+                  </td>
+                  <td className="px-3 py-2 text-right text-sm font-medium text-gray-900">R 0</td>
+                </tr>
+                <tr className="hover:bg-neutral-50">
+                  <td className="px-3 py-2">
+                    <span className="text-sm text-gray-700">From existing capital provisions after deducting capital needs</span>
+                  </td>
+                  <td className="px-3 py-2 text-right">
+                    <div className="text-sm font-medium text-gray-900">R 6,895,118</div>
+                    <div className="text-xs text-gray-500">R 35,571</div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        )}
+      
+        {section === 'total' && (
+          renderSection(totalCapitalParams, 'Total Capital Details')
         )}
 
         {section === 'income' && (
@@ -231,7 +326,6 @@ export function ParameterPanel({ title, parameters, onParameterChange, section }
             </div>
           </div>
         )}
-      </CardContent>
-    </Card>
+    </div>
   );
 }
