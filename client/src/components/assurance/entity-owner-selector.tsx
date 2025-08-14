@@ -108,6 +108,7 @@ export function EntityOwnerSelector({
             onChange={(e) => onOwnerChange(policyId, rowIndex, e.target.value)}
             disabled={disabled}
             className="table-input table-dropdown w-full"
+            style={{ minWidth: '250px' }}
           >
             <option value="">Select owner...</option>
             {entities.map((entity) => (
