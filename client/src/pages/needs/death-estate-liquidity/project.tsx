@@ -95,7 +95,7 @@ export default function ProjectStep() {
                     onClick={() => setActiveTab('overview')}
                     className={`px-4 py-2 text-sm font-medium rounded-md transition-colors ${
                       activeTab === 'overview'
-                        ? 'bg-white text-gray-900 shadow-sm'
+                        ? 'bg-white text-black shadow-sm font-bold border-2 border-blue-500'
                         : 'text-gray-600 hover:text-gray-900'
                     }`}
                   >
@@ -105,7 +105,7 @@ export default function ProjectStep() {
                     onClick={() => setActiveTab('estate')}
                     className={`px-4 py-2 text-sm font-medium rounded-md transition-colors ${
                       activeTab === 'estate'
-                        ? 'bg-white text-gray-900 shadow-sm'
+                        ? 'bg-white text-black shadow-sm font-bold border-2 border-blue-500'
                         : 'text-gray-600 hover:text-gray-900'
                     }`}
                   >
@@ -115,7 +115,7 @@ export default function ProjectStep() {
                     onClick={() => setActiveTab('dependants')}
                     className={`px-4 py-2 text-sm font-medium rounded-md transition-colors ${
                       activeTab === 'dependants'
-                        ? 'bg-white text-gray-900 shadow-sm'
+                        ? 'bg-white text-black shadow-sm font-bold border-2 border-blue-500'
                         : 'text-gray-600 hover:text-gray-900'
                     }`}
                   >
@@ -125,7 +125,7 @@ export default function ProjectStep() {
                     onClick={() => setActiveTab('capital')}
                     className={`px-4 py-2 text-sm font-medium rounded-md transition-colors ${
                       activeTab === 'capital'
-                        ? 'bg-white text-gray-900 shadow-sm'
+                        ? 'bg-white text-black shadow-sm font-bold border-2 border-blue-500'
                         : 'text-gray-600 hover:text-gray-900'
                     }`}
                   >
@@ -135,7 +135,7 @@ export default function ProjectStep() {
                     onClick={() => setActiveTab('income')}
                     className={`px-4 py-2 text-sm font-medium rounded-md transition-colors ${
                       activeTab === 'income'
-                        ? 'bg-white text-gray-900 shadow-sm'
+                        ? 'bg-white text-black shadow-sm font-bold border-2 border-blue-500'
                         : 'text-gray-600 hover:text-gray-900'
                     }`}
                   >
