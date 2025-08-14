@@ -31,25 +31,34 @@ export function ProjectBarChart({ data, title }: BarChartProps) {
     <div className="w-full h-80 flex flex-col items-center justify-center">
       <div className="flex items-end justify-center space-x-8 h-72">
         {bars.map((bar, index) => (
-          <div key={index} className="flex flex-col items-center bar-chart-item">
+          <div key={index} className="flex flex-col items-center bar-chart-item h-full">
             <div 
-              className="text-xs text-gray-600 mb-2 text-center bar-chart-label"
-              style={{ animationDelay: `${index * 0.1}s` }}
+              className="text-xs text-gray-600 mb-2 text-center bar-chart-label flex-shrink-0"
+              style={{ 
+                animationDelay: `${index * 0.1}s`,
+                height: '20px'
+              }}
             >
               {formatCurrency(bar.value)}
             </div>
+            <div className="flex-1 flex items-end">
+              <div 
+                className="w-16 rounded-t-sm bar-chart-bar"
+                style={{ 
+                  height: `${Math.max(bar.value * scale, 10)}px`,
+                  backgroundColor: bar.color,
+                  minHeight: '10px',
+                  animationDelay: `${index * 0.1}s`,
+                  maxHeight: '200px'
+                }}
+              />
+            </div>
             <div 
-              className="w-16 rounded-t-sm bar-chart-bar"
+              className="text-xs text-gray-700 mt-2 text-center font-medium bar-chart-label flex-shrink-0"
               style={{ 
-                height: `${Math.max(bar.value * scale, 10)}px`,
-                backgroundColor: bar.color,
-                minHeight: '10px',
-                animationDelay: `${index * 0.1}s`
+                animationDelay: `${index * 0.1}s`,
+                height: '20px'
               }}
-            />
-            <div 
-              className="text-xs text-gray-700 mt-2 text-center font-medium bar-chart-label"
-              style={{ animationDelay: `${index * 0.1}s` }}
             >
               {bar.name}
             </div>
