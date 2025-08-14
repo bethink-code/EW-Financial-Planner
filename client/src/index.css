@@ -339,7 +339,7 @@ th, td {
   }
   
   /* GLOBAL TABLE STYLING - Ultra Clean with Section Borders Only */
-  table:not(.w-80):not(.w-88):not(.w-96) {
+  table:not([class*="w-"]) {
     width: auto !important;
     background-color: white !important;
     border-radius: 0.5rem !important;
@@ -348,10 +348,8 @@ th, td {
     border-spacing: 0 !important;
   }
   
-  /* Allow tables with fixed width classes to maintain their width */
-  table.w-80,
-  table.w-88,
-  table.w-96 {
+  /* Allow tables with any width class to maintain their width */
+  table[class*="w-"] {
     background-color: white !important;
     border-radius: 0.5rem !important;
     border: 1px solid #e5e7eb !important;
