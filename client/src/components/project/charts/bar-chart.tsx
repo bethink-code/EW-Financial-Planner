@@ -19,7 +19,7 @@ export function ProjectBarChart({ data, title }: BarChartProps) {
   };
 
   const maxValue = Math.max(data.provided, data.required, Math.abs(data.surplus));
-  const scale = 180 / maxValue; // 180px max bar height to leave room for labels
+  const scale = 140 / maxValue; // 140px max bar height to leave room for labels
 
   const bars = [
     { name: 'Provided', value: data.provided, color: 'var(--chart-primary-blue)' },
@@ -29,9 +29,9 @@ export function ProjectBarChart({ data, title }: BarChartProps) {
 
   return (
     <div className="w-full h-80 flex flex-col items-center justify-center">
-      <div className="flex items-end justify-center space-x-8" style={{ height: '240px' }}>
+      <div className="flex items-end justify-center space-x-8" style={{ height: '200px' }}>
         {bars.map((bar, index) => (
-          <div key={index} className="flex flex-col items-center bar-chart-item" style={{ height: '240px' }}>
+          <div key={index} className="flex flex-col items-center bar-chart-item" style={{ height: '200px' }}>
             <div 
               className="text-xs text-gray-600 mb-2 text-center bar-chart-label"
               style={{ 
@@ -41,7 +41,7 @@ export function ProjectBarChart({ data, title }: BarChartProps) {
             >
               {formatCurrency(bar.value)}
             </div>
-            <div className="flex-1 flex items-end" style={{ paddingBottom: '40px' }}>
+            <div className="flex-1 flex items-end" style={{ minHeight: '140px' }}>
               <div 
                 className="w-16 rounded-t-sm bar-chart-bar"
                 style={{ 
@@ -49,15 +49,15 @@ export function ProjectBarChart({ data, title }: BarChartProps) {
                   backgroundColor: bar.color,
                   minHeight: '10px',
                   animationDelay: `${index * 0.1}s`,
-                  maxHeight: '160px'
+                  maxHeight: '140px'
                 }}
               />
             </div>
             <div 
-              className="text-xs text-gray-700 text-center font-medium bar-chart-label absolute"
+              className="text-xs text-gray-700 mt-2 text-center font-medium bar-chart-label"
               style={{ 
                 animationDelay: `${index * 0.1}s`,
-                bottom: '10px'
+                height: '20px'
               }}
             >
               {bar.name}
