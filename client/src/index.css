@@ -357,14 +357,34 @@ th, td {
     border-spacing: 0 !important;
   }
 
-  /* Custom parameter table width */
+  /* Custom parameter table - FIXED width and position */
   .parameter-table {
     width: 600px !important;
+    min-width: 600px !important;
+    max-width: 600px !important;
+    table-layout: fixed !important;
     background-color: white !important;
     border-radius: 0.5rem !important;
     border: 1px solid #e5e7eb !important;
     border-collapse: separate !important;
     border-spacing: 0 !important;
+    position: relative !important;
+    margin: 0 !important;
+  }
+
+  /* Fixed column widths for parameter tables */
+  .parameter-table th:first-child,
+  .parameter-table td:first-child {
+    width: 400px !important;
+    min-width: 400px !important;
+    max-width: 400px !important;
+  }
+
+  .parameter-table th:last-child,
+  .parameter-table td:last-child {
+    width: 200px !important;
+    min-width: 200px !important;
+    max-width: 200px !important;
   }
 
   /* FIX: Prevent double borders at table bottom */

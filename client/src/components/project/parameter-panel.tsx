@@ -156,7 +156,8 @@ export function ParameterPanel({ title, parameters, onParameterChange, section, 
   return (
     <>      
       {section === 'estate' && (
-        <table className="parameter-table table-fixed">
+        <div className="parameter-table-container" style={{ width: '600px', overflow: 'hidden' }}>
+          <table className="parameter-table table-fixed">
           <thead>
             <tr className="border-b border-neutral-300 bg-gray-50">
               <th className="px-2 py-2 text-sm font-medium text-neutral-600 uppercase tracking-wider text-left">Parameter</th>
@@ -186,10 +187,12 @@ export function ParameterPanel({ title, parameters, onParameterChange, section, 
             ))}
           </tbody>
         </table>
+        </div>
       )}
         
         {section === 'dependants' && calculatedValues && (
-          <table className="parameter-table table-fixed">
+          <div className="parameter-table-container" style={{ width: '600px', overflow: 'hidden' }}>
+            <table className="parameter-table table-fixed">
             <thead>
               <tr className="border-b border-neutral-300 bg-gray-50">
                 <th className="px-2 py-2 text-sm font-medium text-neutral-600 uppercase tracking-wider text-left">Parameter</th>
@@ -279,10 +282,12 @@ export function ParameterPanel({ title, parameters, onParameterChange, section, 
               </tr>
             </tbody>
           </table>
+          </div>
         )}
 
         {section === 'capital' && calculatedValues && (
-          <table className="parameter-table table-fixed">
+          <div className="parameter-table-container" style={{ width: '600px', overflow: 'hidden' }}>
+            <table className="parameter-table table-fixed">
             <thead>
               <tr className="border-b border-neutral-300 bg-gray-50">
                 <th className="px-2 py-2 text-sm font-medium text-neutral-600 uppercase tracking-wider text-left">Parameter</th>
@@ -348,6 +353,7 @@ export function ParameterPanel({ title, parameters, onParameterChange, section, 
               </tr>
             </tbody>
           </table>
+          </div>
         )}
 
         {section === 'capital' && !calculatedValues && (
@@ -358,7 +364,7 @@ export function ParameterPanel({ title, parameters, onParameterChange, section, 
         )}
 
         {section === 'income' && (
-          <div>
+          <div className="parameter-table-container" style={{ width: '600px', overflow: 'hidden' }}>
             <table className="parameter-table table-fixed">
               <thead>
                 <tr className="border-b border-neutral-300 bg-gray-50">
