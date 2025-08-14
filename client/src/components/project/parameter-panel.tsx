@@ -150,15 +150,9 @@ export function ParameterPanel({ title, parameters, onParameterChange, section }
   return (
     <Card className="h-[600px] overflow-y-auto">
       <CardHeader className="pb-4">
-        <div className="flex items-center justify-between">
-          <div>
-            <CardTitle className="text-lg">{title}</CardTitle>
-            <CardDescription>Adjust parameters to see real-time projections</CardDescription>
-          </div>
-          <Button variant="outline" size="sm" onClick={resetToDefaults}>
-            <RotateCcw className="h-4 w-4 mr-2" />
-            Reset
-          </Button>
+        <div>
+          <CardTitle className="text-lg">{title}</CardTitle>
+          <CardDescription>Adjust parameters to see real-time projections</CardDescription>
         </div>
       </CardHeader>
       <CardContent className="space-y-6">
