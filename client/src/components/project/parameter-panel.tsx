@@ -163,10 +163,34 @@ export function ParameterPanel({ title, parameters, onParameterChange, section }
       </CardHeader>
       <CardContent className="space-y-6">
         {section === 'estate' && (
-          <EstatePositionParameters onParameterChange={(params) => {
-            // Trigger chart updates when parameters change
-            console.log('Estate position parameters updated:', params);
-          }} />
+          <div className="space-y-4">
+            {/* Flat list of all estate parameters without collapsible sections */}
+            {[...estateProvidedParams, ...estateRequiredParams].map((param) => (
+              <div key={param.key} className="flex items-center justify-between gap-3 py-2">
+                <div className="flex items-center gap-2 flex-1">
+                  {param.checkbox && (
+                    <Checkbox
+                      checked={true}
+                      className="h-4 w-4"
+                    />
+                  )}
+                  <Label className="text-sm text-gray-700 flex-1">{param.label}</Label>
+                </div>
+                {param.customInput ? (
+                  <Input
+                    value={formatCurrency(parameters[param.key] as number)}
+                    onChange={(e) => handleValueChange(param.key, e.target.value)}
+                    className="w-32 text-right text-sm"
+                    placeholder="R 0"
+                  />
+                ) : (
+                  <div className="w-32 text-right text-sm font-medium text-gray-900">
+                    {formatCurrency(parameters[param.key] as number)}
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
         )}
         
         {section === 'dependants' && (
