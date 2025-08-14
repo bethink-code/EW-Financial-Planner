@@ -330,7 +330,7 @@ export function NewRetirementTable({
 
  return (
  <div className="space-y-6">
- <table>
+ <table style={{ tableLayout: 'fixed', width: '100%' }}>
  <thead>
  {/* Main section headers */}
  <tr className="double-row-header-first">
@@ -351,29 +351,29 @@ export function NewRetirementTable({
  
  {/* Individual column headers */}
  <tr className="double-row-header-second">
- <th className="section-start">Description</th>
- <th>Actions</th>
- <th>Owner Name</th>
- <th>Ownership %</th>
- <th>Cover Amount</th>
- <th className="section-start">Actions</th>
- <th>Beneficiary Name</th>
- <th>Benefit Split</th>
- <th>Cover Split</th>
- <th className="section-start">Monthly Income</th>
- <th>Toggle</th>
- <th>Term/Rate</th>
- <th className="section-start">Cover</th>
- <th>Fund Value</th>
- <th>Fund Value at Death</th>
- <th className="section-start">Actions</th>
- <th>Beneficiary Name</th>
- <th>Percentage</th>
- <th>Amount</th>
- <th>Lump Sum Taken</th>
- <th>Non-deductible Contribution</th>
- <th>Living Annuity</th>
- <th>Income Term</th>
+ <th className="section-start table-col-description">Description</th>
+ <th className="table-col-actions">Actions</th>
+ <th className="table-col-owner-name">Owner Name</th>
+ <th className="table-col-ownership-percent">Ownership %</th>
+ <th className="table-col-currency">Cover Amount</th>
+ <th className="section-start table-col-actions">Actions</th>
+ <th className="table-col-beneficiary">Beneficiary Name</th>
+ <th className="table-col-ownership-percent">Benefit Split</th>
+ <th className="table-col-currency">Cover Split</th>
+ <th className="section-start table-col-currency">Monthly Income</th>
+ <th className="table-col-toggle">Toggle</th>
+ <th className="table-col-currency">Term/Rate</th>
+ <th className="section-start table-col-currency">Cover</th>
+ <th className="table-col-currency">Fund Value</th>
+ <th className="table-col-currency">Fund Value at Death</th>
+ <th className="section-start table-col-actions">Actions</th>
+ <th className="table-col-beneficiary">Beneficiary Name</th>
+ <th className="table-col-ownership-percent">Percentage</th>
+ <th className="table-col-currency">Amount</th>
+ <th className="table-col-currency">Lump Sum Taken</th>
+ <th className="table-col-currency">Non-deductible Contribution</th>
+ <th className="table-col-currency">Living Annuity</th>
+ <th className="table-col-currency">Income Term</th>
  </tr>
  </thead>
  <tbody className="divide-y divide-neutral-200">

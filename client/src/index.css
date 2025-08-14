@@ -44,6 +44,49 @@ html {
   min-width: 70px !important;
 }
 
+/* Fixed column widths for financial planning tables */
+.table-col-actions {
+  width: 60px !important;
+  min-width: 60px !important;
+  max-width: 60px !important;
+}
+
+.table-col-owner-name {
+  width: 200px !important;
+  min-width: 200px !important;
+  max-width: 200px !important;
+}
+
+.table-col-ownership-percent {
+  width: 80px !important;
+  min-width: 80px !important;
+  max-width: 80px !important;
+}
+
+.table-col-description {
+  width: 300px !important;
+  min-width: 300px !important;
+  max-width: 300px !important;
+}
+
+.table-col-currency {
+  width: 120px !important;
+  min-width: 120px !important;
+  max-width: 120px !important;
+}
+
+.table-col-beneficiary {
+  width: 180px !important;
+  min-width: 180px !important;
+  max-width: 180px !important;
+}
+
+.table-col-toggle {
+  width: 80px !important;
+  min-width: 80px !important;
+  max-width: 80px !important;
+}
+
 /* Optimized view transitions */
 @view-transition {
   navigation: auto;
