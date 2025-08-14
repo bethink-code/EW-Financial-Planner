@@ -19,7 +19,7 @@ export function ProjectBarChart({ data, title }: BarChartProps) {
   };
 
   const maxValue = Math.max(data.provided, data.required, Math.abs(data.surplus));
-  const scale = 280 / maxValue; // 280px max bar height
+  const scale = 180 / maxValue; // 180px max bar height to leave room for labels
 
   const bars = [
     { name: 'Provided', value: data.provided, color: 'var(--chart-primary-blue)' },
@@ -49,7 +49,7 @@ export function ProjectBarChart({ data, title }: BarChartProps) {
                   backgroundColor: bar.color,
                   minHeight: '10px',
                   animationDelay: `${index * 0.1}s`,
-                  maxHeight: '200px'
+                  maxHeight: '180px'
                 }}
               />
             </div>
