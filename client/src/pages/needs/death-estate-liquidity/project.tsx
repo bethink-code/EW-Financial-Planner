@@ -145,7 +145,7 @@ export default function ProjectStep() {
               </div>
 
               {/* Overview Tab - Shows all 4 gauges */}
-              <TabsContent value="overview" className="mt-8">
+              <TabsContent value="overview" className="mt-8 tab-content-enter">
                 <OverviewDashboard 
                   data={calculatedValues}
                   chartType={chartType}
@@ -153,7 +153,7 @@ export default function ProjectStep() {
               </TabsContent>
 
               {/* Individual Position Tabs */}
-              <TabsContent value="estate" className="mt-8">
+              <TabsContent value="estate" className="mt-8 tab-content-enter">
                 <div className="grid grid-cols-2 gap-8">
                   <div>
                     <ParameterPanel
@@ -175,7 +175,7 @@ export default function ProjectStep() {
                 </div>
               </TabsContent>
 
-              <TabsContent value="dependants" className="mt-8">
+              <TabsContent value="dependants" className="mt-8 tab-content-enter">
                 <div className="grid grid-cols-2 gap-8">
                   <div>
                     <ParameterPanel
@@ -197,7 +197,7 @@ export default function ProjectStep() {
                 </div>
               </TabsContent>
 
-              <TabsContent value="capital" className="mt-8">
+              <TabsContent value="capital" className="mt-8 tab-content-enter">
                 <div className="grid grid-cols-2 gap-8">
                   <div>
                     <ParameterPanel
@@ -219,7 +219,7 @@ export default function ProjectStep() {
                 </div>
               </TabsContent>
 
-              <TabsContent value="income" className="mt-8">
+              <TabsContent value="income" className="mt-8 tab-content-enter">
                 <div className="grid grid-cols-2 gap-8">
                   <div>
                     <ParameterPanel

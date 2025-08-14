@@ -159,6 +159,22 @@ html {
   }
 }
 
+/* Tab transition animations for project tabs */
+.tab-content-enter {
+  animation: tabFadeIn 0.3s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+@keyframes tabFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
 /* Smooth transitions for table columns and sections */
 th, td {
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
