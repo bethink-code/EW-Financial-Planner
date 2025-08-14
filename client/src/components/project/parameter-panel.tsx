@@ -184,7 +184,7 @@ export function ParameterPanel({ title, parameters, onParameterChange, section }
                         type="text"
                         value={formatCurrency(parameters[param.key] as number)}
                         onChange={(e) => handleValueChange(param.key, e.target.value)}
-                        className="table-input w-full text-right text-sm border border-neutral-300 rounded px-2 py-1"
+                        className="table-input w-full text-right text-sm bg-transparent border-0 px-2 py-1 focus:outline-none focus:ring-1 focus:ring-blue-500"
                         placeholder="R 0"
                       />
                     ) : (
@@ -229,7 +229,7 @@ export function ParameterPanel({ title, parameters, onParameterChange, section }
                           type="text"
                           value={formatCurrency(parameters[param.key] as number)}
                           onChange={(e) => handleValueChange(param.key, e.target.value)}
-                          className="table-input w-full text-right text-sm border border-neutral-300 rounded px-2 py-1"
+                          className="table-input w-full text-right text-sm bg-transparent border-0 px-2 py-1 focus:outline-none focus:ring-1 focus:ring-blue-500"
                           placeholder="R 0"
                         />
                       ) : (
@@ -294,9 +294,7 @@ export function ParameterPanel({ title, parameters, onParameterChange, section }
           </div>
         )}
       
-        {section === 'total' && (
-          renderSection(totalCapitalParams, 'Total Capital Details')
-        )}
+
 
         {section === 'income' && (
           <div className="space-y-4">
