@@ -232,72 +232,84 @@ export function ParameterPanel({ title, parameters, onParameterChange, section }
         )}
 
         {section === 'income' && (
-          <table className="w-80 border border-neutral-300 rounded-md">
-            <thead>
-              <tr className="border-b border-neutral-300 bg-gray-50">
-                <th className="px-2 py-1 text-xs font-medium text-neutral-600 uppercase tracking-wider text-left">Income Source</th>
-                <th className="px-2 py-1 text-xs font-medium text-neutral-600 uppercase tracking-wider text-right">Amount</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-neutral-200">
-              <tr className="hover:bg-neutral-50">
-                <td className="px-2 py-0.5">
-                  <span className="text-xs text-gray-700">From retirement funds and existing living annuities after deducting income tax</span>
-                </td>
-                <td className="px-2 py-0.5 text-right text-xs font-medium text-gray-900">R 29,193</td>
-              </tr>
-              <tr className="hover:bg-neutral-50">
-                <td className="px-2 py-0.5">
-                  <span className="text-xs text-gray-700">Defined benefit pension fund</span>
-                </td>
-                <td className="px-2 py-0.5 text-right text-xs font-medium text-gray-900">R 0</td>
-              </tr>
-              <tr className="hover:bg-neutral-50">
-                <td className="px-2 py-0.5">
-                  <span className="text-xs text-gray-700">Monthly death benefit</span>
-                </td>
-                <td className="px-2 py-0.5 text-right text-xs font-medium text-gray-900">R 0</td>
-              </tr>
-              <tr className="hover:bg-neutral-50">
-                <td className="px-2 py-0.5">
-                  <span className="text-xs text-gray-700">From existing capital provisions after deducting capital needs</span>
-                </td>
-                <td className="px-2 py-0.5 text-right">
-                  <div className="text-xs font-medium text-gray-900">R 6,895,118</div>
-                  <div className="text-xs text-gray-500">R 35,571</div>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        )}
-      
-
-
-        {section === 'income' && (
-          <div className="space-y-4">
-            <div className="flex items-center justify-between">
-              <Label className="text-sm">Monthly income position</Label>
-            </div>
-            <div className="space-y-3">
-              <div className="flex justify-between">
-                <span className="text-sm text-gray-600">From retirement funds and existing living annuities after deducting income tax</span>
-                <span className="text-sm font-medium">R 29,193</span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-sm text-gray-600">Defined benefit pension fund</span>
-                <span className="text-sm font-medium">R 0</span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-sm text-gray-600">Monthly death benefit</span>
-                <span className="text-sm font-medium">R 0</span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-sm text-gray-600">From existing capital provisions after deducting capital needs</span>
-                <div className="text-right">
-                  <div className="text-sm font-medium">R 6,895,118</div>
-                  <div className="text-xs text-gray-500">R 35,571</div>
-                </div>
-              </div>
+          <div>
+            <table className="w-80 border border-neutral-300 rounded-md">
+              <thead>
+                <tr className="border-b border-neutral-300 bg-gray-50">
+                  <th className="px-2 py-1 text-xs font-medium text-neutral-600 uppercase tracking-wider text-left">Income Source</th>
+                  <th className="px-2 py-1 text-xs font-medium text-neutral-600 uppercase tracking-wider text-right">Amount</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-neutral-200">
+                <tr className="hover:bg-neutral-50">
+                  <td className="px-2 py-0.5">
+                    <span className="text-xs text-gray-700">From retirement funds and existing living annuities after deducting income tax</span>
+                  </td>
+                  <td className="px-2 py-0.5 text-right text-xs font-medium text-gray-900">R 29,193</td>
+                </tr>
+                <tr className="hover:bg-neutral-50">
+                  <td className="px-2 py-0.5">
+                    <span className="text-xs text-gray-700">Defined benefit pension fund</span>
+                  </td>
+                  <td className="px-2 py-0.5 text-right text-xs font-medium text-gray-900">R 0</td>
+                </tr>
+                <tr className="hover:bg-neutral-50">
+                  <td className="px-2 py-0.5">
+                    <span className="text-xs text-gray-700">Monthly death benefit</span>
+                  </td>
+                  <td className="px-2 py-0.5 text-right text-xs font-medium text-gray-900">R 0</td>
+                </tr>
+                <tr className="hover:bg-neutral-50">
+                  <td className="px-2 py-0.5">
+                    <span className="text-xs text-gray-700">From existing capital provisions after deducting capital needs</span>
+                  </td>
+                  <td className="px-2 py-0.5 text-right">
+                    <div className="text-xs font-medium text-gray-900">R 6,895,118</div>
+                    <div className="text-xs text-gray-500">R 35,571</div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+            
+            <div className="mt-6">
+              <h4 className="text-sm font-medium text-gray-900 mb-3">Monthly income position</h4>
+              <table className="w-80 border border-neutral-300 rounded-md">
+                <thead>
+                  <tr className="border-b border-neutral-300 bg-gray-50">
+                    <th className="px-2 py-1 text-xs font-medium text-neutral-600 uppercase tracking-wider text-left">Income Source</th>
+                    <th className="px-2 py-1 text-xs font-medium text-neutral-600 uppercase tracking-wider text-right">Amount</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-neutral-200">
+                  <tr className="hover:bg-neutral-50">
+                    <td className="px-2 py-0.5">
+                      <span className="text-xs text-gray-700">From retirement funds and existing living annuities after deducting income tax</span>
+                    </td>
+                    <td className="px-2 py-0.5 text-right text-xs font-medium text-gray-900">R 29,193</td>
+                  </tr>
+                  <tr className="hover:bg-neutral-50">
+                    <td className="px-2 py-0.5">
+                      <span className="text-xs text-gray-700">Defined benefit pension fund</span>
+                    </td>
+                    <td className="px-2 py-0.5 text-right text-xs font-medium text-gray-900">R 0</td>
+                  </tr>
+                  <tr className="hover:bg-neutral-50">
+                    <td className="px-2 py-0.5">
+                      <span className="text-xs text-gray-700">Monthly death benefit</span>
+                    </td>
+                    <td className="px-2 py-0.5 text-right text-xs font-medium text-gray-900">R 0</td>
+                  </tr>
+                  <tr className="hover:bg-neutral-50">
+                    <td className="px-2 py-0.5">
+                      <span className="text-xs text-gray-700">From existing capital provisions after deducting capital needs</span>
+                    </td>
+                    <td className="px-2 py-0.5 text-right">
+                      <div className="text-xs font-medium text-gray-900">R 6,895,118</div>
+                      <div className="text-xs text-gray-500">R 35,571</div>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
             </div>
           </div>
         )}
