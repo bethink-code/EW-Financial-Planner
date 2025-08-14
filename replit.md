@@ -61,6 +61,7 @@ Client requests data via TanStack Query hooks. Express routes handle CRUD operat
 - **Preview Card Data Consistency Pattern**: Resolved owner/beneficiary count mismatches by implementing consistent empty string filtering across all preview card components.
 - **Hybrid View Width Alignment Pattern**: Universal implementation across all 9 calculator components with `w-[1320px]` constraint to perfectly align with navigation element. Pattern structure: `<div className="w-full px-6 py-6"><div className="w-[1320px]">[Content]</div></div>` ensures consistent layout and professional appearance while table view can extend horizontally.
 - **Navigation Context Fixes**: Resolved routing confusion with improved default route handling, enhanced step detection for calculator pages in "build" step, and fixed sequential navigation matching to prevent context loss when using bottom navigation arrows.
+- **Global Projection Parameter Table Pattern**: Battle-tested reusable table pattern derived from perfected Dependants Position implementation. Features: `w-80` consistent width, `px-2 py-2` optimized padding, `text-sm` typography, `text-gray-600` labels with `text-gray-800` values, `bg-gray-50` total rows with `font-bold` emphasis. Includes ParameterTable component with helper functions for calculated rows, income rows, and custom editable inputs. Eliminates need for custom table implementations across Estate, Dependants, Capital, and Income position views.
 
 ## External Dependencies
 
