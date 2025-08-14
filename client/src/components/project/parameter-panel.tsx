@@ -166,7 +166,7 @@ export function ParameterPanel({ title, parameters, onParameterChange, section }
             {[...estateProvidedParams, ...estateRequiredParams].map((param, index) => (
               <tr key={param.key} className="hover:bg-neutral-50">
                 <td className="px-2 py-0.5">
-                  <span className="text-xs text-gray-700 leading-tight">{param.label}</span>
+                  <span className="text-xs text-gray-700">{param.label}</span>
                 </td>
                 <td className="px-2 py-0.5">
                   {param.customInput ? (
@@ -174,11 +174,11 @@ export function ParameterPanel({ title, parameters, onParameterChange, section }
                       type="text"
                       value={formatCurrency(parameters[param.key] as number)}
                       onChange={(e) => handleValueChange(param.key, e.target.value)}
-                      className="table-input w-full text-right text-xs bg-transparent border-0 px-1 py-0 focus:outline-none focus:ring-1 focus:ring-blue-500 leading-tight"
+                      className="table-input w-full text-right text-xs bg-transparent border-0 px-1 py-0 focus:outline-none focus:ring-1 focus:ring-blue-500"
                       placeholder="R 0"
                     />
                   ) : (
-                    <div className="text-right text-xs font-medium text-gray-900 leading-tight">
+                    <div className="text-right text-xs font-medium text-gray-900">
                       {formatCurrency(parameters[param.key] as number)}
                     </div>
                   )}
@@ -201,7 +201,7 @@ export function ParameterPanel({ title, parameters, onParameterChange, section }
               {[...dependantsProvidedParams, ...dependantsRequiredParams].map((param, index) => (
                 <tr key={param.key} className="hover:bg-neutral-50">
                   <td className="px-2 py-0.5">
-                    <span className="text-xs text-gray-700 leading-tight">{param.label}</span>
+                    <span className="text-xs text-gray-700">{param.label}</span>
                   </td>
                   <td className="px-2 py-0.5">
                     {param.customInput ? (
@@ -209,11 +209,11 @@ export function ParameterPanel({ title, parameters, onParameterChange, section }
                         type="text"
                         value={formatCurrency(parameters[param.key] as number)}
                         onChange={(e) => handleValueChange(param.key, e.target.value)}
-                        className="table-input w-full text-right text-xs bg-transparent border-0 px-1 py-0 focus:outline-none focus:ring-1 focus:ring-blue-500 leading-tight"
+                        className="table-input w-full text-right text-xs bg-transparent border-0 px-1 py-0 focus:outline-none focus:ring-1 focus:ring-blue-500"
                         placeholder="R 0"
                       />
                     ) : (
-                      <div className="text-right text-xs font-medium text-gray-900 leading-tight">
+                      <div className="text-right text-xs font-medium text-gray-900">
                         {formatCurrency(parameters[param.key] as number)}
                       </div>
                     )}
@@ -242,29 +242,29 @@ export function ParameterPanel({ title, parameters, onParameterChange, section }
             <tbody className="divide-y divide-neutral-200">
               <tr className="hover:bg-neutral-50">
                 <td className="px-2 py-0.5">
-                  <span className="text-xs text-gray-700 leading-tight">From retirement funds and existing living annuities after deducting income tax</span>
+                  <span className="text-xs text-gray-700">From retirement funds and existing living annuities after deducting income tax</span>
                 </td>
-                <td className="px-2 py-0.5 text-right text-xs font-medium text-gray-900 leading-tight">R 29,193</td>
+                <td className="px-2 py-0.5 text-right text-xs font-medium text-gray-900">R 29,193</td>
               </tr>
               <tr className="hover:bg-neutral-50">
                 <td className="px-2 py-0.5">
-                  <span className="text-xs text-gray-700 leading-tight">Defined benefit pension fund</span>
+                  <span className="text-xs text-gray-700">Defined benefit pension fund</span>
                 </td>
-                <td className="px-2 py-0.5 text-right text-xs font-medium text-gray-900 leading-tight">R 0</td>
+                <td className="px-2 py-0.5 text-right text-xs font-medium text-gray-900">R 0</td>
               </tr>
               <tr className="hover:bg-neutral-50">
                 <td className="px-2 py-0.5">
-                  <span className="text-xs text-gray-700 leading-tight">Monthly death benefit</span>
+                  <span className="text-xs text-gray-700">Monthly death benefit</span>
                 </td>
-                <td className="px-2 py-0.5 text-right text-xs font-medium text-gray-900 leading-tight">R 0</td>
+                <td className="px-2 py-0.5 text-right text-xs font-medium text-gray-900">R 0</td>
               </tr>
               <tr className="hover:bg-neutral-50">
                 <td className="px-2 py-0.5">
-                  <span className="text-xs text-gray-700 leading-tight">From existing capital provisions after deducting capital needs</span>
+                  <span className="text-xs text-gray-700">From existing capital provisions after deducting capital needs</span>
                 </td>
                 <td className="px-2 py-0.5 text-right">
-                  <div className="text-xs font-medium text-gray-900 leading-tight">R 6,895,118</div>
-                  <div className="text-xs text-gray-500 leading-tight">R 35,571</div>
+                  <div className="text-xs font-medium text-gray-900">R 6,895,118</div>
+                  <div className="text-xs text-gray-500">R 35,571</div>
                 </td>
               </tr>
             </tbody>
