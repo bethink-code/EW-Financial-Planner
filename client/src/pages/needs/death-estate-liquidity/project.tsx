@@ -9,7 +9,7 @@ import { OverviewDashboard } from '@/components/project/overview-dashboard';
 
 export default function ProjectStep() {
   const [activeTab, setActiveTab] = useState('overview');
-  const [chartType, setChartType] = useState('gauge');
+  const [chartType, setChartType] = useState('bar');
   const [parameters, setParameters] = useState({
     // Estate position parameters
     lifeCoverToEstate: 4000000,
