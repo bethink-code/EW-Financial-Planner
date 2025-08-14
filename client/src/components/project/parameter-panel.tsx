@@ -148,7 +148,7 @@ export function ParameterPanel({ title, parameters, onParameterChange, section }
   };
 
   return (
-    <Card className="h-[600px] overflow-y-auto">
+    <Card className="h-fit">
       <CardHeader className="pb-4">
         <div>
           <CardTitle className="text-lg">{title}</CardTitle>

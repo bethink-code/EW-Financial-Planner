@@ -41,7 +41,7 @@ export function ChartPanel({ title, data, chartType, description }: ChartPanelPr
   };
 
   return (
-    <div className="h-full flex flex-col">
+    <div className="flex flex-col">
       {/* Header */}
       <div className="mb-4">
         <h2 className="text-lg font-semibold text-gray-900">{title}</h2>
