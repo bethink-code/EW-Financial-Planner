@@ -152,7 +152,6 @@ export function ParameterPanel({ title, parameters, onParameterChange, section }
       {/* Simple header without card container */}
       <div className="pb-3">
         <h3 className="text-lg font-semibold text-gray-900">{title}</h3>
-        <p className="text-sm text-gray-600 mt-1">Adjust parameters to see real-time projections</p>
       </div>
       
       {section === 'estate' && (
