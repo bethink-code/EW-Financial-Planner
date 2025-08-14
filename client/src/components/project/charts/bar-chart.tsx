@@ -1,4 +1,4 @@
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell } from 'recharts';
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 
 interface BarChartProps {
   data: {
@@ -44,14 +44,14 @@ export function ProjectBarChart({ data, title }: BarChartProps) {
   console.log('Chart data:', chartData);
 
   return (
-    <div className="w-full h-64">
+    <div className="w-full" style={{ width: '100%', height: '320px' }}>
       <ResponsiveContainer width="100%" height="100%">
         <BarChart
           data={chartData}
           margin={{
             top: 20,
             right: 30,
-            left: 20,
+            left: 80,
             bottom: 5,
           }}
         >
@@ -67,10 +67,7 @@ export function ProjectBarChart({ data, title }: BarChartProps) {
           <Tooltip 
             formatter={(value: number) => [formatCurrency(value), '']}
           />
-          <Bar 
-            dataKey="value" 
-            fill="#3B82F6"
-          />
+          <Bar dataKey="value" fill="#3B82F6" />
         </BarChart>
       </ResponsiveContainer>
     </div>
