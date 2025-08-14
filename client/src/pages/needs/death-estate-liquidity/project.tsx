@@ -79,13 +79,14 @@ export default function ProjectStep() {
   return (
     <div className="">
       <div className="w-full px-6 py-6">
-        <CalculatorHeader 
-          title="Projections"
-          additionalControls={chartTypeSelector}
-          className="mb-6"
-        >
-          {/* Tab Navigation and Content */}
-          <div className="px-6 py-4">
+        <div className="w-[1320px]">
+          <CalculatorHeader 
+            title="Projections"
+            additionalControls={chartTypeSelector}
+            className="mb-6"
+          >
+            {/* Tab Navigation and Content */}
+            <div className="px-6 py-4">
             <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
               {/* Custom Tab Navigation */}
               <div className="inline-flex bg-gray-100 rounded-lg p-1">
@@ -238,6 +239,7 @@ export default function ProjectStep() {
             </Tabs>
           </div>
         </CalculatorHeader>
+        </div>
       </div>
     </div>
   );
