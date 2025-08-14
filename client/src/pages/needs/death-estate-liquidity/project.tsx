@@ -161,6 +161,7 @@ export default function ProjectStep() {
                       parameters={parameters}
                       onParameterChange={handleParameterChange}
                       section="estate"
+                      calculatedValues={calculatedValues.estatePosition}
                     />
                   </div>
                   <div>
@@ -204,6 +205,7 @@ export default function ProjectStep() {
                       parameters={parameters}
                       onParameterChange={handleParameterChange}
                       section="capital"
+                      calculatedValues={calculatedValues.totalCapitalPosition}
                     />
                   </div>
                   <div>
@@ -225,6 +227,7 @@ export default function ProjectStep() {
                       parameters={parameters}
                       onParameterChange={handleParameterChange}
                       section="income"
+                      calculatedValues={calculatedValues.incomePosition}
                     />
                   </div>
                   <div>

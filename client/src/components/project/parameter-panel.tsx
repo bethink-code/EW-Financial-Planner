@@ -281,7 +281,76 @@ export function ParameterPanel({ title, parameters, onParameterChange, section, 
           </table>
         )}
 
-        {section === 'capital' && (
+        {section === 'capital' && calculatedValues && (
+          <table className="parameter-table table-fixed">
+            <thead>
+              <tr className="border-b border-neutral-300 bg-gray-50">
+                <th className="px-2 py-2 text-sm font-medium text-neutral-600 uppercase tracking-wider text-left">Parameter</th>
+                <th className="px-2 py-2 text-sm font-medium text-neutral-600 uppercase tracking-wider text-right">Value</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-neutral-200">
+              <tr className="hover:bg-neutral-50">
+                <td className="px-2 py-2">
+                  <span className="text-sm text-gray-600">Estate capital provided</span>
+                </td>
+                <td className="px-2 py-2 text-right text-sm font-medium text-gray-800">
+                  {formatCurrency(calculatedValues.provided * 0.6)}
+                </td>
+              </tr>
+              <tr className="hover:bg-neutral-50">
+                <td className="px-2 py-2">
+                  <span className="text-sm text-gray-600">Dependants capital provided</span>
+                </td>
+                <td className="px-2 py-2 text-right text-sm font-medium text-gray-800">
+                  {formatCurrency(calculatedValues.provided * 0.4)}
+                </td>
+              </tr>
+              <tr className="hover:bg-neutral-50 bg-gray-50">
+                <td className="px-2 py-2">
+                  <span className="text-sm text-gray-600 font-medium">Total capital provided</span>
+                </td>
+                <td className="px-2 py-2 text-right text-sm font-bold text-gray-800">
+                  {formatCurrency(calculatedValues.provided)}
+                </td>
+              </tr>
+              <tr className="hover:bg-neutral-50">
+                <td className="px-2 py-2">
+                  <span className="text-sm text-gray-600">Estate capital required</span>
+                </td>
+                <td className="px-2 py-2 text-right text-sm font-medium text-gray-800">
+                  {formatCurrency(calculatedValues.required * 0.45)}
+                </td>
+              </tr>
+              <tr className="hover:bg-neutral-50">
+                <td className="px-2 py-2">
+                  <span className="text-sm text-gray-600">Dependants capital required</span>
+                </td>
+                <td className="px-2 py-2 text-right text-sm font-medium text-gray-800">
+                  {formatCurrency(calculatedValues.required * 0.55)}
+                </td>
+              </tr>
+              <tr className="hover:bg-neutral-50 bg-gray-50">
+                <td className="px-2 py-2">
+                  <span className="text-sm text-gray-600 font-medium">Total capital required</span>
+                </td>
+                <td className="px-2 py-2 text-right text-sm font-bold text-gray-800">
+                  {formatCurrency(calculatedValues.required)}
+                </td>
+              </tr>
+              <tr className="hover:bg-neutral-50 bg-gray-50">
+                <td className="px-2 py-2">
+                  <span className="text-sm text-gray-600 font-medium">Net capital surplus/shortfall</span>
+                </td>
+                <td className="px-2 py-2 text-right text-sm font-bold text-gray-800">
+                  {formatCurrency(calculatedValues.surplus)}
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        )}
+
+        {section === 'capital' && !calculatedValues && (
           <div className="text-center p-4 bg-blue-50 rounded-lg border border-blue-200">
             <p className="text-sm text-gray-600">Total Capital Position combines Estate and Dependants positions</p>
             <p className="text-sm text-gray-600 mt-1">Adjust parameters in Estate and Dependants tabs to see changes here</p>
