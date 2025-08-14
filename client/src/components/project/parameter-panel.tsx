@@ -155,8 +155,42 @@ export function ParameterPanel({ title, parameters, onParameterChange, section }
       </div>
       
       {section === 'estate' && (
-        <div className="border border-neutral-300 rounded-md">
-          <table className="w-full">
+        <table className="w-full border border-neutral-300 rounded-md">
+          <thead>
+            <tr className="border-b border-neutral-300 bg-gray-50">
+              <th className="px-3 py-2 text-xs font-medium text-neutral-600 uppercase tracking-wider text-left">Parameter</th>
+              <th className="px-3 py-2 text-xs font-medium text-neutral-600 uppercase tracking-wider text-right">Value</th>
+            </tr>
+          </thead>
+          <tbody className="divide-y divide-neutral-200">
+            {[...estateProvidedParams, ...estateRequiredParams].map((param, index) => (
+              <tr key={param.key} className="hover:bg-neutral-50">
+                <td className="px-3 py-2">
+                  <span className="text-sm text-gray-700">{param.label}</span>
+                </td>
+                <td className="px-3 py-2">
+                  {param.customInput ? (
+                    <input
+                      type="text"
+                      value={formatCurrency(parameters[param.key] as number)}
+                      onChange={(e) => handleValueChange(param.key, e.target.value)}
+                      className="table-input w-full text-right text-sm bg-transparent border-0 px-2 py-1 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                      placeholder="R 0"
+                    />
+                  ) : (
+                    <div className="text-right text-sm font-medium text-gray-900">
+                      {formatCurrency(parameters[param.key] as number)}
+                    </div>
+                  )}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      )}
+        
+        {section === 'dependants' && (
+          <table className="w-full border border-neutral-300 rounded-md">
             <thead>
               <tr className="border-b border-neutral-300 bg-gray-50">
                 <th className="px-3 py-2 text-xs font-medium text-neutral-600 uppercase tracking-wider text-left">Parameter</th>
@@ -164,18 +198,10 @@ export function ParameterPanel({ title, parameters, onParameterChange, section }
               </tr>
             </thead>
             <tbody className="divide-y divide-neutral-200">
-              {[...estateProvidedParams, ...estateRequiredParams].map((param, index) => (
+              {[...dependantsProvidedParams, ...dependantsRequiredParams].map((param, index) => (
                 <tr key={param.key} className="hover:bg-neutral-50">
                   <td className="px-3 py-2">
-                    <div className="flex items-center gap-2">
-                      {param.checkbox && (
-                        <Checkbox
-                          checked={true}
-                          className="h-4 w-4"
-                        />
-                      )}
-                      <span className="text-sm text-gray-700">{param.label}</span>
-                    </div>
+                    <span className="text-sm text-gray-700">{param.label}</span>
                   </td>
                   <td className="px-3 py-2">
                     {param.customInput ? (
@@ -196,52 +222,6 @@ export function ParameterPanel({ title, parameters, onParameterChange, section }
               ))}
             </tbody>
           </table>
-        </div>
-      )}
-        
-        {section === 'dependants' && (
-          <div className="border border-neutral-300 rounded-md">
-            <table className="w-full">
-              <thead>
-                <tr className="border-b border-neutral-300 bg-gray-50">
-                  <th className="px-3 py-2 text-xs font-medium text-neutral-600 uppercase tracking-wider text-left">Parameter</th>
-                  <th className="px-3 py-2 text-xs font-medium text-neutral-600 uppercase tracking-wider text-right">Value</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-neutral-200">
-                {[...dependantsProvidedParams, ...dependantsRequiredParams].map((param, index) => (
-                  <tr key={param.key} className="hover:bg-neutral-50">
-                    <td className="px-3 py-2">
-                      <div className="flex items-center gap-2">
-                        {param.checkbox && (
-                          <Checkbox
-                            checked={true}
-                            className="h-4 w-4"
-                          />
-                        )}
-                        <span className="text-sm text-gray-700">{param.label}</span>
-                      </div>
-                    </td>
-                    <td className="px-3 py-2">
-                      {param.customInput ? (
-                        <input
-                          type="text"
-                          value={formatCurrency(parameters[param.key] as number)}
-                          onChange={(e) => handleValueChange(param.key, e.target.value)}
-                          className="table-input w-full text-right text-sm bg-transparent border-0 px-2 py-1 focus:outline-none focus:ring-1 focus:ring-blue-500"
-                          placeholder="R 0"
-                        />
-                      ) : (
-                        <div className="text-right text-sm font-medium text-gray-900">
-                          {formatCurrency(parameters[param.key] as number)}
-                        </div>
-                      )}
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
         )}
 
         {section === 'capital' && (
@@ -252,45 +232,43 @@ export function ParameterPanel({ title, parameters, onParameterChange, section }
         )}
 
         {section === 'income' && (
-          <div className="border border-neutral-300 rounded-md">
-            <table className="w-full">
-              <thead>
-                <tr className="border-b border-neutral-300 bg-gray-50">
-                  <th className="px-3 py-2 text-xs font-medium text-neutral-600 uppercase tracking-wider text-left">Income Source</th>
-                  <th className="px-3 py-2 text-xs font-medium text-neutral-600 uppercase tracking-wider text-right">Amount</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-neutral-200">
-                <tr className="hover:bg-neutral-50">
-                  <td className="px-3 py-2">
-                    <span className="text-sm text-gray-700">From retirement funds and existing living annuities after deducting income tax</span>
-                  </td>
-                  <td className="px-3 py-2 text-right text-sm font-medium text-gray-900">R 29,193</td>
-                </tr>
-                <tr className="hover:bg-neutral-50">
-                  <td className="px-3 py-2">
-                    <span className="text-sm text-gray-700">Defined benefit pension fund</span>
-                  </td>
-                  <td className="px-3 py-2 text-right text-sm font-medium text-gray-900">R 0</td>
-                </tr>
-                <tr className="hover:bg-neutral-50">
-                  <td className="px-3 py-2">
-                    <span className="text-sm text-gray-700">Monthly death benefit</span>
-                  </td>
-                  <td className="px-3 py-2 text-right text-sm font-medium text-gray-900">R 0</td>
-                </tr>
-                <tr className="hover:bg-neutral-50">
-                  <td className="px-3 py-2">
-                    <span className="text-sm text-gray-700">From existing capital provisions after deducting capital needs</span>
-                  </td>
-                  <td className="px-3 py-2 text-right">
-                    <div className="text-sm font-medium text-gray-900">R 6,895,118</div>
-                    <div className="text-xs text-gray-500">R 35,571</div>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
+          <table className="w-full border border-neutral-300 rounded-md">
+            <thead>
+              <tr className="border-b border-neutral-300 bg-gray-50">
+                <th className="px-3 py-2 text-xs font-medium text-neutral-600 uppercase tracking-wider text-left">Income Source</th>
+                <th className="px-3 py-2 text-xs font-medium text-neutral-600 uppercase tracking-wider text-right">Amount</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-neutral-200">
+              <tr className="hover:bg-neutral-50">
+                <td className="px-3 py-2">
+                  <span className="text-sm text-gray-700">From retirement funds and existing living annuities after deducting income tax</span>
+                </td>
+                <td className="px-3 py-2 text-right text-sm font-medium text-gray-900">R 29,193</td>
+              </tr>
+              <tr className="hover:bg-neutral-50">
+                <td className="px-3 py-2">
+                  <span className="text-sm text-gray-700">Defined benefit pension fund</span>
+                </td>
+                <td className="px-3 py-2 text-right text-sm font-medium text-gray-900">R 0</td>
+              </tr>
+              <tr className="hover:bg-neutral-50">
+                <td className="px-3 py-2">
+                  <span className="text-sm text-gray-700">Monthly death benefit</span>
+                </td>
+                <td className="px-3 py-2 text-right text-sm font-medium text-gray-900">R 0</td>
+              </tr>
+              <tr className="hover:bg-neutral-50">
+                <td className="px-3 py-2">
+                  <span className="text-sm text-gray-700">From existing capital provisions after deducting capital needs</span>
+                </td>
+                <td className="px-3 py-2 text-right">
+                  <div className="text-sm font-medium text-gray-900">R 6,895,118</div>
+                  <div className="text-xs text-gray-500">R 35,571</div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
         )}
       
 
