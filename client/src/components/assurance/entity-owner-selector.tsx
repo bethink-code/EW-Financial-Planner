@@ -102,19 +102,21 @@ export function EntityOwnerSelector({
       
       {/* Owner Name Column */}
       <td className="border border-neutral-300 p-1">
-        <select
-          value={currentOwnerName}
-          onChange={(e) => onOwnerChange(policyId, rowIndex, e.target.value)}
-          disabled={disabled}
-          className="table-input table-dropdown w-full"
-        >
-          <option value="">Select owner...</option>
-          {entities.map((entity) => (
-            <option key={entity.id} value={entity.entityName}>
-              {entity.entityName} ({entity.entityType})
-            </option>
-          ))}
-        </select>
+        <div className="w-full min-w-[250px]">
+          <select
+            value={currentOwnerName}
+            onChange={(e) => onOwnerChange(policyId, rowIndex, e.target.value)}
+            disabled={disabled}
+            className="table-input table-dropdown w-full"
+          >
+            <option value="">Select owner...</option>
+            {entities.map((entity) => (
+              <option key={entity.id} value={entity.entityName}>
+                {entity.entityName} ({entity.entityType})
+              </option>
+            ))}
+          </select>
+        </div>
       </td>
       
       {/* Ownership Percentage Column */}
@@ -123,7 +125,7 @@ export function EntityOwnerSelector({
           type="text"
           defaultValue={currentPercentage}
           placeholder="0%"
-          className={`table-input ${getFieldClass('percentage')} w-full text-center ${getValueClass(currentPercentage, 'percentage')}`}
+          className={`table-input ${getFieldClass('percentage')} w-16 text-center ${getValueClass(currentPercentage, 'percentage')}`}
           onFocus={(e) => {
             handleDefaultValueFocus(e);
             // Remove % sign for editing but keep the number
