@@ -20,23 +20,28 @@ export function ProjectBarChart({ data, title }: BarChartProps) {
     }).format(value).replace('ZAR', 'R');
   };
 
+  // Debug log to check data
+  console.log('Bar chart data:', data);
+
   const chartData = [
     {
       name: 'Provided',
-      value: data.provided,
-      color: '#3B82F6' // Blue
+      value: Math.abs(data.provided || 0),
+      fill: '#3B82F6' // Blue
     },
     {
       name: 'Required',
-      value: data.required,
-      color: '#EF4444' // Red
+      value: Math.abs(data.required || 0),
+      fill: '#EF4444' // Red
     },
     {
       name: 'Surplus',
-      value: data.surplus,
-      color: data.surplus >= 0 ? '#10B981' : '#EF4444' // Green for positive, Red for negative
+      value: Math.abs(data.surplus || 0),
+      fill: data.surplus >= 0 ? '#10B981' : '#EF4444' // Green for positive, Red for negative
     }
   ];
+
+  console.log('Chart data:', chartData);
 
   return (
     <div className="w-full h-64">
@@ -49,40 +54,23 @@ export function ProjectBarChart({ data, title }: BarChartProps) {
             left: 20,
             bottom: 5,
           }}
-          barCategoryGap={20}
         >
-          <CartesianGrid strokeDasharray="3 3" stroke="#E5E7EB" />
+          <CartesianGrid strokeDasharray="3 3" />
           <XAxis 
             dataKey="name" 
-            axisLine={false}
-            tickLine={false}
-            tick={{ fontSize: 12, fill: '#6B7280' }}
+            tick={{ fontSize: 12 }}
           />
           <YAxis 
-            axisLine={false}
-            tickLine={false}
-            tick={{ fontSize: 12, fill: '#6B7280' }}
+            tick={{ fontSize: 12 }}
             tickFormatter={(value) => formatCurrency(value)}
           />
           <Tooltip 
             formatter={(value: number) => [formatCurrency(value), '']}
-            labelStyle={{ color: '#374151' }}
-            contentStyle={{
-              backgroundColor: 'white',
-              border: '1px solid #E5E7EB',
-              borderRadius: '8px',
-              boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)'
-            }}
           />
           <Bar 
             dataKey="value" 
-            radius={[4, 4, 0, 0]}
-            maxBarSize={60}
-          >
-            {chartData.map((entry, index) => (
-              <Cell key={`cell-${index}`} fill={entry.color} />
-            ))}
-          </Bar>
+            fill="#3B82F6"
+          />
         </BarChart>
       </ResponsiveContainer>
     </div>
