@@ -156,14 +156,6 @@ export default function ProjectStep() {
               <TabsContent value="estate">
                 <div className="grid grid-cols-2 gap-6">
                   <div>
-                    <ChartPanel
-                      title="Estate Position"
-                      data={calculatedValues.estatePosition}
-                      chartType={chartType}
-                      description="Shows the estate's capital position after death"
-                    />
-                  </div>
-                  <div>
                     <ParameterPanel
                       title="Estate Position Parameters"
                       parameters={parameters}
@@ -171,19 +163,19 @@ export default function ProjectStep() {
                       section="estate"
                     />
                   </div>
+                  <div>
+                    <ChartPanel
+                      title="Estate Position"
+                      data={calculatedValues.estatePosition}
+                      chartType={chartType}
+                      description="Shows the estate's capital position after death"
+                    />
+                  </div>
                 </div>
               </TabsContent>
 
               <TabsContent value="dependants">
                 <div className="grid grid-cols-2 gap-6">
-                  <div>
-                    <ChartPanel
-                      title="Dependants Position"
-                      data={calculatedValues.dependantsPosition}
-                      chartType={chartType}
-                      description="Shows capital provisions for dependants"
-                    />
-                  </div>
                   <div>
                     <ParameterPanel
                       title="Dependants Position Parameters"
@@ -193,19 +185,19 @@ export default function ProjectStep() {
                       calculatedValues={calculatedValues.dependantsPosition}
                     />
                   </div>
+                  <div>
+                    <ChartPanel
+                      title="Dependants Position"
+                      data={calculatedValues.dependantsPosition}
+                      chartType={chartType}
+                      description="Shows capital provisions for dependants"
+                    />
+                  </div>
                 </div>
               </TabsContent>
 
               <TabsContent value="capital">
                 <div className="grid grid-cols-2 gap-6">
-                  <div>
-                    <ChartPanel
-                      title="Total Capital Position"
-                      data={calculatedValues.totalCapitalPosition}
-                      chartType={chartType}
-                      description="Overall capital adequacy analysis"
-                    />
-                  </div>
                   <div>
                     <ParameterPanel
                       title="Total Capital Position Parameters"
@@ -214,25 +206,33 @@ export default function ProjectStep() {
                       section="capital"
                     />
                   </div>
+                  <div>
+                    <ChartPanel
+                      title="Total Capital Position"
+                      data={calculatedValues.totalCapitalPosition}
+                      chartType={chartType}
+                      description="Overall capital adequacy analysis"
+                    />
+                  </div>
                 </div>
               </TabsContent>
 
               <TabsContent value="income">
                 <div className="grid grid-cols-2 gap-6">
                   <div>
-                    <ChartPanel
-                      title="Income Position"
-                      data={calculatedValues.incomePosition}
-                      chartType={chartType}
-                      description="Monthly income provisions and requirements"
-                    />
-                  </div>
-                  <div>
                     <ParameterPanel
                       title="Income Position Parameters"
                       parameters={parameters}
                       onParameterChange={handleParameterChange}
                       section="income"
+                    />
+                  </div>
+                  <div>
+                    <ChartPanel
+                      title="Income Position"
+                      data={calculatedValues.incomePosition}
+                      chartType={chartType}
+                      description="Monthly income provisions and requirements"
                     />
                   </div>
                 </div>
