@@ -19,7 +19,7 @@ export function ProjectBarChart({ data, title }: BarChartProps) {
   };
 
   const maxValue = Math.max(data.provided, data.required, Math.abs(data.surplus));
-  const scale = 220 / maxValue; // 220px max bar height
+  const scale = 180 / maxValue; // 180px max bar height
 
   const bars = [
     { name: 'Provided', value: data.provided, color: 'var(--chart-primary-blue)' },
@@ -28,31 +28,25 @@ export function ProjectBarChart({ data, title }: BarChartProps) {
   ];
 
   return (
-    <div className="w-full h-80 flex flex-col items-center justify-start" style={{ marginTop: '-25px' }}>
-      <div className="flex items-end justify-between px-16" style={{ height: '260px', width: '100%', maxWidth: '600px' }}>
+    <div className="w-full flex flex-col items-center">
+      <div className="flex items-end justify-center space-x-8">
         {bars.map((bar, index) => (
-          <div key={index} className="flex flex-col items-center bar-chart-item" style={{ height: '260px' }}>
+          <div key={index} className="flex flex-col items-center bar-chart-item">
             <div 
               className="text-xs text-gray-600 mb-2 text-center bar-chart-label"
-              style={{ 
-                animationDelay: `${index * 0.1}s`,
-                height: '20px'
-              }}
+              style={{ animationDelay: `${index * 0.1}s` }}
             >
               {formatCurrency(bar.value)}
             </div>
-            <div className="flex-1 flex items-end" style={{ minHeight: '220px' }}>
-              <div 
-                className="w-16 rounded-t-sm bar-chart-bar"
-                style={{ 
-                  height: `${Math.max(bar.value * scale, 10)}px`,
-                  backgroundColor: bar.color,
-                  minHeight: '10px',
-                  animationDelay: `${index * 0.1}s`,
-                  maxHeight: '220px'
-                }}
-              />
-            </div>
+            <div 
+              className="w-16 rounded-t-sm bar-chart-bar"
+              style={{ 
+                height: `${Math.max(bar.value * scale, 10)}px`,
+                backgroundColor: bar.color,
+                minHeight: '10px',
+                animationDelay: `${index * 0.1}s`
+              }}
+            />
           </div>
         ))}
       </div>
