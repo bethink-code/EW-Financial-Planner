@@ -28,8 +28,8 @@ export function ProjectBarChart({ data, title }: BarChartProps) {
   ];
 
   return (
-    <div className="w-full flex flex-col items-center">
-      <div className="flex items-end justify-center space-x-8">
+    <div className="w-full flex flex-col items-center border-2 border-red-500">
+      <div className="flex items-end justify-center space-x-8 border-2 border-blue-500">
         {bars.map((bar, index) => (
           <div key={index} className="flex flex-col items-center bar-chart-item">
             <div 
