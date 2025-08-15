@@ -28,28 +28,26 @@ export function ProjectBarChart({ data, title }: BarChartProps) {
   ];
 
   return (
-    <div className="w-full flex flex-col items-center">
-      <div className="flex items-end justify-center space-x-8">
-        {bars.map((bar, index) => (
-          <div key={index} className="flex flex-col items-center bar-chart-item">
-            <div 
-              className="text-xs text-gray-600 mb-2 text-center bar-chart-label"
-              style={{ animationDelay: `${index * 0.1}s` }}
-            >
-              {formatCurrency(bar.value)}
-            </div>
-            <div 
-              className="w-16 rounded-t-sm bar-chart-bar"
-              style={{ 
-                height: `${Math.max(bar.value * scale, 10)}px`,
-                backgroundColor: bar.color,
-                minHeight: '10px',
-                animationDelay: `${index * 0.1}s`
-              }}
-            />
+    <div className="flex items-end justify-center space-x-8">
+      {bars.map((bar, index) => (
+        <div key={index} className="flex flex-col items-center bar-chart-item">
+          <div 
+            className="text-xs text-gray-600 mb-2 text-center bar-chart-label"
+            style={{ animationDelay: `${index * 0.1}s` }}
+          >
+            {formatCurrency(bar.value)}
           </div>
-        ))}
-      </div>
+          <div 
+            className="w-16 rounded-t-sm bar-chart-bar"
+            style={{ 
+              height: `${Math.max(bar.value * scale, 10)}px`,
+              backgroundColor: bar.color,
+              minHeight: '10px',
+              animationDelay: `${index * 0.1}s`
+            }}
+          />
+        </div>
+      ))}
     </div>
   );
 }
