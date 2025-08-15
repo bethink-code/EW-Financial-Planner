@@ -46,12 +46,12 @@ export function ChartPanel({ title, data, chartType, description }: ChartPanelPr
       {/* Chart and Summary - Centered */}
       <div className="flex-1 flex flex-col items-center justify-center">
         {/* Chart */}
-        <div className="h-80 flex items-center justify-center mt-20">
+        <div className="flex items-end justify-center">
           {renderChart()}
         </div>
 
         {/* Unified Summary Statistics */}
-        <div className="-mt-20 border-2 border-green-500">
+        <div className="border-2 border-green-500">
           <UnifiedSummary data={data} />
         </div>
       </div>
