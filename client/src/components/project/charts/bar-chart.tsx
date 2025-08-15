@@ -28,7 +28,7 @@ export function ProjectBarChart({ data, title }: BarChartProps) {
   ];
 
   return (
-    <div className="w-full h-80 flex flex-col items-center justify-start" style={{ marginTop: '-27px' }}>
+    <div className="w-full h-80 flex flex-col items-center justify-start" style={{ marginTop: '-32px' }}>
       <div className="flex items-end justify-between px-16" style={{ height: '260px', width: '100%', maxWidth: '600px' }}>
         {bars.map((bar, index) => (
           <div key={index} className="flex flex-col items-center bar-chart-item" style={{ height: '260px' }}>
