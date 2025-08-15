@@ -51,7 +51,7 @@ export function ChartPanel({ title, data, chartType, description }: ChartPanelPr
         </div>
 
         {/* Unified Summary Statistics */}
-        <div className="border-2 border-green-500">
+        <div>
           <UnifiedSummary data={data} />
         </div>
       </div>
