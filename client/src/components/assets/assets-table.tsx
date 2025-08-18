@@ -189,7 +189,8 @@ function AssetsTable({ viewMode, searchTerm, onShowCategoryDialog, onAddAsset }:
   // Render hybrid view or table view based on viewMode
   return viewMode === 'table' ? (
     <div className="space-y-6">
-      <table>
+      <div className="overflow-x-auto">
+        <table>
         <thead>
           <tr className="double-row-header-first">
             <th className="section-start table-actions-cell" rowSpan={2}>
@@ -361,6 +362,7 @@ function AssetsTable({ viewMode, searchTerm, onShowCategoryDialog, onAddAsset }:
           </tr>
         </tfoot>
       </table>
+      </div>
     </div>
   ) : (
     // Hybrid View - Left sidebar with summary cards + Right side detailed form

@@ -330,6 +330,7 @@ export function NewRetirementTable({
 
  return (
  <div className="space-y-6">
+ <div className="overflow-x-auto">
  <table style={{ tableLayout: 'fixed' }}>
  <thead>
  {/* Main section headers */}
@@ -750,6 +751,7 @@ export function NewRetirementTable({
  </tr>
  </tfoot>
  </table>
+ </div>
  </div>
  );
 }

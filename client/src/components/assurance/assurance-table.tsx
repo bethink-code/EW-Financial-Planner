@@ -148,6 +148,7 @@ function AssuranceTable({ viewMode, searchTerm }: AssuranceTableProps) {
 
  return (
  <div className="space-y-6">
+ <div className="overflow-x-auto">
  <table>
  <thead>
  <tr>
@@ -231,6 +232,7 @@ function AssuranceTable({ viewMode, searchTerm }: AssuranceTableProps) {
  </tr>
  </tfoot>
  </table>
+ </div>
  </div>
  );
 }

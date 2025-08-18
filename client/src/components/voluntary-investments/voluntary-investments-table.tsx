@@ -233,7 +233,8 @@ function VoluntaryInvestmentsTable({ viewMode, searchTerm, onAddInvestment }: Vo
 
   return (
     <div className="space-y-6">
-      <table>
+      <div className="overflow-x-auto">
+        <table>
         <thead>
           <tr className="double-row-header-first">
             <th className="section-start table-actions-cell" rowSpan={2}>
@@ -462,6 +463,7 @@ function VoluntaryInvestmentsTable({ viewMode, searchTerm, onAddInvestment }: Vo
           </tr>
         </tfoot>
       </table>
+      </div>
     </div>
   );
 }

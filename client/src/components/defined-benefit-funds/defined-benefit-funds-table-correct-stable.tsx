@@ -315,7 +315,8 @@ export default function DefinedBenefitFundsTable({ onAddFund }: DefinedBenefitFu
 
   return (
     <div className="space-y-6">
-      <table>
+      <div className="overflow-x-auto">
+        <table>
         <thead>
           {/* First Header Row - Section Groups */}
           <tr className="double-row-header-first">
@@ -539,6 +540,7 @@ export default function DefinedBenefitFundsTable({ onAddFund }: DefinedBenefitFu
           </tr>
         </tfoot>
       </table>
+      </div>
     </div>
   );
 }

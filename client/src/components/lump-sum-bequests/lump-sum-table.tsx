@@ -171,6 +171,7 @@ function LumpSumTable({ viewMode, searchTerm, onAddBequest }: LumpSumTableProps)
 
  return (
  <div className="space-y-6">
+ <div className="overflow-x-auto">
  <table>
  <thead>
  <tr className="double-row-header-first">
@@ -304,6 +305,7 @@ function LumpSumTable({ viewMode, searchTerm, onAddBequest }: LumpSumTableProps)
  </tr>
  </tfoot>
  </table>
+ </div>
  </div>
  );
 }
