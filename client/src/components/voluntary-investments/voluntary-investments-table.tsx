@@ -231,6 +231,12 @@ function VoluntaryInvestmentsTable({ viewMode, searchTerm, onAddInvestment }: Vo
     return <div className="text-red-600">Error loading voluntary investments. Please try again.</div>;
   }
 
+  // If hybrid mode is requested, we should not render anything here
+  // The parent component should use VoluntaryInvestmentHybridTable instead
+  if (viewMode === 'hybrid') {
+    return null;
+  }
+
   return (
     <div className="space-y-6">
       <div className="overflow-x-auto">
