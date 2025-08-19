@@ -123,6 +123,7 @@ export function VoluntaryInvestmentDetailForm({ investment, onDelete, onDuplicat
         <div className="space-y-4">
           <FormField label="Investment Description">
             <input
+              key={`description-${investment.id}`}
               type="text"
               defaultValue={investment.description || ''}
               placeholder="Enter details ..."
@@ -176,6 +177,7 @@ export function VoluntaryInvestmentDetailForm({ investment, onDelete, onDuplicat
         <div className="grid grid-cols-2 gap-x-3 gap-y-4" style={{ width: 'fit-content' }}>
           <FormField label="Base Cost">
             <input
+              key={`baseCost-${investment.id}`}
               type="text"
               defaultValue={investment.baseCost || ''}
               placeholder="R 0"
@@ -189,6 +191,7 @@ export function VoluntaryInvestmentDetailForm({ investment, onDelete, onDuplicat
 
           <FormField label="Market Value">
             <input
+              key={`marketValue-${investment.id}`}
               type="text"
               defaultValue={investment.marketValue || ''}
               placeholder="R 0"
@@ -202,6 +205,7 @@ export function VoluntaryInvestmentDetailForm({ investment, onDelete, onDuplicat
 
           <FormField label="Liquidation Percentage">
             <input
+              key={`liquidationPercentage-${investment.id}`}
               type="text"
               defaultValue={investment.liquidationPercentage || ''}
               placeholder="0%"
@@ -220,6 +224,7 @@ export function VoluntaryInvestmentDetailForm({ investment, onDelete, onDuplicat
         <div className="grid grid-cols-2 gap-x-3 gap-y-4" style={{ width: 'fit-content' }}>
           <FormField label="Spouse">
             <input
+              key={`spouse-${investment.id}`}
               type="text"
               defaultValue={investment.spouse || ''}
               placeholder="R 0"
@@ -233,6 +238,7 @@ export function VoluntaryInvestmentDetailForm({ investment, onDelete, onDuplicat
 
           <FormField label="Others">
             <input
+              key={`others-${investment.id}`}
               type="text"
               defaultValue={investment.others || ''}
               placeholder="R 0"
