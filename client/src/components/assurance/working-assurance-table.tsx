@@ -515,7 +515,8 @@ export function AssuranceTable({ viewMode = 'table', onAddPolicy }: AssuranceTab
       {/* Note: Add Policy Button moved to parent component header */}
 
       {/* Table */}
-      <table >
+      <div className="overflow-x-auto">
+        <table >
           <thead>
             <tr className="single-row-header">
               <th className="table-actions-cell">
@@ -894,7 +895,8 @@ export function AssuranceTable({ viewMode = 'table', onAddPolicy }: AssuranceTab
           </tfoot>
         </table>
       </div>
-    );
+    </div>
+  );
 
 
 
