@@ -120,14 +120,14 @@ export default function EntityBeneficiarySelector({
   return (
     <>
       {/* Actions Column */}
-      <td className="pr-0.25 pl-0.25 py-0.5 align-top border-r border-neutral-200" style={{ width: '60px' }}>
-        <div className="pt-0.5">
+      <td className="entity-actions-cell align-top border-r border-neutral-200">
+        <div className="entity-button-container">
           {actionButton}
         </div>
       </td>
       
       {/* Beneficiary Column */}
-      <td className="px-0.25 py-0.5 align-top border-r border-neutral-200" style={{ width: '300px' }}>
+      <td className="entity-dropdown-cell align-top border-r border-neutral-200">
         <select
           value={currentDisplayValue}
           onChange={(e) => {
@@ -142,7 +142,7 @@ export default function EntityBeneficiarySelector({
             }
           }}
           disabled={disabled}
-          className="table-input table-dropdown w-full min-w-[250px]"
+          className="table-input entity-dropdown-input"
         >
           <option value="">Select beneficiary...</option>
           {entities.map((entity) => {
@@ -157,15 +157,14 @@ export default function EntityBeneficiarySelector({
       </td>
 
       {/* Benefit % Column */}
-      <td className="pl-0.25 pr-0.25 py-0.5 align-top border-r border-neutral-200" style={{ width: '80px' }}>
+      <td className="entity-percentage-cell align-top border-r border-neutral-200">
         <input
           type="text"
           defaultValue={currentPercentage}
           placeholder="0%"
-          className={`table-input ${getFieldClass('percentage')} text-center ${getValueClass(currentPercentage, 'percentage')} ${
+          className={`entity-percentage-input ${getFieldClass('percentage')} ${getValueClass(currentPercentage, 'percentage')} ${
             isInvalidTotal ? 'border-red-500 bg-red-50' : ''
           }`}
-          style={{minWidth: "50px", maxWidth: "65px"}}
           onFocus={(e) => {
             handleDefaultValueFocus(e);
             // Remove % sign for editing but keep the number

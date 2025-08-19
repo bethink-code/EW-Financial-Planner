@@ -114,19 +114,19 @@ export default function EntityOwnerSelector({
   return (
     <>
       {/* Actions Column */}
-      <td className="pr-0.25 pl-0.25 py-0.5 align-top border-r border-neutral-200" style={{ width: '60px' }}>
-        <div className="pt-0.5">
+      <td className="entity-actions-cell align-top border-r border-neutral-200">
+        <div className="entity-button-container">
           {actionButton}
         </div>
       </td>
       
       {/* Owner Column */}
-      <td className="px-0.25 py-0.5 align-top border-r border-neutral-200">
+      <td className="entity-dropdown-cell align-top border-r border-neutral-200">
         <select
           value={currentOwner}
           onChange={(e) => handleOwnerSelect(e.target.value, ownerIndex)}
           disabled={disabled}
-          className="table-input table-dropdown"
+          className="table-input entity-dropdown-input"
         >
           <option value="">Select owner...</option>
           {entities.map((entity) => (
@@ -138,12 +138,12 @@ export default function EntityOwnerSelector({
       </td>
 
       {/* Ownership % Column */}
-      <td className="pl-0.25 pr-0.25 py-0.5 align-top border-r border-neutral-200" style={{ width: '80px' }}>
+      <td className="entity-percentage-cell align-top border-r border-neutral-200">
         <input
           type="text"
           defaultValue={currentPercentage}
           placeholder="0%"
-          className={`table-input ${getFieldClass('percentage')} w-16 text-center ${getValueClass(currentPercentage, 'percentage')} ${
+          className={`entity-percentage-input ${getFieldClass('percentage')} ${getValueClass(currentPercentage, 'percentage')} ${
             isInvalidTotal ? 'border-red-500 bg-red-50' : ''
           }`}
           onFocus={(e) => {

@@ -75,19 +75,19 @@ export function EntityBeneficiarySelector({
   };
 
   return (
-    <div className="flex items-center gap-1">
+    <div className="flex items-center gap-0.5">
       <EntitySelector
         value={currentEntityId}
         onChange={handleEntityChange}
         disabled={disabled}
         placeholder="Select beneficiary..."
-        className="table-input table-dropdown flex-1"
+        className="table-input entity-dropdown-input flex-1"
       />
       <input
         type="text"
         defaultValue={currentPercentage}
         placeholder="0%"
-        className={`table-input ${getFieldClass('percentage')} w-16 text-center ${getValueClass(currentPercentage, 'percentage')}`}
+        className={`entity-percentage-input ${getFieldClass('percentage')} ${getValueClass(currentPercentage, 'percentage')}`}
         onFocus={handleDefaultValueFocus}
         onBlur={(e) => handlePercentageChange(e.target.value)}
         disabled={disabled}

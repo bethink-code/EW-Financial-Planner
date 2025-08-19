@@ -88,40 +88,41 @@ export function EntityOwnerSelector({
   return (
     <>
       {/* Actions Column */}
-      <td className="border border-neutral-300 p-1 align-top">
-        {rowIndex === 0 ? (
-          <AddButton
-            onClick={() => onAddOwner(policyId)}
-            disabled={disabled}
-            size="sm"
-          />
-        ) : (
-          <DeleteButton
-            onClick={() => onRemoveOwner(policyId, rowIndex)}
-            disabled={disabled}
-            size="sm"
-          />
-        )}
+      <td className="entity-actions-cell border border-neutral-300 align-top">
+        <div className="entity-button-container">
+          {rowIndex === 0 ? (
+            <AddButton
+              onClick={() => onAddOwner(policyId)}
+              disabled={disabled}
+              size="sm"
+            />
+          ) : (
+            <DeleteButton
+              onClick={() => onRemoveOwner(policyId, rowIndex)}
+              disabled={disabled}
+              size="sm"
+            />
+          )}
+        </div>
       </td>
       
       {/* Owner Name Column */}
-      <td className="border border-neutral-300 p-1">
-        <div className="w-full min-w-[250px]">
-          <select
-            value={currentDisplayValue}
-            onChange={(e) => {
-              // Extract entity name from the full display value
-              const selectedValue = e.target.value;
-              if (selectedValue === "" || selectedValue === "Select owner...") {
-                onOwnerChange(policyId, rowIndex, "");
-              } else {
-                // Extract just the entity name from "EntityName (EntityType)"
-                const entityName = selectedValue.replace(/\s*\([^)]*\)\s*$/, '');
-                onOwnerChange(policyId, rowIndex, entityName);
-              }
-            }}
-            disabled={disabled}
-            className="table-input table-dropdown w-full min-w-[250px]"
+      <td className="entity-dropdown-cell border border-neutral-300">
+        <select
+          value={currentDisplayValue}
+          onChange={(e) => {
+            // Extract entity name from the full display value
+            const selectedValue = e.target.value;
+            if (selectedValue === "" || selectedValue === "Select owner...") {
+              onOwnerChange(policyId, rowIndex, "");
+            } else {
+              // Extract just the entity name from "EntityName (EntityType)"
+              const entityName = selectedValue.replace(/\s*\([^)]*\)\s*$/, '');
+              onOwnerChange(policyId, rowIndex, entityName);
+            }
+          }}
+          disabled={disabled}
+          className="table-input entity-dropdown-input"
           >
             <option value="">Select owner...</option>
             {entities.map((entity) => {
@@ -133,16 +134,15 @@ export function EntityOwnerSelector({
               );
             })}
           </select>
-        </div>
       </td>
       
       {/* Ownership Percentage Column */}
-      <td className="border border-neutral-300 p-1">
+      <td className="entity-percentage-cell border border-neutral-300">
         <input
           type="text"
           defaultValue={currentPercentage}
           placeholder="0%"
-          className={`table-input ${getFieldClass('percentage')} w-16 text-center ${getValueClass(currentPercentage, 'percentage')}`}
+          className={`entity-percentage-input ${getFieldClass('percentage')} ${getValueClass(currentPercentage, 'percentage')}`}
           onFocus={(e) => {
             handleDefaultValueFocus(e);
             // Remove % sign for editing but keep the number
