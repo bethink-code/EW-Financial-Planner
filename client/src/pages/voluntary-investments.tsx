@@ -62,16 +62,17 @@ export default function VoluntaryInvestments() {
   return (
     <div className="">
       <div className="w-full px-6 py-6">
-        {/* Combined Header, Summary and Table */}
-        <CalculatorHeader
-          title="Voluntary Investments"
-          onAddItem={handleAddInvestment}
-          addButtonText="Add Investment"
-          isAddingItem={addMutation.isPending}
-          viewMode={viewMode}
-          onViewModeChange={handleViewModeChange}
-          className="mb-6"
-        >
+        <div className="w-[1320px]">
+          {/* Combined Header, Summary and Table */}
+          <CalculatorHeader
+            title="Voluntary Investments"
+            onAddItem={handleAddInvestment}
+            addButtonText="Add Investment"
+            isAddingItem={addMutation.isPending}
+            viewMode={viewMode}
+            onViewModeChange={handleViewModeChange}
+            className="mb-6"
+          >
           {/* Summary with max width constraint */}
           <div className="max-w-6xl">
             <VoluntaryInvestmentsSummary />
@@ -86,6 +87,7 @@ export default function VoluntaryInvestments() {
             )}
           </div>
         </CalculatorHeader>
+        </div>
       </div>
     </div>
   );
