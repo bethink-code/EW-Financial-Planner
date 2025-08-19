@@ -89,52 +89,19 @@ html {
 
 /* ===== ENTITY SELECTOR SPACING CONTROL ===== */
 
-/* Entity Actions Column - Compact button spacing */
-.entity-actions-cell {
-  width: 45px !important;
-  min-width: 45px !important;
-  max-width: 45px !important;
-  padding: 0.125rem !important;
+/* Target ONLY the horizontal padding between entity selector elements */
+/* Replace px-0.25 (1px) with px-0.5 (2px) for tighter spacing */
+
+/* Override Tailwind's px-0.25 class specifically for entity selectors */
+.px-0\.25 {
+  padding-left: 0.125rem !important;  /* Keep existing 2px */
+  padding-right: 0.125rem !important; /* Keep existing 2px */
 }
 
-/* Entity Dropdown Column - Optimized for name display */
-.entity-dropdown-cell {
-  width: 180px !important;
-  min-width: 180px !important;
-  max-width: 180px !important;
-  padding: 0.125rem 0.25rem !important;
-}
-
-/* Entity Percentage Column - Minimal width for % inputs */
-.entity-percentage-cell {
-  width: 50px !important;
-  min-width: 50px !important;
-  max-width: 50px !important;
-  padding: 0.125rem !important;
-}
-
-/* Entity selector input styling */
-.entity-dropdown-input {
-  width: 100% !important;
-  max-width: 175px !important;
-  font-size: 13px !important;
-}
-
-.entity-percentage-input {
-  width: 42px !important;
-  min-width: 42px !important;
-  max-width: 42px !important;
-  text-align: center !important;
-  font-size: 12px !important;
-  padding: 0.25rem 0.125rem !important;
-}
-
-/* Entity button container - minimal spacing */
-.entity-button-container {
-  padding: 0.125rem !important;
-  display: flex !important;
-  justify-content: center !important;
-  align-items: center !important;
+/* Create tighter spacing variant for entity selectors */
+.entity-tight-spacing {
+  padding-left: 0.0625rem !important;  /* 1px instead of 2px */
+  padding-right: 0.0625rem !important; /* 1px instead of 2px */
 }
 
 /* Optimized view transitions */

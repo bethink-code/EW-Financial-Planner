@@ -120,14 +120,14 @@ export default function EntityBeneficiarySelector({
   return (
     <>
       {/* Actions Column */}
-      <td className="entity-actions-cell align-top border-r border-neutral-200">
-        <div className="entity-button-container">
+      <td className="pr-0.25 pl-0.25 py-0.5 align-top border-r border-neutral-200" style={{ width: '60px' }}>
+        <div className="pt-0.5">
           {actionButton}
         </div>
       </td>
       
       {/* Beneficiary Column */}
-      <td className="entity-dropdown-cell align-top border-r border-neutral-200">
+      <td className="entity-tight-spacing py-0.5 align-top border-r border-neutral-200" style={{ width: '300px' }}>
         <select
           value={currentDisplayValue}
           onChange={(e) => {
@@ -142,7 +142,7 @@ export default function EntityBeneficiarySelector({
             }
           }}
           disabled={disabled}
-          className="table-input entity-dropdown-input"
+          className="table-input table-dropdown w-full min-w-[250px]"
         >
           <option value="">Select beneficiary...</option>
           {entities.map((entity) => {
@@ -157,14 +157,15 @@ export default function EntityBeneficiarySelector({
       </td>
 
       {/* Benefit % Column */}
-      <td className="entity-percentage-cell align-top border-r border-neutral-200">
+      <td className="entity-tight-spacing py-0.5 align-top border-r border-neutral-200" style={{ width: '80px' }}>
         <input
           type="text"
           defaultValue={currentPercentage}
           placeholder="0%"
-          className={`entity-percentage-input ${getFieldClass('percentage')} ${getValueClass(currentPercentage, 'percentage')} ${
+          className={`table-input ${getFieldClass('percentage')} text-center ${getValueClass(currentPercentage, 'percentage')} ${
             isInvalidTotal ? 'border-red-500 bg-red-50' : ''
           }`}
+          style={{minWidth: "50px", maxWidth: "65px"}}
           onFocus={(e) => {
             handleDefaultValueFocus(e);
             // Remove % sign for editing but keep the number
