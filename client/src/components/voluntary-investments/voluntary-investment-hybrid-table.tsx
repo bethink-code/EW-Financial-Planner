@@ -115,10 +115,10 @@ export function VoluntaryInvestmentHybridTable({ searchTerm, onAddInvestment }: 
   }
 
   return (
-    <div className="flex border-t border-neutral-200">
+    <div className="flex border-t border-neutral-200 max-h-[600px]">
       {/* Left Sidebar - Preview Cards */}
-      <div className="w-80 flex-shrink-0 border-r border-neutral-200 bg-neutral-50">
-        <div className="hybrid-add-button-container p-4 border-b border-neutral-200">
+      <div className="w-80 flex-shrink-0 border-r border-neutral-200 bg-neutral-50 flex flex-col max-h-full">
+        <div className="hybrid-add-button-container p-4 border-b border-neutral-200 flex-shrink-0">
           <Button
             onClick={() => addMutation.mutate()}
             disabled={addMutation.isPending}
@@ -129,7 +129,7 @@ export function VoluntaryInvestmentHybridTable({ searchTerm, onAddInvestment }: 
             Add Investment
           </Button>
         </div>
-        <div className="hybrid-tabs-list">
+        <div className="hybrid-tabs-list flex-1 overflow-y-auto">
           {filteredInvestments.map((investment, index) => (
             <VoluntaryInvestmentPreviewCard
               key={investment.id}
@@ -144,7 +144,7 @@ export function VoluntaryInvestmentHybridTable({ searchTerm, onAddInvestment }: 
       </div>
 
       {/* Right Panel - Detail Form */}
-      <div className="flex-1">
+      <div className="flex-1 max-h-full overflow-y-auto">
         {activeInvestment ? (
           <VoluntaryInvestmentDetailForm
             investment={activeInvestment}
