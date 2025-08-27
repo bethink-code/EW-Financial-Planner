@@ -70,9 +70,9 @@ export function FinancialPlanningLayout({
                 </span>
                 
                 <div className="flex items-center gap-2">
-                  <div className="flex items-center bg-[#F5F1E8] rounded-[6px] overflow-hidden">
+                  <div className="flex items-center bg-[#F97415] rounded-[6px] overflow-hidden">
                     {/* Plan name - not clickable in summary view */}
-                    <div className="pl-4 pr-1 text-sm font-medium h-10 flex items-center text-gray-700">
+                    <div className="pl-4 pr-1 text-sm font-medium h-10 flex items-center text-white">
                       <span title={planName} className="flex-1">
                         {planName || "Financial Plan"}
                       </span>
