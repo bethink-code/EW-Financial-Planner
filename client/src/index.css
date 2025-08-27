@@ -329,12 +329,12 @@ th, td {
   --input: hsl(214, 32%, 91%);
   
   /* Primary: Brand blue color */
-  --primary: 198 99% 29%;
-  --primary-foreground: 0 0% 100%;
+  --primary: hsl(198, 99%, 29%);
+  --primary-foreground: hsl(0, 0%, 100%);
   
   /* Secondary: Brand orange color */
-  --secondary: 25 95% 53%;
-  --secondary-foreground: 0 0% 100%;
+  --secondary: hsl(25, 95%, 53%);
+  --secondary-foreground: hsl(0, 0%, 100%);
   
   --accent: hsl(210, 40%, 95%);
   --accent-foreground: hsl(220, 13%, 18%);
