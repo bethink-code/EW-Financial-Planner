@@ -62,8 +62,8 @@ export function FinancialPlanningLayout({
             </div>
           ) : (
             // Financial Plan Summary Navigation
-            <div className="flex items-start justify-between">
-              <div className="flex items-start gap-6">
+            <div className="flex items-end justify-between">
+              <div className="flex items-end gap-6">
               {/* Financial Plan section */}
               <div>
                 <span className="text-xs text-gray-500 uppercase tracking-wider font-medium block mb-1">
@@ -140,7 +140,7 @@ export function FinancialPlanningLayout({
               </div>
               
               {/* Right side buttons */}
-              <div className="flex items-end gap-2 pb-1">
+              <div className="flex items-end gap-2">
                 <Button 
                   variant="outline"
                   size="sm"
