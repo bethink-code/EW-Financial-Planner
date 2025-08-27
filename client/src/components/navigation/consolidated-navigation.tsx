@@ -12,6 +12,8 @@ import {
 } from"@/components/ui/dropdown-menu";
 import { cn } from"@/lib/utils";
 import { SafeFragment } from"@/lib/safe-fragment";
+import { FinancialNeedsDialog } from"@/components/navigation/financial-needs-dialog";
+import { useQuery } from"@tanstack/react-query";
 
 interface ConsolidatedNavigationProps {
   currentNeed: any;
@@ -30,6 +32,16 @@ export function ConsolidatedNavigation({
   const planName = getFinancialPlanName();
   const [isNeedDropdownOpen, setIsNeedDropdownOpen] = useState(false);
   const [stepDropdownOpen, setStepDropdownOpen] = useState<string | null>(null);
+  const [isNeedsDialogOpen, setIsNeedsDialogOpen] = useState(false);
+  
+  // Get current plan ID from URL
+  const planId = location.split('/').pop() || '1';
+  
+  // Fetch current plan needs for the dialog
+  const { data: planWithNeeds } = useQuery({
+    queryKey: [`/api/financial-plans/${planId}/with-needs`],
+    enabled: isNeedsDialogOpen,
+  });
   
   const handleBack = () => {
     window.history.back();
@@ -115,14 +127,24 @@ export function ConsolidatedNavigation({
               
               {/* Financial Plan name with edit button and back button on same row */}
               <div className="flex items-center gap-2">
-                <button className="flex items-center pl-4 pr-1 text-sm font-medium transition-colors h-10 rounded-[6px] focus:outline-none focus:ring-0 focus:border-0 bg-[#F5F1E8] text-gray-700 border-0 hover:bg-[#F0EBE0]">
-                  <span title={planName} className="flex-1">
-                    {planName}
-                  </span>
-                  <span className="flex items-center justify-center h-8 w-8 rounded text-sm font-semibold bg-white text-[#F97415] ml-4">
+                <div className="flex items-center bg-[#F5F1E8] rounded-[6px] overflow-hidden">
+                  {/* Plan name - clickable to go to summary */}
+                  <Link href={`/financial-plan-summary/${planId}`}>
+                    <div className="pl-4 pr-1 text-sm font-medium transition-colors h-10 flex items-center text-gray-700 hover:bg-[#F0EBE0] cursor-pointer">
+                      <span title={planName} className="flex-1">
+                        {planName}
+                      </span>
+                    </div>
+                  </Link>
+                  
+                  {/* Edit pencil icon - clickable to open needs dialog */}
+                  <button 
+                    onClick={() => setIsNeedsDialogOpen(true)}
+                    className="flex items-center justify-center h-8 w-8 rounded text-sm font-semibold bg-white text-[#F97415] ml-1 mr-1 my-1 hover:bg-gray-50 transition-colors"
+                  >
                     <Edit2 className="h-3 w-3" />
-                  </span>
-                </button>
+                  </button>
+                </div>
                 
                 {/* Back to all plans button */}
                 <Link href="/financial-plans">
@@ -275,6 +297,17 @@ export function ConsolidatedNavigation({
           </div>
         </div>
       </div>
+      
+      {/* Financial Needs Dialog */}
+      <FinancialNeedsDialog
+        isOpen={isNeedsDialogOpen}
+        onClose={() => setIsNeedsDialogOpen(false)}
+        planId={planId}
+        currentNeeds={planWithNeeds?.needs?.map(need => ({ 
+          key: need.key, 
+          displayName: need.displayName 
+        })) || []}
+      />
     </div>
   );
 }
