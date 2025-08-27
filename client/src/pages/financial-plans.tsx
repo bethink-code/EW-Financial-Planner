@@ -178,14 +178,21 @@ export default function FinancialPlansPage() {
                             <TableCell>
                               <div className="flex items-center gap-2">
                                 <Link href={`/financial-plans/${plan.id}`}>
-                                  <Button variant="outline" size="sm">
-                                    <Eye className="h-4 w-4 mr-1" />
+                                  <Button className="bg-[#E6F0F5] hover:bg-[#D6E7F0] text-[#016991] border-[#E6F0F5]" size="sm">
                                     Choose
                                   </Button>
                                 </Link>
                                 <Button 
                                   variant="outline" 
                                   size="sm"
+                                  className="h-9 w-9 p-0"
+                                >
+                                  <Copy className="h-4 w-4" />
+                                </Button>
+                                <Button 
+                                  variant="outline" 
+                                  size="sm"
+                                  className="h-9 w-9 p-0"
                                   onClick={() => handleDeletePlan(plan.id, plan.name)}
                                   disabled={deletePlanMutation.isPending}
                                 >
