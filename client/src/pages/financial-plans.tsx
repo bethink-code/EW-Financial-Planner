@@ -23,12 +23,12 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
-import { CreatePlanDialog } from "@/components/financial-plans/create-plan-dialog";
-import { apiRequest } from "@/lib/queryClient";
-import type { FinancialPlan, Need } from "@shared/schema";
+// import { CreatePlanDialog } from "@/components/financial-plans/create-plan-dialog";
+import type { FinancialPlan, Need, PlanNeed } from "@shared/schema";
 
 interface FinancialPlanWithNeeds extends FinancialPlan {
   needs?: Need[];
+  planNeeds?: PlanNeed[];
 }
 
 export default function FinancialPlansPage() {
@@ -51,10 +51,42 @@ export default function FinancialPlansPage() {
     queryKey: ["/api/needs"],
   });
 
+  // Fetch plan needs for each plan to show associated needs
+  const { data: planNeedsMap = {} } = useQuery({
+    queryKey: ["/api/plan-needs", plans],
+    queryFn: async () => {
+      if (!plans || plans.length === 0) return {};
+      
+      const map: Record<number, Need[]> = {};
+      
+      for (const plan of plans) {
+        try {
+          const response = await fetch(`/api/financial-plans/${plan.id}/with-needs`);
+          if (response.ok) {
+            const data = await response.json();
+            map[plan.id] = data.needs || [];
+          }
+        } catch (error) {
+          console.error(`Error fetching needs for plan ${plan.id}:`, error);
+          map[plan.id] = [];
+        }
+      }
+      
+      return map;
+    },
+    enabled: plans && plans.length > 0,
+  });
+
   // Delete plan mutation
   const deletePlanMutation = useMutation({
-    mutationFn: (planId: number) => 
-      apiRequest(`/api/financial-plans/${planId}`, { method: "DELETE" }),
+    mutationFn: async (planId: number) => {
+      const response = await fetch(`/api/financial-plans/${planId}`, { 
+        method: "DELETE" 
+      });
+      if (!response.ok) {
+        throw new Error('Failed to delete plan');
+      }
+    },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["/api/financial-plans"] });
     },
@@ -70,11 +102,8 @@ export default function FinancialPlansPage() {
     return new Date(dateString).toLocaleDateString();
   };
 
-  const getNeedsForPlan = (planId: number): string[] => {
-    // In a real implementation, this would come from the plan-needs relationships
-    // For now, we'll simulate some data based on the plan
-    const sampleNeeds = ["DEATH", "RETIREMENT", "INVESTMENT PLANNING"];
-    return sampleNeeds;
+  const getNeedsForPlan = (planId: number): Need[] => {
+    return planNeedsMap[planId] || [];
   };
 
   return (
@@ -85,19 +114,16 @@ export default function FinancialPlansPage() {
             <CardHeader className="pb-4">
               <div className="flex items-center justify-between">
                 <CardTitle className="text-2xl font-semibold">Financial plans</CardTitle>
-                <CreatePlanDialog 
-                  isOpen={isCreateDialogOpen}
-                  onOpenChange={setIsCreateDialogOpen}
-                  allNeeds={allNeeds}
+                <Button 
+                  className="bg-blue-600 hover:bg-blue-700 text-white"
+                  onClick={() => {
+                    // For now, just show alert - create dialog will be added later
+                    alert("Create plan dialog will be implemented");
+                  }}
                 >
-                  <Button 
-                    className="bg-blue-600 hover:bg-blue-700 text-white"
-                    onClick={() => setIsCreateDialogOpen(true)}
-                  >
-                    <Plus className="h-4 w-4 mr-2" />
-                    Create a new plan
-                  </Button>
-                </CreatePlanDialog>
+                  <Plus className="h-4 w-4 mr-2" />
+                  Create a new plan
+                </Button>
               </div>
             </CardHeader>
 
@@ -145,12 +171,16 @@ export default function FinancialPlansPage() {
                           <TableCell className="font-medium">{plan.name}</TableCell>
                           <TableCell>
                             <div className="flex flex-wrap gap-1">
-                              {getNeedsForPlan(plan.id).map((need, index) => (
+                              {getNeedsForPlan(plan.id).slice(0, 3).map((need, index) => (
                                 <Badge key={index} variant="secondary" className="text-xs">
-                                  {need}
+                                  {need.displayName.toUpperCase()}
                                 </Badge>
                               ))}
-                              <Badge variant="outline" className="text-xs">+2</Badge>
+                              {getNeedsForPlan(plan.id).length > 3 && (
+                                <Badge variant="outline" className="text-xs">
+                                  +{getNeedsForPlan(plan.id).length - 3}
+                                </Badge>
+                              )}
                             </div>
                           </TableCell>
                           <TableCell className="text-gray-600">
