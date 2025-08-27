@@ -144,23 +144,23 @@ export function FinancialPlanningLayout({
                 <Button 
                   variant="outline"
                   size="sm"
-                  className="flex items-center gap-2 text-sm"
+                  className="h-10 w-10 p-0 flex items-center justify-center"
+                  title="Duplicate plan"
                 >
-                  <Copy className="h-3.5 w-3.5" />
-                  Duplicate plan
+                  <Copy className="h-4 w-4" />
                 </Button>
                 <Button 
                   variant="outline"
                   size="sm"
-                  className="flex items-center gap-2 text-sm"
+                  className="h-10 w-10 p-0 flex items-center justify-center"
+                  title="Refresh data"
                 >
-                  <RotateCcw className="h-3.5 w-3.5" />
-                  Refresh data
+                  <RotateCcw className="h-4 w-4" />
                 </Button>
                 <Button 
                   variant="outline"
                   size="sm"
-                  className="flex items-center gap-2 text-sm"
+                  className="flex items-center gap-2 text-sm h-10 px-3"
                 >
                   <FileText className="h-3.5 w-3.5" />
                   Product recommendations (ROA)
