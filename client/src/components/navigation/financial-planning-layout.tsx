@@ -54,7 +54,7 @@ export function FinancialPlanningLayout({
           {variant === "list" ? (
             // Financial Plans List Navigation
             <div className="flex items-center justify-between">
-              <h1 className="text-2xl font-semibold text-gray-900">Financial plans</h1>
+              <h1 className="text-2xl font-semibold text-primary">Financial plans</h1>
               <Button className="bg-blue-600 hover:bg-blue-700 text-white">
                 <Plus className="h-4 w-4 mr-2" />
                 Create a new plan
