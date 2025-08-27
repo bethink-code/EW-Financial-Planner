@@ -125,13 +125,14 @@ export function ConsolidatedNavigation({
                 </button>
                 
                 {/* Back to all plans button */}
-                <Button
-                  variant="ghost"
-                  onClick={handleBack}
-                  className="btn-ghost px-2 text-sm h-10"
-                >
-                  Back to all plans
-                </Button>
+                <Link href="/financial-plans">
+                  <Button
+                    variant="ghost"
+                    className="btn-ghost px-2 text-sm h-10"
+                  >
+                    Back to all plans
+                  </Button>
+                </Link>
               </div>
             </div>
 
