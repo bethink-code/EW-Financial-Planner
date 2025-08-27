@@ -1,6 +1,7 @@
 import { useParams, Link } from "wouter";
 import { useQuery } from "@tanstack/react-query";
 import { ArrowLeft, Eye, BarChart3 } from "lucide-react";
+import { FinancialPlanningLayout } from "@/components/navigation/financial-planning-layout";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -166,74 +167,79 @@ export default function FinancialPlanSummaryPage() {
   const { plan, needs } = planWithNeeds;
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <div className="w-full px-6 py-6">
-        <div className="w-[1320px]">
-          {/* Header */}
-          <div className="mb-6">
-            <Link href="/financial-plans">
-              <Button variant="outline" size="sm" className="mb-4">
-                <ArrowLeft className="h-4 w-4 mr-2" />
-                Back to Financial Plans
-              </Button>
-            </Link>
-            
-            <Card>
-              <CardHeader>
-                <div className="flex items-center justify-between">
-                  <div>
-                    <CardTitle className="text-2xl font-semibold">{plan.name}</CardTitle>
-                    <p className="text-gray-600 mt-2">{plan.description}</p>
-                    <p className="text-sm text-gray-500 mt-1">
-                      Date applicable: {formatDate(plan.dateApplicable)}
-                    </p>
-                  </div>
-                  <div className="text-right">
-                    <div className="text-sm text-gray-500">Total needs</div>
-                    <div className="text-2xl font-bold text-blue-600">{needs.length}</div>
-                  </div>
-                </div>
-              </CardHeader>
-            </Card>
-          </div>
-
-          {/* Needs Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {needs.map((need) => (
-              <Card key={need.id} className="hover:shadow-md transition-shadow">
-                <CardHeader className="pb-3">
+    <FinancialPlanningLayout 
+      variant="summary" 
+      planName={plan.name}
+      planId={plan.id.toString()}
+      needs={needs.map(need => ({ 
+        key: need.key, 
+        displayName: need.displayName, 
+        hasDetailedSteps: need.hasDetailedSteps 
+      }))}
+    >
+      <div className="min-h-screen bg-gray-50">
+        <div className="w-full px-6 py-6">
+          <div className="w-[1320px]">
+            {/* Plan Summary Card */}
+            <div className="mb-6">
+              <Card>
+                <CardHeader>
                   <div className="flex items-center justify-between">
-                    <CardTitle className="text-lg">{need.displayName}</CardTitle>
-                    <Badge className={`text-xs border ${getCategoryColor(need.category || 'other')}`}>
-                      {need.category?.toUpperCase() || 'OTHER'}
-                    </Badge>
-                  </div>
-                  {need.hasDetailedSteps && (
-                    <div className="text-xs text-green-600 font-medium">
-                      ✓ Has detailed steps
+                    <div>
+                      <CardTitle className="text-2xl font-semibold">{plan.name}</CardTitle>
+                      <p className="text-gray-600 mt-2">{plan.description}</p>
+                      <p className="text-sm text-gray-500 mt-1">
+                        Date applicable: {formatDate(plan.dateApplicable)}
+                      </p>
                     </div>
-                  )}
-                </CardHeader>
-                <CardContent>
-                  {renderSummaryData(need)}
-                  
-                  <div className="mt-4 pt-3 border-t">
-                    {getActionButton(need)}
+                    <div className="text-right">
+                      <div className="text-sm text-gray-500">Total needs</div>
+                      <div className="text-2xl font-bold text-blue-600">{needs.length}</div>
+                    </div>
                   </div>
+                </CardHeader>
+              </Card>
+            </div>
+
+            {/* Needs Grid */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {needs.map((need) => (
+                <Card key={need.id} className="hover:shadow-md transition-shadow">
+                  <CardHeader className="pb-3">
+                    <div className="flex items-center justify-between">
+                      <CardTitle className="text-lg">{need.displayName}</CardTitle>
+                      <Badge className={`text-xs border ${getCategoryColor(need.category || 'other')}`}>
+                        {need.category?.toUpperCase() || 'OTHER'}
+                      </Badge>
+                    </div>
+                    {need.hasDetailedSteps && (
+                      <div className="text-xs text-green-600 font-medium">
+                        ✓ Has detailed steps
+                      </div>
+                    )}
+                  </CardHeader>
+                  <CardContent>
+                    {renderSummaryData(need)}
+                    
+                    <div className="mt-4 pt-3 border-t">
+                      {getActionButton(need)}
+                    </div>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+
+            {needs.length === 0 && (
+              <Card>
+                <CardContent className="text-center py-8 text-gray-500">
+                  No financial needs have been added to this plan yet.
                 </CardContent>
               </Card>
-            ))}
+            )}
           </div>
-
-          {needs.length === 0 && (
-            <Card>
-              <CardContent className="text-center py-8 text-gray-500">
-                No financial needs have been added to this plan yet.
-              </CardContent>
-            </Card>
-          )}
         </div>
       </div>
-    </div>
+
+    </FinancialPlanningLayout>
   );
 }
