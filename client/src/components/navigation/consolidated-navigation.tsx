@@ -20,13 +20,15 @@ interface ConsolidatedNavigationProps {
   currentStep: any;
   stepsWithStatus: any[];
   sections: any[];
+  planId?: string;
 }
 
 export function ConsolidatedNavigation({ 
   currentNeed, 
   currentStep, 
   stepsWithStatus,
-  sections 
+  sections,
+  planId = "1"
 }: ConsolidatedNavigationProps) {
   const [location, setLocation] = useLocation();
   const planName = getFinancialPlanName();
@@ -34,8 +36,7 @@ export function ConsolidatedNavigation({
   const [stepDropdownOpen, setStepDropdownOpen] = useState<string | null>(null);
   const [isNeedsDialogOpen, setIsNeedsDialogOpen] = useState(false);
   
-  // Get current plan ID from URL
-  const planId = location.split('/').pop() || '1';
+  // Use the planId prop (defaults to "1" for now)
   
   // Fetch current plan needs for the dialog
   const { data: planWithNeeds } = useQuery({
