@@ -1593,13 +1593,20 @@ th, td {
 
 /* Need Dropdown Button Style (Elite Wealth Tangerine) */
 .btn-need {
-  background-color: #F97415 !important; /* Design system orange */
+  background-color: #F97415 !important; /* Design system bright orange */
+  background: #F97415 !important; /* Design system bright orange - extra specificity */
   color: white !important;
   border: 1px solid #F97415 !important;
   font-weight: 500 !important;
   height: 2.5rem !important; /* 40px */
   border-radius: 6px !important; /* 6px radius */
   transition: all 0.15s ease-in-out !important;
+}
+
+/* Ensure bright orange overrides any potential conflicting styles */
+button.btn-need {
+  background-color: #F97415 !important;
+  background: #F97415 !important;
 }
 
 .btn-need:hover:not(:disabled) {
