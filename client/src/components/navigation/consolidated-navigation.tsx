@@ -147,13 +147,13 @@ export function ConsolidatedNavigation({
                   </button>
                 </div>
                 
-                {/* Back to all plans button */}
-                <Link href="/financial-plans">
+                {/* Back to summary button */}
+                <Link href={`/financial-plans/${planId}`}>
                   <Button
                     variant="ghost"
                     className="btn-ghost px-2 text-sm h-10"
                   >
-                    Back to all plans
+                    Back to summary
                   </Button>
                 </Link>
               </div>
