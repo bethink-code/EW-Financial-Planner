@@ -13,6 +13,7 @@ import NotFound from "@/pages/not-found";
 
 // Financial planning pages
 import FinancialPlansPage from "@/pages/financial-plans";
+import FinancialPlanSummaryPage from "@/pages/financial-plan-summary";
 
 // Existing calculator pages
 import NewRetirementFunds from "@/pages/new-retirement-funds";
@@ -71,6 +72,7 @@ function Router() {
 
         {/* Financial planning routes */}
         <Route path="/financial-plans" component={FinancialPlansPage} />
+        <Route path="/financial-plans/:id" component={FinancialPlanSummaryPage} />
           
           {/* Existing calculator routes with navigation */}
           <Route path="/assurance">
