@@ -183,16 +183,14 @@ export default function FinancialPlansPage() {
                                   </Button>
                                 </Link>
                                 <Button 
-                                  variant="outline" 
+                                  className="h-9 w-9 p-0 bg-white hover:bg-gray-50 text-gray-600 border border-gray-200"
                                   size="sm"
-                                  className="h-9 w-9 p-0"
                                 >
                                   <Copy className="h-4 w-4" />
                                 </Button>
                                 <Button 
-                                  variant="outline" 
+                                  className="h-9 w-9 p-0 bg-white hover:bg-gray-50 text-gray-600 border border-gray-200"
                                   size="sm"
-                                  className="h-9 w-9 p-0"
                                   onClick={() => handleDeletePlan(plan.id, plan.name)}
                                   disabled={deletePlanMutation.isPending}
                                 >
