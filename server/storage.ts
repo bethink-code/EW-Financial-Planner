@@ -247,6 +247,7 @@ export interface IStorage {
   getPlanNeeds(planId: number): Promise<PlanNeed[]>;
   addNeedToPlan(planNeed: InsertPlanNeed): Promise<PlanNeed>;
   removeNeedFromPlan(planId: number, needId: number): Promise<boolean>;
+  removeAllNeedsFromPlan(planId: number): Promise<boolean>;
   updatePlanNeed(
     id: number,
     updates: UpdatePlanNeed,
@@ -1341,6 +1342,17 @@ export class MemStorage implements IStorage {
     return false;
   }
 
+  async removeAllNeedsFromPlan(planId: number): Promise<boolean> {
+    const planNeedsToRemove = Array.from(this.planNeeds.values())
+      .filter(pn => pn.planId === planId);
+    
+    if (planNeedsToRemove.length > 0) {
+      planNeedsToRemove.forEach(pn => this.planNeeds.delete(pn.id));
+      return true;
+    }
+    return false;
+  }
+
   async updatePlanNeed(
     id: number,
     updates: UpdatePlanNeed,
@@ -2364,6 +2376,13 @@ export class DbStorage {
       .where(
         and(eq(planNeeds.planId, planId), eq(planNeeds.needId, needId))
       );
+    return (result.rowCount || 0) > 0;
+  }
+
+  async removeAllNeedsFromPlan(planId: number): Promise<boolean> {
+    const result = await this.db
+      .delete(planNeeds)
+      .where(eq(planNeeds.planId, planId));
     return (result.rowCount || 0) > 0;
   }
 

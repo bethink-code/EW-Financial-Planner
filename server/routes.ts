@@ -1532,6 +1532,53 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Update all needs for a plan
+  app.put("/api/financial-plans/:planId/needs", async (req, res) => {
+    try {
+      const planId = parseInt(req.params.planId);
+      if (isNaN(planId)) {
+        return res.status(400).json({ message: "Invalid plan ID" });
+      }
+
+      const { needKeys } = req.body;
+      if (!Array.isArray(needKeys)) {
+        return res.status(400).json({ message: "needKeys must be an array" });
+      }
+
+      // Get all needs to validate the keys
+      const allNeeds = await storage.getNeeds();
+      const validNeedKeys = allNeeds.map(need => need.key);
+      
+      // Validate that all provided keys exist
+      const invalidKeys = needKeys.filter(key => !validNeedKeys.includes(key));
+      if (invalidKeys.length > 0) {
+        return res.status(400).json({ message: `Invalid need keys: ${invalidKeys.join(', ')}` });
+      }
+
+      // Get the need IDs for the keys
+      const needsToAdd = allNeeds.filter(need => needKeys.includes(need.key));
+      
+      // Remove all existing needs for this plan
+      await storage.removeAllNeedsFromPlan(planId);
+      
+      // Add the new needs
+      for (let i = 0; i < needsToAdd.length; i++) {
+        const need = needsToAdd[i];
+        const planNeedData = insertPlanNeedSchema.parse({
+          planId,
+          needId: need.id,
+          sortOrder: i,
+        });
+        await storage.addNeedToPlan(planNeedData);
+      }
+
+      res.json({ message: "Plan needs updated successfully" });
+    } catch (error) {
+      console.error("Error updating plan needs:", error);
+      res.status(500).json({ message: "Failed to update plan needs" });
+    }
+  });
+
   // Initialize default needs on startup
   await storage.initializeDefaultNeeds();
 

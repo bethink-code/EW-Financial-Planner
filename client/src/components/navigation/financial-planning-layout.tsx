@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useLocation, Link } from "wouter";
 import { ChevronDown, Edit2, Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -9,6 +9,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { FinancialNeedsDialog } from "./financial-needs-dialog";
 import headerImage from "@assets/EW Header_1753945516780.png";
 
 interface FinancialPlanningLayoutProps {
@@ -27,6 +28,7 @@ export function FinancialPlanningLayout({
   needs = []
 }: FinancialPlanningLayoutProps) {
   const [location] = useLocation();
+  const [isNeedsDialogOpen, setIsNeedsDialogOpen] = useState(false);
 
   const handleBack = () => {
     window.history.back();
@@ -118,7 +120,10 @@ export function FinancialPlanningLayout({
                       </DropdownMenuItem>
                     ))}
                     <DropdownMenuSeparator />
-                    <DropdownMenuItem className="dropdown-menu-item">
+                    <DropdownMenuItem 
+                      className="dropdown-menu-item"
+                      onClick={() => setIsNeedsDialogOpen(true)}
+                    >
                       <span className="text-gray-700">Add more needs to this plan</span>
                     </DropdownMenuItem>
                   </DropdownMenuContent>
@@ -133,6 +138,16 @@ export function FinancialPlanningLayout({
       <div style={{ paddingBottom: '80px' }}>
         {children}
       </div>
+      
+      {/* Financial Needs Dialog */}
+      {variant === "summary" && planId && (
+        <FinancialNeedsDialog
+          isOpen={isNeedsDialogOpen}
+          onClose={() => setIsNeedsDialogOpen(false)}
+          planId={planId}
+          currentNeeds={needs}
+        />
+      )}
     </>
   );
 }
