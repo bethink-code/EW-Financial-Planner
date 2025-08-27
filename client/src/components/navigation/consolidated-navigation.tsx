@@ -130,7 +130,7 @@ export function ConsolidatedNavigation({
               <div className="flex items-center gap-2">
                 <div className="flex items-center bg-[#F5F1E8] rounded-[6px] overflow-hidden">
                   {/* Plan name - clickable to go to summary */}
-                  <Link href={`/financial-plan-summary/${planId}`}>
+                  <Link href={`/financial-plans/${planId}`}>
                     <div className="pl-4 pr-1 text-sm font-medium transition-colors h-10 flex items-center text-gray-700 hover:bg-[#F0EBE0] cursor-pointer">
                       <span title={planName} className="flex-1">
                         {planName}
