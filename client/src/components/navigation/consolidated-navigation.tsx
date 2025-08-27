@@ -141,7 +141,7 @@ export function ConsolidatedNavigation({
                   {/* Edit pencil icon - clickable to open needs dialog */}
                   <button 
                     onClick={() => setIsNeedsDialogOpen(true)}
-                    className="flex items-center justify-center h-8 w-8 rounded text-sm font-semibold bg-white text-[#F97415] ml-1 mr-1 my-1 hover:bg-gray-50 transition-colors"
+                    className="flex items-center justify-center h-8 w-8 rounded text-sm font-semibold bg-white bg-opacity-25 text-white ml-1 mr-1 my-1 hover:bg-opacity-30 transition-colors"
                   >
                     <Edit2 className="h-3.5 w-3.5" />
                   </button>
