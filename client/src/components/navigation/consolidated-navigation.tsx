@@ -128,10 +128,10 @@ export function ConsolidatedNavigation({
               
               {/* Financial Plan name with edit button and back button on same row */}
               <div className="flex items-center gap-2">
-                <div className="flex items-center bg-[#F97415] rounded-[6px] overflow-hidden">
+                <div className="flex items-center bg-[#F5F1E8] rounded-[6px] overflow-hidden">
                   {/* Plan name - clickable to go to summary */}
                   <Link href={`/financial-plans/${planId}`}>
-                    <div className="pl-4 pr-1 text-sm font-medium transition-colors h-10 flex items-center text-white hover:opacity-90 cursor-pointer">
+                    <div className="pl-4 pr-1 text-sm font-medium transition-colors h-10 flex items-center text-gray-700 hover:bg-[#F0EBE0] cursor-pointer">
                       <span title={planName} className="flex-1">
                         {planName}
                       </span>
@@ -141,7 +141,7 @@ export function ConsolidatedNavigation({
                   {/* Edit pencil icon - clickable to open needs dialog */}
                   <button 
                     onClick={() => setIsNeedsDialogOpen(true)}
-                    className="flex items-center justify-center h-7 w-7 rounded bg-white text-[#F97415] ml-2 mr-2 hover:bg-gray-50 transition-colors"
+                    className="flex items-center justify-center h-7 w-7 rounded bg-[#F97415] text-white ml-2 mr-2 hover:opacity-90 transition-colors"
                   >
                     <Edit2 className="h-3.5 w-3.5" />
                   </button>
