@@ -161,7 +161,7 @@ export default function FinancialPlansPage() {
                             <TableCell>
                               <div className="flex flex-wrap gap-1">
                                 {getNeedsForPlan(plan.id).slice(0, 3).map((need, index) => (
-                                  <Badge key={index} variant="secondary" className="text-xs">
+                                  <Badge key={index} variant="muted" className="text-xs">
                                     {need.displayName.toUpperCase()}
                                   </Badge>
                                 ))}
