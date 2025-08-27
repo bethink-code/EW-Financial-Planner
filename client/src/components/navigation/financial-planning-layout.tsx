@@ -107,8 +107,7 @@ export function FinancialPlanningLayout({
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
                     <Button 
-                      variant="outline"
-                      className="px-4 flex items-center gap-2 text-sm rounded-md h-10"
+                      className="bg-[#F97415] hover:bg-[#F97415] hover:opacity-90 text-white border-[#F97415] px-4 flex items-center gap-2 text-sm rounded-md h-10"
                     >
                       Manage financial needs
                       <ChevronDown className="h-3.5 w-3.5" />
