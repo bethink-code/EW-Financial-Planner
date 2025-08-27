@@ -11,6 +11,9 @@ import {
   liabilities,
   clientDetails,
   estatePositionParameters,
+  financialPlans,
+  needs,
+  planNeeds,
   type RetirementFund,
   type InsertRetirementFund,
   type UpdateRetirementFund,
@@ -46,12 +49,21 @@ import {
   type EstatePositionParameters,
   type InsertEstatePositionParameters,
   type UpdateEstatePositionParameters,
+  type FinancialPlan,
+  type InsertFinancialPlan,
+  type UpdateFinancialPlan,
+  type Need,
+  type InsertNeed,
+  type UpdateNeed,
+  type PlanNeed,
+  type InsertPlanNeed,
+  type UpdatePlanNeed,
 } from "@shared/schema";
 import { assets, type Assets, type InsertAssets } from "@shared/assets-schema";
 import { Pool, neonConfig } from '@neondatabase/serverless';
 import { drizzle } from 'drizzle-orm/neon-serverless';
 import ws from "ws";
-import { eq, ilike, or, asc } from "drizzle-orm";
+import { eq, ilike, or, asc, and } from "drizzle-orm";
 
 export interface IStorage {
   // Retirement Funds
@@ -208,6 +220,40 @@ export interface IStorage {
   ): Promise<EstatePositionParameters | undefined>;
   deleteEstatePositionParameter(id: number): Promise<boolean>;
   getOrCreateEstatePositionParameter(): Promise<EstatePositionParameters>;
+
+  // Financial Plans
+  getFinancialPlans(): Promise<FinancialPlan[]>;
+  getFinancialPlan(id: number): Promise<FinancialPlan | undefined>;
+  createFinancialPlan(plan: InsertFinancialPlan): Promise<FinancialPlan>;
+  updateFinancialPlan(
+    id: number,
+    updates: UpdateFinancialPlan,
+  ): Promise<FinancialPlan | undefined>;
+  deleteFinancialPlan(id: number): Promise<boolean>;
+  searchFinancialPlans(query: string): Promise<FinancialPlan[]>;
+
+  // Needs
+  getNeeds(): Promise<Need[]>;
+  getNeed(id: number): Promise<Need | undefined>;
+  createNeed(need: InsertNeed): Promise<Need>;
+  updateNeed(
+    id: number,
+    updates: UpdateNeed,
+  ): Promise<Need | undefined>;
+  deleteNeed(id: number): Promise<boolean>;
+  initializeDefaultNeeds(): Promise<void>;
+
+  // Plan Needs
+  getPlanNeeds(planId: number): Promise<PlanNeed[]>;
+  addNeedToPlan(planNeed: InsertPlanNeed): Promise<PlanNeed>;
+  removeNeedFromPlan(planId: number, needId: number): Promise<boolean>;
+  updatePlanNeed(
+    id: number,
+    updates: UpdatePlanNeed,
+  ): Promise<PlanNeed | undefined>;
+
+  // Plan with Needs
+  getFinancialPlanWithNeeds(planId: number): Promise<{ plan: FinancialPlan; needs: Need[] } | undefined>;
 }
 
 export class MemStorage implements IStorage {
@@ -224,6 +270,9 @@ export class MemStorage implements IStorage {
   private assets: Map<number, Assets>;
   private clientDetails: Map<number, ClientDetails>;
   private estatePositionParameters: Map<number, EstatePositionParameters>;
+  private financialPlans: Map<number, FinancialPlan>;
+  private needs: Map<number, Need>;
+  private planNeeds: Map<number, PlanNeed>;
 
   private currentFundId: number;
   private currentBequestId: number;
@@ -238,6 +287,9 @@ export class MemStorage implements IStorage {
   private currentAssetId: number;
   private currentClientDetailId: number;
   private currentEstatePositionParameterId: number;
+  private currentFinancialPlanId: number;
+  private currentNeedId: number;
+  private currentPlanNeedId: number;
 
   constructor() {
     this.retirementFunds = new Map();
@@ -253,6 +305,9 @@ export class MemStorage implements IStorage {
     this.assets = new Map();
     this.clientDetails = new Map();
     this.estatePositionParameters = new Map();
+    this.financialPlans = new Map();
+    this.needs = new Map();
+    this.planNeeds = new Map();
 
     this.currentFundId = 1;
     this.currentBequestId = 1;
@@ -267,6 +322,12 @@ export class MemStorage implements IStorage {
     this.currentAssetId = 1;
     this.currentClientDetailId = 1;
     this.currentEstatePositionParameterId = 1;
+    this.currentFinancialPlanId = 1;
+    this.currentNeedId = 1;
+    this.currentPlanNeedId = 1;
+
+    // Initialize default needs
+    this.initializeDefaultNeeds();
   }
 
   // Retirement Funds methods
@@ -1042,6 +1103,272 @@ export class MemStorage implements IStorage {
 
     return this.createEstatePositionParameter(defaultParameter);
   }
+
+  // Financial Plans methods
+  async getFinancialPlans(): Promise<FinancialPlan[]> {
+    return Array.from(this.financialPlans.values()).sort((a, b) => a.id - b.id);
+  }
+
+  async getFinancialPlan(id: number): Promise<FinancialPlan | undefined> {
+    return this.financialPlans.get(id);
+  }
+
+  async createFinancialPlan(plan: InsertFinancialPlan): Promise<FinancialPlan> {
+    const newPlan: FinancialPlan = {
+      id: this.currentFinancialPlanId++,
+      name: plan.name,
+      description: plan.description || null,
+      dateApplicable: plan.dateApplicable || new Date().toISOString().split('T')[0],
+      createdAt: plan.createdAt || new Date().toISOString(),
+      updatedAt: plan.updatedAt || new Date().toISOString(),
+    };
+    this.financialPlans.set(newPlan.id, newPlan);
+    return newPlan;
+  }
+
+  async updateFinancialPlan(
+    id: number,
+    updates: UpdateFinancialPlan,
+  ): Promise<FinancialPlan | undefined> {
+    const existing = this.financialPlans.get(id);
+    if (!existing) return undefined;
+
+    const updated: FinancialPlan = { 
+      ...existing, 
+      ...updates,
+      updatedAt: new Date().toISOString()
+    };
+    this.financialPlans.set(id, updated);
+    return updated;
+  }
+
+  async deleteFinancialPlan(id: number): Promise<boolean> {
+    // Also delete related plan needs
+    const planNeedsToDelete = Array.from(this.planNeeds.values())
+      .filter(pn => pn.planId === id);
+    planNeedsToDelete.forEach(pn => this.planNeeds.delete(pn.id));
+    
+    return this.financialPlans.delete(id);
+  }
+
+  async searchFinancialPlans(query: string): Promise<FinancialPlan[]> {
+    const allPlans = Array.from(this.financialPlans.values());
+    if (!query.trim()) return allPlans;
+
+    const lowerQuery = query.toLowerCase();
+    return allPlans.filter(plan =>
+      plan.name.toLowerCase().includes(lowerQuery) ||
+      (plan.description && plan.description.toLowerCase().includes(lowerQuery))
+    );
+  }
+
+  // Needs methods
+  async getNeeds(): Promise<Need[]> {
+    return Array.from(this.needs.values()).sort((a, b) => a.id - b.id);
+  }
+
+  async getNeed(id: number): Promise<Need | undefined> {
+    return this.needs.get(id);
+  }
+
+  async createNeed(need: InsertNeed): Promise<Need> {
+    const newNeed: Need = {
+      id: this.currentNeedId++,
+      key: need.key,
+      displayName: need.displayName,
+      category: need.category,
+      hasDetailedSteps: need.hasDetailedSteps || false,
+      summaryData: need.summaryData || null,
+      createdAt: need.createdAt || new Date().toISOString(),
+    };
+    this.needs.set(newNeed.id, newNeed);
+    return newNeed;
+  }
+
+  async updateNeed(
+    id: number,
+    updates: UpdateNeed,
+  ): Promise<Need | undefined> {
+    const existing = this.needs.get(id);
+    if (!existing) return undefined;
+
+    const updated: Need = { ...existing, ...updates };
+    this.needs.set(id, updated);
+    return updated;
+  }
+
+  async deleteNeed(id: number): Promise<boolean> {
+    return this.needs.delete(id);
+  }
+
+  async initializeDefaultNeeds(): Promise<void> {
+    const defaultNeeds = [
+      {
+        key: "death",
+        displayName: "Death",
+        category: "protection",
+        hasDetailedSteps: false,
+        summaryData: null,
+      },
+      {
+        key: "death-estate-liquidity",
+        displayName: "Death with estate liquidity",
+        category: "protection",
+        hasDetailedSteps: true,
+        summaryData: JSON.stringify({
+          estatePosition: { provided: "R5,740,881", required: "R2,918,036", surplus: "R2,822,845" },
+          dependantsPosition: { provided: "R7,822,845", required: "R9,675,356" }
+        }),
+      },
+      {
+        key: "permanent-disability",
+        displayName: "Permanent disability",
+        category: "protection",
+        hasDetailedSteps: false,
+        summaryData: JSON.stringify({
+          lumpSumCover: { surplus: "R831,661" },
+          incomeCover: { shortfall: "R5,135,026" }
+        }),
+      },
+      {
+        key: "temporary-disability",
+        displayName: "Temporary disability",
+        category: "protection",
+        hasDetailedSteps: false,
+        summaryData: null,
+      },
+      {
+        key: "dread-disease",
+        displayName: "Dread disease",
+        category: "protection",
+        hasDetailedSteps: false,
+        summaryData: null,
+      },
+      {
+        key: "retirement",
+        displayName: "Retirement",
+        category: "planning",
+        hasDetailedSteps: false,
+        summaryData: JSON.stringify({
+          retirementFunds: { shortfall: "R8,994,312", required: "R27,965,380" }
+        }),
+      },
+      {
+        key: "investment-planning",
+        displayName: "Investment planning",
+        category: "investment",
+        hasDetailedSteps: false,
+        summaryData: JSON.stringify({
+          totalNominal: "R6,450,000",
+          compulsoryNominal: "R4,450,000",
+          voluntaryNominal: "R2,000,000"
+        }),
+      },
+      {
+        key: "lump-sum-recurring",
+        displayName: "Lump sum and recurring investment",
+        category: "investment",
+        hasDetailedSteps: false,
+        summaryData: null,
+      },
+      {
+        key: "portfolio-comparison",
+        displayName: "Portfolio comparison tool",
+        category: "planning",
+        hasDetailedSteps: false,
+        summaryData: null,
+      },
+      {
+        key: "contribution-income-analysis",
+        displayName: "Contribution and income analysis",
+        category: "planning",
+        hasDetailedSteps: false,
+        summaryData: null,
+      },
+      {
+        key: "saving-future-need",
+        displayName: "Saving for a future need",
+        category: "planning",
+        hasDetailedSteps: false,
+        summaryData: null,
+      },
+      {
+        key: "income-from-capital",
+        displayName: "Income from capital",
+        category: "planning",
+        hasDetailedSteps: false,
+        summaryData: null,
+      },
+      {
+        key: "debt-repayment",
+        displayName: "Debt repayment",
+        category: "planning",
+        hasDetailedSteps: false,
+        summaryData: null,
+      },
+    ];
+
+    for (const needData of defaultNeeds) {
+      await this.createNeed(needData);
+    }
+  }
+
+  // Plan Needs methods
+  async getPlanNeeds(planId: number): Promise<PlanNeed[]> {
+    return Array.from(this.planNeeds.values()).filter(pn => pn.planId === planId);
+  }
+
+  async addNeedToPlan(planNeed: InsertPlanNeed): Promise<PlanNeed> {
+    const newPlanNeed: PlanNeed = {
+      id: this.currentPlanNeedId++,
+      planId: planNeed.planId,
+      needId: planNeed.needId,
+      isActive: planNeed.isActive !== undefined ? planNeed.isActive : true,
+      sortOrder: planNeed.sortOrder || 0,
+      createdAt: planNeed.createdAt || new Date().toISOString(),
+    };
+    this.planNeeds.set(newPlanNeed.id, newPlanNeed);
+    return newPlanNeed;
+  }
+
+  async removeNeedFromPlan(planId: number, needId: number): Promise<boolean> {
+    const planNeed = Array.from(this.planNeeds.values())
+      .find(pn => pn.planId === planId && pn.needId === needId);
+    
+    if (planNeed) {
+      return this.planNeeds.delete(planNeed.id);
+    }
+    return false;
+  }
+
+  async updatePlanNeed(
+    id: number,
+    updates: UpdatePlanNeed,
+  ): Promise<PlanNeed | undefined> {
+    const existing = this.planNeeds.get(id);
+    if (!existing) return undefined;
+
+    const updated: PlanNeed = { ...existing, ...updates };
+    this.planNeeds.set(id, updated);
+    return updated;
+  }
+
+  async getFinancialPlanWithNeeds(planId: number): Promise<{ plan: FinancialPlan; needs: Need[] } | undefined> {
+    const plan = await this.getFinancialPlan(planId);
+    if (!plan) return undefined;
+
+    const planNeeds = await this.getPlanNeeds(planId);
+    const needs = [];
+    
+    for (const planNeed of planNeeds) {
+      const need = await this.getNeed(planNeed.needId);
+      if (need) {
+        needs.push(need);
+      }
+    }
+
+    return { plan, needs };
+  }
 }
 
 // Database storage class
@@ -1797,6 +2124,276 @@ export class DbStorage {
       estatePositionAfterAllocation: "R 0", // Will be calculated
       lastUpdated: new Date().toISOString(),
     };
+  }
+
+  // Financial Plans methods
+  async getFinancialPlans(): Promise<FinancialPlan[]> {
+    return await this.db.select().from(financialPlans).orderBy(asc(financialPlans.id));
+  }
+
+  async getFinancialPlan(id: number): Promise<FinancialPlan | undefined> {
+    const result = await this.db
+      .select()
+      .from(financialPlans)
+      .where(eq(financialPlans.id, id));
+    return result[0];
+  }
+
+  async createFinancialPlan(plan: InsertFinancialPlan): Promise<FinancialPlan> {
+    const result = await this.db
+      .insert(financialPlans)
+      .values(plan)
+      .returning();
+    return result[0];
+  }
+
+  async updateFinancialPlan(
+    id: number,
+    updates: UpdateFinancialPlan,
+  ): Promise<FinancialPlan | undefined> {
+    const result = await this.db
+      .update(financialPlans)
+      .set({
+        ...updates,
+        updatedAt: new Date().toISOString()
+      })
+      .where(eq(financialPlans.id, id))
+      .returning();
+    return result[0];
+  }
+
+  async deleteFinancialPlan(id: number): Promise<boolean> {
+    // Delete related plan needs first
+    await this.db.delete(planNeeds).where(eq(planNeeds.planId, id));
+    
+    const result = await this.db
+      .delete(financialPlans)
+      .where(eq(financialPlans.id, id));
+    return (result.rowCount || 0) > 0;
+  }
+
+  async searchFinancialPlans(query: string): Promise<FinancialPlan[]> {
+    return await this.db
+      .select()
+      .from(financialPlans)
+      .where(
+        or(
+          ilike(financialPlans.name, `%${query}%`),
+          ilike(financialPlans.description, `%${query}%`)
+        )
+      )
+      .orderBy(asc(financialPlans.id));
+  }
+
+  // Needs methods
+  async getNeeds(): Promise<Need[]> {
+    return await this.db.select().from(needs).orderBy(asc(needs.id));
+  }
+
+  async getNeed(id: number): Promise<Need | undefined> {
+    const result = await this.db
+      .select()
+      .from(needs)
+      .where(eq(needs.id, id));
+    return result[0];
+  }
+
+  async createNeed(need: InsertNeed): Promise<Need> {
+    const result = await this.db
+      .insert(needs)
+      .values(need)
+      .returning();
+    return result[0];
+  }
+
+  async updateNeed(
+    id: number,
+    updates: UpdateNeed,
+  ): Promise<Need | undefined> {
+    const result = await this.db
+      .update(needs)
+      .set(updates)
+      .where(eq(needs.id, id))
+      .returning();
+    return result[0];
+  }
+
+  async deleteNeed(id: number): Promise<boolean> {
+    const result = await this.db.delete(needs).where(eq(needs.id, id));
+    return (result.rowCount || 0) > 0;
+  }
+
+  async initializeDefaultNeeds(): Promise<void> {
+    // Check if needs already exist
+    const existingNeeds = await this.getNeeds();
+    if (existingNeeds.length > 0) {
+      return; // Already initialized
+    }
+
+    const defaultNeeds = [
+      {
+        key: "death",
+        displayName: "Death",
+        category: "protection",
+        hasDetailedSteps: false,
+        summaryData: null,
+      },
+      {
+        key: "death-estate-liquidity",
+        displayName: "Death with estate liquidity",
+        category: "protection",
+        hasDetailedSteps: true,
+        summaryData: JSON.stringify({
+          estatePosition: { provided: "R5,740,881", required: "R2,918,036", surplus: "R2,822,845" },
+          dependantsPosition: { provided: "R7,822,845", required: "R9,675,356" }
+        }),
+      },
+      {
+        key: "permanent-disability",
+        displayName: "Permanent disability",
+        category: "protection",
+        hasDetailedSteps: false,
+        summaryData: JSON.stringify({
+          lumpSumCover: { surplus: "R831,661" },
+          incomeCover: { shortfall: "R5,135,026" }
+        }),
+      },
+      {
+        key: "temporary-disability",
+        displayName: "Temporary disability",
+        category: "protection",
+        hasDetailedSteps: false,
+        summaryData: null,
+      },
+      {
+        key: "dread-disease",
+        displayName: "Dread disease",
+        category: "protection",
+        hasDetailedSteps: false,
+        summaryData: null,
+      },
+      {
+        key: "retirement",
+        displayName: "Retirement",
+        category: "planning",
+        hasDetailedSteps: false,
+        summaryData: JSON.stringify({
+          retirementFunds: { shortfall: "R8,994,312", required: "R27,965,380" }
+        }),
+      },
+      {
+        key: "investment-planning",
+        displayName: "Investment planning",
+        category: "investment",
+        hasDetailedSteps: false,
+        summaryData: JSON.stringify({
+          totalNominal: "R6,450,000",
+          compulsoryNominal: "R4,450,000",
+          voluntaryNominal: "R2,000,000"
+        }),
+      },
+      {
+        key: "lump-sum-recurring",
+        displayName: "Lump sum and recurring investment",
+        category: "investment",
+        hasDetailedSteps: false,
+        summaryData: null,
+      },
+      {
+        key: "portfolio-comparison",
+        displayName: "Portfolio comparison tool",
+        category: "planning",
+        hasDetailedSteps: false,
+        summaryData: null,
+      },
+      {
+        key: "contribution-income-analysis",
+        displayName: "Contribution and income analysis",
+        category: "planning",
+        hasDetailedSteps: false,
+        summaryData: null,
+      },
+      {
+        key: "saving-future-need",
+        displayName: "Saving for a future need",
+        category: "planning",
+        hasDetailedSteps: false,
+        summaryData: null,
+      },
+      {
+        key: "income-from-capital",
+        displayName: "Income from capital",
+        category: "planning",
+        hasDetailedSteps: false,
+        summaryData: null,
+      },
+      {
+        key: "debt-repayment",
+        displayName: "Debt repayment",
+        category: "planning",
+        hasDetailedSteps: false,
+        summaryData: null,
+      },
+    ];
+
+    for (const needData of defaultNeeds) {
+      await this.createNeed(needData);
+    }
+  }
+
+  // Plan Needs methods
+  async getPlanNeeds(planId: number): Promise<PlanNeed[]> {
+    return await this.db
+      .select()
+      .from(planNeeds)
+      .where(eq(planNeeds.planId, planId))
+      .orderBy(asc(planNeeds.sortOrder));
+  }
+
+  async addNeedToPlan(planNeed: InsertPlanNeed): Promise<PlanNeed> {
+    const result = await this.db
+      .insert(planNeeds)
+      .values(planNeed)
+      .returning();
+    return result[0];
+  }
+
+  async removeNeedFromPlan(planId: number, needId: number): Promise<boolean> {
+    const result = await this.db
+      .delete(planNeeds)
+      .where(
+        and(eq(planNeeds.planId, planId), eq(planNeeds.needId, needId))
+      );
+    return (result.rowCount || 0) > 0;
+  }
+
+  async updatePlanNeed(
+    id: number,
+    updates: UpdatePlanNeed,
+  ): Promise<PlanNeed | undefined> {
+    const result = await this.db
+      .update(planNeeds)
+      .set(updates)
+      .where(eq(planNeeds.id, id))
+      .returning();
+    return result[0];
+  }
+
+  async getFinancialPlanWithNeeds(planId: number): Promise<{ plan: FinancialPlan; needs: Need[] } | undefined> {
+    const plan = await this.getFinancialPlan(planId);
+    if (!plan) return undefined;
+
+    const planNeedsResults = await this.getPlanNeeds(planId);
+    const needs = [];
+    
+    for (const planNeed of planNeedsResults) {
+      const need = await this.getNeed(planNeed.needId);
+      if (need) {
+        needs.push(need);
+      }
+    }
+
+    return { plan, needs };
   }
 }
 

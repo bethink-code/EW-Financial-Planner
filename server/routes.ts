@@ -26,6 +26,12 @@ import {
   updateClientDetailsSchema,
   insertEstatePositionParametersSchema,
   updateEstatePositionParametersSchema,
+  insertFinancialPlanSchema,
+  updateFinancialPlanSchema,
+  insertNeedSchema,
+  updateNeedSchema,
+  insertPlanNeedSchema,
+  updatePlanNeedSchema,
 } from "@shared/schema";
 import { insertAssetsSchema } from "@shared/assets-schema";
 import { entityIdsToNames, entityNamesToIds } from "./entity-resolver";
@@ -1342,6 +1348,192 @@ export async function registerRoutes(app: Express): Promise<Server> {
       res.status(400).json({ message: "Invalid parameter data" });
     }
   });
+
+  // Financial Plans API routes
+  app.get("/api/financial-plans", async (req, res) => {
+    try {
+      const { search } = req.query;
+      let plans;
+
+      if (search && typeof search === "string") {
+        plans = await storage.searchFinancialPlans(search);
+      } else {
+        plans = await storage.getFinancialPlans();
+      }
+
+      res.json(plans);
+    } catch (error) {
+      console.error("Error fetching financial plans:", error);
+      res.status(500).json({ message: "Failed to fetch financial plans" });
+    }
+  });
+
+  app.get("/api/financial-plans/:id", async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      if (isNaN(id)) {
+        return res.status(400).json({ message: "Invalid plan ID" });
+      }
+
+      const plan = await storage.getFinancialPlan(id);
+      if (!plan) {
+        return res.status(404).json({ message: "Financial plan not found" });
+      }
+
+      res.json(plan);
+    } catch (error) {
+      console.error("Error fetching financial plan:", error);
+      res.status(500).json({ message: "Failed to fetch financial plan" });
+    }
+  });
+
+  app.get("/api/financial-plans/:id/with-needs", async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      if (isNaN(id)) {
+        return res.status(400).json({ message: "Invalid plan ID" });
+      }
+
+      const planWithNeeds = await storage.getFinancialPlanWithNeeds(id);
+      if (!planWithNeeds) {
+        return res.status(404).json({ message: "Financial plan not found" });
+      }
+
+      res.json(planWithNeeds);
+    } catch (error) {
+      console.error("Error fetching financial plan with needs:", error);
+      res.status(500).json({ message: "Failed to fetch financial plan with needs" });
+    }
+  });
+
+  app.post("/api/financial-plans", async (req, res) => {
+    try {
+      const validatedData = insertFinancialPlanSchema.parse(req.body);
+      const plan = await storage.createFinancialPlan(validatedData);
+      res.status(201).json(plan);
+    } catch (error) {
+      console.error("Error creating financial plan:", error);
+      res.status(400).json({ message: "Invalid financial plan data" });
+    }
+  });
+
+  app.patch("/api/financial-plans/:id", async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      if (isNaN(id)) {
+        return res.status(400).json({ message: "Invalid plan ID" });
+      }
+
+      const validatedData = updateFinancialPlanSchema.parse(req.body);
+      const plan = await storage.updateFinancialPlan(id, validatedData);
+
+      if (!plan) {
+        return res.status(404).json({ message: "Financial plan not found" });
+      }
+
+      res.json(plan);
+    } catch (error) {
+      console.error("Error updating financial plan:", error);
+      res.status(400).json({ message: "Invalid financial plan data" });
+    }
+  });
+
+  app.delete("/api/financial-plans/:id", async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      if (isNaN(id)) {
+        return res.status(400).json({ message: "Invalid plan ID" });
+      }
+
+      const deleted = await storage.deleteFinancialPlan(id);
+      if (!deleted) {
+        return res.status(404).json({ message: "Financial plan not found" });
+      }
+
+      res.status(204).send();
+    } catch (error) {
+      console.error("Error deleting financial plan:", error);
+      res.status(500).json({ message: "Failed to delete financial plan" });
+    }
+  });
+
+  // Needs API routes
+  app.get("/api/needs", async (req, res) => {
+    try {
+      const needs = await storage.getNeeds();
+      res.json(needs);
+    } catch (error) {
+      console.error("Error fetching needs:", error);
+      res.status(500).json({ message: "Failed to fetch needs" });
+    }
+  });
+
+  app.get("/api/needs/:id", async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      if (isNaN(id)) {
+        return res.status(400).json({ message: "Invalid need ID" });
+      }
+
+      const need = await storage.getNeed(id);
+      if (!need) {
+        return res.status(404).json({ message: "Need not found" });
+      }
+
+      res.json(need);
+    } catch (error) {
+      console.error("Error fetching need:", error);
+      res.status(500).json({ message: "Failed to fetch need" });
+    }
+  });
+
+  // Plan Needs API routes
+  app.post("/api/financial-plans/:planId/needs", async (req, res) => {
+    try {
+      const planId = parseInt(req.params.planId);
+      if (isNaN(planId)) {
+        return res.status(400).json({ message: "Invalid plan ID" });
+      }
+
+      const { needId, sortOrder } = req.body;
+      
+      const planNeedData = insertPlanNeedSchema.parse({
+        planId,
+        needId,
+        sortOrder: sortOrder || 0,
+      });
+
+      const planNeed = await storage.addNeedToPlan(planNeedData);
+      res.status(201).json(planNeed);
+    } catch (error) {
+      console.error("Error adding need to plan:", error);
+      res.status(400).json({ message: "Invalid plan need data" });
+    }
+  });
+
+  app.delete("/api/financial-plans/:planId/needs/:needId", async (req, res) => {
+    try {
+      const planId = parseInt(req.params.planId);
+      const needId = parseInt(req.params.needId);
+      
+      if (isNaN(planId) || isNaN(needId)) {
+        return res.status(400).json({ message: "Invalid plan ID or need ID" });
+      }
+
+      const deleted = await storage.removeNeedFromPlan(planId, needId);
+      if (!deleted) {
+        return res.status(404).json({ message: "Plan need relationship not found" });
+      }
+
+      res.status(204).send();
+    } catch (error) {
+      console.error("Error removing need from plan:", error);
+      res.status(500).json({ message: "Failed to remove need from plan" });
+    }
+  });
+
+  // Initialize default needs on startup
+  await storage.initializeDefaultNeeds();
 
   const httpServer = createServer(app);
   return httpServer;

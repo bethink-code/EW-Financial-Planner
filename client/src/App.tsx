@@ -11,6 +11,9 @@ import { NavigationLayout } from "@/components/navigation/navigation-layout";
 
 import NotFound from "@/pages/not-found";
 
+// Financial planning pages
+import FinancialPlansPage from "@/pages/financial-plans";
+
 // Existing calculator pages
 import NewRetirementFunds from "@/pages/new-retirement-funds";
 import LumpSumBequests from "@/pages/lump-sum-bequests";
@@ -65,6 +68,9 @@ function Router() {
           window.location.href = '/assurance';
           return null;
         }} />
+
+        {/* Financial planning routes */}
+        <Route path="/financial-plans" component={FinancialPlansPage} />
           
           {/* Existing calculator routes with navigation */}
           <Route path="/assurance">

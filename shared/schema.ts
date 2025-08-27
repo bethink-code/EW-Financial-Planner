@@ -428,4 +428,87 @@ export type EstatePositionParameters = typeof estatePositionParameters.$inferSel
 export type InsertEstatePositionParameters = z.infer<typeof insertEstatePositionParametersSchema>;
 export type UpdateEstatePositionParameters = z.infer<typeof updateEstatePositionParametersSchema>;
 
+// Financial Plans table
+export const financialPlans = pgTable("financial_plans", {
+  id: serial("id").primaryKey(),
+  
+  // Basic plan information
+  name: text("name").notNull(),
+  description: text("description"),
+  dateApplicable: text("date_applicable").notNull().default(new Date().toISOString().split('T')[0]),
+  
+  // Metadata
+  createdAt: text("created_at").notNull().default(new Date().toISOString()),
+  updatedAt: text("updated_at").notNull().default(new Date().toISOString()),
+});
+
+export const insertFinancialPlanSchema = createInsertSchema(financialPlans).omit({
+  id: true,
+});
+
+export const updateFinancialPlanSchema = createInsertSchema(financialPlans).omit({
+  id: true,
+}).partial();
+
+export type FinancialPlan = typeof financialPlans.$inferSelect;
+export type InsertFinancialPlan = z.infer<typeof insertFinancialPlanSchema>;
+export type UpdateFinancialPlan = z.infer<typeof updateFinancialPlanSchema>;
+
+// Needs table
+export const needs = pgTable("needs", {
+  id: serial("id").primaryKey(),
+  
+  // Need identification
+  key: text("key").notNull().unique(), // e.g., "death", "retirement", "permanent-disability"
+  displayName: text("display_name").notNull(), // e.g., "Death with estate liquidity"
+  category: text("category").notNull(), // e.g., "protection", "investment", "planning"
+  
+  // Need configuration
+  hasDetailedSteps: boolean("has_detailed_steps").notNull().default(false), // true only for "death-estate-liquidity"
+  summaryData: text("summary_data"), // JSON string containing summary card data
+  
+  // Metadata
+  createdAt: text("created_at").notNull().default(new Date().toISOString()),
+});
+
+export const insertNeedSchema = createInsertSchema(needs).omit({
+  id: true,
+});
+
+export const updateNeedSchema = createInsertSchema(needs).omit({
+  id: true,
+}).partial();
+
+export type Need = typeof needs.$inferSelect;
+export type InsertNeed = z.infer<typeof insertNeedSchema>;
+export type UpdateNeed = z.infer<typeof updateNeedSchema>;
+
+// Plan Needs junction table (many-to-many relationship)
+export const planNeeds = pgTable("plan_needs", {
+  id: serial("id").primaryKey(),
+  
+  // Foreign keys
+  planId: integer("plan_id").notNull(),
+  needId: integer("need_id").notNull(),
+  
+  // Configuration specific to this plan-need relationship
+  isActive: boolean("is_active").notNull().default(true),
+  sortOrder: integer("sort_order").notNull().default(0),
+  
+  // Metadata
+  createdAt: text("created_at").notNull().default(new Date().toISOString()),
+});
+
+export const insertPlanNeedSchema = createInsertSchema(planNeeds).omit({
+  id: true,
+});
+
+export const updatePlanNeedSchema = createInsertSchema(planNeeds).omit({
+  id: true,
+}).partial();
+
+export type PlanNeed = typeof planNeeds.$inferSelect;
+export type InsertPlanNeed = z.infer<typeof insertPlanNeedSchema>;
+export type UpdatePlanNeed = z.infer<typeof updatePlanNeedSchema>;
+
 export * from './assets-schema';
