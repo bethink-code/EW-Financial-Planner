@@ -116,9 +116,10 @@ export default function FinancialPlanSummaryPage() {
 
   const getActionButton = (need: Need) => {
     if (need.hasDetailedSteps) {
-      // For needs with detailed steps, go to the need page
+      // For needs with detailed steps, go directly to the Project step overview
+      const projectPath = need.key === 'death' ? '/needs/death-estate-liquidity/project' : `/needs/${need.key}/project`;
       return (
-        <Link href={`/needs/${need.key}`}>
+        <Link href={projectPath}>
           <Button size="sm" className="bg-blue-600 hover:bg-blue-700 text-white">
             <BarChart3 className="h-4 w-4 mr-1" />
             View Details
