@@ -304,10 +304,10 @@ export function ConsolidatedNavigation({
         isOpen={isNeedsDialogOpen}
         onClose={() => setIsNeedsDialogOpen(false)}
         planId={planId}
-        currentNeeds={planWithNeeds?.needs?.map(need => ({ 
+        currentNeeds={(planWithNeeds?.needs || []).map((need: any) => ({ 
           key: need.key, 
           displayName: need.displayName 
-        })) || []}
+        }))}
       />
     </div>
   );
