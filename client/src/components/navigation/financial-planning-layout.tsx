@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useLocation, Link } from "wouter";
-import { ChevronDown, Edit2, Plus } from "lucide-react";
+import { ChevronDown, Edit2, Plus, Copy, RotateCcw, FileText } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -62,7 +62,8 @@ export function FinancialPlanningLayout({
             </div>
           ) : (
             // Financial Plan Summary Navigation
-            <div className="flex items-start gap-6">
+            <div className="flex items-start justify-between">
+              <div className="flex items-start gap-6">
               {/* Financial Plan section */}
               <div>
                 <span className="text-xs text-gray-500 uppercase tracking-wider font-medium block mb-1">
@@ -135,6 +136,35 @@ export function FinancialPlanningLayout({
                     </DropdownMenuItem>
                   </DropdownMenuContent>
                 </DropdownMenu>
+              </div>
+              </div>
+              
+              {/* Right side buttons */}
+              <div className="flex items-center gap-2">
+                <Button 
+                  variant="outline"
+                  size="sm"
+                  className="flex items-center gap-2 text-sm"
+                >
+                  <Copy className="h-3.5 w-3.5" />
+                  Duplicate plan
+                </Button>
+                <Button 
+                  variant="outline"
+                  size="sm"
+                  className="flex items-center gap-2 text-sm"
+                >
+                  <RotateCcw className="h-3.5 w-3.5" />
+                  Refresh data
+                </Button>
+                <Button 
+                  variant="outline"
+                  size="sm"
+                  className="flex items-center gap-2 text-sm"
+                >
+                  <FileText className="h-3.5 w-3.5" />
+                  Product recommendations (ROA)
+                </Button>
               </div>
             </div>
           )}
