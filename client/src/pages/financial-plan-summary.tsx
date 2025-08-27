@@ -181,27 +181,6 @@ export default function FinancialPlanSummaryPage() {
       <div className="min-h-screen bg-gray-50">
         <div className="w-full px-6 py-6">
           <div className="w-[1320px]">
-            {/* Plan Summary Card */}
-            <div className="mb-6">
-              <Card>
-                <CardHeader>
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <CardTitle className="text-2xl font-semibold">{plan.name}</CardTitle>
-                      <p className="text-gray-600 mt-2">{plan.description}</p>
-                      <p className="text-sm text-gray-500 mt-1">
-                        Date applicable: {formatDate(plan.dateApplicable)}
-                      </p>
-                    </div>
-                    <div className="text-right">
-                      <div className="text-sm text-gray-500">Total needs</div>
-                      <div className="text-2xl font-bold text-blue-600">{needs.length}</div>
-                    </div>
-                  </div>
-                </CardHeader>
-              </Card>
-            </div>
-
             {/* Needs Grid */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {needs.map((need) => (
