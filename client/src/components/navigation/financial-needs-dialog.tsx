@@ -91,7 +91,7 @@ export function FinancialNeedsDialog({
         // Update existing plan name if changed
         if (currentPlan?.name && planName !== currentPlan.name) {
           const planUpdateResponse = await fetch(`/api/financial-plans/${planId}`, {
-            method: 'PUT',
+            method: 'PATCH',
             headers: {
               'Content-Type': 'application/json',
             },
