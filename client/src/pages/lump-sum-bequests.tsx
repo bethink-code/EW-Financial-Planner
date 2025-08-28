@@ -51,7 +51,7 @@ export default function LumpSumBequests() {
   return (
     <div className="">
       <div className="w-full px-6 py-6">
-        <div className="w-[1320px]">
+        <div className={viewMode === 'table' ? 'w-full' : 'w-[1320px]'}>
           {/* Combined Header, Summary and Table */}
           <CalculatorHeader
           title="Lump Sum Needs and Cash Bequests"
