@@ -209,6 +209,20 @@ export default function FinancialPlanSummaryPage() {
           </div>
         );
       }
+
+      // Add default rendering for any other needs
+      return (
+        <div className="mt-3 space-y-4">
+          <div className="text-sm text-gray-600">
+            Financial data not available for this need type.
+          </div>
+          
+          <div className="flex justify-between items-center pt-3 border-t">
+            <button className="text-sm text-gray-500 hover:text-gray-700">Remove from plan</button>
+            <button className="px-4 py-2 border border-blue-500 text-blue-500 rounded hover:bg-blue-50 text-sm">Launch</button>
+          </div>
+        </div>
+      );
     } catch (error) {
       console.error('Error parsing summary data:', error);
     }
