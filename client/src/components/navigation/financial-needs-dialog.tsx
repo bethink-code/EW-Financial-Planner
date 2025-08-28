@@ -2,6 +2,8 @@ import { useState } from 'react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { apiRequest } from '@/lib/queryClient';
 
@@ -37,6 +39,7 @@ export function FinancialNeedsDialog({
   const [selectedNeeds, setSelectedNeeds] = useState<string[]>(
     currentNeeds.map(need => need.key)
   );
+  const [planName, setPlanName] = useState(planId === 'new' ? '' : '');
   
   const queryClient = useQueryClient();
 
@@ -50,7 +53,7 @@ export function FinancialNeedsDialog({
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({
-            name: 'New Financial Plan',
+            name: planName || 'New Financial Plan',
             description: 'Financial plan created with selected needs',
             dateApplicable: new Date().toISOString().split('T')[0]
           })
@@ -104,6 +107,7 @@ export function FinancialNeedsDialog({
 
   const handleCancel = () => {
     setSelectedNeeds(currentNeeds.map(need => need.key));
+    setPlanName(planId === 'new' ? '' : '');
     onClose();
   };
 
@@ -115,6 +119,21 @@ export function FinancialNeedsDialog({
         </DialogHeader>
         
         <div className="py-4">
+          {planId === 'new' && (
+            <div className="mb-6">
+              <Label htmlFor="planName" className="text-sm font-medium text-gray-700">
+                Plan name
+              </Label>
+              <Input
+                id="planName"
+                type="text"
+                placeholder="Enter plan name"
+                value={planName}
+                onChange={(e) => setPlanName(e.target.value)}
+                className="mt-1"
+              />
+            </div>
+          )}
           <p className="text-gray-600 mb-6">You can select multiple needs.</p>
           
           <div className="grid grid-cols-2 gap-4">
