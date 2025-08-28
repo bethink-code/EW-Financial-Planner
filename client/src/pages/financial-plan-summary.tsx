@@ -289,7 +289,7 @@ export default function FinancialPlanSummaryPage() {
         <div className="w-full px-6 py-6">
           <div className="w-[1320px]">
             {/* Needs Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {needs.map((need) => (
                 <Card key={need.id} className="bg-white hover:shadow-md transition-shadow">
                   <CardHeader className="pb-3">
