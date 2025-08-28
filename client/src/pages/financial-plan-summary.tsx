@@ -36,7 +36,7 @@ export default function FinancialPlanSummaryPage() {
       if (need.key === 'death-estate-liquidity') {
         return (
           <div className="mt-3 space-y-4">
-            <div className="space-y-3">
+            <div className="space-y-3 bg-gray-50 p-4 rounded-lg">
               <div>
                 <div className="flex justify-between items-center mb-1">
                   <span className="text-sm font-medium text-gray-800">Estate position</span>
@@ -77,7 +77,7 @@ export default function FinancialPlanSummaryPage() {
       if (need.key === 'retirement') {
         return (
           <div className="mt-3 space-y-4">
-            <div>
+            <div className="bg-gray-50 p-4 rounded-lg">
               <div className="flex justify-between items-center mb-1">
                 <span className="text-sm font-medium text-gray-800">Retirement funds</span>
                 <span className="text-sm font-medium text-red-600">Shortfall: R8,894,312</span>
@@ -102,6 +102,7 @@ export default function FinancialPlanSummaryPage() {
       if (need.key === 'investment-planning') {
         return (
           <div className="mt-3 space-y-4">
+            <div className="bg-gray-50 p-4 rounded-lg">
             <div className="relative h-32 mb-4">
               {/* Simple area chart representation */}
               <svg className="w-full h-full" viewBox="0 0 300 120">
@@ -151,6 +152,7 @@ export default function FinancialPlanSummaryPage() {
                 <span className="font-medium ml-auto">R2,000,000</span>
               </div>
             </div>
+            </div>
             
             <div className="flex justify-between items-center pt-3 border-t">
               <button className="text-sm text-gray-500 hover:text-gray-700">Remove from plan</button>
@@ -163,7 +165,7 @@ export default function FinancialPlanSummaryPage() {
       if (need.key === 'permanent-disability') {
         return (
           <div className="mt-3 space-y-4">
-            <div className="space-y-3">
+            <div className="space-y-3 bg-gray-50 p-4 rounded-lg">
               <div>
                 <div className="flex justify-between items-center mb-1">
                   <span className="text-sm font-medium text-gray-800">Lump sum disability cover</span>
