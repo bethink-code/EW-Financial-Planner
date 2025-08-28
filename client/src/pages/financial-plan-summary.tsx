@@ -134,8 +134,8 @@ export default function FinancialPlanSummaryPage() {
                   <svg className="w-full h-full" viewBox="0 0 300 120">
                     <defs>
                       <linearGradient id="areaGradient" x1="0%" y1="0%" x2="0%" y2="100%">
-                        <stop offset="0%" style={{ stopColor: '#A5C9EA', stopOpacity: 0.7 }} />
-                        <stop offset="100%" style={{ stopColor: '#A5C9EA', stopOpacity: 0.4 }} />
+                        <stop offset="0%" style={{ stopColor: '#AEDCF2', stopOpacity: 0.7 }} />
+                        <stop offset="100%" style={{ stopColor: '#AEDCF2', stopOpacity: 0.4 }} />
                       </linearGradient>
                     </defs>
                     
