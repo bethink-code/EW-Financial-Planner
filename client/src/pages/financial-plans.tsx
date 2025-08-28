@@ -24,6 +24,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
+import { FinancialNeedsDialog } from "@/components/navigation/financial-needs-dialog";
 // import { CreatePlanDialog } from "@/components/financial-plans/create-plan-dialog";
 import type { FinancialPlan, Need, PlanNeed } from "@shared/schema";
 
@@ -35,6 +36,7 @@ interface FinancialPlanWithNeeds extends FinancialPlan {
 export default function FinancialPlansPage() {
   const [searchQuery, setSearchQuery] = useState("");
   const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
+  const [selectedPlanForNeeds, setSelectedPlanForNeeds] = useState<FinancialPlan | null>(null);
 
   // Fetch financial plans
   const { data: plans = [], isLoading } = useQuery({
@@ -177,11 +179,13 @@ export default function FinancialPlansPage() {
                             </TableCell>
                             <TableCell>
                               <div className="flex items-center gap-2">
-                                <Link href={`/financial-plans/${plan.id}`}>
-                                  <Button className="bg-[#E6F0F5] hover:bg-[#D6E7F0] text-[#016991] border-[#E6F0F5]" size="sm">
-                                    Choose
-                                  </Button>
-                                </Link>
+                                <Button 
+                                  className="bg-[#E6F0F5] hover:bg-[#D6E7F0] text-[#016991] border-[#E6F0F5]" 
+                                  size="sm"
+                                  onClick={() => setSelectedPlanForNeeds(plan)}
+                                >
+                                  Choose
+                                </Button>
                                 <Button 
                                   className="h-9 w-9 p-0 bg-white hover:bg-gray-50 text-gray-600 border border-gray-200"
                                   size="sm"
@@ -209,6 +213,18 @@ export default function FinancialPlansPage() {
           </div>
         </div>
       </div>
+      
+      {selectedPlanForNeeds && (
+        <FinancialNeedsDialog
+          isOpen={!!selectedPlanForNeeds}
+          onClose={() => setSelectedPlanForNeeds(null)}
+          planId={selectedPlanForNeeds.id.toString()}
+          currentNeeds={getNeedsForPlan(selectedPlanForNeeds.id).map(need => ({
+            key: need.key,
+            displayName: need.displayName
+          }))}
+        />
+      )}
     </FinancialPlanningLayout>
   );
 }
