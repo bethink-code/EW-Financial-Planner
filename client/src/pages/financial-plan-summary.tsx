@@ -172,7 +172,7 @@ export default function FinancialPlanSummaryPage() {
                   <div className="text-sm font-medium text-green-600">Surplus: R831,961</div>
                 </div>
                 <div className="w-full bg-gray-200 rounded-full h-2 mb-2">
-                  <div className="bg-[#539cc7] h-2 rounded-full" style={{ width: '119%', maxWidth: '100%' }}></div>
+                  <div className="bg-[#8d7b9f] h-2 rounded-full" style={{ width: '119%', maxWidth: '100%' }}></div>
                 </div>
                 <div className="flex justify-between text-sm text-gray-600">
                   <span>Provided: R3,091,961</span>
@@ -186,7 +186,7 @@ export default function FinancialPlanSummaryPage() {
                   <div className="text-sm font-medium text-red-600">Shortfall: R5,135,026 (R36,630 p.m.)</div>
                 </div>
                 <div className="w-full bg-gray-200 rounded-full h-2 mb-2">
-                  <div className="bg-[#539cc7] h-2 rounded-full" style={{ width: '62%' }}></div>
+                  <div className="bg-[#8d7b9f] h-2 rounded-full" style={{ width: '62%' }}></div>
                 </div>
                 <div className="flex justify-between text-sm text-gray-600">
                   <span>Provided: R8,535,631 (R60,888 p.m.)</span>
