@@ -102,7 +102,7 @@ export function FinancialNeedsDialog({
                   <label 
                     htmlFor={need.key}
                     className={`text-sm cursor-pointer ${
-                      isCurrentlyInPlan ? 'bg-[#E6F0F5] px-2 py-1 rounded' : ''
+                      isChecked ? 'bg-[#E6F0F5] px-2 py-1 rounded' : ''
                     }`}
                   >
                     {need.displayName}
