@@ -66,7 +66,7 @@ export default function FinancialPlanSummaryPage() {
               </div>
             </div>
             
-            <div className="flex justify-between items-center pt-3 border-t">
+            <div className="flex justify-between items-center pt-3">
               <button className="text-sm text-gray-500 hover:text-gray-700">Remove from plan</button>
               <button className="px-4 py-2 border border-blue-500 text-blue-500 rounded hover:bg-blue-50 text-sm">Launch</button>
             </div>
@@ -91,7 +91,7 @@ export default function FinancialPlanSummaryPage() {
               </div>
             </div>
             
-            <div className="flex justify-between items-center pt-3 border-t">
+            <div className="flex justify-between items-center pt-3">
               <button className="text-sm text-gray-500 hover:text-gray-700">Remove from plan</button>
               <button className="px-4 py-2 border border-blue-500 text-blue-500 rounded hover:bg-blue-50 text-sm">Launch</button>
             </div>
@@ -154,7 +154,7 @@ export default function FinancialPlanSummaryPage() {
             </div>
             </div>
             
-            <div className="flex justify-between items-center pt-3 border-t">
+            <div className="flex justify-between items-center pt-3">
               <button className="text-sm text-gray-500 hover:text-gray-700">Remove from plan</button>
               <button className="px-4 py-2 border border-blue-500 text-blue-500 rounded hover:bg-blue-50 text-sm">Launch</button>
             </div>
@@ -195,7 +195,7 @@ export default function FinancialPlanSummaryPage() {
               </div>
             </div>
             
-            <div className="flex justify-between items-center pt-3 border-t">
+            <div className="flex justify-between items-center pt-3">
               <button className="text-sm text-gray-500 hover:text-gray-700">Remove from plan</button>
               <button className="px-4 py-2 border border-blue-500 text-blue-500 rounded hover:bg-blue-50 text-sm">Launch</button>
             </div>
@@ -306,10 +306,6 @@ export default function FinancialPlanSummaryPage() {
                   </CardHeader>
                   <CardContent>
                     {renderSummaryData(need)}
-                    
-                    <div className="mt-4 pt-3 border-t flex justify-between items-center">
-                      {getActionButton(need)}
-                    </div>
                   </CardContent>
                 </Card>
               ))}
