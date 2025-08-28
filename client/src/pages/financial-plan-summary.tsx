@@ -38,7 +38,7 @@ export default function FinancialPlanSummaryPage() {
           <div className="mt-3 space-y-4">
             <div className="space-y-6 bg-[#F6F9FB] p-4 rounded-lg">
               <div>
-                <div className="mb-1">
+                <div className="mb-4">
                   <div className="bar-chart-title">Estate position</div>
                   <div className="text-sm font-medium text-green-600">Allocated to dependants: R2,948,748</div>
                 </div>
@@ -52,7 +52,7 @@ export default function FinancialPlanSummaryPage() {
               </div>
               
               <div>
-                <div className="mb-1">
+                <div className="mb-4">
                   <div className="bar-chart-title">Dependants position</div>
                   <div className="text-sm font-medium text-red-600">Shortfall: R1,752,411</div>
                 </div>
@@ -78,7 +78,7 @@ export default function FinancialPlanSummaryPage() {
         return (
           <div className="mt-3 space-y-4">
             <div className="bg-[#F6F9FB] p-4 rounded-lg">
-              <div className="flex justify-between items-center mb-1">
+              <div className="flex justify-between items-center mb-4">
 <span className="bar-chart-title">Retirement funds</span>
                 <span className="text-sm font-medium text-red-600">Shortfall: R8,894,312</span>
               </div>
