@@ -78,7 +78,7 @@ export function FinancialNeedsDialog({
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-2xl">
+      <DialogContent className="sm:max-w-2xl bg-white">
         <DialogHeader>
           <DialogTitle className="text-2xl font-semibold">Your financial needs</DialogTitle>
         </DialogHeader>
