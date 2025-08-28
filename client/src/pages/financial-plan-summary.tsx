@@ -83,9 +83,9 @@ export default function FinancialPlanSummaryPage() {
                 <span className="text-sm font-medium text-red-600">Shortfall: R8,894,312</span>
               </div>
               <div className="w-full bg-gray-200 rounded-full h-2 mb-2">
-                <div className="bg-orange-400 h-2 rounded-full" style={{ width: '68%' }}></div>
+                <div className="bg-[#539cc7] h-2 rounded-full" style={{ width: '68%' }}></div>
               </div>
-              <div className="flex justify-between text-xs text-gray-600">
+              <div className="flex justify-between text-sm text-gray-600">
                 <span>Provided: R19,071,067</span>
                 <span>Required: R27,965,380</span>
               </div>
@@ -135,7 +135,7 @@ export default function FinancialPlanSummaryPage() {
               </svg>
             </div>
             
-            <div className="space-y-2 text-sm">
+            <div className="space-y-3 text-sm">
               <div className="flex items-center gap-2">
                 <div className="w-3 h-3 bg-[#539cc7] rounded-full"></div>
                 <span className="text-gray-600">Total (Nominal)</span>
@@ -165,14 +165,14 @@ export default function FinancialPlanSummaryPage() {
       if (need.key === 'permanent-disability') {
         return (
           <div className="mt-3 space-y-4">
-            <div className="space-y-3 bg-[#F6F9FB] p-4 rounded-lg">
+            <div className="space-y-6 bg-[#F6F9FB] p-4 rounded-lg">
               <div>
-                <div className="flex justify-between items-center mb-1">
-                  <span className="text-sm font-medium text-gray-800">Lump sum disability cover</span>
-                  <span className="text-sm font-medium text-green-600">Surplus: R831,961</span>
+                <div className="mb-4">
+                  <div className="bar-chart-title">Lump sum disability cover</div>
+                  <div className="text-sm font-medium text-green-600">Surplus: R831,961</div>
                 </div>
                 <div className="w-full bg-gray-200 rounded-full h-2 mb-2">
-                  <div className="bg-purple-500 h-2 rounded-full" style={{ width: '119%', maxWidth: '100%' }}></div>
+                  <div className="bg-[#539cc7] h-2 rounded-full" style={{ width: '119%', maxWidth: '100%' }}></div>
                 </div>
                 <div className="flex justify-between text-sm text-gray-600">
                   <span>Provided: R3,091,961</span>
@@ -181,12 +181,12 @@ export default function FinancialPlanSummaryPage() {
               </div>
               
               <div>
-                <div className="flex justify-between items-center mb-1">
-                  <span className="text-sm font-medium text-gray-800">Income disability cover</span>
-                  <span className="text-sm font-medium text-red-600">Shortfall: R5,135,026 (R36,630 p.m.)</span>
+                <div className="mb-4">
+                  <div className="bar-chart-title">Income disability cover</div>
+                  <div className="text-sm font-medium text-red-600">Shortfall: R5,135,026 (R36,630 p.m.)</div>
                 </div>
                 <div className="w-full bg-gray-200 rounded-full h-2 mb-2">
-                  <div className="bg-purple-400 h-2 rounded-full" style={{ width: '62%' }}></div>
+                  <div className="bg-[#539cc7] h-2 rounded-full" style={{ width: '62%' }}></div>
                 </div>
                 <div className="flex justify-between text-sm text-gray-600">
                   <span>Provided: R8,535,631 (R60,888 p.m.)</span>
