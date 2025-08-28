@@ -21,6 +21,13 @@ html {
   color: #1F2224 !important;
 }
 
+/* Global bar chart title styling */
+.bar-chart-title {
+  font-size: 16px !important;
+  font-weight: 500 !important;
+  color: #1F2224 !important;
+}
+
 /* Override for bold total rows */
 .table-text-14.font-bold {
   font-weight: 700 !important;
