@@ -140,7 +140,7 @@ export function ConsolidatedNavigation({
                   {/* Plan name - clickable to go to summary */}
                   <Link href={`/financial-plans/${planId}`}>
                     <div className="pl-4 pr-1 text-sm font-medium transition-colors h-10 flex items-center text-white hover:opacity-90 cursor-pointer">
-                      <span title={planName} className="flex-1">
+                      <span title={planName} className="flex-1 truncate">
                         {planName}
                       </span>
                     </div>
