@@ -118,9 +118,21 @@ export function FinancialNeedsDialog({
     },
     onSuccess: () => {
       if (planId !== 'new') {
+        // Invalidate the specific plan query
+        queryClient.invalidateQueries({ queryKey: [`/api/financial-plans/${planId}`] });
+        // Invalidate the plan with needs queries (multiple patterns)
         queryClient.invalidateQueries({ queryKey: [`/api/financial-plans/${planId}/with-needs`] });
+        queryClient.invalidateQueries({ queryKey: ["/api/financial-plans", parseInt(planId), "with-needs"] });
       }
+      // Invalidate all financial plans queries (including search variations)
       queryClient.invalidateQueries({ queryKey: ['/api/financial-plans'] });
+      // Invalidate any search-based queries
+      queryClient.invalidateQueries({ 
+        predicate: (query) => 
+          Array.isArray(query.queryKey) && 
+          query.queryKey.length >= 1 && 
+          query.queryKey[0] === '/api/financial-plans'
+      });
       onClose();
     }
   });

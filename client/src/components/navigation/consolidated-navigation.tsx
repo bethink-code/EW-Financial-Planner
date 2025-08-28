@@ -1,8 +1,9 @@
-import React, { useState } from"react";
-import { ChevronLeft, ChevronDown, Edit2 } from"lucide-react";
-import { Link, useLocation } from"wouter";
-import { Button } from"@/components/ui/button";
-import { getFinancialPlanName, needs } from"@shared/navigation-config";
+import React, { useState } from "react";
+import { ChevronLeft, ChevronDown, Edit2 } from "lucide-react";
+import { Link, useLocation } from "wouter";
+import { Button } from "@/components/ui/button";
+import { needs } from "@shared/navigation-config";
+import { useQuery } from "@tanstack/react-query";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -13,7 +14,6 @@ import {
 import { cn } from"@/lib/utils";
 import { SafeFragment } from"@/lib/safe-fragment";
 import { FinancialNeedsDialog } from"@/components/navigation/financial-needs-dialog";
-import { useQuery } from"@tanstack/react-query";
 
 interface ConsolidatedNavigationProps {
   currentNeed: any;
@@ -31,7 +31,6 @@ export function ConsolidatedNavigation({
   planId = "1"
 }: ConsolidatedNavigationProps) {
   const [location, setLocation] = useLocation();
-  const planName = getFinancialPlanName();
   const [isNeedDropdownOpen, setIsNeedDropdownOpen] = useState(false);
   const [stepDropdownOpen, setStepDropdownOpen] = useState<string | null>(null);
   const [isNeedsDialogOpen, setIsNeedsDialogOpen] = useState(false);
@@ -43,6 +42,15 @@ export function ConsolidatedNavigation({
     queryKey: [`/api/financial-plans/${planId}/with-needs`],
     enabled: isNeedsDialogOpen,
   });
+  
+  // Fetch current plan data to get the plan name
+  const { data: currentPlan } = useQuery({
+    queryKey: [`/api/financial-plans/${planId}`],
+    queryFn: () => fetch(`/api/financial-plans/${planId}`).then(res => res.json()),
+    enabled: !!planId && planId !== 'new',
+  });
+  
+  const planName = currentPlan?.name || "Financial Plan";
   
   const handleBack = () => {
     window.history.back();
