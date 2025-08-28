@@ -29,7 +29,7 @@ export default function FinancialPlanSummaryPage() {
 
   const getCategoryColor = (category: string) => {
     switch (category) {
-      case 'protection': return 'bg-red-100 text-red-800 border-red-200';
+      case 'protection': return 'bg-orange-100 text-orange-800 border-orange-200';
       case 'planning': return 'bg-blue-100 text-blue-800 border-blue-200';
       case 'investment': return 'bg-green-100 text-green-800 border-green-200';
       default: return 'bg-gray-100 text-gray-800 border-gray-200';
@@ -120,7 +120,7 @@ export default function FinancialPlanSummaryPage() {
       const projectPath = need.key === 'death' ? '/needs/death-estate-liquidity/project' : `/needs/${need.key}/project`;
       return (
         <Link href={projectPath}>
-          <Button size="sm" className="bg-blue-600 hover:bg-blue-700 text-white">
+          <Button size="sm" className="bg-primary hover:bg-primary/90 text-primary-foreground">
             <BarChart3 className="h-4 w-4 mr-1" />
             View Details
           </Button>
@@ -184,16 +184,16 @@ export default function FinancialPlanSummaryPage() {
             {/* Needs Grid */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {needs.map((need) => (
-                <Card key={need.id} className="hover:shadow-md transition-shadow">
+                <Card key={need.id} className="bg-white hover:shadow-md transition-shadow">
                   <CardHeader className="pb-3">
                     <div className="flex items-center justify-between">
-                      <CardTitle className="text-lg">{need.displayName}</CardTitle>
-                      <Badge className={`text-xs border ${getCategoryColor(need.category || 'other')}`}>
+                      <CardTitle className="text-lg font-semibold text-gray-900">{need.displayName}</CardTitle>
+                      <Badge variant="muted" className={`text-xs font-medium ${getCategoryColor(need.category || 'other')}`}>
                         {need.category?.toUpperCase() || 'OTHER'}
                       </Badge>
                     </div>
                     {need.hasDetailedSteps && (
-                      <div className="text-xs text-green-600 font-medium">
+                      <div className="text-xs text-green-600 font-medium mt-1">
                         ✓ Has detailed steps
                       </div>
                     )}
@@ -201,7 +201,7 @@ export default function FinancialPlanSummaryPage() {
                   <CardContent>
                     {renderSummaryData(need)}
                     
-                    <div className="mt-4 pt-3 border-t">
+                    <div className="mt-4 pt-3 border-t flex justify-between items-center">
                       {getActionButton(need)}
                     </div>
                   </CardContent>
