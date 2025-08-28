@@ -140,14 +140,14 @@ export default function FinancialPlanSummaryPage() {
                     </defs>
                     
                     {/* Area chart background - light blue filled area */}
-                    <path d="M 0 30 Q 75 20 150 25 Q 225 30 300 35 L 300 100 L 0 100 Z" fill="url(#areaGradient)" />
+                    <path d="M 0 50 L 60 50 L 90 35 L 140 30 L 180 35 L 220 45 L 260 60 L 300 85 L 300 100 L 0 100 Z" fill="url(#areaGradient)" />
                     
                     {/* Two line graphs on top */}
                     {/* Total (Nominal) line - blue */}
-                    <path d="M 0 30 Q 75 20 150 25 Q 225 30 300 35" stroke="#539cc7" strokeWidth="2.5" fill="none" />
+                    <path d="M 0 50 L 60 50 L 90 35 L 140 30 L 180 35 L 220 45 L 260 60 L 300 85" stroke="#539cc7" strokeWidth="2.5" fill="none" />
                     
                     {/* Voluntary (Nominal) line - pink */}
-                    <path d="M 0 70 Q 75 65 150 68 Q 225 72 300 75" stroke="#EC4899" strokeWidth="2.5" fill="none" />
+                    <path d="M 0 75 L 60 72 L 120 70 L 180 72 L 240 75 L 300 80" stroke="#EC4899" strokeWidth="2.5" fill="none" />
                   </svg>
                 </div>
               </div>
