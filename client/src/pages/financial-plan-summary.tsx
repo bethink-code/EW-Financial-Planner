@@ -298,11 +298,6 @@ export default function FinancialPlanSummaryPage() {
                     <div className="flex items-center justify-between">
                       <CardTitle className="text-lg font-semibold text-gray-900">{need.displayName}</CardTitle>
                     </div>
-                    {need.hasDetailedSteps && (
-                      <div className="text-xs text-green-600 font-medium mt-1">
-                        ✓ Has detailed steps
-                      </div>
-                    )}
                   </CardHeader>
                   <CardContent>
                     {renderSummaryData(need)}
