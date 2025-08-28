@@ -38,9 +38,9 @@ export default function FinancialPlanSummaryPage() {
           <div className="mt-3 space-y-4">
             <div className="space-y-6 bg-[#F6F9FB] p-4 rounded-lg">
               <div>
-                <div className="flex justify-between items-center mb-1">
-                  <span className="text-sm font-medium text-gray-800">Estate position</span>
-                  <span className="text-sm font-medium text-green-600">Allocated to dependants: R2,948,748</span>
+                <div className="mb-1">
+                  <div className="text-sm font-medium text-gray-800">Estate position</div>
+                  <div className="text-sm font-medium text-green-600">Allocated to dependants: R2,948,748</div>
                 </div>
                 <div className="w-full bg-gray-200 rounded-full h-2 mb-2">
                   <div className="bg-blue-500 h-2 rounded-full" style={{ width: '66%' }}></div>
@@ -52,9 +52,9 @@ export default function FinancialPlanSummaryPage() {
               </div>
               
               <div>
-                <div className="flex justify-between items-center mb-1">
-                  <span className="text-sm font-medium text-gray-800">Dependants position</span>
-                  <span className="text-sm font-medium text-red-600">Shortfall: R1,752,411</span>
+                <div className="mb-1">
+                  <div className="text-sm font-medium text-gray-800">Dependants position</div>
+                  <div className="text-sm font-medium text-red-600">Shortfall: R1,752,411</div>
                 </div>
                 <div className="w-full bg-gray-200 rounded-full h-2 mb-2">
                   <div className="bg-blue-500 h-2 rounded-full" style={{ width: '82%' }}></div>
