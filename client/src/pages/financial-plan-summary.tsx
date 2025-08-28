@@ -139,8 +139,8 @@ export default function FinancialPlanSummaryPage() {
                       </linearGradient>
                     </defs>
                     
-                    {/* Area chart background - light blue filled area */}
-                    <path d="M 0 50 L 60 50 L 90 35 L 140 30 L 180 35 L 220 45 L 260 60 L 300 85 L 300 100 L 0 100 Z" fill="url(#areaGradient)" />
+                    {/* Area chart background - filled between the two lines */}
+                    <path d="M 0 50 L 60 50 L 90 35 L 140 30 L 180 35 L 220 45 L 260 60 L 300 85 L 300 80 L 240 75 L 180 72 L 120 70 L 60 72 L 0 75 Z" fill="url(#areaGradient)" />
                     
                     {/* Two line graphs on top */}
                     {/* Total (Nominal) line - blue */}
