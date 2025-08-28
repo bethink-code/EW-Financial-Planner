@@ -103,55 +103,64 @@ export default function FinancialPlanSummaryPage() {
         return (
           <div className="mt-3 space-y-4">
             <div className="bg-[#F6F9FB] p-4 rounded-lg">
-            <div className="relative h-32 mb-4">
-              {/* Simple area chart representation */}
-              <svg className="w-full h-full" viewBox="0 0 300 120">
-                <defs>
-                  <linearGradient id="gradient1" x1="0%" y1="0%" x2="0%" y2="100%">
-                    <stop offset="0%" style={{ stopColor: '#539cc7', stopOpacity: 0.8 }} />
-                    <stop offset="100%" style={{ stopColor: '#539cc7', stopOpacity: 0.2 }} />
-                  </linearGradient>
-                  <linearGradient id="gradient2" x1="0%" y1="0%" x2="0%" y2="100%">
-                    <stop offset="0%" style={{ stopColor: '#539cc7', stopOpacity: 0.6 }} />
-                    <stop offset="100%" style={{ stopColor: '#539cc7', stopOpacity: 0.1 }} />
-                  </linearGradient>
-                  <linearGradient id="gradient3" x1="0%" y1="0%" x2="0%" y2="100%">
-                    <stop offset="0%" style={{ stopColor: '#EC4899', stopOpacity: 0.8 }} />
-                    <stop offset="100%" style={{ stopColor: '#EC4899', stopOpacity: 0.2 }} />
-                  </linearGradient>
-                </defs>
+              <div className="flex gap-6">
+                {/* Legend on left */}
+                <div className="flex flex-col justify-center space-y-3 text-sm min-w-[140px]">
+                  <div>
+                    <div className="flex items-center gap-2 mb-1">
+                      <div className="w-3 h-3 bg-[#539cc7] rounded-full"></div>
+                      <span className="text-gray-600">Total (Nominal)</span>
+                    </div>
+                    <div className="font-medium text-gray-800">R6,450,000</div>
+                  </div>
+                  <div>
+                    <div className="flex items-center gap-2 mb-1">
+                      <div className="w-3 h-3 bg-[#539cc7] rounded-full" style={{opacity: 0.7}}></div>
+                      <span className="text-gray-600">Compulsory (Nominal)</span>
+                    </div>
+                    <div className="font-medium text-gray-800">R4,450,000</div>
+                  </div>
+                  <div>
+                    <div className="flex items-center gap-2 mb-1">
+                      <div className="w-3 h-3 bg-pink-500 rounded-full"></div>
+                      <span className="text-gray-600">Voluntary (Nominal)</span>
+                    </div>
+                    <div className="font-medium text-gray-800">R2,000,000</div>
+                  </div>
+                </div>
                 
-                {/* Total area */}
-                <path d="M 0 90 Q 75 70 150 75 Q 225 80 300 85 L 300 120 L 0 120 Z" fill="url(#gradient1)" />
-                {/* Compulsory area */}
-                <path d="M 0 90 Q 75 85 150 88 Q 225 90 300 95 L 300 120 L 0 120 Z" fill="url(#gradient2)" />
-                {/* Voluntary area */}
-                <path d="M 0 90 Q 75 95 150 100 Q 225 105 300 110 L 300 120 L 0 120 Z" fill="url(#gradient3)" />
-                
-                {/* Lines */}
-                <path d="M 0 90 Q 75 70 150 75 Q 225 80 300 85" stroke="#539cc7" strokeWidth="2" fill="none" />
-                <path d="M 0 90 Q 75 85 150 88 Q 225 90 300 95" stroke="#539cc7" strokeWidth="2" fill="none" />
-                <path d="M 0 90 Q 75 95 150 100 Q 225 105 300 110" stroke="#EC4899" strokeWidth="2" fill="none" />
-              </svg>
-            </div>
-            
-            <div className="space-y-3 text-sm">
-              <div className="flex items-center gap-2">
-                <div className="w-3 h-3 bg-[#539cc7] rounded-full"></div>
-                <span className="text-gray-600">Total (Nominal)</span>
-                <span className="font-medium ml-auto">R6,450,000</span>
+                {/* Chart on right */}
+                <div className="flex-1 relative h-32">
+                  <svg className="w-full h-full" viewBox="0 0 300 120">
+                    <defs>
+                      <linearGradient id="gradient1" x1="0%" y1="0%" x2="0%" y2="100%">
+                        <stop offset="0%" style={{ stopColor: '#539cc7', stopOpacity: 0.8 }} />
+                        <stop offset="100%" style={{ stopColor: '#539cc7', stopOpacity: 0.2 }} />
+                      </linearGradient>
+                      <linearGradient id="gradient2" x1="0%" y1="0%" x2="0%" y2="100%">
+                        <stop offset="0%" style={{ stopColor: '#539cc7', stopOpacity: 0.6 }} />
+                        <stop offset="100%" style={{ stopColor: '#539cc7', stopOpacity: 0.1 }} />
+                      </linearGradient>
+                      <linearGradient id="gradient3" x1="0%" y1="0%" x2="0%" y2="100%">
+                        <stop offset="0%" style={{ stopColor: '#EC4899', stopOpacity: 0.8 }} />
+                        <stop offset="100%" style={{ stopColor: '#EC4899', stopOpacity: 0.2 }} />
+                      </linearGradient>
+                    </defs>
+                    
+                    {/* Total area */}
+                    <path d="M 0 90 Q 75 70 150 75 Q 225 80 300 85 L 300 120 L 0 120 Z" fill="url(#gradient1)" />
+                    {/* Compulsory area */}
+                    <path d="M 0 90 Q 75 85 150 88 Q 225 90 300 95 L 300 120 L 0 120 Z" fill="url(#gradient2)" />
+                    {/* Voluntary area */}
+                    <path d="M 0 90 Q 75 95 150 100 Q 225 105 300 110 L 300 120 L 0 120 Z" fill="url(#gradient3)" />
+                    
+                    {/* Lines */}
+                    <path d="M 0 90 Q 75 70 150 75 Q 225 80 300 85" stroke="#539cc7" strokeWidth="2" fill="none" />
+                    <path d="M 0 90 Q 75 85 150 88 Q 225 90 300 95" stroke="#539cc7" strokeWidth="2" fill="none" />
+                    <path d="M 0 90 Q 75 95 150 100 Q 225 105 300 110" stroke="#EC4899" strokeWidth="2" fill="none" />
+                  </svg>
+                </div>
               </div>
-              <div className="flex items-center gap-2">
-                <div className="w-3 h-3 bg-[#539cc7] rounded-full" style={{opacity: 0.7}}></div>
-                <span className="text-gray-600">Compulsory (Nominal)</span>
-                <span className="font-medium ml-auto">R4,450,000</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <div className="w-3 h-3 bg-pink-500 rounded-full"></div>
-                <span className="text-gray-600">Voluntary (Nominal)</span>
-                <span className="font-medium ml-auto">R2,000,000</span>
-              </div>
-            </div>
             </div>
             
             <div className="flex justify-between items-center pt-3">
