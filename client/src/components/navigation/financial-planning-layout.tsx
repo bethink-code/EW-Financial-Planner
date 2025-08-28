@@ -18,6 +18,7 @@ interface FinancialPlanningLayoutProps {
   planName?: string;
   planId?: string;
   needs?: Array<{ key: string; displayName: string; hasDetailedSteps: boolean }>;
+  onCreateNewPlan?: () => void;
 }
 
 export function FinancialPlanningLayout({ 
@@ -25,7 +26,8 @@ export function FinancialPlanningLayout({
   variant = "list",
   planName,
   planId,
-  needs = []
+  needs = [],
+  onCreateNewPlan
 }: FinancialPlanningLayoutProps) {
   const [location] = useLocation();
   const [isNeedsDialogOpen, setIsNeedsDialogOpen] = useState(false);
@@ -55,7 +57,7 @@ export function FinancialPlanningLayout({
             // Financial Plans List Navigation
             <div className="flex items-center justify-between">
               <h1 className="text-2xl font-semibold text-primary">Financial plans</h1>
-              <Button variant="default">
+              <Button variant="default" onClick={onCreateNewPlan}>
                 <Plus className="h-4 w-4 mr-2" />
                 Create a new plan
               </Button>

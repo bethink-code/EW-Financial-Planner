@@ -110,19 +110,12 @@ export default function FinancialPlansPage() {
   };
 
   return (
-    <FinancialPlanningLayout variant="list">
+    <FinancialPlanningLayout variant="list" onCreateNewPlan={() => setIsNeedsDialogOpen(true)}>
       <div className="min-h-screen bg-gray-50">
         <div className="w-full px-6 py-6">
           <div className="w-[1320px]">
             <Card>
               <CardHeader className="pb-4">
-                <Button 
-                  className="w-full bg-[#4A90A4] hover:bg-[#3A7A8E] text-white" 
-                  onClick={() => setIsNeedsDialogOpen(true)}
-                >
-                  <Plus className="h-4 w-4 mr-2" />
-                  Create a new plan
-                </Button>
               </CardHeader>
 
               <CardContent>
