@@ -36,9 +36,7 @@ export function FinancialNeedsDialog({
   planId, 
   currentNeeds 
 }: FinancialNeedsDialogProps) {
-  const [selectedNeeds, setSelectedNeeds] = useState<string[]>(
-    currentNeeds.map(need => need.key)
-  );
+  const [selectedNeeds, setSelectedNeeds] = useState<string[]>([]);
   const [planName, setPlanName] = useState('');
   
   const queryClient = useQueryClient();
@@ -58,6 +56,13 @@ export function FinancialNeedsDialog({
       setPlanName(currentPlan.name);
     }
   }, [planId, currentPlan?.name]);
+  
+  // Update selected needs when currentNeeds changes
+  useEffect(() => {
+    if (isOpen) {
+      setSelectedNeeds(currentNeeds.map(need => need.key));
+    }
+  }, [currentNeeds, isOpen]);
 
   const updatePlanNeedsMutation = useMutation({
     mutationFn: async (needsToUpdate: string[]) => {
