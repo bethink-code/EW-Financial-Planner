@@ -68,7 +68,7 @@ export default function FinancialPlanSummaryPage() {
             
             <div className="flex justify-between items-center pt-3">
               <button className="text-sm text-gray-500 hover:text-gray-700">Remove from plan</button>
-              <button className="px-4 py-2 border border-blue-500 text-blue-500 rounded hover:bg-blue-50 text-sm">Launch</button>
+              <button className="px-4 py-2 bg-primary text-primary-foreground rounded hover:bg-primary/90 text-sm">Launch</button>
             </div>
           </div>
         );
@@ -93,7 +93,7 @@ export default function FinancialPlanSummaryPage() {
             
             <div className="flex justify-between items-center pt-3">
               <button className="text-sm text-gray-500 hover:text-gray-700">Remove from plan</button>
-              <button className="px-4 py-2 border border-blue-500 text-blue-500 rounded hover:bg-blue-50 text-sm">Launch</button>
+              <button className="px-4 py-2 bg-primary text-primary-foreground rounded hover:bg-primary/90 text-sm">Launch</button>
             </div>
           </div>
         );
@@ -156,7 +156,7 @@ export default function FinancialPlanSummaryPage() {
             
             <div className="flex justify-between items-center pt-3">
               <button className="text-sm text-gray-500 hover:text-gray-700">Remove from plan</button>
-              <button className="px-4 py-2 border border-blue-500 text-blue-500 rounded hover:bg-blue-50 text-sm">Launch</button>
+              <button className="px-4 py-2 bg-primary text-primary-foreground rounded hover:bg-primary/90 text-sm">Launch</button>
             </div>
           </div>
         );
@@ -197,7 +197,7 @@ export default function FinancialPlanSummaryPage() {
             
             <div className="flex justify-between items-center pt-3">
               <button className="text-sm text-gray-500 hover:text-gray-700">Remove from plan</button>
-              <button className="px-4 py-2 border border-blue-500 text-blue-500 rounded hover:bg-blue-50 text-sm">Launch</button>
+              <button className="px-4 py-2 bg-primary text-primary-foreground rounded hover:bg-primary/90 text-sm">Launch</button>
             </div>
           </div>
         );
@@ -212,7 +212,7 @@ export default function FinancialPlanSummaryPage() {
           
           <div className="flex justify-between items-center pt-3 border-t">
             <button className="text-sm text-gray-500 hover:text-gray-700">Remove from plan</button>
-            <button className="px-4 py-2 border border-blue-500 text-blue-500 rounded hover:bg-blue-50 text-sm">Launch</button>
+            <button className="px-4 py-2 bg-primary text-primary-foreground rounded hover:bg-primary/90 text-sm">Launch</button>
           </div>
         </div>
       );
