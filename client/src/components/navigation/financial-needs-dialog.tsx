@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
@@ -39,9 +39,25 @@ export function FinancialNeedsDialog({
   const [selectedNeeds, setSelectedNeeds] = useState<string[]>(
     currentNeeds.map(need => need.key)
   );
-  const [planName, setPlanName] = useState(planId === 'new' ? '' : '');
+  const [planName, setPlanName] = useState('');
   
   const queryClient = useQueryClient();
+  
+  // Fetch current plan data to get the plan name
+  const { data: currentPlan } = useQuery({
+    queryKey: [`/api/financial-plans/${planId}`],
+    queryFn: () => fetch(`/api/financial-plans/${planId}`).then(res => res.json()),
+    enabled: isOpen && planId !== 'new',
+  });
+  
+  // Update plan name when currentPlan data is loaded
+  useEffect(() => {
+    if (planId === 'new') {
+      setPlanName('');
+    } else if (currentPlan?.name) {
+      setPlanName(currentPlan.name);
+    }
+  }, [planId, currentPlan?.name]);
 
   const updatePlanNeedsMutation = useMutation({
     mutationFn: async (needsToUpdate: string[]) => {
@@ -72,7 +88,23 @@ export function FinancialNeedsDialog({
         if (!needsResponse.ok) throw new Error('Failed to add needs to plan');
         return needsResponse.json();
       } else {
-        // Update existing plan
+        // Update existing plan name if changed
+        if (currentPlan?.name && planName !== currentPlan.name) {
+          const planUpdateResponse = await fetch(`/api/financial-plans/${planId}`, {
+            method: 'PUT',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ 
+              name: planName,
+              description: currentPlan.description,
+              dateApplicable: currentPlan.dateApplicable
+            })
+          });
+          if (!planUpdateResponse.ok) throw new Error('Failed to update plan name');
+        }
+        
+        // Update existing plan needs
         const response = await fetch(`/api/financial-plans/${planId}/needs`, {
           method: 'PUT',
           headers: {
@@ -107,7 +139,11 @@ export function FinancialNeedsDialog({
 
   const handleCancel = () => {
     setSelectedNeeds(currentNeeds.map(need => need.key));
-    setPlanName(planId === 'new' ? '' : '');
+    if (planId === 'new') {
+      setPlanName('');
+    } else if (currentPlan?.name) {
+      setPlanName(currentPlan.name);
+    }
     onClose();
   };
 
@@ -119,21 +155,20 @@ export function FinancialNeedsDialog({
         </DialogHeader>
         
         <div className="py-4">
-          {planId === 'new' && (
-            <div className="mb-6">
-              <Label htmlFor="planName" className="text-sm font-medium text-gray-700">
-                Plan name
-              </Label>
-              <Input
-                id="planName"
-                type="text"
-                placeholder="Enter plan name"
-                value={planName}
-                onChange={(e) => setPlanName(e.target.value)}
-                className="mt-1"
-              />
-            </div>
-          )}
+          <div className="mb-6">
+            <Label htmlFor="planName" className="text-sm font-medium text-gray-700">
+              Plan name
+            </Label>
+            <Input
+              id="planName"
+              type="text"
+              placeholder={planId === 'new' ? "Enter plan name" : "Loading..."}
+              value={planName}
+              onChange={(e) => setPlanName(e.target.value)}
+              className="mt-1"
+              disabled={planId !== 'new' && !currentPlan}
+            />
+          </div>
           <p className="text-gray-600 mb-6">You can select multiple needs.</p>
           
           <div className="grid grid-cols-2 gap-4">
