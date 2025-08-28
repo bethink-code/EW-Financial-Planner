@@ -42,18 +42,49 @@ export function FinancialNeedsDialog({
 
   const updatePlanNeedsMutation = useMutation({
     mutationFn: async (needsToUpdate: string[]) => {
-      const response = await fetch(`/api/financial-plans/${planId}/needs`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ needKeys: needsToUpdate })
-      });
-      if (!response.ok) throw new Error('Failed to update plan needs');
-      return response.json();
+      if (planId === 'new') {
+        // Create new plan
+        const createResponse = await fetch('/api/financial-plans', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            name: 'New Financial Plan',
+            description: 'Financial plan created with selected needs',
+            dateApplicable: new Date().toISOString().split('T')[0]
+          })
+        });
+        if (!createResponse.ok) throw new Error('Failed to create plan');
+        const newPlan = await createResponse.json();
+        
+        // Add needs to the new plan
+        const needsResponse = await fetch(`/api/financial-plans/${newPlan.id}/needs`, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ needKeys: needsToUpdate })
+        });
+        if (!needsResponse.ok) throw new Error('Failed to add needs to plan');
+        return needsResponse.json();
+      } else {
+        // Update existing plan
+        const response = await fetch(`/api/financial-plans/${planId}/needs`, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ needKeys: needsToUpdate })
+        });
+        if (!response.ok) throw new Error('Failed to update plan needs');
+        return response.json();
+      }
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: [`/api/financial-plans/${planId}/with-needs`] });
+      if (planId !== 'new') {
+        queryClient.invalidateQueries({ queryKey: [`/api/financial-plans/${planId}/with-needs`] });
+      }
       queryClient.invalidateQueries({ queryKey: ['/api/financial-plans'] });
       onClose();
     }
@@ -127,7 +158,7 @@ export function FinancialNeedsDialog({
             className="flex-1 bg-primary hover:bg-primary/90 text-primary-foreground"
             disabled={updatePlanNeedsMutation.isPending}
           >
-            {updatePlanNeedsMutation.isPending ? 'Updating...' : '✓ Update plan'}
+            {updatePlanNeedsMutation.isPending ? (planId === 'new' ? 'Creating...' : 'Updating...') : (planId === 'new' ? '✓ Create plan' : '✓ Update plan')}
           </Button>
         </div>
       </DialogContent>

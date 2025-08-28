@@ -36,7 +36,7 @@ interface FinancialPlanWithNeeds extends FinancialPlan {
 export default function FinancialPlansPage() {
   const [searchQuery, setSearchQuery] = useState("");
   const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
-  const [selectedPlanForNeeds, setSelectedPlanForNeeds] = useState<FinancialPlan | null>(null);
+  const [isNeedsDialogOpen, setIsNeedsDialogOpen] = useState(false);
 
   // Fetch financial plans
   const { data: plans = [], isLoading } = useQuery({
@@ -116,9 +116,13 @@ export default function FinancialPlansPage() {
           <div className="w-[1320px]">
             <Card>
               <CardHeader className="pb-4">
-                <div className="bg-blue-50 p-2 text-xs text-blue-700 rounded mb-2">
-                  DEBUG: Plans loaded: {plans.length}, Loading: {isLoading ? 'Yes' : 'No'}
-                </div>
+                <Button 
+                  className="w-full bg-[#4A90A4] hover:bg-[#3A7A8E] text-white" 
+                  onClick={() => setIsNeedsDialogOpen(true)}
+                >
+                  <Plus className="h-4 w-4 mr-2" />
+                  Create a new plan
+                </Button>
               </CardHeader>
 
               <CardContent>
@@ -182,16 +186,11 @@ export default function FinancialPlansPage() {
                             </TableCell>
                             <TableCell>
                               <div className="flex items-center gap-2">
-                                <Button 
-                                  className="bg-[#E6F0F5] hover:bg-[#D6E7F0] text-[#016991] border-[#E6F0F5]" 
-                                  size="sm"
-                                  onClick={() => {
-                                    console.log("Button clicked, setting plan:", plan);
-                                    setSelectedPlanForNeeds(plan);
-                                  }}
-                                >
-                                  Choose
-                                </Button>
+                                <Link href={`/financial-plans/${plan.id}`}>
+                                  <Button className="bg-[#E6F0F5] hover:bg-[#D6E7F0] text-[#016991] border-[#E6F0F5]" size="sm">
+                                    Choose
+                                  </Button>
+                                </Link>
                                 <Button 
                                   className="h-9 w-9 p-0 bg-white hover:bg-gray-50 text-gray-600 border border-gray-200"
                                   size="sm"
@@ -220,19 +219,12 @@ export default function FinancialPlansPage() {
         </div>
       </div>
       
-      {selectedPlanForNeeds && (
-        <Dialog open={!!selectedPlanForNeeds} onOpenChange={() => setSelectedPlanForNeeds(null)}>
-          <DialogContent>
-            <DialogHeader>
-              <DialogTitle>Test Modal</DialogTitle>
-            </DialogHeader>
-            <div className="p-4">
-              <p>This is a test modal for plan: {selectedPlanForNeeds.name}</p>
-              <Button onClick={() => setSelectedPlanForNeeds(null)}>Close</Button>
-            </div>
-          </DialogContent>
-        </Dialog>
-      )}
+      <FinancialNeedsDialog
+        isOpen={isNeedsDialogOpen}
+        onClose={() => setIsNeedsDialogOpen(false)}
+        planId="new"
+        currentNeeds={[]}
+      />
     </FinancialPlanningLayout>
   );
 }
