@@ -147,7 +147,7 @@ export default function FinancialPlanSummaryPage() {
                     <path d="M 0 50 L 60 50 L 90 35 L 140 30 L 180 35 L 220 45 L 260 60 L 300 85" stroke="#539cc7" strokeWidth="2.5" fill="none" />
                     
                     {/* Voluntary (Nominal) line - pink */}
-                    <path d="M 0 75 L 60 72 L 120 70 L 180 72 L 240 75 L 300 80" stroke="#EC4899" strokeWidth="2.5" fill="none" />
+                    <path d="M 0 75 L 60 72 L 120 70 L 180 72 L 240 75 L 300 80" stroke="#d0669c" strokeWidth="2.5" fill="none" />
                   </svg>
                 </div>
               </div>
