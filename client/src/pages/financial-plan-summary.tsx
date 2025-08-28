@@ -68,7 +68,9 @@ export default function FinancialPlanSummaryPage() {
             
             <div className="flex justify-between items-center pt-3">
               <button className="text-sm text-gray-500 hover:text-gray-700">Remove from plan</button>
-              <button className="px-4 py-2 border border-[#016991] text-[#016991] bg-white rounded hover:bg-[#016991]/5 text-sm">Launch</button>
+              <Link href="/needs/death-estate-liquidity/project">
+                <button className="px-4 py-2 border border-[#016991] text-[#016991] bg-white rounded hover:bg-[#016991]/5 text-sm">Launch</button>
+              </Link>
             </div>
           </div>
         );
