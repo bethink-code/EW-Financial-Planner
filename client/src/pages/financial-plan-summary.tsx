@@ -44,14 +44,40 @@ export default function FinancialPlanSummaryPage() {
       
       if (need.key === 'death-estate-liquidity') {
         return (
-          <div className="mt-3 space-y-2 text-sm">
-            <div className="flex justify-between">
-              <span className="text-gray-600">Estate Position:</span>
-              <span className="font-medium text-green-600">R2,822,845 surplus</span>
+          <div className="mt-3 space-y-4">
+            <div className="space-y-3">
+              <div>
+                <div className="flex justify-between items-center mb-1">
+                  <span className="text-sm font-medium text-gray-800">Estate position</span>
+                  <span className="text-sm font-medium text-green-600">Allocated to dependants: R2,948,748</span>
+                </div>
+                <div className="w-full bg-gray-200 rounded-full h-2 mb-2">
+                  <div className="bg-blue-500 h-2 rounded-full" style={{ width: '66%' }}></div>
+                </div>
+                <div className="flex justify-between text-xs text-gray-600">
+                  <span>Provided: R5,740,981</span>
+                  <span>Required: R2,918,036</span>
+                </div>
+              </div>
+              
+              <div>
+                <div className="flex justify-between items-center mb-1">
+                  <span className="text-sm font-medium text-gray-800">Dependants position</span>
+                  <span className="text-sm font-medium text-red-600">Shortfall: R1,752,411</span>
+                </div>
+                <div className="w-full bg-gray-200 rounded-full h-2 mb-2">
+                  <div className="bg-blue-500 h-2 rounded-full" style={{ width: '82%' }}></div>
+                </div>
+                <div className="flex justify-between text-xs text-gray-600">
+                  <span>Provided: R7,822,945</span>
+                  <span>Required: R9,575,356</span>
+                </div>
+              </div>
             </div>
-            <div className="flex justify-between">
-              <span className="text-gray-600">Dependants Position:</span>
-              <span className="font-medium text-orange-600">R9,675,356 required</span>
+            
+            <div className="flex justify-between items-center pt-3 border-t">
+              <button className="text-sm text-gray-500 hover:text-gray-700">Remove from plan</button>
+              <button className="px-4 py-2 border border-blue-500 text-blue-500 rounded hover:bg-blue-50 text-sm">Launch</button>
             </div>
           </div>
         );
@@ -59,14 +85,24 @@ export default function FinancialPlanSummaryPage() {
 
       if (need.key === 'retirement') {
         return (
-          <div className="mt-3 space-y-2 text-sm">
-            <div className="flex justify-between">
-              <span className="text-gray-600">Retirement Funds:</span>
-              <span className="font-medium text-red-600">R8,994,312 shortfall</span>
+          <div className="mt-3 space-y-4">
+            <div>
+              <div className="flex justify-between items-center mb-1">
+                <span className="text-sm font-medium text-gray-800">Retirement funds</span>
+                <span className="text-sm font-medium text-red-600">Shortfall: R8,894,312</span>
+              </div>
+              <div className="w-full bg-gray-200 rounded-full h-2 mb-2">
+                <div className="bg-orange-400 h-2 rounded-full" style={{ width: '68%' }}></div>
+              </div>
+              <div className="flex justify-between text-xs text-gray-600">
+                <span>Provided: R19,071,067</span>
+                <span>Required: R27,965,380</span>
+              </div>
             </div>
-            <div className="flex justify-between">
-              <span className="text-gray-600">Required:</span>
-              <span className="font-medium">R27,965,380</span>
+            
+            <div className="flex justify-between items-center pt-3 border-t">
+              <button className="text-sm text-gray-500 hover:text-gray-700">Remove from plan</button>
+              <button className="px-4 py-2 border border-blue-500 text-blue-500 rounded hover:bg-blue-50 text-sm">Launch</button>
             </div>
           </div>
         );
@@ -74,18 +110,60 @@ export default function FinancialPlanSummaryPage() {
 
       if (need.key === 'investment-planning') {
         return (
-          <div className="mt-3 space-y-2 text-sm">
-            <div className="flex justify-between">
-              <span className="text-gray-600">Total Nominal:</span>
-              <span className="font-medium">R6,450,000</span>
+          <div className="mt-3 space-y-4">
+            <div className="relative h-32 mb-4">
+              {/* Simple area chart representation */}
+              <svg className="w-full h-full" viewBox="0 0 300 120">
+                <defs>
+                  <linearGradient id="gradient1" x1="0%" y1="0%" x2="0%" y2="100%">
+                    <stop offset="0%" style={{ stopColor: '#93C5FD', stopOpacity: 0.8 }} />
+                    <stop offset="100%" style={{ stopColor: '#93C5FD', stopOpacity: 0.2 }} />
+                  </linearGradient>
+                  <linearGradient id="gradient2" x1="0%" y1="0%" x2="0%" y2="100%">
+                    <stop offset="0%" style={{ stopColor: '#60A5FA', stopOpacity: 0.8 }} />
+                    <stop offset="100%" style={{ stopColor: '#60A5FA', stopOpacity: 0.2 }} />
+                  </linearGradient>
+                  <linearGradient id="gradient3" x1="0%" y1="0%" x2="0%" y2="100%">
+                    <stop offset="0%" style={{ stopColor: '#EC4899', stopOpacity: 0.8 }} />
+                    <stop offset="100%" style={{ stopColor: '#EC4899', stopOpacity: 0.2 }} />
+                  </linearGradient>
+                </defs>
+                
+                {/* Total area */}
+                <path d="M 0 90 Q 75 70 150 75 Q 225 80 300 85 L 300 120 L 0 120 Z" fill="url(#gradient1)" />
+                {/* Compulsory area */}
+                <path d="M 0 90 Q 75 85 150 88 Q 225 90 300 95 L 300 120 L 0 120 Z" fill="url(#gradient2)" />
+                {/* Voluntary area */}
+                <path d="M 0 90 Q 75 95 150 100 Q 225 105 300 110 L 300 120 L 0 120 Z" fill="url(#gradient3)" />
+                
+                {/* Lines */}
+                <path d="M 0 90 Q 75 70 150 75 Q 225 80 300 85" stroke="#3B82F6" strokeWidth="2" fill="none" />
+                <path d="M 0 90 Q 75 85 150 88 Q 225 90 300 95" stroke="#1D4ED8" strokeWidth="2" fill="none" />
+                <path d="M 0 90 Q 75 95 150 100 Q 225 105 300 110" stroke="#EC4899" strokeWidth="2" fill="none" />
+              </svg>
             </div>
-            <div className="flex justify-between">
-              <span className="text-gray-600">Compulsory:</span>
-              <span className="font-medium">R4,450,000</span>
+            
+            <div className="space-y-2 text-sm">
+              <div className="flex items-center gap-2">
+                <div className="w-3 h-3 bg-blue-400 rounded-full"></div>
+                <span className="text-gray-600">Total (Nominal)</span>
+                <span className="font-medium ml-auto">R6,450,000</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <div className="w-3 h-3 bg-blue-600 rounded-full"></div>
+                <span className="text-gray-600">Compulsory (Nominal)</span>
+                <span className="font-medium ml-auto">R4,450,000</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <div className="w-3 h-3 bg-pink-500 rounded-full"></div>
+                <span className="text-gray-600">Voluntary (Nominal)</span>
+                <span className="font-medium ml-auto">R2,000,000</span>
+              </div>
             </div>
-            <div className="flex justify-between">
-              <span className="text-gray-600">Voluntary:</span>
-              <span className="font-medium">R2,000,000</span>
+            
+            <div className="flex justify-between items-center pt-3 border-t">
+              <button className="text-sm text-gray-500 hover:text-gray-700">Remove from plan</button>
+              <button className="px-4 py-2 border border-blue-500 text-blue-500 rounded hover:bg-blue-50 text-sm">Launch</button>
             </div>
           </div>
         );
@@ -93,14 +171,40 @@ export default function FinancialPlanSummaryPage() {
 
       if (need.key === 'permanent-disability') {
         return (
-          <div className="mt-3 space-y-2 text-sm">
-            <div className="flex justify-between">
-              <span className="text-gray-600">Lump Sum Cover:</span>
-              <span className="font-medium text-green-600">R831,961 surplus</span>
+          <div className="mt-3 space-y-4">
+            <div className="space-y-3">
+              <div>
+                <div className="flex justify-between items-center mb-1">
+                  <span className="text-sm font-medium text-gray-800">Lump sum disability cover</span>
+                  <span className="text-sm font-medium text-green-600">Surplus: R831,961</span>
+                </div>
+                <div className="w-full bg-gray-200 rounded-full h-2 mb-2">
+                  <div className="bg-purple-500 h-2 rounded-full" style={{ width: '119%', maxWidth: '100%' }}></div>
+                </div>
+                <div className="flex justify-between text-xs text-gray-600">
+                  <span>Provided: R3,091,961</span>
+                  <span>Required: R2,260,000</span>
+                </div>
+              </div>
+              
+              <div>
+                <div className="flex justify-between items-center mb-1">
+                  <span className="text-sm font-medium text-gray-800">Income disability cover</span>
+                  <span className="text-sm font-medium text-red-600">Shortfall: R5,135,026 (R36,630 p.m.)</span>
+                </div>
+                <div className="w-full bg-gray-200 rounded-full h-2 mb-2">
+                  <div className="bg-purple-400 h-2 rounded-full" style={{ width: '62%' }}></div>
+                </div>
+                <div className="flex justify-between text-xs text-gray-600">
+                  <span>Provided: R8,535,631 (R60,888 p.m.)</span>
+                  <span>Required: R13,670,518 (R97,518 p.m.)</span>
+                </div>
+              </div>
             </div>
-            <div className="flex justify-between">
-              <span className="text-gray-600">Income Cover:</span>
-              <span className="font-medium text-red-600">R5,135,026 shortfall</span>
+            
+            <div className="flex justify-between items-center pt-3 border-t">
+              <button className="text-sm text-gray-500 hover:text-gray-700">Remove from plan</button>
+              <button className="px-4 py-2 border border-blue-500 text-blue-500 rounded hover:bg-blue-50 text-sm">Launch</button>
             </div>
           </div>
         );
