@@ -97,12 +97,12 @@ export function FinancialNeedsDialog({
                     id={need.key}
                     checked={isChecked}
                     onCheckedChange={(checked) => handleNeedToggle(need.key, !!checked)}
-                    className="data-[state=checked]:bg-blue-600"
+                    className="data-[state=checked]:bg-[#016991] data-[state=checked]:border-[#016991]"
                   />
                   <label 
                     htmlFor={need.key}
                     className={`text-sm cursor-pointer ${
-                      isCurrentlyInPlan ? 'bg-blue-50 px-2 py-1 rounded' : ''
+                      isCurrentlyInPlan ? 'bg-[#E6F0F5] px-2 py-1 rounded' : ''
                     }`}
                   >
                     {need.displayName}
@@ -117,14 +117,14 @@ export function FinancialNeedsDialog({
           <Button 
             variant="outline" 
             onClick={handleCancel}
-            className="flex-1"
+            className="flex-1 bg-white hover:bg-gray-50 text-gray-600 border-gray-200"
             disabled={updatePlanNeedsMutation.isPending}
           >
             Cancel
           </Button>
           <Button 
             onClick={handleUpdate}
-            className="flex-1 bg-blue-600 hover:bg-blue-700"
+            className="flex-1 bg-[#E6F0F5] hover:bg-[#D6E7F0] text-[#016991] border-[#E6F0F5]"
             disabled={updatePlanNeedsMutation.isPending}
           >
             {updatePlanNeedsMutation.isPending ? 'Updating...' : '✓ Update plan'}
