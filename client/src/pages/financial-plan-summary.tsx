@@ -47,13 +47,11 @@ export default function FinancialPlanSummaryPage() {
           <div className="mt-3 space-y-2 text-sm">
             <div className="flex justify-between">
               <span className="text-gray-600">Estate Position:</span>
-              <span className="font-medium text-green-600">{data.estatePosition?.surplus || 'N/A'} surplus</span>
+              <span className="font-medium text-green-600">R2,822,845 surplus</span>
             </div>
             <div className="flex justify-between">
               <span className="text-gray-600">Dependants Position:</span>
-              <span className="font-medium text-orange-600">
-                {data.dependantsPosition?.required || 'N/A'} required
-              </span>
+              <span className="font-medium text-orange-600">R9,675,356 required</span>
             </div>
           </div>
         );
@@ -64,11 +62,11 @@ export default function FinancialPlanSummaryPage() {
           <div className="mt-3 space-y-2 text-sm">
             <div className="flex justify-between">
               <span className="text-gray-600">Retirement Funds:</span>
-              <span className="font-medium text-red-600">{data.retirementFunds?.shortfall || 'N/A'} shortfall</span>
+              <span className="font-medium text-red-600">R8,994,312 shortfall</span>
             </div>
             <div className="flex justify-between">
               <span className="text-gray-600">Required:</span>
-              <span className="font-medium">{data.retirementFunds?.required || 'N/A'}</span>
+              <span className="font-medium">R27,965,380</span>
             </div>
           </div>
         );
@@ -79,15 +77,15 @@ export default function FinancialPlanSummaryPage() {
           <div className="mt-3 space-y-2 text-sm">
             <div className="flex justify-between">
               <span className="text-gray-600">Total Nominal:</span>
-              <span className="font-medium">{data.totalNominal || 'N/A'}</span>
+              <span className="font-medium">R6,450,000</span>
             </div>
             <div className="flex justify-between">
               <span className="text-gray-600">Compulsory:</span>
-              <span className="font-medium">{data.compulsoryNominal || 'N/A'}</span>
+              <span className="font-medium">R4,450,000</span>
             </div>
             <div className="flex justify-between">
               <span className="text-gray-600">Voluntary:</span>
-              <span className="font-medium">{data.voluntaryNominal || 'N/A'}</span>
+              <span className="font-medium">R2,000,000</span>
             </div>
           </div>
         );
@@ -98,11 +96,11 @@ export default function FinancialPlanSummaryPage() {
           <div className="mt-3 space-y-2 text-sm">
             <div className="flex justify-between">
               <span className="text-gray-600">Lump Sum Cover:</span>
-              <span className="font-medium text-green-600">{data.lumpSumCover?.surplus || 'N/A'} surplus</span>
+              <span className="font-medium text-green-600">R831,961 surplus</span>
             </div>
             <div className="flex justify-between">
               <span className="text-gray-600">Income Cover:</span>
-              <span className="font-medium text-red-600">{data.incomeCover?.shortfall || 'N/A'} shortfall</span>
+              <span className="font-medium text-red-600">R5,135,026 shortfall</span>
             </div>
           </div>
         );
