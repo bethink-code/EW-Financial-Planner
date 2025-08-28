@@ -116,6 +116,9 @@ export default function FinancialPlansPage() {
           <div className="w-[1320px]">
             <Card>
               <CardHeader className="pb-4">
+                <div className="bg-blue-50 p-2 text-xs text-blue-700 rounded mb-2">
+                  DEBUG: Plans loaded: {plans.length}, Loading: {isLoading ? 'Yes' : 'No'}
+                </div>
               </CardHeader>
 
               <CardContent>
@@ -182,7 +185,10 @@ export default function FinancialPlansPage() {
                                 <Button 
                                   className="bg-[#E6F0F5] hover:bg-[#D6E7F0] text-[#016991] border-[#E6F0F5]" 
                                   size="sm"
-                                  onClick={() => setSelectedPlanForNeeds(plan)}
+                                  onClick={() => {
+                                    console.log("Button clicked, setting plan:", plan);
+                                    setSelectedPlanForNeeds(plan);
+                                  }}
                                 >
                                   Choose
                                 </Button>
@@ -215,15 +221,17 @@ export default function FinancialPlansPage() {
       </div>
       
       {selectedPlanForNeeds && (
-        <FinancialNeedsDialog
-          isOpen={!!selectedPlanForNeeds}
-          onClose={() => setSelectedPlanForNeeds(null)}
-          planId={selectedPlanForNeeds.id.toString()}
-          currentNeeds={getNeedsForPlan(selectedPlanForNeeds.id).map(need => ({
-            key: need.key,
-            displayName: need.displayName
-          }))}
-        />
+        <Dialog open={!!selectedPlanForNeeds} onOpenChange={() => setSelectedPlanForNeeds(null)}>
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle>Test Modal</DialogTitle>
+            </DialogHeader>
+            <div className="p-4">
+              <p>This is a test modal for plan: {selectedPlanForNeeds.name}</p>
+              <Button onClick={() => setSelectedPlanForNeeds(null)}>Close</Button>
+            </div>
+          </DialogContent>
+        </Dialog>
       )}
     </FinancialPlanningLayout>
   );
