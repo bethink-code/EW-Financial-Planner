@@ -124,7 +124,7 @@ export function FinancialNeedsDialog({
           </Button>
           <Button 
             onClick={handleUpdate}
-            className="flex-1 bg-[#E6F0F5] hover:bg-[#D6E7F0] text-[#016991] border-[#E6F0F5]"
+            className="flex-1 bg-blue-600 hover:bg-blue-700 text-white"
             disabled={updatePlanNeedsMutation.isPending}
           >
             {updatePlanNeedsMutation.isPending ? 'Updating...' : '✓ Update plan'}
