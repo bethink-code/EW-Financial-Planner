@@ -296,7 +296,7 @@ export default function FinancialPlanSummaryPage() {
                 <Card key={need.id} className="bg-white hover:shadow-md transition-shadow">
                   <CardHeader className="pb-3">
                     <div className="flex items-center justify-between">
-                      <CardTitle className="text-lg font-semibold text-gray-900">{need.displayName}</CardTitle>
+                      <CardTitle className="card-title">{need.displayName}</CardTitle>
                     </div>
                   </CardHeader>
                   <CardContent>

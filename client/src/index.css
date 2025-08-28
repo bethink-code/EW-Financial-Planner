@@ -14,6 +14,13 @@ html {
   line-height: 1.2 !important;
 }
 
+/* Global card title styling */
+.card-title {
+  font-size: 20px !important;
+  font-weight: 500 !important;
+  color: #1F2224 !important;
+}
+
 /* Override for bold total rows */
 .table-text-14.font-bold {
   font-weight: 700 !important;
