@@ -39,13 +39,13 @@ export default function FinancialPlanSummaryPage() {
             <div className="space-y-6 bg-[#F6F9FB] p-4 rounded-lg">
               <div>
                 <div className="mb-1">
-                  <div className="text-sm font-medium text-gray-800">Estate position</div>
+                  <div className="text-base font-semibold text-gray-800">Estate position</div>
                   <div className="text-sm font-medium text-green-600">Allocated to dependants: R2,948,748</div>
                 </div>
                 <div className="w-full bg-gray-200 rounded-full h-2 mb-2">
                   <div className="bg-[#539cc7] h-2 rounded-full" style={{ width: '66%' }}></div>
                 </div>
-                <div className="flex justify-between text-xs text-gray-600">
+                <div className="flex justify-between text-sm text-gray-600">
                   <span>Provided: R5,740,981</span>
                   <span>Required: R2,918,036</span>
                 </div>
@@ -53,13 +53,13 @@ export default function FinancialPlanSummaryPage() {
               
               <div>
                 <div className="mb-1">
-                  <div className="text-sm font-medium text-gray-800">Dependants position</div>
+                  <div className="text-base font-semibold text-gray-800">Dependants position</div>
                   <div className="text-sm font-medium text-red-600">Shortfall: R1,752,411</div>
                 </div>
                 <div className="w-full bg-gray-200 rounded-full h-2 mb-2">
                   <div className="bg-[#539cc7] h-2 rounded-full" style={{ width: '82%' }}></div>
                 </div>
-                <div className="flex justify-between text-xs text-gray-600">
+                <div className="flex justify-between text-sm text-gray-600">
                   <span>Provided: R7,822,945</span>
                   <span>Required: R9,575,356</span>
                 </div>
@@ -174,7 +174,7 @@ export default function FinancialPlanSummaryPage() {
                 <div className="w-full bg-gray-200 rounded-full h-2 mb-2">
                   <div className="bg-purple-500 h-2 rounded-full" style={{ width: '119%', maxWidth: '100%' }}></div>
                 </div>
-                <div className="flex justify-between text-xs text-gray-600">
+                <div className="flex justify-between text-sm text-gray-600">
                   <span>Provided: R3,091,961</span>
                   <span>Required: R2,260,000</span>
                 </div>
@@ -188,7 +188,7 @@ export default function FinancialPlanSummaryPage() {
                 <div className="w-full bg-gray-200 rounded-full h-2 mb-2">
                   <div className="bg-purple-400 h-2 rounded-full" style={{ width: '62%' }}></div>
                 </div>
-                <div className="flex justify-between text-xs text-gray-600">
+                <div className="flex justify-between text-sm text-gray-600">
                   <span>Provided: R8,535,631 (R60,888 p.m.)</span>
                   <span>Required: R13,670,518 (R97,518 p.m.)</span>
                 </div>
