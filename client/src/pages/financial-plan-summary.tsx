@@ -133,31 +133,24 @@ export default function FinancialPlanSummaryPage() {
                 <div className="flex-1 relative h-32">
                   <svg className="w-full h-full" viewBox="0 0 300 120">
                     <defs>
-                      <linearGradient id="gradient1" x1="0%" y1="0%" x2="0%" y2="100%">
-                        <stop offset="0%" style={{ stopColor: '#539cc7', stopOpacity: 0.8 }} />
-                        <stop offset="100%" style={{ stopColor: '#539cc7', stopOpacity: 0.2 }} />
-                      </linearGradient>
-                      <linearGradient id="gradient2" x1="0%" y1="0%" x2="0%" y2="100%">
-                        <stop offset="0%" style={{ stopColor: '#539cc7', stopOpacity: 0.6 }} />
-                        <stop offset="100%" style={{ stopColor: '#539cc7', stopOpacity: 0.1 }} />
-                      </linearGradient>
-                      <linearGradient id="gradient3" x1="0%" y1="0%" x2="0%" y2="100%">
-                        <stop offset="0%" style={{ stopColor: '#EC4899', stopOpacity: 0.8 }} />
-                        <stop offset="100%" style={{ stopColor: '#EC4899', stopOpacity: 0.2 }} />
+                      <linearGradient id="backgroundGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                        <stop offset="0%" style={{ stopColor: '#A5C9EA', stopOpacity: 0.6 }} />
+                        <stop offset="100%" style={{ stopColor: '#A5C9EA', stopOpacity: 0.3 }} />
                       </linearGradient>
                     </defs>
                     
-                    {/* Total area */}
-                    <path d="M 0 90 Q 75 70 150 75 Q 225 80 300 85 L 300 120 L 0 120 Z" fill="url(#gradient1)" />
-                    {/* Compulsory area */}
-                    <path d="M 0 90 Q 75 85 150 88 Q 225 90 300 95 L 300 120 L 0 120 Z" fill="url(#gradient2)" />
-                    {/* Voluntary area */}
-                    <path d="M 0 90 Q 75 95 150 100 Q 225 105 300 110 L 300 120 L 0 120 Z" fill="url(#gradient3)" />
+                    {/* Single light blue background */}
+                    <rect x="0" y="20" width="300" height="80" fill="url(#backgroundGradient)" rx="4" />
                     
-                    {/* Lines */}
-                    <path d="M 0 90 Q 75 70 150 75 Q 225 80 300 85" stroke="#539cc7" strokeWidth="2" fill="none" />
-                    <path d="M 0 90 Q 75 85 150 88 Q 225 90 300 95" stroke="#539cc7" strokeWidth="2" fill="none" />
-                    <path d="M 0 90 Q 75 95 150 100 Q 225 105 300 110" stroke="#EC4899" strokeWidth="2" fill="none" />
+                    {/* Three separate line graphs */}
+                    {/* Total (Nominal) line - blue */}
+                    <path d="M 10 40 Q 80 30 150 35 Q 220 40 290 45" stroke="#539cc7" strokeWidth="3" fill="none" />
+                    
+                    {/* Compulsory (Nominal) line - darker blue */}
+                    <path d="M 10 50 Q 80 45 150 48 Q 220 52 290 55" stroke="#2563eb" strokeWidth="3" fill="none" />
+                    
+                    {/* Voluntary (Nominal) line - pink */}
+                    <path d="M 10 70 Q 80 65 150 68 Q 220 72 290 75" stroke="#EC4899" strokeWidth="3" fill="none" />
                   </svg>
                 </div>
               </div>
