@@ -133,24 +133,21 @@ export default function FinancialPlanSummaryPage() {
                 <div className="flex-1 relative h-32">
                   <svg className="w-full h-full" viewBox="0 0 300 120">
                     <defs>
-                      <linearGradient id="backgroundGradient" x1="0%" y1="0%" x2="0%" y2="100%">
-                        <stop offset="0%" style={{ stopColor: '#A5C9EA', stopOpacity: 0.6 }} />
-                        <stop offset="100%" style={{ stopColor: '#A5C9EA', stopOpacity: 0.3 }} />
+                      <linearGradient id="areaGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                        <stop offset="0%" style={{ stopColor: '#A5C9EA', stopOpacity: 0.7 }} />
+                        <stop offset="100%" style={{ stopColor: '#A5C9EA', stopOpacity: 0.4 }} />
                       </linearGradient>
                     </defs>
                     
-                    {/* Single light blue background */}
-                    <rect x="0" y="20" width="300" height="80" fill="url(#backgroundGradient)" rx="4" />
+                    {/* Area chart background - light blue filled area */}
+                    <path d="M 0 30 Q 75 20 150 25 Q 225 30 300 35 L 300 100 L 0 100 Z" fill="url(#areaGradient)" />
                     
-                    {/* Three separate line graphs */}
+                    {/* Two line graphs on top */}
                     {/* Total (Nominal) line - blue */}
-                    <path d="M 10 40 Q 80 30 150 35 Q 220 40 290 45" stroke="#539cc7" strokeWidth="3" fill="none" />
-                    
-                    {/* Compulsory (Nominal) line - darker blue */}
-                    <path d="M 10 50 Q 80 45 150 48 Q 220 52 290 55" stroke="#2563eb" strokeWidth="3" fill="none" />
+                    <path d="M 0 30 Q 75 20 150 25 Q 225 30 300 35" stroke="#539cc7" strokeWidth="2.5" fill="none" />
                     
                     {/* Voluntary (Nominal) line - pink */}
-                    <path d="M 10 70 Q 80 65 150 68 Q 220 72 290 75" stroke="#EC4899" strokeWidth="3" fill="none" />
+                    <path d="M 0 70 Q 75 65 150 68 Q 225 72 300 75" stroke="#EC4899" strokeWidth="2.5" fill="none" />
                   </svg>
                 </div>
               </div>
