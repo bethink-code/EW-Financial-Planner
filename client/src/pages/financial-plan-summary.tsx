@@ -83,7 +83,7 @@ export default function FinancialPlanSummaryPage() {
                 <span className="text-sm font-medium text-red-600">Shortfall: R8,894,312</span>
               </div>
               <div className="w-full bg-gray-200 rounded-full h-2 mb-2">
-                <div className="bg-[#539cc7] h-2 rounded-full" style={{ width: '68%' }}></div>
+                <div className="bg-[#f1b431] h-2 rounded-full" style={{ width: '68%' }}></div>
               </div>
               <div className="flex justify-between text-sm text-gray-600">
                 <span>Provided: R19,071,067</span>
