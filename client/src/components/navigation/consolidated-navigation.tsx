@@ -191,11 +191,17 @@ export function ConsolidatedNavigation({
                   ))}
                   <DropdownMenuSeparator />
                   <DropdownMenuItem className="dropdown-menu-item" asChild>
-                    <Link href="/manage-needs" onClick={() => setIsNeedDropdownOpen(false)}>
+                    <button 
+                      className="w-full text-left"
+                      onClick={() => {
+                        setIsNeedDropdownOpen(false);
+                        setIsNeedsDialogOpen(true);
+                      }}
+                    >
                       <span className="text-gray-700">
                         Manage needs in this plan
                       </span>
-                    </Link>
+                    </button>
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
