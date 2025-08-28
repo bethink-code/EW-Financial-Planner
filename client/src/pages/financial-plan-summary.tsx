@@ -36,7 +36,7 @@ export default function FinancialPlanSummaryPage() {
       if (need.key === 'death-estate-liquidity') {
         return (
           <div className="mt-3 space-y-4">
-            <div className="space-y-3 bg-[#F6F9FB] p-4 rounded-lg">
+            <div className="space-y-6 bg-[#F6F9FB] p-4 rounded-lg">
               <div>
                 <div className="flex justify-between items-center mb-1">
                   <span className="text-sm font-medium text-gray-800">Estate position</span>
