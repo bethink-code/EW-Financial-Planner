@@ -36,7 +36,7 @@ export default function FinancialPlanSummaryPage() {
       if (need.key === 'death-estate-liquidity') {
         return (
           <div className="mt-3 space-y-4">
-            <div className="space-y-3 bg-gray-50 p-4 rounded-lg">
+            <div className="space-y-3 bg-[#F6F9FB] p-4 rounded-lg">
               <div>
                 <div className="flex justify-between items-center mb-1">
                   <span className="text-sm font-medium text-gray-800">Estate position</span>
@@ -77,7 +77,7 @@ export default function FinancialPlanSummaryPage() {
       if (need.key === 'retirement') {
         return (
           <div className="mt-3 space-y-4">
-            <div className="bg-gray-50 p-4 rounded-lg">
+            <div className="bg-[#F6F9FB] p-4 rounded-lg">
               <div className="flex justify-between items-center mb-1">
                 <span className="text-sm font-medium text-gray-800">Retirement funds</span>
                 <span className="text-sm font-medium text-red-600">Shortfall: R8,894,312</span>
@@ -102,7 +102,7 @@ export default function FinancialPlanSummaryPage() {
       if (need.key === 'investment-planning') {
         return (
           <div className="mt-3 space-y-4">
-            <div className="bg-gray-50 p-4 rounded-lg">
+            <div className="bg-[#F6F9FB] p-4 rounded-lg">
             <div className="relative h-32 mb-4">
               {/* Simple area chart representation */}
               <svg className="w-full h-full" viewBox="0 0 300 120">
@@ -165,7 +165,7 @@ export default function FinancialPlanSummaryPage() {
       if (need.key === 'permanent-disability') {
         return (
           <div className="mt-3 space-y-4">
-            <div className="space-y-3 bg-gray-50 p-4 rounded-lg">
+            <div className="space-y-3 bg-[#F6F9FB] p-4 rounded-lg">
               <div>
                 <div className="flex justify-between items-center mb-1">
                   <span className="text-sm font-medium text-gray-800">Lump sum disability cover</span>
@@ -248,7 +248,7 @@ export default function FinancialPlanSummaryPage() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-gray-50">
+      <div className="min-h-screen bg-[#F6F9FB]">
         <div className="w-full px-6 py-6">
           <div className="w-[1320px]">
             <div className="text-center py-8 text-gray-500">
@@ -262,7 +262,7 @@ export default function FinancialPlanSummaryPage() {
 
   if (!planWithNeeds) {
     return (
-      <div className="min-h-screen bg-gray-50">
+      <div className="min-h-screen bg-[#F6F9FB]">
         <div className="w-full px-6 py-6">
           <div className="w-[1320px]">
             <div className="text-center py-8 text-gray-500">
@@ -287,7 +287,7 @@ export default function FinancialPlanSummaryPage() {
         hasDetailedSteps: need.hasDetailedSteps 
       }))}
     >
-      <div className="min-h-screen bg-gray-50">
+      <div className="min-h-screen bg-[#F6F9FB]">
         <div className="w-full px-6 py-6">
           <div className="w-[1320px]">
             {/* Needs Grid */}
