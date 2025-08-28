@@ -43,7 +43,7 @@ export default function FinancialPlanSummaryPage() {
                   <div className="text-sm font-medium text-green-600">Allocated to dependants: R2,948,748</div>
                 </div>
                 <div className="w-full bg-gray-200 rounded-full h-2 mb-2">
-                  <div className="bg-blue-500 h-2 rounded-full" style={{ width: '66%' }}></div>
+                  <div className="bg-[#539cc7] h-2 rounded-full" style={{ width: '66%' }}></div>
                 </div>
                 <div className="flex justify-between text-xs text-gray-600">
                   <span>Provided: R5,740,981</span>
@@ -57,7 +57,7 @@ export default function FinancialPlanSummaryPage() {
                   <div className="text-sm font-medium text-red-600">Shortfall: R1,752,411</div>
                 </div>
                 <div className="w-full bg-gray-200 rounded-full h-2 mb-2">
-                  <div className="bg-blue-500 h-2 rounded-full" style={{ width: '82%' }}></div>
+                  <div className="bg-[#539cc7] h-2 rounded-full" style={{ width: '82%' }}></div>
                 </div>
                 <div className="flex justify-between text-xs text-gray-600">
                   <span>Provided: R7,822,945</span>
@@ -108,12 +108,12 @@ export default function FinancialPlanSummaryPage() {
               <svg className="w-full h-full" viewBox="0 0 300 120">
                 <defs>
                   <linearGradient id="gradient1" x1="0%" y1="0%" x2="0%" y2="100%">
-                    <stop offset="0%" style={{ stopColor: '#93C5FD', stopOpacity: 0.8 }} />
-                    <stop offset="100%" style={{ stopColor: '#93C5FD', stopOpacity: 0.2 }} />
+                    <stop offset="0%" style={{ stopColor: '#539cc7', stopOpacity: 0.8 }} />
+                    <stop offset="100%" style={{ stopColor: '#539cc7', stopOpacity: 0.2 }} />
                   </linearGradient>
                   <linearGradient id="gradient2" x1="0%" y1="0%" x2="0%" y2="100%">
-                    <stop offset="0%" style={{ stopColor: '#60A5FA', stopOpacity: 0.8 }} />
-                    <stop offset="100%" style={{ stopColor: '#60A5FA', stopOpacity: 0.2 }} />
+                    <stop offset="0%" style={{ stopColor: '#539cc7', stopOpacity: 0.6 }} />
+                    <stop offset="100%" style={{ stopColor: '#539cc7', stopOpacity: 0.1 }} />
                   </linearGradient>
                   <linearGradient id="gradient3" x1="0%" y1="0%" x2="0%" y2="100%">
                     <stop offset="0%" style={{ stopColor: '#EC4899', stopOpacity: 0.8 }} />
@@ -129,20 +129,20 @@ export default function FinancialPlanSummaryPage() {
                 <path d="M 0 90 Q 75 95 150 100 Q 225 105 300 110 L 300 120 L 0 120 Z" fill="url(#gradient3)" />
                 
                 {/* Lines */}
-                <path d="M 0 90 Q 75 70 150 75 Q 225 80 300 85" stroke="#3B82F6" strokeWidth="2" fill="none" />
-                <path d="M 0 90 Q 75 85 150 88 Q 225 90 300 95" stroke="#1D4ED8" strokeWidth="2" fill="none" />
+                <path d="M 0 90 Q 75 70 150 75 Q 225 80 300 85" stroke="#539cc7" strokeWidth="2" fill="none" />
+                <path d="M 0 90 Q 75 85 150 88 Q 225 90 300 95" stroke="#539cc7" strokeWidth="2" fill="none" />
                 <path d="M 0 90 Q 75 95 150 100 Q 225 105 300 110" stroke="#EC4899" strokeWidth="2" fill="none" />
               </svg>
             </div>
             
             <div className="space-y-2 text-sm">
               <div className="flex items-center gap-2">
-                <div className="w-3 h-3 bg-blue-400 rounded-full"></div>
+                <div className="w-3 h-3 bg-[#539cc7] rounded-full"></div>
                 <span className="text-gray-600">Total (Nominal)</span>
                 <span className="font-medium ml-auto">R6,450,000</span>
               </div>
               <div className="flex items-center gap-2">
-                <div className="w-3 h-3 bg-blue-600 rounded-full"></div>
+                <div className="w-3 h-3 bg-[#539cc7] rounded-full" style={{opacity: 0.7}}></div>
                 <span className="text-gray-600">Compulsory (Nominal)</span>
                 <span className="font-medium ml-auto">R4,450,000</span>
               </div>
