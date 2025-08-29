@@ -122,9 +122,6 @@ export function FinancialPlanningLayout({
                         <Link href={`/needs/${need.key}`}>
                           <div className="flex items-center justify-between w-full">
                             <span>{need.displayName}</span>
-                            {need.hasDetailedSteps && (
-                              <span className="text-xs text-green-600">✓ Detailed</span>
-                            )}
                           </div>
                         </Link>
                       </DropdownMenuItem>
