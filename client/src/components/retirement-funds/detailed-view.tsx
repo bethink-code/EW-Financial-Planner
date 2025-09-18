@@ -218,7 +218,7 @@ export function DetailedView({ funds, columnVisibility, onFieldUpdate, isUpdatin
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
-                      {owners.map((owner) => (
+                      {owners.filter(owner => owner && owner.trim() !== "").map((owner) => (
                         <SelectItem key={owner} value={owner}>
                           {owner}
                         </SelectItem>

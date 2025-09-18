@@ -301,7 +301,7 @@ export function ExactMatchTable({
                         <SelectValue />
                       </SelectTrigger>
                       <SelectContent>
-                        {owners.map((owner) => (
+                        {owners.filter(owner => owner && owner.trim() !== "").map((owner) => (
                           <SelectItem key={owner} value={owner} className="text-xs">
                             {owner}
                           </SelectItem>
@@ -318,7 +318,7 @@ export function ExactMatchTable({
                         <SelectValue />
                       </SelectTrigger>
                       <SelectContent>
-                        {owners.map((owner) => (
+                        {owners.filter(owner => owner && owner.trim() !== "").map((owner) => (
                           <SelectItem key={owner} value={owner} className="text-xs">
                             {owner}
                           </SelectItem>

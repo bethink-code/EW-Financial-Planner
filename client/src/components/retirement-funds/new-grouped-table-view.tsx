@@ -759,7 +759,7 @@ export function NewGroupedTableView({ funds, columnVisibility, tableMode, onFiel
                             <Edit3 size={12} className="ml-1 text-teal-400 opacity-0 group-hover:opacity-100 transition-opacity duration-200" />
                           </SelectTrigger>
                           <SelectContent>
-                            {owners.map((owner) => (
+                            {owners.filter(owner => owner && owner.trim() !== "").map((owner) => (
                               <SelectItem key={owner} value={owner}>
                                 {owner}
                               </SelectItem>

@@ -151,7 +151,7 @@ export function NewRetirementTable({
  const handleAddOwner = useCallback((fundId: number) => {
    const fund = funds.find((f: RetirementFund) => f.id === fundId);
    if (fund) {
-     const newOwners = [...fund.owners,""];
+     const newOwners = [...fund.owners,"Enter name..."];
      const newOwnershipPercentages = [...(fund.ownershipPercentages || []), "0%"];
      handleUpdateFund(fundId, 'owners', newOwners);
      handleUpdateFund(fundId, 'ownershipPercentages', newOwnershipPercentages);
