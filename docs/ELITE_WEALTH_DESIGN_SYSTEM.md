@@ -1,7 +1,7 @@
 # Elite Wealth Design System Specification
 
-**Version:** 1.0.0  
-**Last Updated:** February 2026  
+**Version:** 1.0.1  
+**Last Updated:** April 2026  
 
 A comprehensive design system specification for building Elite Wealth-branded financial planning interfaces. This document provides all visual patterns, component styles, color codes, and implementation guidelines needed to create consistent, professional financial applications.
 

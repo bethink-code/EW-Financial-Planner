@@ -1,5 +1,7 @@
 # Elite Wealth Table Pattern Specification
 
+**Version:** 1.0.1 | **Last Updated:** April 2026
+
 ## Overview
 
 This document provides a comprehensive, architectural specification for building Elite Wealth-styled data tables. It defines a **Base Table Pattern** that developers can extend with functional modules as needed. All tables in the system follow this consistent pattern to ensure visual harmony and maintainability.
