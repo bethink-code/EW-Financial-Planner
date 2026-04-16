@@ -63,12 +63,8 @@ function Router() {
   return (
     <div className="min-h-screen bg-gray-50">
       <Switch>
-        {/* Default route - redirect to assurance with proper context */}
-        <Route path="/" component={() => {
-          // Redirect to assurance with proper navigation context
-          window.location.href = '/assurance';
-          return null;
-        }} />
+        {/* Default route - Financial Plans list */}
+        <Route path="/" component={FinancialPlansPage} />
 
         {/* Financial planning routes */}
         <Route path="/financial-plans" component={FinancialPlansPage} />
