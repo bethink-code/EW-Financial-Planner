@@ -59,10 +59,11 @@ function Router() {
   return (
     <div className="min-h-screen bg-gray-50">
       <Switch>
-        {/* Default route - redirect to assurance with proper context */}
+        {/* Default route - redirect root to the Assurance page */}
         <Route path="/" component={() => {
-          // Redirect to assurance with proper navigation context
-          window.location.href = '/assurance';
+          if (window.location.pathname === "/") {
+            window.location.replace('/assurance');
+          }
           return null;
         }} />
           

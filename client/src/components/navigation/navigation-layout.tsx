@@ -5,6 +5,7 @@ import { SectionTabs } from "./section-tabs";
 import { SequentialNavigationBar } from "./sequential-navigation-bar";
 import { needs } from "@shared/navigation-config";
 import headerImage from "@assets/EW Header_1753945516780.png";
+import { CommentsPanel } from "@/components/comments/comments-panel";
 
 interface NavigationLayoutProps {
   children: React.ReactNode;
@@ -17,7 +18,7 @@ export function NavigationLayout({ children }: NavigationLayoutProps) {
   const currentNeed = needs.find(n => n.id === "death-estate-liquidity");
   
   if (!currentNeed || !currentNeed.steps) {
-    return <>{children}</>;
+    return <><CommentsPanel />{children}</>;
   }
   
   // Determine current step based on URL with better calculator route matching
@@ -121,6 +122,9 @@ export function NavigationLayout({ children }: NavigationLayoutProps) {
       
       {/* Sequential Navigation Bar */}
       <SequentialNavigationBar />
+
+      {/* Comments */}
+      <CommentsPanel />
     </>
   );
 }

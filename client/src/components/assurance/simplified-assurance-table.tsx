@@ -1,4 +1,4 @@
-import { useState, useCallback, useMemo } from"react";
+import React, { useState, useCallback, useMemo } from"react";
 import { useQuery, useMutation, useQueryClient } from"@tanstack/react-query";
 import { Plus, Trash2 } from"lucide-react";
 import { DeleteButton, AddButton } from"@/components/ui/action-buttons";
@@ -52,19 +52,20 @@ export function AssuranceTable({ searchTerm }: AssuranceTableProps) {
       try {
         const newPolicy: InsertAssurance = {
           description:"",
-          owner:"Donald Edwards",
+          owners:["Donald Edwards"],
           additionalOwners: [],
-          lifeAssured:"",
-          deathBenefit:"0",
-          beneficiary:"",
-          benefitSplit:"0",
+          lifeAssured:[""],
+          deathBenefit:"R 0",
+          deathBenefits:["R 0"],
+          beneficiaries:[""],
+          benefitSplit:"0%",
           additionalBeneficiaries: [],
           additionalBenefitSplits: [],
-          amount:"0",
+          amount:"R 0",
           buySell: false,
           keyMan: false,
-          premiumsByOthers:"0",
-          collateralSession:"0",
+          premiumsByOthers:"R 0",
+          collateralSession:"R 0",
           excludedFromEstateDuty: false,
           excludedFromProvisions: false
         };
@@ -186,9 +187,9 @@ export function AssuranceTable({ searchTerm }: AssuranceTableProps) {
     const lowerQuery = searchTerm.toLowerCase();
     return policies.filter((policy: Assurance) =>
       policy.description.toLowerCase().includes(lowerQuery) ||
-      policy.owner.toLowerCase().includes(lowerQuery) ||
-      policy.lifeAssured.toLowerCase().includes(lowerQuery) ||
-      policy.beneficiary.toLowerCase().includes(lowerQuery)
+      (policy.owners[0] || "").toLowerCase().includes(lowerQuery) ||
+      (policy.lifeAssured[0] || "").toLowerCase().includes(lowerQuery) ||
+      (policy.beneficiaries[0] || "").toLowerCase().includes(lowerQuery)
     );
   }, [policies, searchTerm]);
 
@@ -236,7 +237,8 @@ export function AssuranceTable({ searchTerm }: AssuranceTableProps) {
           </thead>
           <tbody className="divide-y divide-neutral-200">
             {filteredPolicies.map((policy: Assurance) => (
-              <tr key={policy.id} >
+              <React.Fragment key={policy.id}>
+              <tr>
                 <td className="px-3">
                   <input
                     type="text"
@@ -250,8 +252,8 @@ export function AssuranceTable({ searchTerm }: AssuranceTableProps) {
                   <div className="flex items-center space-x-1">
                     <input
                       type="text"
-                      defaultValue={policy.owner}
-                      onBlur={(e) => handleUpdatePolicy(policy.id, 'owner', e.target.value)}
+                      defaultValue={policy.owners[0] || ""}
+                      onBlur={(e) => handleUpdatePolicy(policy.id, 'owners', [e.target.value])}
                       className={getFieldClass("text")} 
                       disabled={isUpdating}
                     />
@@ -263,8 +265,8 @@ export function AssuranceTable({ searchTerm }: AssuranceTableProps) {
                 <td className="px-3">
                   <input
                     type="text"
-                    defaultValue={policy.lifeAssured}
-                    onBlur={(e) => handleUpdatePolicy(policy.id, 'lifeAssured', e.target.value)}
+                    defaultValue={policy.lifeAssured[0] || ""}
+                    onBlur={(e) => handleUpdatePolicy(policy.id, 'lifeAssured', [e.target.value])}
                     className={getFieldClass("text")} 
                     disabled={isUpdating}
                   />
@@ -282,8 +284,8 @@ export function AssuranceTable({ searchTerm }: AssuranceTableProps) {
                   <div className="flex items-center space-x-1">
                     <input
                       type="text"
-                      defaultValue={policy.beneficiary}
-                      onBlur={(e) => handleUpdatePolicy(policy.id, 'beneficiary', e.target.value)}
+                      defaultValue={policy.beneficiaries[0] || ""}
+                      onBlur={(e) => handleUpdatePolicy(policy.id, 'beneficiaries', [e.target.value])}
                       className={getFieldClass("text")} 
                       disabled={isUpdating}
                     />
@@ -419,7 +421,8 @@ export function AssuranceTable({ searchTerm }: AssuranceTableProps) {
                   <td colSpan={8} className="px-3 text-sm text-neutral-700"></td>
                 </tr>
               ))}
-            )}
+              </React.Fragment>
+            ))}
             
             {/* Total Row */}
             {filteredPolicies.length > 0 && (
@@ -428,7 +431,7 @@ export function AssuranceTable({ searchTerm }: AssuranceTableProps) {
                 <td colSpan={2} className="px-3"></td>
                 <td className="px-3 text-sm font-bold text-neutral-800 text-right">
                   {formatCurrencyValue(
-                    filteredPolicies.reduce((sum, policy) => {
+                    filteredPolicies.reduce((sum: number, policy: Assurance) => {
                       const value = parseFloat(policy.deathBenefit.replace(/[^\d.-]/g, '')) || 0;
                       return sum + value;
                     }, 0).toString(),
@@ -438,7 +441,7 @@ export function AssuranceTable({ searchTerm }: AssuranceTableProps) {
                 <td colSpan={2} className="px-3"></td>
                 <td className="px-3 text-sm font-bold text-neutral-800 text-right">
                   {formatCurrencyValue(
-                    filteredPolicies.reduce((sum, policy) => {
+                    filteredPolicies.reduce((sum: number, policy: Assurance) => {
                       const value = parseFloat(policy.amount.replace(/[^\d.-]/g, '')) || 0;
                       return sum + value;
                     }, 0).toString(),
@@ -448,7 +451,7 @@ export function AssuranceTable({ searchTerm }: AssuranceTableProps) {
                 <td colSpan={4} className="px-3"></td>
                 <td className="px-3 text-sm font-bold text-neutral-800 text-right">
                   {formatCurrencyValue(
-                    filteredPolicies.reduce((sum, policy) => {
+                    filteredPolicies.reduce((sum: number, policy: Assurance) => {
                       const value = parseFloat(policy.premiumsByOthers.replace(/[^\d.-]/g, '')) || 0;
                       return sum + value;
                     }, 0).toString(),
@@ -457,7 +460,7 @@ export function AssuranceTable({ searchTerm }: AssuranceTableProps) {
                 </td>
                 <td className="px-3 text-sm font-bold text-neutral-800 text-right">
                   {formatCurrencyValue(
-                    filteredPolicies.reduce((sum, policy) => {
+                    filteredPolicies.reduce((sum: number, policy: Assurance) => {
                       const value = parseFloat(policy.collateralSession.replace(/[^\d.-]/g, '')) || 0;
                       return sum + value;
                     }, 0).toString(),

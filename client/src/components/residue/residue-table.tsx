@@ -129,7 +129,7 @@ function ResidueTable({ viewMode, searchTerm }: ResidueTableProps) {
                 className={`table-input ${getFieldClass('percentage')} ${getValueClass(residueItem.percentage, 'percentage')}`}
                 defaultValue={formatPercentageValue(residueItem.percentage)}
                 onFocus={handleDefaultValueFocus}
-                onBlur={createEnhancedBlurHandler(residueItem.id, 'percentage', handleInputBlur)}
+                onBlur={createEnhancedBlurHandler((value) => handleInputBlur(residueItem.id, 'percentage', value), 'percentage')}
                 disabled={isUpdating}
               />
             </td>

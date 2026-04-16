@@ -306,7 +306,7 @@ export function AssuranceDetailForm({
                           key={`amount-${policy.id}-${rowIndex}`}
                           type="text"
                           defaultValue={policy.amount || "R 0"}
-                          className={`${getFieldClass('amount')} ${getCellClass('amount')} ${getValueClass(policy.amount || "R 0", 'amount')}`}
+                          className={`${getFieldClass('currency')} ${getCellClass('currency')} ${getValueClass(policy.amount || "R 0", 'currency')}`}
                           onFocus={handleDefaultValueFocus}
                           onBlur={(e) => handleTextFieldBlur('amount', e.target.value)}
                           disabled={disabled}
@@ -408,39 +408,39 @@ export function AssuranceDetailForm({
           <FormField label="Buy/Sell">
             <input
               type="checkbox"
-              defaultChecked={false}
+              defaultChecked={policy.buySell}
               className="rounded border-neutral-300"
-              onChange={(e) => handleTextFieldBlur('buySell', e.target.checked ? 'checked' : 'unchecked')}
+              onChange={(e) => handleCheckboxChange('buySell', e.target.checked)}
               disabled={disabled}
             />
           </FormField>
-          
+
           <FormField label="Key Man">
             <input
               type="checkbox"
-              defaultChecked={false}
+              defaultChecked={policy.keyMan}
               className="rounded border-neutral-300"
-              onChange={(e) => handleTextFieldBlur('keyMan', e.target.checked ? 'checked' : 'unchecked')}
+              onChange={(e) => handleCheckboxChange('keyMan', e.target.checked)}
               disabled={disabled}
             />
           </FormField>
-          
+
           <FormField label="Excluded Estate Duty">
             <input
               type="checkbox"
-              defaultChecked={false}
+              defaultChecked={policy.excludedFromEstateDuty}
               className="rounded border-neutral-300"
-              onChange={(e) => handleTextFieldBlur('excludedEstateDuty', e.target.checked ? 'checked' : 'unchecked')}
+              onChange={(e) => handleCheckboxChange('excludedFromEstateDuty', e.target.checked)}
               disabled={disabled}
             />
           </FormField>
-          
+
           <FormField label="Excluded Provisions">
             <input
               type="checkbox"
-              defaultChecked={false}
+              defaultChecked={policy.excludedFromProvisions}
               className="rounded border-neutral-300"
-              onChange={(e) => handleTextFieldBlur('excludedProvisions', e.target.checked ? 'checked' : 'unchecked')}
+              onChange={(e) => handleCheckboxChange('excludedFromProvisions', e.target.checked)}
               disabled={disabled}
             />
           </FormField>

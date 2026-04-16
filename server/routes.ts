@@ -28,6 +28,7 @@ import {
   updateEstatePositionParametersSchema,
 } from "@shared/schema";
 import { insertAssetsSchema } from "@shared/assets-schema";
+import { insertCommentSchema, updateCommentSchema } from "@shared/schema";
 import { entityIdsToNames, entityNamesToIds } from "./entity-resolver";
 
 export async function registerRoutes(app: Express): Promise<Server> {
@@ -1340,6 +1341,71 @@ export async function registerRoutes(app: Express): Promise<Server> {
     } catch (error) {
       console.error("Error updating estate position parameters:", error);
       res.status(400).json({ message: "Invalid parameter data" });
+    }
+  });
+
+  // Comments Routes
+
+  app.get("/api/comments", async (req, res) => {
+    try {
+      const page = req.query.page as string;
+      if (!page) {
+        return res.json([]);
+      }
+      const items = await storage.getCommentsByPage(page);
+      res.json(items);
+    } catch (error) {
+      console.error("Error fetching comments:", error);
+      res.status(500).json({ message: "Failed to fetch comments" });
+    }
+  });
+
+  app.post("/api/comments", async (req, res) => {
+    try {
+      const validatedData = insertCommentSchema.parse({
+        ...req.body,
+        createdAt: new Date().toISOString(),
+      });
+      const comment = await storage.createComment(validatedData);
+      res.status(201).json(comment);
+    } catch (error) {
+      console.error("Error creating comment:", error);
+      res.status(400).json({ message: "Invalid comment data" });
+    }
+  });
+
+  app.patch("/api/comments/:id", async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      if (isNaN(id)) {
+        return res.status(400).json({ message: "Invalid comment ID" });
+      }
+      const validatedData = updateCommentSchema.parse(req.body);
+      const comment = await storage.updateComment(id, validatedData);
+      if (!comment) {
+        return res.status(404).json({ message: "Comment not found" });
+      }
+      res.json(comment);
+    } catch (error) {
+      console.error("Error updating comment:", error);
+      res.status(400).json({ message: "Invalid comment data" });
+    }
+  });
+
+  app.delete("/api/comments/:id", async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      if (isNaN(id)) {
+        return res.status(400).json({ message: "Invalid comment ID" });
+      }
+      const success = await storage.deleteComment(id);
+      if (!success) {
+        return res.status(404).json({ message: "Comment not found" });
+      }
+      res.status(204).send();
+    } catch (error) {
+      console.error("Error deleting comment:", error);
+      res.status(500).json({ message: "Failed to delete comment" });
     }
   });
 

@@ -9,8 +9,22 @@ export const retirementFunds = pgTable("retirement_funds", {
   description: text("description"),  // Allow null, no default
   owners: text("owners").array().notNull().default(["Donald Edwards"]),
   ownershipPercentages: text("ownership_percentages").array().notNull().default(["100%"]),
-  
-  // Unapproved Life Cover Section  
+  additionalOwners: text("additional_owners").array().notNull().default([]),
+
+  // Classic table fields (owner singular, name, amount, beneficiaryName)
+  owner: text("owner").notNull().default("Donald Edwards"),
+  name: text("name").notNull().default(""),
+  amount: text("amount").notNull().default("R 0"),
+  beneficiaryName: text("beneficiary_name").notNull().default(""),
+
+  // Additional beneficiaries for classic table
+  additionalBeneficiaries: text("additional_beneficiaries").array().notNull().default([]),
+  additionalBenefitSplits: text("additional_benefit_splits").array().notNull().default([]),
+
+  // Beneficiaries JSON for simple table
+  beneficiaries: text("beneficiaries").notNull().default("[]"),
+
+  // Unapproved Life Cover Section
   coverAmount: text("cover_amount").notNull().default("R 0"),
   unapprovedBeneficiaries: text("unapproved_beneficiaries").array().notNull().default([""]),
   unapprovedPercentageSplits: text("unapproved_percentage_splits").array().notNull().default(["0%"]),
@@ -140,6 +154,17 @@ export const assurance = pgTable("assurance", {
   collateralSession: text("collateral_session").notNull().default("R 0"),
   benefitSplit: text("benefit_split").notNull().default("0%"),
   
+  // Policy flags
+  buySell: boolean("buy_sell").notNull().default(false),
+  keyMan: boolean("key_man").notNull().default(false),
+  excludedFromEstateDuty: boolean("excluded_from_estate_duty").notNull().default(false),
+  excludedFromProvisions: boolean("excluded_from_provisions").notNull().default(false),
+
+  // Additional owner/beneficiary rows (legacy pattern used by simplified table)
+  additionalOwners: text("additional_owners").array().notNull().default([]),
+  additionalBeneficiaries: text("additional_beneficiaries").array().notNull().default([]),
+  additionalBenefitSplits: text("additional_benefit_splits").array().notNull().default([]),
+
   // Additional info
   additionalInfo: text("additional_info").notNull().default(""),
 });
@@ -427,5 +452,22 @@ export const updateEstatePositionParametersSchema = createInsertSchema(estatePos
 export type EstatePositionParameters = typeof estatePositionParameters.$inferSelect;
 export type InsertEstatePositionParameters = z.infer<typeof insertEstatePositionParametersSchema>;
 export type UpdateEstatePositionParameters = z.infer<typeof updateEstatePositionParametersSchema>;
+
+// Comments — per-page feedback for prototype reviews
+export const comments = pgTable("comments", {
+  id: serial("id").primaryKey(),
+  page: text("page").notNull(),
+  author: text("author").notNull(),
+  content: text("content").notNull(),
+  status: text("status").notNull().default("open"),
+  image: text("image"),
+  createdAt: text("created_at").notNull(),
+});
+
+export const insertCommentSchema = createInsertSchema(comments).omit({ id: true });
+export const updateCommentSchema = createInsertSchema(comments).omit({ id: true }).partial();
+export type Comment = typeof comments.$inferSelect;
+export type InsertComment = z.infer<typeof insertCommentSchema>;
+export type UpdateComment = z.infer<typeof updateCommentSchema>;
 
 export * from './assets-schema';

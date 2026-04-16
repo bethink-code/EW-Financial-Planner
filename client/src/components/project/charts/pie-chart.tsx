@@ -100,7 +100,7 @@ export function PieChart({ data, title }: PieChartProps) {
             height={36}
             formatter={(value, entry) => (
               <span style={{ color: entry.color }}>
-                {value}: {formatCurrency(entry.payload.value)}
+                {value}: {formatCurrency(entry.payload?.value)}
               </span>
             )}
           />

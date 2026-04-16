@@ -1,8 +1,8 @@
 import { useQuery } from "@tanstack/react-query";
-import type { AdditionalEstateDutyItem } from "@shared/schema";
+import type { AdditionalEstateDutyItems } from "@shared/schema";
 
 export function AdditionalEstateDutyItemsSummary() {
-  const { data: items = [], isLoading } = useQuery<AdditionalEstateDutyItem[]>({
+  const { data: items = [], isLoading } = useQuery<AdditionalEstateDutyItems[]>({
     queryKey: ["/api/additional-estate-duty-items"],
   });
 
@@ -15,12 +15,12 @@ export function AdditionalEstateDutyItemsSummary() {
   }
 
   const totalItems = items.length;
-  const totalAdditions = items.filter(item => !item.isDeduction).reduce((sum, item) => {
+  const totalAdditions = items.filter(item => !item.deduction).reduce((sum, item) => {
     const amount = parseFloat(item.amount.replace(/[^\d.-]/g, '')) || 0;
     return sum + amount;
   }, 0);
 
-  const totalDeductions = items.filter(item => item.isDeduction).reduce((sum, item) => {
+  const totalDeductions = items.filter(item => item.deduction).reduce((sum, item) => {
     const amount = parseFloat(item.amount.replace(/[^\d.-]/g, '')) || 0;
     return sum + amount;
   }, 0);

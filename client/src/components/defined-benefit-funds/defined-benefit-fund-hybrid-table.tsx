@@ -60,7 +60,8 @@ export function DefinedBenefitFundHybridTable({ searchTerm, onAddFund }: Defined
         pensionIncomeYears: "0 years",
         pensionIncomeIncrease: "0%"
       };
-      return await apiRequest("POST", "/api/defined-benefit-funds", newFund);
+      const res = await apiRequest("POST", "/api/defined-benefit-funds", newFund);
+      return await res.json();
     },
     onSuccess: (newFund: DefinedBenefitFund) => {
       queryClient.invalidateQueries({ queryKey: ["/api/defined-benefit-funds"] });
@@ -88,7 +89,8 @@ export function DefinedBenefitFundHybridTable({ searchTerm, onAddFund }: Defined
         ...fundWithoutId,
         description: `${fund.description} (Copy)`,
       };
-      return await apiRequest("POST", "/api/defined-benefit-funds", duplicatedFund);
+      const res = await apiRequest("POST", "/api/defined-benefit-funds", duplicatedFund);
+      return await res.json();
     },
     onSuccess: (newFund: DefinedBenefitFund) => {
       queryClient.invalidateQueries({ queryKey: ["/api/defined-benefit-funds"] });

@@ -22,9 +22,8 @@ function IncomeProvisionsTable({ viewMode, searchTerm }: IncomeProvisionsTablePr
  mutationFn: async (): Promise<IncomeProvisions> => {
  const newIncomeProvision: InsertIncomeProvisions = {
  description:"",
- beneficiary:"Enter beneficiary",
- monthlyAmount:"R 0",
- additionalBeneficiaries: [],
+ personName:"Enter beneficiary",
+ amount:"R 0",
  };
  
  const response = await fetch('/api/income-provisions', {
@@ -96,7 +95,7 @@ function IncomeProvisionsTable({ viewMode, searchTerm }: IncomeProvisionsTablePr
  return {
  count: incomeProvisions.length,
  monthlyAmount: incomeProvisions.reduce((sum: number, incomeProvision: IncomeProvisions) => {
- const value = parseFloat(incomeProvision.monthlyAmount.replace(/[^\d.-]/g, '')) || 0;
+ const value = parseFloat(incomeProvision.amount.replace(/[^\d.-]/g, '')) || 0;
  return sum + value;
  }, 0),
  };
@@ -110,7 +109,7 @@ function IncomeProvisionsTable({ viewMode, searchTerm }: IncomeProvisionsTablePr
 
  const handleInputBlur = useCallback((id: number, field: keyof IncomeProvisions, value: string) => {
  let formattedValue: string;
- if (field === 'monthlyAmount') {
+ if (field === 'amount') {
  formattedValue = formatCurrencyValue(value);
  } else {
  formattedValue = value;
@@ -180,22 +179,22 @@ function IncomeProvisionsTable({ viewMode, searchTerm }: IncomeProvisionsTablePr
  <td className="">
  <input
  type="text"
- defaultValue={incomeProvision.beneficiary}
- className={`table-input ${getFieldClass('text')} ${getValueClass(incomeProvision.beneficiary, 'text')}`}
+ defaultValue={incomeProvision.personName}
+ className={`table-input ${getFieldClass('text')} ${getValueClass(incomeProvision.personName, 'text')}`}
  onFocus={handleDefaultValueFocus}
- onBlur={(e) => handleInputBlur(incomeProvision.id, 'beneficiary', e.target.value)}
+ onBlur={(e) => handleInputBlur(incomeProvision.id, 'personName', e.target.value)}
  disabled={isUpdating}
  />
  </td>
  
  <td className="section-start">
  <input
- key={`monthlyAmount-${incomeProvision.id}-${incomeProvision.monthlyAmount}`}
+ key={`amount-${incomeProvision.id}-${incomeProvision.amount}`}
  type="text"
- defaultValue={incomeProvision.monthlyAmount}
- className={`table-input ${getFieldClass('currency')} ${getValueClass(incomeProvision.monthlyAmount, 'currency')}`}
+ defaultValue={incomeProvision.amount}
+ className={`table-input ${getFieldClass('currency')} ${getValueClass(incomeProvision.amount, 'currency')}`}
  onFocus={handleDefaultValueFocus}
- onBlur={(e) => handleInputBlur(incomeProvision.id, 'monthlyAmount', e.target.value)}
+ onBlur={(e) => handleInputBlur(incomeProvision.id, 'amount', e.target.value)}
  disabled={isUpdating}
  />
  </td>

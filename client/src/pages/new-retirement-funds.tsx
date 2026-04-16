@@ -1,11 +1,10 @@
-import { useState, useMemo, useCallback, useRef } from "react";
+import { useState, useCallback } from "react";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { RetirementFund, UpdateRetirementFund, ClientDetails } from "@shared/schema";
 import { queryClient, apiRequest } from "@/lib/queryClient";
 import { CalculatorHeader } from "@/components/ui/calculator-header";
 import { RetirementFundsSummary } from "@/components/retirement-funds/retirement-funds-summary";
 import { NewRetirementTable } from "@/components/retirement-funds/new-retirement-table";
-import { AdditionalDetails } from "@/components/retirement-funds/additional-details";
 import { RetirementFundHybridTable } from "@/components/retirement-funds/retirement-fund-hybrid-table";
 import { useDebouncedUpdate } from "@/hooks/use-debounced-update";
 import { getDefaultOwners, getDefaultOwnershipPercentages, getDefaultBeneficiaries, getDefaultBeneficiaryPercentages } from "@/lib/entity-utils";
@@ -76,10 +75,10 @@ export default function NewRetirementFunds() {
   // Smart field update that uses debouncing for text fields, immediate for arrays
   const handleFieldUpdate = useCallback((id: number, field: string, value: any) => {
     // Use immediate updates for array fields to prevent synchronization issues
-    const arrayFields = ['owners', 'ownershipPercentages', 'unapprovedBeneficiaries', 
-                        'unapprovedPercentageSplits', 'unapprovedCoverSplits',
-                        'fundValueBeneficiaries', 'fundValuePercentageSplits', 
-                        'fundValueCoverSplits'];
+    const arrayFields = ['owners', 'ownershipPercentages', 'additionalOwners',
+                        'unapprovedBeneficiaries', 'unapprovedPercentageSplits', 'unapprovedCoverSplits',
+                        'fundValueBeneficiaries', 'fundValuePercentageSplits', 'fundValueCoverSplits',
+                        'additionalBeneficiaries', 'additionalBenefitSplits'];
     
     if (arrayFields.includes(field)) {
       executeUpdate(id, field, value);

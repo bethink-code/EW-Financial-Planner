@@ -82,7 +82,8 @@ export function IncomeProvisionsHybridTable({ onAddProvision, searchTerm = "" }:
         ...provisionWithoutId,
         description: `${provision.description || 'Provision'} (Copy)`,
       };
-      return apiRequest('POST', '/api/income-provisions', duplicatedProvision);
+      const res = await apiRequest('POST', '/api/income-provisions', duplicatedProvision);
+      return await res.json();
     },
     onSuccess: (newProvision: IncomeProvisions) => {
       queryClient.invalidateQueries({ queryKey: ['/api/income-provisions'] });

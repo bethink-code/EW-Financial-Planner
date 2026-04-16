@@ -113,7 +113,7 @@ function AssuranceTable({ viewMode, searchTerm }: AssuranceTableProps) {
  updateMutation.mutate({ id, updates });
  }, [updateMutation]);
 
- const handleInputBlur = useCallback((id: number, field: keyof Assurance, value: string | string[]) => {
+ const handleInputBlur = useCallback((id: number, field: keyof Assurance, value: string) => {
  let formattedValue: string;
  if (field === 'benefitSplit') {
  formattedValue = formatPercentageValue(value);
@@ -123,7 +123,7 @@ function AssuranceTable({ viewMode, searchTerm }: AssuranceTableProps) {
  formattedValue = value;
  }
  handleUpdateAssurance(id, field, formattedValue);
- 
+
  const target = document.activeElement as HTMLInputElement;
  if (target && formattedValue !== value) {
  setTimeout(() => {
@@ -191,7 +191,7 @@ function AssuranceTable({ viewMode, searchTerm }: AssuranceTableProps) {
  defaultValue={assurance.owners[0] ||"Donald Edwards"}
  className={`table-input ${getFieldClass('text')} ${getValueClass(assurance.owners[0] ||"", 'text')}`}
  onFocus={handleDefaultValueFocus}
- onBlur={(e) => handleInputBlur(assurance.id, 'owners', [e.target.value])}
+ onBlur={(e) => handleUpdateAssurance(assurance.id, 'owners', [e.target.value])}
  disabled={isUpdating}
  />
  </td>

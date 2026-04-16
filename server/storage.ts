@@ -11,6 +11,7 @@ import {
   liabilities,
   clientDetails,
   estatePositionParameters,
+  comments,
   type RetirementFund,
   type InsertRetirementFund,
   type UpdateRetirementFund,
@@ -46,11 +47,14 @@ import {
   type EstatePositionParameters,
   type InsertEstatePositionParameters,
   type UpdateEstatePositionParameters,
+  type Comment,
+  type InsertComment,
+  type UpdateComment,
 } from "@shared/schema";
 import { assets, type Assets, type InsertAssets } from "@shared/assets-schema";
 import { drizzle } from "drizzle-orm/node-postgres";
 import { Pool } from "pg";
-import { eq, ilike, or, asc } from "drizzle-orm";
+import { eq, ilike, or, asc, desc } from "drizzle-orm";
 
 export interface IStorage {
   // Retirement Funds
@@ -207,6 +211,12 @@ export interface IStorage {
   ): Promise<EstatePositionParameters | undefined>;
   deleteEstatePositionParameter(id: number): Promise<boolean>;
   getOrCreateEstatePositionParameter(): Promise<EstatePositionParameters>;
+
+  // Comments
+  getCommentsByPage(page: string): Promise<Comment[]>;
+  createComment(comment: InsertComment): Promise<Comment>;
+  updateComment(id: number, updates: UpdateComment): Promise<Comment | undefined>;
+  deleteComment(id: number): Promise<boolean>;
 }
 
 export class MemStorage implements IStorage {
@@ -223,6 +233,7 @@ export class MemStorage implements IStorage {
   private assets: Map<number, Assets>;
   private clientDetails: Map<number, ClientDetails>;
   private estatePositionParameters: Map<number, EstatePositionParameters>;
+  private commentsMap: Map<number, Comment>;
 
   private currentFundId: number;
   private currentBequestId: number;
@@ -237,6 +248,7 @@ export class MemStorage implements IStorage {
   private currentAssetId: number;
   private currentClientDetailId: number;
   private currentEstatePositionParameterId: number;
+  private currentCommentId: number;
 
   constructor() {
     this.retirementFunds = new Map();
@@ -252,6 +264,7 @@ export class MemStorage implements IStorage {
     this.assets = new Map();
     this.clientDetails = new Map();
     this.estatePositionParameters = new Map();
+    this.commentsMap = new Map();
 
     this.currentFundId = 1;
     this.currentBequestId = 1;
@@ -266,6 +279,7 @@ export class MemStorage implements IStorage {
     this.currentAssetId = 1;
     this.currentClientDetailId = 1;
     this.currentEstatePositionParameterId = 1;
+    this.currentCommentId = 1;
   }
 
   // Retirement Funds methods
@@ -287,6 +301,15 @@ export class MemStorage implements IStorage {
       id,
       description: insertFund.description || null, // Store null for empty values
       owners: insertFund.owners || ["Donald Edwards"],
+      ownershipPercentages: insertFund.ownershipPercentages || ["100%"],
+      additionalOwners: insertFund.additionalOwners || [],
+      owner: insertFund.owner || "Donald Edwards",
+      name: insertFund.name || "",
+      amount: insertFund.amount || "R 0",
+      beneficiaryName: insertFund.beneficiaryName || "",
+      additionalBeneficiaries: insertFund.additionalBeneficiaries || [],
+      additionalBenefitSplits: insertFund.additionalBenefitSplits || [],
+      beneficiaries: insertFund.beneficiaries || "[]",
       coverAmount: insertFund.coverAmount || "R 0",
       unapprovedBeneficiaries: insertFund.unapprovedBeneficiaries || [""],
       unapprovedPercentageSplits: insertFund.unapprovedPercentageSplits || [
@@ -409,12 +432,26 @@ export class MemStorage implements IStorage {
       id,
       description: insertAssurance.description || "",
       owners: insertAssurance.owners || ["Donald Edwards"],
+      lifeAssured: insertAssurance.lifeAssured || [""],
+      deathBenefits: insertAssurance.deathBenefits || ["R 0"],
+      ownershipPercentages: insertAssurance.ownershipPercentages || ["100%"],
       beneficiaries: insertAssurance.beneficiaries || [""],
+      beneficiaryPercentages: insertAssurance.beneficiaryPercentages || ["100%"],
       deathBenefit: insertAssurance.deathBenefit || "R 0",
       amount: insertAssurance.amount || "R 0",
+      amountToggles: insertAssurance.amountToggles || [true],
+      amountYearsValues: insertAssurance.amountYearsValues || ["0 years"],
+      amountIncreaseValues: insertAssurance.amountIncreaseValues || ["0%"],
       premiumsByOthers: insertAssurance.premiumsByOthers || "R 0",
       collateralSession: insertAssurance.collateralSession || "R 0",
       benefitSplit: insertAssurance.benefitSplit || "0%",
+      buySell: insertAssurance.buySell || false,
+      keyMan: insertAssurance.keyMan || false,
+      excludedFromEstateDuty: insertAssurance.excludedFromEstateDuty || false,
+      excludedFromProvisions: insertAssurance.excludedFromProvisions || false,
+      additionalOwners: insertAssurance.additionalOwners || [],
+      additionalBeneficiaries: insertAssurance.additionalBeneficiaries || [],
+      additionalBenefitSplits: insertAssurance.additionalBenefitSplits || [],
       additionalInfo: insertAssurance.additionalInfo || "",
     };
     this.assurance.set(id, assurance);
@@ -470,6 +507,8 @@ export class MemStorage implements IStorage {
       finalMonthlySalary: fund.finalMonthlySalary || "R 0",
       deathLumpSum: fund.deathLumpSum || "R 0",
       additionalTaxFreeAmount: fund.additionalTaxFreeAmount || "R 0",
+      pensionIncomeCheckbox: fund.pensionIncomeCheckbox ?? true,
+      pensionIncomeYears: fund.pensionIncomeYears || "0 years",
       pensionIncomeAmount: fund.pensionIncomeAmount || "R 0",
       pensionIncomeIncrease: fund.pensionIncomeIncrease || "0%",
     };
@@ -745,17 +784,10 @@ export class MemStorage implements IStorage {
   ): Promise<AdditionalEstateDutyItems> {
     const newItem: AdditionalEstateDutyItems = {
       id: this.currentAdditionalEstateDutyItemId++,
-      category: item.category || "",
       description: item.description || "",
       amount: item.amount || "R 0",
-      increasePercentage: item.increasePercentage || "0%",
-      johnDoe: item.johnDoe || "0%",
-      janetteDoe: item.janetteDoe || "0%",
-      doeJunior: item.doeJunior || "0%",
-      doeFamilyTrust: item.doeFamilyTrust || "0%",
-      estate: item.estate || "R 0",
-      others: item.others || "R 0",
-      client: item.client || "R 0",
+      deduction: item.deduction ?? false,
+      excludeFromJointEstate: item.excludeFromJointEstate ?? false,
     };
 
     this.additionalEstateDutyItems.set(newItem.id, newItem);
@@ -787,8 +819,7 @@ export class MemStorage implements IStorage {
     const lowerQuery = query.toLowerCase();
     return allItems.filter(
       (item) =>
-        item.description.toLowerCase().includes(lowerQuery) ||
-        item.category.toLowerCase().includes(lowerQuery),
+        item.description.toLowerCase().includes(lowerQuery),
     );
   }
 
@@ -807,15 +838,12 @@ export class MemStorage implements IStorage {
       description: liability.description || "Enter details...",
       debtAmount: liability.debtAmount || "R 0",
       currency: liability.currency || "ZAR",
-      peterLambie: liability.peterLambie || "0%",
-      victoriaLambie: liability.victoriaLambie || "0%",
-      juniorLambie: liability.juniorLambie || "0%",
-      lambiesFamilyTrust: liability.lambiesFamilyTrust || "0%",
+      entityOwnership: liability.entityOwnership || "{}",
       others: liability.others || "R 0",
       estate: liability.estate || "R 0",
       client: liability.client || "R 0",
-      section: liability.section || "Enter details...",
-      included: liability.included || true,
+      section: liability.section || "BONDS",
+      included: liability.included ?? true,
     };
 
     this.liabilities.set(newLiability.id, newLiability);
@@ -862,15 +890,12 @@ export class MemStorage implements IStorage {
       id: this.currentAssetId++,
       description: asset.description || "Enter details...",
       marketValue: asset.marketValue || "R 0",
-      johnDoe: asset.johnDoe || "0%",
-      janetteDoe: asset.janetteDoe || "0%",
-      doeJunior: asset.doeJunior || "0%",
-      doeFamilyTrust: asset.doeFamilyTrust || "0%",
+      entityOwnership: asset.entityOwnership || "{}",
       others: asset.others || "R 0",
       estate: asset.estate || "R 0",
       client: asset.client || "R 0",
-      section: asset.section || "Enter details...",
-      included: asset.included || true,
+      section: asset.section || "PROPERTY",
+      included: asset.included ?? true,
     };
 
     this.assets.set(newAsset.id, newAsset);
@@ -973,6 +998,24 @@ export class MemStorage implements IStorage {
   async createEstatePositionParameter(parameter: InsertEstatePositionParameters): Promise<EstatePositionParameters> {
     const newParameter: EstatePositionParameters = {
       id: this.currentEstatePositionParameterId++,
+      lifeCoverToEstate: "R 0",
+      voluntaryInvestments: "R 0",
+      accrualClaimFromSpouse: "R 0",
+      dependantsSurplusUtilised: "R 0",
+      ownEstateCapitalProvided: "R 0",
+      estateDuty: "R 0",
+      executorsFees: "R 0",
+      settleClientLiabilities: "R 0",
+      capitalGainsTax: "R 0",
+      mastersFee: "R 0",
+      deathBedFuneralExpenses: "R 0",
+      conveyancingValuationFees: "R 0",
+      accrualClaimToSpouse: "R 0",
+      ownEstateCapitalRequired: "R 0",
+      surplus: "R 0",
+      estateSurplusUtilisedForDependants: "R 0",
+      estatePositionAfterAllocation: "R 0",
+      lastUpdated: "",
       ...parameter,
     };
     this.estatePositionParameters.set(newParameter.id, newParameter);
@@ -1028,6 +1071,39 @@ export class MemStorage implements IStorage {
 
     return this.createEstatePositionParameter(defaultParameter);
   }
+
+  // Comments methods
+  async getCommentsByPage(page: string): Promise<Comment[]> {
+    return Array.from(this.commentsMap.values())
+      .filter((c) => c.page === page)
+      .sort((a, b) => b.createdAt.localeCompare(a.createdAt));
+  }
+
+  async createComment(comment: InsertComment): Promise<Comment> {
+    const newComment: Comment = {
+      id: this.currentCommentId++,
+      page: comment.page,
+      author: comment.author,
+      content: comment.content,
+      status: comment.status || "open",
+      image: comment.image || null,
+      createdAt: comment.createdAt,
+    };
+    this.commentsMap.set(newComment.id, newComment);
+    return newComment;
+  }
+
+  async updateComment(id: number, updates: UpdateComment): Promise<Comment | undefined> {
+    const existing = this.commentsMap.get(id);
+    if (!existing) return undefined;
+    const updated: Comment = { ...existing, ...updates };
+    this.commentsMap.set(id, updated);
+    return updated;
+  }
+
+  async deleteComment(id: number): Promise<boolean> {
+    return this.commentsMap.delete(id);
+  }
 }
 
 // Database storage class
@@ -1067,6 +1143,15 @@ export class DbStorage {
     return {
       description: fund.description !== undefined ? fund.description : null,
       owners: fund.owners || ["Donald Edwards"],
+      ownershipPercentages: fund.ownershipPercentages || ["100%"],
+      additionalOwners: fund.additionalOwners || [],
+      owner: fund.owner || "Donald Edwards",
+      name: fund.name || "",
+      amount: fund.amount || "R 0",
+      beneficiaryName: fund.beneficiaryName || "",
+      additionalBeneficiaries: fund.additionalBeneficiaries || [],
+      additionalBenefitSplits: fund.additionalBenefitSplits || [],
+      beneficiaries: fund.beneficiaries || "[]",
       coverAmount: fund.coverAmount || "R 0",
       unapprovedBeneficiaries: fund.unapprovedBeneficiaries || [""],
       unapprovedPercentageSplits: fund.unapprovedPercentageSplits || ["0%"],
@@ -1132,17 +1217,10 @@ export class DbStorage {
     item: Partial<InsertAdditionalEstateDutyItems>,
   ): InsertAdditionalEstateDutyItems {
     return {
-      category: item.category || "",
       description: item.description || "",
       amount: item.amount || "R 0",
-      increasePercentage: item.increasePercentage || "0%",
-      johnDoe: item.johnDoe || "0%",
-      janetteDoe: item.janetteDoe || "0%",
-      doeJunior: item.doeJunior || "0%",
-      doeFamilyTrust: item.doeFamilyTrust || "0%",
-      estate: item.estate || "R 0",
-      others: item.others || "R 0",
-      client: item.client || "R 0",
+      deduction: item.deduction ?? false,
+      excludeFromJointEstate: item.excludeFromJointEstate ?? false,
     };
   }
 
@@ -1799,6 +1877,34 @@ export class DbStorage {
       estatePositionAfterAllocation: "R 0", // Will be calculated
       lastUpdated: new Date().toISOString(),
     };
+  }
+
+  // Comments methods
+  async getCommentsByPage(page: string): Promise<Comment[]> {
+    return await this.db
+      .select()
+      .from(comments)
+      .where(eq(comments.page, page))
+      .orderBy(desc(comments.createdAt));
+  }
+
+  async createComment(comment: InsertComment): Promise<Comment> {
+    const result = await this.db.insert(comments).values(comment).returning();
+    return result[0];
+  }
+
+  async updateComment(id: number, updates: UpdateComment): Promise<Comment | undefined> {
+    const result = await this.db
+      .update(comments)
+      .set(updates)
+      .where(eq(comments.id, id))
+      .returning();
+    return result[0];
+  }
+
+  async deleteComment(id: number): Promise<boolean> {
+    const result = await this.db.delete(comments).where(eq(comments.id, id));
+    return (result.rowCount || 0) > 0;
   }
 }
 
