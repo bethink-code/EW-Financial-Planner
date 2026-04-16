@@ -214,7 +214,8 @@ function IncomeNeedsTable({ viewMode, searchTerm, onAddIncomeNeed }: IncomeNeeds
 
   return viewMode === 'table' ? (
     <div className="space-y-6">
-      <table>
+      <div className="overflow-x-auto">
+        <table>
         <thead>
           <tr className="double-row-header-first">
             <th className="section-start table-actions-cell" rowSpan={2}>
@@ -370,6 +371,7 @@ function IncomeNeedsTable({ viewMode, searchTerm, onAddIncomeNeed }: IncomeNeeds
           </tr>
         </tfoot>
       </table>
+      </div>
     </div>
   ) : (
     // Hybrid View - Following Global Hybrid View Pattern

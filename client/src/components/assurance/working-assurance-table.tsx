@@ -515,7 +515,8 @@ export function AssuranceTable({ viewMode = 'table', onAddPolicy }: AssuranceTab
       {/* Note: Add Policy Button moved to parent component header */}
 
       {/* Table */}
-      <table >
+      <div className="overflow-x-auto">
+        <table >
           <thead>
             <tr className="single-row-header">
               <th className="table-actions-cell">
@@ -564,7 +565,7 @@ export function AssuranceTable({ viewMode = 'table', onAddPolicy }: AssuranceTab
                     >
                   {/* Actions - only show on first row */}
                   {rowIndex === 0 && (
-                    <td className="table-actions-cell p-1 text-center align-top" rowSpan={maxRows}>
+                    <td className="table-actions-cell px-0.5 py-0.5 text-center align-top" rowSpan={maxRows}>
                       <ActionButtonGroup>
                         <DuplicateButton 
                           onClick={() => handleDuplicatePolicy(policy)} 
@@ -580,7 +581,7 @@ export function AssuranceTable({ viewMode = 'table', onAddPolicy }: AssuranceTab
 
                   {/* Description - only show on first row */}
                   {rowIndex === 0 && (
-                    <td className="border border-neutral-300 p-1 align-top" rowSpan={maxRows}>
+                    <td className="border border-neutral-300 px-0.5 py-0.5 align-top" rowSpan={maxRows}>
                       <input
                         key={`desc-${policy.id}`}
                         type="text"
@@ -607,7 +608,7 @@ export function AssuranceTable({ viewMode = 'table', onAddPolicy }: AssuranceTab
                   />
 
                   {/* Life Assured */}
-                  <td className="border border-neutral-300 p-1">
+                  <td className="border border-neutral-300 px-0.5 py-0.5">
                     <div className="w-full min-w-[250px]">
                       <Select
                         value={(policy.lifeAssured || [])[rowIndex] || "none"}
@@ -622,7 +623,7 @@ export function AssuranceTable({ viewMode = 'table', onAddPolicy }: AssuranceTab
                         </SelectTrigger>
                         <SelectContent>
                           <SelectItem value="none">Select life assured...</SelectItem>
-                          {entities.map((client) => (
+                          {entities.filter(client => client.entityName && client.entityName.trim() !== "").map((client) => (
                             <SelectItem key={client.id} value={client.entityName}>
                               {client.entityName}
                               {client.entityType === "Primary entity" && " (Primary entity)"}
@@ -634,7 +635,7 @@ export function AssuranceTable({ viewMode = 'table', onAddPolicy }: AssuranceTab
                   </td>
 
                   {/* Death Benefit */}
-                  <td className="border border-neutral-300 p-1">
+                  <td className="border border-neutral-300 px-0.5 py-0.5">
                     <input
                       type="text"
                       defaultValue={((policy.deathBenefits || [])[rowIndex] || "R 0")}
@@ -680,7 +681,7 @@ export function AssuranceTable({ viewMode = 'table', onAddPolicy }: AssuranceTab
                   />
 
                   {/* Benefit Split - calculated read-only field */}
-                  <td className="border border-neutral-300 p-1">
+                  <td className="border border-neutral-300 px-0.5 py-0.5">
                     {(() => {
                       const currentPercentage = (policy.beneficiaryPercentages || ["100%"])[rowIndex] || "0%";
                       // Calculate total death benefit across all Life Assured entries for this policy
@@ -699,7 +700,7 @@ export function AssuranceTable({ viewMode = 'table', onAddPolicy }: AssuranceTab
                   </td>
 
                   {/* Amount - show for every beneficiary row */}
-                  <td className="border border-neutral-300 p-1">
+                  <td className="border border-neutral-300 px-0.5 py-0.5">
                     <input
                       key={`amount-${policy.id}-${rowIndex}`}
                       type="text"
@@ -712,7 +713,7 @@ export function AssuranceTable({ viewMode = 'table', onAddPolicy }: AssuranceTab
                   </td>
 
                   {/* Toggle Button - show for every beneficiary row */}
-                  <td className="border border-neutral-300 p-1">
+                  <td className="border border-neutral-300 px-0.5 py-0.5">
                     <div className="pt-0.5">
                       <button
                         type="button"
@@ -731,7 +732,7 @@ export function AssuranceTable({ viewMode = 'table', onAddPolicy }: AssuranceTab
                   </td>
 
                   {/* Dynamic Field (Years OR Percentage) - show for every beneficiary row */}
-                  <td className="border border-neutral-300 p-1">
+                  <td className="border border-neutral-300 px-0.5 py-0.5">
                     {isAmountYearsMode(policy, rowIndex) ? (
                       // Years Mode
                       <input
@@ -894,7 +895,8 @@ export function AssuranceTable({ viewMode = 'table', onAddPolicy }: AssuranceTab
           </tfoot>
         </table>
       </div>
-    );
+    </div>
+  );
 
 
 

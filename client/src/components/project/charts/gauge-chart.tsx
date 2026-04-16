@@ -15,10 +15,10 @@ export function GaugeChart({ data, title, compact = false }: GaugeChartProps) {
   // Calculate the percentage for the gauge (capped at 200% for visual purposes)
   const percentage = Math.min(data.percentage, 200);
   
-  // Create data for the gauge chart using Elite Wealth brand colors
+  // Create data for the gauge chart using new color palette
   const chartData = [
-    { name: 'Covered', value: percentage, fill: 'hsl(198, 99%, 29%)' }, // Primary brand blue
-    { name: 'Remaining', value: 200 - percentage, fill: 'hsl(220, 13%, 91%)' } // Neutral 200
+    { name: 'Covered', value: percentage, fill: 'var(--chart-primary-blue)' }, // Primary blue from palette
+    { name: 'Remaining', value: 200 - percentage, fill: 'var(--chart-secondary-blue-light)' } // Light blue from palette
   ];
 
   const formatCurrency = (value: number) => {

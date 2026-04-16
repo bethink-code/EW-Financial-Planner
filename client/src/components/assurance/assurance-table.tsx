@@ -116,11 +116,11 @@ function AssuranceTable({ viewMode, searchTerm }: AssuranceTableProps) {
  const handleInputBlur = useCallback((id: number, field: keyof Assurance, value: string) => {
  let formattedValue: string;
  if (field === 'benefitSplit') {
- formattedValue = formatPercentageValue(value);
+ formattedValue = formatPercentageValue(Array.isArray(value) ? value.join('') : value);
  } else if (field === 'amount') {
- formattedValue = formatCurrencyValue(value);
+ formattedValue = formatCurrencyValue(Array.isArray(value) ? value.join('') : value);
  } else {
- formattedValue = value;
+ formattedValue = Array.isArray(value) ? value.join('') : value;
  }
  handleUpdateAssurance(id, field, formattedValue);
 
@@ -148,6 +148,7 @@ function AssuranceTable({ viewMode, searchTerm }: AssuranceTableProps) {
 
  return (
  <div className="space-y-6">
+ <div className="overflow-x-auto">
  <table>
  <thead>
  <tr>
@@ -231,6 +232,7 @@ function AssuranceTable({ viewMode, searchTerm }: AssuranceTableProps) {
  </tr>
  </tfoot>
  </table>
+ </div>
  </div>
  );
 }

@@ -87,9 +87,9 @@ export default function EntityBeneficiarySelector({
     // Return empty table cells for rows beyond beneficiaries count
     return (
       <>
-        <td className="p-1 align-top border-r border-neutral-200" style={{ width: '60px' }}></td>
-        <td className="p-1 align-top border-r border-neutral-200" style={{ width: '300px' }}></td>
-        <td className="p-1 align-top border-r border-neutral-200" style={{ width: '80px' }}></td>
+        <td className="px-0.25 py-0.5 align-top border-r border-neutral-200" style={{ width: '60px' }}></td>
+        <td className="px-0.25 py-0.5 align-top border-r border-neutral-200" style={{ width: '300px' }}></td>
+        <td className="px-0.25 py-0.5 align-top border-r border-neutral-200" style={{ width: '80px' }}></td>
       </>
     );
   }
@@ -97,6 +97,10 @@ export default function EntityBeneficiarySelector({
   const currentBeneficiary = beneficiaries[beneficiaryIndex];
   const currentPercentage = beneficiaryPercentages[beneficiaryIndex] || "0%";
   const isInvalidTotal = Math.abs(percentageTotal - 100) > 0.01;
+  
+  // Find the entity to get full display name
+  const currentEntity = entities.find(entity => entity.entityName === currentBeneficiary);
+  const currentDisplayValue = currentEntity ? `${currentEntity.entityName} (${currentEntity.entityType})` : currentBeneficiary;
 
   // Action button comes FIRST in the code - using same styling as owner component
   const actionButton = rowIndex === 0 ? (
@@ -116,31 +120,44 @@ export default function EntityBeneficiarySelector({
   return (
     <>
       {/* Actions Column */}
-      <td className="pr-0.5 pl-1 py-1 align-top border-r border-neutral-200" style={{ width: '60px' }}>
+      <td className="pr-0.25 pl-0.25 py-0.5 align-top border-r border-neutral-200" style={{ width: '60px' }}>
         <div className="pt-0.5">
           {actionButton}
         </div>
       </td>
       
       {/* Beneficiary Column */}
-      <td className="px-0.5 py-1 align-top border-r border-neutral-200" style={{ width: '300px' }}>
+      <td className="entity-tight-spacing py-0.5 align-top border-r border-neutral-200" style={{ width: '300px' }}>
         <select
-          value={currentBeneficiary}
-          onChange={(e) => handleBeneficiarySelect(e.target.value, beneficiaryIndex)}
+          value={currentDisplayValue}
+          onChange={(e) => {
+            // Extract entity name from the full display value
+            const selectedValue = e.target.value;
+            if (selectedValue === "" || selectedValue === "Select beneficiary...") {
+              handleBeneficiarySelect("", beneficiaryIndex);
+            } else {
+              // Extract just the entity name from "EntityName (EntityType)"
+              const entityName = selectedValue.replace(/\s*\([^)]*\)\s*$/, '');
+              handleBeneficiarySelect(entityName, beneficiaryIndex);
+            }
+          }}
           disabled={disabled}
-          className="table-input table-dropdown w-full"
+          className="table-input table-dropdown w-full min-w-[250px]"
         >
           <option value="">Select beneficiary...</option>
-          {entities.map((entity) => (
-            <option key={entity.id} value={entity.entityName}>
-              {entity.entityName} ({entity.entityType})
-            </option>
-          ))}
+          {entities.map((entity) => {
+            const displayValue = `${entity.entityName} (${entity.entityType})`;
+            return (
+              <option key={entity.id} value={displayValue}>
+                {displayValue}
+              </option>
+            );
+          })}
         </select>
       </td>
 
       {/* Benefit % Column */}
-      <td className="pl-0.5 pr-1 py-1 align-top border-r border-neutral-200" style={{ width: '80px' }}>
+      <td className="entity-tight-spacing py-0.5 align-top border-r border-neutral-200" style={{ width: '80px' }}>
         <input
           type="text"
           defaultValue={currentPercentage}

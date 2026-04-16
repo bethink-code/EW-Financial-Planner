@@ -1,189 +1,223 @@
 import { useState } from "react";
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { useLocation } from "wouter";
-import { Plus, Trash2, FileText, Calendar, User } from "lucide-react";
+import { useQuery, useMutation } from "@tanstack/react-query";
+import { Link } from "wouter";
+import { Search, Plus, Eye, Copy, Trash2 } from "lucide-react";
+import { FinancialPlanningLayout } from "@/components/navigation/financial-planning-layout";
+import { queryClient } from "@/lib/queryClient";
 import { Button } from "@/components/ui/button";
-import { apiRequest } from "@/lib/queryClient";
-import type { FinancialPlan } from "@shared/schema";
-import headerImage from "@assets/EW Header_1753945516780.png";
+import { Input } from "@/components/ui/input";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { Badge } from "@/components/ui/badge";
+import { FinancialNeedsDialog } from "@/components/navigation/financial-needs-dialog";
+// import { CreatePlanDialog } from "@/components/financial-plans/create-plan-dialog";
+import type { FinancialPlan, Need, PlanNeed } from "@shared/schema";
 
-export default function FinancialPlans() {
-  const [, setLocation] = useLocation();
-  const queryClient = useQueryClient();
+interface FinancialPlanWithNeeds extends FinancialPlan {
+  needs?: Need[];
+  planNeeds?: PlanNeed[];
+}
 
-  const { data: plans = [], isLoading } = useQuery<FinancialPlan[]>({
-    queryKey: ["/api/financial-plans"],
+export default function FinancialPlansPage() {
+  const [searchQuery, setSearchQuery] = useState("");
+  const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
+  const [isNeedsDialogOpen, setIsNeedsDialogOpen] = useState(false);
+
+  // Fetch financial plans
+  const { data: plans = [], isLoading } = useQuery({
+    queryKey: ["/api/financial-plans", searchQuery],
+    queryFn: () => {
+      const url = searchQuery 
+        ? `/api/financial-plans?search=${encodeURIComponent(searchQuery)}`
+        : "/api/financial-plans";
+      return fetch(url).then(res => res.json());
+    },
+  });
+
+  // Fetch needs to show in plans
+  const { data: allNeeds = [] } = useQuery({
+    queryKey: ["/api/needs"],
+  });
+
+  // Fetch plan needs for each plan to show associated needs
+  const { data: planNeedsMap = {} } = useQuery({
+    queryKey: ["/api/plan-needs", plans],
     queryFn: async () => {
-      const res = await fetch("/api/financial-plans");
-      if (!res.ok) throw new Error("Failed to fetch plans");
-      return res.json();
+      if (!plans || plans.length === 0) return {};
+      
+      const map: Record<number, Need[]> = {};
+      
+      for (const plan of plans) {
+        try {
+          const response = await fetch(`/api/financial-plans/${plan.id}/with-needs`);
+          if (response.ok) {
+            const data = await response.json();
+            map[plan.id] = data.needs || [];
+          }
+        } catch (error) {
+          console.error(`Error fetching needs for plan ${plan.id}:`, error);
+          map[plan.id] = [];
+        }
+      }
+      
+      return map;
     },
+    enabled: plans && plans.length > 0,
   });
 
-  const createMutation = useMutation({
-    mutationFn: async () => {
-      const res = await apiRequest("POST", "/api/financial-plans", {
-        name: "New Financial Plan",
-        clientName: "",
+  // Delete plan mutation
+  const deletePlanMutation = useMutation({
+    mutationFn: async (planId: number) => {
+      const response = await fetch(`/api/financial-plans/${planId}`, { 
+        method: "DELETE" 
       });
-      return await res.json();
-    },
-    onSuccess: (plan: FinancialPlan) => {
-      queryClient.invalidateQueries({ queryKey: ["/api/financial-plans"] });
-      // Navigate into the new plan
-      setLocation(`/plan/${plan.id}/assurance`);
-    },
-  });
-
-  const deleteMutation = useMutation({
-    mutationFn: async (id: number) => {
-      await apiRequest("DELETE", `/api/financial-plans/${id}`);
+      if (!response.ok) {
+        throw new Error('Failed to delete plan');
+      }
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["/api/financial-plans"] });
     },
   });
 
-  const handleDelete = (id: number, name: string) => {
-    if (confirm(`Delete "${name}"? This cannot be undone.`)) {
-      deleteMutation.mutate(id);
+  const handleDeletePlan = async (planId: number, planName: string) => {
+    if (confirm(`Are you sure you want to delete the plan "${planName}"? This action cannot be undone.`)) {
+      await deletePlanMutation.mutateAsync(planId);
     }
   };
 
-  const handleOpenPlan = (plan: FinancialPlan) => {
-    // For now, navigate to assurance with plan context
-    // TODO: once plan-scoped routing is added, use /plan/:id/assurance
-    setLocation("/assurance");
+  const formatDate = (dateString: string) => {
+    return new Date(dateString).toLocaleDateString();
+  };
+
+  const getNeedsForPlan = (planId: number): Need[] => {
+    return planNeedsMap[planId] || [];
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Header */}
-      <div className="w-full overflow-x-auto">
-        <div className="pl-6">
-          <img
-            src={headerImage}
-            alt="EW Financial Planning"
-            className="block"
-            style={{ width: "auto", height: "auto" }}
-          />
-        </div>
-      </div>
+    <FinancialPlanningLayout variant="list" onCreateNewPlan={() => setIsNeedsDialogOpen(true)}>
+      <div className="min-h-screen bg-gray-50">
+        <div className="w-full px-6 py-6">
+          <div className="w-[1320px]">
+            <Card>
+              <CardHeader className="pb-4">
+              </CardHeader>
 
-      {/* Content */}
-      <div className="w-full px-6 pt-8">
-        <div className="max-w-[1320px]">
-          {/* Title row */}
-          <div className="flex items-center justify-between mb-6">
-            <h1 className="text-2xl font-semibold text-gray-900">
-              Financial Plans
-            </h1>
-            <Button
-              onClick={() => createMutation.mutate()}
-              disabled={createMutation.isPending}
-              className="bg-[#F97415] hover:bg-[#E86A10] text-white"
-            >
-              <Plus className="h-4 w-4 mr-2" />
-              New Plan
-            </Button>
+              <CardContent>
+                {/* Search */}
+                <div className="mb-6">
+                  <div className="relative">
+                    <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
+                    <Input
+                      placeholder="What are you looking for?"
+                      value={searchQuery}
+                      onChange={(e) => setSearchQuery(e.target.value)}
+                      className="pl-10"
+                    />
+                  </div>
+                </div>
+
+                {/* Table */}
+                <div className="bg-white border rounded-lg">
+                  <Table>
+                    <TableHeader className="bg-gray-50">
+                      <TableRow>
+                        <TableHead className="font-semibold text-gray-600">Plan name</TableHead>
+                        <TableHead className="font-semibold text-gray-600">Needs</TableHead>
+                        <TableHead className="font-semibold text-gray-600">Date applicable</TableHead>
+                        <TableHead className="w-32"></TableHead>
+                      </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                      {isLoading ? (
+                        <TableRow>
+                          <TableCell colSpan={4} className="text-center py-8 text-gray-500">
+                            Loading plans...
+                          </TableCell>
+                        </TableRow>
+                      ) : plans.length === 0 ? (
+                        <TableRow>
+                          <TableCell colSpan={4} className="text-center py-8 text-gray-500">
+                            {searchQuery ? "No plans found matching your search." : "No financial plans created yet."}
+                          </TableCell>
+                        </TableRow>
+                      ) : (
+                        plans.map((plan: FinancialPlan) => (
+                          <TableRow key={plan.id} className="hover:bg-gray-50">
+                            <TableCell className="font-medium">{plan.name}</TableCell>
+                            <TableCell>
+                              <div className="flex flex-wrap gap-1">
+                                {getNeedsForPlan(plan.id).slice(0, 3).map((need, index) => (
+                                  <Badge key={index} variant="muted" className="text-xs">
+                                    {need.displayName.toUpperCase()}
+                                  </Badge>
+                                ))}
+                                {getNeedsForPlan(plan.id).length > 3 && (
+                                  <Badge variant="outline" className="text-xs">
+                                    +{getNeedsForPlan(plan.id).length - 3}
+                                  </Badge>
+                                )}
+                              </div>
+                            </TableCell>
+                            <TableCell className="text-gray-600">
+                              {formatDate(plan.dateApplicable)}
+                            </TableCell>
+                            <TableCell>
+                              <div className="flex items-center gap-2">
+                                <Link href={`/financial-plans/${plan.id}`}>
+                                  <Button className="bg-[#E6F0F5] hover:bg-[#D6E7F0] text-[#016991] border-[#E6F0F5]" size="sm">
+                                    Choose
+                                  </Button>
+                                </Link>
+                                <Button 
+                                  className="h-9 w-9 p-0 bg-white hover:bg-gray-50 text-gray-600 border border-gray-200"
+                                  size="sm"
+                                >
+                                  <Copy className="h-4 w-4" />
+                                </Button>
+                                <Button 
+                                  className="h-9 w-9 p-0 bg-white hover:bg-gray-50 text-gray-600 border border-gray-200"
+                                  size="sm"
+                                  onClick={() => handleDeletePlan(plan.id, plan.name)}
+                                  disabled={deletePlanMutation.isPending}
+                                >
+                                  <Trash2 className="h-4 w-4" />
+                                </Button>
+                              </div>
+                            </TableCell>
+                          </TableRow>
+                        ))
+                      )}
+                    </TableBody>
+                  </Table>
+                </div>
+              </CardContent>
+            </Card>
           </div>
-
-          {/* Plans table */}
-          {isLoading ? (
-            <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-12 text-center">
-              <div className="text-gray-500">Loading plans...</div>
-            </div>
-          ) : plans.length === 0 ? (
-            <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-12 text-center">
-              <FileText className="h-12 w-12 text-gray-300 mx-auto mb-4" />
-              <h2 className="text-lg font-medium text-gray-700 mb-2">
-                No financial plans yet
-              </h2>
-              <p className="text-gray-500 mb-6">
-                Create your first financial plan to get started.
-              </p>
-              <Button
-                onClick={() => createMutation.mutate()}
-                disabled={createMutation.isPending}
-                className="bg-[#F97415] hover:bg-[#E86A10] text-white"
-              >
-                <Plus className="h-4 w-4 mr-2" />
-                Create Plan
-              </Button>
-            </div>
-          ) : (
-            <div className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
-              <table className="w-full">
-                <thead>
-                  <tr className="border-b border-gray-200 bg-gray-50">
-                    <th className="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Plan Name
-                    </th>
-                    <th className="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Client
-                    </th>
-                    <th className="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Created
-                    </th>
-                    <th className="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Last Updated
-                    </th>
-                    <th className="text-right px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Actions
-                    </th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {plans.map((plan) => (
-                    <tr
-                      key={plan.id}
-                      className="border-b border-gray-100 hover:bg-gray-50 cursor-pointer transition-colors"
-                      onClick={() => handleOpenPlan(plan)}
-                    >
-                      <td className="px-6 py-4">
-                        <div className="flex items-center gap-3">
-                          <FileText className="h-5 w-5 text-[#F97415]" />
-                          <span className="font-medium text-gray-900">
-                            {plan.name}
-                          </span>
-                        </div>
-                      </td>
-                      <td className="px-6 py-4 text-sm text-gray-600">
-                        <div className="flex items-center gap-2">
-                          <User className="h-4 w-4 text-gray-400" />
-                          {plan.clientName || "—"}
-                        </div>
-                      </td>
-                      <td className="px-6 py-4 text-sm text-gray-500">
-                        <div className="flex items-center gap-2">
-                          <Calendar className="h-4 w-4 text-gray-400" />
-                          {plan.createdAt || "—"}
-                        </div>
-                      </td>
-                      <td className="px-6 py-4 text-sm text-gray-500">
-                        {plan.updatedAt || "—"}
-                      </td>
-                      <td className="px-6 py-4 text-right">
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          className="text-red-500 hover:text-red-700 hover:bg-red-50"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            handleDelete(plan.id, plan.name);
-                          }}
-                        >
-                          <Trash2 className="h-4 w-4" />
-                        </Button>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          )}
         </div>
       </div>
-    </div>
+      
+      <FinancialNeedsDialog
+        isOpen={isNeedsDialogOpen}
+        onClose={() => setIsNeedsDialogOpen(false)}
+        planId="new"
+        currentNeeds={[]}
+      />
+    </FinancialPlanningLayout>
   );
 }

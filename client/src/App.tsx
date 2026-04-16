@@ -10,7 +10,10 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { NavigationLayout } from "@/components/navigation/navigation-layout";
 
 import NotFound from "@/pages/not-found";
-import FinancialPlans from "@/pages/financial-plans";
+
+// Financial planning pages
+import FinancialPlansPage from "@/pages/financial-plans";
+import FinancialPlanSummaryPage from "@/pages/financial-plan-summary";
 
 // Existing calculator pages
 import NewRetirementFunds from "@/pages/new-retirement-funds";
@@ -60,8 +63,16 @@ function Router() {
   return (
     <div className="min-h-screen bg-gray-50">
       <Switch>
-        {/* Default route - Financial Plans list */}
-        <Route path="/" component={FinancialPlans} />
+        {/* Default route - redirect to assurance with proper context */}
+        <Route path="/" component={() => {
+          // Redirect to assurance with proper navigation context
+          window.location.href = '/assurance';
+          return null;
+        }} />
+
+        {/* Financial planning routes */}
+        <Route path="/financial-plans" component={FinancialPlansPage} />
+        <Route path="/financial-plans/:id" component={FinancialPlanSummaryPage} />
           
           {/* Existing calculator routes with navigation */}
           <Route path="/assurance">

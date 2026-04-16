@@ -1,5 +1,3 @@
-import { BarChart as RechartsBarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from 'recharts';
-
 interface BarChartProps {
   data: {
     provided: number;
@@ -10,17 +8,7 @@ interface BarChartProps {
   title: string;
 }
 
-export function BarChart({ data, title }: BarChartProps) {
-  const chartData = [
-    {
-      name: 'Capital',
-      Provided: data.provided,
-      Required: data.required,
-      Surplus: Math.max(data.surplus, 0),
-      Deficit: Math.max(-data.surplus, 0)
-    }
-  ];
-
+export function ProjectBarChart({ data, title }: BarChartProps) {
   const formatCurrency = (value: number) => {
     return new Intl.NumberFormat('en-ZA', {
       style: 'currency',
@@ -30,51 +18,36 @@ export function BarChart({ data, title }: BarChartProps) {
     }).format(value).replace('ZAR', 'R');
   };
 
-  const CustomTooltip = ({ active, payload, label }: any) => {
-    if (active && payload && payload.length) {
-      return (
-        <div className="bg-white p-3 border border-gray-200 rounded-lg shadow-lg">
-          <p className="font-medium mb-2">{title}</p>
-          {payload.map((entry: any, index: number) => (
-            <p key={index} className="text-sm" style={{ color: entry.color }}>
-              {entry.dataKey}: {formatCurrency(entry.value)}
-            </p>
-          ))}
-        </div>
-      );
-    }
-    return null;
-  };
+  const maxValue = Math.max(data.provided, data.required, Math.abs(data.surplus));
+  const scale = 180 / maxValue; // 180px max bar height
+
+  const bars = [
+    { name: 'Provided', value: data.provided, color: 'var(--chart-primary-blue)' },
+    { name: 'Required', value: data.required, color: 'var(--chart-primary-orange)' },
+    { name: 'Surplus', value: Math.abs(data.surplus), color: data.surplus >= 0 ? 'var(--chart-primary-green)' : 'var(--chart-primary-pink)' }
+  ];
 
   return (
-    <div className="w-full h-full">
-      <ResponsiveContainer width="100%" height="100%">
-        <RechartsBarChart
-          data={chartData}
-          margin={{
-            top: 20,
-            right: 30,
-            left: 20,
-            bottom: 5,
-          }}
-        >
-          <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
-          <XAxis dataKey="name" stroke="#6b7280" />
-          <YAxis 
-            stroke="#6b7280"
-            tickFormatter={(value) => formatCurrency(value)}
+    <div className="flex items-end justify-center space-x-20">
+      {bars.map((bar, index) => (
+        <div key={index} className="flex flex-col items-center bar-chart-item">
+          <div 
+            className="text-xs text-gray-600 mb-2 text-center bar-chart-label"
+            style={{ animationDelay: `${index * 0.1}s` }}
+          >
+            {formatCurrency(bar.value)}
+          </div>
+          <div 
+            className="w-16 rounded-t-sm bar-chart-bar"
+            style={{ 
+              height: `${Math.max(bar.value * scale, 10)}px`,
+              backgroundColor: bar.color,
+              minHeight: '10px',
+              animationDelay: `${index * 0.1}s`
+            }}
           />
-          <Tooltip content={<CustomTooltip />} />
-          <Legend />
-          <Bar dataKey="Provided" fill="#016991" name="Provided" />
-          <Bar dataKey="Required" fill="#6b7280" name="Required" />
-          {data.surplus >= 0 ? (
-            <Bar dataKey="Surplus" fill="#10b981" name="Surplus" />
-          ) : (
-            <Bar dataKey="Deficit" fill="#ef4444" name="Deficit" />
-          )}
-        </RechartsBarChart>
-      </ResponsiveContainer>
+        </div>
+      ))}
     </div>
   );
 }

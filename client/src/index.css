@@ -14,6 +14,20 @@ html {
   line-height: 1.2 !important;
 }
 
+/* Global card title styling */
+.card-title {
+  font-size: 20px !important;
+  font-weight: 500 !important;
+  color: #1F2224 !important;
+}
+
+/* Global bar chart title styling */
+.bar-chart-title {
+  font-size: 16px !important;
+  font-weight: 500 !important;
+  color: #1F2224 !important;
+}
+
 /* Override for bold total rows */
 .table-text-14.font-bold {
   font-weight: 700 !important;
@@ -42,6 +56,66 @@ html {
 .percentage-input {
   width: 70px !important;
   min-width: 70px !important;
+}
+
+/* Fixed column widths for financial planning tables */
+.table-col-actions {
+  width: 60px !important;
+  min-width: 60px !important;
+  max-width: 60px !important;
+}
+
+.table-col-owner-name {
+  width: 200px !important;
+  min-width: 200px !important;
+  max-width: 200px !important;
+}
+
+.table-col-ownership-percent {
+  width: 80px !important;
+  min-width: 80px !important;
+  max-width: 80px !important;
+}
+
+.table-col-description {
+  width: 300px !important;
+  min-width: 300px !important;
+  max-width: 300px !important;
+}
+
+.table-col-currency {
+  width: 120px !important;
+  min-width: 120px !important;
+  max-width: 120px !important;
+}
+
+.table-col-beneficiary {
+  width: 180px !important;
+  min-width: 180px !important;
+  max-width: 180px !important;
+}
+
+.table-col-toggle {
+  width: 80px !important;
+  min-width: 80px !important;
+  max-width: 80px !important;
+}
+
+/* ===== ENTITY SELECTOR SPACING CONTROL ===== */
+
+/* Target ONLY the horizontal padding between entity selector elements */
+/* Replace px-0.25 (1px) with px-0.5 (2px) for tighter spacing */
+
+/* Override Tailwind's px-0.25 class specifically for entity selectors */
+.px-0\.25 {
+  padding-left: 0.125rem !important;  /* Keep existing 2px */
+  padding-right: 0.125rem !important; /* Keep existing 2px */
+}
+
+/* Create tighter spacing variant for entity selectors */
+.entity-tight-spacing {
+  padding-left: 0.0625rem !important;  /* 1px instead of 2px */
+  padding-right: 0.0625rem !important; /* 1px instead of 2px */
 }
 
 /* Optimized view transitions */
@@ -113,6 +187,65 @@ html {
     transform: translateX(-10px);
     max-width: 0;
     overflow: hidden;
+  }
+}
+
+/* Tab transition animations for project tabs */
+.tab-content-enter {
+  animation: tabFadeIn 0.3s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+@keyframes tabFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* Bar chart animation classes */
+.bar-chart-item {
+  animation: barItemFadeIn 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  opacity: 0;
+}
+
+.bar-chart-bar {
+  animation: barGrowUp 0.8s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  transform-origin: bottom;
+}
+
+.bar-chart-label {
+  animation: labelFadeIn 0.4s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  opacity: 0;
+}
+
+@keyframes barItemFadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes barGrowUp {
+  from {
+    transform: scaleY(0);
+  }
+  to {
+    transform: scaleY(1);
+  }
+}
+
+@keyframes labelFadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
   }
 }
 
@@ -210,12 +343,12 @@ th, td {
   --input: hsl(214, 32%, 91%);
   
   /* Primary: Brand blue color */
-  --primary: 198 99% 29%;
-  --primary-foreground: 0 0% 100%;
+  --primary: hsl(198, 99%, 29%);
+  --primary-foreground: hsl(0, 0%, 100%);
   
   /* Secondary: Brand orange color */
-  --secondary: 25 95% 53%;
-  --secondary-foreground: 0 0% 100%;
+  --secondary: hsl(25, 95%, 53%);
+  --secondary-foreground: hsl(0, 0%, 100%);
   
   --accent: hsl(210, 40%, 95%);
   --accent-foreground: hsl(220, 13%, 18%);
@@ -259,6 +392,20 @@ th, td {
   --neutral-200: hsl(220, 13%, 91%);
   --neutral-100: hsl(220, 14%, 96%);
   --neutral-50: hsl(210, 20%, 98%);
+  
+  /* Graph Color Palette - Secondary Colors */
+  --chart-primary-blue: #2196F3;
+  --chart-primary-orange: #FF9800;
+  --chart-primary-green: #4CAF50;
+  --chart-primary-pink: #E91E63;
+  
+  --chart-secondary-teal-dark: #0F7377;
+  --chart-secondary-teal: #5DADE2;
+  --chart-secondary-brown: #8D6E63;
+  --chart-secondary-purple: #9C27B0;
+  --chart-secondary-blue-dark: #3F51B5;
+  --chart-secondary-blue-light: #BBDEFB;
+  --chart-secondary-green-light: #A8E6CF;
 }
 
 .dark {
@@ -339,13 +486,52 @@ th, td {
   }
   
   /* GLOBAL TABLE STYLING - Ultra Clean with Section Borders Only */
-  table {
+  table:not([class*="w-"]) {
     width: auto !important;
     background-color: white !important;
     border-radius: 0.5rem !important;
     border: 1px solid #e5e7eb !important;
     border-collapse: separate !important;
     border-spacing: 0 !important;
+  }
+  
+  /* Allow tables with any width class to maintain their width */
+  table[class*="w-"] {
+    background-color: white !important;
+    border-radius: 0.5rem !important;
+    border: 1px solid #e5e7eb !important;
+    border-collapse: separate !important;
+    border-spacing: 0 !important;
+  }
+
+  /* Custom parameter table - FIXED width and position */
+  .parameter-table {
+    width: 600px !important;
+    min-width: 600px !important;
+    max-width: 600px !important;
+    table-layout: fixed !important;
+    background-color: white !important;
+    border-radius: 0.5rem !important;
+    border: 1px solid #e5e7eb !important;
+    border-collapse: separate !important;
+    border-spacing: 0 !important;
+    position: relative !important;
+    margin: 0 !important;
+  }
+
+  /* Fixed column widths for parameter tables */
+  .parameter-table th:first-child,
+  .parameter-table td:first-child {
+    width: 400px !important;
+    min-width: 400px !important;
+    max-width: 400px !important;
+  }
+
+  .parameter-table th:last-child,
+  .parameter-table td:last-child {
+    width: 200px !important;
+    min-width: 200px !important;
+    max-width: 200px !important;
   }
 
   /* FIX: Prevent double borders at table bottom */
@@ -750,8 +936,8 @@ th, td {
   
   /* Input fields for editable content */
   .table-input {
-    height: 2.3rem !important; /* Match dropdown height for consistency */
-    padding: 0.25rem 0.5rem !important; /* Reduced padding to match p-1 for consistent row height */
+    height: 2rem !important; /* Reduced height for tighter spacing */
+    padding: 0.125rem 0.25rem !important; /* Ultra-tight padding for compact selector spacing */
     background-color: hsl(var(--primary) / 0.05);
     border: 1px solid hsl(var(--border));
     outline: none;
@@ -793,8 +979,8 @@ th, td {
   select.table-input,
   .table-dropdown,
   select[class*="table"] {
-    height: 2.3rem !important;
-    padding: 0 0.5rem !important; /* Reduced padding to match input fields */
+    height: 2rem !important;
+    padding: 0 0.25rem !important; /* Ultra-tight padding for compact selector spacing */
     background-color: hsl(var(--primary) / 0.05);
     border: 1px solid hsl(var(--border));
     outline: none;
@@ -804,7 +990,7 @@ th, td {
     border-radius: 6px;
     transition: all 0.2s ease;
     color: hsl(var(--foreground)) !important;
-    line-height: 2.3rem !important;
+    line-height: 2rem !important;
   }
 
   /* Hover and focus states for all dropdowns */
@@ -1421,13 +1607,20 @@ th, td {
 
 /* Need Dropdown Button Style (Elite Wealth Tangerine) */
 .btn-need {
-  background-color: #F97415 !important; /* Design system orange */
+  background-color: #F97415 !important; /* Design system bright orange */
+  background: #F97415 !important; /* Design system bright orange - extra specificity */
   color: white !important;
   border: 1px solid #F97415 !important;
   font-weight: 500 !important;
   height: 2.5rem !important; /* 40px */
   border-radius: 6px !important; /* 6px radius */
   transition: all 0.15s ease-in-out !important;
+}
+
+/* Ensure bright orange overrides any potential conflicting styles */
+button.btn-need {
+  background-color: #F97415 !important;
+  background: #F97415 !important;
 }
 
 .btn-need:hover:not(:disabled) {

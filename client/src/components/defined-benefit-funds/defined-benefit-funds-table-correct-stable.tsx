@@ -315,7 +315,8 @@ export default function DefinedBenefitFundsTable({ onAddFund }: DefinedBenefitFu
 
   return (
     <div className="space-y-6">
-      <table>
+      <div className="overflow-x-auto">
+        <table>
         <thead>
           {/* First Header Row - Section Groups */}
           <tr className="double-row-header-first">
@@ -529,7 +530,7 @@ export default function DefinedBenefitFundsTable({ onAddFund }: DefinedBenefitFu
         {/* Totals Footer */}
         <tfoot>
           <tr>
-            <td className="totals-cell-label text-right" colSpan={6}>Totals</td>
+            <td className="totals-cell-label text-right" colSpan={7}>Totals</td>
             <td className="totals-cell-value">R {totals.finalMonthlySalary.toLocaleString()}</td>
             <td className="totals-cell-value">R {totals.deathLumpSum.toLocaleString()}</td>
             <td className="totals-cell-value">R {totals.additionalTaxFreeAmount.toLocaleString()}</td>
@@ -539,6 +540,7 @@ export default function DefinedBenefitFundsTable({ onAddFund }: DefinedBenefitFu
           </tr>
         </tfoot>
       </table>
+      </div>
     </div>
   );
 }

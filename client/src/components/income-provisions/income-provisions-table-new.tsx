@@ -186,6 +186,7 @@ export default function IncomeProvisionsTable({ viewMode, searchTerm, onAddProvi
  return (
  <div>
  {/* Table */}
+ <div className="overflow-x-auto">
  <table className="min-w-full border border-neutral-200">
  <thead>
  <tr className="double-row-header-first">
@@ -404,6 +405,7 @@ export default function IncomeProvisionsTable({ viewMode, searchTerm, onAddProvi
  </tr>
  </tfoot>
  </table>
+ </div>
  </div>
  );
 }

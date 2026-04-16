@@ -9,22 +9,8 @@ export const retirementFunds = pgTable("retirement_funds", {
   description: text("description"),  // Allow null, no default
   owners: text("owners").array().notNull().default(["Donald Edwards"]),
   ownershipPercentages: text("ownership_percentages").array().notNull().default(["100%"]),
-  additionalOwners: text("additional_owners").array().notNull().default([]),
-
-  // Classic table fields (owner singular, name, amount, beneficiaryName)
-  owner: text("owner").notNull().default("Donald Edwards"),
-  name: text("name").notNull().default(""),
-  amount: text("amount").notNull().default("R 0"),
-  beneficiaryName: text("beneficiary_name").notNull().default(""),
-
-  // Additional beneficiaries for classic table
-  additionalBeneficiaries: text("additional_beneficiaries").array().notNull().default([]),
-  additionalBenefitSplits: text("additional_benefit_splits").array().notNull().default([]),
-
-  // Beneficiaries JSON for simple table
-  beneficiaries: text("beneficiaries").notNull().default("[]"),
-
-  // Unapproved Life Cover Section
+  
+  // Unapproved Life Cover Section  
   coverAmount: text("cover_amount").notNull().default("R 0"),
   unapprovedBeneficiaries: text("unapproved_beneficiaries").array().notNull().default([""]),
   unapprovedPercentageSplits: text("unapproved_percentage_splits").array().notNull().default(["0%"]),
@@ -49,7 +35,34 @@ export const retirementFunds = pgTable("retirement_funds", {
   nonDeductibleContribution: text("non_deductible_contribution").notNull().default("R 0"),
   livingAnnuity: text("living_annuity").notNull().default("R 0"), // Calculated
   livingAnnuityCheckbox: boolean("living_annuity_checkbox").notNull().default(false),
-  incomeTerm: text("income_term").notNull().default("0 years")
+  incomeTerm: text("income_term").notNull().default("0 years"),
+
+  // Additional fields for table views
+  additionalOwners: text("additional_owners").array().notNull().default([]),
+  owner: text("owner").notNull().default("Donald Edwards"),
+  name: text("name").notNull().default(""),
+  amount: text("amount").notNull().default("R 0"),
+  beneficiaryName: text("beneficiary_name").notNull().default(""),
+  beneficiaryPercentageSplit: text("beneficiary_percentage_split").notNull().default("0%"),
+  additionalBeneficiaries: text("additional_beneficiaries").array().notNull().default([]),
+  additionalBenefitSplits: text("additional_benefit_splits").array().notNull().default([]),
+  beneficiaries: text("beneficiaries").notNull().default("[]"),
+
+  // Flows table fields
+  lumpSumDeath: text("lump_sum_death").notNull().default("R 0"),
+  fundValueAfterLumpSum: text("fund_value_after_lump_sum").notNull().default("R 0"),
+  monthlyIncomeTerm: text("monthly_income_term").notNull().default("0 years"),
+  lumpSumProvisionEstate: text("lump_sum_provision_estate").notNull().default("R 0"),
+  lumpSumProvisionSpouse: text("lump_sum_provision_spouse").notNull().default("R 0"),
+  lumpSumProvisionOther: text("lump_sum_provision_other").notNull().default("R 0"),
+  currentAnnualIncome: text("current_annual_income").notNull().default("R 0"),
+  monthlyProvisionOffered: text("monthly_provision_offered").notNull().default("R 0"),
+  incomeEscalation: text("income_escalation").notNull().default("0%"),
+  estateDutyPoliciesOnLife: text("estate_duty_policies_on_life").notNull().default("0%"),
+  estateDutyToSpouse: text("estate_duty_to_spouse").notNull().default("0%"),
+  estateDutyToOthers: text("estate_duty_to_others").notNull().default("0%"),
+  executorsFee: text("executors_fee").notNull().default("0%"),
+  mastersFee: text("masters_fee").notNull().default("0%"),
 });
 
 export const insertRetirementFundSchema = createInsertSchema(retirementFunds).omit({
@@ -63,6 +76,14 @@ export const updateRetirementFundSchema = createInsertSchema(retirementFunds).om
 export type RetirementFund = typeof retirementFunds.$inferSelect;
 export type InsertRetirementFund = z.infer<typeof insertRetirementFundSchema>;
 export type UpdateRetirementFund = z.infer<typeof updateRetirementFundSchema>;
+
+// Beneficiary type used by retirement fund table views
+export interface Beneficiary {
+  id: string;
+  name: string;
+  percentage: number;
+  coverSplit: string;
+}
 
 // Lump Sum Bequests table
 export const lumpSumBequests = pgTable("lump_sum_bequests", {
@@ -154,13 +175,13 @@ export const assurance = pgTable("assurance", {
   collateralSession: text("collateral_session").notNull().default("R 0"),
   benefitSplit: text("benefit_split").notNull().default("0%"),
   
-  // Policy flags
+  // Flags
   buySell: boolean("buy_sell").notNull().default(false),
   keyMan: boolean("key_man").notNull().default(false),
   excludedFromEstateDuty: boolean("excluded_from_estate_duty").notNull().default(false),
   excludedFromProvisions: boolean("excluded_from_provisions").notNull().default(false),
 
-  // Additional owner/beneficiary rows (legacy pattern used by simplified table)
+  // Additional owners/beneficiaries
   additionalOwners: text("additional_owners").array().notNull().default([]),
   additionalBeneficiaries: text("additional_beneficiaries").array().notNull().default([]),
   additionalBenefitSplits: text("additional_benefit_splits").array().notNull().default([]),
@@ -453,34 +474,108 @@ export type EstatePositionParameters = typeof estatePositionParameters.$inferSel
 export type InsertEstatePositionParameters = z.infer<typeof insertEstatePositionParametersSchema>;
 export type UpdateEstatePositionParameters = z.infer<typeof updateEstatePositionParametersSchema>;
 
-// Financial Plans table — top-level container for all financial planning data
+// Financial Plans table
 export const financialPlans = pgTable("financial_plans", {
   id: serial("id").primaryKey(),
-  name: text("name").notNull().default("New Financial Plan"),
-  clientName: text("client_name").notNull().default(""),
-  createdAt: text("created_at").notNull().default(""),
-  updatedAt: text("updated_at").notNull().default(""),
+  
+  // Basic plan information
+  name: text("name").notNull(),
+  description: text("description"),
+  dateApplicable: text("date_applicable").notNull().default(new Date().toISOString().split('T')[0]),
+  
+  // Metadata
+  createdAt: text("created_at").notNull().default(new Date().toISOString()),
+  updatedAt: text("updated_at").notNull().default(new Date().toISOString()),
 });
 
-export const insertFinancialPlanSchema = createInsertSchema(financialPlans).omit({ id: true });
-export const updateFinancialPlanSchema = createInsertSchema(financialPlans).omit({ id: true }).partial();
+export const insertFinancialPlanSchema = createInsertSchema(financialPlans).omit({
+  id: true,
+});
+
+export const updateFinancialPlanSchema = createInsertSchema(financialPlans).omit({
+  id: true,
+}).partial();
+
 export type FinancialPlan = typeof financialPlans.$inferSelect;
 export type InsertFinancialPlan = z.infer<typeof insertFinancialPlanSchema>;
 export type UpdateFinancialPlan = z.infer<typeof updateFinancialPlanSchema>;
 
-// Comments — per-page feedback for prototype reviews
+// Needs table
+export const needs = pgTable("needs", {
+  id: serial("id").primaryKey(),
+  
+  // Need identification
+  key: text("key").notNull().unique(), // e.g., "death", "retirement", "permanent-disability"
+  displayName: text("display_name").notNull(), // e.g., "Death with estate liquidity"
+  category: text("category").notNull(), // e.g., "protection", "investment", "planning"
+  
+  // Need configuration
+  hasDetailedSteps: boolean("has_detailed_steps").notNull().default(false), // true only for "death-estate-liquidity"
+  summaryData: text("summary_data"), // JSON string containing summary card data
+  
+  // Metadata
+  createdAt: text("created_at").notNull().default(new Date().toISOString()),
+});
+
+export const insertNeedSchema = createInsertSchema(needs).omit({
+  id: true,
+});
+
+export const updateNeedSchema = createInsertSchema(needs).omit({
+  id: true,
+}).partial();
+
+export type Need = typeof needs.$inferSelect;
+export type InsertNeed = z.infer<typeof insertNeedSchema>;
+export type UpdateNeed = z.infer<typeof updateNeedSchema>;
+
+// Plan Needs junction table (many-to-many relationship)
+export const planNeeds = pgTable("plan_needs", {
+  id: serial("id").primaryKey(),
+  
+  // Foreign keys
+  planId: integer("plan_id").notNull(),
+  needId: integer("need_id").notNull(),
+  
+  // Configuration specific to this plan-need relationship
+  isActive: boolean("is_active").notNull().default(true),
+  sortOrder: integer("sort_order").notNull().default(0),
+  
+  // Metadata
+  createdAt: text("created_at").notNull().default(new Date().toISOString()),
+});
+
+export const insertPlanNeedSchema = createInsertSchema(planNeeds).omit({
+  id: true,
+});
+
+export const updatePlanNeedSchema = createInsertSchema(planNeeds).omit({
+  id: true,
+}).partial();
+
+export type PlanNeed = typeof planNeeds.$inferSelect;
+export type InsertPlanNeed = z.infer<typeof insertPlanNeedSchema>;
+export type UpdatePlanNeed = z.infer<typeof updatePlanNeedSchema>;
+
+// Comments table
 export const comments = pgTable("comments", {
   id: serial("id").primaryKey(),
   page: text("page").notNull(),
   author: text("author").notNull(),
-  content: text("content").notNull(),
-  status: text("status").notNull().default("open"),
+  content: text("content").notNull().default(""),
   image: text("image"),
-  createdAt: text("created_at").notNull(),
+  status: text("status").notNull().default("open"),
+  createdAt: text("created_at").notNull().default(new Date().toISOString()),
 });
 
-export const insertCommentSchema = createInsertSchema(comments).omit({ id: true });
-export const updateCommentSchema = createInsertSchema(comments).omit({ id: true }).partial();
+export const insertCommentSchema = createInsertSchema(comments).omit({
+  id: true,
+});
+
+export const updateCommentSchema = createInsertSchema(comments).omit({
+  id: true,
+}).partial();
+
 export type Comment = typeof comments.$inferSelect;
 export type InsertComment = z.infer<typeof insertCommentSchema>;
 export type UpdateComment = z.infer<typeof updateCommentSchema>;

@@ -1,11 +1,9 @@
-import React, { useState, useRef, useEffect } from"react";
-import { ChevronLeft, ChevronDown, Edit2, Check, X } from"lucide-react";
-import { Link, useLocation } from"wouter";
-import { useQuery, useMutation, useQueryClient } from"@tanstack/react-query";
-import { Button } from"@/components/ui/button";
-import { needs } from"@shared/navigation-config";
-import { apiRequest } from"@/lib/queryClient";
-import type { FinancialPlan } from"@shared/schema";
+import React, { useState } from "react";
+import { ChevronLeft, ChevronDown, Edit2 } from "lucide-react";
+import { Link, useLocation } from "wouter";
+import { Button } from "@/components/ui/button";
+import { needs } from "@shared/navigation-config";
+import { useQuery } from "@tanstack/react-query";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -15,72 +13,47 @@ import {
 } from"@/components/ui/dropdown-menu";
 import { cn } from"@/lib/utils";
 import { SafeFragment } from"@/lib/safe-fragment";
+import { FinancialNeedsDialog } from"@/components/navigation/financial-needs-dialog";
 
 interface ConsolidatedNavigationProps {
   currentNeed: any;
   currentStep: any;
   stepsWithStatus: any[];
   sections: any[];
+  planId?: string;
 }
 
 export function ConsolidatedNavigation({ 
   currentNeed, 
   currentStep, 
   stepsWithStatus,
-  sections 
+  sections,
+  planId = "1"
 }: ConsolidatedNavigationProps) {
   const [location, setLocation] = useLocation();
-  const queryClient = useQueryClient();
   const [isNeedDropdownOpen, setIsNeedDropdownOpen] = useState(false);
   const [stepDropdownOpen, setStepDropdownOpen] = useState<string | null>(null);
-  const [isEditing, setIsEditing] = useState(false);
-  const [editName, setEditName] = useState("");
-  const editInputRef = useRef<HTMLInputElement>(null);
-
-  // Fetch the first plan (current plan) — later this will be plan-scoped
-  const { data: plans = [] } = useQuery<FinancialPlan[]>({
-    queryKey: ["/api/financial-plans"],
-    queryFn: async () => {
-      const res = await fetch("/api/financial-plans");
-      if (!res.ok) throw new Error("Failed to fetch plans");
-      return res.json();
-    },
+  const [isNeedsDialogOpen, setIsNeedsDialogOpen] = useState(false);
+  
+  // Use the planId prop (defaults to "1" for now)
+  
+  // Fetch current plan needs for the dialog
+  const { data: planWithNeeds } = useQuery<{ needs: any[] }>({
+    queryKey: [`/api/financial-plans/${planId}/with-needs`],
+    enabled: isNeedsDialogOpen,
   });
-  const currentPlan = plans[0];
+  
+  // Fetch current plan data to get the plan name
+  const { data: currentPlan } = useQuery({
+    queryKey: [`/api/financial-plans/${planId}`],
+    queryFn: () => fetch(`/api/financial-plans/${planId}`).then(res => res.json()),
+    enabled: !!planId && planId !== 'new',
+  });
+  
   const planName = currentPlan?.name || "Financial Plan";
-
-  const renameMutation = useMutation({
-    mutationFn: async ({ id, name }: { id: number; name: string }) => {
-      const res = await apiRequest("PATCH", `/api/financial-plans/${id}`, { name });
-      return await res.json();
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["/api/financial-plans"] });
-      setIsEditing(false);
-    },
-  });
-
-  const handleStartEdit = () => {
-    setEditName(planName);
-    setIsEditing(true);
-    setTimeout(() => editInputRef.current?.select(), 0);
-  };
-
-  const handleSaveEdit = () => {
-    const trimmed = editName.trim();
-    if (trimmed && currentPlan && trimmed !== currentPlan.name) {
-      renameMutation.mutate({ id: currentPlan.id, name: trimmed });
-    } else {
-      setIsEditing(false);
-    }
-  };
-
-  const handleCancelEdit = () => {
-    setIsEditing(false);
-  };
-
+  
   const handleBack = () => {
-    setLocation("/");
+    window.history.back();
   };
 
   // Get content for dropdown based on selected step
@@ -163,55 +136,34 @@ export function ConsolidatedNavigation({
               
               {/* Financial Plan name with edit button and back button on same row */}
               <div className="flex items-center gap-2">
-                {isEditing ? (
-                  <div className="flex items-center gap-1 bg-[#F5F1E8] rounded-[6px] pl-4 pr-1 h-10">
-                    <input
-                      ref={editInputRef}
-                      type="text"
-                      value={editName}
-                      onChange={(e) => setEditName(e.target.value)}
-                      onKeyDown={(e) => {
-                        if (e.key === "Enter") handleSaveEdit();
-                        if (e.key === "Escape") handleCancelEdit();
-                      }}
-                      className="bg-transparent border-none outline-none text-sm font-medium text-gray-700 w-[200px]"
-                      autoFocus
-                    />
-                    <button
-                      onClick={handleSaveEdit}
-                      className="flex items-center justify-center h-8 w-8 rounded bg-white text-green-600 hover:bg-green-50"
-                    >
-                      <Check className="h-3 w-3" />
-                    </button>
-                    <button
-                      onClick={handleCancelEdit}
-                      className="flex items-center justify-center h-8 w-8 rounded bg-white text-gray-400 hover:bg-gray-50"
-                    >
-                      <X className="h-3 w-3" />
-                    </button>
-                  </div>
-                ) : (
-                  <button
-                    onClick={handleStartEdit}
-                    className="flex items-center pl-4 pr-1 text-sm font-medium transition-colors h-10 rounded-[6px] focus:outline-none focus:ring-0 focus:border-0 bg-[#F5F1E8] text-gray-700 border-0 hover:bg-[#F0EBE0]"
+                <div className="flex items-center bg-[#F97415] rounded-[6px] overflow-hidden">
+                  {/* Plan name - clickable to go to summary */}
+                  <Link href={`/financial-plans/${planId}`}>
+                    <div className="pl-4 pr-1 text-sm font-medium transition-colors h-10 flex items-center text-white hover:opacity-90 cursor-pointer">
+                      <span title={planName} className="flex-1 truncate">
+                        {planName}
+                      </span>
+                    </div>
+                  </Link>
+                  
+                  {/* Edit pencil icon - clickable to open needs dialog */}
+                  <button 
+                    onClick={() => setIsNeedsDialogOpen(true)}
+                    className="flex items-center justify-center h-8 w-8 rounded text-sm font-semibold bg-white bg-opacity-25 text-white ml-1 mr-1 my-1 hover:bg-opacity-30 transition-colors"
                   >
-                    <span title={planName} className="flex-1">
-                      {planName}
-                    </span>
-                    <span className="flex items-center justify-center h-8 w-8 rounded text-sm font-semibold bg-white text-[#F97415] ml-4">
-                      <Edit2 className="h-3 w-3" />
-                    </span>
+                    <Edit2 className="h-3.5 w-3.5" />
                   </button>
-                )}
-
-                {/* Back to all plans button */}
-                <Button
-                  variant="ghost"
-                  onClick={handleBack}
-                  className="btn-ghost px-2 text-sm h-10"
-                >
-                  Back to all plans
-                </Button>
+                </div>
+                
+                {/* Back to summary button */}
+                <Link href={`/financial-plans/${planId}`}>
+                  <Button
+                    variant="ghost"
+                    className="btn-ghost px-2 text-sm h-10"
+                  >
+                    Back to summary
+                  </Button>
+                </Link>
               </div>
             </div>
 
@@ -247,11 +199,17 @@ export function ConsolidatedNavigation({
                   ))}
                   <DropdownMenuSeparator />
                   <DropdownMenuItem className="dropdown-menu-item" asChild>
-                    <Link href="/manage-needs" onClick={() => setIsNeedDropdownOpen(false)}>
+                    <button 
+                      className="w-full text-left"
+                      onClick={() => {
+                        setIsNeedDropdownOpen(false);
+                        setIsNeedsDialogOpen(true);
+                      }}
+                    >
                       <span className="text-gray-700">
                         Manage needs in this plan
                       </span>
-                    </Link>
+                    </button>
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
@@ -354,6 +312,17 @@ export function ConsolidatedNavigation({
           </div>
         </div>
       </div>
+      
+      {/* Financial Needs Dialog */}
+      <FinancialNeedsDialog
+        isOpen={isNeedsDialogOpen}
+        onClose={() => setIsNeedsDialogOpen(false)}
+        planId={planId}
+        currentNeeds={(planWithNeeds?.needs || []).map((need: any) => ({ 
+          key: need.key, 
+          displayName: need.displayName 
+        }))}
+      />
     </div>
   );
 }

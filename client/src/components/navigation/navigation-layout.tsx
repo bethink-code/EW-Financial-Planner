@@ -113,6 +113,7 @@ export function NavigationLayout({ children }: NavigationLayoutProps) {
         currentStep={currentStep}
         stepsWithStatus={stepsWithStatus}
         sections={sections}
+        planId="1"
       />
       
       {/* Main content with bottom padding to avoid overlap with fixed navigation bar */}

@@ -85,9 +85,9 @@ export default function EntityOwnerSelector({
     // Return empty table cells for rows beyond owners count
     return (
       <>
-        <td className="p-1 align-top border-r border-neutral-200" style={{ width: '60px' }}></td>
-        <td className="p-1 align-top border-r border-neutral-200" style={{ width: '300px' }}></td>
-        <td className="p-1 align-top border-r border-neutral-200" style={{ width: '80px' }}></td>
+        <td className="px-0.25 py-0.5 align-top border-r border-neutral-200" style={{ width: '60px' }}></td>
+        <td className="px-0.25 py-0.5 align-top border-r border-neutral-200" style={{ width: '300px' }}></td>
+        <td className="px-0.25 py-0.5 align-top border-r border-neutral-200" style={{ width: '80px' }}></td>
       </>
     );
   }
@@ -114,19 +114,19 @@ export default function EntityOwnerSelector({
   return (
     <>
       {/* Actions Column */}
-      <td className="pr-0.5 pl-1 py-1 align-top border-r border-neutral-200" style={{ width: '60px' }}>
+      <td className="pr-0.25 pl-0.25 py-0.5 align-top border-r border-neutral-200" style={{ width: '60px' }}>
         <div className="pt-0.5">
           {actionButton}
         </div>
       </td>
       
       {/* Owner Column */}
-      <td className="px-0.5 py-1 align-top border-r border-neutral-200" style={{ width: '300px' }}>
+      <td className="entity-tight-spacing py-0.5 align-top border-r border-neutral-200">
         <select
           value={currentOwner}
           onChange={(e) => handleOwnerSelect(e.target.value, ownerIndex)}
           disabled={disabled}
-          className="table-input table-dropdown w-full"
+          className="table-input table-dropdown"
         >
           <option value="">Select owner...</option>
           {entities.map((entity) => (
@@ -138,7 +138,7 @@ export default function EntityOwnerSelector({
       </td>
 
       {/* Ownership % Column */}
-      <td className="pl-0.5 pr-1 py-1 align-top border-r border-neutral-200" style={{ width: '80px' }}>
+      <td className="entity-tight-spacing py-0.5 align-top border-r border-neutral-200" style={{ width: '80px' }}>
         <input
           type="text"
           defaultValue={currentPercentage}

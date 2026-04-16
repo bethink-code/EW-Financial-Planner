@@ -9,7 +9,7 @@ import { OverviewDashboard } from '@/components/project/overview-dashboard';
 
 export default function ProjectStep() {
   const [activeTab, setActiveTab] = useState('overview');
-  const [chartType, setChartType] = useState('gauge');
+  const [chartType, setChartType] = useState('bar');
   const [parameters, setParameters] = useState({
     // Estate position parameters
     lifeCoverToEstate: 4000000,
@@ -79,14 +79,15 @@ export default function ProjectStep() {
   return (
     <div className="">
       <div className="w-full px-6 py-6">
-        <CalculatorHeader 
-          title="Projections"
-          additionalControls={chartTypeSelector}
-          className="mb-6"
-        >
-          {/* Tab Navigation and Content */}
-          <div className="px-6 py-4">
-            <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
+        <div className="w-[1320px]">
+          <CalculatorHeader 
+            title="Projections"
+            additionalControls={chartTypeSelector}
+            className="mb-6"
+          >
+            {/* Tab Navigation and Content */}
+            <div className="px-6 py-6">
+            <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-8">
               {/* Custom Tab Navigation */}
               <div className="inline-flex bg-gray-100 rounded-lg p-1">
                 <div className="flex gap-1">
@@ -94,7 +95,7 @@ export default function ProjectStep() {
                     onClick={() => setActiveTab('overview')}
                     className={`px-4 py-2 text-sm font-medium rounded-md transition-colors ${
                       activeTab === 'overview'
-                        ? 'bg-white text-gray-900 shadow-sm'
+                        ? 'bg-orange-500 text-white shadow-sm font-bold'
                         : 'text-gray-600 hover:text-gray-900'
                     }`}
                   >
@@ -104,7 +105,7 @@ export default function ProjectStep() {
                     onClick={() => setActiveTab('estate')}
                     className={`px-4 py-2 text-sm font-medium rounded-md transition-colors ${
                       activeTab === 'estate'
-                        ? 'bg-white text-gray-900 shadow-sm'
+                        ? 'bg-orange-500 text-white shadow-sm font-bold'
                         : 'text-gray-600 hover:text-gray-900'
                     }`}
                   >
@@ -114,7 +115,7 @@ export default function ProjectStep() {
                     onClick={() => setActiveTab('dependants')}
                     className={`px-4 py-2 text-sm font-medium rounded-md transition-colors ${
                       activeTab === 'dependants'
-                        ? 'bg-white text-gray-900 shadow-sm'
+                        ? 'bg-orange-500 text-white shadow-sm font-bold'
                         : 'text-gray-600 hover:text-gray-900'
                     }`}
                   >
@@ -124,7 +125,7 @@ export default function ProjectStep() {
                     onClick={() => setActiveTab('capital')}
                     className={`px-4 py-2 text-sm font-medium rounded-md transition-colors ${
                       activeTab === 'capital'
-                        ? 'bg-white text-gray-900 shadow-sm'
+                        ? 'bg-orange-500 text-white shadow-sm font-bold'
                         : 'text-gray-600 hover:text-gray-900'
                     }`}
                   >
@@ -134,7 +135,7 @@ export default function ProjectStep() {
                     onClick={() => setActiveTab('income')}
                     className={`px-4 py-2 text-sm font-medium rounded-md transition-colors ${
                       activeTab === 'income'
-                        ? 'bg-white text-gray-900 shadow-sm'
+                        ? 'bg-orange-500 text-white shadow-sm font-bold'
                         : 'text-gray-600 hover:text-gray-900'
                     }`}
                   >
@@ -144,7 +145,7 @@ export default function ProjectStep() {
               </div>
 
               {/* Overview Tab - Shows all 4 gauges */}
-              <TabsContent value="overview">
+              <TabsContent value="overview" className="mt-8 tab-content-enter">
                 <OverviewDashboard 
                   data={calculatedValues}
                   chartType={chartType}
@@ -152,8 +153,17 @@ export default function ProjectStep() {
               </TabsContent>
 
               {/* Individual Position Tabs */}
-              <TabsContent value="estate">
-                <div className="grid grid-cols-2 gap-6">
+              <TabsContent value="estate" className="mt-8 tab-content-enter">
+                <div className="grid grid-cols-2 gap-8">
+                  <div>
+                    <ParameterPanel
+                      title="Estate Position Parameters"
+                      parameters={parameters}
+                      onParameterChange={handleParameterChange}
+                      section="estate"
+                      calculatedValues={calculatedValues.estatePosition}
+                    />
+                  </div>
                   <div>
                     <ChartPanel
                       title="Estate Position"
@@ -162,19 +172,20 @@ export default function ProjectStep() {
                       description="Shows the estate's capital position after death"
                     />
                   </div>
-                  <div>
-                    <ParameterPanel
-                      title="Estate Position Parameters"
-                      parameters={parameters}
-                      onParameterChange={handleParameterChange}
-                      section="estate"
-                    />
-                  </div>
                 </div>
               </TabsContent>
 
-              <TabsContent value="dependants">
-                <div className="grid grid-cols-2 gap-6">
+              <TabsContent value="dependants" className="mt-8 tab-content-enter">
+                <div className="grid grid-cols-2 gap-8">
+                  <div>
+                    <ParameterPanel
+                      title="Dependants Position Parameters"
+                      parameters={parameters}
+                      onParameterChange={handleParameterChange}
+                      section="dependants"
+                      calculatedValues={calculatedValues.dependantsPosition}
+                    />
+                  </div>
                   <div>
                     <ChartPanel
                       title="Dependants Position"
@@ -183,19 +194,20 @@ export default function ProjectStep() {
                       description="Shows capital provisions for dependants"
                     />
                   </div>
-                  <div>
-                    <ParameterPanel
-                      title="Dependants Position Parameters"
-                      parameters={parameters}
-                      onParameterChange={handleParameterChange}
-                      section="dependants"
-                    />
-                  </div>
                 </div>
               </TabsContent>
 
-              <TabsContent value="capital">
-                <div className="grid grid-cols-2 gap-6">
+              <TabsContent value="capital" className="mt-8 tab-content-enter">
+                <div className="grid grid-cols-2 gap-8">
+                  <div>
+                    <ParameterPanel
+                      title="Total Capital Position Parameters"
+                      parameters={parameters}
+                      onParameterChange={handleParameterChange}
+                      section="capital"
+                      calculatedValues={calculatedValues.totalCapitalPosition}
+                    />
+                  </div>
                   <div>
                     <ChartPanel
                       title="Total Capital Position"
@@ -204,19 +216,20 @@ export default function ProjectStep() {
                       description="Overall capital adequacy analysis"
                     />
                   </div>
-                  <div>
-                    <ParameterPanel
-                      title="Total Capital Position Parameters"
-                      parameters={parameters}
-                      onParameterChange={handleParameterChange}
-                      section="capital"
-                    />
-                  </div>
                 </div>
               </TabsContent>
 
-              <TabsContent value="income">
-                <div className="grid grid-cols-2 gap-6">
+              <TabsContent value="income" className="mt-8 tab-content-enter">
+                <div className="grid grid-cols-2 gap-8">
+                  <div>
+                    <ParameterPanel
+                      title="Income Position Parameters"
+                      parameters={parameters}
+                      onParameterChange={handleParameterChange}
+                      section="income"
+                      calculatedValues={calculatedValues.incomePosition}
+                    />
+                  </div>
                   <div>
                     <ChartPanel
                       title="Income Position"
@@ -225,19 +238,12 @@ export default function ProjectStep() {
                       description="Monthly income provisions and requirements"
                     />
                   </div>
-                  <div>
-                    <ParameterPanel
-                      title="Income Position Parameters"
-                      parameters={parameters}
-                      onParameterChange={handleParameterChange}
-                      section="income"
-                    />
-                  </div>
                 </div>
               </TabsContent>
             </Tabs>
           </div>
         </CalculatorHeader>
+        </div>
       </div>
     </div>
   );

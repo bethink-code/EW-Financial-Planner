@@ -60,6 +60,10 @@ export function EntityOwnerSelector({
   // Convert current name to entity ID for selector
   const currentEntityIds = namesToIds([currentOwnerName]);
   const currentEntityId = currentEntityIds[0] || 0;
+  
+  // Find the entity to get full display name
+  const currentEntity = entities.find(entity => entity.entityName === currentOwnerName);
+  const currentDisplayValue = currentEntity ? `${currentEntity.entityName} (${currentEntity.entityType})` : currentOwnerName;
 
   const handleEntityChange = (entityId: number) => {
     // Convert entity ID back to name for storage
@@ -82,58 +86,79 @@ export function EntityOwnerSelector({
   };
 
   return (
-    <div className="flex items-center gap-1">
-      {/* Action Button FIRST - Same pattern as beneficiary component */}
-      {rowIndex === 0 ? (
-        <AddButton
-          onClick={() => onAddOwner(policyId)}
-          disabled={disabled}
-          size="sm"
-        />
-      ) : (
-        <DeleteButton
-          onClick={() => onRemoveOwner(policyId, rowIndex)}
-          disabled={disabled}
-          size="sm"
-        />
-      )}
+    <>
+      {/* Actions Column */}
+      <td className="border border-neutral-300 p-1 align-top">
+        {rowIndex === 0 ? (
+          <AddButton
+            onClick={() => onAddOwner(policyId)}
+            disabled={disabled}
+            size="sm"
+          />
+        ) : (
+          <DeleteButton
+            onClick={() => onRemoveOwner(policyId, rowIndex)}
+            disabled={disabled}
+            size="sm"
+          />
+        )}
+      </td>
       
-      {/* Entity Selector - Using native HTML select to avoid CSS conflicts */}
-      <select
-        value={currentOwnerName}
-        onChange={(e) => onOwnerChange(policyId, rowIndex, e.target.value)}
-        disabled={disabled}
-        className="table-input table-dropdown flex-1"
-      >
-        <option value="">Select owner...</option>
-        {entities.map((entity) => (
-          <option key={entity.id} value={entity.entityName}>
-            {entity.entityName} ({entity.entityType})
-          </option>
-        ))}
-      </select>
+      {/* Owner Name Column */}
+      <td className="border border-neutral-300 p-1">
+        <div className="w-full min-w-[250px]">
+          <select
+            value={currentDisplayValue}
+            onChange={(e) => {
+              // Extract entity name from the full display value
+              const selectedValue = e.target.value;
+              if (selectedValue === "" || selectedValue === "Select owner...") {
+                onOwnerChange(policyId, rowIndex, "");
+              } else {
+                // Extract just the entity name from "EntityName (EntityType)"
+                const entityName = selectedValue.replace(/\s*\([^)]*\)\s*$/, '');
+                onOwnerChange(policyId, rowIndex, entityName);
+              }
+            }}
+            disabled={disabled}
+            className="table-input table-dropdown w-full min-w-[250px]"
+            >
+              <option value="">Select owner...</option>
+              {entities.map((entity) => {
+                const displayValue = `${entity.entityName} (${entity.entityType})`;
+                return (
+                  <option key={entity.id} value={displayValue}>
+                    {displayValue}
+                  </option>
+                );
+              })}
+            </select>
+        </div>
+      </td>
       
-      {/* Percentage Input with same behavior as beneficiary component */}
-      <input
-        type="text"
-        defaultValue={currentPercentage}
-        placeholder="0%"
-        className={`table-input ${getFieldClass('percentage')} w-16 text-center ${getValueClass(currentPercentage, 'percentage')}`}
-        onFocus={(e) => {
-          handleDefaultValueFocus(e);
-          // Remove % sign for editing but keep the number
-          const valueWithoutPercent = e.target.value.replace('%', '');
-          e.target.value = valueWithoutPercent;
-        }}
-        onBlur={(e) => {
-          handlePercentageChange(e.target.value);
-          // Restore the formatted value with % sign
-          const cleanValue = e.target.value.replace(/[^\d.]/g, '');
-          const numValue = parseFloat(cleanValue);
-          e.target.value = isNaN(numValue) ? "0%" : `${numValue}%`;
-        }}
-        disabled={disabled}
-      />
-    </div>
+      {/* Ownership Percentage Column */}
+      <td className="border border-neutral-300 p-1">
+        <input
+          type="text"
+          defaultValue={currentPercentage}
+          placeholder="0%"
+          className={`table-input ${getFieldClass('percentage')} w-16 text-center ${getValueClass(currentPercentage, 'percentage')}`}
+          onFocus={(e) => {
+            handleDefaultValueFocus(e);
+            // Remove % sign for editing but keep the number
+            const valueWithoutPercent = e.target.value.replace('%', '');
+            e.target.value = valueWithoutPercent;
+          }}
+          onBlur={(e) => {
+            handlePercentageChange(e.target.value);
+            // Restore the formatted value with % sign
+            const cleanValue = e.target.value.replace(/[^\d.]/g, '');
+            const numValue = parseFloat(cleanValue);
+            e.target.value = isNaN(numValue) ? "0%" : `${numValue}%`;
+          }}
+          disabled={disabled}
+        />
+      </td>
+    </>
   );
 }

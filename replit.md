@@ -4,7 +4,9 @@
 This full-stack web application, built with a React frontend and an Express.js backend, manages retirement funds and comprehensive financial planning data. It features 9 calculator views (assets, liabilities, defined benefit funds, assurance, retirement funds, income needs, lump sum bequests, income provisions, voluntary investments) with robust capabilities for viewing, editing, and searching financial data. The application supports multiple viewing modes including grouped table and hybrid views with real-time functionalities, standardized navigation patterns, and consistent UI alignment across all calculator components.
 
 ## User Preferences
-Preferred communication style: Simple, everyday language.
+- Preferred communication style: Simple, everyday language.
+- **CRITICAL**: Always run changes past the user first before implementing them. Never make changes without explicit approval.
+- User wants to be consulted on all modifications before they are executed.
 
 ## System Architecture
 The application is structured as a monorepo, separating client, server, and shared components.
@@ -59,6 +61,10 @@ Client requests data via TanStack Query hooks. Express routes handle CRUD operat
 - **Preview Card Data Consistency Pattern**: Resolved owner/beneficiary count mismatches by implementing consistent empty string filtering across all preview card components.
 - **Hybrid View Width Alignment Pattern**: Universal implementation across all 9 calculator components with `w-[1320px]` constraint to perfectly align with navigation element. Pattern structure: `<div className="w-full px-6 py-6"><div className="w-[1320px]">[Content]</div></div>` ensures consistent layout and professional appearance while table view can extend horizontally.
 - **Navigation Context Fixes**: Resolved routing confusion with improved default route handling, enhanced step detection for calculator pages in "build" step, and fixed sequential navigation matching to prevent context loss when using bottom navigation arrows.
+- **Global Projection Parameter Table Pattern**: Battle-tested reusable table pattern derived from perfected Dependants Position implementation. Features: `.parameter-table` custom CSS class (600px width), `px-2 py-2` optimized padding, `text-sm` typography, `text-gray-600` labels with `text-gray-800` values, `bg-gray-50` total rows with `font-bold` emphasis. Includes ParameterTable component with helper functions for calculated rows, income rows, and custom editable inputs. Eliminates need for custom table implementations across Estate, Dependants, Capital, and Income position views.
+- **Custom CSS Bar Charts**: Reliable chart implementation using pure CSS instead of external libraries. Features proportional scaling, three-bar display (Provided/Required/Surplus), currency formatting, and responsive design with smooth transitions. Successfully deployed across all projection tabs with guaranteed rendering performance.
+- **Graph Color Palette System**: Comprehensive secondary color palette implemented from design system with CSS custom properties. Features primary colors (blue, orange, green, pink) and secondary variations (teal, brown, purple, light blue, mint green) for consistent chart and graph styling. Applied to both bar charts and gauge charts with CSS variable references for maintainability.
+- **Projection Layout Spacing Optimization**: Enhanced breathing room between navigation and content elements with increased vertical spacing (`mt-8`), expanded grid gaps (`gap-8`), and internal component padding (`p-6`) for parameter panels and chart panels. Eliminates cramped feeling and provides professional layout comfort.
 
 ## External Dependencies
 

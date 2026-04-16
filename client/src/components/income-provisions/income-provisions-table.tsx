@@ -140,6 +140,7 @@ function IncomeProvisionsTable({ viewMode, searchTerm }: IncomeProvisionsTablePr
 
  return (
  <div className="space-y-6">
+ <div className="overflow-x-auto">
  <table>
  <thead>
  <tr className="double-row-header-first">
@@ -209,6 +210,7 @@ function IncomeProvisionsTable({ viewMode, searchTerm }: IncomeProvisionsTablePr
  </tr>
  </tfoot>
  </table>
+ </div>
  </div>
  );
 }

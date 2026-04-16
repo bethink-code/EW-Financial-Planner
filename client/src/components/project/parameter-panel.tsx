@@ -13,9 +13,15 @@ interface ParameterPanelProps {
   parameters: Record<string, number | boolean>;
   onParameterChange: (key: string, value: number | boolean) => void;
   section: 'estate' | 'dependants' | 'capital' | 'income';
+  calculatedValues?: {
+    provided: number;
+    required: number;
+    surplus: number;
+    percentage: number;
+  };
 }
 
-export function ParameterPanel({ title, parameters, onParameterChange, section }: ParameterPanelProps) {
+export function ParameterPanel({ title, parameters, onParameterChange, section, calculatedValues }: ParameterPanelProps) {
   const [openSections, setOpenSections] = useState<Set<string>>(new Set(['provided', 'required']));
 
   const toggleSection = (sectionId: string) => {
@@ -111,7 +117,7 @@ export function ParameterPanel({ title, parameters, onParameterChange, section }
           className="flex items-center justify-between w-full p-3 bg-gray-50 hover:bg-gray-100 rounded-md transition-colors"
           onClick={() => toggleSection(sectionId)}
         >
-          <span className="font-medium text-gray-900">{title}</span>
+          <span className="font-medium text-gray-600">{title}</span>
           {isOpen ? <ChevronDown className="h-4 w-4" /> : <ChevronRight className="h-4 w-4" />}
         </CollapsibleTrigger>
         <CollapsibleContent className={isOpen ? 'block' : 'hidden'}>
@@ -125,7 +131,7 @@ export function ParameterPanel({ title, parameters, onParameterChange, section }
                       className="h-4 w-4"
                     />
                   )}
-                  <Label className="text-sm text-gray-700 flex-1">{param.label}</Label>
+                  <Label className="text-sm text-gray-600 flex-1">{param.label}</Label>
                 </div>
                 {param.customInput ? (
                   <Input
@@ -135,7 +141,7 @@ export function ParameterPanel({ title, parameters, onParameterChange, section }
                     placeholder="R 0"
                   />
                 ) : (
-                  <div className="w-32 text-right text-sm font-medium text-gray-900">
+                  <div className="w-32 text-right text-sm font-medium text-gray-800">
                     {formatCurrency(parameters[param.key] as number)}
                   </div>
                 )}
@@ -148,72 +154,291 @@ export function ParameterPanel({ title, parameters, onParameterChange, section }
   };
 
   return (
-    <Card className="h-[600px] overflow-y-auto">
-      <CardHeader className="pb-4">
-        <div className="flex items-center justify-between">
-          <div>
-            <CardTitle className="text-lg">{title}</CardTitle>
-            <CardDescription>Adjust parameters to see real-time projections</CardDescription>
-          </div>
-          <Button variant="outline" size="sm" onClick={resetToDefaults}>
-            <RotateCcw className="h-4 w-4 mr-2" />
-            Reset
-          </Button>
-        </div>
-      </CardHeader>
-      <CardContent className="space-y-6">
-        {section === 'estate' && (
-          <EstatePositionParameters onParameterChange={(params) => {
-            // Trigger chart updates when parameters change
-            console.log('Estate position parameters updated:', params);
-          }} />
-        )}
+    <div className="p-6">      
+      {section === 'estate' && (
+        <table className="parameter-table table-fixed">
+          <thead>
+            <tr className="border-b border-neutral-300 bg-gray-50">
+              <th className="px-2 py-2 text-sm font-medium text-neutral-600 uppercase tracking-wider text-left">Parameter</th>
+              <th className="px-2 py-2 text-sm font-medium text-neutral-600 uppercase tracking-wider text-right">Value</th>
+            </tr>
+          </thead>
+          <tbody className="divide-y divide-neutral-200">
+            {[...estateProvidedParams, ...estateRequiredParams].map((param, index) => (
+              <tr key={param.key} className="hover:bg-neutral-50">
+                <td className="px-2 py-2">
+                  <span className="text-sm text-gray-600">{param.label}</span>
+                </td>
+                <td className="px-2 py-2 text-right text-sm font-medium text-gray-800">
+                  {param.customInput ? (
+                    <input
+                      type="text"
+                      value={formatCurrency(parameters[param.key] as number)}
+                      onChange={(e) => handleValueChange(param.key, e.target.value)}
+                      className="table-input w-full text-right text-sm bg-transparent border-0 px-1 py-0 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                      placeholder="R 0"
+                    />
+                  ) : (
+                    formatCurrency(parameters[param.key] as number)
+                  )}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      )}
         
-        {section === 'dependants' && (
-          <>
-            {renderParameterGroup('Capital Provided', dependantsProvidedParams, 'provided')}
-            {renderParameterGroup('Capital Required', dependantsRequiredParams, 'required')}
-          </>
+        {section === 'dependants' && calculatedValues && (
+          <table className="parameter-table table-fixed">
+            <thead>
+              <tr className="border-b border-neutral-300 bg-gray-50">
+                <th className="px-2 py-2 text-sm font-medium text-neutral-600 uppercase tracking-wider text-left">Parameter</th>
+                <th className="px-2 py-2 text-sm font-medium text-neutral-600 uppercase tracking-wider text-right">Value</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-neutral-200">
+              <tr className="hover:bg-neutral-50">
+                <td className="px-2 py-2">
+                  <span className="text-sm text-gray-600">Life cover to spouse</span>
+                </td>
+                <td className="px-2 py-2 text-right text-sm font-medium text-gray-800">
+                  {formatCurrency(calculatedValues.provided * 0.4)}
+                </td>
+              </tr>
+              <tr className="hover:bg-neutral-50">
+                <td className="px-2 py-2">
+                  <span className="text-sm text-gray-600">Life cover to dependents and others</span>
+                </td>
+                <td className="px-2 py-2 text-right text-sm font-medium text-gray-800">
+                  {formatCurrency(calculatedValues.provided * 0.3)}
+                </td>
+              </tr>
+              <tr className="hover:bg-neutral-50">
+                <td className="px-2 py-2">
+                  <span className="text-sm text-gray-600">Voluntary investments and assets made available as a provision</span>
+                </td>
+                <td className="px-2 py-2 text-right text-sm font-medium text-gray-800">
+                  {formatCurrency(calculatedValues.provided * 0.2)}
+                </td>
+              </tr>
+              <tr className="hover:bg-neutral-50">
+                <td className="px-2 py-2">
+                  <span className="text-sm text-gray-600">Lump sum from retirement funds after tax: Victoria Lambe</span>
+                </td>
+                <td className="px-2 py-2 text-right text-sm font-medium text-gray-800">
+                  {formatCurrency(calculatedValues.provided * 0.1)}
+                </td>
+              </tr>
+              <tr className="hover:bg-neutral-50">
+                <td className="px-2 py-2">
+                  <span className="text-sm text-gray-600">Estate surplus</span>
+                </td>
+                <td className="px-2 py-2 text-right text-sm font-medium text-gray-800">
+                  {formatCurrency(calculatedValues.surplus)}
+                </td>
+              </tr>
+              <tr className="hover:bg-neutral-50 bg-gray-50">
+                <td className="px-2 py-2">
+                  <span className="text-sm text-gray-600 font-medium">Own dependants capital provided</span>
+                </td>
+                <td className="px-2 py-2 text-right text-sm font-bold text-gray-800">
+                  {formatCurrency(calculatedValues.provided)}
+                </td>
+              </tr>
+              <tr className="hover:bg-neutral-50">
+                <td className="px-2 py-2">
+                  <span className="text-sm text-gray-600">Client's liabilities settled by dependants</span>
+                </td>
+                <td className="px-2 py-2 text-right text-sm font-medium text-gray-800">
+                  {formatCurrency(calculatedValues.required * 0.4)}
+                </td>
+              </tr>
+              <tr className="hover:bg-neutral-50">
+                <td className="px-2 py-2">
+                  <span className="text-sm text-gray-600">Lump sum needs and cash bequests</span>
+                </td>
+                <td className="px-2 py-2 text-right text-sm font-medium text-gray-800">
+                  {formatCurrency(calculatedValues.required * 0.35)}
+                </td>
+              </tr>
+              <tr className="hover:bg-neutral-50">
+                <td className="px-2 py-2">
+                  <span className="text-sm text-gray-600">Capital required to provide for income shortfall</span>
+                </td>
+                <td className="px-2 py-2 text-right text-sm font-medium text-gray-800">
+                  {formatCurrency(calculatedValues.required * 0.25)}
+                </td>
+              </tr>
+              <tr className="hover:bg-neutral-50 bg-gray-50">
+                <td className="px-2 py-2">
+                  <span className="text-sm text-gray-600 font-medium">Own dependants capital required</span>
+                </td>
+                <td className="px-2 py-2 text-right text-sm font-bold text-gray-800">
+                  {formatCurrency(calculatedValues.required)}
+                </td>
+              </tr>
+            </tbody>
+          </table>
         )}
 
-        {section === 'capital' && (
-          <div className="space-y-4">
-            <div className="text-center p-6 bg-blue-50 rounded-lg">
-              <p className="text-sm text-gray-600">Total Capital Position combines Estate and Dependants positions</p>
-              <p className="text-xs text-gray-500 mt-2">Adjust parameters in Estate and Dependants tabs to see changes here</p>
-            </div>
+        {section === 'capital' && calculatedValues && (
+          <table className="parameter-table table-fixed">
+            <thead>
+              <tr className="border-b border-neutral-300 bg-gray-50">
+                <th className="px-2 py-2 text-sm font-medium text-neutral-600 uppercase tracking-wider text-left">Parameter</th>
+                <th className="px-2 py-2 text-sm font-medium text-neutral-600 uppercase tracking-wider text-right">Value</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-neutral-200">
+              <tr className="hover:bg-neutral-50">
+                <td className="px-2 py-2">
+                  <span className="text-sm text-gray-600">Estate capital provided</span>
+                </td>
+                <td className="px-2 py-2 text-right text-sm font-medium text-gray-800">
+                  {formatCurrency(calculatedValues.provided * 0.6)}
+                </td>
+              </tr>
+              <tr className="hover:bg-neutral-50">
+                <td className="px-2 py-2">
+                  <span className="text-sm text-gray-600">Dependants capital provided</span>
+                </td>
+                <td className="px-2 py-2 text-right text-sm font-medium text-gray-800">
+                  {formatCurrency(calculatedValues.provided * 0.4)}
+                </td>
+              </tr>
+              <tr className="hover:bg-neutral-50 bg-gray-50">
+                <td className="px-2 py-2">
+                  <span className="text-sm text-gray-600 font-medium">Total capital provided</span>
+                </td>
+                <td className="px-2 py-2 text-right text-sm font-bold text-gray-800">
+                  {formatCurrency(calculatedValues.provided)}
+                </td>
+              </tr>
+              <tr className="hover:bg-neutral-50">
+                <td className="px-2 py-2">
+                  <span className="text-sm text-gray-600">Estate capital required</span>
+                </td>
+                <td className="px-2 py-2 text-right text-sm font-medium text-gray-800">
+                  {formatCurrency(calculatedValues.required * 0.45)}
+                </td>
+              </tr>
+              <tr className="hover:bg-neutral-50">
+                <td className="px-2 py-2">
+                  <span className="text-sm text-gray-600">Dependants capital required</span>
+                </td>
+                <td className="px-2 py-2 text-right text-sm font-medium text-gray-800">
+                  {formatCurrency(calculatedValues.required * 0.55)}
+                </td>
+              </tr>
+              <tr className="hover:bg-neutral-50 bg-gray-50">
+                <td className="px-2 py-2">
+                  <span className="text-sm text-gray-600 font-medium">Total capital required</span>
+                </td>
+                <td className="px-2 py-2 text-right text-sm font-bold text-gray-800">
+                  {formatCurrency(calculatedValues.required)}
+                </td>
+              </tr>
+              <tr className="hover:bg-neutral-50 bg-gray-50">
+                <td className="px-2 py-2">
+                  <span className="text-sm text-gray-600 font-medium">Net capital surplus/shortfall</span>
+                </td>
+                <td className="px-2 py-2 text-right text-sm font-bold text-gray-800">
+                  {formatCurrency(calculatedValues.surplus)}
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        )}
+
+        {section === 'capital' && !calculatedValues && (
+          <div className="text-center p-4 bg-blue-50 rounded-lg border border-blue-200">
+            <p className="text-sm text-gray-600">Total Capital Position combines Estate and Dependants positions</p>
+            <p className="text-sm text-gray-600 mt-1">Adjust parameters in Estate and Dependants tabs to see changes here</p>
           </div>
         )}
 
         {section === 'income' && (
-          <div className="space-y-4">
-            <div className="flex items-center justify-between">
-              <Label className="text-sm">Monthly income position</Label>
-            </div>
-            <div className="space-y-3">
-              <div className="flex justify-between">
-                <span className="text-sm text-gray-600">From retirement funds and existing living annuities after deducting income tax</span>
-                <span className="text-sm font-medium">R 29,193</span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-sm text-gray-600">Defined benefit pension fund</span>
-                <span className="text-sm font-medium">R 0</span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-sm text-gray-600">Monthly death benefit</span>
-                <span className="text-sm font-medium">R 0</span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-sm text-gray-600">From existing capital provisions after deducting capital needs</span>
-                <div className="text-right">
-                  <div className="text-sm font-medium">R 6,895,118</div>
-                  <div className="text-xs text-gray-500">R 35,571</div>
-                </div>
-              </div>
+          <div>
+            <table className="parameter-table table-fixed">
+              <thead>
+                <tr className="border-b border-neutral-300 bg-gray-50">
+                  <th className="px-2 py-2 text-sm font-medium text-neutral-600 uppercase tracking-wider text-left">Income Source</th>
+                  <th className="px-2 py-2 text-sm font-medium text-neutral-600 uppercase tracking-wider text-right">Amount</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-neutral-200">
+                <tr className="hover:bg-neutral-50">
+                  <td className="px-2 py-2">
+                    <span className="text-sm text-gray-600">From retirement funds and existing living annuities after deducting income tax</span>
+                  </td>
+                  <td className="px-2 py-2 text-right text-sm font-medium text-gray-800">R 29,193</td>
+                </tr>
+                <tr className="hover:bg-neutral-50">
+                  <td className="px-2 py-2">
+                    <span className="text-sm text-gray-600">Defined benefit pension fund</span>
+                  </td>
+                  <td className="px-2 py-2 text-right text-sm font-medium text-gray-800">R 0</td>
+                </tr>
+                <tr className="hover:bg-neutral-50">
+                  <td className="px-2 py-2">
+                    <span className="text-sm text-gray-600">Monthly death benefit</span>
+                  </td>
+                  <td className="px-2 py-2 text-right text-sm font-medium text-gray-800">R 0</td>
+                </tr>
+                <tr className="hover:bg-neutral-50">
+                  <td className="px-2 py-2">
+                    <span className="text-sm text-gray-600">From existing capital provisions after deducting capital needs</span>
+                  </td>
+                  <td className="px-2 py-2 text-right">
+                    <div className="text-sm font-medium text-gray-600">R 6,895,118</div>
+                    <div className="text-sm text-gray-500">R 35,571</div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+            
+            <div className="mt-6">
+              <h4 className="text-sm font-medium text-gray-600 mb-3">Monthly income position</h4>
+              <table className="parameter-table table-fixed">
+                <thead>
+                  <tr className="border-b border-neutral-300 bg-gray-50">
+                    <th className="px-2 py-2 text-sm font-medium text-neutral-600 uppercase tracking-wider text-left">Income Source</th>
+                    <th className="px-2 py-2 text-sm font-medium text-neutral-600 uppercase tracking-wider text-right">Amount</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-neutral-200">
+                  <tr className="hover:bg-neutral-50">
+                    <td className="px-2 py-2">
+                      <span className="text-sm text-gray-600">From retirement funds and existing living annuities after deducting income tax</span>
+                    </td>
+                    <td className="px-2 py-2 text-right text-sm font-medium text-gray-800">R 29,193</td>
+                  </tr>
+                  <tr className="hover:bg-neutral-50">
+                    <td className="px-2 py-2">
+                      <span className="text-sm text-gray-600">Defined benefit pension fund</span>
+                    </td>
+                    <td className="px-2 py-2 text-right text-sm font-medium text-gray-800">R 0</td>
+                  </tr>
+                  <tr className="hover:bg-neutral-50">
+                    <td className="px-2 py-2">
+                      <span className="text-sm text-gray-600">Monthly death benefit</span>
+                    </td>
+                    <td className="px-2 py-2 text-right text-sm font-medium text-gray-800">R 0</td>
+                  </tr>
+                  <tr className="hover:bg-neutral-50">
+                    <td className="px-2 py-2">
+                      <span className="text-sm text-gray-600">From existing capital provisions after deducting capital needs</span>
+                    </td>
+                    <td className="px-2 py-2 text-right">
+                      <div className="text-sm font-medium text-gray-600">R 6,895,118</div>
+                      <div className="text-sm text-gray-500">R 35,571</div>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
             </div>
           </div>
         )}
-      </CardContent>
-    </Card>
+    </div>
   );
 }

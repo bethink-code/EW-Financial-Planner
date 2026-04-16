@@ -191,7 +191,7 @@ export function AssuranceDetailForm({
                         </SelectTrigger>
                         <SelectContent>
                           <SelectItem value="none">Select life assured...</SelectItem>
-                          {entities.map((client) => (
+                          {entities.filter(client => client.entityName && client.entityName.trim() !== "").map((client) => (
                             <SelectItem key={client.id} value={client.entityName}>
                               {client.entityName}
                               {client.entityType === "Primary entity" && " (Primary entity)"}

@@ -50,7 +50,7 @@ export function AddButton({
       onClick={onClick}
       disabled={disabled}
       className={cn(
-"px-4 bg-[#016991] text-white hover:bg-[#014f73] rounded-md flex items-center gap-2 transition-colors",
+"px-4 bg-[#016991] text-white hover:bg-[#014f73] rounded-md flex items-center gap-1 transition-colors",
         disabled &&"opacity-50 cursor-not-allowed",
         className
       )}
@@ -237,7 +237,7 @@ export function SaveButton({
       onClick={onClick}
       disabled={disabled}
       className={cn(
-"px-4 bg-[#016991] text-white hover:bg-[#014f73] rounded-md flex items-center gap-2 transition-colors",
+"px-4 bg-[#016991] text-white hover:bg-[#014f73] rounded-md flex items-center gap-1 transition-colors",
         disabled &&"opacity-50 cursor-not-allowed",
         className
       )}

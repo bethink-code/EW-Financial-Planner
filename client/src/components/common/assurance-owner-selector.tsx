@@ -134,7 +134,7 @@ export default function AssuranceOwnerSelector({
           </SelectTrigger>
           <SelectContent>
             <SelectItem value="none">Select owner...</SelectItem>
-            {clientDetails.map((client) => (
+            {clientDetails.filter(client => client.entityName && client.entityName.trim() !== "").map((client) => (
               <SelectItem key={client.id} value={client.entityName}>
                 {client.entityName}
                 {client.entityType === "Primary entity" && " (Primary entity)"}
@@ -156,7 +156,7 @@ export default function AssuranceOwnerSelector({
           </SelectTrigger>
           <SelectContent>
             <SelectItem value="none">Select life assured...</SelectItem>
-            {clientDetails.map((client) => (
+            {clientDetails.filter(client => client.entityName && client.entityName.trim() !== "").map((client) => (
               <SelectItem key={client.id} value={client.entityName}>
                 {client.entityName}
                 {client.entityType === "Primary entity" && " (Primary entity)"}
