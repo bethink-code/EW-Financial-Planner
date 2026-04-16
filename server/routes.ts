@@ -26,13 +26,105 @@ import {
   updateClientDetailsSchema,
   insertEstatePositionParametersSchema,
   updateEstatePositionParametersSchema,
+  insertFinancialPlanSchema,
+  updateFinancialPlanSchema,
 } from "@shared/schema";
 import { insertAssetsSchema } from "@shared/assets-schema";
 import { insertCommentSchema, updateCommentSchema } from "@shared/schema";
 import { entityIdsToNames, entityNamesToIds } from "./entity-resolver";
 
 export async function registerRoutes(app: Express): Promise<Server> {
-  
+
+  // Financial Plans
+  app.get("/api/financial-plans", async (req, res) => {
+    try {
+      const plans = await storage.getFinancialPlans();
+      res.json(plans);
+    } catch (error) {
+      console.error("Error fetching financial plans:", error);
+      res.status(500).json({ message: "Failed to fetch financial plans" });
+    }
+  });
+
+  app.get("/api/financial-plans/:id", async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      if (isNaN(id)) {
+        return res.status(400).json({ message: "Invalid plan ID" });
+      }
+
+      const plan = await storage.getFinancialPlan(id);
+      if (!plan) {
+        return res.status(404).json({ message: "Financial plan not found" });
+      }
+
+      res.json(plan);
+    } catch (error) {
+      console.error("Error fetching financial plan:", error);
+      res.status(500).json({ message: "Failed to fetch financial plan" });
+    }
+  });
+
+  app.post("/api/financial-plans", async (req, res) => {
+    try {
+      const now = new Date().toISOString().split("T")[0];
+      const validatedData = insertFinancialPlanSchema.parse({
+        ...req.body,
+        createdAt: now,
+        updatedAt: now,
+      });
+      const plan = await storage.createFinancialPlan(validatedData);
+      res.status(201).json(plan);
+    } catch (error) {
+      console.error("Error creating financial plan:", error);
+      res.status(400).json({ message: "Invalid financial plan data" });
+    }
+  });
+
+  app.patch("/api/financial-plans/:id", async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      if (isNaN(id)) {
+        return res.status(400).json({ message: "Invalid plan ID" });
+      }
+
+      const now = new Date().toISOString().split("T")[0];
+      const validatedData = updateFinancialPlanSchema.parse({
+        ...req.body,
+        updatedAt: now,
+      });
+      const plan = await storage.updateFinancialPlan(id, validatedData);
+
+      if (!plan) {
+        return res.status(404).json({ message: "Financial plan not found" });
+      }
+
+      res.json(plan);
+    } catch (error) {
+      console.error("Error updating financial plan:", error);
+      res.status(400).json({ message: "Invalid financial plan data" });
+    }
+  });
+
+  app.delete("/api/financial-plans/:id", async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      if (isNaN(id)) {
+        return res.status(400).json({ message: "Invalid plan ID" });
+      }
+
+      const deleted = await storage.deleteFinancialPlan(id);
+      if (!deleted) {
+        return res.status(404).json({ message: "Financial plan not found" });
+      }
+
+      res.status(204).send();
+    } catch (error) {
+      console.error("Error deleting financial plan:", error);
+      res.status(500).json({ message: "Failed to delete financial plan" });
+    }
+  });
+
   // Entity conversion endpoints
   app.post("/api/entities/resolve", async (req, res) => {
     try {

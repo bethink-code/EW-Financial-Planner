@@ -10,6 +10,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { NavigationLayout } from "@/components/navigation/navigation-layout";
 
 import NotFound from "@/pages/not-found";
+import FinancialPlans from "@/pages/financial-plans";
 
 // Existing calculator pages
 import NewRetirementFunds from "@/pages/new-retirement-funds";
@@ -59,13 +60,8 @@ function Router() {
   return (
     <div className="min-h-screen bg-gray-50">
       <Switch>
-        {/* Default route - redirect root to the Assurance page */}
-        <Route path="/" component={() => {
-          if (window.location.pathname === "/") {
-            window.location.replace('/assurance');
-          }
-          return null;
-        }} />
+        {/* Default route - Financial Plans list */}
+        <Route path="/" component={FinancialPlans} />
           
           {/* Existing calculator routes with navigation */}
           <Route path="/assurance">

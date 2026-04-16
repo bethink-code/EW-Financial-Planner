@@ -453,6 +453,21 @@ export type EstatePositionParameters = typeof estatePositionParameters.$inferSel
 export type InsertEstatePositionParameters = z.infer<typeof insertEstatePositionParametersSchema>;
 export type UpdateEstatePositionParameters = z.infer<typeof updateEstatePositionParametersSchema>;
 
+// Financial Plans table — top-level container for all financial planning data
+export const financialPlans = pgTable("financial_plans", {
+  id: serial("id").primaryKey(),
+  name: text("name").notNull().default("New Financial Plan"),
+  clientName: text("client_name").notNull().default(""),
+  createdAt: text("created_at").notNull().default(""),
+  updatedAt: text("updated_at").notNull().default(""),
+});
+
+export const insertFinancialPlanSchema = createInsertSchema(financialPlans).omit({ id: true });
+export const updateFinancialPlanSchema = createInsertSchema(financialPlans).omit({ id: true }).partial();
+export type FinancialPlan = typeof financialPlans.$inferSelect;
+export type InsertFinancialPlan = z.infer<typeof insertFinancialPlanSchema>;
+export type UpdateFinancialPlan = z.infer<typeof updateFinancialPlanSchema>;
+
 // Comments — per-page feedback for prototype reviews
 export const comments = pgTable("comments", {
   id: serial("id").primaryKey(),

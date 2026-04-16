@@ -1,8 +1,11 @@
-import React, { useState } from"react";
-import { ChevronLeft, ChevronDown, Edit2 } from"lucide-react";
+import React, { useState, useRef, useEffect } from"react";
+import { ChevronLeft, ChevronDown, Edit2, Check, X } from"lucide-react";
 import { Link, useLocation } from"wouter";
+import { useQuery, useMutation, useQueryClient } from"@tanstack/react-query";
 import { Button } from"@/components/ui/button";
-import { getFinancialPlanName, needs } from"@shared/navigation-config";
+import { needs } from"@shared/navigation-config";
+import { apiRequest } from"@/lib/queryClient";
+import type { FinancialPlan } from"@shared/schema";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -27,12 +30,57 @@ export function ConsolidatedNavigation({
   sections 
 }: ConsolidatedNavigationProps) {
   const [location, setLocation] = useLocation();
-  const planName = getFinancialPlanName();
+  const queryClient = useQueryClient();
   const [isNeedDropdownOpen, setIsNeedDropdownOpen] = useState(false);
   const [stepDropdownOpen, setStepDropdownOpen] = useState<string | null>(null);
-  
+  const [isEditing, setIsEditing] = useState(false);
+  const [editName, setEditName] = useState("");
+  const editInputRef = useRef<HTMLInputElement>(null);
+
+  // Fetch the first plan (current plan) — later this will be plan-scoped
+  const { data: plans = [] } = useQuery<FinancialPlan[]>({
+    queryKey: ["/api/financial-plans"],
+    queryFn: async () => {
+      const res = await fetch("/api/financial-plans");
+      if (!res.ok) throw new Error("Failed to fetch plans");
+      return res.json();
+    },
+  });
+  const currentPlan = plans[0];
+  const planName = currentPlan?.name || "Financial Plan";
+
+  const renameMutation = useMutation({
+    mutationFn: async ({ id, name }: { id: number; name: string }) => {
+      const res = await apiRequest("PATCH", `/api/financial-plans/${id}`, { name });
+      return await res.json();
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["/api/financial-plans"] });
+      setIsEditing(false);
+    },
+  });
+
+  const handleStartEdit = () => {
+    setEditName(planName);
+    setIsEditing(true);
+    setTimeout(() => editInputRef.current?.select(), 0);
+  };
+
+  const handleSaveEdit = () => {
+    const trimmed = editName.trim();
+    if (trimmed && currentPlan && trimmed !== currentPlan.name) {
+      renameMutation.mutate({ id: currentPlan.id, name: trimmed });
+    } else {
+      setIsEditing(false);
+    }
+  };
+
+  const handleCancelEdit = () => {
+    setIsEditing(false);
+  };
+
   const handleBack = () => {
-    window.history.back();
+    setLocation("/");
   };
 
   // Get content for dropdown based on selected step
@@ -115,15 +163,47 @@ export function ConsolidatedNavigation({
               
               {/* Financial Plan name with edit button and back button on same row */}
               <div className="flex items-center gap-2">
-                <button className="flex items-center pl-4 pr-1 text-sm font-medium transition-colors h-10 rounded-[6px] focus:outline-none focus:ring-0 focus:border-0 bg-[#F5F1E8] text-gray-700 border-0 hover:bg-[#F0EBE0]">
-                  <span title={planName} className="flex-1">
-                    {planName}
-                  </span>
-                  <span className="flex items-center justify-center h-8 w-8 rounded text-sm font-semibold bg-white text-[#F97415] ml-4">
-                    <Edit2 className="h-3 w-3" />
-                  </span>
-                </button>
-                
+                {isEditing ? (
+                  <div className="flex items-center gap-1 bg-[#F5F1E8] rounded-[6px] pl-4 pr-1 h-10">
+                    <input
+                      ref={editInputRef}
+                      type="text"
+                      value={editName}
+                      onChange={(e) => setEditName(e.target.value)}
+                      onKeyDown={(e) => {
+                        if (e.key === "Enter") handleSaveEdit();
+                        if (e.key === "Escape") handleCancelEdit();
+                      }}
+                      className="bg-transparent border-none outline-none text-sm font-medium text-gray-700 w-[200px]"
+                      autoFocus
+                    />
+                    <button
+                      onClick={handleSaveEdit}
+                      className="flex items-center justify-center h-8 w-8 rounded bg-white text-green-600 hover:bg-green-50"
+                    >
+                      <Check className="h-3 w-3" />
+                    </button>
+                    <button
+                      onClick={handleCancelEdit}
+                      className="flex items-center justify-center h-8 w-8 rounded bg-white text-gray-400 hover:bg-gray-50"
+                    >
+                      <X className="h-3 w-3" />
+                    </button>
+                  </div>
+                ) : (
+                  <button
+                    onClick={handleStartEdit}
+                    className="flex items-center pl-4 pr-1 text-sm font-medium transition-colors h-10 rounded-[6px] focus:outline-none focus:ring-0 focus:border-0 bg-[#F5F1E8] text-gray-700 border-0 hover:bg-[#F0EBE0]"
+                  >
+                    <span title={planName} className="flex-1">
+                      {planName}
+                    </span>
+                    <span className="flex items-center justify-center h-8 w-8 rounded text-sm font-semibold bg-white text-[#F97415] ml-4">
+                      <Edit2 className="h-3 w-3" />
+                    </span>
+                  </button>
+                )}
+
                 {/* Back to all plans button */}
                 <Button
                   variant="ghost"

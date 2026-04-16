@@ -11,6 +11,7 @@ import {
   liabilities,
   clientDetails,
   estatePositionParameters,
+  financialPlans,
   comments,
   type RetirementFund,
   type InsertRetirementFund,
@@ -47,6 +48,9 @@ import {
   type EstatePositionParameters,
   type InsertEstatePositionParameters,
   type UpdateEstatePositionParameters,
+  type FinancialPlan,
+  type InsertFinancialPlan,
+  type UpdateFinancialPlan,
   type Comment,
   type InsertComment,
   type UpdateComment,
@@ -212,6 +216,13 @@ export interface IStorage {
   deleteEstatePositionParameter(id: number): Promise<boolean>;
   getOrCreateEstatePositionParameter(): Promise<EstatePositionParameters>;
 
+  // Financial Plans
+  getFinancialPlans(): Promise<FinancialPlan[]>;
+  getFinancialPlan(id: number): Promise<FinancialPlan | undefined>;
+  createFinancialPlan(plan: InsertFinancialPlan): Promise<FinancialPlan>;
+  updateFinancialPlan(id: number, updates: UpdateFinancialPlan): Promise<FinancialPlan | undefined>;
+  deleteFinancialPlan(id: number): Promise<boolean>;
+
   // Comments
   getCommentsByPage(page: string): Promise<Comment[]>;
   createComment(comment: InsertComment): Promise<Comment>;
@@ -233,6 +244,7 @@ export class MemStorage implements IStorage {
   private assets: Map<number, Assets>;
   private clientDetails: Map<number, ClientDetails>;
   private estatePositionParameters: Map<number, EstatePositionParameters>;
+  private financialPlansMap: Map<number, FinancialPlan>;
   private commentsMap: Map<number, Comment>;
 
   private currentFundId: number;
@@ -248,6 +260,7 @@ export class MemStorage implements IStorage {
   private currentAssetId: number;
   private currentClientDetailId: number;
   private currentEstatePositionParameterId: number;
+  private currentFinancialPlanId: number;
   private currentCommentId: number;
 
   constructor() {
@@ -264,6 +277,7 @@ export class MemStorage implements IStorage {
     this.assets = new Map();
     this.clientDetails = new Map();
     this.estatePositionParameters = new Map();
+    this.financialPlansMap = new Map();
     this.commentsMap = new Map();
 
     this.currentFundId = 1;
@@ -279,7 +293,17 @@ export class MemStorage implements IStorage {
     this.currentAssetId = 1;
     this.currentClientDetailId = 1;
     this.currentEstatePositionParameterId = 1;
+    this.currentFinancialPlanId = 2; // Start at 2 since we seed one plan with id 1
     this.currentCommentId = 1;
+
+    // Seed financial plans
+    this.financialPlansMap.set(1, {
+      id: 1,
+      name: "Lambie Estate plan 2025",
+      clientName: "Lambie Family",
+      createdAt: "2025-01-15",
+      updatedAt: "2025-01-15",
+    });
   }
 
   // Retirement Funds methods
@@ -1070,6 +1094,40 @@ export class MemStorage implements IStorage {
     };
 
     return this.createEstatePositionParameter(defaultParameter);
+  }
+
+  // Financial Plans methods
+  async getFinancialPlans(): Promise<FinancialPlan[]> {
+    return Array.from(this.financialPlansMap.values()).sort((a, b) => a.id - b.id);
+  }
+
+  async getFinancialPlan(id: number): Promise<FinancialPlan | undefined> {
+    return this.financialPlansMap.get(id);
+  }
+
+  async createFinancialPlan(plan: InsertFinancialPlan): Promise<FinancialPlan> {
+    const id = this.currentFinancialPlanId++;
+    const newPlan: FinancialPlan = {
+      id,
+      name: plan.name || "New Financial Plan",
+      clientName: plan.clientName || "",
+      createdAt: plan.createdAt || "",
+      updatedAt: plan.updatedAt || "",
+    };
+    this.financialPlansMap.set(id, newPlan);
+    return newPlan;
+  }
+
+  async updateFinancialPlan(id: number, updates: UpdateFinancialPlan): Promise<FinancialPlan | undefined> {
+    const existing = this.financialPlansMap.get(id);
+    if (!existing) return undefined;
+    const updated: FinancialPlan = { ...existing, ...updates };
+    this.financialPlansMap.set(id, updated);
+    return updated;
+  }
+
+  async deleteFinancialPlan(id: number): Promise<boolean> {
+    return this.financialPlansMap.delete(id);
   }
 
   // Comments methods
@@ -1877,6 +1935,41 @@ export class DbStorage {
       estatePositionAfterAllocation: "R 0", // Will be calculated
       lastUpdated: new Date().toISOString(),
     };
+  }
+
+  // Financial Plans methods
+  async getFinancialPlans(): Promise<FinancialPlan[]> {
+    return await this.db.select().from(financialPlans).orderBy(asc(financialPlans.id));
+  }
+
+  async getFinancialPlan(id: number): Promise<FinancialPlan | undefined> {
+    const result = await this.db
+      .select()
+      .from(financialPlans)
+      .where(eq(financialPlans.id, id));
+    return result[0];
+  }
+
+  async createFinancialPlan(plan: InsertFinancialPlan): Promise<FinancialPlan> {
+    const result = await this.db
+      .insert(financialPlans)
+      .values(plan)
+      .returning();
+    return result[0];
+  }
+
+  async updateFinancialPlan(id: number, updates: UpdateFinancialPlan): Promise<FinancialPlan | undefined> {
+    const result = await this.db
+      .update(financialPlans)
+      .set(updates)
+      .where(eq(financialPlans.id, id))
+      .returning();
+    return result[0];
+  }
+
+  async deleteFinancialPlan(id: number): Promise<boolean> {
+    const result = await this.db.delete(financialPlans).where(eq(financialPlans.id, id));
+    return (result.rowCount || 0) > 0;
   }
 
   // Comments methods
