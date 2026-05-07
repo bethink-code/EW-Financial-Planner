@@ -51,7 +51,6 @@ export default function EntityOwnerSelector({
       const numValue = parseFloat(pct.replace('%', '')) || 0;
       return sum + numValue;
     }, 0);
-    console.log('Owner percentage calculation:', { ownershipPercentages, total });
     setPercentageTotal(total);
   }, [ownershipPercentages]);
 
@@ -69,15 +68,7 @@ export default function EntityOwnerSelector({
     
     const numValue = parseFloat(cleanValue);
     const formattedPercentage = isNaN(numValue) ? "0%" : `${numValue}%`;
-    
-    console.log('Owner percentage change handler:', { 
-      input: newPercentage, 
-      cleaned: cleanValue, 
-      formatted: formattedPercentage, 
-      ownerIndex, 
-      policyId 
-    });
-    
+
     onOwnershipPercentageChange(policyId, ownerIndex, formattedPercentage);
   }, [policyId, ownerIndex, onOwnershipPercentageChange]);
 

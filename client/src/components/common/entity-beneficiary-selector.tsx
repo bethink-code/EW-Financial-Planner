@@ -54,7 +54,6 @@ export default function EntityBeneficiarySelector({
       const numValue = parseFloat(pct.replace('%', '')) || 0;
       return sum + numValue;
     }, 0);
-    console.log('Percentage calculation:', { beneficiaryPercentages, total });
     setPercentageTotal(total);
   }, [beneficiaryPercentages]);
 
@@ -72,15 +71,7 @@ export default function EntityBeneficiarySelector({
     
     const numValue = parseFloat(cleanValue);
     const formattedPercentage = isNaN(numValue) ? "0%" : `${numValue}%`;
-    
-    console.log('Percentage change handler:', { 
-      input: newPercentage, 
-      cleaned: cleanValue, 
-      formatted: formattedPercentage, 
-      beneficiaryIndex, 
-      policyId 
-    });
-    
+
     onBeneficiaryPercentageChange(policyId, beneficiaryIndex, formattedPercentage);
   }, [policyId, beneficiaryIndex, onBeneficiaryPercentageChange]);
   if (beneficiaryIndex >= beneficiaries.length) {
