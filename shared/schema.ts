@@ -63,6 +63,11 @@ export const retirementFunds = pgTable("retirement_funds", {
   estateDutyToOthers: text("estate_duty_to_others").notNull().default("0%"),
   executorsFee: text("executors_fee").notNull().default("0%"),
   mastersFee: text("masters_fee").notNull().default("0%"),
+
+  // Retirement projection inputs (used by the retirement need)
+  monthlyContribution: text("monthly_contribution").notNull().default("R 0"),
+  contributionEscalation: text("contribution_escalation").notNull().default("0%"),
+  growthRate: text("growth_rate").notNull().default("10%"),
 });
 
 export const insertRetirementFundSchema = createInsertSchema(retirementFunds).omit({
@@ -222,6 +227,9 @@ export const definedBenefitFunds = pgTable("defined_benefit_funds", {
   pensionIncomeCheckbox: boolean("pension_income_checkbox").notNull().default(true), // Toggle: true = Years mode, false = % mode
   pensionIncomeYears: text("pension_income_years").notNull().default("0 years"),
   pensionIncomeIncrease: text("pension_income_increase").notNull().default("0%"),
+
+  // Retirement projection inputs (used by the retirement need)
+  growthRate: text("growth_rate").notNull().default("10%"),
 });
 
 export const insertDefinedBenefitFundSchema = createInsertSchema(definedBenefitFunds).omit({
@@ -259,6 +267,12 @@ export const voluntaryInvestments = pgTable("voluntary_investments", {
   excludedFromEstateDuty: boolean("excluded_from_estate_duty").notNull().default(false),
   excludedFromCGT: boolean("excluded_from_cgt").notNull().default(false),
   excludedFromExecutorsFees: boolean("excluded_from_executors_fees").notNull().default(false),
+
+  // Retirement projection inputs (used by the retirement need)
+  monthlyContribution: text("monthly_contribution").notNull().default("R 0"),
+  contributionEscalation: text("contribution_escalation").notNull().default("0%"),
+  growthRate: text("growth_rate").notNull().default("10%"),
+  incomeIncrease: text("income_increase").notNull().default("0%"),
 });
 
 export const insertVoluntaryInvestmentSchema = createInsertSchema(voluntaryInvestments).omit({
@@ -579,5 +593,75 @@ export const updateCommentSchema = createInsertSchema(comments).omit({
 export type Comment = typeof comments.$inferSelect;
 export type InsertComment = z.infer<typeof insertCommentSchema>;
 export type UpdateComment = z.infer<typeof updateCommentSchema>;
+
+// Retirement Parameters table — Setup-step inputs for the retirement need (one row per plan).
+export const retirementParameters = pgTable("retirement_parameters", {
+  id: serial("id").primaryKey(),
+  planId: integer("plan_id").notNull().unique(),
+  retirementAge: integer("retirement_age").notNull().default(65),
+  retirementPlanningAge: integer("retirement_planning_age").notNull().default(90),
+  autoCalculateTax: boolean("auto_calculate_tax").notNull().default(true),
+  lastUpdated: text("last_updated").notNull().default(new Date().toISOString()),
+});
+
+export const insertRetirementParametersSchema = createInsertSchema(retirementParameters).omit({
+  id: true,
+});
+
+export const updateRetirementParametersSchema = createInsertSchema(retirementParameters).omit({
+  id: true,
+}).partial();
+
+export type RetirementParameters = typeof retirementParameters.$inferSelect;
+export type InsertRetirementParameters = z.infer<typeof insertRetirementParametersSchema>;
+export type UpdateRetirementParameters = z.infer<typeof updateRetirementParametersSchema>;
+
+// Future Inflows table — lump sums arriving after retirement (e.g. inheritance, asset sale).
+export const futureInflows = pgTable("future_inflows", {
+  id: serial("id").primaryKey(),
+  description: text("description").notNull().default(""),
+  entity: text("entity").notNull().default("Donald Edwards"),
+  startYearsAfterRetirement: integer("start_years_after_retirement").notNull().default(0),
+  currentValue: text("current_value").notNull().default("R 0"),
+  calculateCgt: boolean("calculate_cgt").notNull().default(false),
+  growthRate: text("growth_rate").notNull().default("10%"),
+});
+
+export const insertFutureInflowSchema = createInsertSchema(futureInflows).omit({
+  id: true,
+});
+
+export const updateFutureInflowSchema = createInsertSchema(futureInflows).omit({
+  id: true,
+}).partial();
+
+export type FutureInflow = typeof futureInflows.$inferSelect;
+export type InsertFutureInflow = z.infer<typeof insertFutureInflowSchema>;
+export type UpdateFutureInflow = z.infer<typeof updateFutureInflowSchema>;
+
+// Retirement Lump Sum Needs — one-off / recurring lump sum cash needs at or after retirement.
+// Distinct from `lumpSumBequests` (which fires at death).
+export const retirementLumpSumNeeds = pgTable("retirement_lump_sum_needs", {
+  id: serial("id").primaryKey(),
+  description: text("description").notNull().default(""),
+  startYears: integer("start_years").notNull().default(0),
+  termYears: integer("term_years").notNull().default(0),
+  increasePercentage: text("increase_percentage").notNull().default("0%"),
+  frequency: text("frequency").notNull().default("Single"), // Single | Monthly | Quarterly | Annual
+  frequencyValue: integer("frequency_value").notNull().default(1),
+  amount: text("amount").notNull().default("R 0"),
+});
+
+export const insertRetirementLumpSumNeedSchema = createInsertSchema(retirementLumpSumNeeds).omit({
+  id: true,
+});
+
+export const updateRetirementLumpSumNeedSchema = createInsertSchema(retirementLumpSumNeeds).omit({
+  id: true,
+}).partial();
+
+export type RetirementLumpSumNeed = typeof retirementLumpSumNeeds.$inferSelect;
+export type InsertRetirementLumpSumNeed = z.infer<typeof insertRetirementLumpSumNeedSchema>;
+export type UpdateRetirementLumpSumNeed = z.infer<typeof updateRetirementLumpSumNeedSchema>;
 
 export * from './assets-schema';

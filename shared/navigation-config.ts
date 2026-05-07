@@ -224,7 +224,97 @@ export const needs: Need[] = [
     id: "retirement",
     label: "Retirement",
     path: "/needs/retirement",
-    hasContent: false
+    hasContent: true,
+    steps: [
+      {
+        id: "setup",
+        number: 1,
+        label: "Setup",
+        path: "/needs/retirement/setup",
+        hasContent: true,
+        sections: [
+          {
+            id: "client-details",
+            label: "Client details",
+            path: "/client-details",
+            hasContent: true
+          },
+          {
+            id: "retirement-parameters",
+            label: "Retirement parameters",
+            path: "/needs/retirement/setup/parameters",
+            hasContent: true
+          }
+        ]
+      },
+      {
+        id: "build",
+        number: 2,
+        label: "Build",
+        path: "/needs/retirement/build",
+        hasContent: true,
+        sections: [
+          {
+            id: "retirement-funds",
+            label: "Retirement funds",
+            path: "/new-retirement-funds",
+            hasContent: true
+          },
+          {
+            id: "defined-benefit",
+            label: "Defined benefit funds (GEPF)",
+            path: "/defined-benefit-funds",
+            hasContent: true
+          },
+          {
+            id: "voluntary-investments",
+            label: "Voluntary investments",
+            path: "/voluntary-investments",
+            hasContent: true
+          },
+          {
+            id: "future-inflows",
+            label: "Future inflows",
+            path: "/future-inflows",
+            hasContent: true
+          },
+          {
+            id: "retirement-lump-sum-needs",
+            label: "Lump sum needs",
+            path: "/retirement-lump-sum-needs",
+            hasContent: true
+          },
+          {
+            id: "income-needs",
+            label: "Regular income required",
+            path: "/income-needs",
+            hasContent: true
+          },
+          {
+            id: "income-provisions",
+            label: "Regular income provided",
+            path: "/income-provisions",
+            hasContent: true
+          }
+        ]
+      },
+      {
+        id: "project",
+        number: 3,
+        label: "Project",
+        path: "/needs/retirement/project",
+        hasContent: true,
+        sections: []
+      },
+      {
+        id: "implement",
+        number: 4,
+        label: "Implement",
+        path: "/needs/retirement/implement",
+        hasContent: true,
+        sections: []
+      }
+    ]
   },
   {
     id: "lump-sum-recurring",

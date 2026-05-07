@@ -89,7 +89,11 @@ var retirementFunds = pgTable2("retirement_funds", {
   estateDutyToSpouse: text2("estate_duty_to_spouse").notNull().default("0%"),
   estateDutyToOthers: text2("estate_duty_to_others").notNull().default("0%"),
   executorsFee: text2("executors_fee").notNull().default("0%"),
-  mastersFee: text2("masters_fee").notNull().default("0%")
+  mastersFee: text2("masters_fee").notNull().default("0%"),
+  // Retirement projection inputs (used by the retirement need)
+  monthlyContribution: text2("monthly_contribution").notNull().default("R 0"),
+  contributionEscalation: text2("contribution_escalation").notNull().default("0%"),
+  growthRate: text2("growth_rate").notNull().default("10%")
 });
 var insertRetirementFundSchema = createInsertSchema2(retirementFunds).omit({
   id: true
@@ -209,7 +213,9 @@ var definedBenefitFunds = pgTable2("defined_benefit_funds", {
   pensionIncomeCheckbox: boolean2("pension_income_checkbox").notNull().default(true),
   // Toggle: true = Years mode, false = % mode
   pensionIncomeYears: text2("pension_income_years").notNull().default("0 years"),
-  pensionIncomeIncrease: text2("pension_income_increase").notNull().default("0%")
+  pensionIncomeIncrease: text2("pension_income_increase").notNull().default("0%"),
+  // Retirement projection inputs (used by the retirement need)
+  growthRate: text2("growth_rate").notNull().default("10%")
 });
 var insertDefinedBenefitFundSchema = createInsertSchema2(definedBenefitFunds).omit({
   id: true
@@ -234,7 +240,12 @@ var voluntaryInvestments = pgTable2("voluntary_investments", {
   excludedFromJointEstate: boolean2("excluded_from_joint_estate").notNull().default(false),
   excludedFromEstateDuty: boolean2("excluded_from_estate_duty").notNull().default(false),
   excludedFromCGT: boolean2("excluded_from_cgt").notNull().default(false),
-  excludedFromExecutorsFees: boolean2("excluded_from_executors_fees").notNull().default(false)
+  excludedFromExecutorsFees: boolean2("excluded_from_executors_fees").notNull().default(false),
+  // Retirement projection inputs (used by the retirement need)
+  monthlyContribution: text2("monthly_contribution").notNull().default("R 0"),
+  contributionEscalation: text2("contribution_escalation").notNull().default("0%"),
+  growthRate: text2("growth_rate").notNull().default("10%"),
+  incomeIncrease: text2("income_increase").notNull().default("0%")
 });
 var insertVoluntaryInvestmentSchema = createInsertSchema2(voluntaryInvestments).omit({
   id: true
@@ -449,6 +460,52 @@ var insertCommentSchema = createInsertSchema2(comments).omit({
 var updateCommentSchema = createInsertSchema2(comments).omit({
   id: true
 }).partial();
+var retirementParameters = pgTable2("retirement_parameters", {
+  id: serial2("id").primaryKey(),
+  planId: integer("plan_id").notNull().unique(),
+  retirementAge: integer("retirement_age").notNull().default(65),
+  retirementPlanningAge: integer("retirement_planning_age").notNull().default(90),
+  autoCalculateTax: boolean2("auto_calculate_tax").notNull().default(true),
+  lastUpdated: text2("last_updated").notNull().default((/* @__PURE__ */ new Date()).toISOString())
+});
+var insertRetirementParametersSchema = createInsertSchema2(retirementParameters).omit({
+  id: true
+});
+var updateRetirementParametersSchema = createInsertSchema2(retirementParameters).omit({
+  id: true
+}).partial();
+var futureInflows = pgTable2("future_inflows", {
+  id: serial2("id").primaryKey(),
+  description: text2("description").notNull().default(""),
+  entity: text2("entity").notNull().default("Donald Edwards"),
+  startYearsAfterRetirement: integer("start_years_after_retirement").notNull().default(0),
+  currentValue: text2("current_value").notNull().default("R 0"),
+  calculateCgt: boolean2("calculate_cgt").notNull().default(false),
+  growthRate: text2("growth_rate").notNull().default("10%")
+});
+var insertFutureInflowSchema = createInsertSchema2(futureInflows).omit({
+  id: true
+});
+var updateFutureInflowSchema = createInsertSchema2(futureInflows).omit({
+  id: true
+}).partial();
+var retirementLumpSumNeeds = pgTable2("retirement_lump_sum_needs", {
+  id: serial2("id").primaryKey(),
+  description: text2("description").notNull().default(""),
+  startYears: integer("start_years").notNull().default(0),
+  termYears: integer("term_years").notNull().default(0),
+  increasePercentage: text2("increase_percentage").notNull().default("0%"),
+  frequency: text2("frequency").notNull().default("Single"),
+  // Single | Monthly | Quarterly | Annual
+  frequencyValue: integer("frequency_value").notNull().default(1),
+  amount: text2("amount").notNull().default("R 0")
+});
+var insertRetirementLumpSumNeedSchema = createInsertSchema2(retirementLumpSumNeeds).omit({
+  id: true
+});
+var updateRetirementLumpSumNeedSchema = createInsertSchema2(retirementLumpSumNeeds).omit({
+  id: true
+}).partial();
 
 // server/storage.ts
 import { Pool, neonConfig } from "@neondatabase/serverless";
@@ -472,6 +529,9 @@ var MemStorage = class {
   financialPlans;
   needs;
   planNeeds;
+  retirementParameters;
+  futureInflows;
+  retirementLumpSumNeeds;
   currentFundId;
   currentBequestId;
   currentAssuranceId;
@@ -488,6 +548,9 @@ var MemStorage = class {
   currentFinancialPlanId;
   currentNeedId;
   currentPlanNeedId;
+  currentRetirementParameterId;
+  currentFutureInflowId;
+  currentRetirementLumpSumNeedId;
   constructor() {
     this.retirementFunds = /* @__PURE__ */ new Map();
     this.lumpSumBequests = /* @__PURE__ */ new Map();
@@ -505,6 +568,9 @@ var MemStorage = class {
     this.financialPlans = /* @__PURE__ */ new Map();
     this.needs = /* @__PURE__ */ new Map();
     this.planNeeds = /* @__PURE__ */ new Map();
+    this.retirementParameters = /* @__PURE__ */ new Map();
+    this.futureInflows = /* @__PURE__ */ new Map();
+    this.retirementLumpSumNeeds = /* @__PURE__ */ new Map();
     this.currentFundId = 1;
     this.currentBequestId = 1;
     this.currentAssuranceId = 1;
@@ -521,6 +587,9 @@ var MemStorage = class {
     this.currentFinancialPlanId = 1;
     this.currentNeedId = 1;
     this.currentPlanNeedId = 1;
+    this.currentRetirementParameterId = 1;
+    this.currentFutureInflowId = 1;
+    this.currentRetirementLumpSumNeedId = 1;
     this.initializeDefaultNeeds();
   }
   // Retirement Funds methods
@@ -583,7 +652,10 @@ var MemStorage = class {
       estateDutyToSpouse: insertFund.estateDutyToSpouse || "0%",
       estateDutyToOthers: insertFund.estateDutyToOthers || "0%",
       executorsFee: insertFund.executorsFee || "0%",
-      mastersFee: insertFund.mastersFee || "0%"
+      mastersFee: insertFund.mastersFee || "0%",
+      monthlyContribution: insertFund.monthlyContribution || "R 0",
+      contributionEscalation: insertFund.contributionEscalation || "0%",
+      growthRate: insertFund.growthRate || "10%"
     };
     this.retirementFunds.set(id, fund);
     return fund;
@@ -722,7 +794,8 @@ var MemStorage = class {
       pensionIncomeAmount: fund.pensionIncomeAmount || "R 0",
       pensionIncomeCheckbox: fund.pensionIncomeCheckbox ?? true,
       pensionIncomeYears: fund.pensionIncomeYears || "0 years",
-      pensionIncomeIncrease: fund.pensionIncomeIncrease || "0%"
+      pensionIncomeIncrease: fund.pensionIncomeIncrease || "0%",
+      growthRate: fund.growthRate || "10%"
     };
     this.definedBenefitFunds.set(newFund.id, newFund);
     return newFund;
@@ -766,7 +839,11 @@ var MemStorage = class {
       excludedFromJointEstate: investment.excludedFromJointEstate || false,
       excludedFromEstateDuty: investment.excludedFromEstateDuty || false,
       excludedFromCGT: investment.excludedFromCGT || false,
-      excludedFromExecutorsFees: investment.excludedFromExecutorsFees || false
+      excludedFromExecutorsFees: investment.excludedFromExecutorsFees || false,
+      monthlyContribution: investment.monthlyContribution || "R 0",
+      contributionEscalation: investment.contributionEscalation || "0%",
+      growthRate: investment.growthRate || "10%",
+      incomeIncrease: investment.incomeIncrease || "0%"
     };
     this.voluntaryInvestments.set(newInvestment.id, newInvestment);
     return newInvestment;
@@ -1370,6 +1447,89 @@ var MemStorage = class {
       }
     }
     return { plan, needs: needs2 };
+  }
+  // Retirement Parameters (one row per plan)
+  async getRetirementParameters(planId) {
+    return Array.from(this.retirementParameters.values()).find((p) => p.planId === planId);
+  }
+  async upsertRetirementParameters(planId, updates) {
+    const existing = await this.getRetirementParameters(planId);
+    if (existing) {
+      const merged = { ...existing, ...updates, planId, lastUpdated: (/* @__PURE__ */ new Date()).toISOString() };
+      this.retirementParameters.set(existing.id, merged);
+      return merged;
+    }
+    const created = {
+      id: this.currentRetirementParameterId++,
+      planId,
+      retirementAge: updates.retirementAge ?? 65,
+      retirementPlanningAge: updates.retirementPlanningAge ?? 90,
+      autoCalculateTax: updates.autoCalculateTax ?? true,
+      lastUpdated: (/* @__PURE__ */ new Date()).toISOString()
+    };
+    this.retirementParameters.set(created.id, created);
+    return created;
+  }
+  // Future Inflows
+  async getFutureInflows() {
+    return Array.from(this.futureInflows.values()).sort((a, b) => a.id - b.id);
+  }
+  async getFutureInflow(id) {
+    return this.futureInflows.get(id);
+  }
+  async createFutureInflow(inflow) {
+    const created = {
+      id: this.currentFutureInflowId++,
+      description: inflow.description ?? "",
+      entity: inflow.entity ?? "Donald Edwards",
+      startYearsAfterRetirement: inflow.startYearsAfterRetirement ?? 0,
+      currentValue: inflow.currentValue ?? "R 0",
+      calculateCgt: inflow.calculateCgt ?? false,
+      growthRate: inflow.growthRate ?? "10%"
+    };
+    this.futureInflows.set(created.id, created);
+    return created;
+  }
+  async updateFutureInflow(id, updates) {
+    const existing = this.futureInflows.get(id);
+    if (!existing) return void 0;
+    const updated = { ...existing, ...updates };
+    this.futureInflows.set(id, updated);
+    return updated;
+  }
+  async deleteFutureInflow(id) {
+    return this.futureInflows.delete(id);
+  }
+  // Retirement Lump Sum Needs
+  async getRetirementLumpSumNeeds() {
+    return Array.from(this.retirementLumpSumNeeds.values()).sort((a, b) => a.id - b.id);
+  }
+  async getRetirementLumpSumNeed(id) {
+    return this.retirementLumpSumNeeds.get(id);
+  }
+  async createRetirementLumpSumNeed(need) {
+    const created = {
+      id: this.currentRetirementLumpSumNeedId++,
+      description: need.description ?? "",
+      startYears: need.startYears ?? 0,
+      termYears: need.termYears ?? 0,
+      increasePercentage: need.increasePercentage ?? "0%",
+      frequency: need.frequency ?? "Single",
+      frequencyValue: need.frequencyValue ?? 1,
+      amount: need.amount ?? "R 0"
+    };
+    this.retirementLumpSumNeeds.set(created.id, created);
+    return created;
+  }
+  async updateRetirementLumpSumNeed(id, updates) {
+    const existing = this.retirementLumpSumNeeds.get(id);
+    if (!existing) return void 0;
+    const updated = { ...existing, ...updates };
+    this.retirementLumpSumNeeds.set(id, updated);
+    return updated;
+  }
+  async deleteRetirementLumpSumNeed(id) {
+    return this.retirementLumpSumNeeds.delete(id);
   }
 };
 var DbStorage = class {
@@ -2031,6 +2191,66 @@ var DbStorage = class {
       }
     }
     return { plan, needs: needs2 };
+  }
+  // Retirement Parameters (one row per plan)
+  async getRetirementParameters(planId) {
+    const result = await this.db.select().from(retirementParameters).where(eq(retirementParameters.planId, planId));
+    return result[0];
+  }
+  async upsertRetirementParameters(planId, updates) {
+    const existing = await this.getRetirementParameters(planId);
+    if (existing) {
+      const result2 = await this.db.update(retirementParameters).set({ ...updates, planId, lastUpdated: (/* @__PURE__ */ new Date()).toISOString() }).where(eq(retirementParameters.id, existing.id)).returning();
+      return result2[0];
+    }
+    const result = await this.db.insert(retirementParameters).values({
+      planId,
+      retirementAge: updates.retirementAge ?? 65,
+      retirementPlanningAge: updates.retirementPlanningAge ?? 90,
+      autoCalculateTax: updates.autoCalculateTax ?? true,
+      lastUpdated: (/* @__PURE__ */ new Date()).toISOString()
+    }).returning();
+    return result[0];
+  }
+  // Future Inflows
+  async getFutureInflows() {
+    return await this.db.select().from(futureInflows).orderBy(asc(futureInflows.id));
+  }
+  async getFutureInflow(id) {
+    const result = await this.db.select().from(futureInflows).where(eq(futureInflows.id, id));
+    return result[0];
+  }
+  async createFutureInflow(inflow) {
+    const result = await this.db.insert(futureInflows).values(inflow).returning();
+    return result[0];
+  }
+  async updateFutureInflow(id, updates) {
+    const result = await this.db.update(futureInflows).set(updates).where(eq(futureInflows.id, id)).returning();
+    return result[0];
+  }
+  async deleteFutureInflow(id) {
+    const result = await this.db.delete(futureInflows).where(eq(futureInflows.id, id));
+    return (result.rowCount || 0) > 0;
+  }
+  // Retirement Lump Sum Needs
+  async getRetirementLumpSumNeeds() {
+    return await this.db.select().from(retirementLumpSumNeeds).orderBy(asc(retirementLumpSumNeeds.id));
+  }
+  async getRetirementLumpSumNeed(id) {
+    const result = await this.db.select().from(retirementLumpSumNeeds).where(eq(retirementLumpSumNeeds.id, id));
+    return result[0];
+  }
+  async createRetirementLumpSumNeed(need) {
+    const result = await this.db.insert(retirementLumpSumNeeds).values(need).returning();
+    return result[0];
+  }
+  async updateRetirementLumpSumNeed(id, updates) {
+    const result = await this.db.update(retirementLumpSumNeeds).set(updates).where(eq(retirementLumpSumNeeds.id, id)).returning();
+    return result[0];
+  }
+  async deleteRetirementLumpSumNeed(id) {
+    const result = await this.db.delete(retirementLumpSumNeeds).where(eq(retirementLumpSumNeeds.id, id));
+    return (result.rowCount || 0) > 0;
   }
 };
 var useDatabase = process.env.DATABASE_URL !== void 0;
@@ -3163,6 +3383,492 @@ function registerNeedsRoutes(app2) {
   });
 }
 
+// server/routes/retirement-parameters.ts
+function registerRetirementParametersRoutes(app2) {
+  app2.get("/api/retirement-parameters/:planId", async (req, res) => {
+    try {
+      const planId = parseInt(req.params.planId);
+      if (isNaN(planId)) {
+        return res.status(400).json({ message: "Invalid plan ID" });
+      }
+      const params = await storage.getRetirementParameters(planId);
+      res.json(params ?? { planId, retirementAge: 65, retirementPlanningAge: 90, autoCalculateTax: true });
+    } catch (error) {
+      console.error("Error fetching retirement parameters:", error);
+      res.status(500).json({ message: "Failed to fetch retirement parameters" });
+    }
+  });
+  app2.put("/api/retirement-parameters/:planId", async (req, res) => {
+    try {
+      const planId = parseInt(req.params.planId);
+      if (isNaN(planId)) {
+        return res.status(400).json({ message: "Invalid plan ID" });
+      }
+      const validated = updateRetirementParametersSchema.parse(req.body);
+      const params = await storage.upsertRetirementParameters(planId, validated);
+      res.json(params);
+    } catch (error) {
+      console.error("Error saving retirement parameters:", error);
+      res.status(400).json({ message: "Invalid retirement parameters data" });
+    }
+  });
+}
+
+// server/routes/future-inflows.ts
+function registerFutureInflowRoutes(app2) {
+  app2.get("/api/future-inflows", async (_req, res) => {
+    try {
+      const inflows = await storage.getFutureInflows();
+      res.json(inflows);
+    } catch (error) {
+      console.error("Error fetching future inflows:", error);
+      res.status(500).json({ message: "Failed to fetch future inflows" });
+    }
+  });
+  app2.get("/api/future-inflows/:id", async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      if (isNaN(id)) {
+        return res.status(400).json({ message: "Invalid inflow ID" });
+      }
+      const inflow = await storage.getFutureInflow(id);
+      if (!inflow) {
+        return res.status(404).json({ message: "Future inflow not found" });
+      }
+      res.json(inflow);
+    } catch (error) {
+      console.error("Error fetching future inflow:", error);
+      res.status(500).json({ message: "Failed to fetch future inflow" });
+    }
+  });
+  app2.post("/api/future-inflows", async (req, res) => {
+    try {
+      const validated = insertFutureInflowSchema.parse(req.body);
+      const inflow = await storage.createFutureInflow(validated);
+      res.status(201).json(inflow);
+    } catch (error) {
+      console.error("Error creating future inflow:", error);
+      res.status(400).json({ message: "Invalid future inflow data" });
+    }
+  });
+  app2.patch("/api/future-inflows/:id", async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      if (isNaN(id)) {
+        return res.status(400).json({ message: "Invalid inflow ID" });
+      }
+      const validated = updateFutureInflowSchema.parse(req.body);
+      const inflow = await storage.updateFutureInflow(id, validated);
+      if (!inflow) {
+        return res.status(404).json({ message: "Future inflow not found" });
+      }
+      res.json(inflow);
+    } catch (error) {
+      console.error("Error updating future inflow:", error);
+      res.status(400).json({ message: "Invalid future inflow data" });
+    }
+  });
+  app2.delete("/api/future-inflows/:id", async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      if (isNaN(id)) {
+        return res.status(400).json({ message: "Invalid inflow ID" });
+      }
+      const success = await storage.deleteFutureInflow(id);
+      if (!success) {
+        return res.status(404).json({ message: "Future inflow not found" });
+      }
+      res.status(204).send();
+    } catch (error) {
+      console.error("Error deleting future inflow:", error);
+      res.status(500).json({ message: "Failed to delete future inflow" });
+    }
+  });
+}
+
+// server/routes/retirement-lump-sum-needs.ts
+function registerRetirementLumpSumNeedRoutes(app2) {
+  app2.get("/api/retirement-lump-sum-needs", async (_req, res) => {
+    try {
+      const items = await storage.getRetirementLumpSumNeeds();
+      res.json(items);
+    } catch (error) {
+      console.error("Error fetching retirement lump sum needs:", error);
+      res.status(500).json({ message: "Failed to fetch retirement lump sum needs" });
+    }
+  });
+  app2.get("/api/retirement-lump-sum-needs/:id", async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      if (isNaN(id)) {
+        return res.status(400).json({ message: "Invalid need ID" });
+      }
+      const item = await storage.getRetirementLumpSumNeed(id);
+      if (!item) {
+        return res.status(404).json({ message: "Retirement lump sum need not found" });
+      }
+      res.json(item);
+    } catch (error) {
+      console.error("Error fetching retirement lump sum need:", error);
+      res.status(500).json({ message: "Failed to fetch retirement lump sum need" });
+    }
+  });
+  app2.post("/api/retirement-lump-sum-needs", async (req, res) => {
+    try {
+      const validated = insertRetirementLumpSumNeedSchema.parse(req.body);
+      const item = await storage.createRetirementLumpSumNeed(validated);
+      res.status(201).json(item);
+    } catch (error) {
+      console.error("Error creating retirement lump sum need:", error);
+      res.status(400).json({ message: "Invalid retirement lump sum need data" });
+    }
+  });
+  app2.patch("/api/retirement-lump-sum-needs/:id", async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      if (isNaN(id)) {
+        return res.status(400).json({ message: "Invalid need ID" });
+      }
+      const validated = updateRetirementLumpSumNeedSchema.parse(req.body);
+      const item = await storage.updateRetirementLumpSumNeed(id, validated);
+      if (!item) {
+        return res.status(404).json({ message: "Retirement lump sum need not found" });
+      }
+      res.json(item);
+    } catch (error) {
+      console.error("Error updating retirement lump sum need:", error);
+      res.status(400).json({ message: "Invalid retirement lump sum need data" });
+    }
+  });
+  app2.delete("/api/retirement-lump-sum-needs/:id", async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      if (isNaN(id)) {
+        return res.status(400).json({ message: "Invalid need ID" });
+      }
+      const success = await storage.deleteRetirementLumpSumNeed(id);
+      if (!success) {
+        return res.status(404).json({ message: "Retirement lump sum need not found" });
+      }
+      res.status(204).send();
+    } catch (error) {
+      console.error("Error deleting retirement lump sum need:", error);
+      res.status(500).json({ message: "Failed to delete retirement lump sum need" });
+    }
+  });
+}
+
+// shared/retirement-calculations.ts
+function parseAmount(value) {
+  if (!value) return 0;
+  const cleaned = String(value).replace(/[^\d.-]/g, "");
+  const n = parseFloat(cleaned);
+  return isNaN(n) ? 0 : n;
+}
+function parsePercent(value) {
+  return parseAmount(value) / 100;
+}
+function parseYears(value) {
+  return parseAmount(value);
+}
+function projectFundForward(opts) {
+  const { currentValue, monthlyContribution, contributionEscalation, growthRate, yearsToRetirement } = opts;
+  if (yearsToRetirement <= 0) return currentValue;
+  const fvLumpSum = currentValue * Math.pow(1 + growthRate, yearsToRetirement);
+  if (monthlyContribution <= 0) return fvLumpSum;
+  const annualContribution = monthlyContribution * 12;
+  let fvAnnuity;
+  if (Math.abs(growthRate - contributionEscalation) < 1e-9) {
+    fvAnnuity = annualContribution * yearsToRetirement * Math.pow(1 + growthRate, yearsToRetirement - 1);
+  } else {
+    fvAnnuity = annualContribution * (Math.pow(1 + growthRate, yearsToRetirement) - Math.pow(1 + contributionEscalation, yearsToRetirement)) / (growthRate - contributionEscalation);
+  }
+  return fvLumpSum + fvAnnuity;
+}
+function discountToCurrentTerms(opts) {
+  const { futureValue, discountRate, years } = opts;
+  if (years <= 0) return futureValue;
+  return futureValue / Math.pow(1 + discountRate, years);
+}
+function presentValueGrowingAnnuity(opts) {
+  const { paymentPerPeriod, escalation, discount, termYears, periodsPerYear } = opts;
+  if (paymentPerPeriod <= 0 || termYears <= 0 || periodsPerYear <= 0) return 0;
+  const totalPeriods = termYears * periodsPerYear;
+  const periodicDiscount = discount / periodsPerYear;
+  const periodicEscalation = escalation / periodsPerYear;
+  if (Math.abs(periodicDiscount - periodicEscalation) < 1e-9) {
+    return paymentPerPeriod * totalPeriods;
+  }
+  const ratio = (1 + periodicEscalation) / (1 + periodicDiscount);
+  return paymentPerPeriod * (1 - Math.pow(ratio, totalPeriods)) / (periodicDiscount - periodicEscalation);
+}
+function dbPensionToCapitalEquivalent(opts) {
+  return presentValueGrowingAnnuity({
+    paymentPerPeriod: opts.monthlyIncome,
+    escalation: opts.escalation,
+    discount: opts.realReturn,
+    termYears: opts.yearsAfterRetirement,
+    periodsPerYear: 12
+  });
+}
+function requiredCapitalForIncome(opts) {
+  const periodsPerYear = opts.frequency === "monthly" ? 12 : opts.frequency === "quarterly" ? 4 : 1;
+  const taxable = opts.taxableFraction ?? 0;
+  const tax = opts.taxRate ?? 0;
+  const grossingFactor = 1 - taxable * tax;
+  const grossPayment = grossingFactor > 0 ? opts.monthlyAmount / grossingFactor : opts.monthlyAmount;
+  return presentValueGrowingAnnuity({
+    paymentPerPeriod: grossPayment,
+    escalation: opts.escalation,
+    discount: opts.realReturn,
+    termYears: opts.termYears,
+    periodsPerYear
+  });
+}
+function projectFutureInflow(opts) {
+  const future = opts.currentValue * Math.pow(1 + opts.growthRate, Math.max(0, opts.yearsAfterRetirement));
+  if (!opts.calculateCgt) return future;
+  const gain = Math.max(0, future - opts.currentValue);
+  return future - gain * 0.18;
+}
+function additionalMonthlyContribution(opts) {
+  const { shortfallAtRetirement, growthRate, contributionEscalation, yearsToRetirement } = opts;
+  if (shortfallAtRetirement <= 0 || yearsToRetirement <= 0) return 0;
+  let annuityFactor;
+  if (Math.abs(growthRate - contributionEscalation) < 1e-9) {
+    annuityFactor = yearsToRetirement * Math.pow(1 + growthRate, yearsToRetirement - 1);
+  } else {
+    annuityFactor = (Math.pow(1 + growthRate, yearsToRetirement) - Math.pow(1 + contributionEscalation, yearsToRetirement)) / (growthRate - contributionEscalation);
+  }
+  if (annuityFactor <= 0) return 0;
+  const requiredAnnual = shortfallAtRetirement / annuityFactor;
+  return requiredAnnual / 12;
+}
+var DEFAULT_INFLATION = 0.06;
+function computeRetirementProjection(input) {
+  const ready = !!input.parameters && (input.clientAge ?? 0) > 0;
+  const params = input.parameters ?? { retirementAge: 65, retirementPlanningAge: 90 };
+  const yearsToRetirement = Math.max(0, params.retirementAge - (input.clientAge || 0));
+  const yearsAfterRetirement = Math.max(0, params.retirementPlanningAge - params.retirementAge);
+  const inflation = DEFAULT_INFLATION;
+  const retirementFundProjections = input.retirementFunds.map((f) => {
+    const capital = projectFundForward({
+      currentValue: parseAmount(f.fundValue),
+      monthlyContribution: parseAmount(f.monthlyContribution),
+      contributionEscalation: parsePercent(f.contributionEscalation),
+      growthRate: parsePercent(f.growthRate),
+      yearsToRetirement
+    });
+    return {
+      id: f.id,
+      description: f.description ?? "",
+      capitalAtRetirement: capital,
+      valueInCurrentTerms: discountToCurrentTerms({ futureValue: capital, discountRate: inflation, years: yearsToRetirement })
+    };
+  });
+  const dbFundProjections = input.definedBenefitFunds.map((f) => {
+    const monthlyIncome = parseAmount(f.pensionIncomeAmount);
+    const escalation = parsePercent(f.pensionIncomeIncrease);
+    const lumpSum = parseAmount(f.deathLumpSum);
+    const growthRate = parsePercent(f.growthRate);
+    const realReturn = Math.max(1e-3, growthRate - inflation);
+    const pensionCapital = dbPensionToCapitalEquivalent({
+      monthlyIncome,
+      escalation,
+      realReturn,
+      yearsAfterRetirement
+    });
+    const projectedLumpSum = lumpSum * Math.pow(1 + growthRate, yearsToRetirement);
+    const total = pensionCapital + projectedLumpSum;
+    return {
+      id: f.id,
+      description: f.description,
+      capitalAtRetirement: total,
+      valueInCurrentTerms: discountToCurrentTerms({ futureValue: total, discountRate: inflation, years: yearsToRetirement })
+    };
+  });
+  const voluntaryProjections = input.voluntaryInvestments.map((v) => {
+    const capital = projectFundForward({
+      currentValue: parseAmount(v.marketValue),
+      monthlyContribution: parseAmount(v.monthlyContribution),
+      contributionEscalation: parsePercent(v.contributionEscalation),
+      growthRate: parsePercent(v.growthRate),
+      yearsToRetirement
+    });
+    return {
+      id: v.id,
+      description: v.description,
+      capitalAtRetirement: capital,
+      valueInCurrentTerms: discountToCurrentTerms({ futureValue: capital, discountRate: inflation, years: yearsToRetirement })
+    };
+  });
+  const futureInflowProjections = input.futureInflows.map((f) => {
+    const valueAtInflow = projectFutureInflow({
+      currentValue: parseAmount(f.currentValue),
+      growthRate: parsePercent(f.growthRate),
+      yearsAfterRetirement: f.startYearsAfterRetirement,
+      calculateCgt: f.calculateCgt
+    });
+    const realReturn = Math.max(1e-3, parsePercent(f.growthRate) - inflation);
+    const capitalAtRetirement = valueAtInflow / Math.pow(1 + realReturn, f.startYearsAfterRetirement);
+    return {
+      id: f.id,
+      description: f.description,
+      capitalAtRetirement,
+      valueInCurrentTerms: discountToCurrentTerms({ futureValue: capitalAtRetirement, discountRate: inflation, years: yearsToRetirement })
+    };
+  });
+  const lumpSumProjections = input.lumpSumNeeds.map((n) => {
+    const amount = parseAmount(n.amount);
+    const escalation = parsePercent(n.increasePercentage);
+    const startYears = n.startYears;
+    const periodsPerYear = n.frequency === "Monthly" ? 12 : n.frequency === "Quarterly" ? 4 : n.frequency === "Annual" ? 1 : 0;
+    const realReturn = Math.max(1e-3, 0.1 - inflation);
+    let capitalAtRetirement;
+    if (n.frequency === "Single" || periodsPerYear === 0) {
+      const escalated = amount * Math.pow(1 + escalation, startYears);
+      capitalAtRetirement = escalated / Math.pow(1 + realReturn, startYears);
+    } else {
+      const pvAtStart = presentValueGrowingAnnuity({
+        paymentPerPeriod: amount,
+        escalation,
+        discount: realReturn,
+        termYears: n.termYears,
+        periodsPerYear
+      });
+      capitalAtRetirement = pvAtStart / Math.pow(1 + realReturn, startYears);
+    }
+    return {
+      id: n.id,
+      description: n.description,
+      capitalAtRetirement,
+      valueInCurrentTerms: discountToCurrentTerms({ futureValue: capitalAtRetirement, discountRate: inflation, years: yearsToRetirement })
+    };
+  });
+  const incomeRequiredProjections = input.incomeNeeds.map((n) => {
+    const realReturn = Math.max(1e-3, 0.1 - inflation);
+    const capital = requiredCapitalForIncome({
+      monthlyAmount: parseAmount(n.amount),
+      escalation: parsePercent(n.increasePercentage),
+      termYears: parseYears(n.termYears),
+      realReturn,
+      frequency: n.frequency ?? "monthly"
+    });
+    return {
+      id: n.id,
+      description: n.description,
+      capitalAtRetirement: capital,
+      valueInCurrentTerms: discountToCurrentTerms({ futureValue: capital, discountRate: inflation, years: yearsToRetirement })
+    };
+  });
+  const incomeProvidedProjections = input.incomeProvisions.map((p) => {
+    const realReturn = Math.max(1e-3, 0.1 - inflation);
+    const capital = requiredCapitalForIncome({
+      monthlyAmount: parseAmount(p.amount),
+      escalation: parsePercent(p.increasePercentage),
+      termYears: parseYears(p.termYears),
+      realReturn,
+      frequency: p.frequency ?? "monthly",
+      taxableFraction: parsePercent(p.taxPercentage),
+      taxRate: parsePercent(p.taxRate)
+    });
+    return {
+      id: p.id,
+      description: p.description,
+      capitalAtRetirement: capital,
+      valueInCurrentTerms: discountToCurrentTerms({ futureValue: capital, discountRate: inflation, years: yearsToRetirement })
+    };
+  });
+  const sum = (xs) => xs.reduce((s, x) => s + x.capitalAtRetirement, 0);
+  const capitalProvided = sum(retirementFundProjections) + sum(dbFundProjections) + sum(voluntaryProjections) + sum(futureInflowProjections) + sum(incomeProvidedProjections);
+  const capitalRequired = sum(lumpSumProjections) + sum(incomeRequiredProjections);
+  const surplus = capitalProvided - capitalRequired;
+  const coverage = capitalRequired > 0 ? capitalProvided / capitalRequired : capitalProvided > 0 ? 1 : 0;
+  const additionalContribution = surplus < 0 ? additionalMonthlyContribution({
+    shortfallAtRetirement: Math.abs(surplus),
+    growthRate: 0.1,
+    contributionEscalation: 0.06,
+    yearsToRetirement
+  }) : 0;
+  return {
+    yearsToRetirement,
+    yearsAfterRetirement,
+    inflationProxy: inflation,
+    capitalProvided,
+    capitalRequired,
+    surplus,
+    coverage,
+    retirementFunds: retirementFundProjections,
+    definedBenefitFunds: dbFundProjections,
+    voluntaryInvestments: voluntaryProjections,
+    futureInflows: futureInflowProjections,
+    lumpSumNeeds: lumpSumProjections,
+    incomeRequired: incomeRequiredProjections,
+    incomeProvided: incomeProvidedProjections,
+    additionalMonthlyContribution: additionalContribution,
+    ready
+  };
+}
+function isRetirementReadyToProject(input) {
+  if (!input.parameters) return false;
+  if (!input.clientAge || input.clientAge <= 0) return false;
+  const hasCapitalSource = input.retirementFunds.some((f) => parseAmount(f.fundValue) > 0 || parseAmount(f.monthlyContribution) > 0) || input.definedBenefitFunds.some((f) => parseAmount(f.deathLumpSum) > 0 || parseAmount(f.pensionIncomeAmount) > 0) || input.voluntaryInvestments.some((v) => parseAmount(v.marketValue) > 0 || parseAmount(v.monthlyContribution) > 0) || input.futureInflows.some((f) => parseAmount(f.currentValue) > 0);
+  const hasIncomeNeed = input.incomeNeeds.some((n) => parseAmount(n.amount) > 0);
+  return hasCapitalSource && hasIncomeNeed;
+}
+
+// server/routes/retirement-projection.ts
+function registerRetirementProjectionRoutes(app2) {
+  app2.get("/api/retirement-projection/:planId", async (req, res) => {
+    try {
+      const planId = parseInt(req.params.planId);
+      if (isNaN(planId)) {
+        return res.status(400).json({ message: "Invalid plan ID" });
+      }
+      const [
+        parameters,
+        clientDetails2,
+        retirementFunds2,
+        definedBenefitFunds2,
+        voluntaryInvestments2,
+        futureInflows2,
+        lumpSumNeeds,
+        incomeNeeds2,
+        incomeProvisions2
+      ] = await Promise.all([
+        storage.getRetirementParameters(planId),
+        storage.getClientDetails(),
+        storage.getRetirementFunds(),
+        storage.getDefinedBenefitFunds(),
+        storage.getVoluntaryInvestments(),
+        storage.getFutureInflows(),
+        storage.getRetirementLumpSumNeeds(),
+        storage.getIncomeNeeds(),
+        storage.getIncomeProvisions()
+      ]);
+      const primary = clientDetails2.find((c) => c.entityType === "Primary entity") ?? clientDetails2[0];
+      const clientAge = primary ? parseInt(primary.age) || 0 : 0;
+      const input = {
+        parameters: parameters ?? null,
+        clientAge,
+        retirementFunds: retirementFunds2,
+        definedBenefitFunds: definedBenefitFunds2,
+        voluntaryInvestments: voluntaryInvestments2,
+        futureInflows: futureInflows2,
+        lumpSumNeeds,
+        incomeNeeds: incomeNeeds2,
+        incomeProvisions: incomeProvisions2
+      };
+      const projection = computeRetirementProjection(input);
+      const ready = isRetirementReadyToProject(input);
+      res.json({ ...projection, ready });
+    } catch (error) {
+      console.error("Error computing retirement projection:", error);
+      res.status(500).json({ message: "Failed to compute retirement projection" });
+    }
+  });
+}
+
 // server/routes.ts
 async function registerRoutes(app2) {
   registerEntityRoutes(app2);
@@ -3181,6 +3887,10 @@ async function registerRoutes(app2) {
   registerEstatePositionParameterRoutes(app2);
   registerFinancialPlanRoutes(app2);
   registerNeedsRoutes(app2);
+  registerRetirementParametersRoutes(app2);
+  registerFutureInflowRoutes(app2);
+  registerRetirementLumpSumNeedRoutes(app2);
+  registerRetirementProjectionRoutes(app2);
   await storage.initializeDefaultNeeds();
   return createServer(app2);
 }

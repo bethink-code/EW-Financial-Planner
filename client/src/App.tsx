@@ -43,6 +43,13 @@ import SavingFutureNeed from "@/pages/needs/saving-future-need";
 import IncomeFromCapitalNeed from "@/pages/needs/income-from-capital";
 import DebtRepaymentNeed from "@/pages/needs/debt-repayment";
 
+// Retirement need pages (Setup / Build / Project / Implement)
+import RetirementSetupParameters from "@/pages/needs/retirement/setup/parameters";
+import RetirementProject from "@/pages/needs/retirement/project";
+import RetirementImplement from "@/pages/needs/retirement/implement";
+import FutureInflowsPage from "@/pages/future-inflows";
+import RetirementLumpSumNeedsPage from "@/pages/retirement-lump-sum-needs";
+
 // Death with estate liquidity placeholder pages
 import DeathEstateLiquidityNeed from "@/pages/needs/death-estate-liquidity";
 import ProjectStep from "@/pages/needs/death-estate-liquidity/project";
@@ -162,9 +169,44 @@ function Router() {
               </NavigationLayout>
             )}
           </Route>
-          
+          <Route path="/future-inflows">
+            {() => (
+              <NavigationLayout>
+                <FutureInflowsPage />
+              </NavigationLayout>
+            )}
+          </Route>
+          <Route path="/retirement-lump-sum-needs">
+            {() => (
+              <NavigationLayout>
+                <RetirementLumpSumNeedsPage />
+              </NavigationLayout>
+            )}
+          </Route>
 
-          
+          {/* Retirement need routes */}
+          <Route path="/needs/retirement/setup/parameters">
+            {() => (
+              <NavigationLayout>
+                <RetirementSetupParameters />
+              </NavigationLayout>
+            )}
+          </Route>
+          <Route path="/needs/retirement/project">
+            {() => (
+              <NavigationLayout>
+                <RetirementProject />
+              </NavigationLayout>
+            )}
+          </Route>
+          <Route path="/needs/retirement/implement">
+            {() => (
+              <NavigationLayout>
+                <RetirementImplement />
+              </NavigationLayout>
+            )}
+          </Route>
+
           {/* Placeholder need routes */}
           <Route path="/needs/death" component={DeathNeed} />
           <Route path="/needs/permanent-disability" component={PermanentDisabilityNeed} />

@@ -5,6 +5,9 @@ import { FinancialPlanningLayout } from "@/components/navigation/financial-plann
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import type { FinancialPlan, Need } from "@shared/schema";
+import type { RetirementProjection } from "@shared/retirement-calculations";
+import { getLandingPath, recordLastVisited } from "@/lib/landing-paths";
+import { formatCurrencyValue } from "@/lib/formatting";
 
 interface PlanWithNeeds {
   plan: FinancialPlan;
@@ -77,28 +80,7 @@ export default function FinancialPlanSummaryPage() {
       }
 
       if (need.key === 'retirement') {
-        return (
-          <div className="mt-3 space-y-4">
-            <div className="bg-[#F6F9FB] p-4 rounded-lg">
-              <div className="flex justify-between items-center mb-4">
-<span className="bar-chart-title">Retirement funds</span>
-                <span className="text-sm font-medium text-red-600">Shortfall: R8,894,312</span>
-              </div>
-              <div className="w-full bg-gray-200 rounded-full h-2 mb-2">
-                <div className="bg-[#f1b431] h-2 rounded-full" style={{ width: '68%' }}></div>
-              </div>
-              <div className="flex justify-between text-sm text-gray-600">
-                <span>Provided: R19,071,067</span>
-                <span>Required: R27,965,380</span>
-              </div>
-            </div>
-            
-            <div className="flex justify-between items-center pt-3">
-              <button className="text-sm text-gray-500 hover:text-gray-700">Remove from plan</button>
-              <button className="px-4 py-2 border border-[#016991] text-[#016991] bg-white rounded hover:bg-[#016991]/5 text-sm">Launch</button>
-            </div>
-          </div>
-        );
+        return <RetirementSummaryCard planId={planId} />;
       }
 
       if (need.key === 'investment-planning') {
@@ -319,5 +301,53 @@ export default function FinancialPlanSummaryPage() {
       </div>
 
     </FinancialPlanningLayout>
+  );
+}
+
+function RetirementSummaryCard({ planId }: { planId: number }) {
+  const { data: projection, isLoading } = useQuery<RetirementProjection & { ready: boolean }>({
+    queryKey: [`/api/retirement-projection/${planId}`],
+    queryFn: () => fetch(`/api/retirement-projection/${planId}`).then(r => r.json()),
+    enabled: planId > 0,
+  });
+
+  const provided = projection?.capitalProvided ?? 0;
+  const required = projection?.capitalRequired ?? 0;
+  const surplus = projection?.surplus ?? 0;
+  const coveragePct = Math.min(100, Math.round((projection?.coverage ?? 0) * 100));
+  const goalFunded = surplus >= 0;
+
+  const landingPath = getLandingPath('retirement', !!projection?.ready, planId);
+  const handleLaunch = () => recordLastVisited(planId, 'retirement', landingPath);
+
+  return (
+    <div className="mt-3 space-y-4">
+      <div className="bg-[#F6F9FB] p-4 rounded-lg">
+        <div className="flex justify-between items-center mb-4">
+          <span className="bar-chart-title">Retirement funds</span>
+          {isLoading ? (
+            <span className="text-sm text-neutral-400">Calculating…</span>
+          ) : goalFunded ? (
+            <span className="text-sm font-medium text-green-700">Surplus: {formatCurrencyValue(Math.round(surplus).toString())}</span>
+          ) : (
+            <span className="text-sm font-medium text-red-600">Shortfall: {formatCurrencyValue(Math.round(Math.abs(surplus)).toString())}</span>
+          )}
+        </div>
+        <div className="w-full bg-gray-200 rounded-full h-2 mb-2">
+          <div className={`${goalFunded ? 'bg-green-500' : 'bg-[#f1b431]'} h-2 rounded-full`} style={{ width: `${coveragePct}%` }}></div>
+        </div>
+        <div className="flex justify-between text-sm text-gray-600">
+          <span>Provided: {formatCurrencyValue(Math.round(provided).toString())}</span>
+          <span>Required: {formatCurrencyValue(Math.round(required).toString())}</span>
+        </div>
+      </div>
+
+      <div className="flex justify-between items-center pt-3">
+        <button className="text-sm text-gray-500 hover:text-gray-700">Remove from plan</button>
+        <Link href={landingPath} onClick={handleLaunch}>
+          <button className="px-4 py-2 border border-[#016991] text-[#016991] bg-white rounded hover:bg-[#016991]/5 text-sm">Launch</button>
+        </Link>
+      </div>
+    </div>
   );
 }

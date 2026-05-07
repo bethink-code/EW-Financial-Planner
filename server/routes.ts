@@ -17,6 +17,10 @@ import { registerClientDetailsRoutes } from "./routes/client-details";
 import { registerEstatePositionParameterRoutes } from "./routes/estate-position-parameters";
 import { registerFinancialPlanRoutes } from "./routes/financial-plans";
 import { registerNeedsRoutes } from "./routes/needs";
+import { registerRetirementParametersRoutes } from "./routes/retirement-parameters";
+import { registerFutureInflowRoutes } from "./routes/future-inflows";
+import { registerRetirementLumpSumNeedRoutes } from "./routes/retirement-lump-sum-needs";
+import { registerRetirementProjectionRoutes } from "./routes/retirement-projection";
 
 export async function registerRoutes(app: Express): Promise<Server> {
   registerEntityRoutes(app);
@@ -35,6 +39,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
   registerEstatePositionParameterRoutes(app);
   registerFinancialPlanRoutes(app);
   registerNeedsRoutes(app);
+  registerRetirementParametersRoutes(app);
+  registerFutureInflowRoutes(app);
+  registerRetirementLumpSumNeedRoutes(app);
+  registerRetirementProjectionRoutes(app);
 
   await storage.initializeDefaultNeeds();
 

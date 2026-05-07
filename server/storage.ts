@@ -58,6 +58,18 @@ import {
   type PlanNeed,
   type InsertPlanNeed,
   type UpdatePlanNeed,
+  retirementParameters,
+  type RetirementParameters,
+  type InsertRetirementParameters,
+  type UpdateRetirementParameters,
+  futureInflows,
+  type FutureInflow,
+  type InsertFutureInflow,
+  type UpdateFutureInflow,
+  retirementLumpSumNeeds,
+  type RetirementLumpSumNeed,
+  type InsertRetirementLumpSumNeed,
+  type UpdateRetirementLumpSumNeed,
 } from "@shared/schema";
 import { assets, type Assets, type InsertAssets } from "@shared/assets-schema";
 import { Pool, neonConfig } from '@neondatabase/serverless';
@@ -255,6 +267,24 @@ export interface IStorage {
 
   // Plan with Needs
   getFinancialPlanWithNeeds(planId: number): Promise<{ plan: FinancialPlan; needs: Need[] } | undefined>;
+
+  // Retirement Parameters (one row per plan)
+  getRetirementParameters(planId: number): Promise<RetirementParameters | undefined>;
+  upsertRetirementParameters(planId: number, updates: UpdateRetirementParameters): Promise<RetirementParameters>;
+
+  // Future Inflows
+  getFutureInflows(): Promise<FutureInflow[]>;
+  getFutureInflow(id: number): Promise<FutureInflow | undefined>;
+  createFutureInflow(inflow: InsertFutureInflow): Promise<FutureInflow>;
+  updateFutureInflow(id: number, updates: UpdateFutureInflow): Promise<FutureInflow | undefined>;
+  deleteFutureInflow(id: number): Promise<boolean>;
+
+  // Retirement Lump Sum Needs
+  getRetirementLumpSumNeeds(): Promise<RetirementLumpSumNeed[]>;
+  getRetirementLumpSumNeed(id: number): Promise<RetirementLumpSumNeed | undefined>;
+  createRetirementLumpSumNeed(need: InsertRetirementLumpSumNeed): Promise<RetirementLumpSumNeed>;
+  updateRetirementLumpSumNeed(id: number, updates: UpdateRetirementLumpSumNeed): Promise<RetirementLumpSumNeed | undefined>;
+  deleteRetirementLumpSumNeed(id: number): Promise<boolean>;
 }
 
 export class MemStorage implements IStorage {
@@ -274,6 +304,9 @@ export class MemStorage implements IStorage {
   private financialPlans: Map<number, FinancialPlan>;
   private needs: Map<number, Need>;
   private planNeeds: Map<number, PlanNeed>;
+  private retirementParameters: Map<number, RetirementParameters>;
+  private futureInflows: Map<number, FutureInflow>;
+  private retirementLumpSumNeeds: Map<number, RetirementLumpSumNeed>;
 
   private currentFundId: number;
   private currentBequestId: number;
@@ -291,6 +324,9 @@ export class MemStorage implements IStorage {
   private currentFinancialPlanId: number;
   private currentNeedId: number;
   private currentPlanNeedId: number;
+  private currentRetirementParameterId: number;
+  private currentFutureInflowId: number;
+  private currentRetirementLumpSumNeedId: number;
 
   constructor() {
     this.retirementFunds = new Map();
@@ -309,6 +345,9 @@ export class MemStorage implements IStorage {
     this.financialPlans = new Map();
     this.needs = new Map();
     this.planNeeds = new Map();
+    this.retirementParameters = new Map();
+    this.futureInflows = new Map();
+    this.retirementLumpSumNeeds = new Map();
 
     this.currentFundId = 1;
     this.currentBequestId = 1;
@@ -326,6 +365,9 @@ export class MemStorage implements IStorage {
     this.currentFinancialPlanId = 1;
     this.currentNeedId = 1;
     this.currentPlanNeedId = 1;
+    this.currentRetirementParameterId = 1;
+    this.currentFutureInflowId = 1;
+    this.currentRetirementLumpSumNeedId = 1;
 
     // Initialize default needs
     this.initializeDefaultNeeds();
@@ -395,6 +437,9 @@ export class MemStorage implements IStorage {
       estateDutyToOthers: insertFund.estateDutyToOthers || "0%",
       executorsFee: insertFund.executorsFee || "0%",
       mastersFee: insertFund.mastersFee || "0%",
+      monthlyContribution: insertFund.monthlyContribution || "R 0",
+      contributionEscalation: insertFund.contributionEscalation || "0%",
+      growthRate: insertFund.growthRate || "10%",
     };
     this.retirementFunds.set(id, fund);
     return fund;
@@ -575,6 +620,7 @@ export class MemStorage implements IStorage {
       pensionIncomeCheckbox: fund.pensionIncomeCheckbox ?? true,
       pensionIncomeYears: fund.pensionIncomeYears || "0 years",
       pensionIncomeIncrease: fund.pensionIncomeIncrease || "0%",
+      growthRate: fund.growthRate || "10%",
     };
 
     this.definedBenefitFunds.set(newFund.id, newFund);
@@ -637,6 +683,10 @@ export class MemStorage implements IStorage {
       excludedFromEstateDuty: investment.excludedFromEstateDuty || false,
       excludedFromCGT: investment.excludedFromCGT || false,
       excludedFromExecutorsFees: investment.excludedFromExecutorsFees || false,
+      monthlyContribution: investment.monthlyContribution || "R 0",
+      contributionEscalation: investment.contributionEscalation || "0%",
+      growthRate: investment.growthRate || "10%",
+      incomeIncrease: investment.incomeIncrease || "0%",
     };
 
     this.voluntaryInvestments.set(newInvestment.id, newInvestment);
@@ -1410,6 +1460,101 @@ export class MemStorage implements IStorage {
     }
 
     return { plan, needs };
+  }
+
+  // Retirement Parameters (one row per plan)
+  async getRetirementParameters(planId: number): Promise<RetirementParameters | undefined> {
+    return Array.from(this.retirementParameters.values()).find(p => p.planId === planId);
+  }
+
+  async upsertRetirementParameters(planId: number, updates: UpdateRetirementParameters): Promise<RetirementParameters> {
+    const existing = await this.getRetirementParameters(planId);
+    if (existing) {
+      const merged: RetirementParameters = { ...existing, ...updates, planId, lastUpdated: new Date().toISOString() };
+      this.retirementParameters.set(existing.id, merged);
+      return merged;
+    }
+    const created: RetirementParameters = {
+      id: this.currentRetirementParameterId++,
+      planId,
+      retirementAge: updates.retirementAge ?? 65,
+      retirementPlanningAge: updates.retirementPlanningAge ?? 90,
+      autoCalculateTax: updates.autoCalculateTax ?? true,
+      lastUpdated: new Date().toISOString(),
+    };
+    this.retirementParameters.set(created.id, created);
+    return created;
+  }
+
+  // Future Inflows
+  async getFutureInflows(): Promise<FutureInflow[]> {
+    return Array.from(this.futureInflows.values()).sort((a, b) => a.id - b.id);
+  }
+
+  async getFutureInflow(id: number): Promise<FutureInflow | undefined> {
+    return this.futureInflows.get(id);
+  }
+
+  async createFutureInflow(inflow: InsertFutureInflow): Promise<FutureInflow> {
+    const created: FutureInflow = {
+      id: this.currentFutureInflowId++,
+      description: inflow.description ?? "",
+      entity: inflow.entity ?? "Donald Edwards",
+      startYearsAfterRetirement: inflow.startYearsAfterRetirement ?? 0,
+      currentValue: inflow.currentValue ?? "R 0",
+      calculateCgt: inflow.calculateCgt ?? false,
+      growthRate: inflow.growthRate ?? "10%",
+    };
+    this.futureInflows.set(created.id, created);
+    return created;
+  }
+
+  async updateFutureInflow(id: number, updates: UpdateFutureInflow): Promise<FutureInflow | undefined> {
+    const existing = this.futureInflows.get(id);
+    if (!existing) return undefined;
+    const updated = { ...existing, ...updates };
+    this.futureInflows.set(id, updated);
+    return updated;
+  }
+
+  async deleteFutureInflow(id: number): Promise<boolean> {
+    return this.futureInflows.delete(id);
+  }
+
+  // Retirement Lump Sum Needs
+  async getRetirementLumpSumNeeds(): Promise<RetirementLumpSumNeed[]> {
+    return Array.from(this.retirementLumpSumNeeds.values()).sort((a, b) => a.id - b.id);
+  }
+
+  async getRetirementLumpSumNeed(id: number): Promise<RetirementLumpSumNeed | undefined> {
+    return this.retirementLumpSumNeeds.get(id);
+  }
+
+  async createRetirementLumpSumNeed(need: InsertRetirementLumpSumNeed): Promise<RetirementLumpSumNeed> {
+    const created: RetirementLumpSumNeed = {
+      id: this.currentRetirementLumpSumNeedId++,
+      description: need.description ?? "",
+      startYears: need.startYears ?? 0,
+      termYears: need.termYears ?? 0,
+      increasePercentage: need.increasePercentage ?? "0%",
+      frequency: need.frequency ?? "Single",
+      frequencyValue: need.frequencyValue ?? 1,
+      amount: need.amount ?? "R 0",
+    };
+    this.retirementLumpSumNeeds.set(created.id, created);
+    return created;
+  }
+
+  async updateRetirementLumpSumNeed(id: number, updates: UpdateRetirementLumpSumNeed): Promise<RetirementLumpSumNeed | undefined> {
+    const existing = this.retirementLumpSumNeeds.get(id);
+    if (!existing) return undefined;
+    const updated = { ...existing, ...updates };
+    this.retirementLumpSumNeeds.set(id, updated);
+    return updated;
+  }
+
+  async deleteRetirementLumpSumNeed(id: number): Promise<boolean> {
+    return this.retirementLumpSumNeeds.delete(id);
   }
 }
 
@@ -2473,6 +2618,96 @@ export class DbStorage {
     }
 
     return { plan, needs };
+  }
+
+  // Retirement Parameters (one row per plan)
+  async getRetirementParameters(planId: number): Promise<RetirementParameters | undefined> {
+    const result = await this.db
+      .select()
+      .from(retirementParameters)
+      .where(eq(retirementParameters.planId, planId));
+    return result[0];
+  }
+
+  async upsertRetirementParameters(planId: number, updates: UpdateRetirementParameters): Promise<RetirementParameters> {
+    const existing = await this.getRetirementParameters(planId);
+    if (existing) {
+      const result = await this.db
+        .update(retirementParameters)
+        .set({ ...updates, planId, lastUpdated: new Date().toISOString() })
+        .where(eq(retirementParameters.id, existing.id))
+        .returning();
+      return result[0];
+    }
+    const result = await this.db
+      .insert(retirementParameters)
+      .values({
+        planId,
+        retirementAge: updates.retirementAge ?? 65,
+        retirementPlanningAge: updates.retirementPlanningAge ?? 90,
+        autoCalculateTax: updates.autoCalculateTax ?? true,
+        lastUpdated: new Date().toISOString(),
+      })
+      .returning();
+    return result[0];
+  }
+
+  // Future Inflows
+  async getFutureInflows(): Promise<FutureInflow[]> {
+    return await this.db.select().from(futureInflows).orderBy(asc(futureInflows.id));
+  }
+
+  async getFutureInflow(id: number): Promise<FutureInflow | undefined> {
+    const result = await this.db.select().from(futureInflows).where(eq(futureInflows.id, id));
+    return result[0];
+  }
+
+  async createFutureInflow(inflow: InsertFutureInflow): Promise<FutureInflow> {
+    const result = await this.db.insert(futureInflows).values(inflow).returning();
+    return result[0];
+  }
+
+  async updateFutureInflow(id: number, updates: UpdateFutureInflow): Promise<FutureInflow | undefined> {
+    const result = await this.db
+      .update(futureInflows)
+      .set(updates)
+      .where(eq(futureInflows.id, id))
+      .returning();
+    return result[0];
+  }
+
+  async deleteFutureInflow(id: number): Promise<boolean> {
+    const result = await this.db.delete(futureInflows).where(eq(futureInflows.id, id));
+    return (result.rowCount || 0) > 0;
+  }
+
+  // Retirement Lump Sum Needs
+  async getRetirementLumpSumNeeds(): Promise<RetirementLumpSumNeed[]> {
+    return await this.db.select().from(retirementLumpSumNeeds).orderBy(asc(retirementLumpSumNeeds.id));
+  }
+
+  async getRetirementLumpSumNeed(id: number): Promise<RetirementLumpSumNeed | undefined> {
+    const result = await this.db.select().from(retirementLumpSumNeeds).where(eq(retirementLumpSumNeeds.id, id));
+    return result[0];
+  }
+
+  async createRetirementLumpSumNeed(need: InsertRetirementLumpSumNeed): Promise<RetirementLumpSumNeed> {
+    const result = await this.db.insert(retirementLumpSumNeeds).values(need).returning();
+    return result[0];
+  }
+
+  async updateRetirementLumpSumNeed(id: number, updates: UpdateRetirementLumpSumNeed): Promise<RetirementLumpSumNeed | undefined> {
+    const result = await this.db
+      .update(retirementLumpSumNeeds)
+      .set(updates)
+      .where(eq(retirementLumpSumNeeds.id, id))
+      .returning();
+    return result[0];
+  }
+
+  async deleteRetirementLumpSumNeed(id: number): Promise<boolean> {
+    const result = await this.db.delete(retirementLumpSumNeeds).where(eq(retirementLumpSumNeeds.id, id));
+    return (result.rowCount || 0) > 0;
   }
 }
 
