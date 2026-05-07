@@ -6,7 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import type { FinancialPlan, Need } from "@shared/schema";
 import type { RetirementProjection } from "@shared/retirement-calculations";
-import { getLandingPath, recordLastVisited } from "@/lib/landing-paths";
+import { getRetirementLandingPath } from "@/needs/retirement/landing";
 import { formatCurrencyValue } from "@/lib/formatting";
 
 interface PlanWithNeeds {
@@ -317,8 +317,7 @@ function RetirementSummaryCard({ planId }: { planId: number }) {
   const coveragePct = Math.min(100, Math.round((projection?.coverage ?? 0) * 100));
   const goalFunded = surplus >= 0;
 
-  const landingPath = getLandingPath('retirement', !!projection?.ready, planId);
-  const handleLaunch = () => recordLastVisited(planId, 'retirement', landingPath);
+  const landingPath = getRetirementLandingPath(!!projection?.ready);
 
   return (
     <div className="mt-3 space-y-4">
@@ -344,7 +343,7 @@ function RetirementSummaryCard({ planId }: { planId: number }) {
 
       <div className="flex justify-between items-center pt-3">
         <button className="text-sm text-gray-500 hover:text-gray-700">Remove from plan</button>
-        <Link href={landingPath} onClick={handleLaunch}>
+        <Link href={landingPath}>
           <button className="px-4 py-2 border border-[#016991] text-[#016991] bg-white rounded hover:bg-[#016991]/5 text-sm">Launch</button>
         </Link>
       </div>

@@ -1,5 +1,4 @@
-import { Switch, Route, useLocation } from "wouter";
-import { lazy } from "react";
+import { Switch, Route } from "wouter";
 import { queryClient } from "./lib/queryClient";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { ViewModeProvider } from "@/contexts/view-mode-context";
@@ -7,15 +6,14 @@ import { LoadingProvider } from "@/contexts/loading-context";
 import { GlobalLoadingBar } from "@/components/ui/global-loading-bar";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
-import { NavigationLayout } from "@/components/navigation/navigation-layout";
 
 import NotFound from "@/pages/not-found";
 
-// Financial planning pages
+// Top-level financial planning pages
 import FinancialPlansPage from "@/pages/financial-plans";
 import FinancialPlanSummaryPage from "@/pages/financial-plan-summary";
 
-// Existing calculator pages
+// Shared form components — mounted by individual need modules under their own URLs.
 import NewRetirementFunds from "@/pages/new-retirement-funds";
 import LumpSumBequests from "@/pages/lump-sum-bequests";
 import IncomeNeeds from "@/pages/income-needs";
@@ -29,13 +27,15 @@ import Residue from "@/pages/residue";
 import AdditionalEstateDutyItems from "@/pages/additional-estate-duty-items";
 import ClientDetailsPage from "@/pages/client-details";
 import EntityTestPage from "@/pages/entity-test";
+import FutureInflowsPage from "@/pages/future-inflows";
+import RetirementLumpSumNeedsPage from "@/pages/retirement-lump-sum-needs";
 
-// Placeholder need pages
+// Placeholder pages for needs that don't have a module yet.
 import DeathNeed from "@/pages/needs/death";
 import PermanentDisabilityNeed from "@/pages/needs/permanent-disability";
 import TemporaryDisabilityNeed from "@/pages/needs/temporary-disability";
 import DreadDiseaseNeed from "@/pages/needs/dread-disease";
-import RetirementNeed from "@/pages/needs/retirement";
+import RetirementNeedRedirect from "@/pages/needs/retirement";
 import LumpSumRecurringNeed from "@/pages/needs/lump-sum-recurring";
 import PortfolioComparisonNeed from "@/pages/needs/portfolio-comparison";
 import ContributionIncomeAnalysisNeed from "@/pages/needs/contribution-income-analysis";
@@ -43,264 +43,128 @@ import SavingFutureNeed from "@/pages/needs/saving-future-need";
 import IncomeFromCapitalNeed from "@/pages/needs/income-from-capital";
 import DebtRepaymentNeed from "@/pages/needs/debt-repayment";
 
-// Retirement need pages (Setup / Build / Project / Implement)
+// Need modules — each is self-contained. Layouts wrap content with the need's
+// own chrome and action bar (see client/src/needs/_framework/).
+import { DELLayout } from "@/needs/death-estate-liquidity/layout";
+import { RetirementLayout } from "@/needs/retirement/layout";
+
+// DEL-specific content pages
+import DELLandingRedirect from "@/pages/needs/death-estate-liquidity";
+import DELProjectStep from "@/pages/needs/death-estate-liquidity/project";
+import DELImplementStep from "@/pages/needs/death-estate-liquidity/implement";
+
+// Retirement-specific content pages
 import RetirementSetupParameters from "@/pages/needs/retirement/setup/parameters";
 import RetirementProject from "@/pages/needs/retirement/project";
 import RetirementImplement from "@/pages/needs/retirement/implement";
-import FutureInflowsPage from "@/pages/future-inflows";
-import RetirementLumpSumNeedsPage from "@/pages/retirement-lump-sum-needs";
-
-// Death with estate liquidity placeholder pages
-import DeathEstateLiquidityNeed from "@/pages/needs/death-estate-liquidity";
-import ProjectStep from "@/pages/needs/death-estate-liquidity/project";
-import ImplementStep from "@/pages/needs/death-estate-liquidity/implement";
-import SetupStep from "@/pages/needs/death-estate-liquidity/setup";
-import BuildStep from "@/pages/needs/death-estate-liquidity/build";
-import ClientDetails from "@/pages/needs/death-estate-liquidity/setup/client-details";
-import ParametersSection from "@/pages/needs/death-estate-liquidity/setup/parameters";
-import ParametersSubSection from "@/pages/needs/death-estate-liquidity/setup/parameters/parameters";
-import RetirementFundsGroup from "@/pages/needs/death-estate-liquidity/build/retirement-funds";
-import AssetsLiabilitiesGroup from "@/pages/needs/death-estate-liquidity/build/assets-liabilities";
-import IncomeCapitalNeedsGroup from "@/pages/needs/death-estate-liquidity/build/income-capital-needs";
-
-
-
 
 function Router() {
   return (
     <div className="min-h-screen bg-gray-50">
       <Switch>
-        {/* Default route - Financial Plans list */}
+        {/* Top-level financial planning */}
         <Route path="/" component={FinancialPlansPage} />
-
-        {/* Financial planning routes */}
         <Route path="/financial-plans" component={FinancialPlansPage} />
         <Route path="/financial-plans/:id" component={FinancialPlanSummaryPage} />
-          
-          {/* Existing calculator routes with navigation */}
-          <Route path="/assurance">
-            {() => (
-              <NavigationLayout>
-                <Assurance />
-              </NavigationLayout>
-            )}
-          </Route>
-          <Route path="/new-retirement-funds">
-            {() => (
-              <NavigationLayout>
-                <NewRetirementFunds />
-              </NavigationLayout>
-            )}
-          </Route>
-          <Route path="/defined-benefit-funds">
-            {() => (
-              <NavigationLayout>
-                <DefinedBenefitFunds />
-              </NavigationLayout>
-            )}
-          </Route>
-          <Route path="/voluntary-investments">
-            {() => (
-              <NavigationLayout>
-                <VoluntaryInvestments />
-              </NavigationLayout>
-            )}
-          </Route>
-          <Route path="/assets">
-            {() => (
-              <NavigationLayout>
-                <AssetsPage />
-              </NavigationLayout>
-            )}
-          </Route>
-          <Route path="/liabilities">
-            {() => (
-              <NavigationLayout>
-                <Liabilities />
-              </NavigationLayout>
-            )}
-          </Route>
-          <Route path="/income-needs">
-            {() => (
-              <NavigationLayout>
-                <IncomeNeeds />
-              </NavigationLayout>
-            )}
-          </Route>
-          <Route path="/income-provisions">
-            {() => (
-              <NavigationLayout>
-                <IncomeProvisions />
-              </NavigationLayout>
-            )}
-          </Route>
-          <Route path="/residue">
-            {() => (
-              <NavigationLayout>
-                <Residue />
-              </NavigationLayout>
-            )}
-          </Route>
-          <Route path="/lump-sum-bequests">
-            {() => (
-              <NavigationLayout>
-                <LumpSumBequests />
-              </NavigationLayout>
-            )}
-          </Route>
-          <Route path="/additional-estate-duty-items">
-            {() => (
-              <NavigationLayout>
-                <AdditionalEstateDutyItems />
-              </NavigationLayout>
-            )}
-          </Route>
-          <Route path="/client-details">
-            {() => (
-              <NavigationLayout>
-                <ClientDetailsPage />
-              </NavigationLayout>
-            )}
-          </Route>
-          <Route path="/entity-test">
-            {() => (
-              <NavigationLayout>
-                <EntityTestPage />
-              </NavigationLayout>
-            )}
-          </Route>
-          <Route path="/future-inflows">
-            {() => (
-              <NavigationLayout>
-                <FutureInflowsPage />
-              </NavigationLayout>
-            )}
-          </Route>
-          <Route path="/retirement-lump-sum-needs">
-            {() => (
-              <NavigationLayout>
-                <RetirementLumpSumNeedsPage />
-              </NavigationLayout>
-            )}
-          </Route>
 
-          {/* Retirement need routes */}
-          <Route path="/needs/retirement/setup/parameters">
-            {() => (
-              <NavigationLayout>
-                <RetirementSetupParameters />
-              </NavigationLayout>
-            )}
-          </Route>
-          <Route path="/needs/retirement/project">
-            {() => (
-              <NavigationLayout>
-                <RetirementProject />
-              </NavigationLayout>
-            )}
-          </Route>
-          <Route path="/needs/retirement/implement">
-            {() => (
-              <NavigationLayout>
-                <RetirementImplement />
-              </NavigationLayout>
-            )}
-          </Route>
+        {/* Direct calculator routes (no need chrome) — for development access. */}
+        <Route path="/entity-test" component={EntityTestPage} />
 
-          {/* Placeholder need routes */}
-          <Route path="/needs/death" component={DeathNeed} />
-          <Route path="/needs/permanent-disability" component={PermanentDisabilityNeed} />
-          <Route path="/needs/temporary-disability" component={TemporaryDisabilityNeed} />
-          <Route path="/needs/dread-disease" component={DreadDiseaseNeed} />
-          <Route path="/needs/retirement" component={RetirementNeed} />
-          <Route path="/needs/lump-sum-recurring" component={LumpSumRecurringNeed} />
-          <Route path="/needs/portfolio-comparison" component={PortfolioComparisonNeed} />
-          <Route path="/needs/contribution-income-analysis" component={ContributionIncomeAnalysisNeed} />
-          <Route path="/needs/saving-future-need" component={SavingFutureNeed} />
-          <Route path="/needs/income-from-capital" component={IncomeFromCapitalNeed} />
-          <Route path="/needs/debt-repayment" component={DebtRepaymentNeed} />
-          
-          {/* Death with estate liquidity placeholder routes with navigation */}
-          <Route path="/needs/death-estate-liquidity">
-            {() => (
-              <NavigationLayout>
-                <DeathEstateLiquidityNeed />
-              </NavigationLayout>
-            )}
-          </Route>
-          <Route path="/needs/death-estate-liquidity/setup">
-            {() => (
-              <NavigationLayout>
-                <SetupStep />
-              </NavigationLayout>
-            )}
-          </Route>
-          <Route path="/needs/death-estate-liquidity/build">
-            {() => (
-              <NavigationLayout>
-                <BuildStep />
-              </NavigationLayout>
-            )}
-          </Route>
-          <Route path="/needs/death-estate-liquidity/setup/parameters">
-            {() => (
-              <NavigationLayout>
-                <ParametersSection />
-              </NavigationLayout>
-            )}
-          </Route>
-          <Route path="/needs/death-estate-liquidity/build/retirement-funds">
-            {() => (
-              <NavigationLayout>
-                <RetirementFundsGroup />
-              </NavigationLayout>
-            )}
-          </Route>
-          <Route path="/needs/death-estate-liquidity/build/assets-liabilities">
-            {() => (
-              <NavigationLayout>
-                <AssetsLiabilitiesGroup />
-              </NavigationLayout>
-            )}
-          </Route>
-          <Route path="/needs/death-estate-liquidity/build/income-capital-needs">
-            {() => (
-              <NavigationLayout>
-                <IncomeCapitalNeedsGroup />
-              </NavigationLayout>
-            )}
-          </Route>
-          <Route path="/needs/death-estate-liquidity/project">
-            {() => (
-              <NavigationLayout>
-                <ProjectStep />
-              </NavigationLayout>
-            )}
-          </Route>
-          <Route path="/needs/death-estate-liquidity/implement">
-            {() => (
-              <NavigationLayout>
-                <ImplementStep />
-              </NavigationLayout>
-            )}
-          </Route>
-          <Route path="/needs/death-estate-liquidity/setup/client-details">
-            {() => (
-              <NavigationLayout>
-                <ClientDetails />
-              </NavigationLayout>
-            )}
-          </Route>
-          <Route path="/needs/death-estate-liquidity/setup/parameters/parameters">
-            {() => (
-              <NavigationLayout>
-                <ParametersSubSection />
-              </NavigationLayout>
-            )}
-          </Route>
-          
-          <Route component={NotFound} />
-        </Switch>
+        {/* === Need: Death with estate liquidity === */}
+        <Route path="/needs/death-estate-liquidity" component={DELLandingRedirect} />
+        <Route path="/needs/death-estate-liquidity/setup/client-details">
+          {() => <DELLayout><ClientDetailsPage /></DELLayout>}
+        </Route>
+        <Route path="/needs/death-estate-liquidity/setup/residue">
+          {() => <DELLayout><Residue /></DELLayout>}
+        </Route>
+        <Route path="/needs/death-estate-liquidity/setup/additional-estate-duty-items">
+          {() => <DELLayout><AdditionalEstateDutyItems /></DELLayout>}
+        </Route>
+        <Route path="/needs/death-estate-liquidity/build/assurance">
+          {() => <DELLayout><Assurance /></DELLayout>}
+        </Route>
+        <Route path="/needs/death-estate-liquidity/build/retirement-funds">
+          {() => <DELLayout><NewRetirementFunds /></DELLayout>}
+        </Route>
+        <Route path="/needs/death-estate-liquidity/build/defined-benefit-funds">
+          {() => <DELLayout><DefinedBenefitFunds /></DELLayout>}
+        </Route>
+        <Route path="/needs/death-estate-liquidity/build/voluntary-investments">
+          {() => <DELLayout><VoluntaryInvestments /></DELLayout>}
+        </Route>
+        <Route path="/needs/death-estate-liquidity/build/assets">
+          {() => <DELLayout><AssetsPage /></DELLayout>}
+        </Route>
+        <Route path="/needs/death-estate-liquidity/build/liabilities">
+          {() => <DELLayout><Liabilities /></DELLayout>}
+        </Route>
+        <Route path="/needs/death-estate-liquidity/build/income-needs">
+          {() => <DELLayout><IncomeNeeds /></DELLayout>}
+        </Route>
+        <Route path="/needs/death-estate-liquidity/build/lump-sum-bequests">
+          {() => <DELLayout><LumpSumBequests /></DELLayout>}
+        </Route>
+        <Route path="/needs/death-estate-liquidity/build/income-provisions">
+          {() => <DELLayout><IncomeProvisions /></DELLayout>}
+        </Route>
+        <Route path="/needs/death-estate-liquidity/project">
+          {() => <DELLayout><DELProjectStep /></DELLayout>}
+        </Route>
+        <Route path="/needs/death-estate-liquidity/implement">
+          {() => <DELLayout><DELImplementStep /></DELLayout>}
+        </Route>
+
+        {/* === Need: Retirement === */}
+        <Route path="/needs/retirement" component={RetirementNeedRedirect} />
+        <Route path="/needs/retirement/setup/parameters">
+          {() => <RetirementLayout><RetirementSetupParameters /></RetirementLayout>}
+        </Route>
+        <Route path="/needs/retirement/setup/client-details">
+          {() => <RetirementLayout><ClientDetailsPage /></RetirementLayout>}
+        </Route>
+        <Route path="/needs/retirement/build/retirement-funds">
+          {() => <RetirementLayout><NewRetirementFunds /></RetirementLayout>}
+        </Route>
+        <Route path="/needs/retirement/build/defined-benefit-funds">
+          {() => <RetirementLayout><DefinedBenefitFunds /></RetirementLayout>}
+        </Route>
+        <Route path="/needs/retirement/build/voluntary-investments">
+          {() => <RetirementLayout><VoluntaryInvestments /></RetirementLayout>}
+        </Route>
+        <Route path="/needs/retirement/build/future-inflows">
+          {() => <RetirementLayout><FutureInflowsPage /></RetirementLayout>}
+        </Route>
+        <Route path="/needs/retirement/build/lump-sum-needs">
+          {() => <RetirementLayout><RetirementLumpSumNeedsPage /></RetirementLayout>}
+        </Route>
+        <Route path="/needs/retirement/build/income-required">
+          {() => <RetirementLayout><IncomeNeeds /></RetirementLayout>}
+        </Route>
+        <Route path="/needs/retirement/build/income-provided">
+          {() => <RetirementLayout><IncomeProvisions /></RetirementLayout>}
+        </Route>
+        <Route path="/needs/retirement/project">
+          {() => <RetirementLayout><RetirementProject /></RetirementLayout>}
+        </Route>
+        <Route path="/needs/retirement/implement">
+          {() => <RetirementLayout><RetirementImplement /></RetirementLayout>}
+        </Route>
+
+        {/* === Placeholder needs (no module yet — clicking lands here) === */}
+        <Route path="/needs/death" component={DeathNeed} />
+        <Route path="/needs/permanent-disability" component={PermanentDisabilityNeed} />
+        <Route path="/needs/temporary-disability" component={TemporaryDisabilityNeed} />
+        <Route path="/needs/dread-disease" component={DreadDiseaseNeed} />
+        <Route path="/needs/lump-sum-recurring" component={LumpSumRecurringNeed} />
+        <Route path="/needs/portfolio-comparison" component={PortfolioComparisonNeed} />
+        <Route path="/needs/contribution-income-analysis" component={ContributionIncomeAnalysisNeed} />
+        <Route path="/needs/saving-future-need" component={SavingFutureNeed} />
+        <Route path="/needs/income-from-capital" component={IncomeFromCapitalNeed} />
+        <Route path="/needs/debt-repayment" component={DebtRepaymentNeed} />
+
+        <Route component={NotFound} />
+      </Switch>
     </div>
   );
 }
