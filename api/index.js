@@ -2065,8 +2065,8 @@ function entityNamesToIds(names, clientDetails2) {
   });
 }
 
-// server/routes.ts
-async function registerRoutes(app2) {
+// server/routes/entities.ts
+function registerEntityRoutes(app2) {
   app2.post("/api/entities/resolve", async (req, res) => {
     try {
       const { names } = req.body;
@@ -2089,15 +2089,14 @@ async function registerRoutes(app2) {
       res.status(500).json({ message: "Failed to convert entity IDs" });
     }
   });
+}
+
+// server/routes/retirement-funds.ts
+function registerRetirementFundRoutes(app2) {
   app2.get("/api/retirement-funds", async (req, res) => {
     try {
       const { search } = req.query;
-      let funds;
-      if (search && typeof search === "string") {
-        funds = await storage.searchRetirementFunds(search);
-      } else {
-        funds = await storage.getRetirementFunds();
-      }
+      const funds = search && typeof search === "string" ? await storage.searchRetirementFunds(search) : await storage.getRetirementFunds();
       res.json(funds);
     } catch (error) {
       console.error("Error fetching retirement funds:", error);
@@ -2163,15 +2162,14 @@ async function registerRoutes(app2) {
       res.status(500).json({ message: "Failed to delete retirement fund" });
     }
   });
+}
+
+// server/routes/lump-sum-bequests.ts
+function registerLumpSumBequestRoutes(app2) {
   app2.get("/api/lump-sum-bequests", async (req, res) => {
     try {
       const { search } = req.query;
-      let bequests;
-      if (search && typeof search === "string") {
-        bequests = await storage.searchLumpSumBequests(search);
-      } else {
-        bequests = await storage.getLumpSumBequests();
-      }
+      const bequests = search && typeof search === "string" ? await storage.searchLumpSumBequests(search) : await storage.getLumpSumBequests();
       res.json(bequests);
     } catch (error) {
       console.error("Error fetching lump sum bequests:", error);
@@ -2237,15 +2235,14 @@ async function registerRoutes(app2) {
       res.status(500).json({ message: "Failed to delete lump sum bequest" });
     }
   });
+}
+
+// server/routes/assurance.ts
+function registerAssuranceRoutes(app2) {
   app2.get("/api/assurance", async (req, res) => {
     try {
       const { search } = req.query;
-      let policies;
-      if (search && typeof search === "string") {
-        policies = await storage.searchAssurance(search);
-      } else {
-        policies = await storage.getAssurance();
-      }
+      const policies = search && typeof search === "string" ? await storage.searchAssurance(search) : await storage.getAssurance();
       res.json(policies);
     } catch (error) {
       console.error("Error fetching assurance policies:", error);
@@ -2311,15 +2308,14 @@ async function registerRoutes(app2) {
       res.status(500).json({ message: "Failed to delete assurance policy" });
     }
   });
+}
+
+// server/routes/defined-benefit-funds.ts
+function registerDefinedBenefitFundRoutes(app2) {
   app2.get("/api/defined-benefit-funds", async (req, res) => {
     try {
       const { search } = req.query;
-      let funds;
-      if (search && typeof search === "string") {
-        funds = await storage.searchDefinedBenefitFunds(search);
-      } else {
-        funds = await storage.getDefinedBenefitFunds();
-      }
+      const funds = search && typeof search === "string" ? await storage.searchDefinedBenefitFunds(search) : await storage.getDefinedBenefitFunds();
       res.json(funds);
     } catch (error) {
       console.error("Error fetching defined benefit funds:", error);
@@ -2385,15 +2381,14 @@ async function registerRoutes(app2) {
       res.status(500).json({ message: "Failed to delete defined benefit fund" });
     }
   });
+}
+
+// server/routes/voluntary-investments.ts
+function registerVoluntaryInvestmentRoutes(app2) {
   app2.get("/api/voluntary-investments", async (req, res) => {
     try {
       const { search } = req.query;
-      let investments;
-      if (search && typeof search === "string") {
-        investments = await storage.searchVoluntaryInvestments(search);
-      } else {
-        investments = await storage.getVoluntaryInvestments();
-      }
+      const investments = search && typeof search === "string" ? await storage.searchVoluntaryInvestments(search) : await storage.getVoluntaryInvestments();
       res.json(investments);
     } catch (error) {
       console.error("Error fetching voluntary investments:", error);
@@ -2418,18 +2413,13 @@ async function registerRoutes(app2) {
   });
   app2.post("/api/voluntary-investments", async (req, res) => {
     try {
-      console.log("Received request body:", req.body);
       const validatedData = insertVoluntaryInvestmentSchema.parse(req.body);
-      console.log("Validated data:", validatedData);
       const investment = await storage.createVoluntaryInvestment(validatedData);
       res.status(201).json(investment);
     } catch (error) {
       console.error("Error creating voluntary investment:", error);
-      if (error instanceof Error) {
-        res.status(400).json({ message: error.message });
-      } else {
-        res.status(400).json({ message: "Invalid voluntary investment data" });
-      }
+      const message = error instanceof Error ? error.message : "Invalid voluntary investment data";
+      res.status(400).json({ message });
     }
   });
   app2.patch("/api/voluntary-investments/:id", async (req, res) => {
@@ -2439,10 +2429,7 @@ async function registerRoutes(app2) {
         return res.status(400).json({ message: "Invalid investment ID" });
       }
       const validatedData = updateVoluntaryInvestmentSchema.parse(req.body);
-      const investment = await storage.updateVoluntaryInvestment(
-        id,
-        validatedData
-      );
+      const investment = await storage.updateVoluntaryInvestment(id, validatedData);
       if (!investment) {
         return res.status(404).json({ message: "Voluntary investment not found" });
       }
@@ -2468,15 +2455,14 @@ async function registerRoutes(app2) {
       res.status(500).json({ message: "Failed to delete voluntary investment" });
     }
   });
+}
+
+// server/routes/income-needs.ts
+function registerIncomeNeedsRoutes(app2) {
   app2.get("/api/income-needs", async (req, res) => {
     try {
       const { search } = req.query;
-      let needs2;
-      if (search && typeof search === "string") {
-        needs2 = await storage.searchIncomeNeeds(search);
-      } else {
-        needs2 = await storage.getIncomeNeeds();
-      }
+      const needs2 = search && typeof search === "string" ? await storage.searchIncomeNeeds(search) : await storage.getIncomeNeeds();
       res.json(needs2);
     } catch (error) {
       console.error("Error fetching income needs:", error);
@@ -2542,15 +2528,14 @@ async function registerRoutes(app2) {
       res.status(500).json({ message: "Failed to delete income need" });
     }
   });
+}
+
+// server/routes/income-provisions.ts
+function registerIncomeProvisionsRoutes(app2) {
   app2.get("/api/income-provisions", async (req, res) => {
     try {
       const { search } = req.query;
-      let provisions;
-      if (search && typeof search === "string") {
-        provisions = await storage.searchIncomeProvisions(search);
-      } else {
-        provisions = await storage.getIncomeProvisions();
-      }
+      const provisions = search && typeof search === "string" ? await storage.searchIncomeProvisions(search) : await storage.getIncomeProvisions();
       res.json(provisions);
     } catch (error) {
       console.error("Error fetching income provisions:", error);
@@ -2616,15 +2601,14 @@ async function registerRoutes(app2) {
       res.status(500).json({ message: "Failed to delete income provision" });
     }
   });
+}
+
+// server/routes/residue.ts
+function registerResidueRoutes(app2) {
   app2.get("/api/residue", async (req, res) => {
     try {
       const { search } = req.query;
-      let items;
-      if (search && typeof search === "string") {
-        items = await storage.searchResidue(search);
-      } else {
-        items = await storage.getResidue();
-      }
+      const items = search && typeof search === "string" ? await storage.searchResidue(search) : await storage.getResidue();
       res.json(items);
     } catch (error) {
       console.error("Error fetching residue:", error);
@@ -2690,15 +2674,14 @@ async function registerRoutes(app2) {
       res.status(500).json({ message: "Failed to delete residue item" });
     }
   });
+}
+
+// server/routes/additional-estate-duty-items.ts
+function registerAdditionalEstateDutyItemRoutes(app2) {
   app2.get("/api/additional-estate-duty-items", async (req, res) => {
     try {
       const { search } = req.query;
-      let items;
-      if (search && typeof search === "string") {
-        items = await storage.searchAdditionalEstateDutyItems(search);
-      } else {
-        items = await storage.getAdditionalEstateDutyItems();
-      }
+      const items = search && typeof search === "string" ? await storage.searchAdditionalEstateDutyItems(search) : await storage.getAdditionalEstateDutyItems();
       res.json(items);
     } catch (error) {
       console.error("Error fetching additional estate duty items:", error);
@@ -2723,9 +2706,7 @@ async function registerRoutes(app2) {
   });
   app2.post("/api/additional-estate-duty-items", async (req, res) => {
     try {
-      const validatedData = insertAdditionalEstateDutyItemsSchema.parse(
-        req.body
-      );
+      const validatedData = insertAdditionalEstateDutyItemsSchema.parse(req.body);
       const item = await storage.createAdditionalEstateDutyItem(validatedData);
       res.status(201).json(item);
     } catch (error) {
@@ -2739,13 +2720,8 @@ async function registerRoutes(app2) {
       if (isNaN(id)) {
         return res.status(400).json({ message: "Invalid estate duty item ID" });
       }
-      const validatedData = updateAdditionalEstateDutyItemsSchema.parse(
-        req.body
-      );
-      const item = await storage.updateAdditionalEstateDutyItem(
-        id,
-        validatedData
-      );
+      const validatedData = updateAdditionalEstateDutyItemsSchema.parse(req.body);
+      const item = await storage.updateAdditionalEstateDutyItem(id, validatedData);
       if (!item) {
         return res.status(404).json({ message: "Additional estate duty item not found" });
       }
@@ -2771,15 +2747,14 @@ async function registerRoutes(app2) {
       res.status(500).json({ message: "Failed to delete additional estate duty item" });
     }
   });
+}
+
+// server/routes/liabilities.ts
+function registerLiabilitiesRoutes(app2) {
   app2.get("/api/liabilities", async (req, res) => {
     try {
       const { search } = req.query;
-      let liabilities2;
-      if (search && typeof search === "string") {
-        liabilities2 = await storage.searchLiabilities(search);
-      } else {
-        liabilities2 = await storage.getLiabilities();
-      }
+      const liabilities2 = search && typeof search === "string" ? await storage.searchLiabilities(search) : await storage.getLiabilities();
       res.json(liabilities2);
     } catch (error) {
       console.error("Error fetching liabilities:", error);
@@ -2845,15 +2820,14 @@ async function registerRoutes(app2) {
       res.status(500).json({ message: "Failed to delete liability" });
     }
   });
+}
+
+// server/routes/assets.ts
+function registerAssetsRoutes(app2) {
   app2.get("/api/assets", async (req, res) => {
     try {
       const { search } = req.query;
-      let assets2;
-      if (search && typeof search === "string") {
-        assets2 = await storage.searchAssets(search);
-      } else {
-        assets2 = await storage.getAssets();
-      }
+      const assets2 = search && typeof search === "string" ? await storage.searchAssets(search) : await storage.getAssets();
       res.json(assets2);
     } catch (error) {
       console.error("Error fetching assets:", error);
@@ -2919,98 +2893,10 @@ async function registerRoutes(app2) {
       res.status(500).json({ message: "Failed to delete asset" });
     }
   });
-  app2.get("/api/assets", async (req, res) => {
-    try {
-      const assets2 = await storage.getAssets();
-      res.json(assets2);
-    } catch (error) {
-      console.error("Error fetching assets:", error);
-      res.status(500).json({ message: "Failed to fetch assets" });
-    }
-  });
-  app2.post("/api/assets", async (req, res) => {
-    try {
-      const validatedData = insertAssetsSchema.parse(req.body);
-      const asset = await storage.createAsset(validatedData);
-      res.status(201).json(asset);
-    } catch (error) {
-      console.error("Error creating asset:", error);
-      res.status(400).json({ message: "Invalid asset data" });
-    }
-  });
-  app2.patch("/api/assets/:id", async (req, res) => {
-    try {
-      const id = parseInt(req.params.id);
-      if (isNaN(id)) {
-        return res.status(400).json({ message: "Invalid asset ID" });
-      }
-      const updates = req.body;
-      const asset = await storage.updateAsset(id, updates);
-      res.json(asset);
-    } catch (error) {
-      console.error("Error updating asset:", error);
-      res.status(400).json({ message: "Invalid asset data" });
-    }
-  });
-  app2.delete("/api/assets/:id", async (req, res) => {
-    try {
-      const id = parseInt(req.params.id);
-      if (isNaN(id)) {
-        return res.status(400).json({ message: "Invalid asset ID" });
-      }
-      await storage.deleteAsset(id);
-      res.status(204).send();
-    } catch (error) {
-      console.error("Error deleting asset:", error);
-      res.status(500).json({ message: "Failed to delete asset" });
-    }
-  });
-  app2.get("/api/liabilities", async (req, res) => {
-    try {
-      const liabilities2 = await storage.getLiabilities();
-      res.json(liabilities2);
-    } catch (error) {
-      console.error("Error fetching liabilities:", error);
-      res.status(500).json({ message: "Failed to fetch liabilities" });
-    }
-  });
-  app2.post("/api/liabilities", async (req, res) => {
-    try {
-      const validatedData = insertLiabilitiesSchema.parse(req.body);
-      const liability = await storage.createLiability(validatedData);
-      res.status(201).json(liability);
-    } catch (error) {
-      console.error("Error creating liability:", error);
-      res.status(400).json({ message: "Invalid liability data" });
-    }
-  });
-  app2.patch("/api/liabilities/:id", async (req, res) => {
-    try {
-      const id = parseInt(req.params.id);
-      if (isNaN(id)) {
-        return res.status(400).json({ message: "Invalid liability ID" });
-      }
-      const updates = req.body;
-      const liability = await storage.updateLiability(id, updates);
-      res.json(liability);
-    } catch (error) {
-      console.error("Error updating liability:", error);
-      res.status(400).json({ message: "Invalid liability data" });
-    }
-  });
-  app2.delete("/api/liabilities/:id", async (req, res) => {
-    try {
-      const id = parseInt(req.params.id);
-      if (isNaN(id)) {
-        return res.status(400).json({ message: "Invalid liability ID" });
-      }
-      await storage.deleteLiability(id);
-      res.status(204).send();
-    } catch (error) {
-      console.error("Error deleting liability:", error);
-      res.status(500).json({ message: "Failed to delete liability" });
-    }
-  });
+}
+
+// server/routes/client-details.ts
+function registerClientDetailsRoutes(app2) {
   app2.get("/api/client-details", async (req, res) => {
     try {
       const clientDetails2 = await storage.getClientDetails();
@@ -3057,6 +2943,10 @@ async function registerRoutes(app2) {
       res.status(500).json({ message: "Failed to delete client detail" });
     }
   });
+}
+
+// server/routes/estate-position-parameters.ts
+function registerEstatePositionParameterRoutes(app2) {
   app2.get("/api/estate-position-parameters", async (req, res) => {
     try {
       const parameters = await storage.getOrCreateEstatePositionParameter();
@@ -3084,15 +2974,14 @@ async function registerRoutes(app2) {
       res.status(400).json({ message: "Invalid parameter data" });
     }
   });
+}
+
+// server/routes/financial-plans.ts
+function registerFinancialPlanRoutes(app2) {
   app2.get("/api/financial-plans", async (req, res) => {
     try {
       const { search } = req.query;
-      let plans;
-      if (search && typeof search === "string") {
-        plans = await storage.searchFinancialPlans(search);
-      } else {
-        plans = await storage.getFinancialPlans();
-      }
+      const plans = search && typeof search === "string" ? await storage.searchFinancialPlans(search) : await storage.getFinancialPlans();
       res.json(plans);
     } catch (error) {
       console.error("Error fetching financial plans:", error);
@@ -3174,6 +3063,10 @@ async function registerRoutes(app2) {
       res.status(500).json({ message: "Failed to delete financial plan" });
     }
   });
+}
+
+// server/routes/needs.ts
+function registerNeedsRoutes(app2) {
   app2.get("/api/needs", async (req, res) => {
     try {
       const needs2 = await storage.getNeeds();
@@ -3268,9 +3161,28 @@ async function registerRoutes(app2) {
       res.status(500).json({ message: "Failed to update plan needs" });
     }
   });
+}
+
+// server/routes.ts
+async function registerRoutes(app2) {
+  registerEntityRoutes(app2);
+  registerRetirementFundRoutes(app2);
+  registerLumpSumBequestRoutes(app2);
+  registerAssuranceRoutes(app2);
+  registerDefinedBenefitFundRoutes(app2);
+  registerVoluntaryInvestmentRoutes(app2);
+  registerIncomeNeedsRoutes(app2);
+  registerIncomeProvisionsRoutes(app2);
+  registerResidueRoutes(app2);
+  registerAdditionalEstateDutyItemRoutes(app2);
+  registerLiabilitiesRoutes(app2);
+  registerAssetsRoutes(app2);
+  registerClientDetailsRoutes(app2);
+  registerEstatePositionParameterRoutes(app2);
+  registerFinancialPlanRoutes(app2);
+  registerNeedsRoutes(app2);
   await storage.initializeDefaultNeeds();
-  const httpServer = createServer(app2);
-  return httpServer;
+  return createServer(app2);
 }
 
 // server/api-handler.ts

@@ -78,7 +78,7 @@ export function FieldInput({
   if (config.type === 'textarea') {
     return (
       <textarea
-        defaultValue={value as string || inputProps.defaultValue}
+        defaultValue={(value as string) || (inputProps.defaultValue as string | undefined)}
         placeholder={inputProps.placeholder}
         onBlur={(e) => onBlur?.(e.target.value)}
         onChange={(e) => onChange?.(e.target.value)}
@@ -93,7 +93,7 @@ export function FieldInput({
   return (
     <input
       type={inputProps.type}
-      defaultValue={value as string || inputProps.defaultValue}
+      defaultValue={(value as string) || (inputProps.defaultValue as string | undefined)}
       placeholder={inputProps.placeholder}
       onBlur={handleBlur}
       onChange={handleChange}

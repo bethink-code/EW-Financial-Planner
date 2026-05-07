@@ -350,10 +350,10 @@ export const validateFieldValue = (value: any, config: FieldTypeConfig): boolean
 };
 
 // Utility to create standardized input props
-export const getInputProps = (fieldName: string, overrides?: Partial<FieldTypeConfig>): any => {
+export const getInputProps = (fieldName: string, overrides?: Partial<FieldTypeConfig>) => {
   const config = getFieldConfig(fieldName);
   const mergedConfig = { ...config, ...overrides };
-  
+
   return {
     type: mergedConfig.type === 'currency' || mergedConfig.type === 'percentage' || mergedConfig.type === 'years' ? 'text' : mergedConfig.type,
     placeholder: mergedConfig.placeholder,
@@ -364,8 +364,8 @@ export const getInputProps = (fieldName: string, overrides?: Partial<FieldTypeCo
     maxLength: mergedConfig.inputProps?.maxLength,
     style: {
       minWidth: mergedConfig.inputProps?.minWidth,
-      maxWidth: mergedConfig.inputProps?.maxWidth
-    }
+      maxWidth: mergedConfig.inputProps?.maxWidth,
+    },
   };
 };
 

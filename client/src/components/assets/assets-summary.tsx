@@ -2,6 +2,13 @@ import React from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { Assets, Liabilities } from '@shared/schema';
 
+type SummaryCard = {
+  name: string;
+  count: number;
+  marketValue: string;
+  isNetCard?: boolean;
+};
+
 export function AssetsSummary() {
   const { data: assets = [] } = useQuery<Assets[]>({
     queryKey: ['/api/assets'],
@@ -12,7 +19,7 @@ export function AssetsSummary() {
   });
 
   // Calculate summary by category groups and NET assets
-  const summary = React.useMemo(() => {
+  const summary = React.useMemo<SummaryCard[]>(() => {
     // Calculate total assets value (only included items)
     const totalAssetsValue = assets
       .filter(asset => asset.included)
@@ -74,13 +81,13 @@ export function AssetsSummary() {
     <div className="px-5 pb-5">
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
         {summary.map((section) => (
-          <div key={section.name} className={`summary-card ${(section as any).isNetCard ? 'bg-orange-50 !border-none net-assets-card' : ''}`}>
-            <div className={`text-sm font-medium ${(section as any).isNetCard ? 'text-neutral-700' : 'text-neutral-600'}`}>{section.name}</div>
-            <div className={`text-lg font-semibold ${(section as any).isNetCard ? 'text-neutral-800' : 'text-neutral-900'}`}>{section.marketValue}</div>
-            {!(section as any).isNetCard && (
+          <div key={section.name} className={`summary-card ${section.isNetCard ? 'bg-orange-50 !border-none net-assets-card' : ''}`}>
+            <div className={`text-sm font-medium ${section.isNetCard ? 'text-neutral-700' : 'text-neutral-600'}`}>{section.name}</div>
+            <div className={`text-lg font-semibold ${section.isNetCard ? 'text-neutral-800' : 'text-neutral-900'}`}>{section.marketValue}</div>
+            {!section.isNetCard && (
               <div className="text-xs text-neutral-500">{section.count} asset{section.count !== 1 ? 's' : ''}</div>
             )}
-            {(section as any).isNetCard && (
+            {section.isNetCard && (
               <div className="text-xs text-neutral-600">Assets - Liabilities</div>
             )}
           </div>
