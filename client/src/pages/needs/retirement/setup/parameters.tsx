@@ -6,6 +6,7 @@ import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { apiRequest, queryClient } from "@/lib/queryClient";
+import { formatCurrencyValue, handleDefaultValueFocus } from "@/lib/formatting";
 import type { RetirementParameters } from "@shared/schema";
 
 const PLAN_ID = 1; // Aligned with the hardcoded planId in NavigationLayout — replace when plan-scoped routing is built.
@@ -19,12 +20,14 @@ export default function RetirementSetupParameters() {
   const [retirementAge, setRetirementAge] = useState(65);
   const [retirementPlanningAge, setRetirementPlanningAge] = useState(90);
   const [autoCalculateTax, setAutoCalculateTax] = useState(true);
+  const [currentAnnualIncome, setCurrentAnnualIncome] = useState("R 0");
 
   useEffect(() => {
     if (params) {
       setRetirementAge(params.retirementAge);
       setRetirementPlanningAge(params.retirementPlanningAge);
       setAutoCalculateTax(params.autoCalculateTax);
+      setCurrentAnnualIncome(params.currentAnnualIncome ?? "R 0");
     }
   }, [params]);
 
@@ -34,6 +37,7 @@ export default function RetirementSetupParameters() {
         retirementAge,
         retirementPlanningAge,
         autoCalculateTax,
+        currentAnnualIncome,
       });
       return res.json();
     },
@@ -83,6 +87,20 @@ export default function RetirementSetupParameters() {
             <Label className="text-neutral-500">Years after retirement</Label>
             <div className="px-3 py-2 bg-neutral-50 rounded text-neutral-700 text-sm">{yearsAfterRetirement}</div>
           </div>
+        </div>
+
+        <div className="mt-6 max-w-sm">
+          <Label htmlFor="annualIncome">Current annual taxable income</Label>
+          <Input
+            id="annualIncome"
+            type="text"
+            value={currentAnnualIncome}
+            placeholder="R 0"
+            onFocus={handleDefaultValueFocus}
+            onChange={(e) => setCurrentAnnualIncome(e.target.value)}
+            onBlur={(e) => setCurrentAnnualIncome(formatCurrencyValue(e.target.value))}
+          />
+          <p className="text-xs text-neutral-500 mt-1">Used to compute the tax-deductible portion of any recommended retirement top-up (SA 2025/26 brackets).</p>
         </div>
 
         <div className="flex items-center gap-2 mt-6">

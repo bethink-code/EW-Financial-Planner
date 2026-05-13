@@ -6,6 +6,10 @@ import type { RetirementProjection } from "@shared/retirement-calculations";
 
 const PLAN_ID = 1;
 
+function rand(n: number): string {
+  return formatCurrencyValue(Math.round(n).toString());
+}
+
 export default function RetirementProject() {
   const { data: projection, isLoading } = useQuery<RetirementProjection & { ready: boolean }>({
     queryKey: [`/api/retirement-projection/${PLAN_ID}`],
@@ -16,17 +20,41 @@ export default function RetirementProject() {
     return <div className="px-6 py-6 text-neutral-500">Loading projection…</div>;
   }
 
-  const { capitalProvided, capitalRequired, surplus, coverage, retirementFunds, definedBenefitFunds, voluntaryInvestments, futureInflows, lumpSumNeeds, incomeRequired, incomeProvided, additionalMonthlyContribution, yearsToRetirement, yearsAfterRetirement } = projection;
+  const {
+    capitalProvided,
+    capitalRequired,
+    surplus,
+    coverage,
+    retirementFunds,
+    definedBenefitFunds,
+    voluntaryInvestments,
+    futureInflows,
+    lumpSumNeeds,
+    incomeRequired,
+    incomeProvided,
+    additionalMonthlyContribution,
+    yearsToRetirement,
+    yearsAfterRetirement,
+  } = projection;
 
   return (
-    <div className="w-full px-6 py-6 space-y-6">
-      <Card className="p-6">
-        <div className="flex items-baseline justify-between mb-4">
-          <h2 className="text-xl font-semibold">Retirement projection</h2>
-          <span className="text-sm text-neutral-600">{yearsToRetirement} years to retirement · {yearsAfterRetirement} years after</span>
+    <div className="w-full px-6 py-8 space-y-6">
+      <Card className="p-8 border-0 shadow-sm">
+        <div className="mb-6 pb-4 border-b flex items-end justify-between" style={{ borderColor: "var(--ew-border)" }}>
+          <div>
+            <div className="text-xs font-medium tracking-wide uppercase" style={{ color: "var(--ew-gray-700)" }}>
+              Retirement &nbsp;&rsaquo;&nbsp; Projection
+            </div>
+            <h2 className="text-2xl font-bold mt-1 tracking-tight" style={{ color: "var(--ew-primary-navy)" }}>
+              COVERAGE
+            </h2>
+          </div>
+          <span className="text-xs tabular-nums" style={{ color: "var(--ew-gray-700)" }}>
+            {yearsToRetirement} years to retirement &middot; {yearsAfterRetirement} years after
+          </span>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
           <div className="flex items-center justify-center">
             <GaugeChart
               title="Coverage"
@@ -38,17 +66,23 @@ export default function RetirementProject() {
               }}
             />
           </div>
-          <div className="space-y-3">
+          <div className="space-y-2">
             <SummaryRow label="Capital provided" value={capitalProvided} />
             <SummaryRow label="Capital required" value={capitalRequired} />
-            <SummaryRow label={surplus >= 0 ? "Surplus" : "Shortfall"} value={Math.abs(surplus)} tone={surplus >= 0 ? "positive" : "negative"} />
+            <SummaryRow
+              label={surplus >= 0 ? "Surplus" : "Shortfall"}
+              value={Math.abs(surplus)}
+              tone={surplus >= 0 ? "positive" : "negative"}
+            />
             {additionalMonthlyContribution > 0 && (
-              <div className="pt-3 border-t border-neutral-200">
-                <div className="text-xs font-medium text-amber-700 uppercase tracking-wide">Recommended top-up</div>
-                <div className="text-lg font-semibold text-neutral-900">
-                  {formatCurrencyValue(Math.round(additionalMonthlyContribution).toString())} / month
+              <div className="mt-4 rounded-md p-4 border-l-4" style={{ backgroundColor: "var(--ew-blue-tertiary-50)", borderLeftColor: "var(--ew-blue)" }}>
+                <div className="text-xs font-medium tracking-wide uppercase mb-1" style={{ color: "var(--ew-blue)" }}>
+                  Recommended top-up
                 </div>
-                <div className="text-xs text-neutral-500">to close the shortfall by retirement</div>
+                <div className="text-2xl font-bold tabular-nums tracking-tight" style={{ color: "var(--ew-primary-navy)" }}>
+                  {rand(additionalMonthlyContribution)} <span className="text-sm font-normal" style={{ color: "var(--ew-gray-700)" }}>/ month</span>
+                </div>
+                <div className="text-xs mt-0.5" style={{ color: "var(--ew-gray-700)" }}>to close the shortfall by retirement</div>
               </div>
             )}
           </div>
@@ -69,45 +103,58 @@ export default function RetirementProject() {
 }
 
 function SummaryRow({ label, value, tone }: { label: string; value: number; tone?: "positive" | "negative" }) {
-  const color = tone === "positive" ? "text-green-700" : tone === "negative" ? "text-red-700" : "text-neutral-900";
+  const valueColor =
+    tone === "positive" ? "var(--ew-positive-symbol)" :
+    tone === "negative" ? "var(--ew-negative-symbol)" :
+    "var(--ew-primary-navy)";
   return (
-    <div className="flex items-baseline justify-between">
-      <span className="text-sm text-neutral-600">{label}</span>
-      <span className={`text-lg font-semibold ${color}`}>{formatCurrencyValue(Math.round(value).toString())}</span>
+    <div className="flex items-baseline justify-between py-1.5 border-b last:border-b-0" style={{ borderColor: "var(--ew-border)" }}>
+      <span className="text-sm" style={{ color: "var(--ew-gray-700)" }}>{label}</span>
+      <span className="text-lg font-semibold tabular-nums" style={{ color: valueColor }}>
+        {formatCurrencyValue(Math.round(value).toString())}
+      </span>
     </div>
   );
 }
 
-function VehicleTable({ title, rows }: { title: string; rows: { id: number; description: string; capitalAtRetirement: number; valueInCurrentTerms: number }[] }) {
+function VehicleTable({
+  title,
+  rows,
+}: {
+  title: string;
+  rows: { id: number; description: string; capitalAtRetirement: number; valueInCurrentTerms: number }[];
+}) {
   if (rows.length === 0) {
     return (
-      <Card className="p-4">
-        <h3 className="font-semibold mb-2">{title}</h3>
-        <p className="text-sm text-neutral-400">No entries.</p>
+      <Card className="p-5 border-0 shadow-sm">
+        <h3 className="text-xs font-medium tracking-wide uppercase mb-2" style={{ color: "var(--ew-blue)" }}>{title}</h3>
+        <p className="text-sm" style={{ color: "var(--ew-gray-600)" }}>No entries.</p>
       </Card>
     );
   }
   return (
-    <Card className="p-4">
-      <h3 className="font-semibold mb-2">{title}</h3>
-      <table className="w-full text-sm">
-        <thead className="text-neutral-500 text-xs uppercase">
-          <tr>
-            <th className="text-left p-1">Description</th>
-            <th className="text-right p-1">At retirement</th>
-            <th className="text-right p-1">In today's terms</th>
-          </tr>
-        </thead>
-        <tbody>
-          {rows.map(r => (
-            <tr key={r.id} className="border-t border-neutral-100">
-              <td className="p-1">{r.description || "(untitled)"}</td>
-              <td className="p-1 text-right">{formatCurrencyValue(Math.round(r.capitalAtRetirement).toString())}</td>
-              <td className="p-1 text-right text-neutral-500">{formatCurrencyValue(Math.round(r.valueInCurrentTerms).toString())}</td>
+    <Card className="p-5 border-0 shadow-sm">
+      <h3 className="text-xs font-medium tracking-wide uppercase mb-3" style={{ color: "var(--ew-blue)" }}>{title}</h3>
+      <div className="rounded-md overflow-hidden" style={{ backgroundColor: "var(--ew-row-tint)" }}>
+        <table className="w-full text-sm">
+          <thead>
+            <tr style={{ color: "var(--ew-gray-700)" }}>
+              <th className="px-3 py-2 text-left text-xs font-medium uppercase tracking-wide">Description</th>
+              <th className="px-3 py-2 text-right text-xs font-medium uppercase tracking-wide">At retirement</th>
+              <th className="px-3 py-2 text-right text-xs font-medium uppercase tracking-wide">Today's terms</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {rows.map((r, idx) => (
+              <tr key={r.id} style={{ backgroundColor: idx % 2 === 0 ? "white" : "var(--ew-row-tint)" }}>
+                <td className="px-3 py-2.5" style={{ color: "var(--ew-primary-navy)" }}>{r.description || "(untitled)"}</td>
+                <td className="px-3 py-2.5 text-right tabular-nums font-medium" style={{ color: "var(--ew-gray-900)" }}>{rand(r.capitalAtRetirement)}</td>
+                <td className="px-3 py-2.5 text-right tabular-nums" style={{ color: "var(--ew-gray-700)" }}>{rand(r.valueInCurrentTerms)}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </Card>
   );
 }

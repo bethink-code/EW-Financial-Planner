@@ -15,6 +15,10 @@ import type {
   IncomeNeeds,
   IncomeProvisions,
 } from "./schema";
+import {
+  allocateAdditionalContribution,
+  type ContributionAllocation,
+} from "./sa-tax";
 
 // ============================================================
 // Parsing helpers (currency / percentage strings → numbers)
@@ -233,6 +237,9 @@ export interface RetirementProjection {
   incomeRequired: PerVehicleProjection[];
   incomeProvided: PerVehicleProjection[];
   additionalMonthlyContribution: number;
+  contributionAllocation: ContributionAllocation | null;
+  currentMonthlyRaContribution: number;
+  annualTaxableIncome: number;
   ready: boolean;
 }
 
@@ -424,6 +431,20 @@ export function computeRetirementProjection(input: ProjectionInputs): Retirement
       })
     : 0;
 
+  const currentMonthlyRaContribution = input.retirementFunds.reduce(
+    (sum, f) => sum + parseAmount(f.monthlyContribution),
+    0,
+  );
+  const annualTaxableIncome = parseAmount(input.parameters?.currentAnnualIncome);
+
+  const contributionAllocation = additionalContribution > 0
+    ? allocateAdditionalContribution({
+        additionalMonthlyContribution: additionalContribution,
+        currentMonthlyRaContribution,
+        annualTaxableIncome,
+      })
+    : null;
+
   return {
     yearsToRetirement,
     yearsAfterRetirement,
@@ -440,6 +461,9 @@ export function computeRetirementProjection(input: ProjectionInputs): Retirement
     incomeRequired: incomeRequiredProjections,
     incomeProvided: incomeProvidedProjections,
     additionalMonthlyContribution: additionalContribution,
+    contributionAllocation,
+    currentMonthlyRaContribution,
+    annualTaxableIncome,
     ready,
   };
 }

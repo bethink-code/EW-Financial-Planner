@@ -601,6 +601,7 @@ export const retirementParameters = pgTable("retirement_parameters", {
   retirementAge: integer("retirement_age").notNull().default(65),
   retirementPlanningAge: integer("retirement_planning_age").notNull().default(90),
   autoCalculateTax: boolean("auto_calculate_tax").notNull().default(true),
+  currentAnnualIncome: text("current_annual_income").notNull().default("R 0"),
   lastUpdated: text("last_updated").notNull().default(new Date().toISOString()),
 });
 

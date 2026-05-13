@@ -12,7 +12,7 @@ export function registerRetirementParametersRoutes(app: Express) {
 
       const params = await storage.getRetirementParameters(planId);
       // Return a default-shaped object if not yet created (so the form has defaults to render).
-      res.json(params ?? { planId, retirementAge: 65, retirementPlanningAge: 90, autoCalculateTax: true });
+      res.json(params ?? { planId, retirementAge: 65, retirementPlanningAge: 90, autoCalculateTax: true, currentAnnualIncome: "R 0" });
     } catch (error) {
       console.error("Error fetching retirement parameters:", error);
       res.status(500).json({ message: "Failed to fetch retirement parameters" });

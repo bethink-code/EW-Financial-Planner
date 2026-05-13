@@ -1480,6 +1480,7 @@ export class MemStorage implements IStorage {
       retirementAge: updates.retirementAge ?? 65,
       retirementPlanningAge: updates.retirementPlanningAge ?? 90,
       autoCalculateTax: updates.autoCalculateTax ?? true,
+      currentAnnualIncome: updates.currentAnnualIncome ?? "R 0",
       lastUpdated: new Date().toISOString(),
     };
     this.retirementParameters.set(created.id, created);
