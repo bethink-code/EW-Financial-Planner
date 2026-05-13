@@ -1,65 +1,103 @@
-# Checkpoint — 2026-05-07
+# Checkpoint — 2026-05-12 (full-day session)
 
-State of the codebase at the close of this session. Pick this up tomorrow.
+State of the codebase at end of day. Pick this up fresh next session.
 
-## Where we are
+## Mode
 
-- Pre-existing cleanup pass landed earlier (commits `d9a1cc6a`, `5d372e91` on `main`, pushed to GitHub).
-- Retirement need MVP landed locally (commit `aeda8e2e`, **not pushed**).
-- Framework migration — DEL + Retirement on the same self-contained-needs pattern — landing in this commit, **also not pushed**.
+Demo prototype for Elite Wealth — UX-focused, client's real calculations, **not** handoff-grade. Mode A per CLAUDE.md. Memory: `~/.claude/projects/.../memory/project_mode_demo_prototype.md`.
 
-Local commits ahead of `origin/main`: 2 (retirement MVP + framework migration).
-Tag `prototype-v1` already pushed — that's the immutable pre-cleanup reference point.
+## Headline state
 
-## What's working
+- 37 modified/new files, **none committed yet**
+- Type-check clean, vitest 27/27 passing
+- Dev server should be on http://localhost:5000 (kicked over multiple times during the day — restart `npm run dev` if down)
+- Two architectural memories captured: needs are self-sufficient ([`feedback_self_sufficient_needs.md`]) and Table+Hybrid are two views of one data interface that exist as a UX migration toggle ([`project_table_hybrid_duplication.md`])
 
-- Two financial-planning needs render end-to-end: **Death with estate liquidity** (mock-data Project) and **Retirement** (live projection engine).
-- Both needs use one framework — `client/src/needs/_framework/` — sharing chrome, action bar, smart-landing.
-- Each need is self-contained: own config, own URLs (`/needs/<id>/...`), own page tree.
-- Plan dashboard's Retirement card pulls live numbers from `/api/retirement-projection/:planId`. DEL's card still uses mock JSON in the schema.
-- Retirement projection engine: 27 vitest tests passing, pure functions in `shared/retirement-calculations.ts`.
-- Schema additions pushed to **dev DB**. Prod DB push outstanding.
+## Major deliverables today
 
-## Open before next deploy
+### Retirement need (morning session — committed in 2 prior commits, already on dev DB)
+- SA 2025/26 tax module (`shared/sa-tax.ts`)
+- Retirement projection engine extended for per-vehicle allocation (RA fill then voluntary)
+- `current_annual_income` added to `retirement_parameters` schema (pushed to dev DB only)
+- Setup → Parameters page exposes the new field
+- Implement page rebuilt with allocation table + tax-saving callout
 
-| Item | Why it matters | Where |
-|---|---|---|
-| **Prod DB schema push** | Vercel will 500 on retirement endpoints until tables exist | `DATABASE_URL="<prod>" npx drizzle-kit push` |
-| **GitHub push** | 2 local commits not on `main` yet | `git push origin main` |
+### DEL parity (lean)
+- New `shared/del-calculations.ts` engine (estate / dependants / total / income positions)
+- New `server/routes/del-projection.ts` exposing `/api/del-projection/:planId`
+- DEL Project page rewritten with 4-gauge overview + per-position tabs (using existing `OverviewDashboard` + `ChartPanel` + new breakdown tables)
+- DEL Implement page rewritten with recommended cover + position shortfall table
 
-## Deferred (intentional, non-blocking for MVP)
+### Elite Wealth design system landed
+- Full EW palette + typography tokens in `client/src/index.css` as `--ew-*` CSS variables (Inter font, primary navy `#092C4C`, brand blue `#016991`, tangerine `#EA8A2E`, tertiary blues, positive/negative status colours, neutrals, calculated-cell tints)
+- Chart palette repointed to use EW tokens
+- Project + Implement pages restyled across both needs
+- Table view of editable tables polished — section headers brand-blue on tertiary-50, totals row navy bold, calculated cells with flat tint, vertical-align middle everywhere
 
-1. **Surfacing projection inputs on existing forms.** Retirement Funds, Defined Benefit Funds, Voluntary Investments forms don't yet expose the new `monthlyContribution` / `contributionEscalation` / `growthRate` columns. Defaults work (10% growth, R 0 contribution) so the projection runs, but the values can only be edited via DB until the form UIs are updated. *Touchpoints: `client/src/components/{retirement-funds,defined-benefit-funds,voluntary-investments}/*-detail-form.tsx`.*
-2. **Plan-scoped routing.** `planId = 1` is hardcoded in retirement pages and the framework's `NeedLayout` (matching the existing convention). Replace when the chrome learns the current plan.
-3. **DEL on live projection data.** DEL's project tab and plan-dashboard summary card use hardcoded numbers. The pattern for live data is in retirement; DEL can adopt it. *Touchpoints: `client/src/pages/needs/death-estate-liquidity/project.tsx`, `financial-plan-summary.tsx`.*
-4. **Per-vehicle contribution split** in retirement Implement step. Currently we recommend a single monthly top-up; the legacy reference splits across retirement funds + voluntary investments with per-vehicle tax/growth/escalation.
-5. **Tax handling at retirement.** `autoCalculateTax` flag is plumbed but the engine treats taxRate as a per-row input only — no SA tax bracket tables, no RA contribution deduction logic.
-6. **The other 10 needs.** Death, Permanent disability, Temporary disability, Dread disease, Lump sum & recurring investment, Portfolio comparison, Contribution & income analysis, Saving for a future need, Income from capital, Debt repayment — all still placeholder stubs.
+### Table architecture cleanup
+- 6 totals-row colSpan mismatches fixed across DBF / new-retirement / income-needs / working-assurance / assets / liabilities (assets+liabilities became dynamic via `clientEntities.length`)
+- 2 section-header colSpan mismatches fixed (DBF + new-retirement)
+- `.section-start` / `.section-end` / `[rowSpan]` overrides consolidated into one rule using `var(--ew-border)`
+- `.entity-tight-spacing` + `pr-0.25 pl-0.25` cell padding hacks stripped from entity-owner-selector and entity-beneficiary-selector
+- Inline `border-r border-neutral-200` per-cell separators stripped (cells flow visually within sections; `.section-start` is the single source of vertical dividers)
+- Field-type rules (`.field-percentage` / `.field-currency` / `.field-years` / `.field-number`) trimmed to width + text-align + font-size only; `.table-input` owns padding
+- Vertical-align middle applied globally via one CSS rule that beats Tailwind `.align-top`
 
-## Architecture you'll want to re-read tomorrow
+### Hybrid view form primitives (afternoon session)
+- `FieldGroup` rewritten — flat brand-blue uppercase title on white with full-width `var(--ew-border)` underline (was tinted strip with rounded corners; iterated based on user feedback)
+- `FormField` label colour bumped to navy weight-500
+- New `client/src/components/common/detail-form-header.tsx` — extracted shared title + Duplicate + Delete header; replaces 8 hand-rolled headers
+- Switch components: hardcoded `data-[state=checked]:bg-blue-600` stripped, global rule `[role="switch"][data-state="checked"] { background-color: var(--ew-blue) }` added
+- Lump-sum's calculated `<input readOnly>` → `<div className="calculated-field">` for parity
+- Assurance's 4 raw `<input type="checkbox">` → shadcn `Switch` for parity
+- Inner owner/beneficiary mini-tables in detail forms: stripped `table-header-12`, `bg-neutral-50`, `border border-neutral-200`, `border-b border-neutral-200`, `border-r border-neutral-200` — they now inherit global table CSS automatically
 
-- **`client/src/needs/README.md`** — the framework contract + how-to-add-a-need.
-- **`client/src/needs/_framework/`** — types, flatten, NeedLayout, NeedActionBar, landing helper.
-- **`client/src/needs/retirement/config.ts`** — example of a flat (no-children) need config.
-- **`client/src/needs/death-estate-liquidity/config.ts`** — example with nested `section.children` (Setup→Parameters→[Residue, Additional estate duty]; Build→Retirement Funds→[Retirement funds, Defined benefit]; etc.).
-- **`shared/retirement-calculations.ts`** + **`*.test.ts`** — pure projection engine, the model for any future need that projects.
+### Stepper / nav layout
+- Need dropdown filtered to plan's needs (was showing all 12 in the catalogue)
+- Plan-name pill padding fixed (was asymmetric `pl-4 pr-1` leftover from a missing chevron)
+
+## What's saved across sessions (memory)
+
+- `project_ew_financial_planner.md` — project setup, Vercel, Neon DBs
+- `project_mode_demo_prototype.md` — Mode A, don't over-engineer
+- `feedback_self_sufficient_needs.md` — each need owns its UI/state/calc; never bleed need-specific UI into shared forms
+- `feedback_keep_stepper_pattern.md` — the FINANCIAL PLAN / NEED / STEPS top nav is canonical
+- `project_table_hybrid_duplication.md` — Table view = legacy familiar UI; Hybrid view = new pattern users migrate to; toggle is a deliberate UX safety net; the duplicated **logic** under them is the bug
+
+## What's documented for the next refactor pass
+
+- [`AUDIT.md`](AUDIT.md) at the repo root — full editable-tables audit with priorities. Includes the "two views one data interface" framing, the dead-file pile (~2,500 lines), config-driven `<FieldSchema>` consolidation as long-term end state.
+
+## Deferred (intentional, non-blocking)
+
+- **~82 inline `style={{ width: 'fit-content', minWidth: 'XXpx' }}`** across 10 detail forms. Width utility classes (`.w-input-xs/sm/md/lg/xl/2xl`) added to `index.css`; per-input sweep deferred — too variable to bulk-replace safely.
+- **Owner/beneficiary mini-tables consolidation** into one shared `OwnershipTable` primitive — biggest remaining audit item; cross-form regression risk; better as its own focused pass.
+- **Prod DB schema push** — `retirement_parameters.current_annual_income` added to dev DB only. Run `DATABASE_URL="<prod>" npx drizzle-kit push` before any client demo on Vercel.
+- **GitHub push** — local commits ahead of origin/main still not pushed (prior 2 from morning session + everything from this afternoon is uncommitted).
+- **planId refactor** — out of scope for demo. Hardcoded `1` throughout.
+- **DEL on faithful SA estate-duty engine** — current engine is lean (uses entered values, doesn't compute estate duty from gross-estate + abatement bands). Replace when product demands a full SA estate-duty methodology.
+
+## Files modified this session (37 total)
+
+**New:**
+- `AUDIT.md`
+- `client/src/components/common/detail-form-header.tsx`
+- `server/routes/del-projection.ts`
+- `shared/del-calculations.ts`
+- `shared/sa-tax.ts`
+
+**Modified:** every detail form, every Table-view component that had a totals row, the framework layout, the projection pages, the global CSS, the SA tax + retirement-calculations modules, the schema, the storage layer.
 
 ## How to run
 
 ```bash
-npm run dev          # auto-frees port 5000, starts the server
-npm test             # vitest run
-npm run build:vercel # production build + bundle api/index.js
+npm run dev          # port 5000, dev server
+npm test             # 27 vitest tests
+npx tsc --noEmit     # type-check (one pre-existing error in server/api-handler.ts)
 ```
 
-## Open architectural questions to think on
+## Suggested first move next session
 
-- **Plan ID propagation.** The framework currently hardcodes planId=1. Two cleanish options: (a) carry it in URLs (`/needs/<id>/<planId>/...`), (b) set it once in a context provider when the user enters from a plan dashboard. (b) is less URL noise.
-- **DEL migration to live data.** Should DEL's `/api/del-projection/:planId` mirror retirement's projection endpoint — server-side aggregator + pure-function engine? If yes, what existing inline calc lives in `client/src/pages/needs/death-estate-liquidity/project.tsx` should move into `shared/del-calculations.ts`?
-- **Smart-landing readiness for DEL.** Right now DEL's smart-landing is hardcoded `ready=true` (always lands on Project). Replace when DEL has a real projection endpoint.
-- **Should the projection input columns be split off from the existing `retirementFunds` table** into a separate retirement-specific table, or stay as additional columns? Current shape: additional columns on the existing table (chosen because retirement and DEL share the same fund records — it's the same physical fund being modelled differently).
-
-## Tags / refs
-
-- `prototype-v1` (pushed) — pre-cleanup snapshot.
-- (commit hash for framework refactor will land below the commit message).
+1. Commit. Either one big "design-system + hybrid-view cleanup" commit, or split by concern (engine work / design tokens / cleanup / etc.) — see `git status` to decide.
+2. Browser walkthrough — most of today's work I couldn't visually verify. Key surfaces: Retirement Project / Implement, DEL Project / Implement, Hybrid detail forms for retirement-funds / DB-funds / voluntary-investments / assurance / liabilities / assets, Table views for the same.
+3. Pick from the deferred list above, or take fresh direction from the user.
