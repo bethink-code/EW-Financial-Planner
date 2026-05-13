@@ -347,7 +347,7 @@ export function NewRetirementTable({
  <th className="section-start" colSpan={4}>Unapproved Life Cover</th>
  <th className="section-start" colSpan={3}>Monthly Death Benefit</th>
  <th className="section-start" colSpan={3}>Approved Life Cover</th>
- <th className="section-start" colSpan={7}>Fund Value Beneficiaries</th>
+ <th className="section-start" colSpan={8}>Fund Value Beneficiaries</th>
  </tr>
  
  {/* Individual column headers */}
@@ -742,6 +742,7 @@ export function NewRetirementTable({
  <td className="totals-cell-value">{formatTotal(totals.fundValue)}</td>
  <td className="totals-cell-value">{formatTotal(totals.fundValueAtDeath)}</td>
  <td className="totals-cell-label section-start"></td>
+ <td className="totals-cell-label"></td>
  <td className="totals-cell-label"></td>
  <td className="totals-cell-label"></td>
  <td className="totals-cell-label"></td>

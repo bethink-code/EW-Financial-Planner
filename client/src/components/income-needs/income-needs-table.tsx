@@ -363,10 +363,9 @@ function IncomeNeedsTable({ viewMode, searchTerm, onAddIncomeNeed }: IncomeNeeds
         
         <tfoot>
           <tr>
-            <td className="totals-cell-label text-right section-start">Totals</td>
-            <td className="totals-cell-label section-start" colSpan={2}></td>
+            <td className="totals-cell-label text-right section-start" colSpan={3}>Totals</td>
             <td className="totals-cell-value section-start">R {totals.amount.toLocaleString()}</td>
-            <td className="totals-cell-label" colSpan={4}></td>
+            <td className="totals-cell-label" colSpan={5}></td>
             <td className="totals-cell-value">R {totals.capitalisedAmount.toLocaleString()}</td>
           </tr>
         </tfoot>

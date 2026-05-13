@@ -393,19 +393,62 @@ th, td {
   --neutral-100: hsl(220, 14%, 96%);
   --neutral-50: hsl(210, 20%, 98%);
   
-  /* Graph Color Palette - Secondary Colors */
-  --chart-primary-blue: #2196F3;
-  --chart-primary-orange: #FF9800;
-  --chart-primary-green: #4CAF50;
+  /* ============================================================ */
+  /* Elite Wealth design system tokens (from Figma)                */
+  /* Source of truth — use these for any new visual work.          */
+  /* ============================================================ */
+
+  /* Brand */
+  --ew-primary-navy: #092C4C;
+  --ew-blue: #016991;
+  --ew-blue-hover: #4C8DB4;
+  --ew-blue-pressed: #114E72;
+  --ew-tangerine: #EA8A2E;
+  --ew-black: #171818;
+
+  /* Tertiary blues — backgrounds, tints, gauge "remaining" arcs */
+  --ew-blue-tertiary-50: #E6F0F5;
+  --ew-blue-tertiary-100: #D0E5F0;
+  --ew-blue-tertiary-400: #4C8DB4;
+
+  /* Status — positive / negative */
+  --ew-positive-bg: #C3F1C8;
+  --ew-positive-symbol: #1DB247;
+  --ew-negative-bg: #FFE2D9;
+  --ew-negative-symbol: #E4410D;
+
+  /* Neutrals */
+  --ew-gray-900: #333333;
+  --ew-gray-700: #828282;
+  --ew-gray-600: #BDBDBD;
+  --ew-gray-500: #E0E0E0;
+  --ew-gray-400: #F2F2F2;
+  --ew-border: #EBECEE;
+
+  /* Surfaces — calculated value tint vs. editable field bg */
+  --ew-calculated-bg: #E6F0F5;            /* clearly distinct from white editable inputs */
+  --ew-calculated-bg-emphasis: #D0E5F0;
+  --ew-row-tint: #F8FBFD;
+
+  /* Typography (Inter is already loaded body-wide) */
+  --ew-h1-size: 56px;
+  --ew-h1-weight: 700;
+  --ew-text-size: 14px;
+  --ew-caption-size: 12px;
+
+  /* Graph palette — repointed to EW tokens (was generic Material colors) */
+  --chart-primary-blue: var(--ew-blue);
+  --chart-primary-orange: var(--ew-tangerine);
+  --chart-primary-green: var(--ew-positive-symbol);
   --chart-primary-pink: #E91E63;
-  
-  --chart-secondary-teal-dark: #0F7377;
-  --chart-secondary-teal: #5DADE2;
+
+  --chart-secondary-teal-dark: var(--ew-primary-navy);
+  --chart-secondary-teal: var(--ew-blue-hover);
   --chart-secondary-brown: #8D6E63;
   --chart-secondary-purple: #9C27B0;
-  --chart-secondary-blue-dark: #3F51B5;
-  --chart-secondary-blue-light: #BBDEFB;
-  --chart-secondary-green-light: #A8E6CF;
+  --chart-secondary-blue-dark: var(--ew-primary-navy);
+  --chart-secondary-blue-light: var(--ew-blue-tertiary-100);
+  --chart-secondary-green-light: var(--ew-positive-bg);
 }
 
 .dark {
@@ -576,6 +619,12 @@ th, td {
     background-color: #f9fafb !important;
   }
 
+  /* Row hover — EW tertiary-50 tint instead of generic neutral grey */
+  table tbody tr:hover,
+  table tbody tr.hover\:bg-neutral-50:hover {
+    background-color: var(--ew-row-tint) !important;
+  }
+
   /* Add spacing to table cells for better field separation */
   td {
     padding: 0.5rem 0.75rem;
@@ -597,74 +646,77 @@ th, td {
   }
 
   .single-row-header th {
-    padding: 0 0.5rem !important; /* Remove vertical padding, keep horizontal */
+    padding: 0 0.5rem !important;
     font-size: 11px !important;
-    font-weight: 600 !important;
+    font-weight: 500 !important;
     text-transform: uppercase !important;
-    letter-spacing: 0.025em !important;
-    color: #9ca3af !important; /* Lighter grey from design system */
-    background-color: #f8fafc !important;
-    vertical-align: middle !important; /* Center align text */
+    letter-spacing: 0.04em !important;
+    color: var(--ew-gray-700) !important;
+    background-color: var(--ew-blue-tertiary-50) !important;
+    vertical-align: middle !important;
     line-height: 1.3rem !important;
     white-space: nowrap !important;
     overflow: hidden !important;
     text-overflow: ellipsis !important;
-    border-bottom: 2px solid #9ca3af !important;
+    border-bottom: 1px solid var(--ew-blue-tertiary-100) !important;
   }
 
-  /* DOUBLE ROW HEADER STYLING */
+  /* DOUBLE ROW HEADER STYLING — EW design system */
+  /* First row: section group headers (e.g. OVERVIEW, FUND DETAILS) — brand blue, prominent */
   table thead tr.double-row-header-first th {
-    padding: 0 0.5rem !important; /* Remove vertical padding, keep horizontal */
-    font-size: 11px !important;
+    padding: 0.5rem 0.5rem 0.25rem !important;
+    font-size: 12px !important;
     font-weight: 600 !important;
     text-transform: uppercase !important;
-    letter-spacing: 0.025em !important;
-    color: #9ca3af !important; /* Lighter grey from design system */
-    background-color: #f8fafc !important;
-    vertical-align: bottom !important; /* Align text closer to separator border */
+    letter-spacing: 0.05em !important;
+    color: var(--ew-blue) !important;
+    background-color: var(--ew-blue-tertiary-50) !important;
+    vertical-align: bottom !important;
     line-height: 1.3rem !important;
     white-space: nowrap !important;
     overflow: hidden !important;
     text-overflow: ellipsis !important;
-    border-bottom: none !important; /* Remove horizontal border */
+    border-bottom: none !important;
   }
 
   .double-row-header-first {
-    height: 1.5rem !important; /* Half of 3rem total */
-    min-height: 1.5rem !important;
-    max-height: 1.5rem !important;
+    height: 2rem !important;
+    min-height: 2rem !important;
+    max-height: 2rem !important;
   }
 
+  /* Second row: column headers (e.g. Description, Owner Name) — neutral, refined */
   table thead tr.double-row-header-second th {
-    padding: 0 0.5rem !important; /* Remove vertical padding, keep horizontal */
+    padding: 0.25rem 0.5rem 0.5rem !important;
     font-size: 10px !important;
     font-weight: 500 !important;
     text-transform: uppercase !important;
-    letter-spacing: 0.025em !important;
-    color: #9ca3af !important; /* Lighter grey from design system */
-    background-color: #f8fafc !important;
-    vertical-align: top !important; /* Top align text */
+    letter-spacing: 0.04em !important;
+    color: var(--ew-gray-700) !important;
+    background-color: var(--ew-blue-tertiary-50) !important;
+    vertical-align: top !important;
     line-height: 1.3rem !important;
     white-space: nowrap !important;
     overflow: hidden !important;
     text-overflow: ellipsis !important;
+    border-bottom: 1px solid var(--ew-blue-tertiary-100) !important;
   }
 
   .double-row-header-second {
-    height: 1.5rem !important; /* Half of 3rem total */
-    min-height: 1.5rem !important;
-    max-height: 1.5rem !important;
+    height: 1.75rem !important;
+    min-height: 1.75rem !important;
+    max-height: 1.75rem !important;
   }
 
-  /* Fallback for existing tables without specific classes */
+  /* Fallback for existing tables without specific classes — EW tertiary-50 tint */
   table thead th {
     padding: 0.25rem 0.6rem 0.4rem 0.6rem !important;
     font-size: 11px !important;
-    font-weight: 600 !important;
+    font-weight: 500 !important;
     text-transform: uppercase !important;
-    letter-spacing: 0.025em !important;
-    color: #4b5563 !important;
-    background-color: #f8fafc !important;
+    letter-spacing: 0.04em !important;
+    color: var(--ew-gray-700) !important;
+    background-color: var(--ew-blue-tertiary-50) !important;
     vertical-align: bottom !important;
     line-height: 1.2 !important;
     height: 2.5rem !important;
@@ -673,7 +725,7 @@ th, td {
     white-space: nowrap !important;
     overflow: hidden !important;
     text-overflow: ellipsis !important;
-    border-bottom: 1px solid #e5e7eb !important;
+    border-bottom: 1px solid var(--ew-blue-tertiary-100) !important;
   }
 
   table thead tr + tr th {
@@ -747,21 +799,21 @@ th, td {
     color: #374151 !important; /* text-neutral-700 - darker medium grey */
   }
 
-  /* Standardized header styling - clean appearance with light grey background */
+  /* Standardized header styling — EW tertiary-50 tint across both header rows */
   thead {
-    background-color: #f9fafb !important; /* bg-neutral-50 - same as footer */
-    border-bottom: 1px solid #e5e7eb !important; /* Match horizontal row border style */
+    background-color: var(--ew-blue-tertiary-50) !important;
+    border-bottom: 1px solid var(--ew-blue-tertiary-100) !important;
   }
-  
+
   /* Force header bottom border with maximum specificity */
   table thead,
   body table thead,
   html body table thead {
-    border-bottom: 1px solid #e5e7eb !important;
+    border-bottom: 1px solid var(--ew-blue-tertiary-100) !important;
   }
 
   thead tr {
-    background-color: #f9fafb !important; /* bg-neutral-50 */
+    background-color: var(--ew-blue-tertiary-50) !important;
   }
   
   /* Add border to the last header row */
@@ -789,7 +841,7 @@ th, td {
     border-left: none !important;
     border-right: none !important;
     border-top: none !important;
-    background-color: #f9fafb !important; /* bg-neutral-50 */
+    background-color: var(--ew-blue-tertiary-50) !important;
   }
 
   /* Improved spacing between section headers and column headers */
@@ -807,14 +859,14 @@ th, td {
     border-bottom: 1px solid #e5e7eb !important; /* Light separator between header levels */
   }
 
-  /* Standardized footer/totals styling - clean appearance with section borders */
+  /* Standardized footer/totals styling — EW design language: navy bold on tertiary-50 tint */
   tfoot {
-    background-color: #f9fafb !important; /* bg-neutral-50 */
+    background-color: var(--ew-blue-tertiary-50) !important;
   }
 
   tfoot tr {
-    border-top: 1px solid #d1d5db !important; /* Single border for section separation */
-    height: 3rem !important; /* Control height at row level */
+    border-top: 1px solid var(--ew-blue-tertiary-100) !important;
+    height: 3rem !important;
     min-height: 3rem !important;
     max-height: 3rem !important;
   }
@@ -837,22 +889,23 @@ th, td {
   }
 
   .totals-cell-label {
-    color: #374151 !important; /* text-neutral-700 */
+    color: var(--ew-primary-navy) !important;
     font-size: 0.875rem !important;
-    font-weight: normal !important;
-    padding: 0 0.5rem !important; /* Remove vertical padding, keep horizontal */
-    vertical-align: middle !important; /* Center align text */
+    font-weight: 600 !important;
+    padding: 0 0.5rem !important;
+    vertical-align: middle !important;
     line-height: 1.3rem !important;
   }
 
   .totals-cell-value {
     text-align: right !important;
     font-family: inherit !important;
-    font-weight: 600 !important;
-    color: #374151 !important;
+    font-variant-numeric: tabular-nums !important;
+    font-weight: 700 !important;
+    color: var(--ew-primary-navy) !important;
     font-size: 0.875rem !important;
-    padding: 0 0.5rem !important; /* Remove vertical padding, keep horizontal */
-    vertical-align: middle !important; /* Center align text */
+    padding: 0 0.5rem !important;
+    vertical-align: middle !important;
     line-height: 1.3rem !important;
   }
   
@@ -934,20 +987,26 @@ th, td {
     line-height: 2rem;
   }
   
-  /* Input fields for editable content */
+  /* Input fields for editable content — EW Inputs spec: white bg, visible border, brand-blue focus.
+     Padding lives ONLY here. Field-type rules (.field-percentage, .field-currency, .field-years,
+     .field-number) handle width + text-align + font-size only — never padding. Column separators
+     between sections live on the parent <td> via `.section-start`. Three concerns, three places. */
   .table-input {
-    height: 2rem !important; /* Reduced height for tighter spacing */
-    padding: 0.125rem 0.25rem !important; /* Ultra-tight padding for compact selector spacing */
-    background-color: hsl(var(--primary) / 0.05);
-    border: 1px solid hsl(var(--border));
+    height: 2rem !important;
+    padding-top: 0.125rem !important;
+    padding-bottom: 0.125rem !important;
+    padding-left: 0.75rem !important;
+    padding-right: 0.75rem !important;
+    background-color: #FFFFFF !important;
+    border: 1px solid var(--ew-gray-500) !important;
     outline: none;
-    font-size: 0.875rem !important; /* 14px standardized font size */
+    font-size: 0.875rem !important;
     text-align: left;
     box-sizing: border-box;
     resize: none;
     border-radius: 6px;
-    transition: all 0.2s ease;
-    color: hsl(var(--foreground));
+    transition: all 0.15s ease;
+    color: var(--ew-primary-navy);
     line-height: 1.2;
   }
 
@@ -955,16 +1014,22 @@ th, td {
   .table-input.text-right {
     text-align: right;
   }
-  
+
   .table-input:hover {
-    background-color: hsl(var(--accent));
-    border-color: hsl(var(--primary) / 0.3);
+    background-color: #FFFFFF !important;
+    border-color: var(--ew-gray-700) !important;
   }
-  
+
   .table-input:focus {
-    background-color: hsl(var(--background));
-    border-color: hsl(var(--primary));
-    box-shadow: 0 0 0 2px hsl(var(--primary) / 0.2);
+    background-color: #FFFFFF !important;
+    border-color: var(--ew-blue) !important;
+    box-shadow: 0 0 0 2px var(--ew-blue-tertiary-100) !important;
+  }
+
+  .table-input:disabled {
+    background-color: var(--ew-gray-400) !important;
+    border-color: var(--ew-gray-500) !important;
+    color: var(--ew-gray-700) !important;
   }
   
   /* Ensure Select components display full text */
@@ -974,39 +1039,40 @@ th, td {
     white-space: nowrap !important;
   }
 
-  /* GLOBAL DROPDOWN STYLING - NEVER TOUCH THIS AGAIN! */
-  /* This is the definitive solution for all table dropdowns */
+  /* Dropdown styling — matches `.table-input` editable input pattern (white bg + EW border) */
   select.table-input,
   .table-dropdown,
   select[class*="table"] {
     height: 2rem !important;
-    padding: 0 0.25rem !important; /* Ultra-tight padding for compact selector spacing */
-    background-color: hsl(var(--primary) / 0.05);
-    border: 1px solid hsl(var(--border));
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+    padding-left: 0.625rem !important;
+    padding-right: 0.625rem !important;
+    background-color: #FFFFFF !important;
+    border: 1px solid var(--ew-gray-500) !important;
     outline: none;
     font-size: 0.875rem;
     text-align: left;
     box-sizing: border-box;
     border-radius: 6px;
-    transition: all 0.2s ease;
-    color: hsl(var(--foreground)) !important;
+    transition: all 0.15s ease;
+    color: var(--ew-primary-navy) !important;
     line-height: 2rem !important;
   }
 
-  /* Hover and focus states for all dropdowns */
   select.table-input:hover,
   .table-dropdown:hover,
   select[class*="table"]:hover {
-    background-color: hsl(var(--accent));
-    border-color: hsl(var(--primary) / 0.3);
+    background-color: #FFFFFF !important;
+    border-color: var(--ew-gray-700) !important;
   }
-  
+
   select.table-input:focus,
   .table-dropdown:focus,
   select[class*="table"]:focus {
-    background-color: hsl(var(--background));
-    border-color: hsl(var(--primary));
-    box-shadow: 0 0 0 2px hsl(var(--primary) / 0.2);
+    background-color: #FFFFFF !important;
+    border-color: var(--ew-blue) !important;
+    box-shadow: 0 0 0 2px var(--ew-blue-tertiary-100) !important;
   }
 
   
@@ -1078,6 +1144,8 @@ th, td {
   }
 
   .field-currency,
+  /* Field-type rules — width + alignment + font ONLY. Padding lives on `.table-input`.
+     Column separators live on the parent <td> via `.section-start`. */
   input.field-currency,
   .table-input.field-currency,
   .field-currency.table-input {
@@ -1085,18 +1153,18 @@ th, td {
     max-width: 140px !important;
     width: 120px !important;
     text-align: right !important;
-    font-size: 0.875rem !important; /* 14px standardized font size */
+    font-size: 0.875rem !important;
   }
 
   .field-percentage,
   input.field-percentage,
   .table-input.field-percentage,
   .field-percentage.table-input {
-    min-width: 50px !important;
-    max-width: 65px !important;
-    width: 65px !important;
+    min-width: 60px !important;
+    max-width: 70px !important;
+    width: 64px !important;
     text-align: right !important;
-    font-size: 0.875rem !important; /* 14px standardized font size */
+    font-size: 0.875rem !important;
   }
 
   .field-years,
@@ -1104,10 +1172,10 @@ th, td {
   .table-input.field-years,
   .field-years.table-input {
     min-width: 80px !important;
-    max-width: 80px !important;
-    width: 80px !important;
+    max-width: 88px !important;
+    width: 88px !important;
     text-align: right !important;
-    font-size: 0.875rem !important; /* 14px standardized font size */
+    font-size: 0.875rem !important;
   }
 
   .field-number,
@@ -1117,26 +1185,29 @@ th, td {
     min-width: 70px !important;
     max-width: 120px !important;
     text-align: right !important;
-    font-size: 0.875rem !important; /* 14px standardized font size */
+    font-size: 0.875rem !important;
   }
 
-  /* Default value styling - grey text to distinguish from user-entered values */
+  /* Default value styling — distinguishes empty/placeholder values from entered ones */
   .default-value {
-    color: #9ca3af !important; /* grey-400 */
+    color: var(--ew-gray-600) !important;
+    font-weight: 400 !important;
   }
 
   .default-value:focus {
-    color: #374151 !important; /* grey-700 - darker when focused */
+    color: var(--ew-primary-navy) !important;
   }
 
-  /* Ensure entered values use normal styling */
+  /* Entered values — navy weight to feel intentional */
   .entered-value {
-    color: #374151 !important; /* grey-700 */
+    color: var(--ew-primary-navy) !important;
+    font-weight: 500 !important;
   }
 
-  /* GLOBAL CALCULATED FIELD STYLING - Apply to all calculated/readonly fields */
+  /* GLOBAL CALCULATED FIELD STYLING — EW pattern: flat tint background, no border */
+  /* Border = editable. Tint = calculated. Two clear states. */
   .calculated-field {
-    background-color: transparent !important;
+    background-color: var(--ew-calculated-bg) !important;
     border: 1px solid transparent !important;
     cursor: default !important;
     user-select: none !important;
@@ -1145,41 +1216,43 @@ th, td {
     -ms-user-select: none !important;
     outline: none !important;
     box-shadow: none !important;
-    color: #374151 !important; /* grey-700 - same as entered values */
-    padding: 0.25rem 0.5rem !important; /* Compact padding for consistent table row height */
+    color: var(--ew-primary-navy) !important;
+    padding: 0.25rem 0.5rem !important;
     font-size: 0.875rem !important;
+    font-variant-numeric: tabular-nums !important;
     text-align: right !important;
     height: auto !important;
     width: auto !important;
     box-sizing: border-box !important;
     line-height: 1.2 !important;
+    border-radius: 6px !important;
   }
 
   /* Higher specificity override for table contexts */
   table td.calculated-field,
   table .calculated-field,
   td .calculated-field {
-    padding: 0.25rem 0.5rem !important; /* Consistent padding to match other table inputs */
+    padding: 0.25rem 0.5rem !important;
   }
 
   .calculated-field:hover {
-    background-color: transparent !important;
+    background-color: var(--ew-calculated-bg) !important;
     border: 1px solid transparent !important;
     box-shadow: none !important;
   }
 
   .calculated-field:focus {
-    background-color: transparent !important;
+    background-color: var(--ew-calculated-bg) !important;
     border: 1px solid transparent !important;
     box-shadow: none !important;
     outline: none !important;
   }
 
   .calculated-field:disabled {
-    background-color: transparent !important;
+    background-color: var(--ew-calculated-bg) !important;
     border: 1px solid transparent !important;
     opacity: 1 !important;
-    color: #374151 !important;
+    color: var(--ew-primary-navy) !important;
   }
 
   /* CENTRALIZED TABLE HEADER ADD BUTTON STYLING */
@@ -1256,36 +1329,68 @@ th, td {
     text-align: left !important;
   }
 
-  /* Section borders - unified style for all table elements */
-  /* Section start borders */
-  .section-start {
-    border-left: 1px solid #d1d5db !important;
+  /* ============================================================ */
+  /* Vertical section separators — ONE rule, ONE token.            */
+  /* Used on the first cell of each column group to delimit        */
+  /* sections (Overview / Fund Details / Pension Income / ...).    */
+  /* Padding is inherited from the global `table th, table td`     */
+  /* rule above — do not redeclare padding here.                   */
+  /* ============================================================ */
+  .section-start,
+  th[rowSpan].section-start,
+  td[rowSpan].section-start {
+    border-left: 1px solid var(--ew-border) !important;
     border-right: none !important;
     border-top: none !important;
     border-bottom: none !important;
-    padding-left: 6px !important;
-    padding-right: 6px !important;
   }
-  
-  /* Add extra spacing around section borders by increasing base table cell padding */
-  table th,
-  table td {
-    padding-left: 0.375rem !important;
-    padding-right: 0.375rem !important;
+
+  .section-end {
+    border-right: 1px solid var(--ew-border) !important;
   }
-  
-  /* Special handling for cells with rowSpan */
-  th[rowSpan].section-start,
-  td[rowSpan].section-start {
-    border-left: 1px solid #d1d5db !important;
-  }
-  
-  /* Remove left border ONLY from Actions column (first row, first cell with rowSpan) */
+
+  /* Strip the leftmost border so the table edge isn't double-bordered */
   thead tr:first-child th:first-child.section-start[rowSpan],
   tbody tr td:first-child.section-start,
   tfoot tr td:first-child.section-start {
     border-left: none !important;
   }
+
+  /* Consistent base table cell padding */
+  table th,
+  table td {
+    padding-left: 0.625rem !important;
+    padding-right: 0.625rem !important;
+  }
+
+  /* Slightly taller tbody rows for breathing room */
+  table tbody td {
+    padding-top: 0.625rem !important;
+    padding-bottom: 0.625rem !important;
+  }
+
+  /* GLOBAL: all table cell content sits middle-aligned vertically.
+     Beats Tailwind utilities like `.align-top` because of !important. Single source of truth. */
+  table thead th,
+  table tbody td,
+  table tfoot td {
+    vertical-align: middle !important;
+  }
+
+  /* GLOBAL: Radix Switch in checked state uses EW brand blue. Single source of truth
+     so per-component Tailwind classes (e.g. `data-[state=checked]:bg-blue-600`) become unnecessary. */
+  [role="switch"][data-state="checked"] {
+    background-color: var(--ew-blue) !important;
+  }
+
+  /* Input width utilities — replaces inline `style={{ width: 'fit-content', minWidth: 'XXpx' }}`.
+     One name per width keeps form layouts predictable across detail forms. */
+  .w-input-xs   { width: auto !important; min-width:  80px !important; }
+  .w-input-sm   { width: auto !important; min-width: 100px !important; }
+  .w-input-md   { width: auto !important; min-width: 120px !important; }
+  .w-input-lg   { width: auto !important; min-width: 150px !important; }
+  .w-input-xl   { width: auto !important; min-width: 200px !important; }
+  .w-input-2xl  { width: auto !important; min-width: 300px !important; }
 
   /* CRITICAL: Row borders with absolute maximum specificity - no conflicts allowed */
   html body table tbody tr {
@@ -1313,14 +1418,6 @@ th, td {
     border-bottom: 1px solid #e5e7eb !important;
   }
   
-  /* Section end borders for right side separators */
-  thead th.section-end,
-  tbody td.section-end,
-  tfoot td.section-end,
-  th.section-end,
-  td.section-end {
-    border-right: 2px solid #9ca3af !important;
-  }
 }
 
 /* Custom input styling for inline editing */

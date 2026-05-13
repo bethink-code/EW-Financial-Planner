@@ -343,10 +343,7 @@ function LiabilitiesTable({ viewMode, searchTerm, onShowCategoryDialog, onAddLia
             <td className="totals-cell-label section-start"></td>
             <td className="totals-cell-label text-right section-start">Totals</td>
             <td className="totals-cell-value section-start text-right">R {totals.amount.toLocaleString()}</td>
-            <td className="totals-cell-label section-start"></td>
-            <td className="totals-cell-label"></td>
-            <td className="totals-cell-label"></td>
-            <td className="totals-cell-label"></td>
+            <td className="totals-cell-label section-start" colSpan={clientEntities.length}></td>
             <td className="totals-cell-value section-start text-right">R {totals.estate.toLocaleString()}</td>
             <td className="totals-cell-value text-right">R {totals.others.toLocaleString()}</td>
             <td className="totals-cell-value text-right">R {totals.client.toLocaleString()}</td>

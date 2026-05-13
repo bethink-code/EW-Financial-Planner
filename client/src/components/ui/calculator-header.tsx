@@ -52,9 +52,12 @@ export function CalculatorHeader({
                 onClick={onAddItem}
                 disabled={isAddingItem}
                 size="sm"
-                className="h-10 px-4 bg-white text-gray-700 border border-neutral-200 hover:bg-gray-50 hover:text-gray-900 font-normal"
+                className="h-10 px-4 font-semibold text-white border-0 transition-colors disabled:opacity-60"
+                style={{ backgroundColor: "var(--ew-blue)" }}
+                onMouseEnter={(e) => { (e.currentTarget as HTMLButtonElement).style.backgroundColor = "var(--ew-blue-pressed)"; }}
+                onMouseLeave={(e) => { (e.currentTarget as HTMLButtonElement).style.backgroundColor = "var(--ew-blue)"; }}
               >
-                {isAddingItem ?"Adding..." : addButtonText}
+                {isAddingItem ? "Adding..." : addButtonText}
               </Button>
             )}
             

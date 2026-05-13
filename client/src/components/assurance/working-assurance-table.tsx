@@ -856,40 +856,46 @@ export function AssuranceTable({ viewMode = 'table', onAddPolicy }: AssuranceTab
             })}
           </tbody>
           
-          {/* Totals Footer - Match exact table structure */}
+          {/* Totals Footer — 19 cols to match header (EntityOwnerSelector and EntityBeneficiarySelector each contribute 3 cells in the body) */}
           <tfoot>
             <tr>
-              {/* Actions column */}
+              {/* col 1 — Actions (+) */}
               <td className="totals-cell-label"></td>
-              {/* Description column */}
+              {/* col 2 — Description */}
               <td className="totals-cell-label"></td>
-              {/* Owner column */}
+              {/* col 3 — Actions (owner selector) */}
               <td className="totals-cell-label"></td>
-              {/* Life Assured column */}
+              {/* col 4 — Owner Name */}
+              <td className="totals-cell-label"></td>
+              {/* col 5 — Ownership % */}
+              <td className="totals-cell-label"></td>
+              {/* col 6 — Life Assured (Totals label) */}
               <td className="totals-cell-label text-right">Totals</td>
-              {/* Death Benefit column */}
+              {/* col 7 — Death Benefit value */}
               <td className="totals-cell-value">R {totals.deathBenefit.toLocaleString()}</td>
-              {/* Beneficiary column */}
+              {/* col 8 — Actions (beneficiary selector) */}
               <td className="totals-cell-label"></td>
-              {/* Benefit Split column */}
+              {/* col 9 — Beneficiary Name */}
+              <td className="totals-cell-label"></td>
+              {/* col 10 — Benefit Split value */}
               <td className="totals-cell-value">R {totals.benefitSplit.toLocaleString()}</td>
-              {/* Amount column */}
+              {/* col 11 — Amount value */}
               <td className="totals-cell-value">R {totals.amount.toLocaleString()}</td>
-              {/* Toggle column */}
+              {/* col 12 — Toggle */}
               <td className="totals-cell-label"></td>
-              {/* Years/% column */}
+              {/* col 13 — Years/% */}
               <td className="totals-cell-label"></td>
-              {/* Buy/Sell column */}
+              {/* col 14 — Buy/Sell */}
               <td className="totals-cell-label"></td>
-              {/* Key Man column */}
+              {/* col 15 — Key Man */}
               <td className="totals-cell-label"></td>
-              {/* Excluded Estate Duty column */}
+              {/* col 16 — Excluded Estate Duty */}
               <td className="totals-cell-label"></td>
-              {/* Excluded Provisions column */}
+              {/* col 17 — Excluded Provisions */}
               <td className="totals-cell-label"></td>
-              {/* Premiums by Others column */}
+              {/* col 18 — Premiums by Others value */}
               <td className="totals-cell-value">R {totals.premiumsByOthers.toLocaleString()}</td>
-              {/* Collateral Session column */}
+              {/* col 19 — Collateral Session value */}
               <td className="totals-cell-value">R {totals.collateralSession.toLocaleString()}</td>
             </tr>
           </tfoot>

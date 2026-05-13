@@ -9,6 +9,7 @@ import { useDebouncedUpdate } from '@/hooks/use-debounced-update';
 import { formatTextValue, getValueClass, handleDefaultValueFocus } from '@/lib/formatting';
 import { useLoading } from '@/contexts/loading-context';
 import { Button } from '@/components/ui/button';
+import { DetailFormHeader } from '@/components/common/detail-form-header';
 import { Plus } from 'lucide-react';
 
 interface IncomeProvisionsHybridTableProps {
@@ -171,30 +172,13 @@ export function IncomeProvisionsHybridTable({ onAddProvision, searchTerm = "" }:
   const detailForms = selectedProvision ? (
     <GroupedDetailForm>
       <div key={selectedProvision.id}>
-        {/* Header with Actions */}
-        <div className="flex justify-between items-start mb-6">
-          <h2 className="text-lg font-semibold text-neutral-800">
-            {selectedProvision.description || 'Untitled Provision'}
-          </h2>
-          <div className="flex gap-2">
-            <Button 
-              variant="outline" 
-              size="sm"
-              onClick={() => handleDuplicate(selectedProvision)}
-              disabled={isUpdating}
-            >
-              Duplicate
-            </Button>
-            <Button 
-              variant="outline" 
-              size="sm"
-              onClick={() => handleDelete(selectedProvision.id)}
-              disabled={isUpdating}
-            >
-              Delete
-            </Button>
-          </div>
-        </div>
+        <DetailFormHeader
+          title={selectedProvision.description}
+          emptyTitle="Untitled Provision"
+          onDuplicate={() => handleDuplicate(selectedProvision)}
+          onDelete={() => handleDelete(selectedProvision.id)}
+          disabled={isUpdating}
+        />
 
         {/* Group 1: Overview */}
         <FieldGroup title="Overview">

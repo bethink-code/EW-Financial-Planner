@@ -76,9 +76,9 @@ export default function EntityOwnerSelector({
     // Return empty table cells for rows beyond owners count
     return (
       <>
-        <td className="px-0.25 py-0.5 align-top border-r border-neutral-200" style={{ width: '60px' }}></td>
-        <td className="px-0.25 py-0.5 align-top border-r border-neutral-200" style={{ width: '300px' }}></td>
-        <td className="px-0.25 py-0.5 align-top border-r border-neutral-200" style={{ width: '80px' }}></td>
+        <td className="py-0.5 align-top" style={{ width: '60px' }}></td>
+        <td className="py-0.5 align-top" style={{ width: '300px' }}></td>
+        <td className="py-0.5 align-top" style={{ width: '80px' }}></td>
       </>
     );
   }
@@ -105,14 +105,14 @@ export default function EntityOwnerSelector({
   return (
     <>
       {/* Actions Column */}
-      <td className="pr-0.25 pl-0.25 py-0.5 align-top border-r border-neutral-200" style={{ width: '60px' }}>
+      <td className="py-0.5 align-top" style={{ width: '60px' }}>
         <div className="pt-0.5">
           {actionButton}
         </div>
       </td>
-      
+
       {/* Owner Column */}
-      <td className="entity-tight-spacing py-0.5 align-top border-r border-neutral-200">
+      <td className="py-0.5 align-top">
         <select
           value={currentOwner}
           onChange={(e) => handleOwnerSelect(e.target.value, ownerIndex)}
@@ -129,12 +129,12 @@ export default function EntityOwnerSelector({
       </td>
 
       {/* Ownership % Column */}
-      <td className="entity-tight-spacing py-0.5 align-top border-r border-neutral-200" style={{ width: '80px' }}>
+      <td className="py-0.5 align-top" style={{ width: '90px' }}>
         <input
           type="text"
           defaultValue={currentPercentage}
           placeholder="0%"
-          className={`table-input ${getFieldClass('percentage')} w-16 text-center ${getValueClass(currentPercentage, 'percentage')} ${
+          className={`table-input ${getFieldClass('percentage')} ${getValueClass(currentPercentage, 'percentage')} ${
             isInvalidTotal ? 'border-red-500 bg-red-50' : ''
           }`}
           onFocus={(e) => {

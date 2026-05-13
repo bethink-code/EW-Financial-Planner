@@ -9,6 +9,7 @@ import { useDebouncedUpdate } from '@/hooks/use-debounced-update';
 import { formatTextValue, getValueClass, handleDefaultValueFocus } from '@/lib/formatting';
 import { useLoading } from '@/contexts/loading-context';
 import { Button } from '@/components/ui/button';
+import { DetailFormHeader } from '@/components/common/detail-form-header';
 import { Plus } from 'lucide-react';
 
 interface LumpSumHybridTableProps {
@@ -152,30 +153,13 @@ export function LumpSumHybridTable({ onAddBequest }: LumpSumHybridTableProps) {
   const detailForms = selectedBequest ? (
     <GroupedDetailForm>
       <div key={selectedBequest.id}>
-        {/* Header with Actions */}
-        <div className="flex justify-between items-start mb-6">
-          <h2 className="text-lg font-semibold text-neutral-800">
-            {selectedBequest.description || 'Untitled Bequest'}
-          </h2>
-          <div className="flex gap-2">
-            <Button 
-              variant="outline" 
-              size="sm"
-              onClick={() => handleDuplicate(selectedBequest)}
-              disabled={isUpdating}
-            >
-              Duplicate
-            </Button>
-            <Button 
-              variant="outline" 
-              size="sm"
-              onClick={() => handleDelete(selectedBequest.id)}
-              disabled={isUpdating}
-            >
-              Delete
-            </Button>
-          </div>
-        </div>
+        <DetailFormHeader
+          title={selectedBequest.description}
+          emptyTitle="Untitled Bequest"
+          onDuplicate={() => handleDuplicate(selectedBequest)}
+          onDelete={() => handleDelete(selectedBequest.id)}
+          disabled={isUpdating}
+        />
 
         {/* Group 1: Overview */}
         <FieldGroup title="Overview">
@@ -258,14 +242,9 @@ export function LumpSumHybridTable({ onAddBequest }: LumpSumHybridTableProps) {
           <FieldGroup title="Calculation">
             <div className="flex gap-3">
               <FormField label="Value at Death">
-                <input
-                  type="text"
-                  defaultValue={selectedBequest.valueAtDeath}
-                  className="calculated-field"
-                  style={{ width: 'fit-content', minWidth: '100px' }}
-                  readOnly
-                  disabled
-                />
+                <div className="calculated-field" style={{ minWidth: "100px" }}>
+                  {selectedBequest.valueAtDeath}
+                </div>
               </FormField>
             </div>
           </FieldGroup>

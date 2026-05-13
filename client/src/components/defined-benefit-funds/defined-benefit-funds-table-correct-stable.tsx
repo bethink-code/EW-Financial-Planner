@@ -328,7 +328,7 @@ export default function DefinedBenefitFundsTable({ onAddFund }: DefinedBenefitFu
                 />
               )}
             </th>
-            <th className="section-start" colSpan={3}>Overview</th>
+            <th className="section-start" colSpan={4}>Overview</th>
             <th className="section-start" colSpan={4}>Fund Details</th>
             <th className="section-start" colSpan={3}>Pension Income at Death</th>
           </tr>
@@ -530,7 +530,7 @@ export default function DefinedBenefitFundsTable({ onAddFund }: DefinedBenefitFu
         {/* Totals Footer */}
         <tfoot>
           <tr>
-            <td className="totals-cell-label text-right" colSpan={7}>Totals</td>
+            <td className="totals-cell-label text-right" colSpan={6}>Totals</td>
             <td className="totals-cell-value">R {totals.finalMonthlySalary.toLocaleString()}</td>
             <td className="totals-cell-value">R {totals.deathLumpSum.toLocaleString()}</td>
             <td className="totals-cell-value">R {totals.additionalTaxFreeAmount.toLocaleString()}</td>

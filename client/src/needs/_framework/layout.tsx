@@ -41,6 +41,14 @@ export function NeedLayout({ config, children }: NeedLayoutProps) {
   });
   const planName = plan?.name ?? "Financial Plan";
 
+  // Plan-scoped need list — only the needs actually attached to this plan appear in the dropdown.
+  const { data: planWithNeeds } = useQuery<{ needs: { key: string }[] }>({
+    queryKey: [`/api/financial-plans/${PLAN_ID}/with-needs`],
+    queryFn: () => fetch(`/api/financial-plans/${PLAN_ID}/with-needs`).then(r => r.json()),
+  });
+  const planNeedKeys = new Set((planWithNeeds?.needs ?? []).map(n => n.key));
+  const dropdownNeeds = allNeeds.filter(n => planNeedKeys.has(n.id));
+
   const currentStep = findCurrentStep(config, location);
 
   return (
@@ -57,8 +65,8 @@ export function NeedLayout({ config, children }: NeedLayoutProps) {
             <div>
               <span className="text-xs text-gray-500 uppercase tracking-wider font-medium block mb-1">FINANCIAL PLAN</span>
               <div className="flex items-center gap-2">
-                <button className="flex items-center pl-4 pr-1 text-sm font-medium h-10 rounded-[6px] bg-[#F5F1E8] text-gray-700 hover:bg-[#F0EBE0]">
-                  <span className="flex-1">{planName}</span>
+                <button className="inline-flex items-center px-4 text-sm font-medium h-10 rounded-[6px] bg-[#F5F1E8] text-gray-700 hover:bg-[#F0EBE0] whitespace-nowrap">
+                  {planName}
                 </button>
                 <Button variant="ghost" onClick={() => setLocation("/")} className="btn-ghost px-2 text-sm h-10">
                   Back to all plans
@@ -76,20 +84,26 @@ export function NeedLayout({ config, children }: NeedLayoutProps) {
                   </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="start" className="dropdown-menu-content w-72">
-                  {allNeeds.map(need => (
-                    <DropdownMenuItem key={need.id} className="dropdown-menu-item" asChild>
-                      <Link href={need.path} onClick={() => setNeedDropdownOpen(false)}>
-                        <span
-                          className={cn(
-                            need.hasContent ? "" : "text-gray-400",
-                            need.id === config.id && "text-[#F97415] font-medium",
-                          )}
-                        >
-                          {need.label}
-                        </span>
-                      </Link>
+                  {dropdownNeeds.length === 0 ? (
+                    <DropdownMenuItem disabled className="dropdown-menu-item">
+                      <span className="text-gray-400">No needs in this plan</span>
                     </DropdownMenuItem>
-                  ))}
+                  ) : (
+                    dropdownNeeds.map(need => (
+                      <DropdownMenuItem key={need.id} className="dropdown-menu-item" asChild>
+                        <Link href={need.path} onClick={() => setNeedDropdownOpen(false)}>
+                          <span
+                            className={cn(
+                              need.hasContent ? "" : "text-gray-400",
+                              need.id === config.id && "text-[#F97415] font-medium",
+                            )}
+                          >
+                            {need.label}
+                          </span>
+                        </Link>
+                      </DropdownMenuItem>
+                    ))
+                  )}
                 </DropdownMenuContent>
               </DropdownMenu>
             </div>
