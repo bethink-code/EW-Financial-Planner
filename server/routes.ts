@@ -21,6 +21,7 @@ import { registerRetirementParametersRoutes } from "./routes/retirement-paramete
 import { registerFutureInflowRoutes } from "./routes/future-inflows";
 import { registerRetirementLumpSumNeedRoutes } from "./routes/retirement-lump-sum-needs";
 import { registerRetirementProjectionRoutes } from "./routes/retirement-projection";
+import { registerDelProjectionRoutes } from "./routes/del-projection";
 
 export async function registerRoutes(app: Express): Promise<Server> {
   registerEntityRoutes(app);
@@ -43,6 +44,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   registerFutureInflowRoutes(app);
   registerRetirementLumpSumNeedRoutes(app);
   registerRetirementProjectionRoutes(app);
+  registerDelProjectionRoutes(app);
 
   await storage.initializeDefaultNeeds();
 
