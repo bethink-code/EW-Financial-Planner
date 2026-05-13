@@ -1,4 +1,5 @@
 import { useState, useCallback } from 'react';
+import { useLocation } from 'wouter';
 import { useMutation } from '@tanstack/react-query';
 import { VoluntaryInvestment } from '@shared/schema';
 import { queryClient } from '@/lib/queryClient';
@@ -8,6 +9,7 @@ import { formatCurrencyValue, formatPercentageValue, getValueClass, handleDefaul
 import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
+import { DetailFormHeader } from '@/components/common/detail-form-header';
 
 interface VoluntaryInvestmentDetailFormProps {
   investment: VoluntaryInvestment;
@@ -17,6 +19,8 @@ interface VoluntaryInvestmentDetailFormProps {
 
 export function VoluntaryInvestmentDetailForm({ investment, onDelete, onDuplicate }: VoluntaryInvestmentDetailFormProps) {
   const [isUpdating, setIsUpdating] = useState(false);
+  const [location] = useLocation();
+  const showRetirementProjection = location.startsWith('/needs/retirement');
 
   // Update mutation
   const updateMutation = useMutation({
@@ -43,9 +47,9 @@ export function VoluntaryInvestmentDetailForm({ investment, onDelete, onDuplicat
 
   const handleInputBlur = useCallback((field: keyof VoluntaryInvestment, value: string) => {
     let formattedValue: string;
-    if (field === 'liquidationPercentage') {
+    if (['liquidationPercentage', 'contributionEscalation', 'growthRate', 'incomeIncrease'].includes(field)) {
       formattedValue = formatPercentageValue(value);
-    } else if (['baseCost', 'marketValue', 'spouse', 'others'].includes(field)) {
+    } else if (['baseCost', 'marketValue', 'spouse', 'others', 'monthlyContribution'].includes(field)) {
       formattedValue = formatCurrencyValue(value);
     } else {
       formattedValue = value;
@@ -90,33 +94,14 @@ export function VoluntaryInvestmentDetailForm({ investment, onDelete, onDuplicat
   }, [handleUpdate]);
 
   return (
-    <div className="space-y-12 p-6 bg-white">
-      {/* Header with title and actions */}
-      <div className="flex justify-between items-start">
-        <h2 className="text-lg font-semibold text-neutral-800">
-          {investment.description || 'Untitled Investment'}
-        </h2>
-        <div className="flex gap-2">
-          {onDuplicate && (
-            <Button 
-              variant="outline" 
-              size="sm"
-              onClick={() => onDuplicate(investment)}
-              disabled={isUpdating}
-            >
-              Duplicate
-            </Button>
-          )}
-          <Button 
-            variant="outline" 
-            size="sm"
-            onClick={() => onDelete(investment.id)}
-            disabled={isUpdating}
-          >
-            Delete
-          </Button>
-        </div>
-      </div>
+    <div className="space-y-10 p-6 bg-white">
+      <DetailFormHeader
+        title={investment.description}
+        emptyTitle="Untitled Investment"
+        onDuplicate={onDuplicate ? () => onDuplicate(investment) : undefined}
+        onDelete={() => onDelete(investment.id)}
+        disabled={isUpdating}
+      />
 
       {/* Group 1: Overview */}
       <FieldGroup title="Overview">
@@ -138,21 +123,21 @@ export function VoluntaryInvestmentDetailForm({ investment, onDelete, onDuplicat
           <FormField label="Owners & Ownership Percentages">
             <table className="border-collapse" style={{ tableLayout: 'fixed', width: 'fit-content', minWidth: '380px' }}>
               <thead>
-                <tr className="bg-neutral-50">
-                  <th className="table-header-12 px-1 py-2 border border-neutral-200 text-center font-normal text-neutral-600" style={{ width: '60px' }}>
+                <tr>
+                  <th className="text-center" style={{ width: '60px' }}>
                     ACTIONS
                   </th>
-                  <th className="table-header-12 px-1 py-2 border border-neutral-200 text-left font-normal text-neutral-600" style={{ width: '200px' }}>
+                  <th className="text-left" style={{ width: '200px' }}>
                     OWNER NAME
                   </th>
-                  <th className="table-header-12 px-1 py-2 border border-neutral-200 text-right font-normal text-neutral-600" style={{ width: '120px' }}>
+                  <th className="text-right" style={{ width: '120px' }}>
                     OWNERSHIP %
                   </th>
                 </tr>
               </thead>
               <tbody>
                 {Array.from({ length: Math.max(investment.owners?.length || 1, 1) }, (_, rowIndex) => (
-                  <tr key={`owner-table-row-${rowIndex}`} className="border-b border-neutral-200 bg-white">
+                  <tr key={`owner-table-row-${rowIndex}`}>
                     <EntityOwnerSelector
                       policyId={investment.id}
                       owners={investment.owners || []}
@@ -262,7 +247,6 @@ export function VoluntaryInvestmentDetailForm({ investment, onDelete, onDuplicat
                   checked={investment.excludedFromJointEstate}
                   onCheckedChange={(checked) => handleBooleanChange('excludedFromJointEstate', checked)}
                   disabled={isUpdating}
-                  className="data-[state=checked]:bg-blue-600"
                 />
                 <Label className="text-sm font-medium text-gray-700">
                   {investment.excludedFromJointEstate ? 'Excluded' : 'Included'}
@@ -276,7 +260,6 @@ export function VoluntaryInvestmentDetailForm({ investment, onDelete, onDuplicat
                   checked={investment.excludedFromEstateDuty}
                   onCheckedChange={(checked) => handleBooleanChange('excludedFromEstateDuty', checked)}
                   disabled={isUpdating}
-                  className="data-[state=checked]:bg-blue-600"
                 />
                 <Label className="text-sm font-medium text-gray-700">
                   {investment.excludedFromEstateDuty ? 'Excluded' : 'Included'}
@@ -290,7 +273,6 @@ export function VoluntaryInvestmentDetailForm({ investment, onDelete, onDuplicat
                   checked={investment.excludedFromCGT}
                   onCheckedChange={(checked) => handleBooleanChange('excludedFromCGT', checked)}
                   disabled={isUpdating}
-                  className="data-[state=checked]:bg-blue-600"
                 />
                 <Label className="text-sm font-medium text-gray-700">
                   {investment.excludedFromCGT ? 'Excluded' : 'Included'}
@@ -304,7 +286,6 @@ export function VoluntaryInvestmentDetailForm({ investment, onDelete, onDuplicat
                   checked={investment.excludedFromExecutorsFees}
                   onCheckedChange={(checked) => handleBooleanChange('excludedFromExecutorsFees', checked)}
                   disabled={isUpdating}
-                  className="data-[state=checked]:bg-blue-600"
                 />
                 <Label className="text-sm font-medium text-gray-700">
                   {investment.excludedFromExecutorsFees ? 'Excluded' : 'Included'}
@@ -314,6 +295,69 @@ export function VoluntaryInvestmentDetailForm({ investment, onDelete, onDuplicat
           </div>
         </div>
       </FieldGroup>
+
+      {/* Group 5: Retirement Projection — only rendered inside the Retirement need flow */}
+      {showRetirementProjection && (
+      <FieldGroup title="Retirement Projection">
+        <div className="grid grid-cols-2 gap-x-3 gap-y-4" style={{ width: 'fit-content' }}>
+          <FormField label="Monthly Contribution">
+            <input
+              key={`monthlyContribution-${investment.id}`}
+              type="text"
+              defaultValue={investment.monthlyContribution || 'R 0'}
+              placeholder="R 0"
+              className={`table-input ${getValueClass(investment.monthlyContribution || 'R 0', 'currency')}`}
+              style={{ width: 'fit-content', minWidth: '120px' }}
+              onFocus={handleDefaultValueFocus}
+              onBlur={(e) => handleInputBlur('monthlyContribution', e.target.value)}
+              disabled={isUpdating}
+            />
+          </FormField>
+
+          <FormField label="Contribution Escalation">
+            <input
+              key={`contributionEscalation-${investment.id}`}
+              type="text"
+              defaultValue={investment.contributionEscalation || '0%'}
+              placeholder="0%"
+              className={`table-input ${getValueClass(investment.contributionEscalation || '0%', 'percentage')}`}
+              style={{ width: 'fit-content', minWidth: '120px' }}
+              onFocus={handleDefaultValueFocus}
+              onBlur={(e) => handleInputBlur('contributionEscalation', e.target.value)}
+              disabled={isUpdating}
+            />
+          </FormField>
+
+          <FormField label="Growth Rate">
+            <input
+              key={`growthRate-${investment.id}`}
+              type="text"
+              defaultValue={investment.growthRate || '10%'}
+              placeholder="10%"
+              className={`table-input ${getValueClass(investment.growthRate || '10%', 'percentage')}`}
+              style={{ width: 'fit-content', minWidth: '120px' }}
+              onFocus={handleDefaultValueFocus}
+              onBlur={(e) => handleInputBlur('growthRate', e.target.value)}
+              disabled={isUpdating}
+            />
+          </FormField>
+
+          <FormField label="Income Increase at Retirement">
+            <input
+              key={`incomeIncrease-${investment.id}`}
+              type="text"
+              defaultValue={investment.incomeIncrease || '0%'}
+              placeholder="0%"
+              className={`table-input ${getValueClass(investment.incomeIncrease || '0%', 'percentage')}`}
+              style={{ width: 'fit-content', minWidth: '120px' }}
+              onFocus={handleDefaultValueFocus}
+              onBlur={(e) => handleInputBlur('incomeIncrease', e.target.value)}
+              disabled={isUpdating}
+            />
+          </FormField>
+        </div>
+      </FieldGroup>
+      )}
     </div>
   );
 }

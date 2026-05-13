@@ -1,4 +1,5 @@
 import { useState, useCallback } from 'react';
+import { useLocation } from 'wouter';
 import { useMutation } from '@tanstack/react-query';
 import { DefinedBenefitFund } from '@shared/schema';
 import { queryClient } from '@/lib/queryClient';
@@ -9,6 +10,7 @@ import { getFieldClass } from '@/lib/field-types';
 import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
+import { DetailFormHeader } from '@/components/common/detail-form-header';
 
 interface DefinedBenefitFundDetailFormProps {
   fund: DefinedBenefitFund;
@@ -18,6 +20,8 @@ interface DefinedBenefitFundDetailFormProps {
 
 export function DefinedBenefitFundDetailForm({ fund, onDelete, onDuplicate }: DefinedBenefitFundDetailFormProps) {
   const [isUpdating, setIsUpdating] = useState(false);
+  const [location] = useLocation();
+  const showRetirementProjection = location.startsWith('/needs/retirement');
 
   // Update mutation
   const updateMutation = useMutation({
@@ -44,7 +48,7 @@ export function DefinedBenefitFundDetailForm({ fund, onDelete, onDuplicate }: De
 
   const handleInputBlur = useCallback((field: keyof DefinedBenefitFund, value: string) => {
     let formattedValue: string;
-    if (field === 'pensionIncomeIncrease') {
+    if (field === 'pensionIncomeIncrease' || field === 'growthRate') {
       formattedValue = formatPercentageValue(value);
     } else if (['finalMonthlySalary', 'deathLumpSum', 'additionalTaxFreeAmount', 'pensionIncomeAmount'].includes(field)) {
       formattedValue = formatCurrencyValue(value);
@@ -93,33 +97,14 @@ export function DefinedBenefitFundDetailForm({ fund, onDelete, onDuplicate }: De
   }, [handleUpdate]);
 
   return (
-    <div className="space-y-12 p-6 bg-white">
-      {/* Header with title and actions */}
-      <div className="flex justify-between items-start">
-        <h2 className="text-lg font-semibold text-neutral-800">
-          {fund.description || 'Untitled Fund'}
-        </h2>
-        <div className="flex gap-2">
-          {onDuplicate && (
-            <Button 
-              variant="outline" 
-              size="sm"
-              onClick={() => onDuplicate(fund)}
-              disabled={isUpdating}
-            >
-              Duplicate
-            </Button>
-          )}
-          <Button 
-            variant="outline" 
-            size="sm"
-            onClick={() => onDelete(fund.id)}
-            disabled={isUpdating}
-          >
-            Delete
-          </Button>
-        </div>
-      </div>
+    <div className="space-y-10 p-6 bg-white">
+      <DetailFormHeader
+        title={fund.description}
+        emptyTitle="Untitled Fund"
+        onDuplicate={onDuplicate ? () => onDuplicate(fund) : undefined}
+        onDelete={() => onDelete(fund.id)}
+        disabled={isUpdating}
+      />
 
       {/* Group 1: Overview */}
       <FieldGroup title="Overview">
@@ -140,21 +125,21 @@ export function DefinedBenefitFundDetailForm({ fund, onDelete, onDuplicate }: De
           <FormField label="Owners & Ownership Percentages">
             <table className="border-collapse" style={{ tableLayout: 'fixed', width: 'fit-content', minWidth: '380px' }}>
               <thead>
-                <tr className="bg-neutral-50">
-                  <th className="table-header-12 px-1 py-2 border border-neutral-200 text-center font-normal text-neutral-600" style={{ width: '60px' }}>
+                <tr>
+                  <th className="text-center" style={{ width: '60px' }}>
                     ACTIONS
                   </th>
-                  <th className="table-header-12 px-1 py-2 border border-neutral-200 text-left font-normal text-neutral-600" style={{ width: '200px' }}>
+                  <th className="text-left" style={{ width: '200px' }}>
                     OWNER NAME
                   </th>
-                  <th className="table-header-12 px-1 py-2 border border-neutral-200 text-right font-normal text-neutral-600" style={{ width: '120px' }}>
+                  <th className="text-right" style={{ width: '120px' }}>
                     OWNERSHIP %
                   </th>
                 </tr>
               </thead>
               <tbody>
                 {Array.from({ length: Math.max(fund.owners?.length || 1, 1) }, (_, rowIndex) => (
-                  <tr key={`owner-table-row-${rowIndex}`} className="border-b border-neutral-200 bg-white">
+                  <tr key={`owner-table-row-${rowIndex}`}>
                     <EntityOwnerSelector
                       policyId={fund.id}
                       owners={fund.owners || []}
@@ -270,7 +255,6 @@ export function DefinedBenefitFundDetailForm({ fund, onDelete, onDuplicate }: De
                 checked={fund.pensionIncomeCheckbox}
                 onCheckedChange={handleToggleChange}
                 disabled={isUpdating}
-                className="data-[state=checked]:bg-blue-600"
               />
               <Label htmlFor="pension-toggle" className="text-sm font-medium text-gray-700">
                 {fund.pensionIncomeCheckbox ? 'Years Mode' : 'Percentage Mode'}
@@ -294,6 +278,24 @@ export function DefinedBenefitFundDetailForm({ fund, onDelete, onDuplicate }: De
           </div>
         </div>
       </FieldGroup>
+
+      {/* Group 4: Retirement Projection — only rendered inside the Retirement need flow */}
+      {showRetirementProjection && (
+      <FieldGroup title="Retirement Projection">
+        <FormField label="Growth Rate">
+          <input
+            type="text"
+            defaultValue={fund.growthRate || '10%'}
+            placeholder="10%"
+            className={`table-input ${getValueClass(fund.growthRate || '10%', 'percentage')}`}
+            style={{ width: 'fit-content', minWidth: '120px' }}
+            onFocus={handleDefaultValueFocus}
+            onBlur={(e) => handleInputBlur('growthRate', e.target.value)}
+            disabled={isUpdating}
+          />
+        </FormField>
+      </FieldGroup>
+      )}
     </div>
   );
 }

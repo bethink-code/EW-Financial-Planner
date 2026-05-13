@@ -9,6 +9,7 @@ import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Button } from '@/components/ui/button';
+import { DetailFormHeader } from '@/components/common/detail-form-header';
 
 interface LiabilityDetailFormProps {
   liability: Liabilities;
@@ -82,33 +83,14 @@ export function LiabilityDetailForm({ liability, onDelete, onDuplicate }: Liabil
   const ownership = useMemo(() => parseEntityOwnership(liability.entityOwnership), [liability.entityOwnership]);
 
   return (
-    <div className="space-y-12 p-6 bg-white">
-      {/* Header with title and actions */}
-      <div className="flex justify-between items-start">
-        <h2 className="text-lg font-semibold text-neutral-800">
-          {liability.description || 'Untitled Liability'}
-        </h2>
-        <div className="flex gap-2">
-          {onDuplicate && (
-            <Button 
-              variant="outline" 
-              size="sm"
-              onClick={() => onDuplicate(liability)}
-              disabled={isUpdating}
-            >
-              Duplicate
-            </Button>
-          )}
-          <Button 
-            variant="outline" 
-            size="sm"
-            onClick={() => onDelete(liability.id)}
-            disabled={isUpdating}
-          >
-            Delete
-          </Button>
-        </div>
-      </div>
+    <div className="space-y-10 p-6 bg-white">
+      <DetailFormHeader
+        title={liability.description}
+        emptyTitle="Untitled Liability"
+        onDuplicate={onDuplicate ? () => onDuplicate(liability) : undefined}
+        onDelete={() => onDelete(liability.id)}
+        disabled={isUpdating}
+      />
 
       {/* Group 1: Overview */}
       <FieldGroup title="Overview">
@@ -184,7 +166,6 @@ export function LiabilityDetailForm({ liability, onDelete, onDuplicate }: Liabil
                 checked={liability.included}
                 onCheckedChange={(checked) => handleBooleanChange('included', checked)}
                 disabled={isUpdating}
-                className="data-[state=checked]:bg-blue-600"
               />
               <Label className="text-sm font-medium text-gray-700">
                 {liability.included ? 'Included' : 'Excluded'}

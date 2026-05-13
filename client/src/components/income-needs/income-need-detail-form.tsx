@@ -6,6 +6,7 @@ import { FieldGroup, FormField } from '@/components/common/grouped-detail-form';
 import { formatCurrencyValue, formatPercentageValue, formatYearsValue, formatTextValue, getValueClass, handleDefaultValueFocus } from '@/lib/formatting';
 import { type ClientEntity } from '@/lib/entity-columns-utils';
 import { Button } from '@/components/ui/button';
+import { DetailFormHeader } from '@/components/common/detail-form-header';
 
 interface IncomeNeedDetailFormProps {
   incomeNeed: IncomeNeeds;
@@ -82,31 +83,14 @@ export function IncomeNeedDetailForm({ incomeNeed, onDelete, onDuplicate }: Inco
   const disabled = isUpdating || updateMutation.isPending;
 
   return (
-    <div className="space-y-12 p-6 bg-white">
-      {/* Header with Actions - Mandatory Pattern */}
-      <div className="flex justify-between items-start">
-        <h2 className="text-lg font-semibold text-neutral-800">
-          {incomeNeed.description || 'Untitled Income Need'}
-        </h2>
-        <div className="flex gap-2">
-          <Button 
-            variant="outline" 
-            size="sm"
-            onClick={() => onDuplicate(incomeNeed)}
-            disabled={disabled}
-          >
-            Duplicate
-          </Button>
-          <Button 
-            variant="outline" 
-            size="sm"
-            onClick={() => onDelete(incomeNeed.id)}
-            disabled={disabled}
-          >
-            Delete
-          </Button>
-        </div>
-      </div>
+    <div className="space-y-10 p-6 bg-white">
+      <DetailFormHeader
+        title={incomeNeed.description}
+        emptyTitle="Untitled Income Need"
+        onDuplicate={() => onDuplicate(incomeNeed)}
+        onDelete={() => onDelete(incomeNeed.id)}
+        disabled={disabled}
+      />
 
       {/* Group 1: Overview */}
       <FieldGroup title="Overview">

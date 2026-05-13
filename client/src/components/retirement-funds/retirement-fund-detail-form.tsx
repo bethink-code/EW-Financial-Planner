@@ -1,4 +1,5 @@
 import React from 'react';
+import { useLocation } from 'wouter';
 import { RetirementFund, UpdateRetirementFund } from '@shared/schema';
 import { useQuery } from '@tanstack/react-query';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
@@ -6,6 +7,7 @@ import { Button } from '@/components/ui/button';
 import EntityOwnerSelector from '@/components/common/entity-owner-selector';
 import EntityBeneficiarySelector from '@/components/common/entity-beneficiary-selector';
 import { FieldGroup, FormField } from '@/components/common/grouped-detail-form';
+import { DetailFormHeader } from '@/components/common/detail-form-header';
 import { getFieldClass } from '@/lib/design-tokens';
 import { getValueClass, handleDefaultValueFocus } from '@/lib/formatting';
 import { formatCurrencyValue, formatPercentageValue, formatYearsValue } from '@/lib/formatting';
@@ -28,17 +30,20 @@ export function RetirementFundDetailForm({
   const { data: entities = [] } = useQuery({
     queryKey: ["/api/client-details"],
   });
+  const [location] = useLocation();
+  const showRetirementProjection = location.startsWith('/needs/retirement');
 
   // Text field handlers
   const handleTextFieldBlur = (field: keyof UpdateRetirementFund, value: string) => {
-    if (field === 'coverAmount' || field === 'monthlyIncome' || field === 'approvedLifeCover' || 
-        field === 'fundValue' || field === 'lumpSumTaken' || field === 'nonDeductibleContribution') {
+    if (field === 'coverAmount' || field === 'monthlyIncome' || field === 'approvedLifeCover' ||
+        field === 'fundValue' || field === 'lumpSumTaken' || field === 'nonDeductibleContribution' ||
+        field === 'monthlyContribution') {
       const formattedValue = formatCurrencyValue(value);
       onUpdate(fund.id, field, formattedValue);
     } else if (field === 'termYears' || field === 'incomeTerm') {
       const formattedValue = formatYearsValue(value);
       onUpdate(fund.id, field, formattedValue);
-    } else if (field === 'increasePercentage') {
+    } else if (field === 'increasePercentage' || field === 'contributionEscalation' || field === 'growthRate') {
       const formattedValue = formatPercentageValue(value);
       onUpdate(fund.id, field, formattedValue);
     } else {
@@ -142,31 +147,14 @@ export function RetirementFundDetailForm({
   };
 
   return (
-    <div className="space-y-12 p-6 bg-white">
-      {/* Header with Actions */}
-      <div className="flex justify-between items-start">
-        <h2 className="text-lg font-semibold text-neutral-800">
-          {fund.description || 'Untitled Fund'}
-        </h2>
-        <div className="flex gap-2">
-          <Button 
-            variant="outline" 
-            size="sm"
-            onClick={() => onDuplicate(fund)} 
-            disabled={disabled}
-          >
-            Duplicate
-          </Button>
-          <Button 
-            variant="outline" 
-            size="sm"
-            onClick={() => onDelete(fund.id)} 
-            disabled={disabled}
-          >
-            Delete
-          </Button>
-        </div>
-      </div>
+    <div className="space-y-10 p-6 bg-white">
+      <DetailFormHeader
+        title={fund.description}
+        emptyTitle="Untitled Fund"
+        onDuplicate={() => onDuplicate(fund)}
+        onDelete={() => onDelete(fund.id)}
+        disabled={disabled}
+      />
 
       {/* Group 1: Overview (Owner → Fund → Benefits) */}
       <FieldGroup title="Overview">
@@ -187,30 +175,30 @@ export function RetirementFundDetailForm({
           <FormField label="Owners & Fund Values">
             <table className="border-collapse" style={{ tableLayout: 'fixed', width: 'fit-content', minWidth: '740px' }}>
               <thead>
-                <tr className="bg-neutral-50">
-                  <th className="table-header-12 px-1 py-2 border border-neutral-200 text-center font-normal text-neutral-600" style={{ width: '60px' }}>
+                <tr>
+                  <th className="text-center" style={{ width: '60px' }}>
                     ACTIONS
                   </th>
-                  <th className="table-header-12 px-1 py-2 border border-neutral-200 text-left font-normal text-neutral-600" style={{ width: '300px' }}>
+                  <th className="text-left" style={{ width: '300px' }}>
                     OWNER
                   </th>
-                  <th className="table-header-12 px-1 py-2 border border-neutral-200 text-center font-normal text-neutral-600" style={{ width: '80px' }}>
+                  <th className="text-center" style={{ width: '80px' }}>
                     OWNERSHIP %
                   </th>
-                  <th className="table-header-12 px-1 py-2 border border-neutral-200 text-right font-normal text-neutral-600" style={{ width: '100px' }}>
+                  <th className="text-right" style={{ width: '100px' }}>
                     FUND VALUE
                   </th>
-                  <th className="table-header-12 px-1 py-2 border border-neutral-200 text-right font-normal text-neutral-600" style={{ width: '100px' }}>
+                  <th className="text-right" style={{ width: '100px' }}>
                     APPROVED COVER
                   </th>
-                  <th className="table-header-12 px-1 py-2 border border-neutral-200 text-right font-normal text-neutral-600" style={{ width: '100px' }}>
+                  <th className="text-right" style={{ width: '100px' }}>
                     VALUE AT DEATH
                   </th>
                 </tr>
               </thead>
               <tbody>
                 {Array.from({ length: Math.max(fund.owners.length, 1) }, (_, rowIndex) => (
-                  <tr key={`owner-table-row-${rowIndex}`} className="border-b border-neutral-200 bg-white">
+                  <tr key={`owner-table-row-${rowIndex}`}>
                     <EntityOwnerSelector
                       policyId={fund.id}
                       owners={fund.owners}
@@ -222,7 +210,7 @@ export function RetirementFundDetailForm({
                       rowIndex={rowIndex}
                       disabled={disabled}
                     />
-                    <td className="px-1 py-1 border-r border-neutral-200" style={{ width: '100px' }}>
+                    <td className="px-1 py-1" style={{ width: '100px' }}>
                       {rowIndex === 0 && (
                         <input
                           type="text"
@@ -234,7 +222,7 @@ export function RetirementFundDetailForm({
                         />
                       )}
                     </td>
-                    <td className="px-1 py-1 border-r border-neutral-200" style={{ width: '100px' }}>
+                    <td className="px-1 py-1" style={{ width: '100px' }}>
                       {rowIndex === 0 && (
                         <input
                           type="text"
@@ -279,24 +267,24 @@ export function RetirementFundDetailForm({
           <FormField label="Beneficiaries & Cover Distribution">
             <table className="border-collapse" style={{ tableLayout: 'fixed', width: 'fit-content', minWidth: '640px' }}>
               <thead>
-                <tr className="bg-neutral-50">
-                  <th className="table-header-12 px-1 py-2 border border-neutral-200 text-center font-normal text-neutral-600" style={{ width: '60px' }}>
+                <tr>
+                  <th className="text-center" style={{ width: '60px' }}>
                     ACTIONS
                   </th>
-                  <th className="table-header-12 px-1 py-2 border border-neutral-200 text-left font-normal text-neutral-600" style={{ width: '300px' }}>
+                  <th className="text-left" style={{ width: '300px' }}>
                     BENEFICIARY
                   </th>
-                  <th className="table-header-12 px-1 py-2 border border-neutral-200 text-center font-normal text-neutral-600" style={{ width: '80px' }}>
+                  <th className="text-center" style={{ width: '80px' }}>
                     BENEFIT %
                   </th>
-                  <th className="table-header-12 px-1 py-2 border border-neutral-200 text-right font-normal text-neutral-600" style={{ width: '100px' }}>
+                  <th className="text-right" style={{ width: '100px' }}>
                     COVER SPLIT
                   </th>
                 </tr>
               </thead>
               <tbody>
                 {Array.from({ length: Math.max(fund.unapprovedBeneficiaries.length, 1) }, (_, rowIndex) => (
-                  <tr key={`unapproved-beneficiary-table-row-${rowIndex}`} className="border-b border-neutral-200 bg-white">
+                  <tr key={`unapproved-beneficiary-table-row-${rowIndex}`}>
                     <EntityBeneficiarySelector
                       policyId={fund.id}
                       beneficiaries={fund.unapprovedBeneficiaries}
@@ -429,27 +417,27 @@ export function RetirementFundDetailForm({
           <FormField label="Fund Value Beneficiaries">
             <table className="border-collapse" style={{ tableLayout: 'fixed', width: 'fit-content', minWidth: '640px' }}>
               <thead>
-                <tr className="bg-neutral-50">
-                  <th className="table-header-12 px-1 py-2 border border-neutral-200 text-center font-normal text-neutral-600" style={{ width: '60px' }}>
+                <tr>
+                  <th className="text-center" style={{ width: '60px' }}>
                     ACTIONS
                   </th>
-                  <th className="table-header-12 px-1 py-2 border border-neutral-200 text-left font-normal text-neutral-600" style={{ width: '300px' }}>
+                  <th className="text-left" style={{ width: '300px' }}>
                     BENEFICIARY
                   </th>
-                  <th className="table-header-12 px-1 py-2 border border-neutral-200 text-center font-normal text-neutral-600" style={{ width: '80px' }}>
+                  <th className="text-center" style={{ width: '80px' }}>
                     BENEFIT %
                   </th>
-                  <th className="table-header-12 px-1 py-2 border border-neutral-200 text-right font-normal text-neutral-600" style={{ width: '100px' }}>
+                  <th className="text-right" style={{ width: '100px' }}>
                     COVER SPLIT
                   </th>
-                  <th className="table-header-12 px-1 py-2 border border-neutral-200 text-right font-normal text-neutral-600" style={{ width: '100px' }}>
+                  <th className="text-right" style={{ width: '100px' }}>
                     LIVING ANNUITY
                   </th>
                 </tr>
               </thead>
               <tbody>
                 {Array.from({ length: Math.max(fund.fundValueBeneficiaries.length, 1) }, (_, rowIndex) => (
-                  <tr key={`fund-value-beneficiary-table-row-${rowIndex}`} className="border-b border-neutral-200 bg-white">
+                  <tr key={`fund-value-beneficiary-table-row-${rowIndex}`}>
                     <EntityBeneficiarySelector
                       policyId={fund.id}
                       beneficiaries={fund.fundValueBeneficiaries}
@@ -461,7 +449,7 @@ export function RetirementFundDetailForm({
                       rowIndex={rowIndex}
                       disabled={disabled}
                     />
-                    <td className="px-1 py-1 border-r border-neutral-200" style={{ width: '100px' }}>
+                    <td className="px-1 py-1" style={{ width: '100px' }}>
                       <div className="calculated-field text-right">
                         {fund.fundValueCoverSplits?.[rowIndex] || "R 0"}
                       </div>
@@ -478,6 +466,52 @@ export function RetirementFundDetailForm({
           </FormField>
         </div>
       </FieldGroup>
+
+      {/* Group 5: Retirement Projection — only rendered inside the Retirement need flow */}
+      {showRetirementProjection && (
+      <FieldGroup title="Retirement Projection">
+        <div className="grid grid-cols-3 gap-x-3 gap-y-4" style={{ width: 'fit-content' }}>
+          <FormField label="Monthly Contribution">
+            <input
+              type="text"
+              defaultValue={fund.monthlyContribution || 'R 0'}
+              placeholder="R 0"
+              className={`table-input ${getValueClass(fund.monthlyContribution || 'R 0', 'currency')}`}
+              style={{ width: 'fit-content', minWidth: '120px' }}
+              onFocus={handleDefaultValueFocus}
+              onBlur={(e) => handleTextFieldBlur('monthlyContribution', e.target.value)}
+              disabled={disabled}
+            />
+          </FormField>
+
+          <FormField label="Contribution Escalation">
+            <input
+              type="text"
+              defaultValue={fund.contributionEscalation || '0%'}
+              placeholder="0%"
+              className={`table-input ${getValueClass(fund.contributionEscalation || '0%', 'percentage')}`}
+              style={{ width: 'fit-content', minWidth: '120px' }}
+              onFocus={handleDefaultValueFocus}
+              onBlur={(e) => handleTextFieldBlur('contributionEscalation', e.target.value)}
+              disabled={disabled}
+            />
+          </FormField>
+
+          <FormField label="Growth Rate">
+            <input
+              type="text"
+              defaultValue={fund.growthRate || '10%'}
+              placeholder="10%"
+              className={`table-input ${getValueClass(fund.growthRate || '10%', 'percentage')}`}
+              style={{ width: 'fit-content', minWidth: '120px' }}
+              onFocus={handleDefaultValueFocus}
+              onBlur={(e) => handleTextFieldBlur('growthRate', e.target.value)}
+              disabled={disabled}
+            />
+          </FormField>
+        </div>
+      </FieldGroup>
+      )}
     </div>
   );
 }

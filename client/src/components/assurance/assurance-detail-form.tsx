@@ -5,7 +5,9 @@ import { GroupedDetailForm, FieldGroup, FormField } from '@/components/common/gr
 import EntityOwnerSelector from '@/components/common/entity-owner-selector';
 import EntityBeneficiarySelector from '@/components/common/entity-beneficiary-selector';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Switch } from '@/components/ui/switch';
 import { Button } from '@/components/ui/button';
+import { DetailFormHeader } from '@/components/common/detail-form-header';
 import { handleDefaultValueFocus, formatYearsValue, formatPercentageValue, getValueClass } from '@/lib/formatting';
 import { getFieldClass } from '@/lib/design-tokens';
 import { getCellClass } from '@/lib/field-types';
@@ -101,30 +103,13 @@ export function AssuranceDetailForm({
 
   return (
     <GroupedDetailForm>
-      {/* Header with Actions */}
-      <div className="flex justify-between items-start">
-        <h2 className="text-lg font-semibold text-neutral-800">
-          {policy.description || 'Untitled Policy'}
-        </h2>
-        <div className="flex gap-2">
-          <Button 
-            variant="outline" 
-            size="sm"
-            onClick={() => onDuplicate(policy)} 
-            disabled={disabled}
-          >
-            Duplicate
-          </Button>
-          <Button 
-            variant="outline" 
-            size="sm"
-            onClick={() => onDelete(policy.id)} 
-            disabled={disabled}
-          >
-            Delete
-          </Button>
-        </div>
-      </div>
+      <DetailFormHeader
+        title={policy.description}
+        emptyTitle="Untitled Policy"
+        onDuplicate={() => onDuplicate(policy)}
+        onDelete={() => onDelete(policy.id)}
+        disabled={disabled}
+      />
 
       {/* Group 1: Overview (Owner → Life Assured → Death Benefit) */}
       <FieldGroup title="Overview">
@@ -145,27 +130,27 @@ export function AssuranceDetailForm({
           <FormField label="Owners & Life Assured & Death Benefits">
             <table className="border-collapse" style={{ tableLayout: 'fixed', width: 'fit-content', minWidth: '600px' }}>
               <thead>
-                <tr className="bg-neutral-50">
-                  <th className="table-header-12 px-1 py-2 border border-neutral-200 text-center font-normal text-neutral-600" style={{ width: '60px' }}>
+                <tr>
+                  <th className="text-center" style={{ width: '60px' }}>
                     ACTIONS
                   </th>
-                  <th className="table-header-12 px-1 py-2 border border-neutral-200 text-left font-normal text-neutral-600" style={{ width: '300px' }}>
+                  <th className="text-left" style={{ width: '300px' }}>
                     OWNER
                   </th>
-                  <th className="table-header-12 px-1 py-2 border border-neutral-200 text-center font-normal text-neutral-600" style={{ width: '80px' }}>
+                  <th className="text-center" style={{ width: '80px' }}>
                     OWNERSHIP %
                   </th>
-                  <th className="table-header-12 px-1 py-2 border border-neutral-200 text-left font-normal text-neutral-600" style={{ width: '300px' }}>
+                  <th className="text-left" style={{ width: '300px' }}>
                     LIFE ASSURED
                   </th>
-                  <th className="table-header-12 px-1 py-2 border border-neutral-200 text-right font-normal text-neutral-600" style={{ width: '100px' }}>
+                  <th className="text-right" style={{ width: '100px' }}>
                     DEATH BENEFIT
                   </th>
                 </tr>
               </thead>
               <tbody>
                 {Array.from({ length: Math.max(policy.owners.length, 1) }, (_, rowIndex) => (
-                  <tr key={`owner-table-row-${rowIndex}`} className="border-b border-neutral-200 bg-white">
+                  <tr key={`owner-table-row-${rowIndex}`}>
                     <EntityOwnerSelector
                       policyId={policy.id}
                       owners={policy.owners}
@@ -177,7 +162,7 @@ export function AssuranceDetailForm({
                       rowIndex={rowIndex}
                       disabled={disabled}
                     />
-                    <td className="px-1 py-1 border-r border-neutral-200" style={{ width: '300px' }}>
+                    <td className="px-1 py-1" style={{ width: '300px' }}>
                       <Select
                         value={(policy.lifeAssured || [])[rowIndex] || "none"}
                         onValueChange={(value) => {
@@ -246,33 +231,33 @@ export function AssuranceDetailForm({
             {/* Use actual table element with overflow wrapper for wide dropdown */}
             <table className="border-collapse" style={{ tableLayout: 'fixed', width: 'fit-content', minWidth: '700px' }}>
               <thead>
-                <tr className="bg-neutral-50">
-                  <th className="table-header-12 px-1 py-2 border border-neutral-200 text-center font-normal text-neutral-600" style={{ width: '60px' }}>
+                <tr>
+                  <th className="text-center" style={{ width: '60px' }}>
                     ACTIONS
                   </th>
-                  <th className="table-header-12 px-1 py-2 border border-neutral-200 text-left font-normal text-neutral-600" style={{ width: '300px' }}>
+                  <th className="text-left" style={{ width: '300px' }}>
                     BENEFICIARY
                   </th>
-                  <th className="table-header-12 px-1 py-2 border border-neutral-200 text-center font-normal text-neutral-600" style={{ width: '80px' }}>
+                  <th className="text-center" style={{ width: '80px' }}>
                     BENEFIT %
                   </th>
-                  <th className="table-header-12 px-1 py-2 border border-neutral-200 text-right font-normal text-neutral-600" style={{ width: '100px' }}>
+                  <th className="text-right" style={{ width: '100px' }}>
                     BENEFIT SPLIT
                   </th>
-                  <th className="table-header-12 px-1 py-2 border border-neutral-200 text-right font-normal text-neutral-600" style={{ width: '90px' }}>
+                  <th className="text-right" style={{ width: '90px' }}>
                     AMOUNT
                   </th>
-                  <th className="table-header-12 px-1 py-2 border border-neutral-200 text-center font-normal text-neutral-600" style={{ width: '70px' }}>
+                  <th className="text-center" style={{ width: '70px' }}>
                     TOGGLE
                   </th>
-                  <th className="table-header-12 px-1 py-2 border border-neutral-200 text-center font-normal text-neutral-600" style={{ width: '80px' }}>
+                  <th className="text-center" style={{ width: '80px' }}>
                     YEARS/%
                   </th>
                 </tr>
               </thead>
               <tbody>
                   {Array.from({ length: Math.max(policy.beneficiaries.length, 1) }, (_, rowIndex) => (
-                    <tr key={`beneficiary-table-row-${rowIndex}`} className="border-b border-neutral-200 bg-white">
+                    <tr key={`beneficiary-table-row-${rowIndex}`}>
                       <EntityBeneficiarySelector
                         policyId={policy.id}
                         beneficiaries={policy.beneficiaries}
@@ -284,7 +269,7 @@ export function AssuranceDetailForm({
                         rowIndex={rowIndex}
                         disabled={disabled}
                       />
-                      <td className="px-1 py-1 border-r border-neutral-200" style={{ width: '100px' }}>
+                      <td className="px-1 py-1" style={{ width: '100px' }}>
                         {(() => {
                           const currentPercentage = (policy.beneficiaryPercentages || ["100%"])[rowIndex] || "0%";
                           // Calculate total death benefit across all Life Assured entries for this policy
@@ -301,7 +286,7 @@ export function AssuranceDetailForm({
                           );
                         })()}
                       </td>
-                      <td className="px-1 py-1 border-r border-neutral-200" style={{ width: '90px' }}>
+                      <td className="px-1 py-1" style={{ width: '90px' }}>
                         <input
                           key={`amount-${policy.id}-${rowIndex}`}
                           type="text"
@@ -312,7 +297,7 @@ export function AssuranceDetailForm({
                           disabled={disabled}
                         />
                       </td>
-                      <td className="px-1 py-1 border-r border-neutral-200" style={{ width: '70px' }}>
+                      <td className="px-1 py-1" style={{ width: '70px' }}>
                         <button
                           type="button"
                           onClick={() => {
@@ -403,44 +388,36 @@ export function AssuranceDetailForm({
           </FormField>
         </div>
 
-        {/* Policy-Level Checkboxes */}
-        <div className="flex flex-wrap gap-6 pt-4 border-t border-neutral-200">
+        {/* Policy-Level Flags */}
+        <div className="flex flex-wrap gap-6 pt-4" style={{ borderTop: "1px solid var(--ew-border)" }}>
           <FormField label="Buy/Sell">
-            <input
-              type="checkbox"
-              defaultChecked={policy.buySell}
-              className="rounded border-neutral-300"
-              onChange={(e) => handleCheckboxChange('buySell', e.target.checked)}
+            <Switch
+              checked={policy.buySell}
+              onCheckedChange={(checked) => handleCheckboxChange('buySell', checked)}
               disabled={disabled}
             />
           </FormField>
 
           <FormField label="Key Man">
-            <input
-              type="checkbox"
-              defaultChecked={policy.keyMan}
-              className="rounded border-neutral-300"
-              onChange={(e) => handleCheckboxChange('keyMan', e.target.checked)}
+            <Switch
+              checked={policy.keyMan}
+              onCheckedChange={(checked) => handleCheckboxChange('keyMan', checked)}
               disabled={disabled}
             />
           </FormField>
 
           <FormField label="Excluded Estate Duty">
-            <input
-              type="checkbox"
-              defaultChecked={policy.excludedFromEstateDuty}
-              className="rounded border-neutral-300"
-              onChange={(e) => handleCheckboxChange('excludedFromEstateDuty', e.target.checked)}
+            <Switch
+              checked={policy.excludedFromEstateDuty}
+              onCheckedChange={(checked) => handleCheckboxChange('excludedFromEstateDuty', checked)}
               disabled={disabled}
             />
           </FormField>
 
           <FormField label="Excluded Provisions">
-            <input
-              type="checkbox"
-              defaultChecked={policy.excludedFromProvisions}
-              className="rounded border-neutral-300"
-              onChange={(e) => handleCheckboxChange('excludedFromProvisions', e.target.checked)}
+            <Switch
+              checked={policy.excludedFromProvisions}
+              onCheckedChange={(checked) => handleCheckboxChange('excludedFromProvisions', checked)}
               disabled={disabled}
             />
           </FormField>

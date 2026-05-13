@@ -7,13 +7,21 @@ interface FieldGroupProps {
 }
 
 /**
- * FieldGroup - A visual grouping component for related form fields
- * Maintains the logical structure from table headers without accordion functionality
+ * FieldGroup — section heading per the EW Figma reference: flat brand-blue
+ * uppercase title on white, with a thin EW border underneath spanning the
+ * full content width. No tinted pill, no rounded corners.
  */
 export function FieldGroup({ title, children, className = "" }: FieldGroupProps) {
   return (
-    <div className={`space-y-3 ${className}`}>
-      <h3 className="text-sm font-medium text-neutral-700 uppercase tracking-wide border-b border-neutral-200 pb-1">
+    <div className={`space-y-5 ${className}`}>
+      <h3
+        className="text-sm font-bold uppercase pb-2"
+        style={{
+          color: "var(--ew-blue)",
+          letterSpacing: "0.06em",
+          borderBottom: "1px solid var(--ew-border)",
+        }}
+      >
         {title}
       </h3>
       <div className="space-y-4">
@@ -31,14 +39,17 @@ interface FormFieldProps {
 }
 
 /**
- * FormField - A consistent field layout component
+ * FormField — label + child input. Label is navy weight-500 to feel intentional.
  */
 export function FormField({ label, children, className = "", required = false }: FormFieldProps) {
   return (
-    <div className={`space-y-1 ${className}`}>
-      <label className="block text-sm font-medium text-neutral-600">
+    <div className={`space-y-1.5 ${className}`}>
+      <label
+        className="block text-sm font-medium"
+        style={{ color: "var(--ew-primary-navy)" }}
+      >
         {label}
-        {required && <span className="text-red-500 ml-1">*</span>}
+        {required && <span className="ml-1" style={{ color: "var(--ew-negative-symbol)" }}>*</span>}
       </label>
       {children}
     </div>
@@ -51,12 +62,12 @@ interface GroupedDetailFormProps {
 }
 
 /**
- * GroupedDetailForm - Container for grouped form sections
- * Provides consistent spacing and layout for detail forms in hybrid view
+ * GroupedDetailForm — container for grouped detail-form sections.
+ * Uses generous vertical spacing to match the rest of the EW visual language.
  */
 export function GroupedDetailForm({ children, className = "" }: GroupedDetailFormProps) {
   return (
-    <div className={`space-y-8 p-6 bg-white ${className}`}>
+    <div className={`space-y-10 p-6 bg-white ${className}`}>
       {children}
     </div>
   );

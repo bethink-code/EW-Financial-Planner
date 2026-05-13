@@ -9,6 +9,7 @@ import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Button } from '@/components/ui/button';
+import { DetailFormHeader } from '@/components/common/detail-form-header';
 
 interface AssetDetailFormProps {
   asset: Assets;
@@ -82,33 +83,14 @@ export function AssetDetailForm({ asset, onDelete, onDuplicate }: AssetDetailFor
   const ownership = useMemo(() => parseEntityOwnership(asset.entityOwnership), [asset.entityOwnership]);
 
   return (
-    <div className="space-y-12 p-6 bg-white">
-      {/* Header with title and actions */}
-      <div className="flex justify-between items-start">
-        <h2 className="text-lg font-semibold text-neutral-800">
-          {asset.description || 'Untitled Asset'}
-        </h2>
-        <div className="flex gap-2">
-          {onDuplicate && (
-            <Button 
-              variant="outline" 
-              size="sm"
-              onClick={() => onDuplicate(asset)}
-              disabled={isUpdating}
-            >
-              Duplicate
-            </Button>
-          )}
-          <Button 
-            variant="outline" 
-            size="sm"
-            onClick={() => onDelete(asset.id)}
-            disabled={isUpdating}
-          >
-            Delete
-          </Button>
-        </div>
-      </div>
+    <div className="space-y-10 p-6 bg-white">
+      <DetailFormHeader
+        title={asset.description}
+        emptyTitle="Untitled Asset"
+        onDuplicate={onDuplicate ? () => onDuplicate(asset) : undefined}
+        onDelete={() => onDelete(asset.id)}
+        disabled={isUpdating}
+      />
 
       {/* Group 1: Overview */}
       <FieldGroup title="Overview">
@@ -171,7 +153,6 @@ export function AssetDetailForm({ asset, onDelete, onDuplicate }: AssetDetailFor
                 checked={asset.included}
                 onCheckedChange={(checked) => handleBooleanChange('included', checked)}
                 disabled={isUpdating}
-                className="data-[state=checked]:bg-blue-600"
               />
               <Label className="text-sm font-medium text-gray-700">
                 {asset.included ? 'Included' : 'Excluded'}
