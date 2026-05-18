@@ -158,6 +158,7 @@ export function RetirementFundDetailForm({
       <DetailFormHeader
         title={fund.description}
         emptyTitle="Untitled Fund"
+        onTitleChange={(value) => onUpdate(fund.id, 'description', value)}
         onDuplicate={() => onDuplicate(fund)}
         onDelete={() => onDelete(fund.id)}
         disabled={disabled}
