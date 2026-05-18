@@ -1,8 +1,16 @@
+import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { Card } from "@/components/ui/card";
 import { GaugeChart } from "@/components/project/charts/gauge-chart";
-import { formatCurrencyValue } from "@/lib/formatting";
-import type { RetirementProjection } from "@shared/retirement-calculations";
+import { CustomTabs } from "@/components/ui/custom-tabs";
+import { formatCurrencyValue, handleDefaultValueFocus } from "@/lib/formatting";
+import { additionalMonthlyContribution, type RetirementProjection } from "@shared/retirement-calculations";
+
+function parsePct(value: string): number {
+  const cleaned = value.replace(/[^\d.-]/g, "");
+  const n = parseFloat(cleaned);
+  return isNaN(n) ? 0 : n / 100;
+}
 
 const PLAN_ID = 1;
 
@@ -17,7 +25,7 @@ export default function RetirementProject() {
   });
 
   if (isLoading || !projection) {
-    return <div className="px-6 py-6 text-neutral-500">Loading projection…</div>;
+    return <div className="px-6 py-4 text-neutral-500">Loading projection…</div>;
   }
 
   const {
@@ -37,25 +45,33 @@ export default function RetirementProject() {
     yearsAfterRetirement,
   } = projection;
 
-  return (
-    <div className="w-full px-6 py-8 space-y-6">
-      <Card className="p-8 border-0 shadow-sm">
-        <div className="mb-6 pb-4 border-b flex items-end justify-between" style={{ borderColor: "var(--ew-border)" }}>
-          <div>
-            <div className="text-xs font-medium tracking-wide uppercase" style={{ color: "var(--ew-gray-700)" }}>
-              Retirement &nbsp;&rsaquo;&nbsp; Projection
-            </div>
-            <h2 className="text-2xl font-bold mt-1 tracking-tight" style={{ color: "var(--ew-primary-navy)" }}>
-              COVERAGE
-            </h2>
-          </div>
-          <span className="text-xs tabular-nums" style={{ color: "var(--ew-gray-700)" }}>
-            {yearsToRetirement} years to retirement &middot; {yearsAfterRetirement} years after
-          </span>
-        </div>
+  const flatRows: { category: string; description: string; capitalAtRetirement: number; valueInCurrentTerms: number; key: string }[] = [
+    ...retirementFunds.map(r => ({ category: "Retirement funds", description: r.description, capitalAtRetirement: r.capitalAtRetirement, valueInCurrentTerms: r.valueInCurrentTerms, key: `rf-${r.id}` })),
+    ...definedBenefitFunds.map(r => ({ category: "Defined benefit", description: r.description, capitalAtRetirement: r.capitalAtRetirement, valueInCurrentTerms: r.valueInCurrentTerms, key: `db-${r.id}` })),
+    ...voluntaryInvestments.map(r => ({ category: "Voluntary", description: r.description, capitalAtRetirement: r.capitalAtRetirement, valueInCurrentTerms: r.valueInCurrentTerms, key: `vi-${r.id}` })),
+    ...futureInflows.map(r => ({ category: "Future inflow", description: r.description, capitalAtRetirement: r.capitalAtRetirement, valueInCurrentTerms: r.valueInCurrentTerms, key: `fi-${r.id}` })),
+    ...lumpSumNeeds.map(r => ({ category: "Lump sum need", description: r.description, capitalAtRetirement: r.capitalAtRetirement, valueInCurrentTerms: r.valueInCurrentTerms, key: `ls-${r.id}` })),
+    ...incomeRequired.map(r => ({ category: "Income required", description: r.description, capitalAtRetirement: r.capitalAtRetirement, valueInCurrentTerms: r.valueInCurrentTerms, key: `ir-${r.id}` })),
+    ...incomeProvided.map(r => ({ category: "Income provided", description: r.description, capitalAtRetirement: r.capitalAtRetirement, valueInCurrentTerms: r.valueInCurrentTerms, key: `ip-${r.id}` })),
+  ];
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
-          <div className="flex items-center justify-center">
+  return (
+    <div className="w-full px-6 py-4">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+        {/* LEFT: Coverage chart + summary + recommendation */}
+        <Card className="px-5 py-4 border-0 shadow-none bg-transparent self-start">
+          <div className="mb-3 pb-2 border-b flex items-end justify-between" style={{ borderColor: "var(--ew-border)" }}>
+            <div className="flex items-baseline gap-3">
+              <h2 className="text-base font-bold tracking-tight uppercase" style={{ color: "var(--ew-primary-navy)" }}>
+                Coverage
+              </h2>
+            </div>
+            <span className="text-xs tabular-nums" style={{ color: "var(--ew-gray-700)" }}>
+              {yearsToRetirement} yrs &middot; {yearsAfterRetirement} after
+            </span>
+          </div>
+
+          <div className="flex items-center justify-center -mt-4 -mb-8">
             <GaugeChart
               title="Coverage"
               data={{
@@ -66,38 +82,273 @@ export default function RetirementProject() {
               }}
             />
           </div>
-          <div className="space-y-2">
-            <SummaryRow label="Capital provided" value={capitalProvided} />
-            <SummaryRow label="Capital required" value={capitalRequired} />
-            <SummaryRow
-              label={surplus >= 0 ? "Surplus" : "Shortfall"}
-              value={Math.abs(surplus)}
-              tone={surplus >= 0 ? "positive" : "negative"}
-            />
+
+          <div className="max-w-md mx-auto">
+            <div className="space-y-1">
+              <SummaryRow label="Capital provided" value={capitalProvided} />
+              <SummaryRow label="Capital required" value={capitalRequired} />
+              <SummaryRow
+                label={surplus >= 0 ? "Surplus" : "Shortfall"}
+                value={Math.abs(surplus)}
+                tone={surplus >= 0 ? "positive" : "negative"}
+              />
+            </div>
+
             {additionalMonthlyContribution > 0 && (
-              <div className="mt-4 rounded-md p-4 border-l-4" style={{ backgroundColor: "var(--ew-blue-tertiary-50)", borderLeftColor: "var(--ew-blue)" }}>
-                <div className="text-xs font-medium tracking-wide uppercase mb-1" style={{ color: "var(--ew-blue)" }}>
-                  Recommended top-up
+              <div className="mt-3 rounded-md px-3 py-2 border-l-4" style={{ backgroundColor: "var(--ew-blue-tertiary-50)", borderLeftColor: "var(--ew-blue)" }}>
+                <div className="flex items-baseline justify-between gap-3">
+                  <div>
+                    <div className="text-xs font-medium tracking-wide uppercase" style={{ color: "var(--ew-blue)" }}>
+                      Recommended top-up
+                    </div>
+                    <div className="text-xs" style={{ color: "var(--ew-gray-700)" }}>to close the shortfall by retirement</div>
+                  </div>
+                  <div className="text-lg font-bold tabular-nums tracking-tight whitespace-nowrap" style={{ color: "var(--ew-primary-navy)" }}>
+                    {rand(additionalMonthlyContribution)} <span className="text-xs font-normal" style={{ color: "var(--ew-gray-700)" }}>/ mo</span>
+                  </div>
                 </div>
-                <div className="text-2xl font-bold tabular-nums tracking-tight" style={{ color: "var(--ew-primary-navy)" }}>
-                  {rand(additionalMonthlyContribution)} <span className="text-sm font-normal" style={{ color: "var(--ew-gray-700)" }}>/ month</span>
-                </div>
-                <div className="text-xs mt-0.5" style={{ color: "var(--ew-gray-700)" }}>to close the shortfall by retirement</div>
               </div>
             )}
           </div>
-        </div>
-      </Card>
+        </Card>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <VehicleTable title="Retirement funds" rows={retirementFunds} />
-        <VehicleTable title="Defined benefit funds" rows={definedBenefitFunds} />
-        <VehicleTable title="Voluntary investments" rows={voluntaryInvestments} />
-        <VehicleTable title="Future inflows" rows={futureInflows} />
-        <VehicleTable title="Lump sum needs" rows={lumpSumNeeds} />
-        <VehicleTable title="Income required" rows={incomeRequired} />
-        <VehicleTable title="Income provided" rows={incomeProvided} />
+        {/* RIGHT: Tabs — Breakdown of per-vehicle outputs, or the contributions
+            tuner where planners can play with assumptions and see the
+            recommended top-up move. Lets the user see the chart on the left
+            while flipping between detail and what-if on the right. */}
+        <DetailTabsPanel
+          flatRows={flatRows}
+          shortfall={Math.max(0, -surplus)}
+          yearsToRetirement={yearsToRetirement}
+        />
       </div>
+    </div>
+  );
+}
+
+function DetailTabsPanel({
+  flatRows,
+  shortfall,
+  yearsToRetirement,
+}: {
+  flatRows: { category: string; description: string; capitalAtRetirement: number; valueInCurrentTerms: number; key: string }[];
+  shortfall: number;
+  yearsToRetirement: number;
+}) {
+  const [active, setActive] = useState<"breakdown" | "tuner">("breakdown");
+
+  return (
+    <Card className="p-6 border-0 shadow-sm">
+      <CustomTabs
+        tabs={[
+          { id: "breakdown", label: "Breakdown" },
+          { id: "tuner", label: "Tune contributions" },
+        ]}
+        activeTab={active}
+        onTabChange={(id) => setActive(id as "breakdown" | "tuner")}
+        className="mb-3"
+      />
+      {active === "breakdown" ? (
+        <div className="rounded-md overflow-hidden">
+          <table className="w-full text-xs no-row-borders">
+            <thead>
+              <tr style={{ color: "var(--ew-gray-700)", backgroundColor: "var(--ew-row-tint)" }}>
+                <th className="px-3 py-2 text-left font-medium uppercase tracking-wide w-[140px]">Category</th>
+                <th className="px-3 py-2 text-left font-medium uppercase tracking-wide">Description</th>
+                <th className="px-3 py-2 text-right font-medium uppercase tracking-wide w-[140px]">At retirement</th>
+                <th className="px-3 py-2 text-right font-medium uppercase tracking-wide w-[140px]">Today's terms</th>
+              </tr>
+            </thead>
+            <tbody>
+              {flatRows.length === 0 ? (
+                <tr>
+                  <td colSpan={4} className="px-3 py-3 text-xs text-center" style={{ color: "var(--ew-gray-700)" }}>
+                    No entries yet.
+                  </td>
+                </tr>
+              ) : (
+                flatRows.map((r, idx) => (
+                  <tr key={r.key} style={{ backgroundColor: idx % 2 === 0 ? "white" : "var(--ew-row-tint)" }}>
+                    <td className="px-3 py-1.5 text-xs uppercase tracking-wide" style={{ color: "var(--ew-blue)" }}>{r.category}</td>
+                    <td className="px-3 py-1.5 truncate" style={{ color: "var(--ew-primary-navy)" }}>{r.description || "(untitled)"}</td>
+                    <td className="px-3 py-1.5 text-right tabular-nums font-medium" style={{ color: "var(--ew-gray-900)" }}>{rand(r.capitalAtRetirement)}</td>
+                    <td className="px-3 py-1.5 text-right tabular-nums" style={{ color: "var(--ew-gray-700)" }}>{rand(r.valueInCurrentTerms)}</td>
+                  </tr>
+                ))
+              )}
+            </tbody>
+          </table>
+        </div>
+      ) : (
+        <ContributionsTuner shortfall={shortfall} yearsToRetirement={yearsToRetirement} />
+      )}
+    </Card>
+  );
+}
+
+function ContributionsTuner({
+  shortfall,
+  yearsToRetirement,
+}: {
+  shortfall: number;
+  yearsToRetirement: number;
+}) {
+  const [volGrowth, setVolGrowth] = useState("10%");
+  const [volIncrease, setVolIncrease] = useState("6%");
+  const [volSplit, setVolSplit] = useState("100%");
+  const [raGrowth, setRaGrowth] = useState("10%");
+  const [raTax, setRaTax] = useState("25%");
+  const [raIncrease, setRaIncrease] = useState("6%");
+
+  const volSplitFrac = parsePct(volSplit);
+  const raSplitFrac = Math.max(0, 1 - volSplitFrac);
+
+  const volMonthly = additionalMonthlyContribution({
+    shortfallAtRetirement: shortfall * volSplitFrac,
+    growthRate: parsePct(volGrowth),
+    contributionEscalation: parsePct(volIncrease),
+    yearsToRetirement,
+  });
+  const raMonthly = additionalMonthlyContribution({
+    shortfallAtRetirement: shortfall * raSplitFrac,
+    growthRate: parsePct(raGrowth),
+    contributionEscalation: parsePct(raIncrease),
+    yearsToRetirement,
+  });
+  const raTaxSavingAnnual = raMonthly * 12 * parsePct(raTax);
+
+  return (
+    <div className="space-y-3">
+      <p className="text-xs" style={{ color: "var(--ew-gray-700)" }}>
+        Tune the assumptions to see how the recommended top-up moves. Shortfall: <span className="tabular-nums font-medium" style={{ color: "var(--ew-tangerine)" }}>{formatCurrencyValue(Math.round(shortfall).toString())}</span>
+      </p>
+
+      <AllocationForm
+        title="Voluntary investments"
+        growth={volGrowth} onGrowthChange={setVolGrowth}
+        increase={volIncrease} onIncreaseChange={setVolIncrease}
+        split={volSplit} onSplitChange={setVolSplit}
+        monthly={volMonthly}
+      />
+
+      <AllocationForm
+        title="Retirement funds (RA)"
+        growth={raGrowth} onGrowthChange={setRaGrowth}
+        tax={raTax} onTaxChange={setRaTax}
+        increase={raIncrease} onIncreaseChange={setRaIncrease}
+        splitReadOnly={`${(raSplitFrac * 100).toFixed(0)}%`}
+        monthly={raMonthly}
+        taxSavingAnnual={raTaxSavingAnnual}
+      />
+    </div>
+  );
+}
+
+function AllocationForm({
+  title,
+  growth, onGrowthChange,
+  tax, onTaxChange,
+  increase, onIncreaseChange,
+  split, onSplitChange,
+  splitReadOnly,
+  monthly,
+  taxSavingAnnual,
+}: {
+  title: string;
+  growth: string; onGrowthChange: (v: string) => void;
+  tax?: string; onTaxChange?: (v: string) => void;
+  increase: string; onIncreaseChange: (v: string) => void;
+  split?: string; onSplitChange?: (v: string) => void;
+  splitReadOnly?: string;
+  monthly: number;
+  taxSavingAnnual?: number;
+}) {
+  return (
+    <div className="rounded-md border" style={{ borderColor: "var(--ew-border)" }}>
+      <h4
+        className="text-xs font-bold uppercase tracking-wide px-3 py-2"
+        style={{
+          color: "var(--ew-blue)",
+          backgroundColor: "var(--ew-blue-tertiary-50)",
+          borderBottom: "1px solid var(--ew-border)",
+        }}
+      >
+        {title}
+      </h4>
+      <div className="p-3 grid grid-cols-2 gap-x-4 gap-y-3">
+        <FormFieldRow label="Growth rate %">
+          <input
+            type="text"
+            value={growth}
+            className="table-input field-percentage"
+            onFocus={handleDefaultValueFocus}
+            onChange={(e) => onGrowthChange(e.target.value)}
+          />
+        </FormFieldRow>
+        <FormFieldRow label="Tax %">
+          {onTaxChange ? (
+            <input
+              type="text"
+              value={tax ?? ""}
+              className="table-input field-percentage"
+              onFocus={handleDefaultValueFocus}
+              onChange={(e) => onTaxChange(e.target.value)}
+            />
+          ) : (
+            <div className="calculated-field text-right" style={{ width: 64 }}>—</div>
+          )}
+        </FormFieldRow>
+        <FormFieldRow label="Increase %">
+          <input
+            type="text"
+            value={increase}
+            className="table-input field-percentage"
+            onFocus={handleDefaultValueFocus}
+            onChange={(e) => onIncreaseChange(e.target.value)}
+          />
+        </FormFieldRow>
+        <FormFieldRow label="Split %">
+          {onSplitChange ? (
+            <input
+              type="text"
+              value={split ?? ""}
+              className="table-input field-percentage"
+              onFocus={handleDefaultValueFocus}
+              onChange={(e) => onSplitChange(e.target.value)}
+            />
+          ) : (
+            <div className="calculated-field text-right" style={{ width: 64 }}>{splitReadOnly}</div>
+          )}
+        </FormFieldRow>
+      </div>
+      <div
+        className="px-3 py-2 grid grid-cols-2 gap-4 text-xs"
+        style={{ borderTop: "1px solid var(--ew-border)", backgroundColor: "var(--ew-row-tint)" }}
+      >
+        <div>
+          <div className="uppercase tracking-wide font-medium mb-0.5" style={{ color: "var(--ew-blue)" }}>Top-up / mo</div>
+          <div className="text-base font-semibold tabular-nums" style={{ color: "var(--ew-primary-navy)" }}>
+            {formatCurrencyValue(Math.round(monthly).toString())}
+          </div>
+        </div>
+        {taxSavingAnnual !== undefined && (
+          <div>
+            <div className="uppercase tracking-wide font-medium mb-0.5" style={{ color: "var(--ew-blue)" }}>Tax saving / yr</div>
+            <div className="text-base font-semibold tabular-nums" style={{ color: "var(--ew-primary-navy)" }}>
+              {formatCurrencyValue(Math.round(taxSavingAnnual).toString())}
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
+function FormFieldRow({ label, children }: { label: string; children: React.ReactNode }) {
+  return (
+    <div className="space-y-1">
+      <label className="block text-xs font-medium" style={{ color: "var(--ew-primary-navy)" }}>{label}</label>
+      {children}
     </div>
   );
 }
@@ -105,56 +356,14 @@ export default function RetirementProject() {
 function SummaryRow({ label, value, tone }: { label: string; value: number; tone?: "positive" | "negative" }) {
   const valueColor =
     tone === "positive" ? "var(--ew-positive-symbol)" :
-    tone === "negative" ? "var(--ew-negative-symbol)" :
+    tone === "negative" ? "var(--ew-tangerine)" :
     "var(--ew-primary-navy)";
   return (
-    <div className="flex items-baseline justify-between py-1.5 border-b last:border-b-0" style={{ borderColor: "var(--ew-border)" }}>
+    <div className="flex items-baseline justify-between py-1 border-b last:border-b-0" style={{ borderColor: "var(--ew-border)" }}>
       <span className="text-sm" style={{ color: "var(--ew-gray-700)" }}>{label}</span>
-      <span className="text-lg font-semibold tabular-nums" style={{ color: valueColor }}>
+      <span className="text-sm font-semibold tabular-nums" style={{ color: valueColor }}>
         {formatCurrencyValue(Math.round(value).toString())}
       </span>
     </div>
-  );
-}
-
-function VehicleTable({
-  title,
-  rows,
-}: {
-  title: string;
-  rows: { id: number; description: string; capitalAtRetirement: number; valueInCurrentTerms: number }[];
-}) {
-  if (rows.length === 0) {
-    return (
-      <Card className="p-5 border-0 shadow-sm">
-        <h3 className="text-xs font-medium tracking-wide uppercase mb-2" style={{ color: "var(--ew-blue)" }}>{title}</h3>
-        <p className="text-sm" style={{ color: "var(--ew-gray-600)" }}>No entries.</p>
-      </Card>
-    );
-  }
-  return (
-    <Card className="p-5 border-0 shadow-sm">
-      <h3 className="text-xs font-medium tracking-wide uppercase mb-3" style={{ color: "var(--ew-blue)" }}>{title}</h3>
-      <div className="rounded-md overflow-hidden" style={{ backgroundColor: "var(--ew-row-tint)" }}>
-        <table className="w-full text-sm">
-          <thead>
-            <tr style={{ color: "var(--ew-gray-700)" }}>
-              <th className="px-3 py-2 text-left text-xs font-medium uppercase tracking-wide">Description</th>
-              <th className="px-3 py-2 text-right text-xs font-medium uppercase tracking-wide">At retirement</th>
-              <th className="px-3 py-2 text-right text-xs font-medium uppercase tracking-wide">Today's terms</th>
-            </tr>
-          </thead>
-          <tbody>
-            {rows.map((r, idx) => (
-              <tr key={r.id} style={{ backgroundColor: idx % 2 === 0 ? "white" : "var(--ew-row-tint)" }}>
-                <td className="px-3 py-2.5" style={{ color: "var(--ew-primary-navy)" }}>{r.description || "(untitled)"}</td>
-                <td className="px-3 py-2.5 text-right tabular-nums font-medium" style={{ color: "var(--ew-gray-900)" }}>{rand(r.capitalAtRetirement)}</td>
-                <td className="px-3 py-2.5 text-right tabular-nums" style={{ color: "var(--ew-gray-700)" }}>{rand(r.valueInCurrentTerms)}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-    </Card>
   );
 }

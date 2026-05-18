@@ -987,6 +987,17 @@ th, td {
     line-height: 2rem;
   }
   
+  /* Hide native number-input spinners globally — EW inputs are styled and don't need them. */
+  input[type="number"]::-webkit-outer-spin-button,
+  input[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+  input[type="number"] {
+    -moz-appearance: textfield;
+    appearance: textfield;
+  }
+
   /* Input fields for editable content — EW Inputs spec: white bg, visible border, brand-blue focus.
      Padding lives ONLY here. Field-type rules (.field-percentage, .field-currency, .field-years,
      .field-number) handle width + text-align + font-size only — never padding. Column separators
@@ -1188,6 +1199,34 @@ th, td {
     font-size: 0.875rem !important;
   }
 
+  /* Opt-in: zero out the global tbody row borders (set by `table tbody tr` at
+     line ~586) for tables that want flat alternating-row backgrounds only. */
+  table.no-row-borders tbody tr,
+  table.no-row-borders tbody tr:last-child td,
+  table.no-row-borders tbody tr td.border-b {
+    border-bottom: none !important;
+  }
+
+  /* Compact data-table treatment for simple list tables (future-inflows,
+     retirement-lump-sum-needs, etc.) where the legacy `w-full` would stretch
+     columns to fill the container even though their content is tiny. Opt-in
+     via `<table className="table-compact">` — sizes to content, caps inputs
+     at sensible widths, lets calculated-field cells size naturally. */
+  table.table-compact {
+    width: auto !important;
+  }
+  table.table-compact .table-input {
+    width: auto !important;
+    min-width: 60px;
+    max-width: 140px;
+  }
+  table.table-compact input[type="number"].table-input {
+    max-width: 80px;
+  }
+  table.table-compact .calculated-field {
+    min-width: 70px;
+  }
+
   /* Default value styling — distinguishes empty/placeholder values from entered ones */
   .default-value {
     color: var(--ew-gray-600) !important;
@@ -1370,11 +1409,19 @@ th, td {
   }
 
   /* GLOBAL: all table cell content sits middle-aligned vertically.
-     Beats Tailwind utilities like `.align-top` because of !important. Single source of truth. */
+     Single source of truth — but cells that explicitly opt into `align-top`
+     (the Tailwind utility) get top alignment, which is the right behaviour
+     for rowSpan cells that span multiple sub-rows (description, actions,
+     etc.). The class-bearing selector below has higher specificity than this
+     element-only rule, so it wins when applied. */
   table thead th,
   table tbody td,
   table tfoot td {
     vertical-align: middle !important;
+  }
+  table td.align-top,
+  table th.align-top {
+    vertical-align: top !important;
   }
 
   /* GLOBAL: Radix Switch in checked state uses EW brand blue. Single source of truth

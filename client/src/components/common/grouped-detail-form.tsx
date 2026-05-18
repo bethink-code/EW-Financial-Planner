@@ -72,3 +72,4 @@ export function GroupedDetailForm({ children, className = "" }: GroupedDetailFor
     </div>
   );
 }
+

@@ -1,9 +1,11 @@
 import { useState, useCallback } from "react";
+import { useLocation } from "wouter";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { RetirementFund, UpdateRetirementFund, ClientDetails } from "@shared/schema";
 import { queryClient, apiRequest } from "@/lib/queryClient";
 import { CalculatorHeader } from "@/components/ui/calculator-header";
 import { RetirementFundsSummary } from "@/components/retirement-funds/retirement-funds-summary";
+import { RetirementProjectionRibbon } from "@/components/retirement/retirement-projection-ribbon";
 import { NewRetirementTable } from "@/components/retirement-funds/new-retirement-table";
 import { RetirementFundHybridTable } from "@/components/retirement-funds/retirement-fund-hybrid-table";
 import { useDebouncedUpdate } from "@/hooks/use-debounced-update";
@@ -21,6 +23,8 @@ interface ColumnVisibility {
 export default function NewRetirementFunds() {
   const { viewMode, setViewMode } = useViewMode();
   const [tableMode, setTableMode] = useState<"inputs" | "flows">("inputs");
+  const [location] = useLocation();
+  const isRetirementNeed = location.startsWith("/needs/retirement");
 
   // Enhanced view mode change with transitions
   const handleViewModeChange = useCallback((newMode: 'table' | 'hybrid') => {
@@ -171,11 +175,15 @@ export default function NewRetirementFunds() {
           onTableModeChange={setTableMode}
           className="mb-6"
         >
-          {/* Summary with max width constraint */}
-          <div className="max-w-6xl">
-            <RetirementFundsSummary />
-          </div>
-          
+          {/* Per-domain summary on non-retirement routes only. Retirement
+              renders its cross-category ribbon above the tabs in
+              RetirementCategoryTabs. */}
+          {!isRetirementNeed && (
+            <div className="max-w-6xl">
+              <RetirementFundsSummary />
+            </div>
+          )}
+
           {/* Table with full width and margin */}
           <div className="table-container-wrapper">
             {/* Table View */}

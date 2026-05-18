@@ -11,6 +11,7 @@ import { DetailFormHeader } from '@/components/common/detail-form-header';
 import { getFieldClass } from '@/lib/design-tokens';
 import { getValueClass, handleDefaultValueFocus } from '@/lib/formatting';
 import { formatCurrencyValue, formatPercentageValue, formatYearsValue } from '@/lib/formatting';
+import { useRetirementProjection } from '@/hooks/use-retirement-projection';
 
 interface RetirementFundDetailFormProps {
   fund: RetirementFund;
@@ -32,6 +33,12 @@ export function RetirementFundDetailForm({
   });
   const [location] = useLocation();
   const showRetirementProjection = location.startsWith('/needs/retirement');
+  const { data: projection } = useRetirementProjection();
+  const perVehicle = showRetirementProjection
+    ? projection?.retirementFunds.find(f => f.id === fund.id)
+    : undefined;
+  const formatRand = (n: number | undefined) =>
+    formatCurrencyValue(Math.round(n ?? 0).toString());
 
   // Text field handlers
   const handleTextFieldBlur = (field: keyof UpdateRetirementFund, value: string) => {
@@ -470,7 +477,7 @@ export function RetirementFundDetailForm({
       {/* Group 5: Retirement Projection — only rendered inside the Retirement need flow */}
       {showRetirementProjection && (
       <FieldGroup title="Retirement Projection">
-        <div className="grid grid-cols-3 gap-x-3 gap-y-4" style={{ width: 'fit-content' }}>
+        <div className="grid grid-cols-5 gap-x-3 gap-y-4 items-end" style={{ width: 'fit-content' }}>
           <FormField label="Monthly Contribution">
             <input
               type="text"
@@ -508,6 +515,18 @@ export function RetirementFundDetailForm({
               onBlur={(e) => handleTextFieldBlur('growthRate', e.target.value)}
               disabled={disabled}
             />
+          </FormField>
+
+          <FormField label="Capital at Retirement">
+            <div className="calculated-field" style={{ minWidth: '140px' }}>
+              {formatRand(perVehicle?.capitalAtRetirement)}
+            </div>
+          </FormField>
+
+          <FormField label="Value in Current Terms">
+            <div className="calculated-field" style={{ minWidth: '140px' }}>
+              {formatRand(perVehicle?.valueInCurrentTerms)}
+            </div>
           </FormField>
         </div>
       </FieldGroup>

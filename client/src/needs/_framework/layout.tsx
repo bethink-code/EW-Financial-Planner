@@ -22,6 +22,11 @@ const PLAN_ID = 1;
 interface NeedLayoutProps {
   config: NeedConfig;
   children: React.ReactNode;
+  /** Optional content rendered inside the stepper card, beneath the
+   *  FINANCIAL PLAN / NEED / STEPS row. Used by Retirement to consolidate the
+   *  live projection ribbon into the same white block as the stepper. DEL
+   *  passes nothing, so its layout is unchanged. */
+  headerExtra?: React.ReactNode;
 }
 
 /**
@@ -30,7 +35,7 @@ interface NeedLayoutProps {
  * Previous / Next action bar at the bottom. Driven entirely by the supplied
  * NeedConfig — every need plugs into the same component.
  */
-export function NeedLayout({ config, children }: NeedLayoutProps) {
+export function NeedLayout({ config, children, headerExtra }: NeedLayoutProps) {
   const [location, setLocation] = useLocation();
   const [needDropdownOpen, setNeedDropdownOpen] = useState(false);
   const [openStepDropdown, setOpenStepDropdown] = useState<string | null>(null);
@@ -189,6 +194,14 @@ export function NeedLayout({ config, children }: NeedLayoutProps) {
               </div>
             </div>
           </div>
+          {headerExtra && (
+            <div
+              className="mt-4 pt-4"
+              style={{ borderTop: "1px solid var(--ew-border)" }}
+            >
+              {headerExtra}
+            </div>
+          )}
         </div>
       </div>
 

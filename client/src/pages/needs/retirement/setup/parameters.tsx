@@ -1,10 +1,9 @@
 import { useState, useEffect } from "react";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { Card } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
+import { FieldGroup, FormField } from "@/components/common/grouped-detail-form";
 import { apiRequest, queryClient } from "@/lib/queryClient";
 import { formatCurrencyValue, handleDefaultValueFocus } from "@/lib/formatting";
 import type { RetirementParameters } from "@shared/schema";
@@ -52,73 +51,89 @@ export default function RetirementSetupParameters() {
 
   return (
     <div className="w-full px-6 py-6">
-      <Card className="max-w-3xl p-6">
-        <h2 className="text-xl font-semibold mb-2">Retirement parameters</h2>
-        <p className="text-sm text-neutral-600 mb-6">Set the retirement horizon for this plan. All terms are in years.</p>
+      <Card className="max-w-3xl p-6 bg-white">
+        <div className="space-y-10">
+          <FieldGroup title="Retirement parameters">
+            <p className="text-sm" style={{ color: "var(--ew-gray-700)" }}>
+              Set the retirement horizon for this plan. All terms are in years.
+            </p>
 
-        <div className="grid grid-cols-2 gap-6">
-          <div>
-            <Label htmlFor="retirementAge">Retire at age</Label>
-            <Input
-              id="retirementAge"
-              type="number"
-              min={40}
-              max={100}
-              value={retirementAge}
-              onChange={(e) => setRetirementAge(parseInt(e.target.value) || 65)}
-            />
-          </div>
-          <div>
-            <Label htmlFor="planningAge">Retirement planning to age</Label>
-            <Input
-              id="planningAge"
-              type="number"
-              min={50}
-              max={120}
-              value={retirementPlanningAge}
-              onChange={(e) => setRetirementPlanningAge(parseInt(e.target.value) || 90)}
-            />
-          </div>
-          <div>
-            <Label className="text-neutral-500">Years to retirement</Label>
-            <div className="px-3 py-2 bg-neutral-50 rounded text-neutral-700 text-sm">{yearsToRetirement}</div>
-          </div>
-          <div>
-            <Label className="text-neutral-500">Years after retirement</Label>
-            <div className="px-3 py-2 bg-neutral-50 rounded text-neutral-700 text-sm">{yearsAfterRetirement}</div>
-          </div>
-        </div>
+            <div className="grid grid-cols-2 gap-x-6 gap-y-5">
+              <FormField label="Retire at age">
+                <input
+                  id="retirementAge"
+                  type="number"
+                  min={40}
+                  max={100}
+                  value={retirementAge}
+                  onChange={(e) => setRetirementAge(parseInt(e.target.value) || 65)}
+                  className="table-input w-full"
+                />
+              </FormField>
 
-        <div className="mt-6 max-w-sm">
-          <Label htmlFor="annualIncome">Current annual taxable income</Label>
-          <Input
-            id="annualIncome"
-            type="text"
-            value={currentAnnualIncome}
-            placeholder="R 0"
-            onFocus={handleDefaultValueFocus}
-            onChange={(e) => setCurrentAnnualIncome(e.target.value)}
-            onBlur={(e) => setCurrentAnnualIncome(formatCurrencyValue(e.target.value))}
-          />
-          <p className="text-xs text-neutral-500 mt-1">Used to compute the tax-deductible portion of any recommended retirement top-up (SA 2025/26 brackets).</p>
-        </div>
+              <FormField label="Retirement planning to age">
+                <input
+                  id="planningAge"
+                  type="number"
+                  min={50}
+                  max={120}
+                  value={retirementPlanningAge}
+                  onChange={(e) => setRetirementPlanningAge(parseInt(e.target.value) || 90)}
+                  className="table-input w-full"
+                />
+              </FormField>
 
-        <div className="flex items-center gap-2 mt-6">
-          <Checkbox
-            id="autoCalcTax"
-            checked={autoCalculateTax}
-            onCheckedChange={(c) => setAutoCalculateTax(!!c)}
-          />
-          <Label htmlFor="autoCalcTax" className="cursor-pointer">Auto-calculate tax on income provisions</Label>
-        </div>
+              <FormField label="Years to retirement">
+                <div className="calculated-field" style={{ width: "100%" }}>
+                  {yearsToRetirement}
+                </div>
+              </FormField>
 
-        <div className="mt-6">
-          <Button onClick={() => saveMutation.mutate()} disabled={saveMutation.isPending}>
-            {saveMutation.isPending ? "Saving..." : "Save"}
-          </Button>
-          {saveMutation.isSuccess && (
-            <span className="ml-3 text-sm text-green-600">Saved.</span>
-          )}
+              <FormField label="Years after retirement">
+                <div className="calculated-field" style={{ width: "100%" }}>
+                  {yearsAfterRetirement}
+                </div>
+              </FormField>
+            </div>
+
+            <div className="max-w-sm">
+              <FormField label="Current annual taxable income">
+                <input
+                  id="annualIncome"
+                  type="text"
+                  value={currentAnnualIncome}
+                  placeholder="R 0"
+                  onFocus={handleDefaultValueFocus}
+                  onChange={(e) => setCurrentAnnualIncome(e.target.value)}
+                  onBlur={(e) => setCurrentAnnualIncome(formatCurrencyValue(e.target.value))}
+                  className="table-input w-full"
+                />
+                <p className="text-xs mt-1.5" style={{ color: "var(--ew-gray-700)" }}>
+                  Used to compute the tax-deductible portion of any recommended retirement top-up (SA 2025/26 brackets).
+                </p>
+              </FormField>
+            </div>
+
+            <label className="flex items-center gap-2 cursor-pointer">
+              <Checkbox
+                id="autoCalcTax"
+                checked={autoCalculateTax}
+                onCheckedChange={(c) => setAutoCalculateTax(!!c)}
+              />
+              <span className="text-sm font-medium" style={{ color: "var(--ew-primary-navy)" }}>
+                Auto-calculate tax on income provisions
+              </span>
+            </label>
+
+            <div className="flex items-center gap-3">
+              <Button onClick={() => saveMutation.mutate()} disabled={saveMutation.isPending}>
+                {saveMutation.isPending ? "Saving..." : "Save"}
+              </Button>
+              {saveMutation.isSuccess && (
+                <span className="text-sm" style={{ color: "var(--ew-positive-symbol)" }}>Saved.</span>
+              )}
+            </div>
+          </FieldGroup>
         </div>
       </Card>
     </div>

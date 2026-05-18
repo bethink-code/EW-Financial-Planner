@@ -10,6 +10,7 @@ import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
 import { DetailFormHeader } from '@/components/common/detail-form-header';
+import { useRetirementProjection } from '@/hooks/use-retirement-projection';
 
 interface VoluntaryInvestmentDetailFormProps {
   investment: VoluntaryInvestment;
@@ -21,6 +22,12 @@ export function VoluntaryInvestmentDetailForm({ investment, onDelete, onDuplicat
   const [isUpdating, setIsUpdating] = useState(false);
   const [location] = useLocation();
   const showRetirementProjection = location.startsWith('/needs/retirement');
+  const { data: projection } = useRetirementProjection();
+  const perVehicle = showRetirementProjection
+    ? projection?.voluntaryInvestments.find(v => v.id === investment.id)
+    : undefined;
+  const formatRand = (n: number | undefined) =>
+    formatCurrencyValue(Math.round(n ?? 0).toString());
 
   // Update mutation
   const updateMutation = useMutation({
@@ -354,6 +361,18 @@ export function VoluntaryInvestmentDetailForm({ investment, onDelete, onDuplicat
               onBlur={(e) => handleInputBlur('incomeIncrease', e.target.value)}
               disabled={isUpdating}
             />
+          </FormField>
+
+          <FormField label="Capital at Retirement">
+            <div className="calculated-field" style={{ minWidth: '140px' }}>
+              {formatRand(perVehicle?.capitalAtRetirement)}
+            </div>
+          </FormField>
+
+          <FormField label="Value in Current Terms">
+            <div className="calculated-field" style={{ minWidth: '140px' }}>
+              {formatRand(perVehicle?.valueInCurrentTerms)}
+            </div>
           </FormField>
         </div>
       </FieldGroup>

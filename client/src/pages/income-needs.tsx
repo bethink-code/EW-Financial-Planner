@@ -1,7 +1,9 @@
 import React, { useState, useCallback } from "react";
+import { useLocation } from "wouter";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import IncomeNeedsTable from "../components/income-needs/income-needs-table";
 import { IncomeNeedsSummary } from "@/components/income-needs/income-needs-summary";
+import { RetirementProjectionRibbon } from "@/components/retirement/retirement-projection-ribbon";
 import { CalculatorHeader } from "@/components/ui/calculator-header";
 import { apiRequest, queryClient } from "@/lib/queryClient";
 import type { InsertIncomeNeeds } from "@shared/schema";
@@ -9,6 +11,8 @@ import { useViewMode } from '@/contexts/view-mode-context';
 
 export default function IncomeNeeds() {
   const { viewMode, setViewMode } = useViewMode();
+  const [location] = useLocation();
+  const isRetirementNeed = location.startsWith("/needs/retirement");
 
   // Fetch needs for count
   const { data: needs = [] } = useQuery({
@@ -53,10 +57,13 @@ export default function IncomeNeeds() {
           onViewModeChange={handleViewModeChange}
           className="mb-6"
         >
-          {/* Summary with max width constraint */}
-          <div className="max-w-6xl">
-            <IncomeNeedsSummary />
-          </div>
+          {/* Per-domain summary on non-retirement routes only. Retirement
+              renders its cross-category ribbon above the tabs. */}
+          {!isRetirementNeed && (
+            <div className="max-w-6xl">
+              <IncomeNeedsSummary />
+            </div>
+          )}
           
           {/* Table with full width and margin */}
           <div className="table-container-wrapper">

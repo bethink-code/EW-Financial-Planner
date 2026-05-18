@@ -58,6 +58,14 @@ import RetirementSetupParameters from "@/pages/needs/retirement/setup/parameters
 import RetirementProject from "@/pages/needs/retirement/project";
 import RetirementImplement from "@/pages/needs/retirement/implement";
 
+// Retirement Build prototype variants — three layouts shown to the client
+import RetirementBuildVariantA from "@/pages/needs/retirement/build/variant-a-long";
+import RetirementBuildVariantBBuildUp from "@/pages/needs/retirement/build/variant-b-build-up";
+import RetirementBuildVariantBEvents from "@/pages/needs/retirement/build/variant-b-events";
+import RetirementBuildVariantBLifestyle from "@/pages/needs/retirement/build/variant-b-lifestyle";
+import RetirementBuildVariantCSources from "@/pages/needs/retirement/build/variant-c-sources";
+import RetirementBuildVariantCUses from "@/pages/needs/retirement/build/variant-c-uses";
+
 function Router() {
   return (
     <div className="min-h-screen bg-gray-50">
@@ -123,6 +131,26 @@ function Router() {
         <Route path="/needs/retirement/setup/client-details">
           {() => <RetirementLayout><ClientDetailsPage /></RetirementLayout>}
         </Route>
+        {/* Prototype Build variants — registered before the legacy per-section routes so
+            the specific sub-paths (build-up / events / lifestyle / sources / uses) match first.
+            Variant A's entry is the bare /needs/retirement/build path (registered last). */}
+        <Route path="/needs/retirement/build/build-up">
+          {() => <RetirementLayout><RetirementBuildVariantBBuildUp /></RetirementLayout>}
+        </Route>
+        <Route path="/needs/retirement/build/events">
+          {() => <RetirementLayout><RetirementBuildVariantBEvents /></RetirementLayout>}
+        </Route>
+        <Route path="/needs/retirement/build/lifestyle">
+          {() => <RetirementLayout><RetirementBuildVariantBLifestyle /></RetirementLayout>}
+        </Route>
+        <Route path="/needs/retirement/build/sources">
+          {() => <RetirementLayout><RetirementBuildVariantCSources /></RetirementLayout>}
+        </Route>
+        <Route path="/needs/retirement/build/uses">
+          {() => <RetirementLayout><RetirementBuildVariantCUses /></RetirementLayout>}
+        </Route>
+
+        {/* Legacy per-section deep-form pages — kept for parity and fallback. */}
         <Route path="/needs/retirement/build/retirement-funds">
           {() => <RetirementLayout><NewRetirementFunds /></RetirementLayout>}
         </Route>
@@ -143,6 +171,12 @@ function Router() {
         </Route>
         <Route path="/needs/retirement/build/income-provided">
           {() => <RetirementLayout><IncomeProvisions /></RetirementLayout>}
+        </Route>
+
+        {/* Variant A entry — bare /build path; registered last so the more specific
+            sub-paths above win first. */}
+        <Route path="/needs/retirement/build">
+          {() => <RetirementLayout><RetirementBuildVariantA /></RetirementLayout>}
         </Route>
         <Route path="/needs/retirement/project">
           {() => <RetirementLayout><RetirementProject /></RetirementLayout>}

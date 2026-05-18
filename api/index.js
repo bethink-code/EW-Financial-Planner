@@ -466,6 +466,7 @@ var retirementParameters = pgTable2("retirement_parameters", {
   retirementAge: integer("retirement_age").notNull().default(65),
   retirementPlanningAge: integer("retirement_planning_age").notNull().default(90),
   autoCalculateTax: boolean2("auto_calculate_tax").notNull().default(true),
+  currentAnnualIncome: text2("current_annual_income").notNull().default("R 0"),
   lastUpdated: text2("last_updated").notNull().default((/* @__PURE__ */ new Date()).toISOString())
 });
 var insertRetirementParametersSchema = createInsertSchema2(retirementParameters).omit({
@@ -1465,6 +1466,7 @@ var MemStorage = class {
       retirementAge: updates.retirementAge ?? 65,
       retirementPlanningAge: updates.retirementPlanningAge ?? 90,
       autoCalculateTax: updates.autoCalculateTax ?? true,
+      currentAnnualIncome: updates.currentAnnualIncome ?? "R 0",
       lastUpdated: (/* @__PURE__ */ new Date()).toISOString()
     };
     this.retirementParameters.set(created.id, created);
@@ -1946,17 +1948,17 @@ var DbStorage = class {
     const parseCurrency = (value) => {
       return parseFloat(value.replace(/[^\d.-]/g, "")) || 0;
     };
-    const totalAssets = assets2.reduce((sum, asset) => {
-      return sum + parseCurrency(asset.marketValue);
+    const totalAssets = assets2.reduce((sum2, asset) => {
+      return sum2 + parseCurrency(asset.marketValue);
     }, 0);
-    const totalLiabilities = liabilities2.reduce((sum, liability) => {
-      return sum + parseCurrency(liability.debtAmount);
+    const totalLiabilities = liabilities2.reduce((sum2, liability) => {
+      return sum2 + parseCurrency(liability.debtAmount);
     }, 0);
-    const totalLifeCover = retirementFunds2.reduce((sum, fund) => {
-      return sum + parseCurrency(fund.approvedLifeCover) + parseCurrency(fund.coverAmount);
+    const totalLifeCover = retirementFunds2.reduce((sum2, fund) => {
+      return sum2 + parseCurrency(fund.approvedLifeCover) + parseCurrency(fund.coverAmount);
     }, 0);
-    const totalBequests = lumpSumBequests2.reduce((sum, bequest) => {
-      return sum + parseCurrency(bequest.valueAtDeath);
+    const totalBequests = lumpSumBequests2.reduce((sum2, bequest) => {
+      return sum2 + parseCurrency(bequest.valueAtDeath);
     }, 0);
     return {
       lifeCoverToEstate: `R ${Math.round(totalLifeCover * 0.4).toLocaleString()}`,
@@ -3392,7 +3394,7 @@ function registerRetirementParametersRoutes(app2) {
         return res.status(400).json({ message: "Invalid plan ID" });
       }
       const params = await storage.getRetirementParameters(planId);
-      res.json(params ?? { planId, retirementAge: 65, retirementPlanningAge: 90, autoCalculateTax: true });
+      res.json(params ?? { planId, retirementAge: 65, retirementPlanningAge: 90, autoCalculateTax: true, currentAnnualIncome: "R 0" });
     } catch (error) {
       console.error("Error fetching retirement parameters:", error);
       res.status(500).json({ message: "Failed to fetch retirement parameters" });
@@ -3556,6 +3558,46 @@ function registerRetirementLumpSumNeedRoutes(app2) {
       res.status(500).json({ message: "Failed to delete retirement lump sum need" });
     }
   });
+}
+
+// shared/sa-tax.ts
+var BRACKETS_2025_2026 = [
+  { upTo: 237100, base: 0, rate: 0.18, threshold: 0 },
+  { upTo: 370500, base: 42678, rate: 0.26, threshold: 237100 },
+  { upTo: 512800, base: 77362, rate: 0.31, threshold: 370500 },
+  { upTo: 673e3, base: 121475, rate: 0.36, threshold: 512800 },
+  { upTo: 857900, base: 179147, rate: 0.39, threshold: 673e3 },
+  { upTo: 1817e3, base: 251258, rate: 0.41, threshold: 857900 },
+  { upTo: Infinity, base: 644489, rate: 0.45, threshold: 1817e3 }
+];
+var RA_DEDUCTION_RATE = 0.275;
+var RA_DEDUCTION_ANNUAL_CAP = 35e4;
+function marginalTaxRate(opts) {
+  const income = Math.max(0, opts.annualTaxableIncome);
+  return BRACKETS_2025_2026.find((b) => income <= b.upTo).rate;
+}
+function raDeductionCap(opts) {
+  const income = Math.max(0, opts.annualTaxableIncome);
+  return Math.min(income * RA_DEDUCTION_RATE, RA_DEDUCTION_ANNUAL_CAP);
+}
+function allocateAdditionalContribution(opts) {
+  const additional = Math.max(0, opts.additionalMonthlyContribution);
+  const currentAnnualRa = Math.max(0, opts.currentMonthlyRaContribution) * 12;
+  const cap = raDeductionCap({ annualTaxableIncome: opts.annualTaxableIncome });
+  const roomBefore = Math.max(0, cap - currentAnnualRa);
+  const additionalAnnual = additional * 12;
+  const allocatedToRaAnnual = Math.min(additionalAnnual, roomBefore);
+  const allocatedToVoluntaryAnnual = additionalAnnual - allocatedToRaAnnual;
+  const rate = marginalTaxRate({ annualTaxableIncome: opts.annualTaxableIncome });
+  return {
+    raMonthly: allocatedToRaAnnual / 12,
+    voluntaryMonthly: allocatedToVoluntaryAnnual / 12,
+    raAnnualDeduction: allocatedToRaAnnual,
+    raDeductionCap: cap,
+    raRoomRemainingBefore: roomBefore,
+    marginalRate: rate,
+    annualTaxSavingFromTopUp: allocatedToRaAnnual * rate
+  };
 }
 
 // shared/retirement-calculations.ts
@@ -3779,9 +3821,9 @@ function computeRetirementProjection(input) {
       valueInCurrentTerms: discountToCurrentTerms({ futureValue: capital, discountRate: inflation, years: yearsToRetirement })
     };
   });
-  const sum = (xs) => xs.reduce((s, x) => s + x.capitalAtRetirement, 0);
-  const capitalProvided = sum(retirementFundProjections) + sum(dbFundProjections) + sum(voluntaryProjections) + sum(futureInflowProjections) + sum(incomeProvidedProjections);
-  const capitalRequired = sum(lumpSumProjections) + sum(incomeRequiredProjections);
+  const sum2 = (xs) => xs.reduce((s, x) => s + x.capitalAtRetirement, 0);
+  const capitalProvided = sum2(retirementFundProjections) + sum2(dbFundProjections) + sum2(voluntaryProjections) + sum2(futureInflowProjections) + sum2(incomeProvidedProjections);
+  const capitalRequired = sum2(lumpSumProjections) + sum2(incomeRequiredProjections);
   const surplus = capitalProvided - capitalRequired;
   const coverage = capitalRequired > 0 ? capitalProvided / capitalRequired : capitalProvided > 0 ? 1 : 0;
   const additionalContribution = surplus < 0 ? additionalMonthlyContribution({
@@ -3790,6 +3832,16 @@ function computeRetirementProjection(input) {
     contributionEscalation: 0.06,
     yearsToRetirement
   }) : 0;
+  const currentMonthlyRaContribution = input.retirementFunds.reduce(
+    (sum3, f) => sum3 + parseAmount(f.monthlyContribution),
+    0
+  );
+  const annualTaxableIncome = parseAmount(input.parameters?.currentAnnualIncome);
+  const contributionAllocation = additionalContribution > 0 ? allocateAdditionalContribution({
+    additionalMonthlyContribution: additionalContribution,
+    currentMonthlyRaContribution,
+    annualTaxableIncome
+  }) : null;
   return {
     yearsToRetirement,
     yearsAfterRetirement,
@@ -3806,6 +3858,9 @@ function computeRetirementProjection(input) {
     incomeRequired: incomeRequiredProjections,
     incomeProvided: incomeProvidedProjections,
     additionalMonthlyContribution: additionalContribution,
+    contributionAllocation,
+    currentMonthlyRaContribution,
+    annualTaxableIncome,
     ready
   };
 }
@@ -3869,6 +3924,175 @@ function registerRetirementProjectionRoutes(app2) {
   });
 }
 
+// shared/del-calculations.ts
+function position(provided, required) {
+  const surplus = provided - required;
+  const percentage = required > 0 ? provided / required * 100 : provided > 0 ? 100 : 0;
+  return { provided, required, surplus, percentage };
+}
+function sum(xs) {
+  return xs.reduce((a, b) => a + b, 0);
+}
+function computeDelProjection(input) {
+  const p = input.estateParameters;
+  const lifeCoverToEstate = p ? parseAmount(p.lifeCoverToEstate) : sum(
+    input.assurance.filter((a) => !a.buySell && !a.keyMan && !a.excludedFromEstateDuty).map((a) => parseAmount(a.deathBenefit))
+  );
+  const voluntaryInvestmentsToEstate = p ? parseAmount(p.voluntaryInvestments) : sum(input.voluntaryInvestments.map((v) => parseAmount(v.marketValue)));
+  const accrualClaimFromSpouse = parseAmount(p?.accrualClaimFromSpouse);
+  const dependantsSurplusUtilised = parseAmount(p?.dependantsSurplusUtilised);
+  const estateProvided = lifeCoverToEstate + voluntaryInvestmentsToEstate + accrualClaimFromSpouse + dependantsSurplusUtilised;
+  const estateDuty = parseAmount(p?.estateDuty);
+  const executorsFees = parseAmount(p?.executorsFees);
+  const settleClientLiabilities = p ? parseAmount(p.settleClientLiabilities) : sum(input.liabilities.filter((l) => l.included).map((l) => parseAmount(l.debtAmount)));
+  const capitalGainsTax = parseAmount(p?.capitalGainsTax);
+  const mastersFee = parseAmount(p?.mastersFee);
+  const deathBedFuneral = parseAmount(p?.deathBedFuneralExpenses);
+  const conveyancingValuation = parseAmount(p?.conveyancingValuationFees);
+  const accrualClaimToSpouse = parseAmount(p?.accrualClaimToSpouse);
+  const estateRequired = estateDuty + executorsFees + settleClientLiabilities + capitalGainsTax + mastersFee + deathBedFuneral + conveyancingValuation + accrualClaimToSpouse;
+  const estate = position(estateProvided, estateRequired);
+  const estateBreakdown = [
+    { label: "Life cover to the estate", amount: lifeCoverToEstate, side: "provided" },
+    { label: "Voluntary investments to estate", amount: voluntaryInvestmentsToEstate, side: "provided" },
+    { label: "Accrual claim from spouse", amount: accrualClaimFromSpouse, side: "provided" },
+    { label: "Dependants' surplus utilised", amount: dependantsSurplusUtilised, side: "provided" },
+    { label: "Estate duty", amount: estateDuty, side: "required" },
+    { label: "Executor's fees", amount: executorsFees, side: "required" },
+    { label: "Settle client's liabilities", amount: settleClientLiabilities, side: "required" },
+    { label: "Capital gains tax", amount: capitalGainsTax, side: "required" },
+    { label: "Master's fee", amount: mastersFee, side: "required" },
+    { label: "Death bed and funeral expenses", amount: deathBedFuneral, side: "required" },
+    { label: "Conveyancing and valuation fees", amount: conveyancingValuation, side: "required" },
+    { label: "Accrual claim to spouse", amount: accrualClaimToSpouse, side: "required" }
+  ];
+  const lifeCoverToDependants = sum(
+    input.assurance.filter((a) => !a.buySell && !a.keyMan).map((a) => parseAmount(a.deathBenefit) * (a.excludedFromEstateDuty ? 1 : 0))
+  );
+  const retirementFundDeathBenefits = sum(
+    input.retirementFunds.map(
+      (f) => parseAmount(f.fundValueAtDeath || f.fundValue) + parseAmount(f.approvedLifeCover) + parseAmount(f.coverAmount)
+    )
+  );
+  const dbFundLumpSums = sum(input.definedBenefitFunds.map((f) => parseAmount(f.deathLumpSum)));
+  const estateSurplusUtilisedForDependants = Math.max(0, estate.surplus);
+  const dependantsProvided = lifeCoverToDependants + retirementFundDeathBenefits + dbFundLumpSums + estateSurplusUtilisedForDependants;
+  const lumpSumBequests2 = sum(input.lumpSumBequests.map((b) => parseAmount(b.valueAtDeath) || parseAmount(b.amount)));
+  const REAL_RETURN_DEFAULT = 0.06;
+  const capitalisedIncomeNeeds = sum(
+    input.incomeNeeds.map((n) => {
+      const monthlyAmount = parseAmount(n.amount);
+      const termYears = parseAmount(n.termYears);
+      const escalation = parsePercent(n.increasePercentage);
+      if (monthlyAmount <= 0 || termYears <= 0) return 0;
+      const annualAmount = monthlyAmount * 12;
+      if (Math.abs(REAL_RETURN_DEFAULT - escalation) < 1e-9) {
+        return annualAmount * termYears;
+      }
+      const ratio = (1 + escalation) / (1 + REAL_RETURN_DEFAULT);
+      return annualAmount * (1 - Math.pow(ratio, termYears)) / (REAL_RETURN_DEFAULT - escalation);
+    })
+  );
+  const liabilitiesSettledByDependants = sum(
+    input.liabilities.filter((l) => l.included).map((l) => parseAmount(l.others))
+  );
+  const dependantsRequired = lumpSumBequests2 + capitalisedIncomeNeeds + liabilitiesSettledByDependants;
+  const dependants = position(dependantsProvided, dependantsRequired);
+  const dependantsBreakdown = [
+    { label: "Life cover to dependants", amount: lifeCoverToDependants, side: "provided" },
+    { label: "Retirement fund death benefits", amount: retirementFundDeathBenefits, side: "provided" },
+    { label: "Defined benefit fund lump sums", amount: dbFundLumpSums, side: "provided" },
+    { label: "Estate surplus utilised", amount: estateSurplusUtilisedForDependants, side: "provided" },
+    { label: "Lump sum bequests", amount: lumpSumBequests2, side: "required" },
+    { label: "Capitalised income needs", amount: capitalisedIncomeNeeds, side: "required" },
+    { label: "Liabilities settled by dependants", amount: liabilitiesSettledByDependants, side: "required" }
+  ];
+  const totalCapitalProvided = estateProvided + lifeCoverToDependants + retirementFundDeathBenefits + dbFundLumpSums;
+  const totalCapitalRequired = estateRequired + dependantsRequired;
+  const totalCapital = position(totalCapitalProvided, totalCapitalRequired);
+  const monthlyIncomeFromRetirementFunds = sum(
+    input.retirementFunds.map((f) => f.monthlyIncomeCheckbox ? parseAmount(f.monthlyIncome) : 0)
+  );
+  const monthlyDbPension = sum(
+    input.definedBenefitFunds.map(
+      (f) => f.pensionIncomeCheckbox ? parseAmount(f.pensionIncomeAmount) : 0
+    )
+  );
+  const monthlyAssuranceIncome = sum(
+    input.assurance.map((a) => a.amount && parseAmount(a.amount) > 0 ? parseAmount(a.amount) : 0)
+  );
+  const incomeProvided = monthlyIncomeFromRetirementFunds + monthlyDbPension + monthlyAssuranceIncome;
+  const incomeRequired = sum(
+    input.incomeNeeds.map((n) => parseAmount(n.amount))
+  );
+  const income = position(incomeProvided, incomeRequired);
+  const incomeBreakdown = [
+    { label: "Retirement funds and living annuities", amount: monthlyIncomeFromRetirementFunds, side: "provided" },
+    { label: "Defined benefit pension", amount: monthlyDbPension, side: "provided" },
+    { label: "Assurance monthly income", amount: monthlyAssuranceIncome, side: "provided" },
+    { label: "Monthly income needs", amount: incomeRequired, side: "required" }
+  ];
+  const recommendedAdditionalCover = Math.max(0, -totalCapital.surplus);
+  const ready = !!p || input.assurance.length > 0 || input.retirementFunds.length > 0 || input.voluntaryInvestments.length > 0 || input.liabilities.length > 0;
+  return {
+    estatePosition: { ...estate, breakdown: estateBreakdown },
+    dependantsPosition: { ...dependants, breakdown: dependantsBreakdown },
+    totalCapitalPosition: totalCapital,
+    incomePosition: { ...income, breakdown: incomeBreakdown },
+    recommendedAdditionalCover,
+    ready
+  };
+}
+
+// server/routes/del-projection.ts
+function registerDelProjectionRoutes(app2) {
+  app2.get("/api/del-projection/:planId", async (req, res) => {
+    try {
+      const planId = parseInt(req.params.planId);
+      if (isNaN(planId)) {
+        return res.status(400).json({ message: "Invalid plan ID" });
+      }
+      const [
+        estateParameters,
+        assurance2,
+        retirementFunds2,
+        definedBenefitFunds2,
+        voluntaryInvestments2,
+        liabilities2,
+        lumpSumBequests2,
+        incomeNeeds2,
+        incomeProvisions2
+      ] = await Promise.all([
+        storage.getEstatePositionParameters(),
+        storage.getAssurance(),
+        storage.getRetirementFunds(),
+        storage.getDefinedBenefitFunds(),
+        storage.getVoluntaryInvestments(),
+        storage.getLiabilities(),
+        storage.getLumpSumBequests(),
+        storage.getIncomeNeeds(),
+        storage.getIncomeProvisions()
+      ]);
+      const params = Array.isArray(estateParameters) ? estateParameters[0] ?? null : estateParameters ?? null;
+      const projection = computeDelProjection({
+        estateParameters: params,
+        assurance: assurance2,
+        retirementFunds: retirementFunds2,
+        definedBenefitFunds: definedBenefitFunds2,
+        voluntaryInvestments: voluntaryInvestments2,
+        liabilities: liabilities2,
+        lumpSumBequests: lumpSumBequests2,
+        incomeNeeds: incomeNeeds2,
+        incomeProvisions: incomeProvisions2
+      });
+      res.json(projection);
+    } catch (error) {
+      console.error("Error computing DEL projection:", error);
+      res.status(500).json({ message: "Failed to compute DEL projection" });
+    }
+  });
+}
+
 // server/routes.ts
 async function registerRoutes(app2) {
   registerEntityRoutes(app2);
@@ -3891,6 +4115,7 @@ async function registerRoutes(app2) {
   registerFutureInflowRoutes(app2);
   registerRetirementLumpSumNeedRoutes(app2);
   registerRetirementProjectionRoutes(app2);
+  registerDelProjectionRoutes(app2);
   await storage.initializeDefaultNeeds();
   return createServer(app2);
 }

@@ -1,8 +1,10 @@
 import React, { useState, useCallback } from "react";
+import { useLocation } from "wouter";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import IncomeProvisionsTable from "../components/income-provisions/income-provisions-table-new";
 import { IncomeProvisionsHybridTable } from "@/components/income-provisions/income-provisions-hybrid-table";
 import { IncomeProvisionsSummary } from "@/components/income-provisions/income-provisions-summary";
+import { RetirementProjectionRibbon } from "@/components/retirement/retirement-projection-ribbon";
 import { CalculatorHeader } from "@/components/ui/calculator-header";
 import { apiRequest, queryClient } from "@/lib/queryClient";
 import type { InsertIncomeProvisions } from "@shared/schema";
@@ -11,6 +13,8 @@ import { useViewMode } from '@/contexts/view-mode-context';
 export default function IncomeProvisions() {
   const { viewMode, setViewMode } = useViewMode();
   const [searchTerm, setSearchTerm] = useState("");
+  const [location] = useLocation();
+  const isRetirementNeed = location.startsWith("/needs/retirement");
 
   // Fetch provisions for count
   const { data: provisions = [] } = useQuery({
@@ -55,10 +59,13 @@ export default function IncomeProvisions() {
             onViewModeChange={handleViewModeChange}
             className="mb-6"
           >
-            {/* Summary with max width constraint */}
-            <div className="max-w-6xl">
-              <IncomeProvisionsSummary searchTerm={searchTerm} />
-            </div>
+            {/* Per-domain summary on non-retirement routes only. Retirement
+                renders its cross-category ribbon above the tabs. */}
+            {!isRetirementNeed && (
+              <div className="max-w-6xl">
+                <IncomeProvisionsSummary searchTerm={searchTerm} />
+              </div>
+            )}
             
             {/* Table with full width and margin */}
             <div className="table-container-wrapper">

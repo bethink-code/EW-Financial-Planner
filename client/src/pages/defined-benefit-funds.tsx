@@ -1,8 +1,10 @@
 import React, { useState, useCallback } from "react";
+import { useLocation } from "wouter";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import DefinedBenefitFundsTable from "../components/defined-benefit-funds/defined-benefit-funds-table-correct-stable";
 import { DefinedBenefitFundHybridTable } from "../components/defined-benefit-funds/defined-benefit-fund-hybrid-table";
 import { DefinedBenefitFundsSummary } from "@/components/defined-benefit-funds/defined-benefit-funds-summary";
+import { RetirementProjectionRibbon } from "@/components/retirement/retirement-projection-ribbon";
 import { CalculatorHeader } from "@/components/ui/calculator-header";
 import { apiRequest, queryClient } from "@/lib/queryClient";
 import { getDefaultOwners, getDefaultOwnershipPercentages } from "@/lib/entity-utils";
@@ -11,6 +13,8 @@ import { useViewMode } from '@/contexts/view-mode-context';
 
 export default function DefinedBenefitFunds() {
   const { viewMode, setViewMode } = useViewMode();
+  const [location] = useLocation();
+  const isRetirementNeed = location.startsWith("/needs/retirement");
 
   // Fetch funds for count
   const { data: funds = [] } = useQuery({
@@ -70,10 +74,13 @@ export default function DefinedBenefitFunds() {
           onViewModeChange={handleViewModeChange}
           className="mb-6"
         >
-          {/* Summary with max width constraint */}
-          <div className="max-w-6xl">
-            <DefinedBenefitFundsSummary />
-          </div>
+          {/* Per-domain summary on non-retirement routes only. Retirement
+              renders its cross-category ribbon above the tabs. */}
+          {!isRetirementNeed && (
+            <div className="max-w-6xl">
+              <DefinedBenefitFundsSummary />
+            </div>
+          )}
           
           {/* Table with full width and margin */}
           <div className="table-container-wrapper">

@@ -11,6 +11,7 @@ import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
 import { DetailFormHeader } from '@/components/common/detail-form-header';
+import { useRetirementProjection } from '@/hooks/use-retirement-projection';
 
 interface DefinedBenefitFundDetailFormProps {
   fund: DefinedBenefitFund;
@@ -22,6 +23,12 @@ export function DefinedBenefitFundDetailForm({ fund, onDelete, onDuplicate }: De
   const [isUpdating, setIsUpdating] = useState(false);
   const [location] = useLocation();
   const showRetirementProjection = location.startsWith('/needs/retirement');
+  const { data: projection } = useRetirementProjection();
+  const perVehicle = showRetirementProjection
+    ? projection?.definedBenefitFunds.find(f => f.id === fund.id)
+    : undefined;
+  const formatRand = (n: number | undefined) =>
+    formatCurrencyValue(Math.round(n ?? 0).toString());
 
   // Update mutation
   const updateMutation = useMutation({
@@ -282,18 +289,32 @@ export function DefinedBenefitFundDetailForm({ fund, onDelete, onDuplicate }: De
       {/* Group 4: Retirement Projection — only rendered inside the Retirement need flow */}
       {showRetirementProjection && (
       <FieldGroup title="Retirement Projection">
-        <FormField label="Growth Rate">
-          <input
-            type="text"
-            defaultValue={fund.growthRate || '10%'}
-            placeholder="10%"
-            className={`table-input ${getValueClass(fund.growthRate || '10%', 'percentage')}`}
-            style={{ width: 'fit-content', minWidth: '120px' }}
-            onFocus={handleDefaultValueFocus}
-            onBlur={(e) => handleInputBlur('growthRate', e.target.value)}
-            disabled={isUpdating}
-          />
-        </FormField>
+        <div className="grid grid-cols-3 gap-x-3 gap-y-4 items-end" style={{ width: 'fit-content' }}>
+          <FormField label="Growth Rate">
+            <input
+              type="text"
+              defaultValue={fund.growthRate || '10%'}
+              placeholder="10%"
+              className={`table-input ${getValueClass(fund.growthRate || '10%', 'percentage')}`}
+              style={{ width: 'fit-content', minWidth: '120px' }}
+              onFocus={handleDefaultValueFocus}
+              onBlur={(e) => handleInputBlur('growthRate', e.target.value)}
+              disabled={isUpdating}
+            />
+          </FormField>
+
+          <FormField label="Capital at Retirement">
+            <div className="calculated-field" style={{ minWidth: '140px' }}>
+              {formatRand(perVehicle?.capitalAtRetirement)}
+            </div>
+          </FormField>
+
+          <FormField label="Value in Current Terms">
+            <div className="calculated-field" style={{ minWidth: '140px' }}>
+              {formatRand(perVehicle?.valueInCurrentTerms)}
+            </div>
+          </FormField>
+        </div>
       </FieldGroup>
       )}
     </div>
