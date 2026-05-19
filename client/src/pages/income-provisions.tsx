@@ -1,17 +1,14 @@
 import React, { useState, useCallback } from "react";
 import { useLocation } from "wouter";
 import { useQuery, useMutation } from "@tanstack/react-query";
-import IncomeProvisionsTable from "../components/income-provisions/income-provisions-table-new";
 import { IncomeProvisionsHybridTable } from "@/components/income-provisions/income-provisions-hybrid-table";
 import { IncomeProvisionsSummary } from "@/components/income-provisions/income-provisions-summary";
 import { RetirementProjectionRibbon } from "@/components/retirement/retirement-projection-ribbon";
 import { CalculatorHeader } from "@/components/ui/calculator-header";
 import { apiRequest, queryClient } from "@/lib/queryClient";
 import type { InsertIncomeProvisions } from "@shared/schema";
-import { useViewMode } from '@/contexts/view-mode-context';
 
 export default function IncomeProvisions() {
-  const { viewMode, setViewMode } = useViewMode();
   const [searchTerm, setSearchTerm] = useState("");
   const [location] = useLocation();
   const isRetirementNeed = location.startsWith("/needs/retirement");
@@ -37,10 +34,6 @@ export default function IncomeProvisions() {
     },
   });
 
-  const handleViewModeChange = useCallback((newMode: 'table' | 'hybrid') => {
-    setViewMode(newMode);
-  }, [setViewMode]);
-
   const handleAddProvision = useCallback(() => {
     addMutation.mutate();
   }, [addMutation]);
@@ -48,15 +41,13 @@ export default function IncomeProvisions() {
   return (
     <div className="">
       <div className="w-full px-6 py-6">
-        <div className={viewMode === 'table' ? 'w-full' : 'w-[1320px]'}>
+        <div className="w-[1320px]">
           {/* Combined Header, Summary and Table */}
           <CalculatorHeader
             title="Income Provisions"
             onAddItem={handleAddProvision}
             addButtonText="Add Provision"
             isAddingItem={addMutation.isPending}
-            viewMode={viewMode}
-            onViewModeChange={handleViewModeChange}
             className="mb-6"
           >
             {/* Per-domain summary on non-retirement routes only. Retirement
@@ -69,11 +60,7 @@ export default function IncomeProvisions() {
             
             {/* Table with full width and margin */}
             <div className="table-container-wrapper">
-              {viewMode === 'hybrid' ? (
-                <IncomeProvisionsHybridTable onAddProvision={handleAddProvision} searchTerm={searchTerm} />
-              ) : (
-                <IncomeProvisionsTable viewMode={viewMode} searchTerm={searchTerm} onAddProvision={handleAddProvision} />
-              )}
+              <IncomeProvisionsHybridTable onAddProvision={handleAddProvision} searchTerm={searchTerm} />
             </div>
           </CalculatorHeader>
         </div>

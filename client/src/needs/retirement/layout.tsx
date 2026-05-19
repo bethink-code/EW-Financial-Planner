@@ -3,7 +3,6 @@ import { NeedLayout } from "@/needs/_framework";
 import { buildRetirementConfig } from "./config";
 import { useBuildVariant } from "./build-variant";
 import { BuildVariantFab } from "./build-variant-fab";
-import { ViewModeFab } from "./view-mode-fab";
 import { RetirementProjectionRibbon } from "@/components/retirement/retirement-projection-ribbon";
 
 export function RetirementLayout({ children }: { children: React.ReactNode }) {
@@ -18,12 +17,7 @@ export function RetirementLayout({ children }: { children: React.ReactNode }) {
       headerExtra={onBuildRoute ? <RetirementProjectionRibbon /> : undefined}
     >
       {children}
-      {onBuildRoute && (
-        <>
-          <BuildVariantFab />
-          <ViewModeFab />
-        </>
-      )}
+      {onBuildRoute && <BuildVariantFab />}
     </NeedLayout>
   );
 }

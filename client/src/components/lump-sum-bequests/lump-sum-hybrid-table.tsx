@@ -258,8 +258,6 @@ export function LumpSumHybridTable({ onAddBequest }: LumpSumHybridTableProps) {
 
   return (
     <HybridViewWrapper
-      viewMode="hybrid"
-      tableComponent={null}
       summaryCards={
         <div>
           {onAddBequest && (

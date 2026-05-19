@@ -1,7 +1,6 @@
-import { Plus, RefreshCw } from"lucide-react";
+import { RefreshCw } from "lucide-react";
 import { useLocation } from "wouter";
-import { Button } from"@/components/ui/button";
-import { GraphTableSwitcher, InputFlowSwitcher } from"@/components/ui/switcher";
+import { Button } from "@/components/ui/button";
 
 interface CalculatorHeaderProps {
   title: string;
@@ -10,11 +9,6 @@ interface CalculatorHeaderProps {
   onAddItem?: () => void;
   addButtonText?: string;
   isAddingItem?: boolean;
-  viewMode?:"table" |"hybrid";
-  onViewModeChange?: (mode:"table" |"hybrid") => void;
-  showTableFlowsSwitcher?: boolean;
-  tableMode?:"inputs" |"flows";
-  onTableModeChange?: (mode:"inputs" |"flows") => void;
   onRefresh?: () => void;
   isRefreshing?: boolean;
   additionalControls?: React.ReactNode;
@@ -24,27 +18,20 @@ interface CalculatorHeaderProps {
 
 export function CalculatorHeader({
   title,
-  itemCount,
-  itemLabel ="items",
   onAddItem,
-  addButtonText ="Add Item",
+  addButtonText = "Add Item",
   isAddingItem = false,
-  viewMode ="table",
-  onViewModeChange,
-  showTableFlowsSwitcher = false,
-  tableMode ="inputs",
-  onTableModeChange,
   onRefresh,
   isRefreshing = false,
   additionalControls,
-  className ="",
+  className = "",
   children
 }: CalculatorHeaderProps) {
   const [location] = useLocation();
   // On Retirement Build routes the page-level header band is redundant — the
   // category tab announces the section, the sidebar already exposes its own
-  // Add button, and Table/Hybrid lives in a FAB. Skip rendering the header
-  // band so the body content sits flush under the tab strip. DEL is untouched.
+  // Add button. Skip rendering the header band so the body content sits flush
+  // under the tab strip. DEL is untouched.
   const isRetirementBuild = location.startsWith("/needs/retirement/build");
 
   return (
@@ -52,7 +39,7 @@ export function CalculatorHeader({
       {!isRetirementBuild && (
         <div className="px-5 pt-5 pb-6">
           <div className="flex items-center justify-between w-full max-w-6xl">
-            {/* Left section: Title, count, Add button, and switchers */}
+            {/* Left section: Title, Add button */}
             <div className="flex items-center gap-4">
               <h1 className="text-2xl font-semibold text-primary">{title}</h1>
 
@@ -70,24 +57,6 @@ export function CalculatorHeader({
                 </Button>
               )}
 
-              {/* View Mode Buttons */}
-              {onViewModeChange && (
-                <GraphTableSwitcher
-                  value={viewMode}
-                  onChange={(value) => onViewModeChange(value as"table" |"hybrid")}
-                  size="sm"
-                />
-              )}
-
-              {/* Table/Flows Switcher for retirement funds */}
-              {showTableFlowsSwitcher && onTableModeChange && (
-                <InputFlowSwitcher
-                  value={tableMode ==="inputs" ?"input" :"flow"}
-                  onChange={(value) => onTableModeChange(value ==="input" ?"inputs" :"flows")}
-                  size="sm"
-                />
-              )}
-
               {/* Refresh Button */}
               {onRefresh && (
                 <button
@@ -102,7 +71,6 @@ export function CalculatorHeader({
 
             {/* Right section: Additional controls only */}
             <div className="flex gap-3 items-center">
-              {/* Additional controls */}
               {additionalControls}
             </div>
           </div>

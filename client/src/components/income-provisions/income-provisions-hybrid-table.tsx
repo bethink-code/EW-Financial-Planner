@@ -324,8 +324,6 @@ export function IncomeProvisionsHybridTable({ onAddProvision, searchTerm = "" }:
 
   return (
     <HybridViewWrapper
-      viewMode="hybrid"
-      tableComponent={null}
       summaryCards={
         <div>
           {onAddProvision && (

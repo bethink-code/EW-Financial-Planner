@@ -6,12 +6,7 @@ import { getFieldClass, getCellClass } from '@/lib/field-types';
 import { formatPercentageValue, formatTextValue, getValueClass, handleDefaultValueFocus, createEnhancedBlurHandler } from '@/lib/formatting';
 import { SafeFragment } from '@/lib/safe-fragment';
 
-interface ResidueTableProps {
-  viewMode: 'table' | 'hybrid';
-  searchTerm?: string;
-}
-
-function ResidueTable({ viewMode, searchTerm }: ResidueTableProps) {
+function ResidueTable() {
   const [isUpdating, setIsUpdating] = useState(false);
 
   const { data: residueItems = [], isLoading, error } = useQuery<Residue[]>({

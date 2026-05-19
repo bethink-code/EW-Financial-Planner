@@ -6,12 +6,9 @@ import { queryClient, apiRequest } from "@/lib/queryClient";
 import { CalculatorHeader } from "@/components/ui/calculator-header";
 import { RetirementFundsSummary } from "@/components/retirement-funds/retirement-funds-summary";
 import { RetirementProjectionRibbon } from "@/components/retirement/retirement-projection-ribbon";
-import { NewRetirementTable } from "@/components/retirement-funds/new-retirement-table";
 import { RetirementFundHybridTable } from "@/components/retirement-funds/retirement-fund-hybrid-table";
 import { useDebouncedUpdate } from "@/hooks/use-debounced-update";
 import { getDefaultOwners, getDefaultOwnershipPercentages, getDefaultBeneficiaries, getDefaultBeneficiaryPercentages } from "@/lib/entity-utils";
-import { useViewMode } from '@/contexts/view-mode-context';
-
 interface ColumnVisibility {
   overview: boolean;
   unapprovedLifeCover: boolean;
@@ -21,21 +18,8 @@ interface ColumnVisibility {
 }
 
 export default function NewRetirementFunds() {
-  const { viewMode, setViewMode } = useViewMode();
-  const [tableMode, setTableMode] = useState<"inputs" | "flows">("inputs");
   const [location] = useLocation();
   const isRetirementNeed = location.startsWith("/needs/retirement");
-
-  // Enhanced view mode change with transitions
-  const handleViewModeChange = useCallback((newMode: 'table' | 'hybrid') => {
-    if (document.startViewTransition) {
-      document.startViewTransition(() => {
-        setViewMode(newMode);
-      });
-    } else {
-      setViewMode(newMode);
-    }
-  }, [setViewMode]);
 
   const [columnVisibility, setColumnVisibility] = useState<ColumnVisibility>({
     overview: true,
@@ -161,18 +145,13 @@ export default function NewRetirementFunds() {
   return (
     <div className="">
       <div className="w-full px-6 py-6">
-        <div className={viewMode === 'table' ? 'w-full' : 'w-[1320px]'}>
+        <div className="w-[1320px]">
           {/* Combined Header, Summary and Table */}
           <CalculatorHeader
           title="Retirement Funds"
           onAddItem={handleAddFund}
           addButtonText="Add Fund"
           isAddingItem={addMutation.isPending}
-          viewMode={viewMode}
-          onViewModeChange={handleViewModeChange}
-          showTableFlowsSwitcher={viewMode === "table"}
-          tableMode={tableMode}
-          onTableModeChange={setTableMode}
           className="mb-6"
         >
           {/* Per-domain summary on non-retirement routes only. Retirement
@@ -186,29 +165,14 @@ export default function NewRetirementFunds() {
 
           {/* Table with full width and margin */}
           <div className="table-container-wrapper">
-            {/* Table View */}
-            {viewMode === "table" && (
-              <NewRetirementTable
-                funds={funds}
-                onFieldUpdate={handleFieldUpdate}
-                onRemoveFund={handleRemoveFund}
-                onDuplicateFund={handleDuplicateFund}
-                onAddFund={handleAddFund}
-                isUpdating={updateMutation.isPending}
-              />
-            )}
-
-            {/* Hybrid View */}
-            {viewMode === "hybrid" && (
-              <RetirementFundHybridTable
-                funds={funds}
-                onUpdate={handleFieldUpdate}
-                onDuplicate={handleDuplicateFund}
-                onDelete={handleRemoveFund}
-                onAddFund={handleAddFund}
-                disabled={updateMutation.isPending || addMutation.isPending}
-              />
-            )}
+            <RetirementFundHybridTable
+              funds={funds}
+              onUpdate={handleFieldUpdate}
+              onDuplicate={handleDuplicateFund}
+              onDelete={handleRemoveFund}
+              onAddFund={handleAddFund}
+              disabled={updateMutation.isPending || addMutation.isPending}
+            />
           </div>
         </CalculatorHeader>
         </div>

@@ -1,8 +1,6 @@
 import React from 'react';
 
 interface HybridViewWrapperProps {
-  viewMode: 'table' | 'hybrid';
-  tableComponent: React.ReactNode;
   summaryCards: React.ReactNode;
   detailForms: React.ReactNode;
   isUpdating?: boolean;
@@ -12,13 +10,12 @@ interface HybridViewWrapperProps {
 }
 
 /**
- * HybridViewWrapper - A reusable component that provides consistent hybrid view functionality
- * across all calculation tables in the financial planning platform.
- * 
+ * HybridViewWrapper - the shared two-pane editing layout used across every
+ * financial domain: a left sidebar of summary cards (tabs) and a right pane
+ * with the detail form for the selected item.
+ *
  * Usage:
  * <HybridViewWrapper
- *   viewMode={viewMode}
- *   tableComponent={<YourTableComponent />}
  *   summaryCards={<YourSummaryCards />}
  *   detailForms={<YourDetailForms />}
  *   isEmpty={isEmpty}
@@ -26,22 +23,12 @@ interface HybridViewWrapperProps {
  * />
  */
 export function HybridViewWrapper({
-  viewMode,
-  tableComponent,
   summaryCards,
   detailForms,
-  isUpdating = false,
   isEmpty = false,
   emptyStateMessage = "No items found",
   children
 }: HybridViewWrapperProps) {
-  
-  // Render table view
-  if (viewMode === 'table') {
-    return <>{tableComponent}</>;
-  }
-
-  // Render hybrid view - Left sidebar with summary cards + Right side detailed forms
   return (
     <div className="flex border-t border-neutral-200 max-w-full overflow-hidden">
       {/* Left Sidebar - Summary Cards (Tabs) */}
@@ -59,7 +46,7 @@ export function HybridViewWrapper({
           detailForms
         )}
       </div>
-      
+
       {/* Additional content can be passed as children */}
       {children}
     </div>

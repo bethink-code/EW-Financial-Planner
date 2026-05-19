@@ -5,11 +5,9 @@ import { AssuranceSummary } from "@/components/assurance/simple-assurance-summar
 import { CalculatorHeader } from "@/components/ui/calculator-header";
 import { apiRequest, queryClient } from "@/lib/queryClient";
 import { getDefaultOwners, getDefaultOwnershipPercentages, getDefaultBeneficiaries, getDefaultBeneficiaryPercentages } from "@/lib/entity-utils";
-import { useViewMode } from '@/contexts/view-mode-context';
 import type { InsertAssurance, ClientDetails } from "@shared/schema";
 
 export default function Assurance() {
-  const { viewMode, setViewMode } = useViewMode();
   const [isRefreshing, setIsRefreshing] = useState(false);
 
   // Fetch policies for count
@@ -55,10 +53,6 @@ export default function Assurance() {
     },
   });
 
-  const handleViewModeChange = useCallback((newMode: 'table' | 'hybrid') => {
-    setViewMode(newMode);
-  }, [setViewMode]);
-
   const handleAddPolicy = useCallback(() => {
     addMutation.mutate();
   }, [addMutation]);
@@ -75,15 +69,13 @@ export default function Assurance() {
   return (
     <div className="">
       <div className="w-full px-6 py-6">
-        <div className={viewMode === 'table' ? 'w-full' : 'w-[1320px]'}>
+        <div className="w-[1320px]">
           {/* Combined Header, Summary and Table */}
           <CalculatorHeader
           title="Assurance"
           onAddItem={handleAddPolicy}
           addButtonText="Add Policy"
           isAddingItem={addMutation.isPending}
-          viewMode={viewMode}
-          onViewModeChange={handleViewModeChange}
           onRefresh={handleRefresh}
           isRefreshing={isRefreshing}
           className="mb-6"
@@ -95,7 +87,7 @@ export default function Assurance() {
           
           {/* Table with full width and margin */}
           <div className="table-container-wrapper">
-            <AssuranceTable viewMode={viewMode} onAddPolicy={handleAddPolicy} />
+            <AssuranceTable onAddPolicy={handleAddPolicy} />
           </div>
         </CalculatorHeader>
         </div>

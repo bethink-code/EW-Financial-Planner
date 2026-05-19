@@ -1,15 +1,11 @@
 import React, { useState, useCallback } from 'react';
 import { CalculatorHeader } from '@/components/ui/calculator-header';
-import { LiabilitiesTable } from '@/components/liabilities/liabilities-table';
 import { LiabilityHybridTable } from '@/components/liabilities/liability-hybrid-table';
 import { LiabilitiesSummary } from '@/components/liabilities/liabilities-summary';
 import { CategorySelectionDialog } from '@/components/ui/category-selection-dialog';
 import { useQuery, useMutation } from '@tanstack/react-query';
 import { queryClient, apiRequest } from '@/lib/queryClient';
-import { useViewMode } from '@/contexts/view-mode-context';
-
 export default function LiabilitiesPage() {
-  const { viewMode, setViewMode } = useViewMode();
   const [showCategoryDialog, setShowCategoryDialog] = useState(false);
 
   // Fetch liabilities
@@ -48,22 +44,16 @@ export default function LiabilitiesPage() {
     addMutation.mutate(category);
   }, [addMutation]);
 
-  const handleViewModeChange = useCallback((newMode: 'table' | 'hybrid') => {
-    setViewMode(newMode);
-  }, []);
-
   return (
     <div className="">
       <div className="w-full px-6 py-6">
-        <div className={viewMode === 'table' ? 'w-full' : 'w-[1320px]'}>
+        <div className="w-[1320px]">
           {/* Combined Header, Summary and Table */}
           <CalculatorHeader
           title="Liabilities"
           onAddItem={handleAddLiability}
           addButtonText="Add Liability"
           isAddingItem={addMutation.isPending}
-          viewMode={viewMode}
-          onViewModeChange={handleViewModeChange}
           className="mb-6"
         >
           {/* Summary with max width constraint */}
@@ -73,15 +63,7 @@ export default function LiabilitiesPage() {
           
           {/* Table with full width and margin */}
           <div className="table-container-wrapper">
-            {viewMode === 'hybrid' ? (
-              <LiabilityHybridTable onAddLiability={handleAddLiability} />
-            ) : (
-              <LiabilitiesTable 
-                viewMode={viewMode} 
-                onShowCategoryDialog={() => setShowCategoryDialog(true)}
-                onAddLiability={handleAddLiability}
-              />
-            )}
+            <LiabilityHybridTable onAddLiability={handleAddLiability} />
           </div>
         </CalculatorHeader>
 

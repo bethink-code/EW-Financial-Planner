@@ -7,10 +7,8 @@ import { RetirementProjectionRibbon } from "@/components/retirement/retirement-p
 import { CalculatorHeader } from "@/components/ui/calculator-header";
 import { apiRequest, queryClient } from "@/lib/queryClient";
 import type { InsertIncomeNeeds } from "@shared/schema";
-import { useViewMode } from '@/contexts/view-mode-context';
 
 export default function IncomeNeeds() {
-  const { viewMode, setViewMode } = useViewMode();
   const [location] = useLocation();
   const isRetirementNeed = location.startsWith("/needs/retirement");
 
@@ -35,10 +33,6 @@ export default function IncomeNeeds() {
     },
   });
 
-  const handleViewModeChange = useCallback((newMode: 'table' | 'hybrid') => {
-    setViewMode(newMode);
-  }, [setViewMode]);
-
   const handleAddNeed = useCallback(() => {
     addMutation.mutate();
   }, [addMutation]);
@@ -46,15 +40,13 @@ export default function IncomeNeeds() {
   return (
     <div className="">
       <div className="w-full px-6 py-6">
-        <div className={viewMode === 'table' ? 'w-full' : 'w-[1320px]'}>
+        <div className="w-[1320px]">
           {/* Combined Header, Summary and Table */}
           <CalculatorHeader
           title="Income Needs"
           onAddItem={handleAddNeed}
           addButtonText="Add Need"
           isAddingItem={addMutation.isPending}
-          viewMode={viewMode}
-          onViewModeChange={handleViewModeChange}
           className="mb-6"
         >
           {/* Per-domain summary on non-retirement routes only. Retirement
@@ -67,7 +59,7 @@ export default function IncomeNeeds() {
           
           {/* Table with full width and margin */}
           <div className="table-container-wrapper">
-            <IncomeNeedsTable viewMode={viewMode} onAddIncomeNeed={handleAddNeed} />
+            <IncomeNeedsTable onAddIncomeNeed={handleAddNeed} />
           </div>
         </CalculatorHeader>
         </div>

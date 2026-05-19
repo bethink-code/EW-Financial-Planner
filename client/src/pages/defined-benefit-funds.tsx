@@ -1,7 +1,6 @@
 import React, { useState, useCallback } from "react";
 import { useLocation } from "wouter";
 import { useQuery, useMutation } from "@tanstack/react-query";
-import DefinedBenefitFundsTable from "../components/defined-benefit-funds/defined-benefit-funds-table-correct-stable";
 import { DefinedBenefitFundHybridTable } from "../components/defined-benefit-funds/defined-benefit-fund-hybrid-table";
 import { DefinedBenefitFundsSummary } from "@/components/defined-benefit-funds/defined-benefit-funds-summary";
 import { RetirementProjectionRibbon } from "@/components/retirement/retirement-projection-ribbon";
@@ -9,10 +8,8 @@ import { CalculatorHeader } from "@/components/ui/calculator-header";
 import { apiRequest, queryClient } from "@/lib/queryClient";
 import { getDefaultOwners, getDefaultOwnershipPercentages } from "@/lib/entity-utils";
 import type { InsertDefinedBenefitFund, ClientDetails } from "@shared/schema";
-import { useViewMode } from '@/contexts/view-mode-context';
 
 export default function DefinedBenefitFunds() {
-  const { viewMode, setViewMode } = useViewMode();
   const [location] = useLocation();
   const isRetirementNeed = location.startsWith("/needs/retirement");
 
@@ -52,10 +49,6 @@ export default function DefinedBenefitFunds() {
     },
   });
 
-  const handleViewModeChange = useCallback((newMode: 'table' | 'hybrid') => {
-    setViewMode(newMode);
-  }, [setViewMode]);
-
   const handleAddFund = useCallback(() => {
     addMutation.mutate();
   }, [addMutation]);
@@ -63,15 +56,13 @@ export default function DefinedBenefitFunds() {
   return (
     <div className="">
       <div className="w-full px-6 py-6">
-        <div className={viewMode === 'table' ? 'w-full' : 'w-[1320px]'}>
+        <div className="w-[1320px]">
           {/* Combined Header, Summary and Table */}
           <CalculatorHeader
           title="Defined Benefit Funds"
           onAddItem={handleAddFund}
           addButtonText="Add Fund"
           isAddingItem={addMutation.isPending}
-          viewMode={viewMode}
-          onViewModeChange={handleViewModeChange}
           className="mb-6"
         >
           {/* Per-domain summary on non-retirement routes only. Retirement
@@ -84,11 +75,7 @@ export default function DefinedBenefitFunds() {
           
           {/* Table with full width and margin */}
           <div className="table-container-wrapper">
-            {viewMode === 'hybrid' ? (
-              <DefinedBenefitFundHybridTable onAddFund={handleAddFund} />
-            ) : (
-              <DefinedBenefitFundsTable onAddFund={handleAddFund} />
-            )}
+            <DefinedBenefitFundHybridTable onAddFund={handleAddFund} />
           </div>
         </CalculatorHeader>
         </div>

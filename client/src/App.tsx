@@ -1,7 +1,6 @@
 import { Switch, Route } from "wouter";
 import { queryClient } from "./lib/queryClient";
 import { QueryClientProvider } from "@tanstack/react-query";
-import { ViewModeProvider } from "@/contexts/view-mode-context";
 import { LoadingProvider } from "@/contexts/loading-context";
 import { GlobalLoadingBar } from "@/components/ui/global-loading-bar";
 import { Toaster } from "@/components/ui/toaster";
@@ -207,13 +206,11 @@ function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <LoadingProvider>
-        <ViewModeProvider>
-          <TooltipProvider>
-            <GlobalLoadingBar />
-            <Toaster />
-            <Router />
-          </TooltipProvider>
-        </ViewModeProvider>
+        <TooltipProvider>
+          <GlobalLoadingBar />
+          <Toaster />
+          <Router />
+        </TooltipProvider>
       </LoadingProvider>
     </QueryClientProvider>
   );
