@@ -1,7 +1,7 @@
 import React, { useState, useCallback } from "react";
 import { useLocation } from "wouter";
 import { useQuery, useMutation } from "@tanstack/react-query";
-import { IncomeProvisionsHybridTable } from "@/components/income-provisions/income-provisions-hybrid-table";
+import { IncomeProvisionsTable } from "@/components/income-provisions/income-provisions-table";
 import { IncomeProvisionsSummary } from "@/components/income-provisions/income-provisions-summary";
 import { RetirementProjectionRibbon } from "@/components/retirement/retirement-projection-ribbon";
 import { CalculatorHeader } from "@/components/ui/calculator-header";
@@ -60,7 +60,7 @@ export default function IncomeProvisions() {
             
             {/* Table with full width and margin */}
             <div className="table-container-wrapper">
-              <IncomeProvisionsHybridTable onAddProvision={handleAddProvision} searchTerm={searchTerm} />
+              <IncomeProvisionsTable onAddProvision={handleAddProvision} searchTerm={searchTerm} />
             </div>
           </CalculatorHeader>
         </div>

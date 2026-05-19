@@ -1,7 +1,7 @@
 import React, { useState, useCallback } from "react";
 import { useLocation } from "wouter";
 import { useQuery, useMutation } from "@tanstack/react-query";
-import { VoluntaryInvestmentHybridTable } from "../components/voluntary-investments/voluntary-investment-hybrid-table";
+import { VoluntaryInvestmentTable } from "../components/voluntary-investments/voluntary-investment-table";
 import { VoluntaryInvestmentsSummary } from "@/components/voluntary-investments/voluntary-investments-summary";
 import { RetirementProjectionRibbon } from "@/components/retirement/retirement-projection-ribbon";
 import { CalculatorHeader } from "@/components/ui/calculator-header";
@@ -77,7 +77,7 @@ export default function VoluntaryInvestments() {
           
           {/* Table with full width and margin */}
           <div className="table-container-wrapper">
-            <VoluntaryInvestmentHybridTable onAddInvestment={handleAddInvestment} />
+            <VoluntaryInvestmentTable onAddInvestment={handleAddInvestment} />
           </div>
         </CalculatorHeader>
         </div>

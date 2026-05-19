@@ -7,12 +7,12 @@ import { LiabilityDetailForm } from './liability-detail-form';
 import { Button } from '@/components/ui/button';
 import { Plus } from 'lucide-react';
 
-interface LiabilityHybridTableProps {
+interface LiabilityTableProps {
   searchTerm?: string;
   onAddLiability?: () => void;
 }
 
-export function LiabilityHybridTable({ searchTerm, onAddLiability }: LiabilityHybridTableProps) {
+export function LiabilityTable({ searchTerm, onAddLiability }: LiabilityTableProps) {
   const [activeLiabilityId, setActiveLiabilityId] = useState<number | null>(null);
 
   // Fetch liabilities

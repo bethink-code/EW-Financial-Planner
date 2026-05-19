@@ -1,6 +1,6 @@
 import { useState, useCallback } from "react";
 import { useQuery, useMutation } from "@tanstack/react-query";
-import { LumpSumHybridTable } from "@/components/lump-sum-bequests/lump-sum-hybrid-table";
+import { LumpSumTable } from "@/components/lump-sum-bequests/lump-sum-table";
 import { LumpSumSummary } from "@/components/lump-sum-bequests/lump-sum-summary";
 import { CalculatorHeader } from "@/components/ui/calculator-header";
 import { apiRequest, queryClient } from "@/lib/queryClient";
@@ -60,7 +60,7 @@ export default function LumpSumBequests() {
           
           {/* Table with full width and margin */}
           <div className="table-container-wrapper">
-            <LumpSumHybridTable onAddBequest={handleAddBequest} />
+            <LumpSumTable onAddBequest={handleAddBequest} />
           </div>
         </CalculatorHeader>
         </div>

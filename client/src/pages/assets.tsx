@@ -1,7 +1,7 @@
 import React, { useState, useCallback } from 'react';
 import { useQuery, useMutation } from '@tanstack/react-query';
 import { Assets } from '@shared/assets-schema';
-import { AssetHybridTable } from '@/components/assets/asset-hybrid-table';
+import { AssetTable } from '@/components/assets/asset-table';
 import { AssetsSummary } from '@/components/assets/assets-summary';
 import { CalculatorHeader } from '@/components/ui/calculator-header';
 import { CategorySelectionDialog } from '@/components/ui/category-selection-dialog';
@@ -64,7 +64,7 @@ export function AssetsPage() {
           
           {/* Table with full width and margin */}
           <div className="table-container-wrapper">
-            <AssetHybridTable onAddAsset={handleAddAsset} />
+            <AssetTable onAddAsset={handleAddAsset} />
           </div>
         </CalculatorHeader>
 

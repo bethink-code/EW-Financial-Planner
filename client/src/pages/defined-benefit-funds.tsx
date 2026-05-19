@@ -1,7 +1,7 @@
 import React, { useState, useCallback } from "react";
 import { useLocation } from "wouter";
 import { useQuery, useMutation } from "@tanstack/react-query";
-import { DefinedBenefitFundHybridTable } from "../components/defined-benefit-funds/defined-benefit-fund-hybrid-table";
+import { DefinedBenefitFundTable } from "../components/defined-benefit-funds/defined-benefit-fund-table";
 import { DefinedBenefitFundsSummary } from "@/components/defined-benefit-funds/defined-benefit-funds-summary";
 import { RetirementProjectionRibbon } from "@/components/retirement/retirement-projection-ribbon";
 import { CalculatorHeader } from "@/components/ui/calculator-header";
@@ -75,7 +75,7 @@ export default function DefinedBenefitFunds() {
           
           {/* Table with full width and margin */}
           <div className="table-container-wrapper">
-            <DefinedBenefitFundHybridTable onAddFund={handleAddFund} />
+            <DefinedBenefitFundTable onAddFund={handleAddFund} />
           </div>
         </CalculatorHeader>
         </div>

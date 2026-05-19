@@ -9,12 +9,12 @@ import type { ClientDetails } from '@shared/schema';
 import { Button } from '@/components/ui/button';
 import { Plus } from 'lucide-react';
 
-interface DefinedBenefitFundHybridTableProps {
+interface DefinedBenefitFundTableProps {
   searchTerm?: string;
   onAddFund?: () => void;
 }
 
-export function DefinedBenefitFundHybridTable({ searchTerm, onAddFund }: DefinedBenefitFundHybridTableProps) {
+export function DefinedBenefitFundTable({ searchTerm, onAddFund }: DefinedBenefitFundTableProps) {
   const [activeFundId, setActiveFundId] = useState<number | null>(null);
 
   // Fetch funds

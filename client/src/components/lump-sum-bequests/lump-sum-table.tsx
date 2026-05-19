@@ -12,11 +12,11 @@ import { Button } from '@/components/ui/button';
 import { DetailFormHeader } from '@/components/common/detail-form-header';
 import { Plus } from 'lucide-react';
 
-interface LumpSumHybridTableProps {
+interface LumpSumTableProps {
   onAddBequest?: () => void;
 }
 
-export function LumpSumHybridTable({ onAddBequest }: LumpSumHybridTableProps) {
+export function LumpSumTable({ onAddBequest }: LumpSumTableProps) {
   const { isLoading: globalLoading } = useLoading();
   const [selectedBequestId, setSelectedBequestId] = React.useState<number | null>(null);
 

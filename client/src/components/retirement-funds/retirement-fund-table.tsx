@@ -5,7 +5,7 @@ import { RetirementFundDetailForm } from './retirement-fund-detail-form';
 import { Button } from '@/components/ui/button';
 import { Plus } from 'lucide-react';
 
-interface RetirementFundHybridTableProps {
+interface RetirementFundTableProps {
   funds: RetirementFund[];
   onUpdate: (id: number, field: keyof UpdateRetirementFund, value: any) => void;
   onDuplicate: (fund: RetirementFund) => void;
@@ -14,14 +14,14 @@ interface RetirementFundHybridTableProps {
   disabled?: boolean;
 }
 
-export function RetirementFundHybridTable({ 
+export function RetirementFundTable({ 
   funds, 
   onUpdate, 
   onDuplicate, 
   onDelete, 
   onAddFund,
   disabled = false 
-}: RetirementFundHybridTableProps) {
+}: RetirementFundTableProps) {
   const [activeFundId, setActiveFundId] = useState<number | null>(
     funds.length > 0 ? funds[0].id : null
   );

@@ -1,6 +1,6 @@
 import React, { useState, useCallback } from 'react';
 import { CalculatorHeader } from '@/components/ui/calculator-header';
-import { LiabilityHybridTable } from '@/components/liabilities/liability-hybrid-table';
+import { LiabilityTable } from '@/components/liabilities/liability-table';
 import { LiabilitiesSummary } from '@/components/liabilities/liabilities-summary';
 import { CategorySelectionDialog } from '@/components/ui/category-selection-dialog';
 import { useQuery, useMutation } from '@tanstack/react-query';
@@ -63,7 +63,7 @@ export default function LiabilitiesPage() {
           
           {/* Table with full width and margin */}
           <div className="table-container-wrapper">
-            <LiabilityHybridTable onAddLiability={handleAddLiability} />
+            <LiabilityTable onAddLiability={handleAddLiability} />
           </div>
         </CalculatorHeader>
 

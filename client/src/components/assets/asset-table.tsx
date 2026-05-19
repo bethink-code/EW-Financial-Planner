@@ -7,12 +7,12 @@ import { AssetDetailForm } from './asset-detail-form';
 import { Button } from '@/components/ui/button';
 import { Plus } from 'lucide-react';
 
-interface AssetHybridTableProps {
+interface AssetTableProps {
   searchTerm?: string;
   onAddAsset?: () => void;
 }
 
-export function AssetHybridTable({ searchTerm, onAddAsset }: AssetHybridTableProps) {
+export function AssetTable({ searchTerm, onAddAsset }: AssetTableProps) {
   const [activeAssetId, setActiveAssetId] = useState<number | null>(null);
 
   // Fetch assets

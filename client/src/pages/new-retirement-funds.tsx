@@ -6,7 +6,7 @@ import { queryClient, apiRequest } from "@/lib/queryClient";
 import { CalculatorHeader } from "@/components/ui/calculator-header";
 import { RetirementFundsSummary } from "@/components/retirement-funds/retirement-funds-summary";
 import { RetirementProjectionRibbon } from "@/components/retirement/retirement-projection-ribbon";
-import { RetirementFundHybridTable } from "@/components/retirement-funds/retirement-fund-hybrid-table";
+import { RetirementFundTable } from "@/components/retirement-funds/retirement-fund-table";
 import { useDebouncedUpdate } from "@/hooks/use-debounced-update";
 import { getDefaultOwners, getDefaultOwnershipPercentages, getDefaultBeneficiaries, getDefaultBeneficiaryPercentages } from "@/lib/entity-utils";
 interface ColumnVisibility {
@@ -165,7 +165,7 @@ export default function NewRetirementFunds() {
 
           {/* Table with full width and margin */}
           <div className="table-container-wrapper">
-            <RetirementFundHybridTable
+            <RetirementFundTable
               funds={funds}
               onUpdate={handleFieldUpdate}
               onDuplicate={handleDuplicateFund}

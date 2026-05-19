@@ -12,12 +12,12 @@ import { Button } from '@/components/ui/button';
 import { DetailFormHeader } from '@/components/common/detail-form-header';
 import { Plus } from 'lucide-react';
 
-interface IncomeProvisionsHybridTableProps {
+interface IncomeProvisionsTableProps {
   onAddProvision?: () => void;
   searchTerm?: string;
 }
 
-export function IncomeProvisionsHybridTable({ onAddProvision, searchTerm = "" }: IncomeProvisionsHybridTableProps) {
+export function IncomeProvisionsTable({ onAddProvision, searchTerm = "" }: IncomeProvisionsTableProps) {
   const { isLoading: globalLoading } = useLoading();
   const [selectedProvisionId, setSelectedProvisionId] = React.useState<number | null>(null);
 

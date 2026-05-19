@@ -9,12 +9,12 @@ import { VoluntaryInvestmentDetailForm } from './voluntary-investment-detail-for
 import { getDefaultOwners, getDefaultOwnershipPercentages } from '@/lib/entity-utils';
 import type { ClientDetails } from '@shared/schema';
 
-interface VoluntaryInvestmentHybridTableProps {
+interface VoluntaryInvestmentTableProps {
   searchTerm?: string;
   onAddInvestment?: () => void;
 }
 
-export function VoluntaryInvestmentHybridTable({ searchTerm, onAddInvestment }: VoluntaryInvestmentHybridTableProps) {
+export function VoluntaryInvestmentTable({ searchTerm, onAddInvestment }: VoluntaryInvestmentTableProps) {
   const [activeInvestmentId, setActiveInvestmentId] = useState<number | null>(null);
 
   // Fetch investments

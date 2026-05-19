@@ -1,6 +1,6 @@
 import { useState, useCallback } from "react";
 import { useQuery, useMutation } from "@tanstack/react-query";
-import { AssuranceTable } from "@/components/assurance/working-assurance-table";
+import { AssuranceTable } from "@/components/assurance/assurance-table";
 import { AssuranceSummary } from "@/components/assurance/simple-assurance-summary";
 import { CalculatorHeader } from "@/components/ui/calculator-header";
 import { apiRequest, queryClient } from "@/lib/queryClient";
