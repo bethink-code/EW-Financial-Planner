@@ -58,17 +58,17 @@ export function RetirementCategoryTabs({ categories, initial }: Props) {
       {/* Cross-category ribbon is rendered by RetirementLayout inside the
           stepper card (above this component). Tabs sit directly below.
           Match the body's horizontal padding + inner-width so the tab strip
-          spans the same column as the table container below. Overflow →
-          dropdown is handled inside CustomTabs; we only override visual
-          treatment (flush-left + larger active label) for this specific
-          layout. */}
+          spans the same column as the table container below. The active-
+          label / focus-outline / hover treatments now live in CustomTabs by
+          default; only the flush-left nav override is specific to this
+          layout (this wrapper already has its own px-6). */}
       <div className="w-full px-6">
         <div className="w-[1320px] max-w-full px-6">
           <CustomTabs
             tabs={tabs}
             activeTab={active}
             onTabChange={(id) => setActive(id as RetirementCategoryId)}
-            className="mb-0 [&_nav]:!mx-0 [&_button]:focus:!outline-none [&_button.border-transparent:hover]:!border-transparent [&_button.text-primary]:!text-xl [&_button.text-primary]:!font-semibold"
+            className="mb-0 [&_nav]:!mx-0"
           />
         </div>
       </div>

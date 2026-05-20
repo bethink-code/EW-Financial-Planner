@@ -73,7 +73,9 @@ export function CustomTabs({ tabs, activeTab, onTabChange, className, useLinks =
     const ro = new ResizeObserver(compute);
     ro.observe(navRef.current);
     return () => ro.disconnect();
-  }, [tabs]);
+    // Re-measure when the active tab changes — the active label is rendered
+    // larger (text-xl font-semibold), so the measurement layer's widths shift.
+  }, [tabs, activeTab, location]);
 
   const visibleTabs = tabs.slice(0, visibleCount);
   const overflowTabs = tabs.slice(visibleCount);
@@ -81,11 +83,15 @@ export function CustomTabs({ tabs, activeTab, onTabChange, className, useLinks =
     useLinks ? location === t.href : activeTab === t.id
   );
 
+  // Active tab is rendered larger + bolder to read as the section heading,
+  // matching the Retirement Build category-tab pattern. No focus outline or
+  // hover border on inactive tabs — keeps the strip visually quiet until
+  // selected.
   const tabClass = (isActive: boolean) => cn(
-    "px-1 pb-3 border-b-2 font-medium text-sm transition-colors relative whitespace-nowrap",
+    "px-1 pb-3 border-b-2 transition-colors relative whitespace-nowrap focus:outline-none",
     isActive
-      ? "border-primary text-primary dark:border-primary dark:text-primary"
-      : "border-transparent text-neutral-500 hover:text-neutral-700 hover:border-neutral-300 dark:text-neutral-400 dark:hover:text-neutral-300"
+      ? "border-primary text-primary text-xl font-semibold dark:border-primary dark:text-primary"
+      : "border-transparent text-neutral-500 text-sm font-medium hover:text-neutral-700 dark:text-neutral-400 dark:hover:text-neutral-300"
   );
 
   const renderBadge = (tab: Tab, isActive: boolean) => tab.badge != null && (
@@ -134,20 +140,26 @@ export function CustomTabs({ tabs, activeTab, onTabChange, className, useLinks =
           style={{ height: 0, overflow: "hidden" }}
         >
           <div className="flex flex-nowrap gap-x-6 ml-[24px] mr-[24px]">
-            {tabs.map((tab, i) => (
-              <span
-                key={`m-${tab.id}`}
-                ref={el => { measureRefs.current[i] = el; }}
-                className="px-1 font-medium text-sm whitespace-nowrap"
-              >
-                {tab.label}
-                {tab.badge != null && (
-                  <span className="ml-2 inline-flex items-center justify-center px-2 text-xs font-bold">
-                    {tab.badge}
-                  </span>
-                )}
-              </span>
-            ))}
+            {tabs.map((tab, i) => {
+              const isActive = useLinks ? location === tab.href : activeTab === tab.id;
+              return (
+                <span
+                  key={`m-${tab.id}`}
+                  ref={el => { measureRefs.current[i] = el; }}
+                  className={cn(
+                    "px-1 whitespace-nowrap",
+                    isActive ? "text-xl font-semibold" : "text-sm font-medium",
+                  )}
+                >
+                  {tab.label}
+                  {tab.badge != null && (
+                    <span className="ml-2 inline-flex items-center justify-center px-2 text-xs font-bold">
+                      {tab.badge}
+                    </span>
+                  )}
+                </span>
+              );
+            })}
           </div>
         </div>
 
