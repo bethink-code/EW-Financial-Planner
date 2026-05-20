@@ -37,14 +37,38 @@ export function RetirementProjectionRibbon({ actions }: RetirementProjectionRibb
   const coveragePct = Math.min(100, Math.max(0, Math.round(coverage * 100)));
 
   return (
-    <div className="flex items-stretch gap-3">
+    <div
+      className="rounded-md overflow-hidden"
+      style={{
+        backgroundColor: "#F7F7F7",
+        border: "1px solid #EEEEEE",
+      }}
+    >
+      {/* Compact meta strip inside the ribbon card — anchors "years to
+          retirement" and the Refresh button as part of the ribbon rather
+          than floating as a separate column beside it. */}
       <div
-        className="flex items-stretch rounded-md overflow-hidden flex-1 min-w-0"
-        style={{
-          backgroundColor: "#F7F7F7",
-          border: "1px solid #EEEEEE",
-        }}
+        className="flex items-center justify-end gap-3 px-4 py-1.5"
+        style={{ borderBottom: "1px solid #EEEEEE" }}
       >
+        <span className="text-xs tabular-nums" style={{ color: "var(--ew-gray-700)" }}>
+          {yearsToRetirement} yrs to retirement
+        </span>
+        {actions}
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={refresh}
+          disabled={isLoading}
+          className="gap-1.5 h-7 px-2 text-xs"
+        >
+          <RefreshCw className="h-3 w-3" />
+          Refresh
+        </Button>
+      </div>
+      {/* KPI segments — wrap to a new line if the viewport is too narrow
+          to keep them on one row. */}
+      <div className="flex items-stretch flex-wrap">
         <Segment label="Capital at retirement" value={rand(provided)} loading={isLoading} />
         <Divider />
         <Segment label="Capital required" value={rand(required)} loading={isLoading} />
@@ -68,26 +92,6 @@ export function RetirementProjectionRibbon({ actions }: RetirementProjectionRibb
             />
           </>
         )}
-      </div>
-      <div className="flex items-end shrink-0">
-        <div className="flex flex-col items-end gap-2">
-          <span className="text-xs tabular-nums" style={{ color: "var(--ew-gray-700)" }}>
-            {yearsToRetirement} yrs to retirement
-          </span>
-          <div className="flex items-center gap-2">
-            {actions}
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={refresh}
-              disabled={isLoading}
-              className="gap-1.5"
-            >
-              <RefreshCw className="h-3.5 w-3.5" />
-              Refresh
-            </Button>
-          </div>
-        </div>
       </div>
     </div>
   );
