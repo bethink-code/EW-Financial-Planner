@@ -137,10 +137,14 @@ export function ClientDetailsTable({ onAddEntity }: ClientDetailsTableProps) {
 
   const detailForms = selectedEntity ? (
     <GroupedDetailForm>
-      <div key={selectedEntity.id}>
+      {/* `space-y-10` on this inner wrapper matches GroupedDetailForm's own
+          spacing — without it, the FieldGroups inside butt up against each
+          other (space-y-10 on GroupedDetailForm only sees a single child). */}
+      <div key={selectedEntity.id} className="space-y-10">
         <DetailFormHeader
           title={selectedEntity.entityName}
           emptyTitle="Unnamed Entity"
+          onTitleChange={(value) => handleImmediateUpdate(selectedEntity.id, 'entityName', value)}
           onDuplicate={() => handleDuplicate(selectedEntity)}
           onDelete={() => handleDelete(selectedEntity.id)}
           disabled={isUpdating}
