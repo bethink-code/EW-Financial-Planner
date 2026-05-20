@@ -59,10 +59,12 @@ export function PlanStepper({ config, currentStep, headerExtra }: PlanStepperPro
   return (
     <section className="w-full px-6 pt-8 pb-2" aria-label="Plan stepper">
       <div className="w-[1320px] max-w-full bg-white rounded-lg shadow-sm border border-gray-200 px-6 py-4">
-        {/* Two rows: FINANCIAL PLAN identifies which plan you're in; NEED +
-            STEPS together pick your navigation within it. Pairing NEED with
-            STEPS means they always wrap as a unit, never split. */}
-        <div className="space-y-3">
+        {/* All three columns sit inline when there's room. When the viewport
+            narrows, FINANCIAL PLAN identifies which plan, NEED + STEPS pick
+            your navigation within it — and the NEED + STEPS pair wraps as a
+            unit (they're a nested flex-wrap), never splitting need from
+            steps. */}
+        <div className="flex items-start gap-x-6 gap-y-3 flex-wrap">
           <div>
             <span className="text-xs text-gray-500 uppercase tracking-wider font-medium block mb-1">FINANCIAL PLAN</span>
             <div className="flex items-center gap-2 flex-wrap">
