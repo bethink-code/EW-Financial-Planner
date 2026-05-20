@@ -57,7 +57,7 @@ export function HybridViewWrapper({
         </div>
       )}
       <div className="flex max-w-full overflow-hidden">
-        <div className="w-80 flex-shrink-0 border-r border-neutral-200 bg-neutral-50">
+        <div className="w-80 flex-shrink-0 border-r border-neutral-200">
           {summaryCards}
         </div>
         <div className="flex-1">

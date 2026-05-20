@@ -19,7 +19,7 @@ export function HybridItemPreviewRow({ title, onClick, isLast }: HybridItemPrevi
       type="button"
       onClick={onClick}
       className={cn(
-        "w-full flex items-center justify-between gap-2 px-4 py-3 text-left bg-white hover:bg-neutral-50 transition-colors border-b border-neutral-200",
+        "w-full flex items-center justify-between gap-2 px-4 py-3 text-left bg-transparent hover:bg-neutral-50 transition-colors border-b border-neutral-200",
         isLast && "border-b-0",
       )}
     >
