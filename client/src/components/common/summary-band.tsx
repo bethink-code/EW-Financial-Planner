@@ -6,6 +6,11 @@ interface SummaryBandProps {
    *  Set to false on tabs without a sidebar (single-record pages) so the
    *  tiles span the full card width. Defaults to true. */
   firstColIsSidebar?: boolean;
+  /** Optional content to render in the sidebar-width first column instead
+   *  of an empty spacer. Used by Assets & Liabilities to host the cream
+   *  toggle-with-NET-total tile. Only renders when firstColIsSidebar is
+   *  true (otherwise there's no first column to fill). */
+  firstSlot?: React.ReactNode;
   children: React.ReactNode;
 }
 
@@ -21,10 +26,12 @@ interface SummaryBandProps {
  * Auto-flow: tiles take equal-fraction columns regardless of how many you
  * pass, so adding a fourth tile re-balances the grid automatically.
  */
-export function SummaryBand({ firstColIsSidebar = true, children }: SummaryBandProps) {
+export function SummaryBand({ firstColIsSidebar = true, firstSlot, children }: SummaryBandProps) {
   return (
     <div className="flex items-stretch">
-      {firstColIsSidebar && <div className="w-80 flex-shrink-0" />}
+      {firstColIsSidebar && (
+        <div className="w-80 flex-shrink-0 px-4 py-5">{firstSlot}</div>
+      )}
       <div className={cn('flex-1 py-5', firstColIsSidebar ? 'pl-6 pr-4' : 'px-4')}>
         <div className="grid grid-flow-col auto-cols-fr gap-3">
           {children}

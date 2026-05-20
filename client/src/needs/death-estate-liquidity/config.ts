@@ -66,21 +66,9 @@ export const delConfig: NeedConfig = {
           path: "/needs/death-estate-liquidity/build/voluntary-investments",
         },
         {
-          id: "assets-liabilities-group",
+          id: "assets-liabilities",
           label: "Assets & Liabilities",
-          path: "/needs/death-estate-liquidity/build/assets-liabilities-group",
-          children: [
-            {
-              id: "lifestyle-assets",
-              label: "Lifestyle assets",
-              path: "/needs/death-estate-liquidity/build/assets",
-            },
-            {
-              id: "liabilities",
-              label: "Liabilities",
-              path: "/needs/death-estate-liquidity/build/liabilities",
-            },
-          ],
+          path: "/needs/death-estate-liquidity/build/assets-liabilities",
         },
         {
           id: "income-capital-needs-group",

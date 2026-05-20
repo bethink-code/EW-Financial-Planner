@@ -17,8 +17,7 @@ import NewRetirementFunds from "@/pages/new-retirement-funds";
 import LumpSumBequests from "@/pages/lump-sum-bequests";
 import IncomeNeeds from "@/pages/income-needs";
 import IncomeProvisions from "@/pages/income-provisions";
-import Liabilities from "@/pages/liabilities";
-import { AssetsPage } from "@/pages/assets";
+import AssetsLiabilitiesPage from "@/pages/assets-liabilities";
 import Assurance from "@/pages/assurance";
 import DefinedBenefitFunds from "@/pages/defined-benefit-funds";
 import VoluntaryInvestments from "@/pages/voluntary-investments";
@@ -95,11 +94,8 @@ function Router() {
         <Route path="/needs/death-estate-liquidity/build/voluntary-investments">
           {() => <DELLayout><VoluntaryInvestments /></DELLayout>}
         </Route>
-        <Route path="/needs/death-estate-liquidity/build/assets">
-          {() => <DELLayout><AssetsPage /></DELLayout>}
-        </Route>
-        <Route path="/needs/death-estate-liquidity/build/liabilities">
-          {() => <DELLayout><Liabilities /></DELLayout>}
+        <Route path="/needs/death-estate-liquidity/build/assets-liabilities">
+          {() => <DELLayout><AssetsLiabilitiesPage /></DELLayout>}
         </Route>
         <Route path="/needs/death-estate-liquidity/build/income-needs">
           {() => <DELLayout><IncomeNeeds /></DELLayout>}

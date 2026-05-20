@@ -2,22 +2,18 @@ import { useState, useCallback, useMemo } from 'react';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { Assets } from '@shared/assets-schema';
 import { queryClient } from '@/lib/queryClient';
-import { FieldGroup, FormField } from '@/components/common/grouped-detail-form';
+import { FieldGroup, FormField, GroupedDetailForm } from '@/components/common/grouped-detail-form';
 import { formatCurrencyValue, formatPercentageValue, getValueClass, handleDefaultValueFocus } from '@/lib/formatting';
 import { parseEntityOwnership, setEntityOwnership, getEntityDisplayName, type ClientEntity } from '@/lib/entity-columns-utils';
 import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Button } from '@/components/ui/button';
-import { DetailFormHeader } from '@/components/common/detail-form-header';
 
 interface AssetDetailFormProps {
   asset: Assets;
-  onDelete: (id: number) => void;
-  onDuplicate?: (asset: Assets) => void;
 }
 
-export function AssetDetailForm({ asset, onDelete, onDuplicate }: AssetDetailFormProps) {
+export function AssetDetailForm({ asset }: AssetDetailFormProps) {
   const [isUpdating, setIsUpdating] = useState(false);
 
   // Query for client entities to build ownership fields
@@ -83,38 +79,30 @@ export function AssetDetailForm({ asset, onDelete, onDuplicate }: AssetDetailFor
   const ownership = useMemo(() => parseEntityOwnership(asset.entityOwnership), [asset.entityOwnership]);
 
   return (
-    <div className="space-y-10 p-6 bg-white">
-      <DetailFormHeader
-        title={asset.description}
-        emptyTitle="Untitled Asset"
-        onDuplicate={onDuplicate ? () => onDuplicate(asset) : undefined}
-        onDelete={() => onDelete(asset.id)}
-        disabled={isUpdating}
-      />
-
+    <GroupedDetailForm>
       {/* Group 1: Overview */}
       <FieldGroup title="Overview">
-        <div className="space-y-4">
-          <FormField label="Asset Description">
+        <div className="flex gap-3 flex-wrap items-end">
+          <FormField label="Name">
             <input
               type="text"
               defaultValue={asset.description || ''}
               placeholder="Enter details ..."
               className={`table-input ${asset.description ? '' : 'text-neutral-400'}`}
-              style={{ width: 'fit-content', minWidth: '200px' }}
+              style={{ minWidth: '240px' }}
               onFocus={handleDefaultValueFocus}
               onBlur={(e) => handleInputBlur('description', e.target.value)}
               disabled={isUpdating}
             />
           </FormField>
-          
+
           <FormField label="Category">
             <Select
               value={asset.section || ''}
               onValueChange={(value) => handleUpdate('section', value)}
               disabled={isUpdating}
             >
-              <SelectTrigger style={{ width: 'fit-content', minWidth: '150px' }}>
+              <SelectTrigger style={{ minWidth: '180px' }}>
                 <SelectValue placeholder="Select category..." />
               </SelectTrigger>
               <SelectContent>
@@ -252,6 +240,6 @@ export function AssetDetailForm({ asset, onDelete, onDuplicate }: AssetDetailFor
           </FormField>
         </div>
       </FieldGroup>
-    </div>
+    </GroupedDetailForm>
   );
 }
