@@ -1,4 +1,5 @@
 import React from 'react';
+import { cn } from '@/lib/utils';
 
 interface HybridViewWrapperProps {
   /** Optional top action strip — Add | Title | Duplicate/Delete. Spans the
@@ -10,6 +11,13 @@ interface HybridViewWrapperProps {
   isEmpty?: boolean;
   emptyStateMessage?: string;
   children?: React.ReactNode;
+  /** When true, the wrapper renders its own white card (background, border,
+   *  shadow, rounded corners). Use this on pages that don't wrap the editor
+   *  in a separate CalculatorHeader card — i.e. pages migrated to the new
+   *  top-strip-inside-the-card pattern. Defaults to false for backward
+   *  compatibility with the older pages that still rely on CalculatorHeader
+   *  for the card visual. */
+  card?: boolean;
 }
 
 /**
@@ -34,9 +42,15 @@ export function HybridViewWrapper({
   isEmpty = false,
   emptyStateMessage = "No items found",
   children,
+  card = false,
 }: HybridViewWrapperProps) {
   return (
-    <div className="flex flex-col">
+    <div
+      className={cn(
+        "flex flex-col",
+        card && "bg-white rounded-lg shadow-sm border border-neutral-200 overflow-hidden",
+      )}
+    >
       {header && (
         <div className="border-b border-neutral-200">
           {header}
