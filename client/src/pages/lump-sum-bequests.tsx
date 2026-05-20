@@ -43,7 +43,7 @@ export default function LumpSumBequests() {
 
   return (
     <div className="w-full px-6 pb-6">
-      <div className="w-[1320px]">
+      <div className="w-[1320px] max-w-full">
         <CalculatorHeader>
           <div className="max-w-6xl">
             <LumpSumSummary />

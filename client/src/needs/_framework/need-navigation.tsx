@@ -31,7 +31,7 @@ export function NeedNavigation({ step }: NeedNavigationProps) {
 
   return (
     <section className="w-full px-6 pt-4" aria-label="Need navigation">
-      <div className="w-[1320px]">
+      <div className="w-[1320px] max-w-full">
         <CustomTabs tabs={tabs} activeTab="" useLinks className="mb-0" />
       </div>
     </section>

@@ -58,8 +58,10 @@ export function PlanStepper({ config, currentStep, headerExtra }: PlanStepperPro
 
   return (
     <section className="w-full px-6 pt-8 pb-2" aria-label="Plan stepper">
-      <div className="w-[1320px] bg-white rounded-lg shadow-sm border border-gray-200 px-6 py-4">
-        <div className="flex items-start gap-6">
+      <div className="w-[1320px] max-w-full bg-white rounded-lg shadow-sm border border-gray-200 px-6 py-4">
+        {/* flex-wrap + gap-y-3 keeps the three columns from clipping when the
+            viewport (or a label) grows / shrinks. Floor target: 1024px. */}
+        <div className="flex items-start gap-x-6 gap-y-3 flex-wrap">
           <div>
             <span className="text-xs text-gray-500 uppercase tracking-wider font-medium block mb-1">FINANCIAL PLAN</span>
             <div className="flex items-center gap-2">

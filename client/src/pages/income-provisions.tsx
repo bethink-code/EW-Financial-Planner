@@ -40,7 +40,7 @@ export default function IncomeProvisions() {
 
   return (
     <div className="w-full px-6 pb-6">
-      <div className="w-[1320px]">
+      <div className="w-[1320px] max-w-full">
         <CalculatorHeader>
           {/* Per-domain summary on non-retirement routes only. Retirement
               renders its cross-category ribbon above the tabs. */}
