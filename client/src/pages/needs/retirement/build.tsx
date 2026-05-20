@@ -1,11 +1,11 @@
 import { RetirementCategoryTabs } from "@/components/retirement/retirement-category-tabs";
 
 /**
- * Variant A — "Long" prototype: a single Build page with all 7 categories
- * accessible as in-page tabs. The user stays in the Hybrid view throughout;
- * tab clicks swap the active category without leaving the page.
+ * Retirement Build page: a single page with all 7 categories accessible
+ * as in-page tabs. Tab clicks swap the active category without leaving the
+ * page; overflow handling on the tab strip is provided by CustomTabs.
  */
-export default function RetirementBuildVariantA() {
+export default function RetirementBuild() {
   return (
     <RetirementCategoryTabs
       categories={[
