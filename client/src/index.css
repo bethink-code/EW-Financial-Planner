@@ -348,13 +348,15 @@ th, td {
     min-height: 100vh;
   }
   
-  body {
-    overflow-x: auto; /* Enable horizontal scrolling at browser level */  
-  }
-  
+  /* `body` and `#root` previously hard-coded a max-content width and 100vw
+     min so the legacy fixed-1320px layout could scroll horizontally on
+     narrow viewports. With the responsive (`w-[1320px] max-w-full`) layout
+     that's actively wrong: it pins #root to its widest intrinsic child
+     (still 1320px) and `max-w-full` then has nothing smaller to clamp to.
+     Letting #root default to its block width (= body width = viewport)
+     restores the resize behaviour. */
   #root {
-    width: max-content; /* Size to content width */
-    min-width: 100vw; /* At least viewport width */
+    min-height: 100vh;
   }
 
   /* Apply background to iframe container */
