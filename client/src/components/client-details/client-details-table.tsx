@@ -3,23 +3,30 @@ import { useQuery, useMutation } from '@tanstack/react-query';
 import { ClientDetails, InsertClientDetails } from '@shared/schema';
 import { apiRequest, queryClient } from '@/lib/queryClient';
 import { HybridViewWrapper } from '@/components/common/hybrid-view-wrapper';
+import { HybridHeaderBar } from '@/components/common/hybrid-header-bar';
 import { HybridItemPreviewCard } from '@/components/common/hybrid-item-preview-card';
+import { HybridItemPreviewRow } from '@/components/common/hybrid-item-preview-row';
 import { FieldGroup, FormField, GroupedDetailForm } from '@/components/common/grouped-detail-form';
 import { useDebouncedUpdate } from '@/hooks/use-debounced-update';
-import { formatTextValue, formatPercentageValue, getValueClass, handleDefaultValueFocus } from '@/lib/formatting';
-import { Button } from '@/components/ui/button';
-import { DetailFormHeader } from '@/components/common/detail-form-header';
-import { Plus } from 'lucide-react';
+import { formatPercentageValue, getValueClass, handleDefaultValueFocus } from '@/lib/formatting';
 
 interface ClientDetailsTableProps {
   onAddEntity?: () => void;
 }
 
 /**
- * Hybrid editor for client entities. Mirrors the lump-sum / asset / liability
- * pattern: a left-side preview-card list (one card per entity) + a right-side
- * grouped detail form for the selected entity. Replaces the previous flat
- * row-per-entity editable table so capture interfaces stay consistent.
+ * Hybrid editor for client entities. New pattern:
+ *
+ *   [ Add Entity ]        Garth Shoebridge ✎     [ Duplicate ] [ Delete ]
+ *   ───────────────────────────────────────────────────────────────────
+ *   Active card (full)    │   Detail form (FieldGroups)
+ *   Inactive row     (i)  │
+ *   Inactive row     (i)  │
+ *
+ * Top action strip (Add | Title | Duplicate/Delete) lives in HybridViewWrapper's
+ * `header` slot. Left sidebar shows the selected entity as a full preview card
+ * with the remaining entities as compact rows. Detail form on the right has no
+ * header of its own — title + actions live in the strip above.
  */
 export function ClientDetailsTable({ onAddEntity }: ClientDetailsTableProps) {
   const [selectedEntityId, setSelectedEntityId] = React.useState<number | null>(null);
@@ -101,57 +108,57 @@ export function ClientDetailsTable({ onAddEntity }: ClientDetailsTableProps) {
 
   const isUpdating = deleteMutation.isPending || duplicateMutation.isPending;
 
-  // Preview cards
-  const summaryCards = entities.map((entity, index) => {
-    const isFirst = index === 0;
-    const isLast = index === entities.length - 1;
-    const isActive = entity.id === selectedEntityId;
-
-    const title = entity.entityName?.trim() || `Entity ${index + 1}`;
-
-    const previewLines: string[] = [];
-    if (entity.entityType) previewLines.push(entity.entityType);
-    if (entity.maritalStatus) previewLines.push(entity.maritalStatus);
-    const subtitle = previewLines.join('\n') || 'No details entered';
-
-    const primaryValue = entity.age && entity.age !== '0' ? `${entity.age} yrs` : '';
-
-    return (
-      <HybridItemPreviewCard
-        key={entity.id}
-        title={title}
-        subtitle={subtitle}
-        primaryValue={primaryValue}
-        variant={isActive ? 'active' : 'blue'}
-        isClickable={true}
-        isFirst={isFirst}
-        isLast={isLast}
-        onClick={() => setSelectedEntityId(entity.id)}
-      />
-    );
-  });
-
   const selectedEntity = selectedEntityId
-    ? entities.find(e => e.id === selectedEntityId)
+    ? entities.find(e => e.id === selectedEntityId) ?? null
     : null;
+  const otherEntities = entities.filter(e => e.id !== selectedEntityId);
+
+  const entityIndex = (entity: ClientDetails) => entities.findIndex(e => e.id === entity.id);
+  const titleFor = (entity: ClientDetails) =>
+    entity.entityName?.trim() || `Entity ${entityIndex(entity) + 1}`;
+
+  // Sidebar — active card expanded at top, inactive items as compact rows.
+  const summaryCards = (
+    <div>
+      {selectedEntity && (() => {
+        const previewLines: string[] = [];
+        if (selectedEntity.entityType) previewLines.push(selectedEntity.entityType);
+        if (selectedEntity.maritalStatus) previewLines.push(selectedEntity.maritalStatus);
+        const subtitle = previewLines.join('\n') || 'No details entered';
+        const primaryValue = selectedEntity.age && selectedEntity.age !== '0'
+          ? `${selectedEntity.age} yrs`
+          : '';
+
+        return (
+          <HybridItemPreviewCard
+            title={titleFor(selectedEntity)}
+            subtitle={subtitle}
+            primaryValue={primaryValue}
+            variant="active"
+            isClickable={false}
+            isFirst={true}
+            isLast={otherEntities.length === 0}
+          />
+        );
+      })()}
+
+      {otherEntities.map((entity, index) => (
+        <HybridItemPreviewRow
+          key={entity.id}
+          title={titleFor(entity)}
+          onClick={() => setSelectedEntityId(entity.id)}
+          isLast={index === otherEntities.length - 1}
+        />
+      ))}
+    </div>
+  );
 
   const detailForms = selectedEntity ? (
     <GroupedDetailForm>
-      {/* `space-y-10` on this inner wrapper matches GroupedDetailForm's own
-          spacing — without it, the FieldGroups inside butt up against each
-          other (space-y-10 on GroupedDetailForm only sees a single child). */}
+      {/* space-y-10 on this inner wrapper matches GroupedDetailForm's own
+          spacing — without it the FieldGroups would butt up against each
+          other (space-y-10 on the parent only sees a single child). */}
       <div key={selectedEntity.id} className="space-y-10">
-        <DetailFormHeader
-          title={selectedEntity.entityName}
-          emptyTitle="Unnamed Entity"
-          onTitleChange={(value) => handleImmediateUpdate(selectedEntity.id, 'entityName', value)}
-          onDuplicate={() => handleDuplicate(selectedEntity)}
-          onDelete={() => handleDelete(selectedEntity.id)}
-          disabled={isUpdating}
-        />
-
-        {/* Entity Name is captured by the detail-form title above (pencil to
-            rename). Only Entity Type lives here. */}
         <FieldGroup title="Entity">
           <div className="flex gap-3">
             <FormField label="Entity Type">
@@ -279,25 +286,20 @@ export function ClientDetailsTable({ onAddEntity }: ClientDetailsTableProps) {
 
   return (
     <HybridViewWrapper
-      summaryCards={
-        <div>
-          {onAddEntity && (
-            <div className="hybrid-add-button-container p-4 border-b border-neutral-200">
-              <Button
-                onClick={onAddEntity}
-                className="bg-white text-gray-700 border border-neutral-200 hover:bg-gray-50 hover:text-gray-900 font-normal"
-                size="sm"
-              >
-                <Plus className="h-4 w-4 mr-2" />
-                Add Entity
-              </Button>
-            </div>
-          )}
-          <div className="hybrid-tabs-list">
-            {summaryCards}
-          </div>
-        </div>
+      header={
+        <HybridHeaderBar
+          add={onAddEntity ? { label: 'Add Entity', onClick: onAddEntity } : undefined}
+          title={selectedEntity?.entityName}
+          emptyTitle={selectedEntity ? 'Unnamed Entity' : undefined}
+          onTitleChange={selectedEntity
+            ? (value) => handleImmediateUpdate(selectedEntity.id, 'entityName', value)
+            : undefined}
+          onDuplicate={selectedEntity ? () => handleDuplicate(selectedEntity) : undefined}
+          onDelete={selectedEntity ? () => handleDelete(selectedEntity.id) : undefined}
+          disabled={isUpdating}
+        />
       }
+      summaryCards={summaryCards}
       detailForms={detailForms}
       isEmpty={entities.length === 0}
       emptyStateMessage="No entities added yet. Click 'Add Entity' to create your first entity."
