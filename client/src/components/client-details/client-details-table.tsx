@@ -276,7 +276,6 @@ export function ClientDetailsTable({ onAddEntity }: ClientDetailsTableProps) {
 
   return (
     <HybridViewWrapper
-      card
       header={
         <HybridHeaderBar
           add={onAddEntity ? { label: 'Add Entity', onClick: onAddEntity } : undefined}

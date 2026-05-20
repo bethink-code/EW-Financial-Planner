@@ -223,7 +223,6 @@ export function LumpSumTable({ onAddBequest }: LumpSumTableProps) {
 
   return (
     <HybridViewWrapper
-      card
       summary={<LumpSumSummary />}
       header={
         <HybridHeaderBar

@@ -61,9 +61,6 @@ export function HybridSidebar<T>({
             subtitle={content.subtitle}
             primaryValue={content.primaryValue ?? ''}
             secondaryInfo={content.secondaryInfo}
-            variant="active"
-            isClickable={false}
-            isFirst
             isLast={others.length === 0}
           />
         );

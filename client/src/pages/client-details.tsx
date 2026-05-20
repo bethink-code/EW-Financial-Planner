@@ -19,8 +19,6 @@ export default function ClientDetailsPage() {
     addMutation.mutate();
   }, [addMutation]);
 
-  // No CalculatorHeader wrapper — ClientDetailsTable's HybridViewWrapper
-  // (card=true) is itself the white form card.
   return (
     <div className="w-full px-6 pb-6">
       <div className="w-[1320px] max-w-full">

@@ -82,7 +82,6 @@ export function RetirementFundTable({
 
   return (
     <HybridViewWrapper
-      card
       summary={showSummary ? <RetirementFundsSummary /> : undefined}
       header={
         <HybridHeaderBar

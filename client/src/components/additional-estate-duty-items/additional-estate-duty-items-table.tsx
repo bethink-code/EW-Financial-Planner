@@ -190,7 +190,6 @@ function AdditionalEstateDutyItemsTable({ onAddItem }: AdditionalEstateDutyItems
 
   return (
     <HybridViewWrapper
-      card
       summary={<AdditionalEstateDutyItemsSummary />}
       header={
         <HybridHeaderBar

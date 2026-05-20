@@ -114,7 +114,6 @@ export function VoluntaryInvestmentTable({ onAddInvestment, showSummary = true }
 
   return (
     <HybridViewWrapper
-      card
       summary={showSummary ? <VoluntaryInvestmentsSummary /> : undefined}
       header={
         <HybridHeaderBar

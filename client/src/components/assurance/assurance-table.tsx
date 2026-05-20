@@ -263,7 +263,6 @@ export function AssuranceTable({ onAddPolicy }: AssuranceTableProps) {
 
   return (
     <HybridViewWrapper
-      card
       summary={<AssuranceSummary />}
       header={
         <HybridHeaderBar

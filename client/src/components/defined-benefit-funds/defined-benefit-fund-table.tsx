@@ -106,7 +106,6 @@ export function DefinedBenefitFundTable({ onAddFund, showSummary = true }: Defin
 
   return (
     <HybridViewWrapper
-      card
       summary={showSummary ? <DefinedBenefitFundsSummary /> : undefined}
       header={
         <HybridHeaderBar

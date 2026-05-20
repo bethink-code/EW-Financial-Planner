@@ -265,7 +265,6 @@ export function IncomeProvisionsTable({ onAddProvision, showSummary = true }: In
 
   return (
     <HybridViewWrapper
-      card
       summary={showSummary ? <IncomeProvisionsSummary /> : undefined}
       header={
         <HybridHeaderBar

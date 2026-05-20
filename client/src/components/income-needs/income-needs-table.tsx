@@ -273,7 +273,6 @@ function IncomeNeedsTable({ onAddIncomeNeed, showSummary = true }: IncomeNeedsTa
 
   return (
     <HybridViewWrapper
-      card
       summary={showSummary ? <IncomeNeedsSummary /> : undefined}
       header={
         <HybridHeaderBar
