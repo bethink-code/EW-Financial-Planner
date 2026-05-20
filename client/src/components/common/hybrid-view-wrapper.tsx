@@ -48,15 +48,15 @@ export function HybridViewWrapper({
     <div
       className={cn(
         "flex flex-col",
-        card && "bg-white rounded-lg shadow-sm border border-neutral-200 overflow-hidden",
+        card && "rounded-lg shadow-sm border border-neutral-200 overflow-hidden",
       )}
     >
       {header && (
-        <div className="border-b border-neutral-200">
+        <div className={cn("border-b border-neutral-200", card && "bg-white")}>
           {header}
         </div>
       )}
-      <div className="flex max-w-full overflow-hidden">
+      <div className={cn("flex max-w-full overflow-hidden", card && "bg-white")}>
         <div className="w-80 flex-shrink-0 border-r border-neutral-200">
           {summaryCards}
         </div>
