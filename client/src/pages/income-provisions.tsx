@@ -43,13 +43,7 @@ export default function IncomeProvisions() {
       <div className="w-full px-6 py-6">
         <div className="w-[1320px]">
           {/* Combined Header, Summary and Table */}
-          <CalculatorHeader
-            title="Income Provisions"
-            onAddItem={handleAddProvision}
-            addButtonText="Add Provision"
-            isAddingItem={addMutation.isPending}
-            className="mb-6"
-          >
+          <CalculatorHeader className="mb-6">
             {/* Per-domain summary on non-retirement routes only. Retirement
                 renders its cross-category ribbon above the tabs. */}
             {!isRetirementNeed && (

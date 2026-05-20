@@ -7,7 +7,7 @@ export default function Residue() {
       <div className="w-full px-6 py-6">
         {/* Header and Table without Summary - Compact Card */}
         <div className="w-fit">
-          <CalculatorHeader title="Residue" className="mb-6">
+          <CalculatorHeader className="mb-6">
             {/* Table with compact layout */}
             <div className="table-container-wrapper">
               <ResidueTable />

@@ -24,13 +24,7 @@ export default function ClientDetailsPage() {
     <div className="">
       <div className="w-full px-6 py-6">
         <div className="w-[1320px]">
-          <CalculatorHeader
-            title="Client Details"
-            onAddItem={handleAddEntity}
-            addButtonText="Add Entity"
-            isAddingItem={addMutation.isPending}
-            className="mb-6"
-          >
+          <CalculatorHeader className="mb-6">
             <div className="table-container-wrapper">
               <ClientDetailsTable onAddEntity={handleAddEntity} />
             </div>

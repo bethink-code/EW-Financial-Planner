@@ -46,13 +46,7 @@ export default function LumpSumBequests() {
       <div className="w-full px-6 py-6">
         <div className="w-[1320px]">
           {/* Combined Header, Summary and Table */}
-          <CalculatorHeader
-          title="Lump Sum Needs and Cash Bequests"
-          onAddItem={handleAddBequest}
-          addButtonText="Add Bequest"
-          isAddingItem={addMutation.isPending}
-          className="mb-6"
-        >
+          <CalculatorHeader className="mb-6">
           {/* Summary with max width constraint */}
           <div className="max-w-6xl">
             <LumpSumSummary />

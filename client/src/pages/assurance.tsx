@@ -71,15 +71,7 @@ export default function Assurance() {
       <div className="w-full px-6 py-6">
         <div className="w-[1320px]">
           {/* Combined Header, Summary and Table */}
-          <CalculatorHeader
-          title="Assurance"
-          onAddItem={handleAddPolicy}
-          addButtonText="Add Policy"
-          isAddingItem={addMutation.isPending}
-          onRefresh={handleRefresh}
-          isRefreshing={isRefreshing}
-          className="mb-6"
-        >
+          <CalculatorHeader className="mb-6">
           {/* Summary with max width constraint */}
           <div className="max-w-6xl">
             <AssuranceSummary />

@@ -50,13 +50,7 @@ export function AssetsPage() {
       <div className="w-full px-6 py-6">
         <div className="w-[1320px]">
           {/* Combined Header, Summary and Table */}
-          <CalculatorHeader
-          title="Assets"
-          onAddItem={handleAddAsset}
-          addButtonText="Add Asset"
-          isAddingItem={addMutation.isPending}
-          className="mb-6"
-        >
+          <CalculatorHeader className="mb-6">
           {/* Summary with max width constraint */}
           <div className="max-w-6xl">
             <AssetsSummary />

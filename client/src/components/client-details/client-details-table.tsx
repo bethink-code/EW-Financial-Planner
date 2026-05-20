@@ -150,18 +150,10 @@ export function ClientDetailsTable({ onAddEntity }: ClientDetailsTableProps) {
           disabled={isUpdating}
         />
 
+        {/* Entity Name is captured by the detail-form title above (pencil to
+            rename). Only Entity Type lives here. */}
         <FieldGroup title="Entity">
           <div className="flex gap-3">
-            <FormField label="Entity Name">
-              <input
-                type="text"
-                defaultValue={formatTextValue(selectedEntity.entityName)}
-                className={`table-input ${getValueClass(selectedEntity.entityName, 'text')}`}
-                style={{ width: 'fit-content', minWidth: '180px' }}
-                onFocus={handleDefaultValueFocus}
-                onBlur={(e) => handleFieldUpdate(selectedEntity.id, 'entityName', e.target.value)}
-              />
-            </FormField>
             <FormField label="Entity Type">
               <select
                 className="table-input table-dropdown"

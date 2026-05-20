@@ -36,13 +36,7 @@ export default function AdditionalEstateDutyItems() {
       <div className="w-full px-6 py-6">
         <div className="w-[1320px]">
           {/* Combined Header, Summary and Table - Compact Card */}
-          <CalculatorHeader
-            title="Additional Estate Duty Items"
-            onAddItem={handleAddItem}
-            addButtonText="Add Item"
-            isAddingItem={addMutation.isPending}
-            className="mb-6"
-          >
+          <CalculatorHeader className="mb-6">
             {/* Summary */}
             <AdditionalEstateDutyItemsSummary />
 
