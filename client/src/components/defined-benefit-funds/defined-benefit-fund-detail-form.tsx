@@ -4,22 +4,18 @@ import { useMutation } from '@tanstack/react-query';
 import { DefinedBenefitFund } from '@shared/schema';
 import { queryClient } from '@/lib/queryClient';
 import EntityOwnerSelector from '@/components/common/entity-owner-selector';
-import { FieldGroup, FormField } from '@/components/common/grouped-detail-form';
+import { FieldGroup, FormField, GroupedDetailForm } from '@/components/common/grouped-detail-form';
 import { formatCurrencyValue, formatPercentageValue, formatYearsValue, getValueClass, handleDefaultValueFocus } from '@/lib/formatting';
 import { getFieldClass } from '@/lib/field-types';
 import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
-import { Button } from '@/components/ui/button';
-import { DetailFormHeader } from '@/components/common/detail-form-header';
 import { useRetirementProjection } from '@/hooks/use-retirement-projection';
 
 interface DefinedBenefitFundDetailFormProps {
   fund: DefinedBenefitFund;
-  onDelete: (id: number) => void;
-  onDuplicate?: (fund: DefinedBenefitFund) => void;
 }
 
-export function DefinedBenefitFundDetailForm({ fund, onDelete, onDuplicate }: DefinedBenefitFundDetailFormProps) {
+export function DefinedBenefitFundDetailForm({ fund }: DefinedBenefitFundDetailFormProps) {
   const [isUpdating, setIsUpdating] = useState(false);
   const [location] = useLocation();
   const showRetirementProjection = location.startsWith('/needs/retirement');
@@ -104,15 +100,7 @@ export function DefinedBenefitFundDetailForm({ fund, onDelete, onDuplicate }: De
   }, [handleUpdate]);
 
   return (
-    <div className="space-y-10 p-6 bg-white">
-      <DetailFormHeader
-        title={fund.description}
-        emptyTitle="Untitled Fund"
-        onDuplicate={onDuplicate ? () => onDuplicate(fund) : undefined}
-        onDelete={() => onDelete(fund.id)}
-        disabled={isUpdating}
-      />
-
+    <GroupedDetailForm>
       {/* Group 1: Overview */}
       <FieldGroup title="Overview">
         <div className="space-y-4">
@@ -317,6 +305,6 @@ export function DefinedBenefitFundDetailForm({ fund, onDelete, onDuplicate }: De
         </div>
       </FieldGroup>
       )}
-    </div>
+    </GroupedDetailForm>
   );
 }

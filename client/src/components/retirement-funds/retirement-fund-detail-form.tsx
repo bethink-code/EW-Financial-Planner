@@ -1,13 +1,10 @@
-import React from 'react';
 import { useLocation } from 'wouter';
 import { RetirementFund, UpdateRetirementFund } from '@shared/schema';
 import { useQuery } from '@tanstack/react-query';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Button } from '@/components/ui/button';
 import EntityOwnerSelector from '@/components/common/entity-owner-selector';
 import EntityBeneficiarySelector from '@/components/common/entity-beneficiary-selector';
-import { FieldGroup, FormField } from '@/components/common/grouped-detail-form';
-import { DetailFormHeader } from '@/components/common/detail-form-header';
+import { FieldGroup, FormField, GroupedDetailForm } from '@/components/common/grouped-detail-form';
 import { getFieldClass } from '@/lib/design-tokens';
 import { getValueClass, handleDefaultValueFocus } from '@/lib/formatting';
 import { formatCurrencyValue, formatPercentageValue, formatYearsValue } from '@/lib/formatting';
@@ -16,17 +13,13 @@ import { useRetirementProjection } from '@/hooks/use-retirement-projection';
 interface RetirementFundDetailFormProps {
   fund: RetirementFund;
   onUpdate: (id: number, field: keyof UpdateRetirementFund, value: any) => void;
-  onDuplicate: (fund: RetirementFund) => void;
-  onDelete: (id: number) => void;
   disabled?: boolean;
 }
 
-export function RetirementFundDetailForm({ 
-  fund, 
-  onUpdate, 
-  onDuplicate, 
-  onDelete, 
-  disabled = false 
+export function RetirementFundDetailForm({
+  fund,
+  onUpdate,
+  disabled = false
 }: RetirementFundDetailFormProps) {
   const { data: entities = [] } = useQuery({
     queryKey: ["/api/client-details"],
@@ -154,16 +147,7 @@ export function RetirementFundDetailForm({
   };
 
   return (
-    <div className="space-y-10 p-6 bg-white">
-      <DetailFormHeader
-        title={fund.description}
-        emptyTitle="Untitled Fund"
-        onTitleChange={(value) => onUpdate(fund.id, 'description', value)}
-        onDuplicate={() => onDuplicate(fund)}
-        onDelete={() => onDelete(fund.id)}
-        disabled={disabled}
-      />
-
+    <GroupedDetailForm>
       {/* Group 1: Overview (Owner → Fund → Benefits) */}
       <FieldGroup title="Overview">
         <div className="space-y-4">
@@ -532,6 +516,6 @@ export function RetirementFundDetailForm({
         </div>
       </FieldGroup>
       )}
-    </div>
+    </GroupedDetailForm>
   );
 }

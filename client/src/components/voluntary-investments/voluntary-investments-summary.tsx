@@ -1,48 +1,25 @@
 import { useQuery } from "@tanstack/react-query";
 import type { VoluntaryInvestment } from "@shared/schema";
+import { SummaryBand, SummaryTile } from "@/components/common/summary-band";
 
 export function VoluntaryInvestmentsSummary() {
-  const { data: investments = [], isLoading } = useQuery<VoluntaryInvestment[]>({
+  const { data: investments = [] } = useQuery<VoluntaryInvestment[]>({
     queryKey: ["/api/voluntary-investments"],
   });
 
-  if (isLoading) {
-    return (
-      <div className="px-5 pb-5">
-        <div className="text-neutral-500">Loading summary...</div>
-      </div>
+  const sum = (extract: (i: VoluntaryInvestment) => string | null | undefined) =>
+    investments.reduce(
+      (acc, i) => acc + (parseFloat((extract(i) || '').replace(/[^\d.-]/g, '')) || 0),
+      0,
     );
-  }
-
-  const totalInvestments = investments.length;
-  const totalBaseCost = investments.reduce((sum, investment) => {
-    const amount = parseFloat((investment.baseCost || "R 0").replace(/[^\d.-]/g, '')) || 0;
-    return sum + amount;
-  }, 0);
-
-  const totalMarketValue = investments.reduce((sum, investment) => {
-    const amount = parseFloat((investment.marketValue || "R 0").replace(/[^\d.-]/g, '')) || 0;
-    return sum + amount;
-  }, 0);
+  const totalBaseCost = sum(i => i.baseCost);
+  const totalMarketValue = sum(i => i.marketValue);
 
   return (
-    <div className="px-5 pb-5">
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div className="summary-card">
-          <div className="text-xs font-medium text-teal-700 mb-1">Total Investments</div>
-          <div className="text-lg font-bold text-neutral-900">{totalInvestments}</div>
-        </div>
-        
-        <div className="summary-card">
-          <div className="text-xs font-medium text-teal-700 mb-1">Total Base Cost</div>
-          <div className="text-lg font-bold text-neutral-900">R {totalBaseCost.toLocaleString()}</div>
-        </div>
-        
-        <div className="summary-card">
-          <div className="text-xs font-medium text-teal-700 mb-1">Total Market Value</div>
-          <div className="text-lg font-bold text-neutral-900">R {totalMarketValue.toLocaleString()}</div>
-        </div>
-      </div>
-    </div>
+    <SummaryBand>
+      <SummaryTile label="Investments" value={String(investments.length)} />
+      <SummaryTile label="Base cost" value={`R ${totalBaseCost.toLocaleString()}`} />
+      <SummaryTile label="Market value" value={`R ${totalMarketValue.toLocaleString()}`} />
+    </SummaryBand>
   );
 }

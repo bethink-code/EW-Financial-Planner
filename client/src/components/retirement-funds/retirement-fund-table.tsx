@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { RetirementFund, UpdateRetirementFund } from '@shared/schema';
-import { RetirementFundPreviewCard } from './retirement-fund-preview-card';
+import { HybridViewWrapper } from '@/components/common/hybrid-view-wrapper';
+import { HybridHeaderBar } from '@/components/common/hybrid-header-bar';
+import { HybridSidebar } from '@/components/common/hybrid-sidebar';
 import { RetirementFundDetailForm } from './retirement-fund-detail-form';
-import { Button } from '@/components/ui/button';
-import { Plus } from 'lucide-react';
+import { RetirementFundsSummary } from './retirement-funds-summary';
 
 interface RetirementFundTableProps {
   funds: RetirementFund[];
@@ -12,73 +13,91 @@ interface RetirementFundTableProps {
   onDelete: (id: number) => void;
   onAddFund?: () => void;
   disabled?: boolean;
+  /** Hide the section summary band — used on Retirement routes where the
+   *  phase-level projection ribbon already covers these stats. */
+  showSummary?: boolean;
 }
 
-export function RetirementFundTable({ 
-  funds, 
-  onUpdate, 
-  onDuplicate, 
-  onDelete, 
+export function RetirementFundTable({
+  funds,
+  onUpdate,
+  onDuplicate,
+  onDelete,
   onAddFund,
-  disabled = false 
+  disabled = false,
+  showSummary = true,
 }: RetirementFundTableProps) {
-  const [activeFundId, setActiveFundId] = useState<number | null>(
-    funds.length > 0 ? funds[0].id : null
+  const [selectedFundId, setSelectedFundId] = React.useState<number | null>(null);
+
+  React.useEffect(() => {
+    if (funds.length > 0 && selectedFundId === null) {
+      setSelectedFundId(funds[0].id);
+    }
+  }, [funds, selectedFundId]);
+
+  const selectedFund = selectedFundId
+    ? funds.find(f => f.id === selectedFundId) ?? null
+    : null;
+
+  const fundIndex = (f: RetirementFund) => funds.findIndex(x => x.id === f.id);
+  const titleFor = (f: RetirementFund) =>
+    f.description?.trim() || `Fund ${fundIndex(f) + 1}`;
+
+  const handleDelete = (id: number) => {
+    if (window.confirm('Delete this retirement fund? This cannot be undone.')) {
+      if (id === selectedFundId) setSelectedFundId(null);
+      onDelete(id);
+    }
+  };
+
+  const summaryCards = (
+    <HybridSidebar
+      items={funds}
+      selectedId={selectedFundId}
+      onSelect={setSelectedFundId}
+      getId={(f) => f.id}
+      getTitle={titleFor}
+      renderActive={(f) => {
+        const owners = (f.owners || []).filter(o => o?.trim());
+        const lines: string[] = [];
+        if (owners.length > 0) lines.push(`Owners: ${owners.join(', ')}`);
+        if (f.fundValue && f.fundValue !== 'R 0') lines.push(`Fund value: ${f.fundValue}`);
+        return {
+          subtitle: lines.join('\n') || 'No details entered',
+          primaryValue: f.fundValueAtDeath || 'R 0',
+          secondaryInfo: f.coverAmount && f.coverAmount !== 'R 0' ? `Cover: ${f.coverAmount}` : undefined,
+        };
+      }}
+    />
   );
 
-  const activeFund = funds.find(fund => fund.id === activeFundId);
-
-  const previewCards = funds.map((fund, index) => (
-    <RetirementFundPreviewCard
-      key={fund.id}
-      fund={fund}
-      isActive={fund.id === activeFundId}
-      onClick={() => setActiveFundId(fund.id)}
-      isFirst={index === 0}
-      isLast={index === funds.length - 1}
-    />
-  ));
-
-  const detailForm = activeFund ? (
+  const detailForms = selectedFund ? (
     <RetirementFundDetailForm
-      fund={activeFund}
+      key={`form-${selectedFund.id}-${selectedFund.owners.length}`}
+      fund={selectedFund}
       onUpdate={onUpdate}
-      onDuplicate={onDuplicate}
-      onDelete={onDelete}
       disabled={disabled}
     />
-  ) : (
-    <div className="flex items-center justify-center h-64 text-neutral-500">
-      No fund selected
-    </div>
-  );
+  ) : null;
 
   return (
-    <div className="flex border-t border-neutral-200">
-      {/* Left Sidebar - Preview Cards (Tabs) */}
-      <div className="w-80 flex-shrink-0 border-r border-neutral-200 bg-neutral-50">
-        {onAddFund && (
-          <div className="hybrid-add-button-container p-4 border-b border-neutral-200">
-            <Button
-              onClick={onAddFund}
-              disabled={disabled}
-              className="bg-white text-gray-700 border border-neutral-200 hover:bg-gray-50 hover:text-gray-900 font-normal"
-              size="sm"
-            >
-              <Plus className="h-4 w-4 mr-2" />
-              Add Fund
-            </Button>
-          </div>
-        )}
-        <div className="hybrid-tabs-list">
-          {previewCards}
-        </div>
-      </div>
-
-      {/* Right Side - Detail Form */}
-      <div className="flex-1">
-        {detailForm}
-      </div>
-    </div>
+    <HybridViewWrapper
+      card
+      summary={showSummary ? <RetirementFundsSummary /> : undefined}
+      header={
+        <HybridHeaderBar
+          add={onAddFund ? { label: 'Add Fund', onClick: onAddFund } : undefined}
+          title={selectedFund?.description}
+          emptyTitle={selectedFund ? 'Untitled Fund' : undefined}
+          onDuplicate={selectedFund ? () => onDuplicate(selectedFund) : undefined}
+          onDelete={selectedFund ? () => handleDelete(selectedFund.id) : undefined}
+          disabled={disabled}
+        />
+      }
+      summaryCards={summaryCards}
+      detailForms={detailForms}
+      isEmpty={funds.length === 0}
+      emptyStateMessage="No retirement funds yet. Click 'Add Fund' to create your first fund."
+    />
   );
 }

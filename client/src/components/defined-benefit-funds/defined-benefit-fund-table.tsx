@@ -1,177 +1,127 @@
-import { useState, useMemo } from 'react';
+import React from 'react';
 import { useQuery, useMutation } from '@tanstack/react-query';
 import { DefinedBenefitFund, InsertDefinedBenefitFund } from '@shared/schema';
 import { queryClient, apiRequest } from '@/lib/queryClient';
-import { DefinedBenefitFundPreviewCard } from './defined-benefit-fund-preview-card';
+import { HybridViewWrapper } from '@/components/common/hybrid-view-wrapper';
+import { HybridHeaderBar } from '@/components/common/hybrid-header-bar';
+import { HybridSidebar } from '@/components/common/hybrid-sidebar';
 import { DefinedBenefitFundDetailForm } from './defined-benefit-fund-detail-form';
-import { getDefaultOwners, getDefaultOwnershipPercentages } from '@/lib/entity-utils';
-import type { ClientDetails } from '@shared/schema';
-import { Button } from '@/components/ui/button';
-import { Plus } from 'lucide-react';
+import { DefinedBenefitFundsSummary } from './defined-benefit-funds-summary';
 
 interface DefinedBenefitFundTableProps {
-  searchTerm?: string;
   onAddFund?: () => void;
+  /** Hide the section summary band — used on Retirement routes where the
+   *  phase-level projection ribbon already covers these stats. */
+  showSummary?: boolean;
 }
 
-export function DefinedBenefitFundTable({ searchTerm, onAddFund }: DefinedBenefitFundTableProps) {
-  const [activeFundId, setActiveFundId] = useState<number | null>(null);
+export function DefinedBenefitFundTable({ onAddFund, showSummary = true }: DefinedBenefitFundTableProps) {
+  const [selectedFundId, setSelectedFundId] = React.useState<number | null>(null);
 
-  // Fetch funds
   const { data: funds = [], isLoading } = useQuery<DefinedBenefitFund[]>({
     queryKey: ['/api/defined-benefit-funds'],
   });
 
-  // Fetch client details for defaults
-  const { data: clientDetails = [] } = useQuery<ClientDetails[]>({
-    queryKey: ['/api/client-details']
-  });
-
-  // Filter funds based on search term
-  const filteredFunds = useMemo(() => {
-    if (!searchTerm) return funds;
-    return funds.filter(fund =>
-      fund.description?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      fund.owners?.some(owner => owner.toLowerCase().includes(searchTerm.toLowerCase()))
-    );
-  }, [funds, searchTerm]);
-
-  // Set active fund to first fund if none selected
-  const activeFund = useMemo(() => {
-    if (activeFundId) {
-      return filteredFunds.find(fund => fund.id === activeFundId);
+  React.useEffect(() => {
+    if (funds.length > 0 && selectedFundId === null) {
+      setSelectedFundId(funds[0].id);
     }
-    return filteredFunds[0] || null;
-  }, [filteredFunds, activeFundId]);
+  }, [funds, selectedFundId]);
 
-  // Add fund mutation
-  const addMutation = useMutation({
-    mutationFn: async () => {
-      const newFund: InsertDefinedBenefitFund = {
-        description: "",
-        owners: getDefaultOwners(clientDetails),
-        ownershipPercentages: getDefaultOwnershipPercentages(),
-        yearsOfService: "0 years",
-        finalMonthlySalary: "R 0",
-        deathLumpSum: "R 0",
-        additionalTaxFreeAmount: "R 0",
-        pensionIncomeAmount: "R 0",
-        pensionIncomeCheckbox: true,
-        pensionIncomeYears: "0 years",
-        pensionIncomeIncrease: "0%"
-      };
-      const res = await apiRequest("POST", "/api/defined-benefit-funds", newFund);
-      return await res.json();
-    },
-    onSuccess: (newFund: DefinedBenefitFund) => {
-      queryClient.invalidateQueries({ queryKey: ["/api/defined-benefit-funds"] });
-      setActiveFundId(newFund.id);
-      onAddFund?.();
+  const deleteMutation = useMutation({
+    mutationFn: async (id: number) => apiRequest('DELETE', `/api/defined-benefit-funds/${id}`),
+    onSuccess: (_, id) => {
+      if (id === selectedFundId) setSelectedFundId(null);
+      queryClient.invalidateQueries({ queryKey: ['/api/defined-benefit-funds'] });
     },
   });
 
-  // Delete fund mutation
-  const deleteMutation = useMutation({
-    mutationFn: async (id: number) => {
-      await apiRequest("DELETE", `/api/defined-benefit-funds/${id}`);
+  const duplicateMutation = useMutation({
+    mutationFn: async (source: DefinedBenefitFund) => {
+      const { id, ...rest } = source;
+      const copy: InsertDefinedBenefitFund = {
+        ...rest,
+        description: source.description ? `${source.description} (Copy)` : '',
+      };
+      return apiRequest('POST', '/api/defined-benefit-funds', copy);
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["/api/defined-benefit-funds"] });
-      setActiveFundId(null);
+      queryClient.invalidateQueries({ queryKey: ['/api/defined-benefit-funds'] });
     },
   });
 
-  // Duplicate fund mutation
-  const duplicateMutation = useMutation({
-    mutationFn: async (fund: DefinedBenefitFund) => {
-      const { id, ...fundWithoutId } = fund;
-      const duplicatedFund = {
-        ...fundWithoutId,
-        description: `${fund.description} (Copy)`,
-      };
-      const res = await apiRequest("POST", "/api/defined-benefit-funds", duplicatedFund);
-      return await res.json();
-    },
-    onSuccess: (newFund: DefinedBenefitFund) => {
-      queryClient.invalidateQueries({ queryKey: ["/api/defined-benefit-funds"] });
-      setActiveFundId(newFund.id);
-    },
-  });
-
-  const handleDeleteFund = (id: number) => {
-    if (window.confirm('Are you sure you want to delete this defined benefit fund?')) {
+  const handleDelete = (id: number) => {
+    if (window.confirm('Delete this defined benefit fund? This cannot be undone.')) {
       deleteMutation.mutate(id);
     }
   };
 
-  const handleDuplicateFund = (fund: DefinedBenefitFund) => {
+  const handleDuplicate = (fund: DefinedBenefitFund) => {
     duplicateMutation.mutate(fund);
   };
 
-  if (isLoading) {
-    return <div className="flex justify-center py-8">Loading defined benefit funds...</div>;
-  }
+  const isUpdating = deleteMutation.isPending || duplicateMutation.isPending;
 
-  if (filteredFunds.length === 0) {
-    return (
-      <div className="text-center py-8">
-        <p className="text-gray-500 mb-4">
-          {searchTerm ? 'No funds match your search.' : 'No defined benefit funds yet.'}
-        </p>
-        <button
-          onClick={() => addMutation.mutate()}
-          disabled={addMutation.isPending}
-          className="inline-flex items-center px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-md hover:bg-blue-700 disabled:opacity-50"
-        >
-          Add Fund
-        </button>
-      </div>
-    );
+  const selectedFund = selectedFundId
+    ? funds.find(f => f.id === selectedFundId) ?? null
+    : null;
+
+  const fundIndex = (f: DefinedBenefitFund) => funds.findIndex(x => x.id === f.id);
+  const titleFor = (f: DefinedBenefitFund) =>
+    f.description?.trim() || `Fund ${fundIndex(f) + 1}`;
+
+  const summaryCards = (
+    <HybridSidebar
+      items={funds}
+      selectedId={selectedFundId}
+      onSelect={setSelectedFundId}
+      getId={(f) => f.id}
+      getTitle={titleFor}
+      renderActive={(f) => {
+        const owners = (f.owners || []).filter(o => o?.trim());
+        const lines: string[] = [];
+        if (owners.length > 0) lines.push(`Owners: ${owners.join(', ')}`);
+        if (f.yearsOfService) lines.push(`Service: ${f.yearsOfService}`);
+        return {
+          subtitle: lines.join('\n') || 'No details entered',
+          primaryValue: f.deathLumpSum || 'R 0',
+          secondaryInfo: f.pensionIncomeAmount && f.pensionIncomeAmount !== 'R 0'
+            ? `Pension: ${f.pensionIncomeAmount}`
+            : undefined,
+        };
+      }}
+    />
+  );
+
+  const detailForms = selectedFund ? (
+    <DefinedBenefitFundDetailForm
+      key={`form-${selectedFund.id}-${selectedFund.owners?.length ?? 0}`}
+      fund={selectedFund}
+    />
+  ) : null;
+
+  if (isLoading) {
+    return <div className="text-center py-4">Loading defined benefit funds...</div>;
   }
 
   return (
-    <div className="flex border-t border-neutral-200">
-      {/* Left Sidebar - Preview Cards */}
-      <div className="w-80 flex-shrink-0 border-r border-neutral-200 bg-neutral-50">
-        <div className="hybrid-add-button-container p-4 border-b border-neutral-200">
-          <Button
-            onClick={() => addMutation.mutate()}
-            disabled={addMutation.isPending}
-            className="bg-white text-gray-700 border border-neutral-200 hover:bg-gray-50 hover:text-gray-900 font-normal"
-            size="sm"
-          >
-            <Plus className="h-4 w-4 mr-2" />
-            Add Fund
-          </Button>
-        </div>
-        <div className="hybrid-tabs-list">
-          {filteredFunds.map((fund, index) => (
-            <DefinedBenefitFundPreviewCard
-              key={fund.id}
-              fund={fund}
-              isActive={activeFund?.id === fund.id}
-              onClick={() => setActiveFundId(fund.id)}
-              isFirst={index === 0}
-              isLast={index === filteredFunds.length - 1}
-            />
-          ))}
-        </div>
-      </div>
-
-      {/* Right Panel - Detail Form */}
-      <div className="flex-1">
-        {activeFund ? (
-          <DefinedBenefitFundDetailForm
-            fund={activeFund}
-            onDelete={handleDeleteFund}
-            onDuplicate={handleDuplicateFund}
-          />
-        ) : (
-          <div className="p-6 text-center text-gray-500">
-            Select a fund to view details
-          </div>
-        )}
-      </div>
-    </div>
+    <HybridViewWrapper
+      card
+      summary={showSummary ? <DefinedBenefitFundsSummary /> : undefined}
+      header={
+        <HybridHeaderBar
+          add={onAddFund ? { label: 'Add Fund', onClick: onAddFund } : undefined}
+          title={selectedFund?.description}
+          emptyTitle={selectedFund ? 'Untitled Fund' : undefined}
+          onDuplicate={selectedFund ? () => handleDuplicate(selectedFund) : undefined}
+          onDelete={selectedFund ? () => handleDelete(selectedFund.id) : undefined}
+          disabled={isUpdating}
+        />
+      }
+      summaryCards={summaryCards}
+      detailForms={detailForms}
+      isEmpty={funds.length === 0}
+      emptyStateMessage="No defined benefit funds yet. Click 'Add Fund' to create your first fund."
+    />
   );
 }
