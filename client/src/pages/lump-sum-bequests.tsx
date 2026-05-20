@@ -42,22 +42,14 @@ export default function LumpSumBequests() {
   }, [addMutation]);
 
   return (
-    <div className="">
-      <div className="w-full px-6 pb-6">
-        <div className="w-[1320px]">
-          {/* Combined Header, Summary and Table */}
-          <CalculatorHeader className="mb-6">
-          {/* Summary with max width constraint */}
+    <div className="w-full px-6 pb-6">
+      <div className="w-[1320px]">
+        <CalculatorHeader>
           <div className="max-w-6xl">
             <LumpSumSummary />
           </div>
-          
-          {/* Table with full width and margin */}
-          <div className="table-container-wrapper">
-            <LumpSumTable onAddBequest={handleAddBequest} />
-          </div>
+          <LumpSumTable onAddBequest={handleAddBequest} />
         </CalculatorHeader>
-        </div>
       </div>
     </div>
   );

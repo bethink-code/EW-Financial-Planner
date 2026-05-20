@@ -46,23 +46,15 @@ export function AssetsPage() {
   }, [addMutation]);
 
   return (
-    <div className="">
-      <div className="w-full px-6 pb-6">
-        <div className="w-[1320px]">
-          {/* Combined Header, Summary and Table */}
-          <CalculatorHeader className="mb-6">
-          {/* Summary with max width constraint */}
+    <div className="w-full px-6 pb-6">
+      <div className="w-[1320px]">
+        <CalculatorHeader>
           <div className="max-w-6xl">
             <AssetsSummary />
           </div>
-          
-          {/* Table with full width and margin */}
-          <div className="table-container-wrapper">
-            <AssetTable onAddAsset={handleAddAsset} />
-          </div>
+          <AssetTable onAddAsset={handleAddAsset} />
         </CalculatorHeader>
 
-        {/* Category Selection Dialog */}
         <CategorySelectionDialog
           isOpen={showCategoryDialog}
           onClose={() => setShowCategoryDialog(false)}
@@ -70,7 +62,6 @@ export function AssetsPage() {
           title="Select Asset Category"
           categories={assetCategories}
         />
-        </div>
       </div>
     </div>
   );

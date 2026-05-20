@@ -32,20 +32,12 @@ export default function AdditionalEstateDutyItems() {
   }, [addMutation]);
 
   return (
-    <div className="">
-      <div className="w-full px-6 pb-6">
-        <div className="w-[1320px]">
-          {/* Combined Header, Summary and Table - Compact Card */}
-          <CalculatorHeader className="mb-6">
-            {/* Summary */}
-            <AdditionalEstateDutyItemsSummary />
-
-            {/* Table with compact layout */}
-            <div className="table-container-wrapper">
-              <AdditionalEstateDutyItemsTable />
-            </div>
-          </CalculatorHeader>
-        </div>
+    <div className="w-full px-6 pb-6">
+      <div className="w-[1320px]">
+        <CalculatorHeader>
+          <AdditionalEstateDutyItemsSummary />
+          <AdditionalEstateDutyItemsTable />
+        </CalculatorHeader>
       </div>
     </div>
   );

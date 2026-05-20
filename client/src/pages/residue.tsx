@@ -3,17 +3,11 @@ import { CalculatorHeader } from "@/components/ui/calculator-header";
 
 export default function Residue() {
   return (
-    <div className="">
-      <div className="w-full px-6 pb-6">
-        {/* Header and Table without Summary - Compact Card */}
-        <div className="w-fit">
-          <CalculatorHeader className="mb-6">
-            {/* Table with compact layout */}
-            <div className="table-container-wrapper">
-              <ResidueTable />
-            </div>
-          </CalculatorHeader>
-        </div>
+    <div className="w-full px-6 pb-6">
+      <div className="w-fit">
+        <CalculatorHeader>
+          <ResidueTable />
+        </CalculatorHeader>
       </div>
     </div>
   );

@@ -143,11 +143,9 @@ export default function NewRetirementFunds() {
   }
 
   return (
-    <div className="">
-      <div className="w-full px-6 pb-6">
-        <div className="w-[1320px]">
-          {/* Combined Header, Summary and Table */}
-          <CalculatorHeader className="mb-6">
+    <div className="w-full px-6 pb-6">
+      <div className="w-[1320px]">
+        <CalculatorHeader>
           {/* Per-domain summary on non-retirement routes only. Retirement
               renders its cross-category ribbon above the tabs in
               RetirementCategoryTabs. */}
@@ -156,20 +154,15 @@ export default function NewRetirementFunds() {
               <RetirementFundsSummary />
             </div>
           )}
-
-          {/* Table with full width and margin */}
-          <div className="table-container-wrapper">
-            <RetirementFundTable
-              funds={funds}
-              onUpdate={handleFieldUpdate}
-              onDuplicate={handleDuplicateFund}
-              onDelete={handleRemoveFund}
-              onAddFund={handleAddFund}
-              disabled={updateMutation.isPending || addMutation.isPending}
-            />
-          </div>
+          <RetirementFundTable
+            funds={funds}
+            onUpdate={handleFieldUpdate}
+            onDuplicate={handleDuplicateFund}
+            onDelete={handleRemoveFund}
+            onAddFund={handleAddFund}
+            disabled={updateMutation.isPending || addMutation.isPending}
+          />
         </CalculatorHeader>
-        </div>
       </div>
     </div>
   );

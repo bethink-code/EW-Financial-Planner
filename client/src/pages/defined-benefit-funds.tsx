@@ -54,11 +54,9 @@ export default function DefinedBenefitFunds() {
   }, [addMutation]);
 
   return (
-    <div className="">
-      <div className="w-full px-6 pb-6">
-        <div className="w-[1320px]">
-          {/* Combined Header, Summary and Table */}
-          <CalculatorHeader className="mb-6">
+    <div className="w-full px-6 pb-6">
+      <div className="w-[1320px]">
+        <CalculatorHeader>
           {/* Per-domain summary on non-retirement routes only. Retirement
               renders its cross-category ribbon above the tabs. */}
           {!isRetirementNeed && (
@@ -66,13 +64,8 @@ export default function DefinedBenefitFunds() {
               <DefinedBenefitFundsSummary />
             </div>
           )}
-          
-          {/* Table with full width and margin */}
-          <div className="table-container-wrapper">
-            <DefinedBenefitFundTable onAddFund={handleAddFund} />
-          </div>
+          <DefinedBenefitFundTable onAddFund={handleAddFund} />
         </CalculatorHeader>
-        </div>
       </div>
     </div>
   );

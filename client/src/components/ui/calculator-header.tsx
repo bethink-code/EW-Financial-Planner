@@ -17,7 +17,7 @@ export function CalculatorHeader({ className = "", children }: CalculatorHeaderP
   return (
     <div
       className={cn(
-        "bg-white rounded-lg shadow-sm border border-neutral-200 pt-[30px] px-6 pb-6",
+        "bg-white rounded-lg shadow-sm border border-neutral-200 pt-[30px] px-6 pb-6 space-y-6",
         className,
       )}
     >

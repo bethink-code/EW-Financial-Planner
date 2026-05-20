@@ -39,25 +39,18 @@ export default function IncomeProvisions() {
   }, [addMutation]);
 
   return (
-    <div className="">
-      <div className="w-full px-6 pb-6">
-        <div className="w-[1320px]">
-          {/* Combined Header, Summary and Table */}
-          <CalculatorHeader className="mb-6">
-            {/* Per-domain summary on non-retirement routes only. Retirement
-                renders its cross-category ribbon above the tabs. */}
-            {!isRetirementNeed && (
-              <div className="max-w-6xl">
-                <IncomeProvisionsSummary searchTerm={searchTerm} />
-              </div>
-            )}
-            
-            {/* Table with full width and margin */}
-            <div className="table-container-wrapper">
-              <IncomeProvisionsTable onAddProvision={handleAddProvision} searchTerm={searchTerm} />
+    <div className="w-full px-6 pb-6">
+      <div className="w-[1320px]">
+        <CalculatorHeader>
+          {/* Per-domain summary on non-retirement routes only. Retirement
+              renders its cross-category ribbon above the tabs. */}
+          {!isRetirementNeed && (
+            <div className="max-w-6xl">
+              <IncomeProvisionsSummary searchTerm={searchTerm} />
             </div>
-          </CalculatorHeader>
-        </div>
+          )}
+          <IncomeProvisionsTable onAddProvision={handleAddProvision} searchTerm={searchTerm} />
+        </CalculatorHeader>
       </div>
     </div>
   );

@@ -67,22 +67,14 @@ export default function Assurance() {
   }, [refetch]);
 
   return (
-    <div className="">
-      <div className="w-full px-6 pb-6">
-        <div className="w-[1320px]">
-          {/* Combined Header, Summary and Table */}
-          <CalculatorHeader className="mb-6">
-          {/* Summary with max width constraint */}
+    <div className="w-full px-6 pb-6">
+      <div className="w-[1320px]">
+        <CalculatorHeader>
           <div className="max-w-6xl">
             <AssuranceSummary />
           </div>
-          
-          {/* Table with full width and margin */}
-          <div className="table-container-wrapper">
-            <AssuranceTable onAddPolicy={handleAddPolicy} />
-          </div>
+          <AssuranceTable onAddPolicy={handleAddPolicy} />
         </CalculatorHeader>
-        </div>
       </div>
     </div>
   );

@@ -45,23 +45,15 @@ export default function LiabilitiesPage() {
   }, [addMutation]);
 
   return (
-    <div className="">
-      <div className="w-full px-6 pb-6">
-        <div className="w-[1320px]">
-          {/* Combined Header, Summary and Table */}
-          <CalculatorHeader className="mb-6">
-          {/* Summary with max width constraint */}
+    <div className="w-full px-6 pb-6">
+      <div className="w-[1320px]">
+        <CalculatorHeader>
           <div className="max-w-6xl">
             <LiabilitiesSummary />
           </div>
-          
-          {/* Table with full width and margin */}
-          <div className="table-container-wrapper">
-            <LiabilityTable onAddLiability={handleAddLiability} />
-          </div>
+          <LiabilityTable onAddLiability={handleAddLiability} />
         </CalculatorHeader>
 
-        {/* Category Selection Dialog */}
         <CategorySelectionDialog
           isOpen={showCategoryDialog}
           onClose={() => setShowCategoryDialog(false)}
@@ -69,7 +61,6 @@ export default function LiabilitiesPage() {
           title="Select Liability Category"
           categories={liabilityCategories}
         />
-        </div>
       </div>
     </div>
   );
