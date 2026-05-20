@@ -1,14 +1,13 @@
-import { useState, useCallback, useMemo, useEffect } from "react";
+import { useState, useCallback, useEffect } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { Plus } from "lucide-react";
-import { formatTextValue } from "@/lib/formatting";
 import { apiRequest } from "@/lib/queryClient";
 import { AssuranceDetailForm } from "@/components/assurance/assurance-detail-form";
+import { AssuranceSummary } from "@/components/assurance/simple-assurance-summary";
 import { useDebouncedUpdate } from "@/hooks/use-debounced-update";
 import { useLoadingMutation } from "@/hooks/use-loading-mutation";
-import { Button } from "@/components/ui/button";
 import { HybridViewWrapper } from "@/components/common/hybrid-view-wrapper";
-import { HybridItemPreviewCard } from "@/components/common/hybrid-item-preview-card";
+import { HybridHeaderBar } from "@/components/common/hybrid-header-bar";
+import { HybridSidebar } from "@/components/common/hybrid-sidebar";
 import type { Assurance, InsertAssurance, ClientDetails } from "@shared/schema";
 
 interface AssuranceTableProps {
@@ -17,112 +16,72 @@ interface AssuranceTableProps {
 
 export function AssuranceTable({ onAddPolicy }: AssuranceTableProps) {
   const queryClient = useQueryClient();
-  const [isUpdating, setIsUpdating] = useState(false);
 
-  // Fetch client details for entity options
-  const { data: entities = [] } = useQuery<ClientDetails[]>({
-    queryKey: ["/api/client-details"]
+  useQuery<ClientDetails[]>({
+    queryKey: ["/api/client-details"],
   });
 
-  // Fetch assurance policies
-  const { data: policies = [], isLoading } = useQuery({
+  const { data: policies = [], isLoading } = useQuery<Assurance[]>({
     queryKey: ["/api/assurance"],
     queryFn: async () => {
       const response = await fetch("/api/assurance");
       if (!response.ok) throw new Error('Failed to fetch assurance policies');
       return response.json();
-    }
+    },
   });
 
-  // Update policy mutation with loading integration
   const updateMutation = useLoadingMutation({
     mutationFn: async ({ id, updates }: { id: number; updates: Partial<Assurance> }) => {
-      try {
-        const response = await apiRequest("PATCH", `/api/assurance/${id}`, updates);
-        return await response.json();
-      } catch (error) {
-        console.error('Update policy error:', error);
-        throw error;
-      }
+      const response = await apiRequest("PATCH", `/api/assurance/${id}`, updates);
+      return await response.json();
     },
     onSuccess: () => {
-      // Force a complete cache invalidation and refetch
       queryClient.invalidateQueries({ queryKey: ["/api/assurance"] });
       queryClient.refetchQueries({ queryKey: ["/api/assurance"] });
-      setIsUpdating(false);
     },
-    onError: (error) => {
-      console.error('Update mutation error:', error);
-      setIsUpdating(false);
-    }
   });
 
-  // Delete policy mutation with loading integration
   const deleteMutation = useLoadingMutation({
-    mutationFn: (id: number) => {
-      return apiRequest("DELETE", `/api/assurance/${id}`);
-    },
+    mutationFn: (id: number) => apiRequest("DELETE", `/api/assurance/${id}`),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["/api/assurance"] });
     },
   });
 
-  // Duplicate policy mutation with loading integration
   const duplicateMutation = useLoadingMutation({
     mutationFn: async (policy: Assurance) => {
-      try {
-        const newPolicy: InsertAssurance = {
-          description: policy.description + " (Copy)",
-          owners: [...policy.owners],
-          beneficiaries: [...policy.beneficiaries],
-          deathBenefit: policy.deathBenefit,
-          amount: policy.amount,
-          amountToggles: [...(policy.amountToggles || [true])],
-          amountYearsValues: [...(policy.amountYearsValues || ["0 years"])],
-          amountIncreaseValues: [...(policy.amountIncreaseValues || ["0%"])],
-          premiumsByOthers: policy.premiumsByOthers,
-          collateralSession: policy.collateralSession,
-          benefitSplit: policy.benefitSplit,
-          additionalInfo: policy.additionalInfo
-        };
-        const response = await apiRequest("POST", "/api/assurance", newPolicy);
-        return await response.json();
-      } catch (error) {
-        console.error('Duplicate policy error:', error);
-        throw error;
-      }
+      const newPolicy: InsertAssurance = {
+        description: policy.description ? `${policy.description} (Copy)` : '',
+        owners: [...policy.owners],
+        beneficiaries: [...policy.beneficiaries],
+        deathBenefit: policy.deathBenefit,
+        amount: policy.amount,
+        amountToggles: [...(policy.amountToggles || [true])],
+        amountYearsValues: [...(policy.amountYearsValues || ["0 years"])],
+        amountIncreaseValues: [...(policy.amountIncreaseValues || ["0%"])],
+        premiumsByOthers: policy.premiumsByOthers,
+        collateralSession: policy.collateralSession,
+        benefitSplit: policy.benefitSplit,
+        additionalInfo: policy.additionalInfo,
+      };
+      const response = await apiRequest("POST", "/api/assurance", newPolicy);
+      return await response.json();
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["/api/assurance"] });
     },
-    onError: (error) => {
-      console.error('Duplicate mutation error:', error);
-    }
   });
 
-  // Base update function
-  const executeUpdate = useCallback((id: number, field: keyof Assurance, value: string | boolean | string[]) => {
-    const updates = { [field]: value };
-    updateMutation.mutate({ id, updates });
+  type FieldValue = string | boolean | string[] | boolean[];
+
+  const executeUpdate = useCallback((id: number, field: keyof Assurance, value: FieldValue) => {
+    updateMutation.mutate({ id, updates: { [field]: value } });
   }, [updateMutation]);
 
-  // Debounced update for text fields
   const debouncedUpdate = useDebouncedUpdate(executeUpdate, 300);
 
-  const handleDeletePolicy = useCallback((id: number) => {
-    if (confirm('Are you sure you want to delete this policy?')) {
-      deleteMutation.mutate(id);
-    }
-  }, [deleteMutation]);
-
-  const handleDuplicatePolicy = useCallback((policy: Assurance) => {
-    duplicateMutation.mutate(policy);
-  }, [duplicateMutation]);
-
-  const handleUpdatePolicy = useCallback((id: number, field: keyof Assurance, value: string | boolean | string[]) => {
-    // Use immediate updates for array fields to prevent synchronization issues
-    const arrayFields = ['owners', 'beneficiaries', 'ownershipPercentages', 'beneficiaryPercentages'];
-
+  const handleUpdatePolicy = useCallback((id: number, field: keyof Assurance, value: FieldValue) => {
+    const arrayFields = ['owners', 'beneficiaries', 'ownershipPercentages', 'beneficiaryPercentages', 'lifeAssured', 'deathBenefits', 'amountToggles', 'amountYearsValues', 'amountIncreaseValues'];
     if (arrayFields.includes(field)) {
       executeUpdate(id, field, value);
     } else {
@@ -130,245 +89,154 @@ export function AssuranceTable({ onAddPolicy }: AssuranceTableProps) {
     }
   }, [executeUpdate, debouncedUpdate]);
 
-  // Add owner to policy - includes life assured and death benefit pairing for Assurance
-  const handleAddOwner = useCallback((id: number) => {
-    const policy = policies.find((p: Assurance) => p.id === id);
-    if (policy) {
-      const newOwners = [...policy.owners, ""];
-      const newLifeAssured = [...(policy.lifeAssured || []), ""];
-      const newDeathBenefits = [...(policy.deathBenefits || []), "R 0"];
-      const newOwnershipPercentages = [...(policy.ownershipPercentages || []), "0%"];
-      handleUpdatePolicy(id, 'owners', newOwners);
-      handleUpdatePolicy(id, 'lifeAssured', newLifeAssured);
-      handleUpdatePolicy(id, 'deathBenefits', newDeathBenefits);
-      handleUpdatePolicy(id, 'ownershipPercentages', newOwnershipPercentages);
-    }
-  }, [policies, handleUpdatePolicy]);
-
-  // Remove specific owner by index using splice method - includes life assured and death benefit pairing
-  const handleRemoveOwner = useCallback((id: number, ownerIndex: number) => {
-    const policy = policies.find((p: Assurance) => p.id === id);
-    if (policy && policy.owners.length > 1 && ownerIndex > 0) { // Protect first owner
-      const newOwners = [...policy.owners];
-      const newLifeAssured = [...(policy.lifeAssured || [])];
-      const newDeathBenefits = [...(policy.deathBenefits || [])];
-      const newOwnershipPercentages = [...(policy.ownershipPercentages || [])];
-      newOwners.splice(ownerIndex, 1);
-      newLifeAssured.splice(ownerIndex, 1);
-      newDeathBenefits.splice(ownerIndex, 1);
-      newOwnershipPercentages.splice(ownerIndex, 1);
-      handleUpdatePolicy(id, 'owners', newOwners);
-      handleUpdatePolicy(id, 'lifeAssured', newLifeAssured);
-      handleUpdatePolicy(id, 'deathBenefits', newDeathBenefits);
-      handleUpdatePolicy(id, 'ownershipPercentages', newOwnershipPercentages);
-    }
-  }, [policies, handleUpdatePolicy]);
-
-  // Add beneficiary to policy - also expand toggle arrays
-  const handleAddBeneficiary = useCallback((id: number) => {
-    const policy = policies.find((p: Assurance) => p.id === id);
-    if (policy) {
-      const newBeneficiaries = [...policy.beneficiaries, ""];
-      const newBeneficiaryPercentages = [...(policy.beneficiaryPercentages || []), "0%"];
-      const newToggles = [...(policy.amountToggles || []), true];
-      const newYearsValues = [...(policy.amountYearsValues || []), "0 years"];
-      const newIncreaseValues = [...(policy.amountIncreaseValues || []), "0%"];
-
-      handleUpdatePolicy(id, 'beneficiaries', newBeneficiaries);
-      handleUpdatePolicy(id, 'beneficiaryPercentages', newBeneficiaryPercentages);
-      handleUpdatePolicy(id, 'amountToggles', newToggles);
-      handleUpdatePolicy(id, 'amountYearsValues', newYearsValues);
-      handleUpdatePolicy(id, 'amountIncreaseValues', newIncreaseValues);
-    }
-  }, [policies, handleUpdatePolicy]);
-
-  // Remove specific beneficiary by index using splice method - also trim toggle arrays
-  const handleRemoveBeneficiary = useCallback((id: number, beneficiaryIndex: number) => {
-    const policy = policies.find((p: Assurance) => p.id === id);
-    if (policy && policy.beneficiaries.length > 1 && beneficiaryIndex > 0) { // Protect first beneficiary
-      const newBeneficiaries = [...policy.beneficiaries];
-      const newBeneficiaryPercentages = [...(policy.beneficiaryPercentages || [])];
-      const newToggles = [...(policy.amountToggles || [])];
-      const newYearsValues = [...(policy.amountYearsValues || [])];
-      const newIncreaseValues = [...(policy.amountIncreaseValues || [])];
-
-      newBeneficiaries.splice(beneficiaryIndex, 1);
-      newBeneficiaryPercentages.splice(beneficiaryIndex, 1);
-      newToggles.splice(beneficiaryIndex, 1);
-      newYearsValues.splice(beneficiaryIndex, 1);
-      newIncreaseValues.splice(beneficiaryIndex, 1);
-
-      handleUpdatePolicy(id, 'beneficiaries', newBeneficiaries);
-      handleUpdatePolicy(id, 'beneficiaryPercentages', newBeneficiaryPercentages);
-      handleUpdatePolicy(id, 'amountToggles', newToggles);
-      handleUpdatePolicy(id, 'amountYearsValues', newYearsValues);
-      handleUpdatePolicy(id, 'amountIncreaseValues', newIncreaseValues);
-    }
-  }, [policies, handleUpdatePolicy]);
-
-  // Update owner name
-  const handleOwnerChange = useCallback((id: number, ownerIndex: number, newOwner: string) => {
-    const policy = policies.find((p: Assurance) => p.id === id);
-    if (policy) {
-      const updatedOwners = [...policy.owners];
-      updatedOwners[ownerIndex] = newOwner;
-      handleUpdatePolicy(id, 'owners', updatedOwners);
-    }
-  }, [policies, handleUpdatePolicy]);
-
-  // Update beneficiary name
-  const handleBeneficiaryChange = useCallback((id: number, beneficiaryIndex: number, newBeneficiary: string) => {
-    const policy = policies.find((p: Assurance) => p.id === id);
-    if (policy) {
-      const updatedBeneficiaries = [...policy.beneficiaries];
-      updatedBeneficiaries[beneficiaryIndex] = newBeneficiary;
-      handleUpdatePolicy(id, 'beneficiaries', updatedBeneficiaries);
-    }
-  }, [policies, handleUpdatePolicy]);
-
-  // Update life assured name
-  const handleLifeAssuredChange = useCallback((id: number, lifeAssuredIndex: number, newLifeAssured: string) => {
-    const policy = policies.find((p: Assurance) => p.id === id);
-    if (policy) {
-      const updatedLifeAssured = [...(policy.lifeAssured || [])];
-      updatedLifeAssured[lifeAssuredIndex] = newLifeAssured;
-      handleUpdatePolicy(id, 'lifeAssured', updatedLifeAssured);
-    }
-  }, [policies, handleUpdatePolicy]);
-
-  // Update death benefit amount for specific index
-  const handleDeathBenefitChange = useCallback((id: number, deathBenefitIndex: number, newDeathBenefit: string) => {
-    const policy = policies.find((p: Assurance) => p.id === id);
-    if (policy) {
-      const updatedDeathBenefits = [...(policy.deathBenefits || [])];
-      updatedDeathBenefits[deathBenefitIndex] = newDeathBenefit;
-      handleUpdatePolicy(id, 'deathBenefits', updatedDeathBenefits);
-    }
-  }, [policies, handleUpdatePolicy]);
-
-  // Update ownership percentage
-  const handleOwnershipPercentageChange = useCallback((id: number, ownerIndex: number, newPercentage: string) => {
-    const policy = policies.find((p: Assurance) => p.id === id);
-    if (policy) {
-      const updatedPercentages = [...(policy.ownershipPercentages || [])];
-      updatedPercentages[ownerIndex] = newPercentage;
-      handleUpdatePolicy(id, 'ownershipPercentages', updatedPercentages);
-    }
-  }, [policies, handleUpdatePolicy]);
-
-  // Update beneficiary percentage
-  const handleBeneficiaryPercentageChange = useCallback((id: number, beneficiaryIndex: number, newPercentage: string) => {
-    const policy = policies.find((p: Assurance) => p.id === id);
-    if (policy) {
-      const updatedPercentages = [...(policy.beneficiaryPercentages || [])];
-      updatedPercentages[beneficiaryIndex] = newPercentage;
-      handleUpdatePolicy(id, 'beneficiaryPercentages', updatedPercentages);
-    }
-  }, [policies, handleUpdatePolicy]);
-
-  // Use policies directly without filtering
-  const filteredPolicies = policies;
-
-  // Selection state for the detail pane
   const [selectedPolicyId, setSelectedPolicyId] = useState<number | null>(null);
 
-  // Default selection to the first policy
   useEffect(() => {
-    if (filteredPolicies.length > 0 && selectedPolicyId === null) {
-      setSelectedPolicyId(filteredPolicies[0].id);
+    if (policies.length > 0 && selectedPolicyId === null) {
+      setSelectedPolicyId(policies[0].id);
     }
-  }, [filteredPolicies, selectedPolicyId]);
+  }, [policies, selectedPolicyId]);
 
-  // Preview-card data preparation
-  const getItemPreview = useCallback((policy: Assurance, isSelected: boolean) => {
-    // Use the consolidated death benefit field rather than summing the array
-    const totalDeathBenefit = parseFloat(policy.deathBenefit?.replace(/[^\d.-]/g, '') || '0') || 0;
+  const handleDeletePolicy = useCallback((id: number) => {
+    if (window.confirm('Are you sure you want to delete this policy?')) {
+      if (id === selectedPolicyId) setSelectedPolicyId(null);
+      deleteMutation.mutate(id);
+    }
+  }, [deleteMutation, selectedPolicyId]);
 
-    // Format owners list - show each owner on separate line with prefix
-    const owners = policy.owners || [];
-    const ownersDisplay = owners.length === 0
-      ? 'Owner: Unassigned'
-      : owners.map(owner => `Owner: ${owner}`).join('\n');
+  const handleDuplicatePolicy = useCallback((policy: Assurance) => {
+    duplicateMutation.mutate(policy);
+  }, [duplicateMutation]);
 
-    return {
-      id: policy.id,
-      title: formatTextValue(policy.description) || `Policy #${policy.id}`,
-      subtitle: ownersDisplay,
-      primaryValue: `R ${totalDeathBenefit.toLocaleString()}`,
-      secondaryInfo: policy.amount !== 'R 0' ? `Amount: ${policy.amount}` : undefined,
-      isSelected
-    };
-  }, []);
+  // Array-field helpers — owners, life assured, death benefits, and ownership %
+  // travel together as a tuple per row, so add/remove must update all four.
+  const handleAddOwner = useCallback((id: number) => {
+    const policy = policies.find(p => p.id === id);
+    if (!policy) return;
+    handleUpdatePolicy(id, 'owners', [...policy.owners, ""]);
+    handleUpdatePolicy(id, 'lifeAssured', [...(policy.lifeAssured || []), ""]);
+    handleUpdatePolicy(id, 'deathBenefits', [...(policy.deathBenefits || []), "R 0"]);
+    handleUpdatePolicy(id, 'ownershipPercentages', [...(policy.ownershipPercentages || []), "0%"]);
+  }, [policies, handleUpdatePolicy]);
 
-  // Prepare preview items with selection state
-  const previewItems = useMemo(() =>
-    filteredPolicies.map((policy: Assurance) => getItemPreview(policy, policy.id === selectedPolicyId)),
-    [filteredPolicies, getItemPreview, selectedPolicyId]
-  );
+  const handleRemoveOwner = useCallback((id: number, ownerIndex: number) => {
+    const policy = policies.find(p => p.id === id);
+    if (!policy || policy.owners.length <= 1 || ownerIndex === 0) return;
+    const cut = <T,>(arr: T[]) => { const x = [...arr]; x.splice(ownerIndex, 1); return x; };
+    handleUpdatePolicy(id, 'owners', cut(policy.owners));
+    handleUpdatePolicy(id, 'lifeAssured', cut(policy.lifeAssured || []));
+    handleUpdatePolicy(id, 'deathBenefits', cut(policy.deathBenefits || []));
+    handleUpdatePolicy(id, 'ownershipPercentages', cut(policy.ownershipPercentages || []));
+  }, [policies, handleUpdatePolicy]);
 
-  // Get selected policy for detail view
-  const selectedPolicy = useMemo(() =>
-    filteredPolicies.find((policy: Assurance) => policy.id === selectedPolicyId),
-    [filteredPolicies, selectedPolicyId]
-  );
+  const handleAddBeneficiary = useCallback((id: number) => {
+    const policy = policies.find(p => p.id === id);
+    if (!policy) return;
+    handleUpdatePolicy(id, 'beneficiaries', [...policy.beneficiaries, ""]);
+    handleUpdatePolicy(id, 'beneficiaryPercentages', [...(policy.beneficiaryPercentages || []), "0%"]);
+    handleUpdatePolicy(id, 'amountToggles', [...(policy.amountToggles || []), true]);
+    handleUpdatePolicy(id, 'amountYearsValues', [...(policy.amountYearsValues || []), "0 years"]);
+    handleUpdatePolicy(id, 'amountIncreaseValues', [...(policy.amountIncreaseValues || []), "0%"]);
+  }, [policies, handleUpdatePolicy]);
 
-  if (isLoading) {
-    return (
-      <div className="p-8 text-center">
-        <div className="text-neutral-500">Loading assurance policies...</div>
-      </div>
-    );
-  }
+  const handleRemoveBeneficiary = useCallback((id: number, beneficiaryIndex: number) => {
+    const policy = policies.find(p => p.id === id);
+    if (!policy || policy.beneficiaries.length <= 1 || beneficiaryIndex === 0) return;
+    const cut = <T,>(arr: T[]) => { const x = [...arr]; x.splice(beneficiaryIndex, 1); return x; };
+    handleUpdatePolicy(id, 'beneficiaries', cut(policy.beneficiaries));
+    handleUpdatePolicy(id, 'beneficiaryPercentages', cut(policy.beneficiaryPercentages || []));
+    handleUpdatePolicy(id, 'amountToggles', cut(policy.amountToggles || []));
+    handleUpdatePolicy(id, 'amountYearsValues', cut(policy.amountYearsValues || []));
+    handleUpdatePolicy(id, 'amountIncreaseValues', cut(policy.amountIncreaseValues || []));
+  }, [policies, handleUpdatePolicy]);
 
-  // Summary cards - clickable policy tabs
+  const handleOwnerChange = useCallback((id: number, ownerIndex: number, value: string) => {
+    const policy = policies.find(p => p.id === id);
+    if (!policy) return;
+    const next = [...policy.owners];
+    next[ownerIndex] = value;
+    handleUpdatePolicy(id, 'owners', next);
+  }, [policies, handleUpdatePolicy]);
+
+  const handleBeneficiaryChange = useCallback((id: number, beneficiaryIndex: number, value: string) => {
+    const policy = policies.find(p => p.id === id);
+    if (!policy) return;
+    const next = [...policy.beneficiaries];
+    next[beneficiaryIndex] = value;
+    handleUpdatePolicy(id, 'beneficiaries', next);
+  }, [policies, handleUpdatePolicy]);
+
+  const handleLifeAssuredChange = useCallback((id: number, lifeAssuredIndex: number, value: string) => {
+    const policy = policies.find(p => p.id === id);
+    if (!policy) return;
+    const next = [...(policy.lifeAssured || [])];
+    next[lifeAssuredIndex] = value;
+    handleUpdatePolicy(id, 'lifeAssured', next);
+  }, [policies, handleUpdatePolicy]);
+
+  const handleDeathBenefitChange = useCallback((id: number, deathBenefitIndex: number, value: string) => {
+    const policy = policies.find(p => p.id === id);
+    if (!policy) return;
+    const next = [...(policy.deathBenefits || [])];
+    next[deathBenefitIndex] = value;
+    handleUpdatePolicy(id, 'deathBenefits', next);
+  }, [policies, handleUpdatePolicy]);
+
+  const handleOwnershipPercentageChange = useCallback((id: number, ownerIndex: number, value: string) => {
+    const policy = policies.find(p => p.id === id);
+    if (!policy) return;
+    const next = [...(policy.ownershipPercentages || [])];
+    next[ownerIndex] = value;
+    handleUpdatePolicy(id, 'ownershipPercentages', next);
+  }, [policies, handleUpdatePolicy]);
+
+  const handleBeneficiaryPercentageChange = useCallback((id: number, beneficiaryIndex: number, value: string) => {
+    const policy = policies.find(p => p.id === id);
+    if (!policy) return;
+    const next = [...(policy.beneficiaryPercentages || [])];
+    next[beneficiaryIndex] = value;
+    handleUpdatePolicy(id, 'beneficiaryPercentages', next);
+  }, [policies, handleUpdatePolicy]);
+
+  const selectedPolicy = selectedPolicyId
+    ? policies.find(p => p.id === selectedPolicyId) ?? null
+    : null;
+
+  const titleFor = (p: Assurance) =>
+    p.description?.trim() || `Policy #${p.id}`;
+
   const summaryCards = (
-    <div>
-      {/* Add Policy Button - Mandatory Pattern */}
-      {onAddPolicy && (
-        <div className="hybrid-add-button-container p-4 border-b border-neutral-200">
-          <Button
-            onClick={onAddPolicy}
-            className="bg-white text-gray-700 border border-neutral-200 hover:bg-gray-50 hover:text-gray-900 font-normal"
-            size="sm"
-          >
-            <Plus className="h-4 w-4 mr-2" />
-            Add Policy
-          </Button>
-        </div>
-      )}
-
-      {previewItems.map((item: {
-        id: number;
-        title: string;
-        subtitle: string;
-        primaryValue: string;
-        secondaryInfo?: string;
-        isSelected: boolean;
-      }, index: number) => (
-        <HybridItemPreviewCard
-          key={item.id}
-          title={item.title}
-          subtitle={item.subtitle}
-          primaryValue={item.primaryValue}
-          secondaryInfo={item.secondaryInfo}
-          variant={item.isSelected ? "active" : "blue"}
-          onClick={() => setSelectedPolicyId(item.id)}
-          isClickable={true}
-          isFirst={index === 0}
-          isLast={index === previewItems.length - 1}
-        />
-      ))}
-    </div>
+    <HybridSidebar
+      items={policies}
+      selectedId={selectedPolicyId}
+      onSelect={setSelectedPolicyId}
+      getId={(p) => p.id}
+      getTitle={titleFor}
+      renderActive={(p) => {
+        const owners = (p.owners || []).filter(o => o?.trim());
+        const lines: string[] = [];
+        if (owners.length > 0) {
+          lines.push(`Owners: ${owners.join(', ')}`);
+        }
+        const beneficiaries = (p.beneficiaries || []).filter(b => b?.trim());
+        if (beneficiaries.length > 0) {
+          lines.push(`Beneficiaries: ${beneficiaries.length}`);
+        }
+        const total = parseFloat(p.deathBenefit?.replace(/[^\d.-]/g, '') || '0') || 0;
+        return {
+          subtitle: lines.join('\n') || 'No details entered',
+          primaryValue: `R ${total.toLocaleString()}`,
+          secondaryInfo: p.amount && p.amount !== 'R 0' ? `Amount: ${p.amount}` : undefined,
+        };
+      }}
+    />
   );
 
-  // Detail form for selected policy only
   const detailForms = selectedPolicy ? (
     <AssuranceDetailForm
       key={`form-${selectedPolicy.id}-${selectedPolicy.owners.length}-${selectedPolicy.beneficiaries.length}`}
       policy={selectedPolicy}
       onUpdate={handleUpdatePolicy}
-      onDuplicate={handleDuplicatePolicy}
-      onDelete={handleDeletePolicy}
       onOwnerChange={handleOwnerChange}
       onLifeAssuredChange={handleLifeAssuredChange}
       onDeathBenefitChange={handleDeathBenefitChange}
@@ -381,19 +249,36 @@ export function AssuranceTable({ onAddPolicy }: AssuranceTableProps) {
       onRemoveBeneficiary={handleRemoveBeneficiary}
       disabled={updateMutation.isPending}
     />
-  ) : (
-    <div className="text-center py-8">
-      <p className="text-neutral-500">Select a policy from the left to view details</p>
-    </div>
-  );
+  ) : null;
+
+  if (isLoading) {
+    return (
+      <div className="p-8 text-center">
+        <div className="text-neutral-500">Loading assurance policies...</div>
+      </div>
+    );
+  }
+
+  const isUpdating = deleteMutation.isPending || duplicateMutation.isPending;
 
   return (
     <HybridViewWrapper
+      card
+      summary={<AssuranceSummary />}
+      header={
+        <HybridHeaderBar
+          add={onAddPolicy ? { label: 'Add Policy', onClick: onAddPolicy } : undefined}
+          title={selectedPolicy?.description}
+          emptyTitle={selectedPolicy ? 'Untitled Policy' : undefined}
+          onDuplicate={selectedPolicy ? () => handleDuplicatePolicy(selectedPolicy) : undefined}
+          onDelete={selectedPolicy ? () => handleDeletePolicy(selectedPolicy.id) : undefined}
+          disabled={isUpdating}
+        />
+      }
       summaryCards={summaryCards}
       detailForms={detailForms}
-      isUpdating={isUpdating}
-      isEmpty={filteredPolicies.length === 0}
-      emptyStateMessage="No assurance policies found"
+      isEmpty={policies.length === 0}
+      emptyStateMessage="No assurance policies yet. Click 'Add Policy' to create your first policy."
     />
   );
 }
