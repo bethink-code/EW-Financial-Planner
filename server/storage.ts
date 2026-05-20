@@ -486,7 +486,8 @@ export class MemStorage implements IStorage {
     const id = this.currentBequestId++;
     const bequest: LumpSumBequest = {
       id,
-      description: insertBequest.description || "Enter details ...",
+      name: insertBequest.name || "",
+      description: insertBequest.description || "",
       entity: insertBequest.entity || "Enter details ...",
       start: insertBequest.start || "Enter details ...",
       amount: insertBequest.amount || "R 0",
@@ -733,6 +734,7 @@ export class MemStorage implements IStorage {
   async createIncomeNeed(need: InsertIncomeNeeds): Promise<IncomeNeeds> {
     const newNeed: IncomeNeeds = {
       id: this.currentIncomeNeedId++,
+      name: need.name || "",
       description: need.description || "",
       personName: need.personName || "",
       startDate: need.startDate || "",
@@ -790,7 +792,8 @@ export class MemStorage implements IStorage {
   ): Promise<IncomeProvisions> {
     const newProvision: IncomeProvisions = {
       id: this.currentIncomeProvisionId++,
-      description: provision.description || "Enter details ...",
+      name: provision.name || "",
+      description: provision.description || "",
       personName: provision.personName || "Enter details ...",
       startDate: provision.startDate || "Enter details ...",
       amount: provision.amount || "R 0",
@@ -898,6 +901,7 @@ export class MemStorage implements IStorage {
   ): Promise<AdditionalEstateDutyItems> {
     const newItem: AdditionalEstateDutyItems = {
       id: this.currentAdditionalEstateDutyItemId++,
+      name: item.name || "",
       description: item.description || "",
       amount: item.amount || "R 0",
       deduction: item.deduction ?? false,

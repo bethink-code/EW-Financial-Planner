@@ -29,9 +29,9 @@ interface HybridViewWrapperProps {
  * financial domain. Four optional slots:
  *
  *   ┌──────────────────────────────────────────────────────┐
- *   │  summary  (section-level aggregate stats)            │
- *   ├──────────────────────────────────────────────────────┤
  *   │  header   (Add | Title | Duplicate/Delete)           │
+ *   ├──────────────────────────────────────────────────────┤
+ *   │  summary  (section-level aggregate stats)            │
  *   ├────────────┬─────────────────────────────────────────┤
  *   │ summary    │ detailForms                             │
  *   │ cards      │                                         │
@@ -58,14 +58,14 @@ export function HybridViewWrapper({
         card && "rounded-lg shadow-sm border border-neutral-200 overflow-hidden",
       )}
     >
-      {summary && (
-        <div className={cn("border-b border-neutral-200", card && "bg-white")}>
-          {summary}
-        </div>
-      )}
       {header && (
         <div className={cn("border-b border-neutral-200", card && "bg-white")}>
           {header}
+        </div>
+      )}
+      {summary && (
+        <div className={cn("border-b border-neutral-200", card && "bg-white")}>
+          {summary}
         </div>
       )}
       <div className="flex max-w-full overflow-hidden">

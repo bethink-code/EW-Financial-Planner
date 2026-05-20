@@ -57,7 +57,8 @@ function AdditionalEstateDutyItemsTable({ onAddItem }: AdditionalEstateDutyItems
   const duplicateMutation = useMutation({
     mutationFn: async (source: AdditionalEstateDutyItems) => {
       const copy: InsertAdditionalEstateDutyItems = {
-        description: source.description ? `${source.description} (Copy)` : '',
+        name: source.name ? `${source.name} (Copy)` : '',
+        description: source.description,
         amount: source.amount,
         deduction: source.deduction,
         excludeFromJointEstate: source.excludeFromJointEstate,
@@ -69,7 +70,7 @@ function AdditionalEstateDutyItemsTable({ onAddItem }: AdditionalEstateDutyItems
     },
   });
 
-  const handleTextBlur = (id: number, field: 'description' | 'amount', value: string) => {
+  const handleTextBlur = (id: number, field: 'name' | 'description' | 'amount', value: string) => {
     const formatted = field === 'amount' ? formatCurrencyValue(value) : value;
     debouncedUpdate(id, field, formatted);
   };
@@ -100,7 +101,7 @@ function AdditionalEstateDutyItemsTable({ onAddItem }: AdditionalEstateDutyItems
 
   const itemIndex = (item: AdditionalEstateDutyItems) => items.findIndex(i => i.id === item.id);
   const titleFor = (item: AdditionalEstateDutyItems) =>
-    item.description?.trim() || `Item ${itemIndex(item) + 1}`;
+    item.name?.trim() || `Item ${itemIndex(item) + 1}`;
 
   const summaryCards = (
     <HybridSidebar
@@ -126,15 +127,26 @@ function AdditionalEstateDutyItemsTable({ onAddItem }: AdditionalEstateDutyItems
     <GroupedDetailForm>
       <div key={selectedItem.id} className="space-y-10">
         <FieldGroup title="Item">
-          <FormField label="Description">
-            <input
-              type="text"
-              defaultValue={selectedItem.description}
-              className={`table-input ${getValueClass(selectedItem.description, 'text')}`}
-              style={{ width: '100%', maxWidth: '420px' }}
-              onBlur={(e) => handleTextBlur(selectedItem.id, 'description', e.target.value)}
-            />
-          </FormField>
+          <div className="flex gap-3 flex-wrap">
+            <FormField label="Name">
+              <input
+                type="text"
+                defaultValue={selectedItem.name}
+                className={`table-input ${getValueClass(selectedItem.name, 'text')}`}
+                style={{ width: '100%', minWidth: '200px' }}
+                onBlur={(e) => handleTextBlur(selectedItem.id, 'name', e.target.value)}
+              />
+            </FormField>
+            <FormField label="Description">
+              <input
+                type="text"
+                defaultValue={selectedItem.description}
+                className={`table-input ${getValueClass(selectedItem.description, 'text')}`}
+                style={{ width: '100%', minWidth: '280px' }}
+                onBlur={(e) => handleTextBlur(selectedItem.id, 'description', e.target.value)}
+              />
+            </FormField>
+          </div>
           <FormField label="Amount">
             <input
               type="text"
@@ -183,11 +195,8 @@ function AdditionalEstateDutyItemsTable({ onAddItem }: AdditionalEstateDutyItems
       header={
         <HybridHeaderBar
           add={onAddItem ? { label: 'Add Item', onClick: onAddItem } : undefined}
-          title={selectedItem?.description}
+          title={selectedItem?.name}
           emptyTitle={selectedItem ? 'Unnamed Item' : undefined}
-          onTitleChange={selectedItem
-            ? (value) => handleImmediateUpdate(selectedItem.id, 'description', value)
-            : undefined}
           onDuplicate={selectedItem ? () => handleDuplicate(selectedItem) : undefined}
           onDelete={selectedItem ? () => handleDelete(selectedItem.id) : undefined}
           disabled={isUpdating}

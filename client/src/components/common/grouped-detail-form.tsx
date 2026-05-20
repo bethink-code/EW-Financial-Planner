@@ -13,7 +13,10 @@ interface FieldGroupProps {
  */
 export function FieldGroup({ title, children, className = "" }: FieldGroupProps) {
   return (
-    <div className={`space-y-5 ${className}`}>
+    <div
+      className={`space-y-5 rounded-lg p-6 ${className}`}
+      style={{ backgroundColor: "#F4F8FB" }}
+    >
       <h3
         className="text-sm font-bold uppercase pb-2 w-fit"
         style={{

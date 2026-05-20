@@ -1,33 +1,16 @@
-import React, { useState, useCallback } from "react";
+import { useCallback } from "react";
 import { useLocation } from "wouter";
-import { useQuery, useMutation } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
 import { IncomeProvisionsTable } from "@/components/income-provisions/income-provisions-table";
-import { IncomeProvisionsSummary } from "@/components/income-provisions/income-provisions-summary";
-import { RetirementProjectionRibbon } from "@/components/retirement/retirement-projection-ribbon";
-import { CalculatorHeader } from "@/components/ui/calculator-header";
 import { apiRequest, queryClient } from "@/lib/queryClient";
-import type { InsertIncomeProvisions } from "@shared/schema";
 
 export default function IncomeProvisions() {
-  const [searchTerm, setSearchTerm] = useState("");
   const [location] = useLocation();
   const isRetirementNeed = location.startsWith("/needs/retirement");
 
-  // Fetch provisions for count
-  const { data: provisions = [] } = useQuery({
-    queryKey: ["/api/income-provisions"],  
-    queryFn: async () => {
-      const response = await fetch("/api/income-provisions");
-      if (!response.ok) throw new Error('Failed to fetch income provisions');
-      return response.json();
-    }
-  });
-
-  // Add new provision mutation
   const addMutation = useMutation({
     mutationFn: async () => {
-      const newProvision = {}; // Send empty object to use database defaults
-      return apiRequest("POST", "/api/income-provisions", newProvision);
+      return apiRequest("POST", "/api/income-provisions", {});
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["/api/income-provisions"] });
@@ -41,16 +24,13 @@ export default function IncomeProvisions() {
   return (
     <div className="w-full px-6 pb-6">
       <div className="w-[1320px] max-w-full">
-        <CalculatorHeader>
-          {/* Per-domain summary on non-retirement routes only. Retirement
-              renders its cross-category ribbon above the tabs. */}
-          {!isRetirementNeed && (
-            <div className="max-w-6xl">
-              <IncomeProvisionsSummary searchTerm={searchTerm} />
-            </div>
-          )}
-          <IncomeProvisionsTable onAddProvision={handleAddProvision} searchTerm={searchTerm} />
-        </CalculatorHeader>
+        <IncomeProvisionsTable
+          onAddProvision={handleAddProvision}
+          // Retirement renders a cross-category projection ribbon at the
+          // phase level — suppress the section summary there to avoid two
+          // overlapping summaries.
+          showSummary={!isRetirementNeed}
+        />
       </div>
     </div>
   );

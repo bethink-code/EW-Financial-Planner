@@ -2,15 +2,16 @@ import { CustomTabs } from "@/components/ui/custom-tabs";
 import type { NeedStep } from "./types";
 
 /** Flatten a step's sections into a tab list. Sections with children render
- *  each child as `"<Section> — <Child>"` so the grouping context is preserved
- *  (e.g. DEL Setup → `Parameters — Residue` / `Parameters — Additional estate
- *  duty items`). Sections without children render as their own label. */
+ *  each child as a top-level tab using just the child's label — the parent
+ *  grouping exists for config-organisation only, not for display. (If we
+ *  ever need ambiguous-label disambiguation, this is the place to re-add
+ *  the "Parent — Child" prefix.) */
 function buildSectionTabs(step: NeedStep): { id: string; label: string; href: string }[] {
   return step.sections.flatMap(section =>
     section.children && section.children.length > 0
       ? section.children.map(child => ({
           id: child.id,
-          label: `${section.label} — ${child.label}`,
+          label: child.label,
           href: child.path,
         }))
       : [{ id: section.id, label: section.label, href: section.path }],

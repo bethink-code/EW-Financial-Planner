@@ -3,28 +3,24 @@ import { useQuery, useMutation } from '@tanstack/react-query';
 import { LumpSumBequest, InsertLumpSumBequest } from '@shared/schema';
 import { apiRequest, queryClient } from '@/lib/queryClient';
 import { HybridViewWrapper } from '@/components/common/hybrid-view-wrapper';
-import { HybridItemPreviewCard } from '@/components/common/hybrid-item-preview-card';
+import { HybridHeaderBar } from '@/components/common/hybrid-header-bar';
+import { HybridSidebar } from '@/components/common/hybrid-sidebar';
 import { FieldGroup, FormField, GroupedDetailForm } from '@/components/common/grouped-detail-form';
+import { LumpSumSummary } from '@/components/lump-sum-bequests/lump-sum-summary';
 import { useDebouncedUpdate } from '@/hooks/use-debounced-update';
-import { formatTextValue, getValueClass, handleDefaultValueFocus } from '@/lib/formatting';
-import { useLoading } from '@/contexts/loading-context';
-import { Button } from '@/components/ui/button';
-import { DetailFormHeader } from '@/components/common/detail-form-header';
-import { Plus } from 'lucide-react';
+import { formatCurrencyValue, formatPercentageValue, getValueClass, handleDefaultValueFocus } from '@/lib/formatting';
 
 interface LumpSumTableProps {
   onAddBequest?: () => void;
 }
 
 export function LumpSumTable({ onAddBequest }: LumpSumTableProps) {
-  const { isLoading: globalLoading } = useLoading();
   const [selectedBequestId, setSelectedBequestId] = React.useState<number | null>(null);
 
   const { data: bequests = [], isLoading } = useQuery<LumpSumBequest[]>({
     queryKey: ['/api/lump-sum-bequests'],
   });
 
-  // Auto-select first item when data loads
   React.useEffect(() => {
     if (bequests.length > 0 && selectedBequestId === null) {
       setSelectedBequestId(bequests[0].id);
@@ -48,207 +44,176 @@ export function LumpSumTable({ onAddBequest }: LumpSumTableProps) {
     mutationFn: async (id: number) => {
       return apiRequest('DELETE', `/api/lump-sum-bequests/${id}`);
     },
-    onSuccess: () => {
+    onSuccess: (_, id) => {
+      if (id === selectedBequestId) setSelectedBequestId(null);
       queryClient.invalidateQueries({ queryKey: ['/api/lump-sum-bequests'] });
     },
   });
 
-  const addMutation = useMutation({
-    mutationFn: async () => {
-      const newBequest: InsertLumpSumBequest = {
-        description: "Enter details ...",
-        entity: "Enter details ...",
-        start: "Enter details ...",
-        amount: "R 0",
-        increasePercentage: "0%",
-        cpi: false,
-        valueAtDeath: "R 0"
+  const duplicateMutation = useMutation({
+    mutationFn: async (source: LumpSumBequest) => {
+      const copy: InsertLumpSumBequest = {
+        name: source.name ? `${source.name} (Copy)` : '',
+        description: source.description,
+        entity: source.entity,
+        start: source.start,
+        amount: source.amount,
+        increasePercentage: source.increasePercentage,
+        cpi: source.cpi,
+        valueAtDeath: source.valueAtDeath,
       };
-      return apiRequest('POST', '/api/lump-sum-bequests', newBequest);
+      return apiRequest('POST', '/api/lump-sum-bequests', copy);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['/api/lump-sum-bequests'] });
     },
   });
 
-  const handleFieldUpdate = (id: number, field: keyof LumpSumBequest, value: string | boolean) => {
-    debouncedUpdate(id, field, value);
+  const handleTextBlur = (id: number, field: keyof LumpSumBequest, value: string) => {
+    let formatted: string = value;
+    if (field === 'amount') formatted = formatCurrencyValue(value);
+    else if (field === 'increasePercentage') formatted = formatPercentageValue(value);
+    debouncedUpdate(id, field, formatted);
+  };
+
+  const handleCheckbox = (id: number, field: keyof LumpSumBequest, checked: boolean) => {
+    updateMutation.mutate({ id, updates: { [field]: checked } });
+  };
+
+  const handleImmediateUpdate = (id: number, field: keyof LumpSumBequest, value: string) => {
+    updateMutation.mutate({ id, updates: { [field]: value } });
   };
 
   const handleDelete = (id: number) => {
-    deleteMutation.mutate(id);
+    if (window.confirm('Delete this bequest? This cannot be undone.')) {
+      deleteMutation.mutate(id);
+    }
   };
 
   const handleDuplicate = (bequest: LumpSumBequest) => {
-    const duplicate: InsertLumpSumBequest = {
-      description: bequest.description,
-      entity: bequest.entity,
-      start: bequest.start,
-      amount: bequest.amount,
-      increasePercentage: bequest.increasePercentage,
-      cpi: bequest.cpi,
-      valueAtDeath: bequest.valueAtDeath
-    };
-    addMutation.mutate();
+    duplicateMutation.mutate(bequest);
   };
 
-  const isUpdating = deleteMutation.isPending || addMutation.isPending;
+  const isUpdating = deleteMutation.isPending || duplicateMutation.isPending;
 
-  // Generate preview cards
-  const summaryCards = bequests.map((bequest, index) => {
-    const isFirst = index === 0;
-    const isLast = index === bequests.length - 1;
-    const isActive = bequest.id === selectedBequestId;
-
-    // Generate preview content
-    const title = bequest.description && bequest.description.trim() !== '' && bequest.description !== 'Enter details ...' 
-      ? bequest.description 
-      : `Bequest ${index + 1}`;
-
-    const previewLines = [];
-    
-    if (bequest.entity && bequest.entity.trim() !== '' && bequest.entity !== 'Enter details ...') {
-      previewLines.push(`Entity: ${bequest.entity}`);
-    }
-    
-    if (bequest.start && bequest.start.trim() !== '' && bequest.start !== 'Enter details ...') {
-      previewLines.push(`Start: ${bequest.start}`);
-    }
-    
-    if (bequest.amount && bequest.amount !== 'R 0') {
-      previewLines.push(`Amount: ${bequest.amount}`);
-    }
-    
-    if (bequest.increasePercentage && bequest.increasePercentage !== '0%') {
-      previewLines.push(`Increase: ${bequest.increasePercentage}`);
-    }
-
-    if (bequest.cpi) {
-      previewLines.push('CPI Linked: Yes');
-    }
-
-    const preview = previewLines.length > 0 ? previewLines.join('\n') : 'No details entered';
-
-    return (
-      <HybridItemPreviewCard
-        key={bequest.id}
-        title={title}
-        subtitle={preview}
-        primaryValue={bequest.amount || 'R 0'}
-        variant={isActive ? 'active' : 'blue'}
-        isClickable={true}
-        isFirst={isFirst}
-        isLast={isLast}
-        onClick={() => setSelectedBequestId(bequest.id)}
-      />
-    );
-  });
-
-  // Get selected bequest for detail form
-  const selectedBequest = selectedBequestId 
-    ? bequests.find(bequest => bequest.id === selectedBequestId)
+  const selectedBequest = selectedBequestId
+    ? bequests.find(b => b.id === selectedBequestId) ?? null
     : null;
 
-  // Generate detail forms - only show selected item
+  const bequestIndex = (b: LumpSumBequest) => bequests.findIndex(x => x.id === b.id);
+  const titleFor = (b: LumpSumBequest) =>
+    b.name?.trim() || `Bequest ${bequestIndex(b) + 1}`;
+
+  const summaryCards = (
+    <HybridSidebar
+      items={bequests}
+      selectedId={selectedBequestId}
+      onSelect={setSelectedBequestId}
+      getId={(b) => b.id}
+      getTitle={titleFor}
+      renderActive={(b) => {
+        const lines: string[] = [];
+        if (b.entity?.trim()) lines.push(`Entity: ${b.entity}`);
+        if (b.start?.trim()) lines.push(`Start: ${b.start}`);
+        if (b.cpi) lines.push('CPI linked: Yes');
+        return {
+          subtitle: lines.join('\n') || 'No details entered',
+          primaryValue: b.amount || 'R 0',
+        };
+      }}
+    />
+  );
+
   const detailForms = selectedBequest ? (
     <GroupedDetailForm>
-      <div key={selectedBequest.id}>
-        <DetailFormHeader
-          title={selectedBequest.description}
-          emptyTitle="Untitled Bequest"
-          onDuplicate={() => handleDuplicate(selectedBequest)}
-          onDelete={() => handleDelete(selectedBequest.id)}
-          disabled={isUpdating}
-        />
-
-        {/* Group 1: Overview */}
+      <div key={selectedBequest.id} className="space-y-10">
         <FieldGroup title="Overview">
-            <div className="flex gap-3">
-              <FormField label="Description">
-                <input
-                  type="text"
-                  defaultValue={formatTextValue(selectedBequest.description)}
-                  className={`table-input ${getValueClass(selectedBequest.description, 'text')}`}
-                  style={{ width: 'fit-content', minWidth: '120px' }}
-                  onFocus={handleDefaultValueFocus}
-                  onBlur={(e) => handleFieldUpdate(selectedBequest.id, 'description', e.target.value)}
-                />
-              </FormField>
-              
-              <FormField label="Entity">
-                <input
-                  type="text"
-                  defaultValue={formatTextValue(selectedBequest.entity)}
-                  className={`table-input ${getValueClass(selectedBequest.entity, 'text')}`}
-                  style={{ width: 'fit-content', minWidth: '120px' }}
-                  onFocus={handleDefaultValueFocus}
-                  onBlur={(e) => handleFieldUpdate(selectedBequest.id, 'entity', e.target.value)}
-                />
-              </FormField>
-              
-              <FormField label="Start">
-                <input
-                  type="text"
-                  defaultValue={formatTextValue(selectedBequest.start)}
-                  className={`table-input ${getValueClass(selectedBequest.start, 'text')}`}
-                  style={{ width: 'fit-content', minWidth: '80px' }}
-                  onFocus={handleDefaultValueFocus}
-                  onBlur={(e) => handleFieldUpdate(selectedBequest.id, 'start', e.target.value)}
-                />
-              </FormField>
-            </div>
-          </FieldGroup>
+          <div className="flex gap-3 flex-wrap">
+            <FormField label="Name">
+              <input
+                type="text"
+                defaultValue={selectedBequest.name}
+                className={`table-input ${getValueClass(selectedBequest.name, 'text')}`}
+                style={{ width: '100%', minWidth: '200px' }}
+                onBlur={(e) => handleTextBlur(selectedBequest.id, 'name', e.target.value)}
+              />
+            </FormField>
+            <FormField label="Description">
+              <input
+                type="text"
+                defaultValue={selectedBequest.description}
+                className={`table-input ${getValueClass(selectedBequest.description, 'text')}`}
+                style={{ width: '100%', minWidth: '280px' }}
+                onBlur={(e) => handleTextBlur(selectedBequest.id, 'description', e.target.value)}
+              />
+            </FormField>
+          </div>
+          <div className="flex gap-3 flex-wrap">
+            <FormField label="Entity">
+              <input
+                type="text"
+                defaultValue={selectedBequest.entity}
+                className={`table-input ${getValueClass(selectedBequest.entity, 'text')}`}
+                style={{ width: 'fit-content', minWidth: '160px' }}
+                onBlur={(e) => handleTextBlur(selectedBequest.id, 'entity', e.target.value)}
+              />
+            </FormField>
+            <FormField label="Start">
+              <input
+                type="text"
+                defaultValue={selectedBequest.start}
+                className={`table-input ${getValueClass(selectedBequest.start, 'text')}`}
+                style={{ width: 'fit-content', minWidth: '120px' }}
+                onBlur={(e) => handleTextBlur(selectedBequest.id, 'start', e.target.value)}
+              />
+            </FormField>
+          </div>
+        </FieldGroup>
 
-          {/* Group 2: Need Details */}
-          <FieldGroup title="Need Details">
-            <div className="flex gap-3">
-              <FormField label="Amount">
+        <FieldGroup title="Bequest Details">
+          <div className="flex gap-3 flex-wrap">
+            <FormField label="Amount">
+              <input
+                type="text"
+                defaultValue={selectedBequest.amount || 'R 0'}
+                className={`table-input ${getValueClass(selectedBequest.amount, 'currency')}`}
+                style={{ width: 'fit-content', minWidth: '160px' }}
+                onFocus={handleDefaultValueFocus}
+                onBlur={(e) => handleTextBlur(selectedBequest.id, 'amount', e.target.value)}
+              />
+            </FormField>
+            <FormField label="Increase %">
+              <input
+                type="text"
+                defaultValue={formatPercentageValue(selectedBequest.increasePercentage)}
+                className={`table-input ${getValueClass(selectedBequest.increasePercentage, 'percentage')}`}
+                style={{ width: 'fit-content', minWidth: '80px' }}
+                onFocus={handleDefaultValueFocus}
+                onBlur={(e) => handleTextBlur(selectedBequest.id, 'increasePercentage', e.target.value)}
+              />
+            </FormField>
+            <FormField label="CPI linked">
+              <label className="inline-flex items-center gap-2 text-sm" style={{ color: 'var(--ew-primary-navy)' }}>
                 <input
-                  type="text"
-                  defaultValue={selectedBequest.amount}
-                  className={`table-input ${getValueClass(selectedBequest.amount, 'currency')}`}
-                  style={{ width: 'fit-content', minWidth: '100px' }}
-                  onBlur={(e) => handleFieldUpdate(selectedBequest.id, 'amount', e.target.value)}
+                  type="checkbox"
+                  className="w-4 h-4"
+                  checked={selectedBequest.cpi}
+                  onChange={(e) => handleCheckbox(selectedBequest.id, 'cpi', e.target.checked)}
                 />
-              </FormField>
-              
-              <FormField label="Increase %">
-                <input
-                  type="text"
-                  defaultValue={selectedBequest.increasePercentage}
-                  className={`table-input ${getValueClass(selectedBequest.increasePercentage, 'percentage')}`}
-                  style={{ width: 'fit-content', minWidth: '60px' }}
-                  onBlur={(e) => handleFieldUpdate(selectedBequest.id, 'increasePercentage', e.target.value)}
-                />
-              </FormField>
-              
-              <FormField label="CPI Linked">
-                <div className="flex items-center">
-                  <input
-                    type="checkbox"
-                    checked={selectedBequest.cpi}
-                    onChange={(e) => handleFieldUpdate(selectedBequest.id, 'cpi', e.target.checked)}
-                    className="h-4 w-4 text-primary focus:ring-primary border-gray-300 rounded"
-                  />
-                  <label className="ml-2 text-sm text-gray-700">
-                    {selectedBequest.cpi ? 'Yes' : 'No'}
-                  </label>
-                </div>
-              </FormField>
-            </div>
-          </FieldGroup>
+                Increase with inflation
+              </label>
+            </FormField>
+          </div>
+        </FieldGroup>
 
-          {/* Group 3: Calculation */}
-          <FieldGroup title="Calculation">
-            <div className="flex gap-3">
-              <FormField label="Value at Death">
-                <div className="calculated-field" style={{ minWidth: "100px" }}>
-                  {selectedBequest.valueAtDeath}
-                </div>
-              </FormField>
+        <FieldGroup title="Calculation">
+          <FormField label="Value at death">
+            <div className="calculated-field" style={{ minWidth: '160px' }}>
+              {selectedBequest.valueAtDeath}
             </div>
-          </FieldGroup>
-        </div>
+          </FormField>
+        </FieldGroup>
+      </div>
     </GroupedDetailForm>
   ) : null;
 
@@ -258,25 +223,19 @@ export function LumpSumTable({ onAddBequest }: LumpSumTableProps) {
 
   return (
     <HybridViewWrapper
-      summaryCards={
-        <div>
-          {onAddBequest && (
-            <div className="hybrid-add-button-container p-4 border-b border-neutral-200">
-              <Button
-                onClick={onAddBequest}
-                className="bg-white text-gray-700 border border-neutral-200 hover:bg-gray-50 hover:text-gray-900 font-normal"
-                size="sm"
-              >
-                <Plus className="h-4 w-4 mr-2" />
-                Add Bequest
-              </Button>
-            </div>
-          )}
-          <div className="hybrid-tabs-list">
-            {summaryCards}
-          </div>
-        </div>
+      card
+      summary={<LumpSumSummary />}
+      header={
+        <HybridHeaderBar
+          add={onAddBequest ? { label: 'Add Bequest', onClick: onAddBequest } : undefined}
+          title={selectedBequest?.name}
+          emptyTitle={selectedBequest ? 'Unnamed Bequest' : undefined}
+          onDuplicate={selectedBequest ? () => handleDuplicate(selectedBequest) : undefined}
+          onDelete={selectedBequest ? () => handleDelete(selectedBequest.id) : undefined}
+          disabled={isUpdating}
+        />
       }
+      summaryCards={summaryCards}
       detailForms={detailForms}
       isEmpty={bequests.length === 0}
       emptyStateMessage="No bequests added yet. Click 'Add Bequest' to create your first bequest."

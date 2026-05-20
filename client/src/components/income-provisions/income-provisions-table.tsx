@@ -3,46 +3,38 @@ import { useQuery, useMutation } from '@tanstack/react-query';
 import { IncomeProvisions } from '@shared/schema';
 import { apiRequest, queryClient } from '@/lib/queryClient';
 import { HybridViewWrapper } from '@/components/common/hybrid-view-wrapper';
-import { HybridItemPreviewCard } from '@/components/common/hybrid-item-preview-card';
+import { HybridHeaderBar } from '@/components/common/hybrid-header-bar';
+import { HybridSidebar } from '@/components/common/hybrid-sidebar';
 import { FieldGroup, FormField, GroupedDetailForm } from '@/components/common/grouped-detail-form';
+import { IncomeProvisionsSummary } from '@/components/income-provisions/income-provisions-summary';
 import { useDebouncedUpdate } from '@/hooks/use-debounced-update';
-import { formatTextValue, getValueClass, handleDefaultValueFocus } from '@/lib/formatting';
-import { useLoading } from '@/contexts/loading-context';
-import { Button } from '@/components/ui/button';
-import { DetailFormHeader } from '@/components/common/detail-form-header';
-import { Plus } from 'lucide-react';
+import {
+  formatCurrencyValue,
+  formatPercentageValue,
+  formatYearsValue,
+  getValueClass,
+  handleDefaultValueFocus,
+} from '@/lib/formatting';
 
 interface IncomeProvisionsTableProps {
   onAddProvision?: () => void;
-  searchTerm?: string;
+  /** Hide the section summary band — used on Retirement routes where the
+   *  phase-level projection ribbon already covers these stats. */
+  showSummary?: boolean;
 }
 
-export function IncomeProvisionsTable({ onAddProvision, searchTerm = "" }: IncomeProvisionsTableProps) {
-  const { isLoading: globalLoading } = useLoading();
+export function IncomeProvisionsTable({ onAddProvision, showSummary = true }: IncomeProvisionsTableProps) {
   const [selectedProvisionId, setSelectedProvisionId] = React.useState<number | null>(null);
 
   const { data: provisions = [], isLoading } = useQuery<IncomeProvisions[]>({
     queryKey: ['/api/income-provisions'],
   });
 
-  // Filter provisions based on search term
-  const filteredProvisions = provisions.filter(provision => {
-    if (!searchTerm) return true;
-    const search = searchTerm.toLowerCase();
-    return (
-      provision.description?.toLowerCase().includes(search) ||
-      provision.personName?.toLowerCase().includes(search) ||
-      provision.amount?.toLowerCase().includes(search) ||
-      provision.frequency?.toLowerCase().includes(search)
-    );
-  });
-
-  // Auto-select first item when data loads
   React.useEffect(() => {
-    if (filteredProvisions.length > 0 && selectedProvisionId === null) {
-      setSelectedProvisionId(filteredProvisions[0].id);
+    if (provisions.length > 0 && selectedProvisionId === null) {
+      setSelectedProvisionId(provisions[0].id);
     }
-  }, [filteredProvisions, selectedProvisionId]);
+  }, [provisions, selectedProvisionId]);
 
   const updateMutation = useMutation({
     mutationFn: async ({ id, updates }: { id: number; updates: Partial<IncomeProvisions> }) => {
@@ -53,268 +45,217 @@ export function IncomeProvisionsTable({ onAddProvision, searchTerm = "" }: Incom
     },
   });
 
-  const debouncedUpdate = useDebouncedUpdate((id: number, field: keyof IncomeProvisions, value: string | boolean | number) => {
-    updateMutation.mutate({ id, updates: { [field]: value } });
-  });
+  const debouncedUpdate = useDebouncedUpdate(
+    (id: number, field: keyof IncomeProvisions, value: string | boolean) => {
+      updateMutation.mutate({ id, updates: { [field]: value } });
+    },
+  );
 
   const deleteMutation = useMutation({
     mutationFn: async (id: number) => {
       return apiRequest('DELETE', `/api/income-provisions/${id}`);
     },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['/api/income-provisions'] });
-    },
-  });
-
-  const addMutation = useMutation({
-    mutationFn: async () => {
-      const newProvision = {}; // Send empty object to use database defaults
-      return apiRequest('POST', '/api/income-provisions', newProvision);
-    },
-    onSuccess: () => {
+    onSuccess: (_, id) => {
+      if (id === selectedProvisionId) setSelectedProvisionId(null);
       queryClient.invalidateQueries({ queryKey: ['/api/income-provisions'] });
     },
   });
 
   const duplicateMutation = useMutation({
-    mutationFn: async (provision: IncomeProvisions) => {
-      const { id, ...provisionWithoutId } = provision;
-      const duplicatedProvision = {
-        ...provisionWithoutId,
-        description: `${provision.description || 'Provision'} (Copy)`,
-      };
-      const res = await apiRequest('POST', '/api/income-provisions', duplicatedProvision);
-      return await res.json();
+    mutationFn: async (source: IncomeProvisions) => {
+      const { id, ...rest } = source;
+      return apiRequest('POST', '/api/income-provisions', {
+        ...rest,
+        name: source.name ? `${source.name} (Copy)` : '',
+      });
     },
-    onSuccess: (newProvision: IncomeProvisions) => {
+    onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['/api/income-provisions'] });
-      setSelectedProvisionId(newProvision.id);
     },
   });
 
-  const handleFieldUpdate = (id: number, field: keyof IncomeProvisions, value: string | boolean | number) => {
-    debouncedUpdate(id, field, value);
+  const handleTextBlur = (id: number, field: keyof IncomeProvisions, value: string) => {
+    let formatted: string = value;
+    if (field === 'amount') formatted = formatCurrencyValue(value);
+    else if (field === 'increasePercentage' || field === 'taxPercentage') formatted = formatPercentageValue(value);
+    else if (field === 'termYears') formatted = formatYearsValue(value);
+    debouncedUpdate(id, field, formatted);
+  };
+
+  const handleCheckbox = (id: number, field: keyof IncomeProvisions, checked: boolean) => {
+    updateMutation.mutate({ id, updates: { [field]: checked } });
+  };
+
+  const handleImmediateUpdate = (id: number, field: keyof IncomeProvisions, value: string) => {
+    updateMutation.mutate({ id, updates: { [field]: value } });
   };
 
   const handleDelete = (id: number) => {
-    deleteMutation.mutate(id);
+    if (window.confirm('Delete this provision? This cannot be undone.')) {
+      deleteMutation.mutate(id);
+    }
   };
 
-  const handleDuplicate = (provision: IncomeProvisions) => {
-    duplicateMutation.mutate(provision);
+  const handleDuplicate = (p: IncomeProvisions) => {
+    duplicateMutation.mutate(p);
   };
 
-  const isUpdating = deleteMutation.isPending || addMutation.isPending || duplicateMutation.isPending;
+  const isUpdating = deleteMutation.isPending || duplicateMutation.isPending;
 
-  // Calculate capitalised amount (simplified version)
-  const calculateCapitalisedAmount = (provision: IncomeProvisions): string => {
-    // This would contain the actual calculation logic
-    // For now, return a placeholder
-    return "R 0";
-  };
-
-  // Generate preview cards
-  const summaryCards = filteredProvisions.map((provision, index) => {
-    const isFirst = index === 0;
-    const isLast = index === filteredProvisions.length - 1;
-    const isActive = provision.id === selectedProvisionId;
-
-    // Generate preview content
-    const title = provision.description && provision.description.trim() !== '' && provision.description !== 'Enter details ...' 
-      ? provision.description 
-      : `Provision ${index + 1}`;
-
-    const previewLines = [];
-    
-    if (provision.personName && provision.personName.trim() !== '' && provision.personName !== 'Enter details ...') {
-      previewLines.push(`Entity: ${provision.personName}`);
-    }
-    
-    if (provision.amount && provision.amount !== 'R 0') {
-      previewLines.push(`Amount: ${provision.amount}`);
-    }
-    
-    if (provision.startDate && provision.startDate.trim() !== '' && provision.startDate !== 'Enter details ...') {
-      previewLines.push(`Start: ${provision.startDate}`);
-    }
-    
-    if (provision.termYears && provision.termYears !== '0 years') {
-      previewLines.push(`Term: ${provision.termYears}`);
-    }
-    
-    if (provision.frequency && provision.frequency.trim() !== '' && provision.frequency !== 'Enter details ...') {
-      previewLines.push(`Frequency: ${provision.frequency}`);
-    }
-
-    const preview = previewLines.length > 0 ? previewLines.join('\n') : 'No details entered';
-
-    return (
-      <HybridItemPreviewCard
-        key={provision.id}
-        title={title}
-        subtitle={preview}
-        primaryValue={provision.amount || 'R 0'}
-        variant={isActive ? 'active' : 'blue'}
-        isClickable={true}
-        isFirst={isFirst}
-        isLast={isLast}
-        onClick={() => setSelectedProvisionId(provision.id)}
-      />
-    );
-  });
-
-  // Get selected provision for detail form
-  const selectedProvision = selectedProvisionId 
-    ? filteredProvisions.find(provision => provision.id === selectedProvisionId)
+  const selectedProvision = selectedProvisionId
+    ? provisions.find(p => p.id === selectedProvisionId) ?? null
     : null;
 
-  // Generate detail forms - only show selected item
+  const provisionIndex = (p: IncomeProvisions) => provisions.findIndex(x => x.id === p.id);
+  const titleFor = (p: IncomeProvisions) =>
+    p.name?.trim() || `Provision ${provisionIndex(p) + 1}`;
+
+  const summaryCards = (
+    <HybridSidebar
+      items={provisions}
+      selectedId={selectedProvisionId}
+      onSelect={setSelectedProvisionId}
+      getId={(p) => p.id}
+      getTitle={titleFor}
+      renderActive={(p) => {
+        const lines: string[] = [];
+        if (p.personName?.trim()) lines.push(`Entity: ${p.personName}`);
+        if (p.frequency?.trim()) lines.push(`Frequency: ${p.frequency}`);
+        if (p.termYears?.trim() && p.termYears !== '0') lines.push(`Term: ${p.termYears}`);
+        return {
+          subtitle: lines.join('\n') || 'No details entered',
+          primaryValue: p.amount || 'R 0',
+        };
+      }}
+    />
+  );
+
   const detailForms = selectedProvision ? (
     <GroupedDetailForm>
-      <div key={selectedProvision.id}>
-        <DetailFormHeader
-          title={selectedProvision.description}
-          emptyTitle="Untitled Provision"
-          onDuplicate={() => handleDuplicate(selectedProvision)}
-          onDelete={() => handleDelete(selectedProvision.id)}
-          disabled={isUpdating}
-        />
-
-        {/* Group 1: Overview */}
+      <div key={selectedProvision.id} className="space-y-10">
         <FieldGroup title="Overview">
-            <div className="flex gap-3">
-              <FormField label="Description">
-                <input
-                  type="text"
-                  defaultValue={formatTextValue(selectedProvision.description)}
-                  className={`table-input ${getValueClass(selectedProvision.description, 'text')}`}
-                  style={{ width: 'fit-content', minWidth: '120px' }}
-                  onFocus={handleDefaultValueFocus}
-                  onBlur={(e) => handleFieldUpdate(selectedProvision.id, 'description', e.target.value)}
-                />
-              </FormField>
-              
-              <FormField label="Entity">
-                <input
-                  type="text"
-                  defaultValue={formatTextValue(selectedProvision.personName)}
-                  className={`table-input ${getValueClass(selectedProvision.personName, 'text')}`}
-                  style={{ width: 'fit-content', minWidth: '120px' }}
-                  onFocus={handleDefaultValueFocus}
-                  onBlur={(e) => handleFieldUpdate(selectedProvision.id, 'personName', e.target.value)}
-                />
-              </FormField>
-            </div>
-          </FieldGroup>
+          <div className="flex gap-3 flex-wrap">
+            <FormField label="Name">
+              <input
+                type="text"
+                defaultValue={selectedProvision.name}
+                className={`table-input ${getValueClass(selectedProvision.name, 'text')}`}
+                style={{ width: '100%', minWidth: '200px' }}
+                onBlur={(e) => handleTextBlur(selectedProvision.id, 'name', e.target.value)}
+              />
+            </FormField>
+            <FormField label="Description">
+              <input
+                type="text"
+                defaultValue={selectedProvision.description}
+                className={`table-input ${getValueClass(selectedProvision.description, 'text')}`}
+                style={{ width: '100%', minWidth: '280px' }}
+                onBlur={(e) => handleTextBlur(selectedProvision.id, 'description', e.target.value)}
+              />
+            </FormField>
+          </div>
+          <FormField label="Entity">
+            <input
+              type="text"
+              defaultValue={selectedProvision.personName}
+              className={`table-input ${getValueClass(selectedProvision.personName, 'text')}`}
+              style={{ width: 'fit-content', minWidth: '200px' }}
+              onBlur={(e) => handleTextBlur(selectedProvision.id, 'personName', e.target.value)}
+            />
+          </FormField>
+        </FieldGroup>
 
-        {/* Group 2: Income Provision Details */}
-        <FieldGroup title="Income Provision Details" className="mt-8">
-            <div className="flex gap-3 flex-wrap">
-              <FormField label="Amount">
+        <FieldGroup title="Provision Details">
+          <div className="flex gap-3 flex-wrap">
+            <FormField label="Amount">
+              <input
+                type="text"
+                defaultValue={selectedProvision.amount || 'R 0'}
+                className={`table-input ${getValueClass(selectedProvision.amount, 'currency')}`}
+                style={{ width: 'fit-content', minWidth: '140px' }}
+                onFocus={handleDefaultValueFocus}
+                onBlur={(e) => handleTextBlur(selectedProvision.id, 'amount', e.target.value)}
+              />
+            </FormField>
+            <FormField label="Frequency">
+              <select
+                className="table-input table-dropdown"
+                defaultValue={selectedProvision.frequency || 'monthly'}
+                onChange={(e) => handleImmediateUpdate(selectedProvision.id, 'frequency', e.target.value)}
+                style={{ minWidth: '140px' }}
+              >
+                <option value="monthly">Monthly</option>
+                <option value="quarterly">Quarterly</option>
+                <option value="annually">Annually</option>
+              </select>
+            </FormField>
+            <FormField label="Start">
+              <input
+                type="text"
+                defaultValue={selectedProvision.startDate}
+                className={`table-input ${getValueClass(selectedProvision.startDate, 'text')}`}
+                style={{ width: 'fit-content', minWidth: '120px' }}
+                onBlur={(e) => handleTextBlur(selectedProvision.id, 'startDate', e.target.value)}
+              />
+            </FormField>
+            <FormField label="Term (years)">
+              <input
+                type="text"
+                defaultValue={selectedProvision.termYears}
+                className={`table-input ${getValueClass(selectedProvision.termYears, 'years')}`}
+                style={{ width: 'fit-content', minWidth: '100px' }}
+                onFocus={handleDefaultValueFocus}
+                onBlur={(e) => handleTextBlur(selectedProvision.id, 'termYears', e.target.value)}
+              />
+            </FormField>
+            <FormField label="Increase %">
+              <input
+                type="text"
+                defaultValue={formatPercentageValue(selectedProvision.increasePercentage)}
+                className={`table-input ${getValueClass(selectedProvision.increasePercentage, 'percentage')}`}
+                style={{ width: 'fit-content', minWidth: '80px' }}
+                onFocus={handleDefaultValueFocus}
+                onBlur={(e) => handleTextBlur(selectedProvision.id, 'increasePercentage', e.target.value)}
+              />
+            </FormField>
+            <FormField label="CPI linked">
+              <label className="inline-flex items-center gap-2 text-sm" style={{ color: 'var(--ew-primary-navy)' }}>
                 <input
-                  type="text"
-                  defaultValue={selectedProvision.amount}
-                  className={`table-input ${getValueClass(selectedProvision.amount, 'currency')}`}
-                  style={{ width: 'fit-content', minWidth: '100px' }}
-                  onBlur={(e) => handleFieldUpdate(selectedProvision.id, 'amount', e.target.value)}
+                  type="checkbox"
+                  className="w-4 h-4"
+                  checked={selectedProvision.cpi}
+                  onChange={(e) => handleCheckbox(selectedProvision.id, 'cpi', e.target.checked)}
                 />
-              </FormField>
-              
-              <FormField label="Start">
-                <input
-                  type="text"
-                  defaultValue={formatTextValue(selectedProvision.startDate)}
-                  className={`table-input ${getValueClass(selectedProvision.startDate, 'text')}`}
-                  style={{ width: 'fit-content', minWidth: '80px' }}
-                  onFocus={handleDefaultValueFocus}
-                  onBlur={(e) => handleFieldUpdate(selectedProvision.id, 'startDate', e.target.value)}
-                />
-              </FormField>
-              
-              <FormField label="Term (years)">
-                <input
-                  type="text"
-                  defaultValue={selectedProvision.termYears}
-                  className={`table-input ${getValueClass(selectedProvision.termYears, 'years')}`}
-                  style={{ width: 'fit-content', minWidth: '80px' }}
-                  onBlur={(e) => handleFieldUpdate(selectedProvision.id, 'termYears', e.target.value)}
-                />
-              </FormField>
-              
-              <FormField label="Increase %">
-                <input
-                  type="text"
-                  defaultValue={selectedProvision.increasePercentage}
-                  className={`table-input ${getValueClass(selectedProvision.increasePercentage, 'percentage')}`}
-                  style={{ width: 'fit-content', minWidth: '60px' }}
-                  onBlur={(e) => handleFieldUpdate(selectedProvision.id, 'increasePercentage', e.target.value)}
-                />
-              </FormField>
-              
-              <FormField label="Frequency">
-                <input
-                  type="text"
-                  defaultValue={formatTextValue(selectedProvision.frequency)}
-                  className={`table-input ${getValueClass(selectedProvision.frequency, 'text')}`}
-                  style={{ width: 'fit-content', minWidth: '80px' }}
-                  onFocus={handleDefaultValueFocus}
-                  onBlur={(e) => handleFieldUpdate(selectedProvision.id, 'frequency', e.target.value)}
-                />
-              </FormField>
-              
-              <FormField label="Tax %">
-                <input
-                  type="text"
-                  defaultValue={selectedProvision.taxPercentage}
-                  className={`table-input ${getValueClass(selectedProvision.taxPercentage, 'percentage')}`}
-                  style={{ width: 'fit-content', minWidth: '60px' }}
-                  onBlur={(e) => handleFieldUpdate(selectedProvision.id, 'taxPercentage', e.target.value)}
-                />
-              </FormField>
-            </div>
-          </FieldGroup>
+                Increase with inflation
+              </label>
+            </FormField>
+          </div>
+        </FieldGroup>
 
-          {/* Group 3: Additional Details */}
-          <FieldGroup title="Additional Details" className="mt-8">
-            <div className="flex gap-3">
-              <FormField label="CPI Linked">
-                <div className="flex items-center">
-                  <input
-                    type="checkbox"
-                    checked={selectedProvision.cpi}
-                    onChange={(e) => handleFieldUpdate(selectedProvision.id, 'cpi', e.target.checked)}
-                    className="h-4 w-4 text-primary focus:ring-primary border-gray-300 rounded"
-                  />
-                  <label className="ml-2 text-sm text-gray-700">
-                    {selectedProvision.cpi ? 'Yes' : 'No'}
-                  </label>
-                </div>
-              </FormField>
-              
-              <FormField label="Tax Rate">
-                <input
-                  type="text"
-                  defaultValue={formatTextValue(selectedProvision.taxRate)}
-                  className={`table-input ${getValueClass(selectedProvision.taxRate, 'text')}`}
-                  style={{ width: 'fit-content', minWidth: '80px' }}
-                  onFocus={handleDefaultValueFocus}
-                  onBlur={(e) => handleFieldUpdate(selectedProvision.id, 'taxRate', e.target.value)}
-                />
-              </FormField>
-              
-              <FormField label="Capitalised Amount">
-                <input
-                  type="text"
-                  defaultValue={calculateCapitalisedAmount(selectedProvision)}
-                  className="calculated-field"
-                  style={{ width: 'fit-content', minWidth: '100px' }}
-                  readOnly
-                  disabled
-                />
-              </FormField>
-            </div>
-          </FieldGroup>
-        </div>
+        <FieldGroup title="Tax">
+          <div className="flex gap-3 flex-wrap">
+            <FormField label="Tax %">
+              <input
+                type="text"
+                defaultValue={formatPercentageValue(selectedProvision.taxPercentage)}
+                className={`table-input ${getValueClass(selectedProvision.taxPercentage, 'percentage')}`}
+                style={{ width: 'fit-content', minWidth: '80px' }}
+                onFocus={handleDefaultValueFocus}
+                onBlur={(e) => handleTextBlur(selectedProvision.id, 'taxPercentage', e.target.value)}
+              />
+            </FormField>
+            <FormField label="Tax rate">
+              <input
+                type="text"
+                defaultValue={selectedProvision.taxRate}
+                className={`table-input ${getValueClass(selectedProvision.taxRate, 'text')}`}
+                style={{ width: 'fit-content', minWidth: '120px' }}
+                onBlur={(e) => handleTextBlur(selectedProvision.id, 'taxRate', e.target.value)}
+              />
+            </FormField>
+          </div>
+        </FieldGroup>
+      </div>
     </GroupedDetailForm>
   ) : null;
 
@@ -324,28 +265,22 @@ export function IncomeProvisionsTable({ onAddProvision, searchTerm = "" }: Incom
 
   return (
     <HybridViewWrapper
-      summaryCards={
-        <div>
-          {onAddProvision && (
-            <div className="hybrid-add-button-container p-4 border-b border-neutral-200">
-              <Button
-                onClick={onAddProvision}
-                className="bg-white text-gray-700 border border-neutral-200 hover:bg-gray-50 hover:text-gray-900 font-normal"
-                size="sm"
-              >
-                <Plus className="h-4 w-4 mr-2" />
-                Add Provision
-              </Button>
-            </div>
-          )}
-          <div className="hybrid-tabs-list">
-            {summaryCards}
-          </div>
-        </div>
+      card
+      summary={showSummary ? <IncomeProvisionsSummary /> : undefined}
+      header={
+        <HybridHeaderBar
+          add={onAddProvision ? { label: 'Add Provision', onClick: onAddProvision } : undefined}
+          title={selectedProvision?.name}
+          emptyTitle={selectedProvision ? 'Unnamed Provision' : undefined}
+          onDuplicate={selectedProvision ? () => handleDuplicate(selectedProvision) : undefined}
+          onDelete={selectedProvision ? () => handleDelete(selectedProvision.id) : undefined}
+          disabled={isUpdating}
+        />
       }
+      summaryCards={summaryCards}
       detailForms={detailForms}
-      isEmpty={filteredProvisions.length === 0}
-      emptyStateMessage="No provisions added yet. Click 'Add Provision' to create your first income provision."
+      isEmpty={provisions.length === 0}
+      emptyStateMessage="No provisions added yet. Click 'Add Provision' to create your first provision."
     />
   );
 }

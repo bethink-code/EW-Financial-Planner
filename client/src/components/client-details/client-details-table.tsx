@@ -141,7 +141,16 @@ export function ClientDetailsTable({ onAddEntity }: ClientDetailsTableProps) {
           other (space-y-10 on the parent only sees a single child). */}
       <div key={selectedEntity.id} className="space-y-10">
         <FieldGroup title="Entity">
-          <div className="flex gap-3">
+          <FormField label="Name">
+            <input
+              type="text"
+              defaultValue={selectedEntity.entityName ?? ''}
+              className={`table-input ${getValueClass(selectedEntity.entityName, 'text')}`}
+              style={{ width: '100%', maxWidth: '420px' }}
+              onBlur={(e) => handleFieldUpdate(selectedEntity.id, 'entityName', e.target.value)}
+            />
+          </FormField>
+          <div className="flex gap-3 flex-wrap">
             <FormField label="Entity Type">
               <select
                 className="table-input table-dropdown"
@@ -273,9 +282,6 @@ export function ClientDetailsTable({ onAddEntity }: ClientDetailsTableProps) {
           add={onAddEntity ? { label: 'Add Entity', onClick: onAddEntity } : undefined}
           title={selectedEntity?.entityName}
           emptyTitle={selectedEntity ? 'Unnamed Entity' : undefined}
-          onTitleChange={selectedEntity
-            ? (value) => handleImmediateUpdate(selectedEntity.id, 'entityName', value)
-            : undefined}
           onDuplicate={selectedEntity ? () => handleDuplicate(selectedEntity) : undefined}
           onDelete={selectedEntity ? () => handleDelete(selectedEntity.id) : undefined}
           disabled={isUpdating}
