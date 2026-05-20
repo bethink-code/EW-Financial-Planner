@@ -2,6 +2,10 @@ import React from 'react';
 import { cn } from '@/lib/utils';
 
 interface HybridViewWrapperProps {
+  /** Optional section-level summary band at the top of the card — aggregate
+   *  stats for the data on this tab. Sits above the header strip; bordered
+   *  off underneath. Example: AdditionalEstateDutyItemsSummary. */
+  summary?: React.ReactNode;
   /** Optional top action strip — Add | Title | Duplicate/Delete. Spans the
    *  full form-card width above the sidebar + detail-form columns. */
   header?: React.ReactNode;
@@ -22,20 +26,23 @@ interface HybridViewWrapperProps {
 
 /**
  * HybridViewWrapper — the shared two-pane editing layout used across every
- * financial domain. Three slots:
+ * financial domain. Four optional slots:
  *
  *   ┌──────────────────────────────────────────────────────┐
- *   │  header  (Add | Title | Duplicate/Delete — full width│
+ *   │  summary  (section-level aggregate stats)            │
+ *   ├──────────────────────────────────────────────────────┤
+ *   │  header   (Add | Title | Duplicate/Delete)           │
  *   ├────────────┬─────────────────────────────────────────┤
  *   │ summary    │ detailForms                             │
  *   │ cards      │                                         │
  *   └────────────┴─────────────────────────────────────────┘
  *
- * The header is the new pattern (action strip across the top); the sidebar
- * holds the active item expanded + compact rows for the rest; the right
- * pane holds the form fields with no header of its own.
+ * The phase/step-level summary (e.g. Retirement projection ribbon) lives
+ * elsewhere — passed through NeedLayout's `headerExtra` slot into the
+ * PlanStepper card.
  */
 export function HybridViewWrapper({
+  summary,
   header,
   summaryCards,
   detailForms,
@@ -51,16 +58,21 @@ export function HybridViewWrapper({
         card && "rounded-lg shadow-sm border border-neutral-200 overflow-hidden",
       )}
     >
+      {summary && (
+        <div className={cn("border-b border-neutral-200", card && "bg-white")}>
+          {summary}
+        </div>
+      )}
       {header && (
         <div className={cn("border-b border-neutral-200", card && "bg-white")}>
           {header}
         </div>
       )}
-      <div className={cn("flex max-w-full overflow-hidden", card && "bg-white")}>
-        <div className="w-80 flex-shrink-0 border-r border-neutral-200">
+      <div className="flex max-w-full overflow-hidden">
+        <div className="w-80 flex-shrink-0 border-r border-neutral-200 bg-neutral-50">
           {summaryCards}
         </div>
-        <div className="flex-1">
+        <div className={cn("flex-1", card && "bg-white")}>
           {isEmpty ? (
             <div className="text-center py-8">
               <p className="text-neutral-500 mb-4">{emptyStateMessage}</p>

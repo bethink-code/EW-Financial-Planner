@@ -1,25 +1,13 @@
 import { useCallback } from "react";
-import { useQuery, useMutation } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
 import AdditionalEstateDutyItemsTable from "../components/additional-estate-duty-items/additional-estate-duty-items-table";
-import { AdditionalEstateDutyItemsSummary } from "@/components/additional-estate-duty-items/additional-estate-duty-items-summary";
-import { CalculatorHeader } from "@/components/ui/calculator-header";
 import { apiRequest, queryClient } from "@/lib/queryClient";
+import type { InsertAdditionalEstateDutyItems } from "@shared/schema";
 
 export default function AdditionalEstateDutyItems() {
-  // Fetch items for count
-  const { data: items = [] } = useQuery({
-    queryKey: ["/api/additional-estate-duty-items"],
-    queryFn: async () => {
-      const response = await fetch("/api/additional-estate-duty-items");
-      if (!response.ok) throw new Error('Failed to fetch additional estate duty items');
-      return response.json();
-    }
-  });
-
-  // Add new item mutation
   const addMutation = useMutation({
     mutationFn: async () => {
-      const newItem = {}; // Send empty object to use database defaults
+      const newItem: InsertAdditionalEstateDutyItems = {};
       return apiRequest("POST", "/api/additional-estate-duty-items", newItem);
     },
     onSuccess: () => {
@@ -34,10 +22,7 @@ export default function AdditionalEstateDutyItems() {
   return (
     <div className="w-full px-6 pb-6">
       <div className="w-[1320px] max-w-full">
-        <CalculatorHeader>
-          <AdditionalEstateDutyItemsSummary />
-          <AdditionalEstateDutyItemsTable />
-        </CalculatorHeader>
+        <AdditionalEstateDutyItemsTable onAddItem={handleAddItem} />
       </div>
     </div>
   );

@@ -1,10 +1,8 @@
 import { Info } from "lucide-react";
-import { cn } from "@/lib/utils";
 
 interface HybridItemPreviewRowProps {
   title: string;
   onClick?: () => void;
-  isLast?: boolean;
 }
 
 /**
@@ -13,15 +11,12 @@ interface HybridItemPreviewRowProps {
  * the list; everything else uses this row so the sidebar stays scannable
  * even with many items.
  */
-export function HybridItemPreviewRow({ title, onClick, isLast }: HybridItemPreviewRowProps) {
+export function HybridItemPreviewRow({ title, onClick }: HybridItemPreviewRowProps) {
   return (
     <button
       type="button"
       onClick={onClick}
-      className={cn(
-        "w-full flex items-center justify-between gap-2 px-4 py-3 text-left bg-transparent hover:bg-neutral-50 transition-colors border-b border-neutral-200",
-        isLast && "border-b-0",
-      )}
+      className="w-full flex items-center justify-between gap-2 px-4 py-3 text-left bg-transparent hover:bg-neutral-50 transition-colors border-b border-neutral-200"
     >
       <span
         className="text-sm font-medium truncate"

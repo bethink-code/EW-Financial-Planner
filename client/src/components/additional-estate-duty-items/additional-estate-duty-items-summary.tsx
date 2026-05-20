@@ -1,5 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import type { AdditionalEstateDutyItems } from "@shared/schema";
+import { SummaryBand, SummaryTile } from "@/components/common/summary-band";
 
 export function AdditionalEstateDutyItemsSummary() {
   const { data: items = [], isLoading } = useQuery<AdditionalEstateDutyItems[]>({
@@ -8,41 +9,25 @@ export function AdditionalEstateDutyItemsSummary() {
 
   if (isLoading) {
     return (
-      <div className="px-5 pb-5">
-        <div className="text-neutral-500">Loading summary...</div>
+      <div className="px-6 py-3">
+        <div className="text-neutral-500 text-sm">Loading summary...</div>
       </div>
     );
   }
 
-  const totalItems = items.length;
-  const totalAdditions = items.filter(item => !item.deduction).reduce((sum, item) => {
-    const amount = parseFloat(item.amount.replace(/[^\d.-]/g, '')) || 0;
-    return sum + amount;
-  }, 0);
-
-  const totalDeductions = items.filter(item => item.deduction).reduce((sum, item) => {
-    const amount = parseFloat(item.amount.replace(/[^\d.-]/g, '')) || 0;
-    return sum + amount;
-  }, 0);
+  const totalAdditions = items
+    .filter(item => !item.deduction)
+    .reduce((sum, item) => sum + (parseFloat(item.amount.replace(/[^\d.-]/g, '')) || 0), 0);
+  const totalDeductions = items
+    .filter(item => item.deduction)
+    .reduce((sum, item) => sum + (parseFloat(item.amount.replace(/[^\d.-]/g, '')) || 0), 0);
+  const net = totalAdditions - totalDeductions;
 
   return (
-    <div className="px-5 pb-5">
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div className="summary-card">
-          <div className="text-xs font-medium text-teal-700 mb-1">Total Items</div>
-          <div className="text-lg font-bold text-neutral-900">{totalItems}</div>
-        </div>
-        
-        <div className="summary-card">
-          <div className="text-xs font-medium text-teal-700 mb-1">Total Additions</div>
-          <div className="text-lg font-bold text-neutral-900">R {totalAdditions.toLocaleString()}</div>
-        </div>
-        
-        <div className="summary-card">
-          <div className="text-xs font-medium text-teal-700 mb-1">Total Deductions</div>
-          <div className="text-lg font-bold text-neutral-900">R {totalDeductions.toLocaleString()}</div>
-        </div>
-      </div>
-    </div>
+    <SummaryBand>
+      <SummaryTile label="Net" value={`R ${net.toLocaleString()}`} />
+      <SummaryTile label="Additions" value={`R ${totalAdditions.toLocaleString()}`} />
+      <SummaryTile label="Deductions" value={`R ${totalDeductions.toLocaleString()}`} />
+    </SummaryBand>
   );
 }

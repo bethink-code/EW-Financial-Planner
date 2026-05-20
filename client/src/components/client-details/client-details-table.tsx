@@ -4,8 +4,7 @@ import { ClientDetails, InsertClientDetails } from '@shared/schema';
 import { apiRequest, queryClient } from '@/lib/queryClient';
 import { HybridViewWrapper } from '@/components/common/hybrid-view-wrapper';
 import { HybridHeaderBar } from '@/components/common/hybrid-header-bar';
-import { HybridItemPreviewCard } from '@/components/common/hybrid-item-preview-card';
-import { HybridItemPreviewRow } from '@/components/common/hybrid-item-preview-row';
+import { HybridSidebar } from '@/components/common/hybrid-sidebar';
 import { FieldGroup, FormField, GroupedDetailForm } from '@/components/common/grouped-detail-form';
 import { useDebouncedUpdate } from '@/hooks/use-debounced-update';
 import { formatPercentageValue, getValueClass, handleDefaultValueFocus } from '@/lib/formatting';
@@ -111,46 +110,28 @@ export function ClientDetailsTable({ onAddEntity }: ClientDetailsTableProps) {
   const selectedEntity = selectedEntityId
     ? entities.find(e => e.id === selectedEntityId) ?? null
     : null;
-  const otherEntities = entities.filter(e => e.id !== selectedEntityId);
 
   const entityIndex = (entity: ClientDetails) => entities.findIndex(e => e.id === entity.id);
   const titleFor = (entity: ClientDetails) =>
     entity.entityName?.trim() || `Entity ${entityIndex(entity) + 1}`;
 
-  // Sidebar — active card expanded at top, inactive items as compact rows.
   const summaryCards = (
-    <div>
-      {selectedEntity && (() => {
-        const previewLines: string[] = [];
-        if (selectedEntity.entityType) previewLines.push(selectedEntity.entityType);
-        if (selectedEntity.maritalStatus) previewLines.push(selectedEntity.maritalStatus);
-        const subtitle = previewLines.join('\n') || 'No details entered';
-        const primaryValue = selectedEntity.age && selectedEntity.age !== '0'
-          ? `${selectedEntity.age} yrs`
-          : '';
-
-        return (
-          <HybridItemPreviewCard
-            title={titleFor(selectedEntity)}
-            subtitle={subtitle}
-            primaryValue={primaryValue}
-            variant="active"
-            isClickable={false}
-            isFirst={true}
-            isLast={otherEntities.length === 0}
-          />
-        );
-      })()}
-
-      {otherEntities.map((entity, index) => (
-        <HybridItemPreviewRow
-          key={entity.id}
-          title={titleFor(entity)}
-          onClick={() => setSelectedEntityId(entity.id)}
-          isLast={index === otherEntities.length - 1}
-        />
-      ))}
-    </div>
+    <HybridSidebar
+      items={entities}
+      selectedId={selectedEntityId}
+      onSelect={setSelectedEntityId}
+      getId={(e) => e.id}
+      getTitle={titleFor}
+      renderActive={(entity) => {
+        const lines: string[] = [];
+        if (entity.entityType) lines.push(`Entity type: ${entity.entityType}`);
+        if (entity.maritalStatus) lines.push(`Marital status: ${entity.maritalStatus}`);
+        return {
+          subtitle: lines.join('\n') || 'No details entered',
+          primaryValue: entity.age && entity.age !== '0' ? `${entity.age} yrs` : '',
+        };
+      }}
+    />
   );
 
   const detailForms = selectedEntity ? (

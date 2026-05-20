@@ -28,9 +28,14 @@ interface HybridHeaderBarProps {
 
 /**
  * The full-width top action strip that sits inside the form card, above the
- * sidebar + detail form. Three regions on a 3-column grid:
+ * sidebar + detail form. Mirrors the body row's column structure so the
+ * title in the right region left-aligns with the FieldGroup headings below:
  *
- *   [ Add Entity ]            Policy 2 ✎             [ Duplicate ] [ Delete ]
+ *   ┌──────────────┬──────────────────────────────────────────────┐
+ *   │ Add Entity   │ Title ✎                  Duplicate  Delete   │
+ *   ├──────────────┼──────────────────────────────────────────────┤
+ *   │ sidebar      │ ENTITY                                       │
+ *   │ items        │   …form fields…                              │
  *
  * Replaces the historical pair of: (a) Add button living inside the sidebar
  * and (b) DetailFormHeader living at the top of the detail form. Both now
@@ -65,16 +70,21 @@ export function HybridHeaderBar({
   };
 
   return (
-    <div className="grid grid-cols-3 items-center gap-3 px-4 py-3">
-      {/* Add — left */}
-      <div className="justify-self-start">
+    <div className="flex items-stretch">
+      {/* Sidebar column — Add button. Matches body's w-80 sidebar so the
+          right region's left edge aligns with the detail form below. */}
+      <div className="w-80 flex-shrink-0 flex items-center px-4 py-5">
         {add && (
           <Button
             onClick={add.onClick}
             disabled={add.disabled || disabled}
             variant="outline"
             size="sm"
-            className="bg-white text-gray-700 border border-neutral-200 hover:bg-gray-50 hover:text-gray-900 font-normal"
+            className="border-transparent font-normal hover:bg-[var(--ew-blue-tertiary-100)]"
+            style={{
+              backgroundColor: "var(--ew-blue-tertiary-50)",
+              color: "var(--ew-blue)",
+            }}
           >
             <Plus className="h-4 w-4 mr-2" />
             {add.label}
@@ -82,69 +92,71 @@ export function HybridHeaderBar({
         )}
       </div>
 
-      {/* Title — centred */}
-      <div className="justify-self-center min-w-0 max-w-full flex items-center gap-2">
-        {editing ? (
-          <input
-            autoFocus
-            value={draft}
-            onChange={(e) => setDraft(e.target.value)}
-            onBlur={commit}
-            onKeyDown={(e) => {
-              if (e.key === "Enter") commit();
-              if (e.key === "Escape") setEditing(false);
-            }}
-            placeholder={emptyTitle}
-            className="text-lg font-semibold bg-transparent outline-none text-center border-b min-w-0"
-            style={{ color: "var(--ew-primary-navy)", borderColor: "var(--ew-blue)" }}
-          />
-        ) : displayTitle ? (
-          <>
-            <h2
-              className="text-lg font-semibold truncate text-center"
-              style={{ color: "var(--ew-primary-navy)" }}
-            >
-              {displayTitle}
-            </h2>
-            {onTitleChange && (
-              <button
-                type="button"
-                onClick={startEdit}
-                disabled={disabled}
-                aria-label="Rename"
-                className="flex-shrink-0 p-1 rounded text-neutral-400 hover:text-neutral-600 hover:bg-neutral-100 disabled:opacity-50"
+      {/* Detail column — title left, actions right. p-6 left matches
+          GroupedDetailForm so the title sits over ENTITY etc. */}
+      <div className="flex-1 flex items-center gap-3 pl-6 pr-4 py-5">
+        <div className="min-w-0 flex items-center gap-2">
+          {editing ? (
+            <input
+              autoFocus
+              value={draft}
+              onChange={(e) => setDraft(e.target.value)}
+              onBlur={commit}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") commit();
+                if (e.key === "Escape") setEditing(false);
+              }}
+              placeholder={emptyTitle}
+              className="text-lg font-semibold bg-transparent outline-none border-b min-w-0"
+              style={{ color: "var(--ew-primary-navy)", borderColor: "var(--ew-blue)" }}
+            />
+          ) : displayTitle ? (
+            <>
+              <h2
+                className="text-lg font-semibold truncate"
+                style={{ color: "var(--ew-primary-navy)" }}
               >
-                <Pencil className="h-4 w-4" />
-              </button>
-            )}
-          </>
-        ) : null}
-      </div>
+                {displayTitle}
+              </h2>
+              {onTitleChange && (
+                <button
+                  type="button"
+                  onClick={startEdit}
+                  disabled={disabled}
+                  aria-label="Rename"
+                  className="flex-shrink-0 p-1 rounded text-neutral-400 hover:text-neutral-600 hover:bg-neutral-100 disabled:opacity-50"
+                >
+                  <Pencil className="h-4 w-4" />
+                </button>
+              )}
+            </>
+          ) : null}
+        </div>
 
-      {/* Actions — right */}
-      <div className="justify-self-end flex gap-2">
-        {onDuplicate && (
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={onDuplicate}
-            disabled={disabled}
-            className="btn-secondary"
-          >
-            Duplicate
-          </Button>
-        )}
-        {onDelete && (
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={onDelete}
-            disabled={disabled}
-            className="btn-secondary"
-          >
-            Delete
-          </Button>
-        )}
+        <div className="ml-auto flex gap-2">
+          {onDuplicate && (
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={onDuplicate}
+              disabled={disabled}
+              className="btn-secondary"
+            >
+              Duplicate
+            </Button>
+          )}
+          {onDelete && (
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={onDelete}
+              disabled={disabled}
+              className="btn-secondary"
+            >
+              Delete
+            </Button>
+          )}
+        </div>
       </div>
     </div>
   );
