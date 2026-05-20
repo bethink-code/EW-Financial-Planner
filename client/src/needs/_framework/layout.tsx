@@ -9,11 +9,12 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { CustomTabs } from "@/components/ui/custom-tabs";
 import { cn } from "@/lib/utils";
 import { needs as allNeeds } from "@shared/navigation-config";
 import { CommentsPanel } from "@/components/comments/comments-panel";
 import headerImage from "@assets/EW Header_1753945516780.png";
-import type { NeedConfig } from "./types";
+import type { NeedConfig, NeedStep } from "./types";
 import { findCurrentStep } from "./flatten";
 import { NeedActionBar } from "./action-bar";
 
@@ -29,16 +30,43 @@ interface NeedLayoutProps {
   headerExtra?: React.ReactNode;
 }
 
+/** Where clicking a step chip lands the user. If the step has sub-pages we
+ *  navigate to the first leaf (the first child of the first section, or the
+ *  first flat section), so the body content is always something. */
+function firstLeafPath(step: NeedStep): string {
+  if (step.sections.length === 0) return step.path;
+  const first = step.sections[0];
+  if (first.children && first.children.length > 0) return first.children[0].path;
+  return first.path;
+}
+
+/** Flatten a step's sections into a tab list. For sections that contain
+ *  children, each child becomes a tab labelled `"<Section> — <Child>"` so the
+ *  grouping context is preserved (the user picked "combined labels" over
+ *  flattening to leaf-only). Sections without children render as a single tab
+ *  with the section's own label. */
+function buildSectionTabs(step: NeedStep): { id: string; label: string; href: string }[] {
+  return step.sections.flatMap(section =>
+    section.children && section.children.length > 0
+      ? section.children.map(child => ({
+          id: child.id,
+          label: `${section.label} — ${child.label}`,
+          href: child.path,
+        }))
+      : [{ id: section.id, label: section.label, href: section.path }],
+  );
+}
+
 /**
  * Generic chrome for a need workspace: client header, FINANCIAL PLAN pill,
- * NEED dropdown (lists all needs from shared config), STEPS bar, and the
+ * NEED dropdown (lists all needs from shared config), STEPS bar, the auto
+ * section-tab strip when the current step has sub-pages, and the
  * Previous / Next action bar at the bottom. Driven entirely by the supplied
  * NeedConfig — every need plugs into the same component.
  */
 export function NeedLayout({ config, children, headerExtra }: NeedLayoutProps) {
   const [location, setLocation] = useLocation();
   const [needDropdownOpen, setNeedDropdownOpen] = useState(false);
-  const [openStepDropdown, setOpenStepDropdown] = useState<string | null>(null);
 
   const { data: plan } = useQuery<{ name: string }>({
     queryKey: [`/api/financial-plans/${PLAN_ID}`],
@@ -55,6 +83,7 @@ export function NeedLayout({ config, children, headerExtra }: NeedLayoutProps) {
   const dropdownNeeds = allNeeds.filter(n => planNeedKeys.has(n.id));
 
   const currentStep = findCurrentStep(config, location);
+  const sectionTabs = buildSectionTabs(currentStep);
 
   return (
     <>
@@ -118,77 +147,25 @@ export function NeedLayout({ config, children, headerExtra }: NeedLayoutProps) {
               <div className="flex items-center gap-2">
                 {config.steps.map(step => {
                   const isActive = step.id === currentStep.id;
-                  if (step.sections.length === 0) {
-                    return (
-                      <button
-                        key={step.id}
-                        onClick={() => setLocation(step.path)}
+                  return (
+                    <button
+                      key={step.id}
+                      onClick={() => setLocation(firstLeafPath(step))}
+                      className={cn(
+                        "flex items-center gap-2 pl-1 pr-2 text-sm font-medium h-10 rounded-[6px]",
+                        isActive ? "bg-[#F97415] text-white" : "bg-[#F5F1E8] text-gray-700 hover:bg-[#F0EBE0]",
+                      )}
+                    >
+                      <span
                         className={cn(
-                          "flex items-center gap-2 pl-1 pr-2 text-sm font-medium h-10 rounded-[6px]",
-                          isActive ? "bg-[#F97415] text-white" : "bg-[#F5F1E8] text-gray-700 hover:bg-[#F0EBE0]",
+                          "flex items-center justify-center h-8 w-8 rounded text-sm font-semibold",
+                          isActive ? "bg-white/20 text-white" : "bg-white text-[#F97415]",
                         )}
                       >
-                        <span
-                          className={cn(
-                            "flex items-center justify-center h-8 w-8 rounded text-sm font-semibold",
-                            isActive ? "bg-white/20 text-white" : "bg-white text-[#F97415]",
-                          )}
-                        >
-                          {step.number}
-                        </span>
-                        <span>{step.label}</span>
-                      </button>
-                    );
-                  }
-                  return (
-                    <DropdownMenu
-                      key={step.id}
-                      open={openStepDropdown === step.id}
-                      onOpenChange={open => setOpenStepDropdown(open ? step.id : null)}
-                    >
-                      <DropdownMenuTrigger asChild>
-                        <button
-                          className={cn(
-                            "flex items-center gap-2 pl-1 pr-2 text-sm font-medium h-10 rounded-[6px]",
-                            isActive ? "bg-[#F97415] text-white" : "bg-[#F5F1E8] text-gray-700 hover:bg-[#F0EBE0]",
-                          )}
-                        >
-                          <span
-                            className={cn(
-                              "flex items-center justify-center h-8 w-8 rounded text-sm font-semibold",
-                              isActive ? "bg-white/20 text-white" : "bg-white text-[#F97415]",
-                            )}
-                          >
-                            {step.number}
-                          </span>
-                          <span>{step.label}</span>
-                          <ChevronDown className="h-3.5 w-3.5 ml-1" />
-                        </button>
-                      </DropdownMenuTrigger>
-                      <DropdownMenuContent align="start" className="dropdown-menu-content w-72">
-                        {step.sections.flatMap(section =>
-                          section.children && section.children.length > 0
-                            ? section.children.map(child => (
-                                <DropdownMenuItem key={child.id} className="dropdown-menu-item" asChild>
-                                  <Link href={child.path} onClick={() => setOpenStepDropdown(null)}>
-                                    <span className={cn(location === child.path && "text-[#F97415] font-medium")}>
-                                      {section.label} — {child.label}
-                                    </span>
-                                  </Link>
-                                </DropdownMenuItem>
-                              ))
-                            : [
-                                <DropdownMenuItem key={section.id} className="dropdown-menu-item" asChild>
-                                  <Link href={section.path} onClick={() => setOpenStepDropdown(null)}>
-                                    <span className={cn(location === section.path && "text-[#F97415] font-medium")}>
-                                      {section.label}
-                                    </span>
-                                  </Link>
-                                </DropdownMenuItem>,
-                              ],
-                        )}
-                      </DropdownMenuContent>
-                    </DropdownMenu>
+                        {step.number}
+                      </span>
+                      <span>{step.label}</span>
+                    </button>
                   );
                 })}
               </div>
@@ -204,6 +181,22 @@ export function NeedLayout({ config, children, headerExtra }: NeedLayoutProps) {
           )}
         </div>
       </div>
+
+      {/* Auto section-tab strip — appears whenever the current step has
+          sub-pages. Replaces the old per-step dropdowns; tabs that don't fit
+          the viewport collapse into a "More ▼" dropdown via CustomTabs. */}
+      {sectionTabs.length > 0 && (
+        <div className="w-full px-6 pt-4">
+          <div className="w-[1320px]">
+            <CustomTabs
+              tabs={sectionTabs}
+              activeTab=""
+              useLinks
+              className="mb-0"
+            />
+          </div>
+        </div>
+      )}
 
       <div style={{ paddingBottom: "80px" }}>{children}</div>
 

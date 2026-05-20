@@ -58,17 +58,17 @@ export function RetirementCategoryTabs({ categories, initial }: Props) {
       {/* Cross-category ribbon is rendered by RetirementLayout inside the
           stepper card (above this component). Tabs sit directly below.
           Match the body's horizontal padding + inner-width so the tab strip
-          spans the same column as the table container below. CustomTabs has
-          an internal max-w-[1024px] + flex-wrap + per-tab side margins —
-          override via descendant selectors so the strip fills the body width
-          and tabs stay on one row. */}
+          spans the same column as the table container below. Overflow →
+          dropdown is handled inside CustomTabs; we only override visual
+          treatment (flush-left + larger active label) for this specific
+          layout. */}
       <div className="w-full px-6">
         <div className="w-[1320px] max-w-full px-6">
           <CustomTabs
             tabs={tabs}
             activeTab={active}
             onTabChange={(id) => setActive(id as RetirementCategoryId)}
-            className="mb-0 [&>div>div]:!max-w-none [&_nav]:!flex-nowrap [&_nav]:!gap-x-6 [&_nav]:!mx-0 [&_nav]:!overflow-x-auto [&_nav]:!items-end [&_button]:!pb-3 [&_button]:focus:!outline-none [&_button.border-transparent:hover]:!border-transparent [&_button.text-primary]:!text-xl [&_button.text-primary]:!font-semibold"
+            className="mb-0 [&_nav]:!mx-0 [&_button]:focus:!outline-none [&_button.border-transparent:hover]:!border-transparent [&_button.text-primary]:!text-xl [&_button.text-primary]:!font-semibold"
           />
         </div>
       </div>
