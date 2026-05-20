@@ -4,7 +4,7 @@ import { CalculatorHeader } from "@/components/ui/calculator-header";
 export default function Residue() {
   return (
     <div className="">
-      <div className="w-full px-6 py-6">
+      <div className="w-full px-6 pb-6">
         {/* Header and Table without Summary - Compact Card */}
         <div className="w-fit">
           <CalculatorHeader className="mb-6">
