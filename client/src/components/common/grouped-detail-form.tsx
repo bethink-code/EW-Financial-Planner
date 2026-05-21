@@ -13,19 +13,23 @@ interface FieldGroupProps {
  */
 export function FieldGroup({ title, children, className = "" }: FieldGroupProps) {
   return (
-    <div className={`space-y-5 ${className}`}>
+    <div className={className}>
       <h3
-        className="text-sm font-bold uppercase pb-2"
+        className="text-sm font-bold uppercase pb-2 w-fit ml-6"
         style={{
           color: "var(--ew-blue)",
           letterSpacing: "0.06em",
-          borderBottom: "1px solid var(--ew-border)",
         }}
       >
         {title}
       </h3>
-      <div className="space-y-4">
-        {children}
+      <div
+        className="rounded-lg p-6"
+        style={{ backgroundColor: "#F4F8FB" }}
+      >
+        <div className="space-y-4">
+          {children}
+        </div>
       </div>
     </div>
   );
@@ -67,7 +71,7 @@ interface GroupedDetailFormProps {
  */
 export function GroupedDetailForm({ children, className = "" }: GroupedDetailFormProps) {
   return (
-    <div className={`space-y-10 p-6 bg-white ${className}`}>
+    <div className={`space-y-10 px-6 pt-6 pb-16 bg-white ${className}`}>
       {children}
     </div>
   );

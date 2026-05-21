@@ -48,7 +48,23 @@ export function flattenNeed(config: NeedConfig): FlatNeedItem[] {
 
 export function findItemByPath(config: NeedConfig, path: string): { index: number; item: FlatNeedItem | null } {
   const flat = flattenNeed(config);
-  const idx = flat.findIndex(i => i.path === path);
+  // Exact match first — fast path for URLs that match a flat item directly.
+  let idx = flat.findIndex(i => i.path === path);
+  // Fallback: longest prefix match. Lets deep sub-pages (e.g.
+  // /needs/retirement/build/retirement-funds, which isn't in the config
+  // because Build has no sections) anchor to their parent step so the
+  // action bar still renders Prev/Next from there.
+  if (idx === -1) {
+    let bestLen = -1;
+    flat.forEach((item, i) => {
+      if (path === item.path || path.startsWith(item.path + "/")) {
+        if (item.path.length > bestLen) {
+          bestLen = item.path.length;
+          idx = i;
+        }
+      }
+    });
+  }
   return { index: idx, item: idx >= 0 ? flat[idx] : null };
 }
 

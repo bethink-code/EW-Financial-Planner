@@ -4,21 +4,17 @@ import { useMutation } from '@tanstack/react-query';
 import { VoluntaryInvestment } from '@shared/schema';
 import { queryClient } from '@/lib/queryClient';
 import EntityOwnerSelector from '@/components/common/entity-owner-selector';
-import { FieldGroup, FormField } from '@/components/common/grouped-detail-form';
+import { FieldGroup, FormField, GroupedDetailForm } from '@/components/common/grouped-detail-form';
 import { formatCurrencyValue, formatPercentageValue, getValueClass, handleDefaultValueFocus } from '@/lib/formatting';
 import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
-import { Button } from '@/components/ui/button';
-import { DetailFormHeader } from '@/components/common/detail-form-header';
 import { useRetirementProjection } from '@/hooks/use-retirement-projection';
 
 interface VoluntaryInvestmentDetailFormProps {
   investment: VoluntaryInvestment;
-  onDelete: (id: number) => void;
-  onDuplicate?: (investment: VoluntaryInvestment) => void;
 }
 
-export function VoluntaryInvestmentDetailForm({ investment, onDelete, onDuplicate }: VoluntaryInvestmentDetailFormProps) {
+export function VoluntaryInvestmentDetailForm({ investment }: VoluntaryInvestmentDetailFormProps) {
   const [isUpdating, setIsUpdating] = useState(false);
   const [location] = useLocation();
   const showRetirementProjection = location.startsWith('/needs/retirement');
@@ -101,15 +97,7 @@ export function VoluntaryInvestmentDetailForm({ investment, onDelete, onDuplicat
   }, [handleUpdate]);
 
   return (
-    <div className="space-y-10 p-6 bg-white">
-      <DetailFormHeader
-        title={investment.description}
-        emptyTitle="Untitled Investment"
-        onDuplicate={onDuplicate ? () => onDuplicate(investment) : undefined}
-        onDelete={() => onDelete(investment.id)}
-        disabled={isUpdating}
-      />
-
+    <GroupedDetailForm>
       {/* Group 1: Overview */}
       <FieldGroup title="Overview">
         <div className="space-y-4">
@@ -377,6 +365,6 @@ export function VoluntaryInvestmentDetailForm({ investment, onDelete, onDuplicat
         </div>
       </FieldGroup>
       )}
-    </div>
+    </GroupedDetailForm>
   );
 }

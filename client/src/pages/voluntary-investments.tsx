@@ -1,37 +1,19 @@
-import React, { useState, useCallback } from "react";
+import { useCallback } from "react";
 import { useLocation } from "wouter";
 import { useQuery, useMutation } from "@tanstack/react-query";
-import VoluntaryInvestmentsTable from "../components/voluntary-investments/voluntary-investments-table";
-import { VoluntaryInvestmentHybridTable } from "../components/voluntary-investments/voluntary-investment-hybrid-table";
-import { VoluntaryInvestmentsSummary } from "@/components/voluntary-investments/voluntary-investments-summary";
-import { RetirementProjectionRibbon } from "@/components/retirement/retirement-projection-ribbon";
-import { CalculatorHeader } from "@/components/ui/calculator-header";
+import { VoluntaryInvestmentTable } from "../components/voluntary-investments/voluntary-investment-table";
 import { apiRequest, queryClient } from "@/lib/queryClient";
 import { getDefaultOwners, getDefaultOwnershipPercentages } from "@/lib/entity-utils";
 import type { InsertVoluntaryInvestment, ClientDetails } from "@shared/schema";
-import { useViewMode } from '@/contexts/view-mode-context';
 
 export default function VoluntaryInvestments() {
-  const { viewMode, setViewMode } = useViewMode();
   const [location] = useLocation();
   const isRetirementNeed = location.startsWith("/needs/retirement");
 
-  // Fetch investments for count
-  const { data: investments = [] } = useQuery({
-    queryKey: ["/api/voluntary-investments"],  
-    queryFn: async () => {
-      const response = await fetch("/api/voluntary-investments");
-      if (!response.ok) throw new Error('Failed to fetch voluntary investments');
-      return response.json();
-    }
-  });
-
-  // Fetch client details for default entity
   const { data: clientDetails = [] } = useQuery<ClientDetails[]>({
-    queryKey: ["/api/client-details"]
+    queryKey: ["/api/client-details"],
   });
 
-  // Add new investment mutation with Primary entity default
   const addMutation = useMutation({
     mutationFn: async () => {
       const newInvestment: InsertVoluntaryInvestment = {
@@ -46,7 +28,7 @@ export default function VoluntaryInvestments() {
         excludedFromJointEstate: false,
         excludedFromEstateDuty: false,
         excludedFromCGT: false,
-        excludedFromExecutorsFees: false
+        excludedFromExecutorsFees: false,
       };
       return apiRequest("POST", "/api/voluntary-investments", newInvestment);
     },
@@ -55,46 +37,17 @@ export default function VoluntaryInvestments() {
     },
   });
 
-  const handleViewModeChange = useCallback((newMode: 'table' | 'hybrid') => {
-    setViewMode(newMode);
-  }, [setViewMode]);
-
   const handleAddInvestment = useCallback(() => {
     addMutation.mutate();
   }, [addMutation]);
 
   return (
-    <div className="">
-      <div className="w-full px-6 py-6">
-        <div className={viewMode === 'table' ? 'w-full' : 'w-[1320px]'}>
-          {/* Combined Header, Summary and Table */}
-          <CalculatorHeader
-            title="Voluntary Investments"
-            onAddItem={handleAddInvestment}
-            addButtonText="Add Investment"
-            isAddingItem={addMutation.isPending}
-            viewMode={viewMode}
-            onViewModeChange={handleViewModeChange}
-            className="mb-6"
-          >
-          {/* Per-domain summary on non-retirement routes only. Retirement
-              renders its cross-category ribbon above the tabs. */}
-          {!isRetirementNeed && (
-            <div className="max-w-6xl">
-              <VoluntaryInvestmentsSummary />
-            </div>
-          )}
-          
-          {/* Table with full width and margin */}
-          <div className="table-container-wrapper">
-            {viewMode === 'hybrid' ? (
-              <VoluntaryInvestmentHybridTable onAddInvestment={handleAddInvestment} />
-            ) : (
-              <VoluntaryInvestmentsTable viewMode={viewMode} onAddInvestment={handleAddInvestment} />
-            )}
-          </div>
-        </CalculatorHeader>
-        </div>
+    <div className="w-full px-6 pb-6">
+      <div className="w-[1320px] max-w-full">
+        <VoluntaryInvestmentTable
+          onAddInvestment={handleAddInvestment}
+          showSummary={!isRetirementNeed}
+        />
       </div>
     </div>
   );

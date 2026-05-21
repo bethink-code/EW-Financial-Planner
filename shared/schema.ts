@@ -93,8 +93,9 @@ export interface Beneficiary {
 // Lump Sum Bequests table
 export const lumpSumBequests = pgTable("lump_sum_bequests", {
   id: serial("id").primaryKey(),
-  
+
   // Overview Section
+  name: text("name").notNull().default(""),
   description: text("description").notNull().default(""),
   entity: text("entity").notNull().default(""),
   
@@ -292,8 +293,9 @@ export type UpdateVoluntaryInvestment = z.infer<typeof updateVoluntaryInvestment
 // Income Needs table schema - New 3-section structure
 export const incomeNeeds = pgTable("income_needs", {
   id: serial("id").primaryKey(),
-  
+
   // Overview Section
+  name: text("name").notNull().default(""),
   description: text("description").notNull().default(""),
   personName: text("person_name").notNull().default(""),
   
@@ -322,8 +324,9 @@ export type UpdateIncomeNeeds = z.infer<typeof updateIncomeNeedsSchema>;
 // Income Provisions table schema - Extended from Income Needs with additional columns
 export const incomeProvisions = pgTable("income_provisions", {
   id: serial("id").primaryKey(),
-  
+
   // Overview Section (same as Income Needs)
+  name: text("name").notNull().default(""),
   description: text("description").notNull().default(""),
   personName: text("person_name").notNull().default(""),
   
@@ -379,8 +382,9 @@ export type UpdateResidue = z.infer<typeof updateResidueSchema>;
 // Additional Estate Duty Items table schema - Simple 4-field structure
 export const additionalEstateDutyItems = pgTable("additional_estate_duty_items", {
   id: serial("id").primaryKey(),
-  
-  // Description field
+
+  // Identifier + longer description
+  name: text("name").notNull().default(""),
   description: text("description").notNull().default(""),
   
   // Amount field

@@ -1,52 +1,27 @@
-import { useState, useCallback } from "react";
+import { useCallback } from "react";
 import { useLocation } from "wouter";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { RetirementFund, UpdateRetirementFund, ClientDetails } from "@shared/schema";
 import { queryClient, apiRequest } from "@/lib/queryClient";
-import { CalculatorHeader } from "@/components/ui/calculator-header";
-import { RetirementFundsSummary } from "@/components/retirement-funds/retirement-funds-summary";
-import { RetirementProjectionRibbon } from "@/components/retirement/retirement-projection-ribbon";
-import { NewRetirementTable } from "@/components/retirement-funds/new-retirement-table";
-import { RetirementFundHybridTable } from "@/components/retirement-funds/retirement-fund-hybrid-table";
+import { RetirementFundTable } from "@/components/retirement-funds/retirement-fund-table";
 import { useDebouncedUpdate } from "@/hooks/use-debounced-update";
-import { getDefaultOwners, getDefaultOwnershipPercentages, getDefaultBeneficiaries, getDefaultBeneficiaryPercentages } from "@/lib/entity-utils";
-import { useViewMode } from '@/contexts/view-mode-context';
-
-interface ColumnVisibility {
-  overview: boolean;
-  unapprovedLifeCover: boolean;
-  monthlyDeathBenefit: boolean;
-  fundValue: boolean;
-  fundValueBeneficiaries: boolean;
-}
+import {
+  getDefaultOwners,
+  getDefaultOwnershipPercentages,
+  getDefaultBeneficiaries,
+  getDefaultBeneficiaryPercentages,
+} from "@/lib/entity-utils";
 
 export default function NewRetirementFunds() {
-  const { viewMode, setViewMode } = useViewMode();
-  const [tableMode, setTableMode] = useState<"inputs" | "flows">("inputs");
   const [location] = useLocation();
   const isRetirementNeed = location.startsWith("/needs/retirement");
 
-  // Enhanced view mode change with transitions
-  const handleViewModeChange = useCallback((newMode: 'table' | 'hybrid') => {
-    if (document.startViewTransition) {
-      document.startViewTransition(() => {
-        setViewMode(newMode);
-      });
-    } else {
-      setViewMode(newMode);
-    }
-  }, [setViewMode]);
-
-  const [columnVisibility, setColumnVisibility] = useState<ColumnVisibility>({
-    overview: true,
-    unapprovedLifeCover: true,
-    monthlyDeathBenefit: true,
-    fundValue: true,
-    fundValueBeneficiaries: true,
-  });
-
   const { data: funds = [], isLoading } = useQuery<RetirementFund[]>({
     queryKey: ["/api/retirement-funds"],
+  });
+
+  const { data: clientDetails = [] } = useQuery<ClientDetails[]>({
+    queryKey: ["/api/client-details"],
   });
 
   const addMutation = useMutation({
@@ -63,38 +38,36 @@ export default function NewRetirementFunds() {
       return apiRequest("PATCH", `/api/retirement-funds/${id}`, updates);
     },
     onSuccess: () => {
-      // Force fresh data reload after every update to ensure synchronization
       queryClient.invalidateQueries({ queryKey: ["/api/retirement-funds"] });
     },
   });
 
-  // Base update handler
+  const deleteMutation = useMutation({
+    mutationFn: async (id: number) => apiRequest("DELETE", `/api/retirement-funds/${id}`),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["/api/retirement-funds"] });
+    },
+  });
+
   const executeUpdate = useCallback((id: number, field: string, value: any) => {
     updateMutation.mutate({ id, updates: { [field]: value } });
   }, [updateMutation]);
 
-  // Debounced update for text fields to prevent race conditions
   const debouncedUpdate = useDebouncedUpdate(executeUpdate, 300);
 
-  // Smart field update that uses debouncing for text fields, immediate for arrays
+  // Arrays update immediately to keep paired data (owners + percentages,
+  // beneficiaries + splits) in sync; text fields debounce.
   const handleFieldUpdate = useCallback((id: number, field: string, value: any) => {
-    // Use immediate updates for array fields to prevent synchronization issues
     const arrayFields = ['owners', 'ownershipPercentages', 'additionalOwners',
                         'unapprovedBeneficiaries', 'unapprovedPercentageSplits', 'unapprovedCoverSplits',
                         'fundValueBeneficiaries', 'fundValuePercentageSplits', 'fundValueCoverSplits',
                         'additionalBeneficiaries', 'additionalBenefitSplits'];
-    
     if (arrayFields.includes(field)) {
       executeUpdate(id, field, value);
     } else {
       debouncedUpdate(id, field, value);
     }
   }, [executeUpdate, debouncedUpdate]);
-
-  // Fetch client details for default entity
-  const { data: clientDetails = [] } = useQuery<ClientDetails[]>({
-    queryKey: ["/api/client-details"]
-  });
 
   const handleAddFund = useCallback(() => {
     const newFund = {
@@ -103,19 +76,10 @@ export default function NewRetirementFunds() {
       unapprovedBeneficiaries: getDefaultBeneficiaries(clientDetails),
       unapprovedPercentageSplits: getDefaultBeneficiaryPercentages(),
       fundValueBeneficiaries: getDefaultBeneficiaries(clientDetails),
-      fundValuePercentageSplits: getDefaultBeneficiaryPercentages()
-    }; // Use Primary entity defaults
+      fundValuePercentageSplits: getDefaultBeneficiaryPercentages(),
+    };
     addMutation.mutate(newFund as Omit<RetirementFund, 'id'>);
   }, [addMutation, clientDetails]);
-
-  const deleteMutation = useMutation({
-    mutationFn: async (id: number) => {
-      return apiRequest("DELETE", `/api/retirement-funds/${id}`);
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["/api/retirement-funds"] });
-    },
-  });
 
   const handleRemoveFund = useCallback((id: number) => {
     deleteMutation.mutate(id);
@@ -123,28 +87,11 @@ export default function NewRetirementFunds() {
 
   const handleDuplicateFund = useCallback((fund: RetirementFund) => {
     const { id, ...fundWithoutId } = fund;
-    const duplicatedFund = {
+    addMutation.mutate({
       ...fundWithoutId,
-      description: `${fund.description} (Copy)`,
-    };
-    addMutation.mutate(duplicatedFund);
+      description: fund.description ? `${fund.description} (Copy)` : '',
+    });
   }, [addMutation]);
-
-  const handleToggleColumnGroup = useCallback((group: keyof ColumnVisibility) => {
-    if (document.startViewTransition) {
-      document.startViewTransition(() => {
-        setColumnVisibility(prev => ({
-          ...prev,
-          [group]: !prev[group]
-        }));
-      });
-    } else {
-      setColumnVisibility(prev => ({
-        ...prev,
-        [group]: !prev[group]
-      }));
-    }
-  }, []);
 
   if (isLoading) {
     return (
@@ -159,59 +106,17 @@ export default function NewRetirementFunds() {
   }
 
   return (
-    <div className="">
-      <div className="w-full px-6 py-6">
-        <div className={viewMode === 'table' ? 'w-full' : 'w-[1320px]'}>
-          {/* Combined Header, Summary and Table */}
-          <CalculatorHeader
-          title="Retirement Funds"
-          onAddItem={handleAddFund}
-          addButtonText="Add Fund"
-          isAddingItem={addMutation.isPending}
-          viewMode={viewMode}
-          onViewModeChange={handleViewModeChange}
-          showTableFlowsSwitcher={viewMode === "table"}
-          tableMode={tableMode}
-          onTableModeChange={setTableMode}
-          className="mb-6"
-        >
-          {/* Per-domain summary on non-retirement routes only. Retirement
-              renders its cross-category ribbon above the tabs in
-              RetirementCategoryTabs. */}
-          {!isRetirementNeed && (
-            <div className="max-w-6xl">
-              <RetirementFundsSummary />
-            </div>
-          )}
-
-          {/* Table with full width and margin */}
-          <div className="table-container-wrapper">
-            {/* Table View */}
-            {viewMode === "table" && (
-              <NewRetirementTable
-                funds={funds}
-                onFieldUpdate={handleFieldUpdate}
-                onRemoveFund={handleRemoveFund}
-                onDuplicateFund={handleDuplicateFund}
-                onAddFund={handleAddFund}
-                isUpdating={updateMutation.isPending}
-              />
-            )}
-
-            {/* Hybrid View */}
-            {viewMode === "hybrid" && (
-              <RetirementFundHybridTable
-                funds={funds}
-                onUpdate={handleFieldUpdate}
-                onDuplicate={handleDuplicateFund}
-                onDelete={handleRemoveFund}
-                onAddFund={handleAddFund}
-                disabled={updateMutation.isPending || addMutation.isPending}
-              />
-            )}
-          </div>
-        </CalculatorHeader>
-        </div>
+    <div className="w-full px-6 pb-6">
+      <div className="w-[1320px] max-w-full">
+        <RetirementFundTable
+          funds={funds}
+          onUpdate={handleFieldUpdate}
+          onDuplicate={handleDuplicateFund}
+          onDelete={handleRemoveFund}
+          onAddFund={handleAddFund}
+          disabled={updateMutation.isPending || addMutation.isPending}
+          showSummary={!isRetirementNeed}
+        />
       </div>
     </div>
   );

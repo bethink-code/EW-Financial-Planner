@@ -2,22 +2,18 @@ import { useState, useCallback, useMemo } from 'react';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { Liabilities } from '@shared/liabilities-schema';
 import { queryClient } from '@/lib/queryClient';
-import { FieldGroup, FormField } from '@/components/common/grouped-detail-form';
+import { FieldGroup, FormField, GroupedDetailForm } from '@/components/common/grouped-detail-form';
 import { formatCurrencyValue, formatPercentageValue, getValueClass, handleDefaultValueFocus } from '@/lib/formatting';
 import { parseEntityOwnership, setEntityOwnership, getEntityDisplayName, type ClientEntity } from '@/lib/entity-columns-utils';
 import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Button } from '@/components/ui/button';
-import { DetailFormHeader } from '@/components/common/detail-form-header';
 
 interface LiabilityDetailFormProps {
   liability: Liabilities;
-  onDelete: (id: number) => void;
-  onDuplicate?: (liability: Liabilities) => void;
 }
 
-export function LiabilityDetailForm({ liability, onDelete, onDuplicate }: LiabilityDetailFormProps) {
+export function LiabilityDetailForm({ liability }: LiabilityDetailFormProps) {
   const [isUpdating, setIsUpdating] = useState(false);
 
   // Query for client entities to build ownership fields
@@ -83,38 +79,31 @@ export function LiabilityDetailForm({ liability, onDelete, onDuplicate }: Liabil
   const ownership = useMemo(() => parseEntityOwnership(liability.entityOwnership), [liability.entityOwnership]);
 
   return (
-    <div className="space-y-10 p-6 bg-white">
-      <DetailFormHeader
-        title={liability.description}
-        emptyTitle="Untitled Liability"
-        onDuplicate={onDuplicate ? () => onDuplicate(liability) : undefined}
-        onDelete={() => onDelete(liability.id)}
-        disabled={isUpdating}
-      />
+    <GroupedDetailForm>
 
       {/* Group 1: Overview */}
       <FieldGroup title="Overview">
-        <div className="space-y-4">
-          <FormField label="Liability Description">
+        <div className="flex gap-3 flex-wrap items-end">
+          <FormField label="Name">
             <input
               type="text"
               defaultValue={liability.description || ''}
               placeholder="Enter details ..."
               className={`table-input ${liability.description ? '' : 'text-neutral-400'}`}
-              style={{ width: 'fit-content', minWidth: '200px' }}
+              style={{ minWidth: '240px' }}
               onFocus={handleDefaultValueFocus}
               onBlur={(e) => handleInputBlur('description', e.target.value)}
               disabled={isUpdating}
             />
           </FormField>
-          
+
           <FormField label="Category">
             <Select
               value={liability.category || ''}
               onValueChange={(value) => handleUpdate('category', value)}
               disabled={isUpdating}
             >
-              <SelectTrigger style={{ width: 'fit-content', minWidth: '150px' }}>
+              <SelectTrigger style={{ minWidth: '170px' }}>
                 <SelectValue placeholder="Select category..." />
               </SelectTrigger>
               <SelectContent>
@@ -128,14 +117,14 @@ export function LiabilityDetailForm({ liability, onDelete, onDuplicate }: Liabil
               </SelectContent>
             </Select>
           </FormField>
-          
+
           <FormField label="Currency">
             <input
               type="text"
               defaultValue={liability.currency || ''}
               placeholder="ZAR"
               className={`table-input ${liability.currency ? '' : 'text-neutral-400'}`}
-              style={{ width: 'fit-content', minWidth: '80px' }}
+              style={{ minWidth: '80px', width: '80px' }}
               onFocus={handleDefaultValueFocus}
               onBlur={(e) => handleInputBlur('currency', e.target.value)}
               disabled={isUpdating}
@@ -265,6 +254,6 @@ export function LiabilityDetailForm({ liability, onDelete, onDuplicate }: Liabil
           </FormField>
         </div>
       </FieldGroup>
-    </div>
+    </GroupedDetailForm>
   );
 }

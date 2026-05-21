@@ -1,4 +1,3 @@
-import React from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { Assurance, ClientDetails } from '@shared/schema';
 import { GroupedDetailForm, FieldGroup, FormField } from '@/components/common/grouped-detail-form';
@@ -6,17 +5,13 @@ import EntityOwnerSelector from '@/components/common/entity-owner-selector';
 import EntityBeneficiarySelector from '@/components/common/entity-beneficiary-selector';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Switch } from '@/components/ui/switch';
-import { Button } from '@/components/ui/button';
-import { DetailFormHeader } from '@/components/common/detail-form-header';
 import { handleDefaultValueFocus, formatYearsValue, formatPercentageValue, getValueClass } from '@/lib/formatting';
 import { getFieldClass } from '@/lib/design-tokens';
 import { getCellClass } from '@/lib/field-types';
 
 interface AssuranceDetailFormProps {
   policy: Assurance;
-  onUpdate: (id: number, field: keyof Assurance, value: string | boolean | string[]) => void;
-  onDuplicate: (policy: Assurance) => void;
-  onDelete: (id: number) => void;
+  onUpdate: (id: number, field: keyof Assurance, value: string | boolean | string[] | boolean[]) => void;
   onOwnerChange: (policyId: number, ownerIndex: number, newOwner: string) => void;
   onLifeAssuredChange: (policyId: number, lifeAssuredIndex: number, newLifeAssured: string) => void;
   onDeathBenefitChange: (policyId: number, deathBenefitIndex: number, newDeathBenefit: string) => void;
@@ -31,14 +26,13 @@ interface AssuranceDetailFormProps {
 }
 
 /**
- * AssuranceDetailForm - Structured detail form for assurance policies in hybrid view
- * Maintains logical groupings from the table structure without flattening the hierarchy
+ * AssuranceDetailForm - Field groups for the active policy. Action strip
+ * (Add | Title | Duplicate/Delete) lives in HybridHeaderBar above; this
+ * component just renders the form sections.
  */
 export function AssuranceDetailForm({
   policy,
   onUpdate,
-  onDuplicate,
-  onDelete,
   onOwnerChange,
   onLifeAssuredChange,
   onDeathBenefitChange,
@@ -103,14 +97,6 @@ export function AssuranceDetailForm({
 
   return (
     <GroupedDetailForm>
-      <DetailFormHeader
-        title={policy.description}
-        emptyTitle="Untitled Policy"
-        onDuplicate={() => onDuplicate(policy)}
-        onDelete={() => onDelete(policy.id)}
-        disabled={disabled}
-      />
-
       {/* Group 1: Overview (Owner → Life Assured → Death Benefit) */}
       <FieldGroup title="Overview">
         <div className="space-y-4">

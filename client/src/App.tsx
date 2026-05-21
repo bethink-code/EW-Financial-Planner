@@ -1,7 +1,6 @@
 import { Switch, Route } from "wouter";
 import { queryClient } from "./lib/queryClient";
 import { QueryClientProvider } from "@tanstack/react-query";
-import { ViewModeProvider } from "@/contexts/view-mode-context";
 import { LoadingProvider } from "@/contexts/loading-context";
 import { GlobalLoadingBar } from "@/components/ui/global-loading-bar";
 import { Toaster } from "@/components/ui/toaster";
@@ -18,8 +17,7 @@ import NewRetirementFunds from "@/pages/new-retirement-funds";
 import LumpSumBequests from "@/pages/lump-sum-bequests";
 import IncomeNeeds from "@/pages/income-needs";
 import IncomeProvisions from "@/pages/income-provisions";
-import Liabilities from "@/pages/liabilities";
-import { AssetsPage } from "@/pages/assets";
+import AssetsLiabilitiesPage from "@/pages/assets-liabilities";
 import Assurance from "@/pages/assurance";
 import DefinedBenefitFunds from "@/pages/defined-benefit-funds";
 import VoluntaryInvestments from "@/pages/voluntary-investments";
@@ -58,13 +56,8 @@ import RetirementSetupParameters from "@/pages/needs/retirement/setup/parameters
 import RetirementProject from "@/pages/needs/retirement/project";
 import RetirementImplement from "@/pages/needs/retirement/implement";
 
-// Retirement Build prototype variants — three layouts shown to the client
-import RetirementBuildVariantA from "@/pages/needs/retirement/build/variant-a-long";
-import RetirementBuildVariantBBuildUp from "@/pages/needs/retirement/build/variant-b-build-up";
-import RetirementBuildVariantBEvents from "@/pages/needs/retirement/build/variant-b-events";
-import RetirementBuildVariantBLifestyle from "@/pages/needs/retirement/build/variant-b-lifestyle";
-import RetirementBuildVariantCSources from "@/pages/needs/retirement/build/variant-c-sources";
-import RetirementBuildVariantCUses from "@/pages/needs/retirement/build/variant-c-uses";
+// Retirement Build — single page with all categories as in-page tabs.
+import RetirementBuild from "@/pages/needs/retirement/build";
 
 function Router() {
   return (
@@ -101,11 +94,8 @@ function Router() {
         <Route path="/needs/death-estate-liquidity/build/voluntary-investments">
           {() => <DELLayout><VoluntaryInvestments /></DELLayout>}
         </Route>
-        <Route path="/needs/death-estate-liquidity/build/assets">
-          {() => <DELLayout><AssetsPage /></DELLayout>}
-        </Route>
-        <Route path="/needs/death-estate-liquidity/build/liabilities">
-          {() => <DELLayout><Liabilities /></DELLayout>}
+        <Route path="/needs/death-estate-liquidity/build/assets-liabilities">
+          {() => <DELLayout><AssetsLiabilitiesPage /></DELLayout>}
         </Route>
         <Route path="/needs/death-estate-liquidity/build/income-needs">
           {() => <DELLayout><IncomeNeeds /></DELLayout>}
@@ -131,25 +121,6 @@ function Router() {
         <Route path="/needs/retirement/setup/client-details">
           {() => <RetirementLayout><ClientDetailsPage /></RetirementLayout>}
         </Route>
-        {/* Prototype Build variants — registered before the legacy per-section routes so
-            the specific sub-paths (build-up / events / lifestyle / sources / uses) match first.
-            Variant A's entry is the bare /needs/retirement/build path (registered last). */}
-        <Route path="/needs/retirement/build/build-up">
-          {() => <RetirementLayout><RetirementBuildVariantBBuildUp /></RetirementLayout>}
-        </Route>
-        <Route path="/needs/retirement/build/events">
-          {() => <RetirementLayout><RetirementBuildVariantBEvents /></RetirementLayout>}
-        </Route>
-        <Route path="/needs/retirement/build/lifestyle">
-          {() => <RetirementLayout><RetirementBuildVariantBLifestyle /></RetirementLayout>}
-        </Route>
-        <Route path="/needs/retirement/build/sources">
-          {() => <RetirementLayout><RetirementBuildVariantCSources /></RetirementLayout>}
-        </Route>
-        <Route path="/needs/retirement/build/uses">
-          {() => <RetirementLayout><RetirementBuildVariantCUses /></RetirementLayout>}
-        </Route>
-
         {/* Legacy per-section deep-form pages — kept for parity and fallback. */}
         <Route path="/needs/retirement/build/retirement-funds">
           {() => <RetirementLayout><NewRetirementFunds /></RetirementLayout>}
@@ -173,10 +144,10 @@ function Router() {
           {() => <RetirementLayout><IncomeProvisions /></RetirementLayout>}
         </Route>
 
-        {/* Variant A entry — bare /build path; registered last so the more specific
-            sub-paths above win first. */}
+        {/* Build entry — bare /build path; registered last so the legacy
+            per-section sub-paths above win first. */}
         <Route path="/needs/retirement/build">
-          {() => <RetirementLayout><RetirementBuildVariantA /></RetirementLayout>}
+          {() => <RetirementLayout><RetirementBuild /></RetirementLayout>}
         </Route>
         <Route path="/needs/retirement/project">
           {() => <RetirementLayout><RetirementProject /></RetirementLayout>}
@@ -207,13 +178,11 @@ function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <LoadingProvider>
-        <ViewModeProvider>
-          <TooltipProvider>
-            <GlobalLoadingBar />
-            <Toaster />
-            <Router />
-          </TooltipProvider>
-        </ViewModeProvider>
+        <TooltipProvider>
+          <GlobalLoadingBar />
+          <Toaster />
+          <Router />
+        </TooltipProvider>
       </LoadingProvider>
     </QueryClientProvider>
   );

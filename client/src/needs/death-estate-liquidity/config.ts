@@ -21,21 +21,14 @@ export const delConfig: NeedConfig = {
           path: "/needs/death-estate-liquidity/setup/client-details",
         },
         {
-          id: "parameters",
-          label: "Parameters",
-          path: "/needs/death-estate-liquidity/setup/parameters",
-          children: [
-            {
-              id: "residue",
-              label: "Residue",
-              path: "/needs/death-estate-liquidity/setup/residue",
-            },
-            {
-              id: "additional-estate-duty",
-              label: "Additional estate duty items",
-              path: "/needs/death-estate-liquidity/setup/additional-estate-duty-items",
-            },
-          ],
+          id: "residue",
+          label: "Residue",
+          path: "/needs/death-estate-liquidity/setup/residue",
+        },
+        {
+          id: "additional-estate-duty",
+          label: "Additional Estate Duty Items",
+          path: "/needs/death-estate-liquidity/setup/additional-estate-duty-items",
         },
       ],
     },
@@ -73,21 +66,9 @@ export const delConfig: NeedConfig = {
           path: "/needs/death-estate-liquidity/build/voluntary-investments",
         },
         {
-          id: "assets-liabilities-group",
+          id: "assets-liabilities",
           label: "Assets & Liabilities",
-          path: "/needs/death-estate-liquidity/build/assets-liabilities-group",
-          children: [
-            {
-              id: "lifestyle-assets",
-              label: "Lifestyle assets",
-              path: "/needs/death-estate-liquidity/build/assets",
-            },
-            {
-              id: "liabilities",
-              label: "Liabilities",
-              path: "/needs/death-estate-liquidity/build/liabilities",
-            },
-          ],
+          path: "/needs/death-estate-liquidity/build/assets-liabilities",
         },
         {
           id: "income-capital-needs-group",
