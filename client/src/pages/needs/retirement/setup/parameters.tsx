@@ -1,10 +1,8 @@
 import { useState, useEffect } from "react";
 import { useQuery, useMutation } from "@tanstack/react-query";
-import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { FieldGroup, FormField, GroupedDetailForm } from "@/components/common/grouped-detail-form";
 import { apiRequest, queryClient } from "@/lib/queryClient";
-import { formatCurrencyValue, handleDefaultValueFocus } from "@/lib/formatting";
 import type { RetirementParameters } from "@shared/schema";
 
 const PLAN_ID = 1; // Aligned with the hardcoded planId in NavigationLayout — replace when plan-scoped routing is built.
@@ -18,24 +16,23 @@ export default function RetirementSetupParameters() {
   const [retirementAge, setRetirementAge] = useState(65);
   const [retirementPlanningAge, setRetirementPlanningAge] = useState(90);
   const [autoCalculateTax, setAutoCalculateTax] = useState(true);
-  const [currentAnnualIncome, setCurrentAnnualIncome] = useState("R 0");
 
   useEffect(() => {
     if (params) {
       setRetirementAge(params.retirementAge);
       setRetirementPlanningAge(params.retirementPlanningAge);
       setAutoCalculateTax(params.autoCalculateTax);
-      setCurrentAnnualIncome(params.currentAnnualIncome ?? "R 0");
     }
   }, [params]);
 
   const saveMutation = useMutation({
-    mutationFn: async () => {
+    mutationFn: async (next: { retirementAge: number; retirementPlanningAge: number; autoCalculateTax: boolean }) => {
       const res = await apiRequest("PUT", `/api/retirement-parameters/${PLAN_ID}`, {
-        retirementAge,
-        retirementPlanningAge,
-        autoCalculateTax,
-        currentAnnualIncome,
+        ...next,
+        // Preserve the existing annual taxable income — field no longer
+        // surfaces on this page but the Implement-page tax-saving calc
+        // still reads it.
+        currentAnnualIncome: params?.currentAnnualIncome ?? "R 0",
       });
       return res.json();
     },
@@ -45,6 +42,17 @@ export default function RetirementSetupParameters() {
     },
   });
 
+  // Save current state — used by every input on blur/onCheckedChange so
+  // there's no explicit Save button.
+  const saveLatest = (overrides: Partial<{ retirementAge: number; retirementPlanningAge: number; autoCalculateTax: boolean }> = {}) => {
+    saveMutation.mutate({
+      retirementAge,
+      retirementPlanningAge,
+      autoCalculateTax,
+      ...overrides,
+    });
+  };
+
   const yearsToRetirement = Math.max(0, retirementAge - 52); // primary entity stub age; refine when client-age wiring lands.
   const yearsAfterRetirement = Math.max(0, retirementPlanningAge - retirementAge);
 
@@ -53,8 +61,8 @@ export default function RetirementSetupParameters() {
       <div className="w-[1320px] max-w-full">
         <div className="rounded-lg shadow-sm border border-neutral-200 overflow-hidden bg-white">
           <GroupedDetailForm>
-            <FieldGroup title="Retirement horizon">
-              <div className="flex gap-3 flex-wrap items-end">
+            <FieldGroup title="Retirement parameters">
+              <div className="flex gap-6 flex-wrap items-end">
                 <FormField label="Retire at age">
                   <input
                     type="number"
@@ -62,72 +70,51 @@ export default function RetirementSetupParameters() {
                     max={100}
                     value={retirementAge}
                     onChange={(e) => setRetirementAge(parseInt(e.target.value) || 65)}
+                    onBlur={() => saveLatest()}
                     className="table-input"
-                    style={{ width: '100px' }}
+                    style={{ width: '80px' }}
                   />
                 </FormField>
-                <FormField label="Planning to age">
+                <FormField label="Years to retirement">
+                  <div className="calculated-field" style={{ width: '80px' }}>
+                    {yearsToRetirement}
+                  </div>
+                </FormField>
+                <FormField label="Retirement planning to age">
                   <input
                     type="number"
                     min={50}
                     max={120}
                     value={retirementPlanningAge}
                     onChange={(e) => setRetirementPlanningAge(parseInt(e.target.value) || 90)}
+                    onBlur={() => saveLatest()}
                     className="table-input"
-                    style={{ width: '100px' }}
+                    style={{ width: '80px' }}
                   />
                 </FormField>
-                <FormField label="Years to retirement">
-                  <div className="calculated-field" style={{ minWidth: '100px' }}>
-                    {yearsToRetirement}
-                  </div>
-                </FormField>
                 <FormField label="Years after retirement">
-                  <div className="calculated-field" style={{ minWidth: '100px' }}>
+                  <div className="calculated-field" style={{ width: '80px' }}>
                     {yearsAfterRetirement}
                   </div>
                 </FormField>
-              </div>
-            </FieldGroup>
-
-            <FieldGroup title="Tax">
-              <div className="flex gap-3 flex-wrap items-end">
-                <FormField label="Current annual taxable income">
-                  <input
-                    type="text"
-                    value={currentAnnualIncome}
-                    placeholder="R 0"
-                    onFocus={handleDefaultValueFocus}
-                    onChange={(e) => setCurrentAnnualIncome(e.target.value)}
-                    onBlur={(e) => setCurrentAnnualIncome(formatCurrencyValue(e.target.value))}
-                    className="table-input"
-                    style={{ minWidth: '180px' }}
+                <label className="flex items-center gap-2 cursor-pointer ml-auto" style={{ paddingBottom: '0.4rem' }}>
+                  <Checkbox
+                    checked={autoCalculateTax}
+                    onCheckedChange={(c) => {
+                      const next = !!c;
+                      setAutoCalculateTax(next);
+                      saveLatest({ autoCalculateTax: next });
+                    }}
                   />
-                </FormField>
+                  <span className="text-sm font-medium" style={{ color: 'var(--ew-primary-navy)' }}>
+                    Auto calculate tax
+                  </span>
+                </label>
               </div>
-              <p className="text-xs" style={{ color: 'var(--ew-gray-700)' }}>
-                Used to compute the tax-deductible portion of any recommended retirement top-up
-                (SA 2025/26 brackets).
+              <p className="text-xs italic" style={{ color: 'var(--ew-gray-700)' }}>
+                All terms are in years. 'Start' refers to years after retirement.
               </p>
-              <label className="flex items-center gap-2 cursor-pointer">
-                <Checkbox
-                  checked={autoCalculateTax}
-                  onCheckedChange={(c) => setAutoCalculateTax(!!c)}
-                />
-                <span className="text-sm font-medium" style={{ color: 'var(--ew-primary-navy)' }}>
-                  Auto-calculate tax on income provisions
-                </span>
-              </label>
             </FieldGroup>
-
-            <div className="flex items-center gap-3">
-              <Button onClick={() => saveMutation.mutate()} disabled={saveMutation.isPending}>
-                {saveMutation.isPending ? 'Saving...' : 'Save'}
-              </Button>
-              {saveMutation.isSuccess && (
-                <span className="text-sm" style={{ color: 'var(--ew-positive-symbol)' }}>Saved.</span>
-              )}
-            </div>
           </GroupedDetailForm>
         </div>
       </div>

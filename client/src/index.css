@@ -984,11 +984,17 @@ th, td {
     outline: none !important;
     box-shadow: none !important;
     color: var(--ew-primary-navy) !important;
-    padding: 0.25rem 0.5rem !important;
+    /* Match `.table-input` height + horizontal padding so editable and
+       non-editable fields read as the same size, and labels above line
+       up across mixed rows. */
+    height: 2rem !important;
+    padding: 0.125rem 0.75rem !important;
     font-size: 0.875rem !important;
     font-variant-numeric: tabular-nums !important;
     text-align: right !important;
-    height: auto !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: flex-end !important;
     width: auto !important;
     box-sizing: border-box !important;
     line-height: 1.2 !important;

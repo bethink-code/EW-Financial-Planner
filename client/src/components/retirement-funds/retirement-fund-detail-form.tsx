@@ -1,5 +1,5 @@
 import { useLocation } from 'wouter';
-import { RetirementFund, UpdateRetirementFund } from '@shared/schema';
+import { RetirementFund, UpdateRetirementFund, ClientDetails } from '@shared/schema';
 import { useQuery } from '@tanstack/react-query';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import EntityOwnerSelector from '@/components/common/entity-owner-selector';
@@ -21,7 +21,7 @@ export function RetirementFundDetailForm({
   onUpdate,
   disabled = false
 }: RetirementFundDetailFormProps) {
-  const { data: entities = [] } = useQuery({
+  const { data: entities = [] } = useQuery<ClientDetails[]>({
     queryKey: ["/api/client-details"],
   });
   const [location] = useLocation();
@@ -145,6 +145,109 @@ export function RetirementFundDetailForm({
       onUpdate(fundId, 'fundValueCoverSplits', updatedCoverSplits);
     }
   };
+
+  // Retirement-need view: minimal single-row form per the client's reference.
+  // DEL-specific fields (multi-owner table, life cover, beneficiary
+  // distributions) are not relevant here and would clutter the projection
+  // story. The underlying schema still holds those fields — they just
+  // don't surface on /needs/retirement routes.
+  if (showRetirementProjection) {
+    const entityList = entities.filter(e => e.entityName && e.entityName.trim());
+    const currentEntity = fund.owners?.[0] || '';
+    return (
+      <GroupedDetailForm>
+        <FieldGroup title="Retirement fund">
+          <div className="flex gap-3 flex-wrap items-end">
+            <FormField label="Name">
+              <input
+                type="text"
+                defaultValue={fund.description || ''}
+                placeholder="Enter details ..."
+                className={`table-input ${fund.description ? '' : 'text-neutral-400'}`}
+                style={{ minWidth: '200px' }}
+                onFocus={handleDefaultValueFocus}
+                onBlur={(e) => handleTextFieldBlur('description', e.target.value)}
+                disabled={disabled}
+              />
+            </FormField>
+
+            <FormField label="Entity">
+              <Select
+                value={currentEntity || 'none'}
+                onValueChange={(v) => {
+                  const value = v === 'none' ? '' : v;
+                  // Replace the first owner; preserve 100% ownership since
+                  // Retirement assumes single-entity ownership.
+                  onUpdate(fund.id, 'owners', [value]);
+                  onUpdate(fund.id, 'ownershipPercentages', ['100%']);
+                }}
+                disabled={disabled}
+              >
+                <SelectTrigger className="table-input" style={{ minWidth: '180px' }}>
+                  <SelectValue placeholder="Select entity..." />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="none">Select entity...</SelectItem>
+                  {entityList.map(e => (
+                    <SelectItem key={e.id} value={e.entityName ?? ''}>{e.entityName}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </FormField>
+
+            <FormField label="Contribution (PM)">
+              <input
+                type="text"
+                defaultValue={fund.monthlyContribution || 'R 0'}
+                className={`table-input ${getValueClass(fund.monthlyContribution || 'R 0', 'currency')}`}
+                style={{ width: '120px' }}
+                onFocus={handleDefaultValueFocus}
+                onBlur={(e) => handleTextFieldBlur('monthlyContribution', e.target.value)}
+                disabled={disabled}
+              />
+            </FormField>
+
+            <FormField label="Increase %">
+              <input
+                type="text"
+                defaultValue={fund.contributionEscalation || '0%'}
+                className={`table-input ${getValueClass(fund.contributionEscalation || '0%', 'percentage')}`}
+                style={{ width: '90px' }}
+                onFocus={handleDefaultValueFocus}
+                onBlur={(e) => handleTextFieldBlur('contributionEscalation', e.target.value)}
+                disabled={disabled}
+              />
+            </FormField>
+
+            <FormField label="Growth Rate">
+              <input
+                type="text"
+                defaultValue={fund.growthRate || '10%'}
+                className={`table-input ${getValueClass(fund.growthRate || '10%', 'percentage')}`}
+                style={{ width: '90px' }}
+                onFocus={handleDefaultValueFocus}
+                onBlur={(e) => handleTextFieldBlur('growthRate', e.target.value)}
+                disabled={disabled}
+              />
+            </FormField>
+
+            <FormField label="Current Value">
+              <input
+                type="text"
+                defaultValue={fund.fundValue || 'R 0'}
+                className={`table-input ${getValueClass(fund.fundValue || 'R 0', 'currency')}`}
+                style={{ width: '120px' }}
+                onFocus={handleDefaultValueFocus}
+                onBlur={(e) => handleTextFieldBlur('fundValue', e.target.value)}
+                disabled={disabled}
+              />
+            </FormField>
+
+          </div>
+        </FieldGroup>
+      </GroupedDetailForm>
+    );
+  }
 
   return (
     <GroupedDetailForm>

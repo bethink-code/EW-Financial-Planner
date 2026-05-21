@@ -1,8 +1,12 @@
 import React from 'react';
+import { useLocation } from 'wouter';
 import { RetirementFund, UpdateRetirementFund } from '@shared/schema';
 import { HybridViewWrapper } from '@/components/common/hybrid-view-wrapper';
 import { HybridHeaderBar } from '@/components/common/hybrid-header-bar';
 import { HybridSidebar } from '@/components/common/hybrid-sidebar';
+import { SummaryBand, SummaryTile } from '@/components/common/summary-band';
+import { useRetirementProjection } from '@/hooks/use-retirement-projection';
+import { formatCurrencyValue } from '@/lib/formatting';
 import { RetirementFundDetailForm } from './retirement-fund-detail-form';
 import { RetirementFundsSummary } from './retirement-funds-summary';
 
@@ -27,7 +31,12 @@ export function RetirementFundTable({
   disabled = false,
   showSummary = true,
 }: RetirementFundTableProps) {
+  const [location] = useLocation();
+  const isRetirementNeed = location.startsWith('/needs/retirement');
   const [selectedFundId, setSelectedFundId] = React.useState<number | null>(null);
+  const { data: projection } = useRetirementProjection();
+  const formatRand = (n: number | undefined) =>
+    formatCurrencyValue(Math.round(n ?? 0).toString());
 
   React.useEffect(() => {
     if (funds.length > 0 && selectedFundId === null) {
@@ -61,6 +70,19 @@ export function RetirementFundTable({
         const owners = (f.owners || []).filter(o => o?.trim());
         const lines: string[] = [];
         if (owners.length > 0) lines.push(`Owners: ${owners.join(', ')}`);
+        if (isRetirementNeed) {
+          // Retirement view: show contribution + growth context so the
+          // active card reads as a savings vehicle, not an estate item.
+          if (f.monthlyContribution && f.monthlyContribution !== 'R 0') {
+            lines.push(`Contribution: ${f.monthlyContribution}/mo`);
+          }
+          if (f.growthRate) lines.push(`Growth: ${f.growthRate}`);
+          return {
+            subtitle: lines.join('\n') || 'No details entered',
+            primaryValue: f.fundValue || 'R 0',
+          };
+        }
+        // DEL view: emphasise the estate-side figures.
         if (f.fundValue && f.fundValue !== 'R 0') lines.push(`Fund value: ${f.fundValue}`);
         return {
           subtitle: lines.join('\n') || 'No details entered',
@@ -80,9 +102,39 @@ export function RetirementFundTable({
     />
   ) : null;
 
+  // Section summary: on Retirement, show aggregates across THIS tab's funds
+  // (subset of the phase-level projection ribbon, which sums across every
+  // retirement vehicle). On DEL, the existing aggregate summary when
+  // showSummary is on.
+  const aggregateRf = projection?.retirementFunds ?? [];
+  const totalCapital = aggregateRf.reduce((sum, f) => sum + (f.capitalAtRetirement ?? 0), 0);
+  const totalInCurrentTerms = aggregateRf.reduce((sum, f) => sum + (f.valueInCurrentTerms ?? 0), 0);
+  const fundCount = funds.length;
+  const countLabel = `${fundCount} ${fundCount === 1 ? 'fund' : 'funds'}`;
+  const sectionSummary = isRetirementNeed
+    ? (
+        <SummaryBand>
+          <SummaryTile
+            variant="accent"
+            label="Capital at retirement"
+            value={formatRand(totalCapital)}
+            subValue={countLabel}
+          />
+          <SummaryTile
+            variant="accent"
+            label="Value in current terms"
+            value={formatRand(totalInCurrentTerms)}
+            subValue={countLabel}
+          />
+        </SummaryBand>
+      )
+    : showSummary
+      ? <RetirementFundsSummary />
+      : undefined;
+
   return (
     <HybridViewWrapper
-      summary={showSummary ? <RetirementFundsSummary /> : undefined}
+      summary={sectionSummary}
       header={
         <HybridHeaderBar
           add={onAddFund ? { label: 'Add Fund', onClick: onAddFund } : undefined}

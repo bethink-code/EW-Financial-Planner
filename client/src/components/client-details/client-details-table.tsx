@@ -7,6 +7,7 @@ import { HybridHeaderBar } from '@/components/common/hybrid-header-bar';
 import { HybridSidebar } from '@/components/common/hybrid-sidebar';
 import { FieldGroup, FormField, GroupedDetailForm } from '@/components/common/grouped-detail-form';
 import { useDebouncedUpdate } from '@/hooks/use-debounced-update';
+import { useAutoSelectedItem } from '@/hooks/use-auto-selected-item';
 import { formatPercentageValue, getValueClass, handleDefaultValueFocus } from '@/lib/formatting';
 
 interface ClientDetailsTableProps {
