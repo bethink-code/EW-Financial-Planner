@@ -1,32 +1,31 @@
-import { useLocation } from "wouter";
+import React, { useCallback, useEffect, useState } from "react";
 import { useQuery, useMutation } from "@tanstack/react-query";
-import { Card } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Trash2, Plus } from "lucide-react";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { apiRequest, queryClient } from "@/lib/queryClient";
-import type { RetirementLumpSumNeed, InsertRetirementLumpSumNeed } from "@shared/schema";
-import { formatCurrencyValue, handleDefaultValueFocus } from "@/lib/formatting";
-import { RetirementProjectionRibbon } from "@/components/retirement/retirement-projection-ribbon";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { HybridViewWrapper } from "@/components/common/hybrid-view-wrapper";
+import { HybridHeaderBar } from "@/components/common/hybrid-header-bar";
+import { HybridSidebar } from "@/components/common/hybrid-sidebar";
+import { FieldGroup, FormField, GroupedDetailForm } from "@/components/common/grouped-detail-form";
+import { useDebouncedUpdate } from "@/hooks/use-debounced-update";
 import { useRetirementProjection } from "@/hooks/use-retirement-projection";
+import { apiRequest, queryClient } from "@/lib/queryClient";
+import { formatCurrencyValue, formatPercentageValue, getValueClass, handleDefaultValueFocus } from "@/lib/formatting";
+import type { RetirementLumpSumNeed, InsertRetirementLumpSumNeed } from "@shared/schema";
 
 const FREQUENCIES = ["Single", "Monthly", "Quarterly", "Annual"] as const;
 
 export default function RetirementLumpSumNeedsPage() {
-  const [location] = useLocation();
-  const isRetirementNeed = location.startsWith("/needs/retirement");
+  const [selectedNeedId, setSelectedNeedId] = useState<number | null>(null);
 
-  const { data: needs = [] } = useQuery<RetirementLumpSumNeed[]>({
+  const { data: needs = [], isLoading } = useQuery<RetirementLumpSumNeed[]>({
     queryKey: ["/api/retirement-lump-sum-needs"],
   });
-
   const { data: projection } = useRetirementProjection();
+
+  useEffect(() => {
+    if (needs.length > 0 && selectedNeedId === null) {
+      setSelectedNeedId(needs[0].id);
+    }
+  }, [needs, selectedNeedId]);
 
   const addMutation = useMutation({
     mutationFn: async () => {
@@ -52,145 +51,202 @@ export default function RetirementLumpSumNeedsPage() {
 
   const deleteMutation = useMutation({
     mutationFn: async (id: number) => apiRequest("DELETE", `/api/retirement-lump-sum-needs/${id}`),
+    onSuccess: (_, id) => {
+      if (id === selectedNeedId) setSelectedNeedId(null);
+      queryClient.invalidateQueries({ queryKey: ["/api/retirement-lump-sum-needs"] });
+    },
+  });
+
+  const duplicateMutation = useMutation({
+    mutationFn: async (source: RetirementLumpSumNeed) => {
+      const { id, ...rest } = source;
+      return apiRequest("POST", "/api/retirement-lump-sum-needs", {
+        ...rest,
+        description: source.description ? `${source.description} (Copy)` : "",
+      });
+    },
     onSuccess: () => queryClient.invalidateQueries({ queryKey: ["/api/retirement-lump-sum-needs"] }),
   });
 
-  const formatRand = (n: number | undefined) =>
-    formatCurrencyValue(Math.round(n ?? 0).toString());
-  const findProjection = (id: number) =>
-    projection?.lumpSumNeeds.find(n => n.id === id);
-
-  const addButton = (
-    <Button onClick={() => addMutation.mutate()} disabled={addMutation.isPending} size="sm" className="gap-1.5">
-      <Plus className="w-3.5 h-3.5" />
-      Add Need
-    </Button>
+  const debouncedUpdate = useDebouncedUpdate(
+    (id: number, field: keyof RetirementLumpSumNeed, value: string | number) => {
+      updateMutation.mutate({ id, updates: { [field]: value } });
+    },
   );
 
-  return (
-    <div className="w-full px-6 py-6">
-      <Card className="p-6 bg-white">
-        {/* Title is hidden on retirement (active tab announces the section).
-            The ribbon lives above the tabs now, so we only render the Add
-            button here. */}
-        {isRetirementNeed ? (
-          <div className="flex justify-end mb-4">{addButton}</div>
-        ) : (
-          <div className="flex items-center justify-between mb-6">
-            <h2 className="text-xl font-semibold" style={{ color: "var(--ew-primary-navy)" }}>
-              Lump sum needs (at or after retirement)
-            </h2>
-            {addButton}
-          </div>
-        )}
+  const handleTextBlur = (id: number, field: keyof RetirementLumpSumNeed, value: string) => {
+    let formatted: string = value;
+    if (field === "amount") formatted = formatCurrencyValue(value);
+    else if (field === "increasePercentage") formatted = formatPercentageValue(value);
+    debouncedUpdate(id, field, formatted);
+  };
 
-        {needs.length === 0 ? (
-          <p className="text-center py-8" style={{ color: "var(--ew-gray-700)" }}>
-            No lump sum needs yet. Click "Add Need" to start.
-          </p>
-        ) : (
-          <table className="table-compact text-sm border-collapse">
-            <thead>
-              <tr style={{ color: "var(--ew-gray-700)" }}>
-                <th className="text-left p-2 text-xs font-medium uppercase tracking-wide">Description</th>
-                <th className="text-right p-2 text-xs font-medium uppercase tracking-wide">Start (yrs)</th>
-                <th className="text-right p-2 text-xs font-medium uppercase tracking-wide">Term (yrs)</th>
-                <th className="text-right p-2 text-xs font-medium uppercase tracking-wide">Increase %</th>
-                <th className="text-left p-2 text-xs font-medium uppercase tracking-wide">Frequency</th>
-                <th className="text-right p-2 text-xs font-medium uppercase tracking-wide">Amount</th>
-                {isRetirementNeed && (
-                  <>
-                    <th className="text-right p-2 text-xs font-medium uppercase tracking-wide" style={{ color: "var(--ew-blue)" }}>
-                      Capital at retirement
-                    </th>
-                    <th className="text-right p-2 text-xs font-medium uppercase tracking-wide" style={{ color: "var(--ew-blue)" }}>
-                      Value in current terms
-                    </th>
-                  </>
-                )}
-                <th className="p-2 w-10"></th>
-              </tr>
-            </thead>
-            <tbody>
-              {needs.map(need => {
-                const proj = findProjection(need.id);
-                return (
-                  <tr key={need.id} style={{ borderTop: "1px solid var(--ew-border)" }}>
-                    <td className="p-2">
-                      <input
-                        type="text"
-                        defaultValue={need.description}
-                        className="table-input w-full"
-                        placeholder="Description"
-                        onBlur={(e) => updateMutation.mutate({ id: need.id, updates: { description: e.target.value } })}
-                      />
-                    </td>
-                    <td className="p-2">
-                      <input
-                        type="number"
-                        defaultValue={need.startYears}
-                        className="table-input w-full text-right"
-                        onBlur={(e) => updateMutation.mutate({ id: need.id, updates: { startYears: parseInt(e.target.value) || 0 } })}
-                      />
-                    </td>
-                    <td className="p-2">
-                      <input
-                        type="number"
-                        defaultValue={need.termYears}
-                        className="table-input w-full text-right"
-                        onBlur={(e) => updateMutation.mutate({ id: need.id, updates: { termYears: parseInt(e.target.value) || 0 } })}
-                      />
-                    </td>
-                    <td className="p-2">
-                      <input
-                        type="text"
-                        defaultValue={need.increasePercentage}
-                        className="table-input w-full text-right"
-                        onBlur={(e) => updateMutation.mutate({ id: need.id, updates: { increasePercentage: e.target.value } })}
-                      />
-                    </td>
-                    <td className="p-2">
-                      <Select value={need.frequency} onValueChange={(v) => updateMutation.mutate({ id: need.id, updates: { frequency: v } })}>
-                        <SelectTrigger className="table-input"><SelectValue /></SelectTrigger>
-                        <SelectContent>
-                          {FREQUENCIES.map(f => <SelectItem key={f} value={f}>{f}</SelectItem>)}
-                        </SelectContent>
-                      </Select>
-                    </td>
-                    <td className="p-2">
-                      <input
-                        type="text"
-                        defaultValue={need.amount}
-                        className="table-input w-full text-right"
-                        onFocus={handleDefaultValueFocus}
-                        onBlur={(e) => updateMutation.mutate({ id: need.id, updates: { amount: formatCurrencyValue(e.target.value) } })}
-                      />
-                    </td>
-                    {isRetirementNeed && (
-                      <>
-                        <td className="p-2">
-                          <div className="calculated-field">{formatRand(proj?.capitalAtRetirement)}</div>
-                        </td>
-                        <td className="p-2">
-                          <div className="calculated-field">{formatRand(proj?.valueInCurrentTerms)}</div>
-                        </td>
-                      </>
-                    )}
-                    <td className="p-2">
-                      <button
-                        onClick={() => deleteMutation.mutate(need.id)}
-                        className="text-neutral-400 hover:text-red-600"
-                      >
-                        <Trash2 className="w-4 h-4" />
-                      </button>
-                    </td>
-                  </tr>
-                );
-              })}
-            </tbody>
-          </table>
-        )}
-      </Card>
+  const handleNumberBlur = (id: number, field: keyof RetirementLumpSumNeed, value: string) => {
+    debouncedUpdate(id, field, parseInt(value) || 0);
+  };
+
+  const handleImmediateUpdate = (id: number, field: keyof RetirementLumpSumNeed, value: string) => {
+    updateMutation.mutate({ id, updates: { [field]: value } });
+  };
+
+  const handleAdd = useCallback(() => addMutation.mutate(), [addMutation]);
+
+  const handleDelete = (id: number) => {
+    if (window.confirm("Delete this lump sum need? This cannot be undone.")) {
+      deleteMutation.mutate(id);
+    }
+  };
+
+  const handleDuplicate = (need: RetirementLumpSumNeed) => {
+    duplicateMutation.mutate(need);
+  };
+
+  const isUpdating = deleteMutation.isPending || duplicateMutation.isPending || addMutation.isPending;
+
+  const selectedNeed = selectedNeedId
+    ? needs.find(n => n.id === selectedNeedId) ?? null
+    : null;
+
+  const formatRand = (n: number | undefined) =>
+    formatCurrencyValue(Math.round(n ?? 0).toString());
+
+  const needIndex = (n: RetirementLumpSumNeed) => needs.findIndex(x => x.id === n.id);
+  const titleFor = (n: RetirementLumpSumNeed) =>
+    n.description?.trim() || `Need ${needIndex(n) + 1}`;
+
+  const summaryCards = (
+    <HybridSidebar
+      items={needs}
+      selectedId={selectedNeedId}
+      onSelect={setSelectedNeedId}
+      getId={(n) => n.id}
+      getTitle={titleFor}
+      renderActive={(n) => {
+        const lines: string[] = [];
+        lines.push(`Frequency: ${n.frequency}`);
+        lines.push(`Start: +${n.startYears} yrs · Term: ${n.termYears} yrs`);
+        return {
+          subtitle: lines.join("\n"),
+          primaryValue: n.amount || "R 0",
+        };
+      }}
+    />
+  );
+
+  const detailForms = selectedNeed ? (() => {
+    const proj = projection?.lumpSumNeeds.find(p => p.id === selectedNeed.id);
+    return (
+      <GroupedDetailForm>
+        <div key={selectedNeed.id} className="space-y-10">
+          <FieldGroup title="Overview">
+            <FormField label="Name">
+              <input
+                type="text"
+                defaultValue={selectedNeed.description}
+                className={`table-input ${getValueClass(selectedNeed.description, "text")}`}
+                style={{ width: "100%", maxWidth: "420px" }}
+                onBlur={(e) => handleTextBlur(selectedNeed.id, "description", e.target.value)}
+              />
+            </FormField>
+          </FieldGroup>
+
+          <FieldGroup title="Need details">
+            <div className="flex gap-3 flex-wrap items-end">
+              <FormField label="Amount">
+                <input
+                  type="text"
+                  defaultValue={selectedNeed.amount || "R 0"}
+                  className={`table-input ${getValueClass(selectedNeed.amount, "currency")}`}
+                  style={{ minWidth: "140px" }}
+                  onFocus={handleDefaultValueFocus}
+                  onBlur={(e) => handleTextBlur(selectedNeed.id, "amount", e.target.value)}
+                />
+              </FormField>
+              <FormField label="Frequency">
+                <Select
+                  value={selectedNeed.frequency}
+                  onValueChange={(v) => handleImmediateUpdate(selectedNeed.id, "frequency", v)}
+                >
+                  <SelectTrigger style={{ minWidth: "140px" }}><SelectValue /></SelectTrigger>
+                  <SelectContent>
+                    {FREQUENCIES.map(f => <SelectItem key={f} value={f}>{f}</SelectItem>)}
+                  </SelectContent>
+                </Select>
+              </FormField>
+              <FormField label="Start (yrs after retirement)">
+                <input
+                  type="number"
+                  defaultValue={selectedNeed.startYears}
+                  className="table-input"
+                  style={{ width: "100px" }}
+                  onBlur={(e) => handleNumberBlur(selectedNeed.id, "startYears", e.target.value)}
+                />
+              </FormField>
+              <FormField label="Term (yrs)">
+                <input
+                  type="number"
+                  defaultValue={selectedNeed.termYears}
+                  className="table-input"
+                  style={{ width: "100px" }}
+                  onBlur={(e) => handleNumberBlur(selectedNeed.id, "termYears", e.target.value)}
+                />
+              </FormField>
+              <FormField label="Increase %">
+                <input
+                  type="text"
+                  defaultValue={formatPercentageValue(selectedNeed.increasePercentage)}
+                  className={`table-input ${getValueClass(selectedNeed.increasePercentage, "percentage")}`}
+                  style={{ minWidth: "80px" }}
+                  onFocus={handleDefaultValueFocus}
+                  onBlur={(e) => handleTextBlur(selectedNeed.id, "increasePercentage", e.target.value)}
+                />
+              </FormField>
+            </div>
+          </FieldGroup>
+
+          <FieldGroup title="Projection">
+            <div className="flex gap-3 flex-wrap items-end">
+              <FormField label="Capital at retirement">
+                <div className="calculated-field" style={{ minWidth: "160px" }}>
+                  {formatRand(proj?.capitalAtRetirement)}
+                </div>
+              </FormField>
+              <FormField label="Value in current terms">
+                <div className="calculated-field" style={{ minWidth: "160px" }}>
+                  {formatRand(proj?.valueInCurrentTerms)}
+                </div>
+              </FormField>
+            </div>
+          </FieldGroup>
+        </div>
+      </GroupedDetailForm>
+    );
+  })() : null;
+
+  if (isLoading) {
+    return <div className="text-center py-4">Loading lump sum needs...</div>;
+  }
+
+  return (
+    <div className="w-full px-6 pb-6">
+      <div className="w-[1320px] max-w-full">
+        <HybridViewWrapper
+          header={
+            <HybridHeaderBar
+              add={{ label: "Add Need", onClick: handleAdd }}
+              title={selectedNeed?.description}
+              emptyTitle={selectedNeed ? "Untitled Need" : undefined}
+              onDuplicate={selectedNeed ? () => handleDuplicate(selectedNeed) : undefined}
+              onDelete={selectedNeed ? () => handleDelete(selectedNeed.id) : undefined}
+              disabled={isUpdating}
+            />
+          }
+          summaryCards={summaryCards}
+          detailForms={detailForms}
+          isEmpty={needs.length === 0}
+          emptyStateMessage="No lump sum needs yet. Click 'Add Need' to create your first need."
+        />
+      </div>
     </div>
   );
 }
