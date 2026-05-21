@@ -26,7 +26,15 @@ export const retirementConfig: NeedConfig = {
       number: 2,
       label: "Build",
       path: "/needs/retirement/build",
-      sections: [],
+      sections: [
+        { id: "retirement-funds", label: "Retirement funds", path: "/needs/retirement/build/retirement-funds" },
+        { id: "defined-benefit-funds", label: "Defined benefit / GEPF", path: "/needs/retirement/build/defined-benefit-funds" },
+        { id: "voluntary-investments", label: "Voluntary investments", path: "/needs/retirement/build/voluntary-investments" },
+        { id: "future-inflows", label: "Future inflows", path: "/needs/retirement/build/future-inflows" },
+        { id: "lump-sum-needs", label: "Lump sum needs", path: "/needs/retirement/build/lump-sum-needs" },
+        { id: "income-required", label: "Regular income required", path: "/needs/retirement/build/income-required" },
+        { id: "income-provided", label: "Regular income provided", path: "/needs/retirement/build/income-provided" },
+      ],
     },
     {
       id: "project",

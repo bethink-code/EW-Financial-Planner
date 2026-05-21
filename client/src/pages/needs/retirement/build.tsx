@@ -1,22 +1,25 @@
-import { RetirementCategoryTabs } from "@/components/retirement/retirement-category-tabs";
+import { useEffect } from "react";
+import { useLocation } from "wouter";
+import { retirementConfig } from "@/needs/retirement/config";
+import { flattenNeed } from "@/needs/_framework/flatten";
 
 /**
- * Retirement Build page: a single page with all 7 categories accessible
- * as in-page tabs. Tab clicks swap the active category without leaving the
- * page; overflow handling on the tab strip is provided by CustomTabs.
+ * Bare /needs/retirement/build URL. Redirects to the first Build sub-section
+ * so the framework's tab strip and the action bar work normally — Build is
+ * a category-tab step, not a destination page in its own right.
  */
 export default function RetirementBuild() {
+  const [, setLocation] = useLocation();
+
+  useEffect(() => {
+    const buildStep = retirementConfig.steps.find(s => s.id === "build");
+    if (!buildStep) return;
+    const flat = flattenNeed(retirementConfig);
+    const firstBuild = flat.find(i => i.step.id === "build");
+    if (firstBuild) setLocation(firstBuild.path);
+  }, [setLocation]);
+
   return (
-    <RetirementCategoryTabs
-      categories={[
-        "retirement-funds",
-        "defined-benefit-funds",
-        "voluntary-investments",
-        "future-inflows",
-        "lump-sum-needs",
-        "income-required",
-        "income-provided",
-      ]}
-    />
+    <div className="px-6 py-12 text-center text-neutral-500">Loading Build…</div>
   );
 }
