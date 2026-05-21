@@ -1,15 +1,34 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { useQuery, useMutation } from "@tanstack/react-query";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { HybridViewWrapper } from "@/components/common/hybrid-view-wrapper";
 import { HybridHeaderBar } from "@/components/common/hybrid-header-bar";
 import { HybridSidebar } from "@/components/common/hybrid-sidebar";
-import { FieldGroup, FormField, GroupedDetailForm } from "@/components/common/grouped-detail-form";
+import { SummaryBand, SummaryTile } from "@/components/common/summary-band";
+import {
+  FieldGroup,
+  FormField,
+  GroupedDetailForm,
+} from "@/components/common/grouped-detail-form";
 import { useDebouncedUpdate } from "@/hooks/use-debounced-update";
 import { useRetirementProjection } from "@/hooks/use-retirement-projection";
 import { apiRequest, queryClient } from "@/lib/queryClient";
-import { formatCurrencyValue, formatPercentageValue, getValueClass, handleDefaultValueFocus } from "@/lib/formatting";
-import type { RetirementLumpSumNeed, InsertRetirementLumpSumNeed } from "@shared/schema";
+import {
+  formatCurrencyValue,
+  formatPercentageValue,
+  getValueClass,
+  handleDefaultValueFocus,
+} from "@/lib/formatting";
+import type {
+  RetirementLumpSumNeed,
+  InsertRetirementLumpSumNeed,
+} from "@shared/schema";
 
 const FREQUENCIES = ["Single", "Monthly", "Quarterly", "Annual"] as const;
 
@@ -40,20 +59,34 @@ export default function RetirementLumpSumNeedsPage() {
       };
       return apiRequest("POST", "/api/retirement-lump-sum-needs", newNeed);
     },
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: ["/api/retirement-lump-sum-needs"] }),
+    onSuccess: () =>
+      queryClient.invalidateQueries({
+        queryKey: ["/api/retirement-lump-sum-needs"],
+      }),
   });
 
   const updateMutation = useMutation({
-    mutationFn: async ({ id, updates }: { id: number; updates: Partial<RetirementLumpSumNeed> }) =>
-      apiRequest("PATCH", `/api/retirement-lump-sum-needs/${id}`, updates),
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: ["/api/retirement-lump-sum-needs"] }),
+    mutationFn: async ({
+      id,
+      updates,
+    }: {
+      id: number;
+      updates: Partial<RetirementLumpSumNeed>;
+    }) => apiRequest("PATCH", `/api/retirement-lump-sum-needs/${id}`, updates),
+    onSuccess: () =>
+      queryClient.invalidateQueries({
+        queryKey: ["/api/retirement-lump-sum-needs"],
+      }),
   });
 
   const deleteMutation = useMutation({
-    mutationFn: async (id: number) => apiRequest("DELETE", `/api/retirement-lump-sum-needs/${id}`),
+    mutationFn: async (id: number) =>
+      apiRequest("DELETE", `/api/retirement-lump-sum-needs/${id}`),
     onSuccess: (_, id) => {
       if (id === selectedNeedId) setSelectedNeedId(null);
-      queryClient.invalidateQueries({ queryKey: ["/api/retirement-lump-sum-needs"] });
+      queryClient.invalidateQueries({
+        queryKey: ["/api/retirement-lump-sum-needs"],
+      });
     },
   });
 
@@ -65,27 +98,47 @@ export default function RetirementLumpSumNeedsPage() {
         description: source.description ? `${source.description} (Copy)` : "",
       });
     },
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: ["/api/retirement-lump-sum-needs"] }),
+    onSuccess: () =>
+      queryClient.invalidateQueries({
+        queryKey: ["/api/retirement-lump-sum-needs"],
+      }),
   });
 
   const debouncedUpdate = useDebouncedUpdate(
-    (id: number, field: keyof RetirementLumpSumNeed, value: string | number) => {
+    (
+      id: number,
+      field: keyof RetirementLumpSumNeed,
+      value: string | number
+    ) => {
       updateMutation.mutate({ id, updates: { [field]: value } });
-    },
+    }
   );
 
-  const handleTextBlur = (id: number, field: keyof RetirementLumpSumNeed, value: string) => {
+  const handleTextBlur = (
+    id: number,
+    field: keyof RetirementLumpSumNeed,
+    value: string
+  ) => {
     let formatted: string = value;
     if (field === "amount") formatted = formatCurrencyValue(value);
-    else if (field === "increasePercentage") formatted = formatPercentageValue(value);
+    else if (field === "increasePercentage")
+      formatted = formatPercentageValue(value);
     debouncedUpdate(id, field, formatted);
   };
 
-  const handleNumberBlur = (id: number, field: keyof RetirementLumpSumNeed, value: string) => {
+  const handleNumberBlur = (
+    id: number,
+    field: keyof RetirementLumpSumNeed,
+    value: string
+  ) => {
     debouncedUpdate(id, field, parseInt(value) || 0);
   };
 
-  const handleImmediateUpdate = (id: number, field: keyof RetirementLumpSumNeed, value: string) => {
+  const handleImmediateUpdate = (
+    id: number,
+    field: keyof RetirementLumpSumNeed,
+    value: string
+  ) => {
     updateMutation.mutate({ id, updates: { [field]: value } });
   };
 
@@ -101,16 +154,20 @@ export default function RetirementLumpSumNeedsPage() {
     duplicateMutation.mutate(need);
   };
 
-  const isUpdating = deleteMutation.isPending || duplicateMutation.isPending || addMutation.isPending;
+  const isUpdating =
+    deleteMutation.isPending ||
+    duplicateMutation.isPending ||
+    addMutation.isPending;
 
   const selectedNeed = selectedNeedId
-    ? needs.find(n => n.id === selectedNeedId) ?? null
+    ? needs.find((n) => n.id === selectedNeedId) ?? null
     : null;
 
   const formatRand = (n: number | undefined) =>
     formatCurrencyValue(Math.round(n ?? 0).toString());
 
-  const needIndex = (n: RetirementLumpSumNeed) => needs.findIndex(x => x.id === n.id);
+  const needIndex = (n: RetirementLumpSumNeed) =>
+    needs.findIndex((x) => x.id === n.id);
   const titleFor = (n: RetirementLumpSumNeed) =>
     n.description?.trim() || `Need ${needIndex(n) + 1}`;
 
@@ -133,95 +190,197 @@ export default function RetirementLumpSumNeedsPage() {
     />
   );
 
-  const detailForms = selectedNeed ? (() => {
-    const proj = projection?.lumpSumNeeds.find(p => p.id === selectedNeed.id);
-    return (
-      <GroupedDetailForm>
-        <div key={selectedNeed.id} className="space-y-10">
-          <FieldGroup title="Overview">
-            <FormField label="Name">
-              <input
-                type="text"
-                defaultValue={selectedNeed.description}
-                className={`table-input ${getValueClass(selectedNeed.description, "text")}`}
-                style={{ width: "100%", maxWidth: "420px" }}
-                onBlur={(e) => handleTextBlur(selectedNeed.id, "description", e.target.value)}
-              />
-            </FormField>
-          </FieldGroup>
+  const detailForms = selectedNeed
+    ? (() => {
+        const proj = projection?.lumpSumNeeds.find(
+          (p) => p.id === selectedNeed.id
+        );
+        const termDisabled = selectedNeed.frequency === "Single";
+        const nameValue = selectedNeed.description || "Lump sum need";
+        return (
+          <GroupedDetailForm>
+            <FieldGroup title="Lump sum needs">
+              <div className="flex gap-3 flex-wrap items-end">
+                <FormField label="Name">
+                  <input
+                    type="text"
+                    defaultValue={nameValue}
+                    className="table-input"
+                    style={{ minWidth: "200px" }}
+                    onFocus={handleDefaultValueFocus}
+                    onBlur={(e) =>
+                      handleTextBlur(
+                        selectedNeed.id,
+                        "description",
+                        e.target.value
+                      )
+                    }
+                  />
+                </FormField>
 
-          <FieldGroup title="Need details">
-            <div className="flex gap-3 flex-wrap items-end">
-              <FormField label="Amount">
-                <input
-                  type="text"
-                  defaultValue={selectedNeed.amount || "R 0"}
-                  className={`table-input ${getValueClass(selectedNeed.amount, "currency")}`}
-                  style={{ minWidth: "140px" }}
-                  onFocus={handleDefaultValueFocus}
-                  onBlur={(e) => handleTextBlur(selectedNeed.id, "amount", e.target.value)}
-                />
-              </FormField>
-              <FormField label="Frequency">
-                <Select
-                  value={selectedNeed.frequency}
-                  onValueChange={(v) => handleImmediateUpdate(selectedNeed.id, "frequency", v)}
-                >
-                  <SelectTrigger style={{ minWidth: "140px" }}><SelectValue /></SelectTrigger>
-                  <SelectContent>
-                    {FREQUENCIES.map(f => <SelectItem key={f} value={f}>{f}</SelectItem>)}
-                  </SelectContent>
-                </Select>
-              </FormField>
-              <FormField label="Start (yrs after retirement)">
-                <input
-                  type="number"
-                  defaultValue={selectedNeed.startYears}
-                  className="table-input"
-                  style={{ width: "100px" }}
-                  onBlur={(e) => handleNumberBlur(selectedNeed.id, "startYears", e.target.value)}
-                />
-              </FormField>
-              <FormField label="Term (yrs)">
-                <input
-                  type="number"
-                  defaultValue={selectedNeed.termYears}
-                  className="table-input"
-                  style={{ width: "100px" }}
-                  onBlur={(e) => handleNumberBlur(selectedNeed.id, "termYears", e.target.value)}
-                />
-              </FormField>
-              <FormField label="Increase %">
-                <input
-                  type="text"
-                  defaultValue={formatPercentageValue(selectedNeed.increasePercentage)}
-                  className={`table-input ${getValueClass(selectedNeed.increasePercentage, "percentage")}`}
-                  style={{ minWidth: "80px" }}
-                  onFocus={handleDefaultValueFocus}
-                  onBlur={(e) => handleTextBlur(selectedNeed.id, "increasePercentage", e.target.value)}
-                />
-              </FormField>
-            </div>
-          </FieldGroup>
+                <FormField label="Start">
+                  <input
+                    type="number"
+                    defaultValue={selectedNeed.startYears}
+                    className="table-input"
+                    style={{ width: "80px" }}
+                    onBlur={(e) =>
+                      handleNumberBlur(
+                        selectedNeed.id,
+                        "startYears",
+                        e.target.value
+                      )
+                    }
+                  />
+                </FormField>
 
-          <FieldGroup title="Projection">
-            <div className="flex gap-3 flex-wrap items-end">
-              <FormField label="Capital at retirement">
-                <div className="calculated-field" style={{ minWidth: "160px" }}>
-                  {formatRand(proj?.capitalAtRetirement)}
-                </div>
-              </FormField>
-              <FormField label="Value in current terms">
-                <div className="calculated-field" style={{ minWidth: "160px" }}>
-                  {formatRand(proj?.valueInCurrentTerms)}
-                </div>
-              </FormField>
-            </div>
-          </FieldGroup>
-        </div>
-      </GroupedDetailForm>
-    );
-  })() : null;
+                <FormField label="Term">
+                  <input
+                    type="number"
+                    defaultValue={selectedNeed.termYears}
+                    className="table-input"
+                    style={{ width: "80px" }}
+                    onBlur={(e) =>
+                      handleNumberBlur(
+                        selectedNeed.id,
+                        "termYears",
+                        e.target.value
+                      )
+                    }
+                    disabled={termDisabled}
+                  />
+                </FormField>
+
+                <FormField label="Increase %">
+                  <input
+                    type="text"
+                    defaultValue={formatPercentageValue(
+                      selectedNeed.increasePercentage
+                    )}
+                    className={`table-input ${getValueClass(
+                      selectedNeed.increasePercentage || "0%",
+                      "percentage"
+                    )}`}
+                    style={{ width: "90px" }}
+                    onFocus={handleDefaultValueFocus}
+                    onBlur={(e) =>
+                      handleTextBlur(
+                        selectedNeed.id,
+                        "increasePercentage",
+                        e.target.value
+                      )
+                    }
+                  />
+                </FormField>
+
+                <FormField label="Frequency (every)">
+                  <div className="flex gap-2 items-center">
+                    <Select
+                      value={selectedNeed.frequency}
+                      onValueChange={(v) =>
+                        handleImmediateUpdate(selectedNeed.id, "frequency", v)
+                      }
+                    >
+                      <SelectTrigger
+                        className="table-input"
+                        style={{ minWidth: "110px" }}
+                      >
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {FREQUENCIES.map((f) => (
+                          <SelectItem key={f} value={f}>
+                            {f}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                    <input
+                      type="number"
+                      defaultValue={selectedNeed.frequencyValue ?? 1}
+                      className="table-input"
+                      style={{ width: "60px" }}
+                      onBlur={(e) =>
+                        handleNumberBlur(
+                          selectedNeed.id,
+                          "frequencyValue",
+                          e.target.value
+                        )
+                      }
+                      disabled={termDisabled}
+                    />
+                  </div>
+                </FormField>
+
+                <FormField label="Amount">
+                  <input
+                    type="text"
+                    defaultValue={selectedNeed.amount || "R 0"}
+                    className={`table-input ${getValueClass(
+                      selectedNeed.amount || "R 0",
+                      "currency"
+                    )}`}
+                    style={{ width: "120px" }}
+                    onFocus={handleDefaultValueFocus}
+                    onBlur={(e) =>
+                      handleTextBlur(selectedNeed.id, "amount", e.target.value)
+                    }
+                  />
+                </FormField>
+              </div>
+
+              <div className="flex gap-3 flex-wrap items-end">
+                <FormField label="Capital at retirement">
+                  <div
+                    className="calculated-field"
+                    style={{ minWidth: "140px" }}
+                  >
+                    {formatRand(proj?.capitalAtRetirement)}
+                  </div>
+                </FormField>
+
+                <FormField label="Value in current terms">
+                  <div
+                    className="calculated-field"
+                    style={{ minWidth: "140px" }}
+                  >
+                    {formatRand(proj?.valueInCurrentTerms)}
+                  </div>
+                </FormField>
+              </div>
+            </FieldGroup>
+          </GroupedDetailForm>
+        );
+      })()
+    : null;
+
+  const aggregateNeeds = projection?.lumpSumNeeds ?? [];
+  const totalCapital = aggregateNeeds.reduce(
+    (sum, n) => sum + (n.capitalAtRetirement ?? 0),
+    0
+  );
+  const totalInCurrentTerms = aggregateNeeds.reduce(
+    (sum, n) => sum + (n.valueInCurrentTerms ?? 0),
+    0
+  );
+  const needCount = needs.length;
+  const countLabel = `${needCount} ${needCount === 1 ? "need" : "needs"}`;
+  const sectionSummary = (
+    <SummaryBand>
+      <SummaryTile
+        variant="accent"
+        label="Capital at retirement"
+        value={formatRand(totalCapital)}
+        subValue={countLabel}
+      />
+      <SummaryTile
+        variant="accent"
+        label="Value in current terms"
+        value={formatRand(totalInCurrentTerms)}
+        subValue={countLabel}
+      />
+    </SummaryBand>
+  );
 
   if (isLoading) {
     return <div className="text-center py-4">Loading lump sum needs...</div>;
@@ -231,13 +390,18 @@ export default function RetirementLumpSumNeedsPage() {
     <div className="w-full px-6 pb-6">
       <div className="w-[1320px] max-w-full">
         <HybridViewWrapper
+          summary={sectionSummary}
           header={
             <HybridHeaderBar
               add={{ label: "Add Need", onClick: handleAdd }}
               title={selectedNeed?.description}
               emptyTitle={selectedNeed ? "Untitled Need" : undefined}
-              onDuplicate={selectedNeed ? () => handleDuplicate(selectedNeed) : undefined}
-              onDelete={selectedNeed ? () => handleDelete(selectedNeed.id) : undefined}
+              onDuplicate={
+                selectedNeed ? () => handleDuplicate(selectedNeed) : undefined
+              }
+              onDelete={
+                selectedNeed ? () => handleDelete(selectedNeed.id) : undefined
+              }
               disabled={isUpdating}
             />
           }

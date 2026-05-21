@@ -1,12 +1,16 @@
-import React from 'react';
-import { useQuery, useMutation } from '@tanstack/react-query';
-import { VoluntaryInvestment, InsertVoluntaryInvestment } from '@shared/schema';
-import { queryClient, apiRequest } from '@/lib/queryClient';
-import { HybridViewWrapper } from '@/components/common/hybrid-view-wrapper';
-import { HybridHeaderBar } from '@/components/common/hybrid-header-bar';
-import { HybridSidebar } from '@/components/common/hybrid-sidebar';
-import { VoluntaryInvestmentDetailForm } from './voluntary-investment-detail-form';
-import { VoluntaryInvestmentsSummary } from './voluntary-investments-summary';
+import React from "react";
+import { useLocation } from "wouter";
+import { useQuery, useMutation } from "@tanstack/react-query";
+import { VoluntaryInvestment, InsertVoluntaryInvestment } from "@shared/schema";
+import { queryClient, apiRequest } from "@/lib/queryClient";
+import { HybridViewWrapper } from "@/components/common/hybrid-view-wrapper";
+import { HybridHeaderBar } from "@/components/common/hybrid-header-bar";
+import { HybridSidebar } from "@/components/common/hybrid-sidebar";
+import { SummaryBand, SummaryTile } from "@/components/common/summary-band";
+import { useRetirementProjection } from "@/hooks/use-retirement-projection";
+import { formatCurrencyValue } from "@/lib/formatting";
+import { VoluntaryInvestmentDetailForm } from "./voluntary-investment-detail-form";
+import { VoluntaryInvestmentsSummary } from "./voluntary-investments-summary";
 
 interface VoluntaryInvestmentTableProps {
   onAddInvestment?: () => void;
@@ -15,12 +19,24 @@ interface VoluntaryInvestmentTableProps {
   showSummary?: boolean;
 }
 
-export function VoluntaryInvestmentTable({ onAddInvestment, showSummary = true }: VoluntaryInvestmentTableProps) {
-  const [selectedInvestmentId, setSelectedInvestmentId] = React.useState<number | null>(null);
+export function VoluntaryInvestmentTable({
+  onAddInvestment,
+  showSummary = true,
+}: VoluntaryInvestmentTableProps) {
+  const [location] = useLocation();
+  const isRetirementNeed = location.startsWith("/needs/retirement");
+  const [selectedInvestmentId, setSelectedInvestmentId] = React.useState<
+    number | null
+  >(null);
 
-  const { data: investments = [], isLoading } = useQuery<VoluntaryInvestment[]>({
-    queryKey: ['/api/voluntary-investments'],
-  });
+  const { data: investments = [], isLoading } = useQuery<VoluntaryInvestment[]>(
+    {
+      queryKey: ["/api/voluntary-investments"],
+    }
+  );
+  const { data: projection } = useRetirementProjection();
+  const formatRand = (n: number | undefined) =>
+    formatCurrencyValue(Math.round(n ?? 0).toString());
 
   React.useEffect(() => {
     if (investments.length > 0 && selectedInvestmentId === null) {
@@ -30,18 +46,20 @@ export function VoluntaryInvestmentTable({ onAddInvestment, showSummary = true }
 
   const deleteMutation = useMutation({
     mutationFn: async (id: number) => {
-      return apiRequest('DELETE', `/api/voluntary-investments/${id}`);
+      return apiRequest("DELETE", `/api/voluntary-investments/${id}`);
     },
     onSuccess: (_, id) => {
       if (id === selectedInvestmentId) setSelectedInvestmentId(null);
-      queryClient.invalidateQueries({ queryKey: ['/api/voluntary-investments'] });
+      queryClient.invalidateQueries({
+        queryKey: ["/api/voluntary-investments"],
+      });
     },
   });
 
   const duplicateMutation = useMutation({
     mutationFn: async (source: VoluntaryInvestment) => {
       const copy: InsertVoluntaryInvestment = {
-        description: source.description ? `${source.description} (Copy)` : '',
+        description: source.description ? `${source.description} (Copy)` : "",
         owners: [...(source.owners || [])],
         ownershipPercentages: [...(source.ownershipPercentages || [])],
         baseCost: source.baseCost,
@@ -54,15 +72,19 @@ export function VoluntaryInvestmentTable({ onAddInvestment, showSummary = true }
         excludedFromCGT: source.excludedFromCGT,
         excludedFromExecutorsFees: source.excludedFromExecutorsFees,
       };
-      return apiRequest('POST', '/api/voluntary-investments', copy);
+      return apiRequest("POST", "/api/voluntary-investments", copy);
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['/api/voluntary-investments'] });
+      queryClient.invalidateQueries({
+        queryKey: ["/api/voluntary-investments"],
+      });
     },
   });
 
   const handleDelete = (id: number) => {
-    if (window.confirm('Delete this voluntary investment? This cannot be undone.')) {
+    if (
+      window.confirm("Delete this voluntary investment? This cannot be undone.")
+    ) {
       deleteMutation.mutate(id);
     }
   };
@@ -74,10 +96,11 @@ export function VoluntaryInvestmentTable({ onAddInvestment, showSummary = true }
   const isUpdating = deleteMutation.isPending || duplicateMutation.isPending;
 
   const selectedInvestment = selectedInvestmentId
-    ? investments.find(i => i.id === selectedInvestmentId) ?? null
+    ? investments.find((i) => i.id === selectedInvestmentId) ?? null
     : null;
 
-  const investmentIndex = (i: VoluntaryInvestment) => investments.findIndex(x => x.id === i.id);
+  const investmentIndex = (i: VoluntaryInvestment) =>
+    investments.findIndex((x) => x.id === i.id);
   const titleFor = (i: VoluntaryInvestment) =>
     i.description?.trim() || `Investment ${investmentIndex(i) + 1}`;
 
@@ -89,13 +112,16 @@ export function VoluntaryInvestmentTable({ onAddInvestment, showSummary = true }
       getId={(i) => i.id}
       getTitle={titleFor}
       renderActive={(i) => {
-        const owners = (i.owners || []).filter(o => o?.trim());
+        const owners = (i.owners || []).filter((o) => o?.trim());
         const lines: string[] = [];
-        if (owners.length > 0) lines.push(`Owners: ${owners.join(', ')}`);
+        if (owners.length > 0) lines.push(`Owners: ${owners.join(", ")}`);
         return {
-          subtitle: lines.join('\n') || 'No details entered',
-          primaryValue: i.marketValue || 'R 0',
-          secondaryInfo: i.baseCost && i.baseCost !== 'R 0' ? `Base: ${i.baseCost}` : undefined,
+          subtitle: lines.join("\n") || "No details entered",
+          primaryValue: i.marketValue || "R 0",
+          secondaryInfo:
+            i.baseCost && i.baseCost !== "R 0"
+              ? `Base: ${i.baseCost}`
+              : undefined,
         };
       }}
     />
@@ -103,25 +129,76 @@ export function VoluntaryInvestmentTable({ onAddInvestment, showSummary = true }
 
   const detailForms = selectedInvestment ? (
     <VoluntaryInvestmentDetailForm
-      key={`form-${selectedInvestment.id}-${selectedInvestment.owners?.length ?? 0}`}
+      key={`form-${selectedInvestment.id}-${
+        selectedInvestment.owners?.length ?? 0
+      }`}
       investment={selectedInvestment}
     />
   ) : null;
 
+  // Section summary band — aggregate across this tab's investments. On
+  // Retirement, accent tiles mirror the per-tab pattern used on Future
+  // Inflows / Lump Sum / Income tabs.
+  const aggregateVi = projection?.voluntaryInvestments ?? [];
+  const totalCapital = aggregateVi.reduce(
+    (sum, v) => sum + (v.capitalAtRetirement ?? 0),
+    0
+  );
+  const totalInCurrentTerms = aggregateVi.reduce(
+    (sum, v) => sum + (v.valueInCurrentTerms ?? 0),
+    0
+  );
+  const investmentCount = investments.length;
+  const countLabel = `${investmentCount} ${
+    investmentCount === 1 ? "investment" : "investments"
+  }`;
+  const sectionSummary = isRetirementNeed ? (
+    <SummaryBand>
+      <SummaryTile
+        variant="accent"
+        label="Capital at retirement"
+        value={formatRand(totalCapital)}
+        subValue={countLabel}
+      />
+      <SummaryTile
+        variant="accent"
+        label="Value in current terms"
+        value={formatRand(totalInCurrentTerms)}
+        subValue={countLabel}
+      />
+    </SummaryBand>
+  ) : showSummary ? (
+    <VoluntaryInvestmentsSummary />
+  ) : undefined;
+
   if (isLoading) {
-    return <div className="text-center py-4">Loading voluntary investments...</div>;
+    return (
+      <div className="text-center py-4">Loading voluntary investments...</div>
+    );
   }
 
   return (
     <HybridViewWrapper
-      summary={showSummary ? <VoluntaryInvestmentsSummary /> : undefined}
+      summary={sectionSummary}
       header={
         <HybridHeaderBar
-          add={onAddInvestment ? { label: 'Add Investment', onClick: onAddInvestment } : undefined}
+          add={
+            onAddInvestment
+              ? { label: "Add Investment", onClick: onAddInvestment }
+              : undefined
+          }
           title={selectedInvestment?.description}
-          emptyTitle={selectedInvestment ? 'Untitled Investment' : undefined}
-          onDuplicate={selectedInvestment ? () => handleDuplicate(selectedInvestment) : undefined}
-          onDelete={selectedInvestment ? () => handleDelete(selectedInvestment.id) : undefined}
+          emptyTitle={selectedInvestment ? "Untitled Investment" : undefined}
+          onDuplicate={
+            selectedInvestment
+              ? () => handleDuplicate(selectedInvestment)
+              : undefined
+          }
+          onDelete={
+            selectedInvestment
+              ? () => handleDelete(selectedInvestment.id)
+              : undefined
+          }
           disabled={isUpdating}
         />
       }

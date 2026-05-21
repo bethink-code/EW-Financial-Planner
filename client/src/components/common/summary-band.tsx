@@ -78,8 +78,8 @@ export function SummaryTile({ label, value, subValue, variant = 'default' }: Sum
   const s = TILE_STYLES[variant];
   return (
     <div
-      className="rounded-lg border px-4 py-4 flex items-baseline justify-between"
-      style={{ backgroundColor: s.bg, borderColor: s.border }}
+      className="rounded-lg px-4 py-4 flex items-baseline justify-between"
+      style={{ backgroundColor: s.bg }}
     >
       <div
         className="text-sm font-medium uppercase tracking-wide"

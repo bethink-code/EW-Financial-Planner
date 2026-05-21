@@ -5,12 +5,16 @@ import { RetirementProjectionRibbon } from "@/components/retirement/retirement-p
 
 export function RetirementLayout({ children }: { children: React.ReactNode }) {
   const [location] = useLocation();
-  const onBuildRoute = location.startsWith("/needs/retirement/build");
+  // Show the projection ribbon on Build *and* Project — same need-summary
+  // KPIs carry across both, per the client's reference.
+  const showRibbon =
+    location.startsWith("/needs/retirement/build") ||
+    location.startsWith("/needs/retirement/project");
 
   return (
     <NeedLayout
       config={retirementConfig}
-      headerExtra={onBuildRoute ? <RetirementProjectionRibbon /> : undefined}
+      headerExtra={showRibbon ? <RetirementProjectionRibbon /> : undefined}
     >
       {children}
     </NeedLayout>

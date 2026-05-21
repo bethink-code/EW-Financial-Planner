@@ -104,6 +104,7 @@ var updateRetirementFundSchema = createInsertSchema2(retirementFunds).omit({
 var lumpSumBequests = pgTable2("lump_sum_bequests", {
   id: serial2("id").primaryKey(),
   // Overview Section
+  name: text2("name").notNull().default(""),
   description: text2("description").notNull().default(""),
   entity: text2("entity").notNull().default(""),
   // Need Details Section
@@ -256,6 +257,7 @@ var updateVoluntaryInvestmentSchema = createInsertSchema2(voluntaryInvestments).
 var incomeNeeds = pgTable2("income_needs", {
   id: serial2("id").primaryKey(),
   // Overview Section
+  name: text2("name").notNull().default(""),
   description: text2("description").notNull().default(""),
   personName: text2("person_name").notNull().default(""),
   // Income Need Details Section
@@ -276,6 +278,7 @@ var updateIncomeNeedsSchema = createInsertSchema2(incomeNeeds).omit({
 var incomeProvisions = pgTable2("income_provisions", {
   id: serial2("id").primaryKey(),
   // Overview Section (same as Income Needs)
+  name: text2("name").notNull().default(""),
   description: text2("description").notNull().default(""),
   personName: text2("person_name").notNull().default(""),
   // Income Provision Details Section (extended from Income Needs)
@@ -311,7 +314,8 @@ var updateResidueSchema = createInsertSchema2(residue).omit({
 }).partial();
 var additionalEstateDutyItems = pgTable2("additional_estate_duty_items", {
   id: serial2("id").primaryKey(),
-  // Description field
+  // Identifier + longer description
+  name: text2("name").notNull().default(""),
   description: text2("description").notNull().default(""),
   // Amount field
   amount: text2("amount").notNull().default("R 0"),
@@ -690,7 +694,8 @@ var MemStorage = class {
     const id = this.currentBequestId++;
     const bequest = {
       id,
-      description: insertBequest.description || "Enter details ...",
+      name: insertBequest.name || "",
+      description: insertBequest.description || "",
       entity: insertBequest.entity || "Enter details ...",
       start: insertBequest.start || "Enter details ...",
       amount: insertBequest.amount || "R 0",
@@ -877,6 +882,7 @@ var MemStorage = class {
   async createIncomeNeed(need) {
     const newNeed = {
       id: this.currentIncomeNeedId++,
+      name: need.name || "",
       description: need.description || "",
       personName: need.personName || "",
       startDate: need.startDate || "",
@@ -918,7 +924,8 @@ var MemStorage = class {
   async createIncomeProvision(provision) {
     const newProvision = {
       id: this.currentIncomeProvisionId++,
-      description: provision.description || "Enter details ...",
+      name: provision.name || "",
+      description: provision.description || "",
       personName: provision.personName || "Enter details ...",
       startDate: provision.startDate || "Enter details ...",
       amount: provision.amount || "R 0",
@@ -995,6 +1002,7 @@ var MemStorage = class {
   async createAdditionalEstateDutyItem(item) {
     const newItem = {
       id: this.currentAdditionalEstateDutyItemId++,
+      name: item.name || "",
       description: item.description || "",
       amount: item.amount || "R 0",
       deduction: item.deduction ?? false,
@@ -3614,7 +3622,13 @@ function parseYears(value) {
   return parseAmount(value);
 }
 function projectFundForward(opts) {
-  const { currentValue, monthlyContribution, contributionEscalation, growthRate, yearsToRetirement } = opts;
+  const {
+    currentValue,
+    monthlyContribution,
+    contributionEscalation,
+    growthRate,
+    yearsToRetirement
+  } = opts;
   if (yearsToRetirement <= 0) return currentValue;
   const fvLumpSum = currentValue * Math.pow(1 + growthRate, yearsToRetirement);
   if (monthlyContribution <= 0) return fvLumpSum;
@@ -3674,7 +3688,12 @@ function projectFutureInflow(opts) {
   return future - gain * 0.18;
 }
 function additionalMonthlyContribution(opts) {
-  const { shortfallAtRetirement, growthRate, contributionEscalation, yearsToRetirement } = opts;
+  const {
+    shortfallAtRetirement,
+    growthRate,
+    contributionEscalation,
+    yearsToRetirement
+  } = opts;
   if (shortfallAtRetirement <= 0 || yearsToRetirement <= 0) return 0;
   let annuityFactor;
   if (Math.abs(growthRate - contributionEscalation) < 1e-9) {
@@ -3690,8 +3709,14 @@ var DEFAULT_INFLATION = 0.06;
 function computeRetirementProjection(input) {
   const ready = !!input.parameters && (input.clientAge ?? 0) > 0;
   const params = input.parameters ?? { retirementAge: 65, retirementPlanningAge: 90 };
-  const yearsToRetirement = Math.max(0, params.retirementAge - (input.clientAge || 0));
-  const yearsAfterRetirement = Math.max(0, params.retirementPlanningAge - params.retirementAge);
+  const yearsToRetirement = Math.max(
+    0,
+    params.retirementAge - (input.clientAge || 0)
+  );
+  const yearsAfterRetirement = Math.max(
+    0,
+    params.retirementPlanningAge - params.retirementAge
+  );
   const inflation = DEFAULT_INFLATION;
   const retirementFundProjections = input.retirementFunds.map((f) => {
     const capital = projectFundForward({
@@ -3705,7 +3730,11 @@ function computeRetirementProjection(input) {
       id: f.id,
       description: f.description ?? "",
       capitalAtRetirement: capital,
-      valueInCurrentTerms: discountToCurrentTerms({ futureValue: capital, discountRate: inflation, years: yearsToRetirement })
+      valueInCurrentTerms: discountToCurrentTerms({
+        futureValue: capital,
+        discountRate: inflation,
+        years: yearsToRetirement
+      })
     };
   });
   const dbFundProjections = input.definedBenefitFunds.map((f) => {
@@ -3726,7 +3755,11 @@ function computeRetirementProjection(input) {
       id: f.id,
       description: f.description,
       capitalAtRetirement: total,
-      valueInCurrentTerms: discountToCurrentTerms({ futureValue: total, discountRate: inflation, years: yearsToRetirement })
+      valueInCurrentTerms: discountToCurrentTerms({
+        futureValue: total,
+        discountRate: inflation,
+        years: yearsToRetirement
+      })
     };
   });
   const voluntaryProjections = input.voluntaryInvestments.map((v) => {
@@ -3741,7 +3774,11 @@ function computeRetirementProjection(input) {
       id: v.id,
       description: v.description,
       capitalAtRetirement: capital,
-      valueInCurrentTerms: discountToCurrentTerms({ futureValue: capital, discountRate: inflation, years: yearsToRetirement })
+      valueInCurrentTerms: discountToCurrentTerms({
+        futureValue: capital,
+        discountRate: inflation,
+        years: yearsToRetirement
+      })
     };
   });
   const futureInflowProjections = input.futureInflows.map((f) => {
@@ -3751,42 +3788,56 @@ function computeRetirementProjection(input) {
       yearsAfterRetirement: f.startYearsAfterRetirement,
       calculateCgt: f.calculateCgt
     });
-    const realReturn = Math.max(1e-3, parsePercent(f.growthRate) - inflation);
+    const realReturn = Math.max(
+      1e-3,
+      parsePercent(f.growthRate) - inflation
+    );
     const capitalAtRetirement = valueAtInflow / Math.pow(1 + realReturn, f.startYearsAfterRetirement);
     return {
       id: f.id,
       description: f.description,
       capitalAtRetirement,
-      valueInCurrentTerms: discountToCurrentTerms({ futureValue: capitalAtRetirement, discountRate: inflation, years: yearsToRetirement })
+      valueInCurrentTerms: discountToCurrentTerms({
+        futureValue: capitalAtRetirement,
+        discountRate: inflation,
+        years: yearsToRetirement
+      }),
+      valueAtInflow
     };
   });
-  const lumpSumProjections = input.lumpSumNeeds.map((n) => {
-    const amount = parseAmount(n.amount);
-    const escalation = parsePercent(n.increasePercentage);
-    const startYears = n.startYears;
-    const periodsPerYear = n.frequency === "Monthly" ? 12 : n.frequency === "Quarterly" ? 4 : n.frequency === "Annual" ? 1 : 0;
-    const realReturn = Math.max(1e-3, 0.1 - inflation);
-    let capitalAtRetirement;
-    if (n.frequency === "Single" || periodsPerYear === 0) {
-      const escalated = amount * Math.pow(1 + escalation, startYears);
-      capitalAtRetirement = escalated / Math.pow(1 + realReturn, startYears);
-    } else {
-      const pvAtStart = presentValueGrowingAnnuity({
-        paymentPerPeriod: amount,
-        escalation,
-        discount: realReturn,
-        termYears: n.termYears,
-        periodsPerYear
-      });
-      capitalAtRetirement = pvAtStart / Math.pow(1 + realReturn, startYears);
+  const lumpSumProjections = input.lumpSumNeeds.map(
+    (n) => {
+      const amount = parseAmount(n.amount);
+      const escalation = parsePercent(n.increasePercentage);
+      const startYears = n.startYears;
+      const periodsPerYear = n.frequency === "Monthly" ? 12 : n.frequency === "Quarterly" ? 4 : n.frequency === "Annual" ? 1 : 0;
+      const realReturn = Math.max(1e-3, 0.1 - inflation);
+      let capitalAtRetirement;
+      if (n.frequency === "Single" || periodsPerYear === 0) {
+        const escalated = amount * Math.pow(1 + escalation, startYears);
+        capitalAtRetirement = escalated / Math.pow(1 + realReturn, startYears);
+      } else {
+        const pvAtStart = presentValueGrowingAnnuity({
+          paymentPerPeriod: amount,
+          escalation,
+          discount: realReturn,
+          termYears: n.termYears,
+          periodsPerYear
+        });
+        capitalAtRetirement = pvAtStart / Math.pow(1 + realReturn, startYears);
+      }
+      return {
+        id: n.id,
+        description: n.description,
+        capitalAtRetirement,
+        valueInCurrentTerms: discountToCurrentTerms({
+          futureValue: capitalAtRetirement,
+          discountRate: inflation,
+          years: yearsToRetirement
+        })
+      };
     }
-    return {
-      id: n.id,
-      description: n.description,
-      capitalAtRetirement,
-      valueInCurrentTerms: discountToCurrentTerms({ futureValue: capitalAtRetirement, discountRate: inflation, years: yearsToRetirement })
-    };
-  });
+  );
   const incomeRequiredProjections = input.incomeNeeds.map((n) => {
     const realReturn = Math.max(1e-3, 0.1 - inflation);
     const capital = requiredCapitalForIncome({
@@ -3800,7 +3851,11 @@ function computeRetirementProjection(input) {
       id: n.id,
       description: n.description,
       capitalAtRetirement: capital,
-      valueInCurrentTerms: discountToCurrentTerms({ futureValue: capital, discountRate: inflation, years: yearsToRetirement })
+      valueInCurrentTerms: discountToCurrentTerms({
+        futureValue: capital,
+        discountRate: inflation,
+        years: yearsToRetirement
+      })
     };
   });
   const incomeProvidedProjections = input.incomeProvisions.map((p) => {
@@ -3818,13 +3873,32 @@ function computeRetirementProjection(input) {
       id: p.id,
       description: p.description,
       capitalAtRetirement: capital,
-      valueInCurrentTerms: discountToCurrentTerms({ futureValue: capital, discountRate: inflation, years: yearsToRetirement })
+      valueInCurrentTerms: discountToCurrentTerms({
+        futureValue: capital,
+        discountRate: inflation,
+        years: yearsToRetirement
+      })
     };
   });
   const sum2 = (xs) => xs.reduce((s, x) => s + x.capitalAtRetirement, 0);
+  const sumCurrent = (xs) => xs.reduce((s, x) => s + x.valueInCurrentTerms, 0);
   const capitalProvided = sum2(retirementFundProjections) + sum2(dbFundProjections) + sum2(voluntaryProjections) + sum2(futureInflowProjections) + sum2(incomeProvidedProjections);
+  const capitalProvidedCurrent = sumCurrent(retirementFundProjections) + sumCurrent(dbFundProjections) + sumCurrent(voluntaryProjections) + sumCurrent(futureInflowProjections) + sumCurrent(incomeProvidedProjections);
   const capitalRequired = sum2(lumpSumProjections) + sum2(incomeRequiredProjections);
+  const capitalRequiredCurrent = sumCurrent(lumpSumProjections) + sumCurrent(incomeRequiredProjections);
   const surplus = capitalProvided - capitalRequired;
+  const voluntaryCapitalSurplus = {
+    capitalAtRetirement: sum2(voluntaryProjections) + sum2(futureInflowProjections) - sum2(lumpSumProjections),
+    valueInCurrentTerms: sumCurrent(voluntaryProjections) + sumCurrent(futureInflowProjections) - sumCurrent(lumpSumProjections)
+  };
+  const incomeSurplus = {
+    capitalAtRetirement: sum2(incomeProvidedProjections) - sum2(incomeRequiredProjections),
+    valueInCurrentTerms: sumCurrent(incomeProvidedProjections) - sumCurrent(incomeRequiredProjections)
+  };
+  const surplusCapital = {
+    capitalAtRetirement: surplus,
+    valueInCurrentTerms: capitalProvidedCurrent - capitalRequiredCurrent
+  };
   const coverage = capitalRequired > 0 ? capitalProvided / capitalRequired : capitalProvided > 0 ? 1 : 0;
   const additionalContribution = surplus < 0 ? additionalMonthlyContribution({
     shortfallAtRetirement: Math.abs(surplus),
@@ -3836,7 +3910,9 @@ function computeRetirementProjection(input) {
     (sum3, f) => sum3 + parseAmount(f.monthlyContribution),
     0
   );
-  const annualTaxableIncome = parseAmount(input.parameters?.currentAnnualIncome);
+  const annualTaxableIncome = parseAmount(
+    input.parameters?.currentAnnualIncome
+  );
   const contributionAllocation = additionalContribution > 0 ? allocateAdditionalContribution({
     additionalMonthlyContribution: additionalContribution,
     currentMonthlyRaContribution,
@@ -3850,6 +3926,9 @@ function computeRetirementProjection(input) {
     capitalRequired,
     surplus,
     coverage,
+    voluntaryCapitalSurplus,
+    incomeSurplus,
+    surplusCapital,
     retirementFunds: retirementFundProjections,
     definedBenefitFunds: dbFundProjections,
     voluntaryInvestments: voluntaryProjections,
@@ -3867,8 +3946,16 @@ function computeRetirementProjection(input) {
 function isRetirementReadyToProject(input) {
   if (!input.parameters) return false;
   if (!input.clientAge || input.clientAge <= 0) return false;
-  const hasCapitalSource = input.retirementFunds.some((f) => parseAmount(f.fundValue) > 0 || parseAmount(f.monthlyContribution) > 0) || input.definedBenefitFunds.some((f) => parseAmount(f.deathLumpSum) > 0 || parseAmount(f.pensionIncomeAmount) > 0) || input.voluntaryInvestments.some((v) => parseAmount(v.marketValue) > 0 || parseAmount(v.monthlyContribution) > 0) || input.futureInflows.some((f) => parseAmount(f.currentValue) > 0);
-  const hasIncomeNeed = input.incomeNeeds.some((n) => parseAmount(n.amount) > 0);
+  const hasCapitalSource = input.retirementFunds.some(
+    (f) => parseAmount(f.fundValue) > 0 || parseAmount(f.monthlyContribution) > 0
+  ) || input.definedBenefitFunds.some(
+    (f) => parseAmount(f.deathLumpSum) > 0 || parseAmount(f.pensionIncomeAmount) > 0
+  ) || input.voluntaryInvestments.some(
+    (v) => parseAmount(v.marketValue) > 0 || parseAmount(v.monthlyContribution) > 0
+  ) || input.futureInflows.some((f) => parseAmount(f.currentValue) > 0);
+  const hasIncomeNeed = input.incomeNeeds.some(
+    (n) => parseAmount(n.amount) > 0
+  );
   return hasCapitalSource && hasIncomeNeed;
 }
 

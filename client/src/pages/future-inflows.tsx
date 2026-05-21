@@ -1,21 +1,45 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { Checkbox } from "@/components/ui/checkbox";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { HybridViewWrapper } from "@/components/common/hybrid-view-wrapper";
 import { HybridHeaderBar } from "@/components/common/hybrid-header-bar";
 import { HybridSidebar } from "@/components/common/hybrid-sidebar";
-import { FieldGroup, FormField, GroupedDetailForm } from "@/components/common/grouped-detail-form";
+import { SummaryBand, SummaryTile } from "@/components/common/summary-band";
+import {
+  FieldGroup,
+  FormField,
+  GroupedDetailForm,
+} from "@/components/common/grouped-detail-form";
 import { useDebouncedUpdate } from "@/hooks/use-debounced-update";
 import { useRetirementProjection } from "@/hooks/use-retirement-projection";
 import { apiRequest, queryClient } from "@/lib/queryClient";
-import { formatCurrencyValue, formatPercentageValue, getValueClass, handleDefaultValueFocus } from "@/lib/formatting";
-import type { FutureInflow, InsertFutureInflow } from "@shared/schema";
+import {
+  formatCurrencyValue,
+  formatPercentageValue,
+  getValueClass,
+  handleDefaultValueFocus,
+} from "@/lib/formatting";
+import type {
+  ClientDetails,
+  FutureInflow,
+  InsertFutureInflow,
+} from "@shared/schema";
 
 export default function FutureInflowsPage() {
   const [selectedInflowId, setSelectedInflowId] = useState<number | null>(null);
 
   const { data: inflows = [], isLoading } = useQuery<FutureInflow[]>({
     queryKey: ["/api/future-inflows"],
+  });
+  const { data: entities = [] } = useQuery<ClientDetails[]>({
+    queryKey: ["/api/client-details"],
   });
   const { data: projection } = useRetirementProjection();
 
@@ -37,17 +61,25 @@ export default function FutureInflowsPage() {
       };
       return apiRequest("POST", "/api/future-inflows", newInflow);
     },
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: ["/api/future-inflows"] }),
+    onSuccess: () =>
+      queryClient.invalidateQueries({ queryKey: ["/api/future-inflows"] }),
   });
 
   const updateMutation = useMutation({
-    mutationFn: async ({ id, updates }: { id: number; updates: Partial<FutureInflow> }) =>
-      apiRequest("PATCH", `/api/future-inflows/${id}`, updates),
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: ["/api/future-inflows"] }),
+    mutationFn: async ({
+      id,
+      updates,
+    }: {
+      id: number;
+      updates: Partial<FutureInflow>;
+    }) => apiRequest("PATCH", `/api/future-inflows/${id}`, updates),
+    onSuccess: () =>
+      queryClient.invalidateQueries({ queryKey: ["/api/future-inflows"] }),
   });
 
   const deleteMutation = useMutation({
-    mutationFn: async (id: number) => apiRequest("DELETE", `/api/future-inflows/${id}`),
+    mutationFn: async (id: number) =>
+      apiRequest("DELETE", `/api/future-inflows/${id}`),
     onSuccess: (_, id) => {
       if (id === selectedInflowId) setSelectedInflowId(null);
       queryClient.invalidateQueries({ queryKey: ["/api/future-inflows"] });
@@ -62,27 +94,44 @@ export default function FutureInflowsPage() {
         description: source.description ? `${source.description} (Copy)` : "",
       });
     },
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: ["/api/future-inflows"] }),
+    onSuccess: () =>
+      queryClient.invalidateQueries({ queryKey: ["/api/future-inflows"] }),
   });
 
   const debouncedUpdate = useDebouncedUpdate(
-    (id: number, field: keyof FutureInflow, value: string | number | boolean) => {
+    (
+      id: number,
+      field: keyof FutureInflow,
+      value: string | number | boolean
+    ) => {
       updateMutation.mutate({ id, updates: { [field]: value } });
-    },
+    }
   );
 
-  const handleTextBlur = (id: number, field: keyof FutureInflow, value: string) => {
+  const handleTextBlur = (
+    id: number,
+    field: keyof FutureInflow,
+    value: string
+  ) => {
     let formatted: string = value;
     if (field === "currentValue") formatted = formatCurrencyValue(value);
     else if (field === "growthRate") formatted = formatPercentageValue(value);
     debouncedUpdate(id, field, formatted);
   };
 
-  const handleNumberBlur = (id: number, field: keyof FutureInflow, value: string) => {
+  const handleNumberBlur = (
+    id: number,
+    field: keyof FutureInflow,
+    value: string
+  ) => {
     debouncedUpdate(id, field, parseInt(value) || 0);
   };
 
-  const handleCheckbox = (id: number, field: keyof FutureInflow, checked: boolean) => {
+  const handleCheckbox = (
+    id: number,
+    field: keyof FutureInflow,
+    checked: boolean
+  ) => {
     updateMutation.mutate({ id, updates: { [field]: checked } });
   };
 
@@ -98,16 +147,20 @@ export default function FutureInflowsPage() {
     duplicateMutation.mutate(inflow);
   };
 
-  const isUpdating = deleteMutation.isPending || duplicateMutation.isPending || addMutation.isPending;
+  const isUpdating =
+    deleteMutation.isPending ||
+    duplicateMutation.isPending ||
+    addMutation.isPending;
 
   const selectedInflow = selectedInflowId
-    ? inflows.find(i => i.id === selectedInflowId) ?? null
+    ? inflows.find((i) => i.id === selectedInflowId) ?? null
     : null;
 
   const formatRand = (n: number | undefined) =>
     formatCurrencyValue(Math.round(n ?? 0).toString());
 
-  const inflowIndex = (i: FutureInflow) => inflows.findIndex(x => x.id === i.id);
+  const inflowIndex = (i: FutureInflow) =>
+    inflows.findIndex((x) => x.id === i.id);
   const titleFor = (i: FutureInflow) =>
     i.description?.trim() || `Inflow ${inflowIndex(i) + 1}`;
 
@@ -131,95 +184,206 @@ export default function FutureInflowsPage() {
     />
   );
 
-  const detailForms = selectedInflow ? (() => {
-    const proj = projection?.futureInflows.find(f => f.id === selectedInflow.id);
-    return (
-      <GroupedDetailForm>
-        <div key={selectedInflow.id} className="space-y-10">
-          <FieldGroup title="Overview">
-            <div className="flex gap-3 flex-wrap items-end">
-              <FormField label="Name">
-                <input
-                  type="text"
-                  defaultValue={selectedInflow.description}
-                  className={`table-input ${getValueClass(selectedInflow.description, "text")}`}
-                  style={{ minWidth: "240px" }}
-                  onBlur={(e) => handleTextBlur(selectedInflow.id, "description", e.target.value)}
-                />
-              </FormField>
-              <FormField label="Entity">
-                <input
-                  type="text"
-                  defaultValue={selectedInflow.entity}
-                  className={`table-input ${getValueClass(selectedInflow.entity, "text")}`}
-                  style={{ minWidth: "180px" }}
-                  onBlur={(e) => handleTextBlur(selectedInflow.id, "entity", e.target.value)}
-                />
-              </FormField>
-            </div>
-          </FieldGroup>
+  const entityList = entities.filter(
+    (e) => e.entityName && e.entityName.trim()
+  );
 
-          <FieldGroup title="Inflow details">
-            <div className="flex gap-3 flex-wrap items-end">
-              <FormField label="Current value">
-                <input
-                  type="text"
-                  defaultValue={selectedInflow.currentValue || "R 0"}
-                  className={`table-input ${getValueClass(selectedInflow.currentValue, "currency")}`}
-                  style={{ minWidth: "140px" }}
-                  onFocus={handleDefaultValueFocus}
-                  onBlur={(e) => handleTextBlur(selectedInflow.id, "currentValue", e.target.value)}
-                />
-              </FormField>
-              <FormField label="Start (yrs after retirement)">
-                <input
-                  type="number"
-                  defaultValue={selectedInflow.startYearsAfterRetirement}
-                  className="table-input"
-                  style={{ width: "100px" }}
-                  onBlur={(e) => handleNumberBlur(selectedInflow.id, "startYearsAfterRetirement", e.target.value)}
-                />
-              </FormField>
-              <FormField label="Growth rate">
-                <input
-                  type="text"
-                  defaultValue={formatPercentageValue(selectedInflow.growthRate)}
-                  className={`table-input ${getValueClass(selectedInflow.growthRate, "percentage")}`}
-                  style={{ minWidth: "80px" }}
-                  onFocus={handleDefaultValueFocus}
-                  onBlur={(e) => handleTextBlur(selectedInflow.id, "growthRate", e.target.value)}
-                />
-              </FormField>
-              <FormField label="Calculate CGT">
-                <label className="inline-flex items-center gap-2 text-sm" style={{ color: "var(--ew-primary-navy)" }}>
-                  <Checkbox
-                    checked={selectedInflow.calculateCgt}
-                    onCheckedChange={(c) => handleCheckbox(selectedInflow.id, "calculateCgt", !!c)}
+  const primaryEntity = entityList.find(
+    (e) => e.entityType === "Primary entity"
+  );
+
+  const detailForms = selectedInflow
+    ? (() => {
+        const proj = projection?.futureInflows.find(
+          (f) => f.id === selectedInflow.id
+        );
+        const nameValue = selectedInflow.description || "Future inflow";
+        const entityValue =
+          selectedInflow.entity || primaryEntity?.entityName || "";
+        return (
+          <GroupedDetailForm>
+            <FieldGroup title="Future inflow">
+              <div className="flex gap-3 flex-wrap items-end">
+                <FormField label="Name">
+                  <input
+                    type="text"
+                    defaultValue={nameValue}
+                    className="table-input"
+                    style={{ minWidth: "200px" }}
+                    onFocus={handleDefaultValueFocus}
+                    onBlur={(e) =>
+                      handleTextBlur(
+                        selectedInflow.id,
+                        "description",
+                        e.target.value
+                      )
+                    }
                   />
-                  Apply capital gains tax
-                </label>
-              </FormField>
-            </div>
-          </FieldGroup>
+                </FormField>
 
-          <FieldGroup title="Projection">
-            <div className="flex gap-3 flex-wrap items-end">
-              <FormField label="Capital at retirement">
-                <div className="calculated-field" style={{ minWidth: "160px" }}>
-                  {formatRand(proj?.capitalAtRetirement)}
-                </div>
-              </FormField>
-              <FormField label="Value in current terms">
-                <div className="calculated-field" style={{ minWidth: "160px" }}>
-                  {formatRand(proj?.valueInCurrentTerms)}
-                </div>
-              </FormField>
-            </div>
-          </FieldGroup>
-        </div>
-      </GroupedDetailForm>
-    );
-  })() : null;
+                <FormField label="Entity">
+                  <Select
+                    value={entityValue || "none"}
+                    onValueChange={(v) => {
+                      const value = v === "none" ? "" : v;
+                      updateMutation.mutate({
+                        id: selectedInflow.id,
+                        updates: { entity: value },
+                      });
+                    }}
+                  >
+                    <SelectTrigger
+                      className="table-input"
+                      style={{ minWidth: "180px" }}
+                    >
+                      <SelectValue placeholder="Select entity..." />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="none">Select entity...</SelectItem>
+                      {entityList.map((e) => (
+                        <SelectItem key={e.id} value={e.entityName ?? ""}>
+                          {e.entityName}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </FormField>
+
+                <FormField label="Start">
+                  <input
+                    type="number"
+                    defaultValue={selectedInflow.startYearsAfterRetirement}
+                    className="table-input"
+                    style={{ width: "80px" }}
+                    onBlur={(e) =>
+                      handleNumberBlur(
+                        selectedInflow.id,
+                        "startYearsAfterRetirement",
+                        e.target.value
+                      )
+                    }
+                  />
+                </FormField>
+
+                <FormField label="Value at retirement">
+                  <input
+                    type="text"
+                    defaultValue={selectedInflow.currentValue || "R 0"}
+                    className={`table-input ${getValueClass(
+                      selectedInflow.currentValue || "R 0",
+                      "currency"
+                    )}`}
+                    style={{ width: "120px" }}
+                    onFocus={handleDefaultValueFocus}
+                    onBlur={(e) =>
+                      handleTextBlur(
+                        selectedInflow.id,
+                        "currentValue",
+                        e.target.value
+                      )
+                    }
+                  />
+                </FormField>
+
+                <FormField label="Calculate CGT?">
+                  <div className="h-8 flex items-center">
+                    <Checkbox
+                      checked={selectedInflow.calculateCgt}
+                      onCheckedChange={(c) =>
+                        handleCheckbox(selectedInflow.id, "calculateCgt", !!c)
+                      }
+                    />
+                  </div>
+                </FormField>
+
+                <FormField label="Growth Rate">
+                  <input
+                    type="text"
+                    defaultValue={formatPercentageValue(
+                      selectedInflow.growthRate
+                    )}
+                    className={`table-input ${getValueClass(
+                      selectedInflow.growthRate || "10%",
+                      "percentage"
+                    )}`}
+                    style={{ width: "90px" }}
+                    onFocus={handleDefaultValueFocus}
+                    onBlur={(e) =>
+                      handleTextBlur(
+                        selectedInflow.id,
+                        "growthRate",
+                        e.target.value
+                      )
+                    }
+                  />
+                </FormField>
+
+                <FormField label="Value at Inflow">
+                  <div
+                    className="calculated-field"
+                    style={{ minWidth: "140px" }}
+                  >
+                    {formatRand(proj?.valueAtInflow)}
+                  </div>
+                </FormField>
+              </div>
+
+              <div className="flex gap-3 flex-wrap items-end">
+                <FormField label="Capital at retirement">
+                  <div
+                    className="calculated-field"
+                    style={{ minWidth: "140px" }}
+                  >
+                    {formatRand(proj?.capitalAtRetirement)}
+                  </div>
+                </FormField>
+
+                <FormField label="Value in current terms">
+                  <div
+                    className="calculated-field"
+                    style={{ minWidth: "140px" }}
+                  >
+                    {formatRand(proj?.valueInCurrentTerms)}
+                  </div>
+                </FormField>
+              </div>
+            </FieldGroup>
+          </GroupedDetailForm>
+        );
+      })()
+    : null;
+
+  // Section summary band — aggregate across this tab's inflows. Mirrors the
+  // per-tab summary on the other Retirement vehicles (DB Funds, etc.).
+  const aggregateInflows = projection?.futureInflows ?? [];
+  const totalCapital = aggregateInflows.reduce(
+    (sum, f) => sum + (f.capitalAtRetirement ?? 0),
+    0
+  );
+  const totalInCurrentTerms = aggregateInflows.reduce(
+    (sum, f) => sum + (f.valueInCurrentTerms ?? 0),
+    0
+  );
+  const inflowCount = inflows.length;
+  const countLabel = `${inflowCount} ${
+    inflowCount === 1 ? "inflow" : "inflows"
+  }`;
+  const sectionSummary = (
+    <SummaryBand>
+      <SummaryTile
+        variant="accent"
+        label="Capital at retirement"
+        value={formatRand(totalCapital)}
+        subValue={countLabel}
+      />
+      <SummaryTile
+        variant="accent"
+        label="Value in current terms"
+        value={formatRand(totalInCurrentTerms)}
+        subValue={countLabel}
+      />
+    </SummaryBand>
+  );
 
   if (isLoading) {
     return <div className="text-center py-4">Loading future inflows...</div>;
@@ -229,13 +393,22 @@ export default function FutureInflowsPage() {
     <div className="w-full px-6 pb-6">
       <div className="w-[1320px] max-w-full">
         <HybridViewWrapper
+          summary={sectionSummary}
           header={
             <HybridHeaderBar
               add={{ label: "Add Inflow", onClick: handleAdd }}
               title={selectedInflow?.description}
               emptyTitle={selectedInflow ? "Untitled Inflow" : undefined}
-              onDuplicate={selectedInflow ? () => handleDuplicate(selectedInflow) : undefined}
-              onDelete={selectedInflow ? () => handleDelete(selectedInflow.id) : undefined}
+              onDuplicate={
+                selectedInflow
+                  ? () => handleDuplicate(selectedInflow)
+                  : undefined
+              }
+              onDelete={
+                selectedInflow
+                  ? () => handleDelete(selectedInflow.id)
+                  : undefined
+              }
               disabled={isUpdating}
             />
           }
