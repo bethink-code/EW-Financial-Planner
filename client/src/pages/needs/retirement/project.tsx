@@ -187,53 +187,57 @@ export default function RetirementProject() {
 
   return (
     <div className="w-full px-6 py-4">
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 items-center">
-        {/* LEFT: Surplus rows + Coverage chart + summary + recommendation */}
-        <Card className="px-5 py-4 border-0 shadow-none bg-transparent max-w-md mx-auto w-full">
-          <CoverageBars
-            capitalProvided={capitalProvided}
-            capitalRequired={capitalRequired}
-            coverage={coverage}
-            adjustedCapital={adjustedCapital}
-            adjustedCoverage={adjustedCoverage}
-          />
-        </Card>
+      {/* Cap to the same width as the stepper/summary card above so the
+          bottom half lines up under one control. */}
+      <div className="w-[1320px] max-w-full">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 items-center">
+          {/* LEFT: Surplus rows + Coverage chart + summary + recommendation */}
+          <Card className="px-5 py-4 border-0 shadow-none bg-transparent max-w-md mx-auto w-full">
+            <CoverageBars
+              capitalProvided={capitalProvided}
+              capitalRequired={capitalRequired}
+              coverage={coverage}
+              adjustedCapital={adjustedCapital}
+              adjustedCoverage={adjustedCoverage}
+            />
+          </Card>
 
-        {/* RIGHT: Tabs — Tune contributions (what-if), Breakdown (per-vehicle
+          {/* RIGHT: Tabs — Tune contributions (what-if), Breakdown (per-vehicle
             detail), Assumptions (editable rates). Tuner state is lifted to the
             parent so the CoverageBars on the left reflect the user's choice. */}
-        <DetailTabsPanel
-          flatRows={flatRows}
-          shortfall={shortfall}
-          yearsToRetirement={yearsToRetirement}
-          scenario={scenario}
-          onScenarioChange={setScenario}
-          mixVoluntaryPct={mixVoluntaryPct}
-          onMixVoluntaryPctChange={setMixVoluntaryPct}
-          scenarioAmounts={scenarioAmounts}
-          onScenarioAmountsChange={setScenarioAmounts}
-          recommended={{
-            voluntary: recVoluntary,
-            ra: recRa,
-            mixVol: recMixVol,
-            mixRa: recMixRa,
-            lumpsum: recLumpSum,
-          }}
-          effective={{
-            voluntary: effVoluntary,
-            ra: effRa,
-            mixVol: effMixVol,
-            mixRa: effMixRa,
-            lumpsum: effLumpSum,
-          }}
-          raTax={RA_TAX}
-          growthPct={growthPct}
-          onGrowthPctChange={setGrowthPct}
-          increasePct={increasePct}
-          onIncreasePctChange={setIncreasePct}
-          raTaxPct={raTaxPct}
-          onRaTaxPctChange={setRaTaxPct}
-        />
+          <DetailTabsPanel
+            flatRows={flatRows}
+            shortfall={shortfall}
+            yearsToRetirement={yearsToRetirement}
+            scenario={scenario}
+            onScenarioChange={setScenario}
+            mixVoluntaryPct={mixVoluntaryPct}
+            onMixVoluntaryPctChange={setMixVoluntaryPct}
+            scenarioAmounts={scenarioAmounts}
+            onScenarioAmountsChange={setScenarioAmounts}
+            recommended={{
+              voluntary: recVoluntary,
+              ra: recRa,
+              mixVol: recMixVol,
+              mixRa: recMixRa,
+              lumpsum: recLumpSum,
+            }}
+            effective={{
+              voluntary: effVoluntary,
+              ra: effRa,
+              mixVol: effMixVol,
+              mixRa: effMixRa,
+              lumpsum: effLumpSum,
+            }}
+            raTax={RA_TAX}
+            growthPct={growthPct}
+            onGrowthPctChange={setGrowthPct}
+            increasePct={increasePct}
+            onIncreasePctChange={setIncreasePct}
+            raTaxPct={raTaxPct}
+            onRaTaxPctChange={setRaTaxPct}
+          />
+        </div>
       </div>
     </div>
   );

@@ -10,7 +10,7 @@ import {
 import { HybridViewWrapper } from "@/components/common/hybrid-view-wrapper";
 import { HybridHeaderBar } from "@/components/common/hybrid-header-bar";
 import { HybridSidebar } from "@/components/common/hybrid-sidebar";
-import { SummaryBand, SummaryTile } from "@/components/common/summary-band";
+import { SectionCapitalSummary } from "@/components/common/section-capital-summary";
 import {
   FieldGroup,
   FormField,
@@ -364,22 +364,13 @@ export default function RetirementLumpSumNeedsPage() {
     0
   );
   const needCount = needs.length;
-  const countLabel = `${needCount} ${needCount === 1 ? "need" : "needs"}`;
   const sectionSummary = (
-    <SummaryBand>
-      <SummaryTile
-        variant="accent"
-        label="Capital at retirement"
-        value={formatRand(totalCapital)}
-        subValue={countLabel}
-      />
-      <SummaryTile
-        variant="accent"
-        label="Value in current terms"
-        value={formatRand(totalInCurrentTerms)}
-        subValue={countLabel}
-      />
-    </SummaryBand>
+    <SectionCapitalSummary
+      capitalAtRetirement={totalCapital}
+      valueInCurrentTerms={totalInCurrentTerms}
+      count={needCount}
+      noun="need"
+    />
   );
 
   if (isLoading) {

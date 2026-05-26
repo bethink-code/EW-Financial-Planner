@@ -13,7 +13,7 @@ import {
 import { HybridViewWrapper } from "@/components/common/hybrid-view-wrapper";
 import { HybridHeaderBar } from "@/components/common/hybrid-header-bar";
 import { HybridSidebar } from "@/components/common/hybrid-sidebar";
-import { SummaryBand, SummaryTile } from "@/components/common/summary-band";
+import { SectionCapitalSummary } from "@/components/common/section-capital-summary";
 import {
   FieldGroup,
   FormField,
@@ -646,24 +646,13 @@ export function IncomeProvisionsTable({
     0
   );
   const provisionCount = provisions.length;
-  const countLabel = `${provisionCount} ${
-    provisionCount === 1 ? "provision" : "provisions"
-  }`;
   const sectionSummary = isRetirementNeed ? (
-    <SummaryBand>
-      <SummaryTile
-        variant="accent"
-        label="Capital at retirement"
-        value={formatRand(totalCapital)}
-        subValue={countLabel}
-      />
-      <SummaryTile
-        variant="accent"
-        label="Value in current terms"
-        value={formatRand(totalInCurrentTerms)}
-        subValue={countLabel}
-      />
-    </SummaryBand>
+    <SectionCapitalSummary
+      capitalAtRetirement={totalCapital}
+      valueInCurrentTerms={totalInCurrentTerms}
+      count={provisionCount}
+      noun="provision"
+    />
   ) : showSummary ? (
     <IncomeProvisionsSummary />
   ) : undefined;

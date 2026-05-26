@@ -11,7 +11,7 @@ import {
 import { HybridViewWrapper } from "@/components/common/hybrid-view-wrapper";
 import { HybridHeaderBar } from "@/components/common/hybrid-header-bar";
 import { HybridSidebar } from "@/components/common/hybrid-sidebar";
-import { SummaryBand, SummaryTile } from "@/components/common/summary-band";
+import { SectionCapitalSummary } from "@/components/common/section-capital-summary";
 import {
   FieldGroup,
   FormField,
@@ -365,24 +365,13 @@ export default function FutureInflowsPage() {
     0
   );
   const inflowCount = inflows.length;
-  const countLabel = `${inflowCount} ${
-    inflowCount === 1 ? "inflow" : "inflows"
-  }`;
   const sectionSummary = (
-    <SummaryBand>
-      <SummaryTile
-        variant="accent"
-        label="Capital at retirement"
-        value={formatRand(totalCapital)}
-        subValue={countLabel}
-      />
-      <SummaryTile
-        variant="accent"
-        label="Value in current terms"
-        value={formatRand(totalInCurrentTerms)}
-        subValue={countLabel}
-      />
-    </SummaryBand>
+    <SectionCapitalSummary
+      capitalAtRetirement={totalCapital}
+      valueInCurrentTerms={totalInCurrentTerms}
+      count={inflowCount}
+      noun="inflow"
+    />
   );
 
   if (isLoading) {

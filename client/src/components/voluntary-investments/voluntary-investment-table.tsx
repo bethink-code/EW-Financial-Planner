@@ -6,9 +6,8 @@ import { queryClient, apiRequest } from "@/lib/queryClient";
 import { HybridViewWrapper } from "@/components/common/hybrid-view-wrapper";
 import { HybridHeaderBar } from "@/components/common/hybrid-header-bar";
 import { HybridSidebar } from "@/components/common/hybrid-sidebar";
-import { SummaryBand, SummaryTile } from "@/components/common/summary-band";
+import { SectionCapitalSummary } from "@/components/common/section-capital-summary";
 import { useRetirementProjection } from "@/hooks/use-retirement-projection";
-import { formatCurrencyValue } from "@/lib/formatting";
 import { VoluntaryInvestmentDetailForm } from "./voluntary-investment-detail-form";
 import { VoluntaryInvestmentsSummary } from "./voluntary-investments-summary";
 
@@ -35,8 +34,6 @@ export function VoluntaryInvestmentTable({
     }
   );
   const { data: projection } = useRetirementProjection();
-  const formatRand = (n: number | undefined) =>
-    formatCurrencyValue(Math.round(n ?? 0).toString());
 
   React.useEffect(() => {
     if (investments.length > 0 && selectedInvestmentId === null) {
@@ -149,24 +146,13 @@ export function VoluntaryInvestmentTable({
     0
   );
   const investmentCount = investments.length;
-  const countLabel = `${investmentCount} ${
-    investmentCount === 1 ? "investment" : "investments"
-  }`;
   const sectionSummary = isRetirementNeed ? (
-    <SummaryBand>
-      <SummaryTile
-        variant="accent"
-        label="Capital at retirement"
-        value={formatRand(totalCapital)}
-        subValue={countLabel}
-      />
-      <SummaryTile
-        variant="accent"
-        label="Value in current terms"
-        value={formatRand(totalInCurrentTerms)}
-        subValue={countLabel}
-      />
-    </SummaryBand>
+    <SectionCapitalSummary
+      capitalAtRetirement={totalCapital}
+      valueInCurrentTerms={totalInCurrentTerms}
+      count={investmentCount}
+      noun="investment"
+    />
   ) : showSummary ? (
     <VoluntaryInvestmentsSummary />
   ) : undefined;
