@@ -197,7 +197,7 @@ export default function RetirementProject() {
   return (
     <div className="w-full px-6 py-4">
       <div className="w-[1320px] max-w-full">
-        <Card className="px-5 py-4 border-0 shadow-sm">
+        <Card className="px-5 py-4 border-0 shadow-sm bg-white">
           {/* Header: title, legend and Adjust as one centred group. */}
           <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 mb-8">
             <h2 className="text-2xl font-semibold text-primary">
@@ -207,8 +207,8 @@ export default function RetirementProject() {
             <button
               type="button"
               onClick={() => setAdjustOpen(true)}
-              className="inline-flex items-center gap-1.5 h-8 px-3 rounded-md text-xs font-medium text-white"
-              style={{ backgroundColor: "var(--ew-blue)" }}
+              className="inline-flex items-center gap-1.5 h-8 px-3 rounded-md text-xs font-medium bg-white border border-input shadow-sm hover:bg-accent hover:text-accent-foreground"
+              style={{ color: "var(--ew-primary-navy)" }}
             >
               <Settings2 className="h-3.5 w-3.5" />
               Adjust
