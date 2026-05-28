@@ -124,6 +124,10 @@ export const retirementFunds = pgTable("retirement_funds", {
     .notNull()
     .default("0%"),
   growthRate: text("growth_rate").notNull().default("10%"),
+
+  // Two-Pot component tagging + per-fund lump-sum election at retirement
+  component: text("component").notNull().default("Vested"),
+  lumpSumPercent: text("lump_sum_percent").notNull().default("33.33%"),
 });
 
 export const insertRetirementFundSchema = createInsertSchema(

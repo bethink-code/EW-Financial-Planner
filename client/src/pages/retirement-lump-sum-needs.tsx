@@ -18,6 +18,7 @@ import {
 } from "@/components/common/grouped-detail-form";
 import { useDebouncedUpdate } from "@/hooks/use-debounced-update";
 import { useRetirementProjection } from "@/hooks/use-retirement-projection";
+import { useValueMode } from "@/components/common/value-mode";
 import { apiRequest, queryClient } from "@/lib/queryClient";
 import {
   formatCurrencyValue,
@@ -165,6 +166,8 @@ export default function RetirementLumpSumNeedsPage() {
 
   const formatRand = (n: number | undefined) =>
     formatCurrencyValue(Math.round(n ?? 0).toString());
+  const { mode } = useValueMode();
+  const atRetirement = mode === "atRetirement";
 
   const needIndex = (n: RetirementLumpSumNeed) =>
     needs.findIndex((x) => x.id === n.id);
@@ -199,7 +202,21 @@ export default function RetirementLumpSumNeedsPage() {
         const nameValue = selectedNeed.description || "Lump sum need";
         return (
           <GroupedDetailForm>
-            <FieldGroup title="Lump sum needs">
+            <FieldGroup
+              title="Lump sum needs"
+              outcomes={[
+                {
+                  label: atRetirement
+                    ? "Capital at retirement"
+                    : "Value in current terms",
+                  value: formatRand(
+                    atRetirement
+                      ? proj?.capitalAtRetirement
+                      : proj?.valueInCurrentTerms
+                  ),
+                },
+              ]}
+            >
               <div className="flex gap-3 flex-wrap items-end">
                 <FormField label="Name">
                   <input
@@ -326,26 +343,6 @@ export default function RetirementLumpSumNeedsPage() {
                       handleTextBlur(selectedNeed.id, "amount", e.target.value)
                     }
                   />
-                </FormField>
-              </div>
-
-              <div className="flex gap-3 flex-wrap items-end">
-                <FormField label="Capital at retirement">
-                  <div
-                    className="calculated-field"
-                    style={{ minWidth: "140px" }}
-                  >
-                    {formatRand(proj?.capitalAtRetirement)}
-                  </div>
-                </FormField>
-
-                <FormField label="Value in current terms">
-                  <div
-                    className="calculated-field"
-                    style={{ minWidth: "140px" }}
-                  >
-                    {formatRand(proj?.valueInCurrentTerms)}
-                  </div>
                 </FormField>
               </div>
             </FieldGroup>

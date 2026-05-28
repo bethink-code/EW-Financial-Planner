@@ -27,6 +27,7 @@ import { getFieldClass } from "@/lib/field-types";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 import { useRetirementProjection } from "@/hooks/use-retirement-projection";
+import { useValueMode } from "@/components/common/value-mode";
 
 interface DefinedBenefitFundDetailFormProps {
   fund: DefinedBenefitFund;
@@ -45,6 +46,8 @@ export function DefinedBenefitFundDetailForm({
   const perVehicle = showRetirementProjection
     ? projection?.definedBenefitFunds.find((f) => f.id === fund.id)
     : undefined;
+  const { mode } = useValueMode();
+  const atRetirement = mode === "atRetirement";
   const formatRand = (n: number | undefined) =>
     formatCurrencyValue(Math.round(n ?? 0).toString());
 
@@ -176,7 +179,21 @@ export function DefinedBenefitFundDetailForm({
     const nameValue = fund.description || "Defined benefit fund";
     return (
       <GroupedDetailForm>
-        <FieldGroup title="Defined benefit fund">
+        <FieldGroup
+          title="Defined benefit fund"
+          outcomes={[
+            {
+              label: atRetirement
+                ? "Capital at retirement"
+                : "Value in current terms",
+              value: formatRand(
+                atRetirement
+                  ? perVehicle?.capitalAtRetirement
+                  : perVehicle?.valueInCurrentTerms
+              ),
+            },
+          ]}
+        >
           <div className="flex gap-3 flex-wrap items-end">
             <FormField label="Name">
               <input
@@ -281,20 +298,6 @@ export function DefinedBenefitFundDetailForm({
                 }
                 disabled={isUpdating}
               />
-            </FormField>
-          </div>
-
-          <div className="flex gap-3 flex-wrap items-end">
-            <FormField label="Capital at retirement">
-              <div className="calculated-field" style={{ minWidth: "140px" }}>
-                {formatRand(perVehicle?.capitalAtRetirement)}
-              </div>
-            </FormField>
-
-            <FormField label="Value in current terms">
-              <div className="calculated-field" style={{ minWidth: "140px" }}>
-                {formatRand(perVehicle?.valueInCurrentTerms)}
-              </div>
             </FormField>
           </div>
         </FieldGroup>

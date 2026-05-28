@@ -1,17 +1,18 @@
 import React from 'react';
 
+export interface OutcomeItem {
+  label: string;
+  value: React.ReactNode;
+}
+
 interface FieldGroupProps {
   title: string;
   children: React.ReactNode;
+  outcomes?: OutcomeItem[];
   className?: string;
 }
 
-/**
- * FieldGroup — section heading per the EW Figma reference: flat brand-blue
- * uppercase title on white, with a thin EW border underneath spanning the
- * full content width. No tinted pill, no rounded corners.
- */
-export function FieldGroup({ title, children, className = "" }: FieldGroupProps) {
+export function FieldGroup({ title, children, outcomes, className = "" }: FieldGroupProps) {
   return (
     <div className={className}>
       <h3
@@ -30,6 +31,30 @@ export function FieldGroup({ title, children, className = "" }: FieldGroupProps)
         <div className="space-y-4">
           {children}
         </div>
+        {outcomes && outcomes.length > 0 && (
+          <div className="mt-6 flex gap-3 flex-wrap">
+            {outcomes.map((item, i) => (
+              <div
+                key={i}
+                className="rounded-md px-4 py-3 flex-1 min-w-[140px] max-w-[220px]"
+                style={{ backgroundColor: "#E5ECF3" }}
+              >
+                <div
+                  className="text-xs font-medium"
+                  style={{ color: "var(--ew-primary-navy)", opacity: 0.7 }}
+                >
+                  {item.label}
+                </div>
+                <div
+                  className="text-base font-semibold mt-0.5"
+                  style={{ color: "var(--ew-primary-navy)" }}
+                >
+                  {item.value}
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
       </div>
     </div>
   );

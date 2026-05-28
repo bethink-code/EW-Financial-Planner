@@ -19,6 +19,7 @@ import {
 } from "@/components/common/grouped-detail-form";
 import { useDebouncedUpdate } from "@/hooks/use-debounced-update";
 import { useRetirementProjection } from "@/hooks/use-retirement-projection";
+import { useValueMode } from "@/components/common/value-mode";
 import { apiRequest, queryClient } from "@/lib/queryClient";
 import {
   formatCurrencyValue,
@@ -158,6 +159,8 @@ export default function FutureInflowsPage() {
 
   const formatRand = (n: number | undefined) =>
     formatCurrencyValue(Math.round(n ?? 0).toString());
+  const { mode } = useValueMode();
+  const atRetirement = mode === "atRetirement";
 
   const inflowIndex = (i: FutureInflow) =>
     inflows.findIndex((x) => x.id === i.id);
@@ -202,7 +205,25 @@ export default function FutureInflowsPage() {
           selectedInflow.entity || primaryEntity?.entityName || "";
         return (
           <GroupedDetailForm>
-            <FieldGroup title="Future inflow">
+            <FieldGroup
+              title="Future inflow"
+              outcomes={[
+                {
+                  label: "Value at inflow",
+                  value: formatRand(proj?.valueAtInflow),
+                },
+                {
+                  label: atRetirement
+                    ? "Capital at retirement"
+                    : "Value in current terms",
+                  value: formatRand(
+                    atRetirement
+                      ? proj?.capitalAtRetirement
+                      : proj?.valueInCurrentTerms
+                  ),
+                },
+              ]}
+            >
               <div className="flex gap-3 flex-wrap items-end">
                 <FormField label="Name">
                   <input
@@ -318,34 +339,6 @@ export default function FutureInflowsPage() {
                   />
                 </FormField>
 
-                <FormField label="Value at Inflow">
-                  <div
-                    className="calculated-field"
-                    style={{ minWidth: "140px" }}
-                  >
-                    {formatRand(proj?.valueAtInflow)}
-                  </div>
-                </FormField>
-              </div>
-
-              <div className="flex gap-3 flex-wrap items-end">
-                <FormField label="Capital at retirement">
-                  <div
-                    className="calculated-field"
-                    style={{ minWidth: "140px" }}
-                  >
-                    {formatRand(proj?.capitalAtRetirement)}
-                  </div>
-                </FormField>
-
-                <FormField label="Value in current terms">
-                  <div
-                    className="calculated-field"
-                    style={{ minWidth: "140px" }}
-                  >
-                    {formatRand(proj?.valueInCurrentTerms)}
-                  </div>
-                </FormField>
               </div>
             </FieldGroup>
           </GroupedDetailForm>

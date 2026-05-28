@@ -22,6 +22,7 @@ import {
 import { IncomeProvisionsSummary } from "@/components/income-provisions/income-provisions-summary";
 import { useDebouncedUpdate } from "@/hooks/use-debounced-update";
 import { useRetirementProjection } from "@/hooks/use-retirement-projection";
+import { useValueMode } from "@/components/common/value-mode";
 import {
   formatCurrencyValue,
   formatPercentageValue,
@@ -55,6 +56,8 @@ export function IncomeProvisionsTable({
     queryKey: ["/api/client-details"],
   });
   const { data: projection } = useRetirementProjection();
+  const { mode } = useValueMode();
+  const atRetirement = mode === "atRetirement";
   const formatRand = (n: number | undefined) =>
     formatCurrencyValue(Math.round(n ?? 0).toString());
 
@@ -207,7 +210,21 @@ export function IncomeProvisionsTable({
           selectedProvision.personName || primaryEntity?.entityName || "";
         return (
           <GroupedDetailForm>
-            <FieldGroup title="Regular income provided (current value)">
+            <FieldGroup
+              title="Regular income provided (current value)"
+              outcomes={[
+                {
+                  label: atRetirement
+                    ? "Capital at retirement"
+                    : "Value in current terms",
+                  value: formatRand(
+                    atRetirement
+                      ? proj?.capitalAtRetirement
+                      : proj?.valueInCurrentTerms
+                  ),
+                },
+              ]}
+            >
               <div className="flex gap-3 flex-wrap items-end">
                 <FormField label="Name">
                   <input
@@ -384,26 +401,6 @@ export function IncomeProvisionsTable({
                 <FormField label="Amount After Tax">
                   <div className="calculated-field" style={{ width: "140px" }}>
                     {formatRand(amountAfterTax)}
-                  </div>
-                </FormField>
-              </div>
-
-              <div className="flex gap-3 flex-wrap items-end">
-                <FormField label="Capital at retirement">
-                  <div
-                    className="calculated-field"
-                    style={{ minWidth: "140px" }}
-                  >
-                    {formatRand(proj?.capitalAtRetirement)}
-                  </div>
-                </FormField>
-
-                <FormField label="Value in current terms">
-                  <div
-                    className="calculated-field"
-                    style={{ minWidth: "140px" }}
-                  >
-                    {formatRand(proj?.valueInCurrentTerms)}
                   </div>
                 </FormField>
               </div>
