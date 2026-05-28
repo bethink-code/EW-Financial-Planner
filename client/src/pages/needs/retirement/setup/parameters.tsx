@@ -1,7 +1,11 @@
 import { useState, useEffect } from "react";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { Checkbox } from "@/components/ui/checkbox";
-import { FieldGroup, FormField, GroupedDetailForm } from "@/components/common/grouped-detail-form";
+import {
+  FieldGroup,
+  FormField,
+  GroupedDetailForm,
+} from "@/components/common/grouped-detail-form";
 import { apiRequest, queryClient } from "@/lib/queryClient";
 import type { RetirementParameters } from "@shared/schema";
 
@@ -10,51 +14,84 @@ const PLAN_ID = 1; // Aligned with the hardcoded planId in NavigationLayout — 
 export default function RetirementSetupParameters() {
   const { data: params } = useQuery<RetirementParameters>({
     queryKey: [`/api/retirement-parameters/${PLAN_ID}`],
-    queryFn: () => fetch(`/api/retirement-parameters/${PLAN_ID}`).then(r => r.json()),
+    queryFn: () =>
+      fetch(`/api/retirement-parameters/${PLAN_ID}`).then((r) => r.json()),
   });
 
   const [retirementAge, setRetirementAge] = useState(65);
   const [retirementPlanningAge, setRetirementPlanningAge] = useState(90);
   const [autoCalculateTax, setAutoCalculateTax] = useState(true);
+  const [cpiPct, setCpiPct] = useState(4.5);
+  const [yieldPremiumPct, setYieldPremiumPct] = useState(3);
+
+  const parsePct = (s: string | null | undefined) =>
+    parseFloat(String(s ?? "").replace(/[^\d.]/g, "")) || 0;
 
   useEffect(() => {
     if (params) {
       setRetirementAge(params.retirementAge);
       setRetirementPlanningAge(params.retirementPlanningAge);
       setAutoCalculateTax(params.autoCalculateTax);
+      setCpiPct(parsePct(params.cpi) || 4.5);
+      setYieldPremiumPct(parsePct(params.yieldPremium) || 3);
     }
   }, [params]);
 
+  type Editable = {
+    retirementAge: number;
+    retirementPlanningAge: number;
+    autoCalculateTax: boolean;
+    cpiPct: number;
+    yieldPremiumPct: number;
+  };
+
   const saveMutation = useMutation({
-    mutationFn: async (next: { retirementAge: number; retirementPlanningAge: number; autoCalculateTax: boolean }) => {
-      const res = await apiRequest("PUT", `/api/retirement-parameters/${PLAN_ID}`, {
-        ...next,
-        // Preserve the existing annual taxable income — field no longer
-        // surfaces on this page but the Implement-page tax-saving calc
-        // still reads it.
-        currentAnnualIncome: params?.currentAnnualIncome ?? "R 0",
-      });
+    mutationFn: async (next: Editable) => {
+      const res = await apiRequest(
+        "PUT",
+        `/api/retirement-parameters/${PLAN_ID}`,
+        {
+          retirementAge: next.retirementAge,
+          retirementPlanningAge: next.retirementPlanningAge,
+          autoCalculateTax: next.autoCalculateTax,
+          cpi: `${next.cpiPct}%`,
+          yieldPremium: `${next.yieldPremiumPct}%`,
+          // Preserve the existing annual taxable income — field no longer
+          // surfaces on this page but the Implement-page tax-saving calc
+          // still reads it.
+          currentAnnualIncome: params?.currentAnnualIncome ?? "R 0",
+        }
+      );
       return res.json();
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: [`/api/retirement-parameters/${PLAN_ID}`] });
-      queryClient.invalidateQueries({ queryKey: [`/api/retirement-projection/${PLAN_ID}`] });
+      queryClient.invalidateQueries({
+        queryKey: [`/api/retirement-parameters/${PLAN_ID}`],
+      });
+      queryClient.invalidateQueries({
+        queryKey: [`/api/retirement-projection/${PLAN_ID}`],
+      });
     },
   });
 
   // Save current state — used by every input on blur/onCheckedChange so
   // there's no explicit Save button.
-  const saveLatest = (overrides: Partial<{ retirementAge: number; retirementPlanningAge: number; autoCalculateTax: boolean }> = {}) => {
+  const saveLatest = (overrides: Partial<Editable> = {}) => {
     saveMutation.mutate({
       retirementAge,
       retirementPlanningAge,
       autoCalculateTax,
+      cpiPct,
+      yieldPremiumPct,
       ...overrides,
     });
   };
 
   const yearsToRetirement = Math.max(0, retirementAge - 52); // primary entity stub age; refine when client-age wiring lands.
-  const yearsAfterRetirement = Math.max(0, retirementPlanningAge - retirementAge);
+  const yearsAfterRetirement = Math.max(
+    0,
+    retirementPlanningAge - retirementAge
+  );
 
   return (
     <div className="w-full px-6 pb-6">
@@ -69,14 +106,16 @@ export default function RetirementSetupParameters() {
                     min={40}
                     max={100}
                     value={retirementAge}
-                    onChange={(e) => setRetirementAge(parseInt(e.target.value) || 65)}
+                    onChange={(e) =>
+                      setRetirementAge(parseInt(e.target.value) || 65)
+                    }
                     onBlur={() => saveLatest()}
                     className="table-input"
-                    style={{ width: '80px' }}
+                    style={{ width: "80px" }}
                   />
                 </FormField>
                 <FormField label="Years to retirement">
-                  <div className="calculated-field" style={{ width: '80px' }}>
+                  <div className="calculated-field" style={{ width: "80px" }}>
                     {yearsToRetirement}
                   </div>
                 </FormField>
@@ -86,18 +125,23 @@ export default function RetirementSetupParameters() {
                     min={50}
                     max={120}
                     value={retirementPlanningAge}
-                    onChange={(e) => setRetirementPlanningAge(parseInt(e.target.value) || 90)}
+                    onChange={(e) =>
+                      setRetirementPlanningAge(parseInt(e.target.value) || 90)
+                    }
                     onBlur={() => saveLatest()}
                     className="table-input"
-                    style={{ width: '80px' }}
+                    style={{ width: "80px" }}
                   />
                 </FormField>
                 <FormField label="Years after retirement">
-                  <div className="calculated-field" style={{ width: '80px' }}>
+                  <div className="calculated-field" style={{ width: "80px" }}>
                     {yearsAfterRetirement}
                   </div>
                 </FormField>
-                <label className="flex items-center gap-2 cursor-pointer ml-auto" style={{ paddingBottom: '0.4rem' }}>
+                <label
+                  className="flex items-center gap-2 cursor-pointer ml-auto"
+                  style={{ paddingBottom: "0.4rem" }}
+                >
                   <Checkbox
                     checked={autoCalculateTax}
                     onCheckedChange={(c) => {
@@ -106,13 +150,59 @@ export default function RetirementSetupParameters() {
                       saveLatest({ autoCalculateTax: next });
                     }}
                   />
-                  <span className="text-sm font-medium" style={{ color: 'var(--ew-primary-navy)' }}>
+                  <span
+                    className="text-sm font-medium"
+                    style={{ color: "var(--ew-primary-navy)" }}
+                  >
                     Auto calculate tax
                   </span>
                 </label>
               </div>
-              <p className="text-xs italic" style={{ color: 'var(--ew-gray-700)' }}>
-                All terms are in years. 'Start' refers to years after retirement.
+              <p
+                className="text-xs italic"
+                style={{ color: "var(--ew-gray-700)" }}
+              >
+                All terms are in years. 'Start' refers to years after
+                retirement.
+              </p>
+            </FieldGroup>
+
+            <FieldGroup title="Inflation parameters">
+              <div className="flex gap-6 flex-wrap items-end">
+                <FormField label="CPI (inflation) %">
+                  <input
+                    type="number"
+                    min={0}
+                    max={12}
+                    step={0.25}
+                    value={cpiPct}
+                    onChange={(e) => setCpiPct(parseFloat(e.target.value) || 0)}
+                    onBlur={() => saveLatest()}
+                    className="table-input"
+                    style={{ width: "80px" }}
+                  />
+                </FormField>
+                <FormField label="Yield premium (CPI +) %">
+                  <input
+                    type="number"
+                    min={0}
+                    max={7}
+                    step={0.25}
+                    value={yieldPremiumPct}
+                    onChange={(e) =>
+                      setYieldPremiumPct(parseFloat(e.target.value) || 0)
+                    }
+                    onBlur={() => saveLatest()}
+                    className="table-input"
+                    style={{ width: "80px" }}
+                  />
+                </FormField>
+              </div>
+              <p
+                className="text-xs italic"
+                style={{ color: "var(--ew-gray-700)" }}
+              >
+                Nominal yield = CPI + premium.
               </p>
             </FieldGroup>
           </GroupedDetailForm>

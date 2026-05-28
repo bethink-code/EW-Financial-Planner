@@ -72,8 +72,8 @@ import {
   type UpdateRetirementLumpSumNeed,
 } from "@shared/schema";
 import { assets, type Assets, type InsertAssets } from "@shared/assets-schema";
-import { Pool, neonConfig } from '@neondatabase/serverless';
-import { drizzle } from 'drizzle-orm/neon-serverless';
+import { Pool, neonConfig } from "@neondatabase/serverless";
+import { drizzle } from "drizzle-orm/neon-serverless";
 import ws from "ws";
 import { eq, ilike, or, asc, and } from "drizzle-orm";
 
@@ -84,7 +84,7 @@ export interface IStorage {
   createRetirementFund(fund: InsertRetirementFund): Promise<RetirementFund>;
   updateRetirementFund(
     id: number,
-    updates: UpdateRetirementFund,
+    updates: UpdateRetirementFund
   ): Promise<RetirementFund | undefined>;
   deleteRetirementFund(id: number): Promise<boolean>;
   searchRetirementFunds(query: string): Promise<RetirementFund[]>;
@@ -95,7 +95,7 @@ export interface IStorage {
   createLumpSumBequest(bequest: InsertLumpSumBequest): Promise<LumpSumBequest>;
   updateLumpSumBequest(
     id: number,
-    updates: Partial<InsertLumpSumBequest>,
+    updates: Partial<InsertLumpSumBequest>
   ): Promise<LumpSumBequest | undefined>;
   deleteLumpSumBequest(id: number): Promise<boolean>;
   searchLumpSumBequests(query: string): Promise<LumpSumBequest[]>;
@@ -106,7 +106,7 @@ export interface IStorage {
   createAssurance(assurance: InsertAssurance): Promise<Assurance>;
   updateAssurance(
     id: number,
-    updates: UpdateAssurance,
+    updates: UpdateAssurance
   ): Promise<Assurance | undefined>;
   deleteAssurance(id: number): Promise<boolean>;
   searchAssurance(query: string): Promise<Assurance[]>;
@@ -115,11 +115,11 @@ export interface IStorage {
   getDefinedBenefitFunds(): Promise<DefinedBenefitFund[]>;
   getDefinedBenefitFund(id: number): Promise<DefinedBenefitFund | undefined>;
   createDefinedBenefitFund(
-    fund: InsertDefinedBenefitFund,
+    fund: InsertDefinedBenefitFund
   ): Promise<DefinedBenefitFund>;
   updateDefinedBenefitFund(
     id: number,
-    updates: UpdateDefinedBenefitFund,
+    updates: UpdateDefinedBenefitFund
   ): Promise<DefinedBenefitFund | undefined>;
   deleteDefinedBenefitFund(id: number): Promise<boolean>;
   searchDefinedBenefitFunds(query: string): Promise<DefinedBenefitFund[]>;
@@ -128,11 +128,11 @@ export interface IStorage {
   getVoluntaryInvestments(): Promise<VoluntaryInvestment[]>;
   getVoluntaryInvestment(id: number): Promise<VoluntaryInvestment | undefined>;
   createVoluntaryInvestment(
-    investment: InsertVoluntaryInvestment,
+    investment: InsertVoluntaryInvestment
   ): Promise<VoluntaryInvestment>;
   updateVoluntaryInvestment(
     id: number,
-    updates: UpdateVoluntaryInvestment,
+    updates: UpdateVoluntaryInvestment
   ): Promise<VoluntaryInvestment | undefined>;
   deleteVoluntaryInvestment(id: number): Promise<boolean>;
   searchVoluntaryInvestments(query: string): Promise<VoluntaryInvestment[]>;
@@ -143,7 +143,7 @@ export interface IStorage {
   createIncomeNeed(need: InsertIncomeNeeds): Promise<IncomeNeeds>;
   updateIncomeNeed(
     id: number,
-    updates: UpdateIncomeNeeds,
+    updates: UpdateIncomeNeeds
   ): Promise<IncomeNeeds | undefined>;
   deleteIncomeNeed(id: number): Promise<boolean>;
   searchIncomeNeeds(query: string): Promise<IncomeNeeds[]>;
@@ -152,11 +152,11 @@ export interface IStorage {
   getIncomeProvisions(): Promise<IncomeProvisions[]>;
   getIncomeProvision(id: number): Promise<IncomeProvisions | undefined>;
   createIncomeProvision(
-    provision: InsertIncomeProvisions,
+    provision: InsertIncomeProvisions
   ): Promise<IncomeProvisions>;
   updateIncomeProvision(
     id: number,
-    updates: UpdateIncomeProvisions,
+    updates: UpdateIncomeProvisions
   ): Promise<IncomeProvisions | undefined>;
   deleteIncomeProvision(id: number): Promise<boolean>;
   searchIncomeProvisions(query: string): Promise<IncomeProvisions[]>;
@@ -167,7 +167,7 @@ export interface IStorage {
   createResidueItem(item: InsertResidue): Promise<Residue>;
   updateResidueItem(
     id: number,
-    updates: UpdateResidue,
+    updates: UpdateResidue
   ): Promise<Residue | undefined>;
   deleteResidueItem(id: number): Promise<boolean>;
   searchResidue(query: string): Promise<Residue[]>;
@@ -175,18 +175,18 @@ export interface IStorage {
   // Additional Estate Duty Items
   getAdditionalEstateDutyItems(): Promise<AdditionalEstateDutyItems[]>;
   getAdditionalEstateDutyItem(
-    id: number,
+    id: number
   ): Promise<AdditionalEstateDutyItems | undefined>;
   createAdditionalEstateDutyItem(
-    item: InsertAdditionalEstateDutyItems,
+    item: InsertAdditionalEstateDutyItems
   ): Promise<AdditionalEstateDutyItems>;
   updateAdditionalEstateDutyItem(
     id: number,
-    updates: UpdateAdditionalEstateDutyItems,
+    updates: UpdateAdditionalEstateDutyItems
   ): Promise<AdditionalEstateDutyItems | undefined>;
   deleteAdditionalEstateDutyItem(id: number): Promise<boolean>;
   searchAdditionalEstateDutyItems(
-    query: string,
+    query: string
   ): Promise<AdditionalEstateDutyItems[]>;
 
   // Liabilities
@@ -195,7 +195,7 @@ export interface IStorage {
   createLiability(liability: InsertLiabilities): Promise<Liabilities>;
   updateLiability(
     id: number,
-    updates: UpdateLiabilities,
+    updates: UpdateLiabilities
   ): Promise<Liabilities | undefined>;
   deleteLiability(id: number): Promise<boolean>;
   searchLiabilities(query: string): Promise<Liabilities[]>;
@@ -206,7 +206,7 @@ export interface IStorage {
   createAsset(asset: InsertAssets): Promise<Assets>;
   updateAsset(
     id: number,
-    updates: Partial<InsertAssets>,
+    updates: Partial<InsertAssets>
   ): Promise<Assets | undefined>;
   deleteAsset(id: number): Promise<boolean>;
   searchAssets(query: string): Promise<Assets[]>;
@@ -217,18 +217,22 @@ export interface IStorage {
   createClientDetail(clientDetail: InsertClientDetails): Promise<ClientDetails>;
   updateClientDetail(
     id: number,
-    updates: UpdateClientDetails,
+    updates: UpdateClientDetails
   ): Promise<ClientDetails | undefined>;
   deleteClientDetail(id: number): Promise<boolean>;
   searchClientDetails(query: string): Promise<ClientDetails[]>;
 
   // Estate Position Parameters
   getEstatePositionParameters(): Promise<EstatePositionParameters[]>;
-  getEstatePositionParameter(id: number): Promise<EstatePositionParameters | undefined>;
-  createEstatePositionParameter(parameter: InsertEstatePositionParameters): Promise<EstatePositionParameters>;
+  getEstatePositionParameter(
+    id: number
+  ): Promise<EstatePositionParameters | undefined>;
+  createEstatePositionParameter(
+    parameter: InsertEstatePositionParameters
+  ): Promise<EstatePositionParameters>;
   updateEstatePositionParameter(
     id: number,
-    updates: UpdateEstatePositionParameters,
+    updates: UpdateEstatePositionParameters
   ): Promise<EstatePositionParameters | undefined>;
   deleteEstatePositionParameter(id: number): Promise<boolean>;
   getOrCreateEstatePositionParameter(): Promise<EstatePositionParameters>;
@@ -239,7 +243,7 @@ export interface IStorage {
   createFinancialPlan(plan: InsertFinancialPlan): Promise<FinancialPlan>;
   updateFinancialPlan(
     id: number,
-    updates: UpdateFinancialPlan,
+    updates: UpdateFinancialPlan
   ): Promise<FinancialPlan | undefined>;
   deleteFinancialPlan(id: number): Promise<boolean>;
   searchFinancialPlans(query: string): Promise<FinancialPlan[]>;
@@ -248,10 +252,7 @@ export interface IStorage {
   getNeeds(): Promise<Need[]>;
   getNeed(id: number): Promise<Need | undefined>;
   createNeed(need: InsertNeed): Promise<Need>;
-  updateNeed(
-    id: number,
-    updates: UpdateNeed,
-  ): Promise<Need | undefined>;
+  updateNeed(id: number, updates: UpdateNeed): Promise<Need | undefined>;
   deleteNeed(id: number): Promise<boolean>;
   initializeDefaultNeeds(): Promise<void>;
 
@@ -262,28 +263,45 @@ export interface IStorage {
   removeAllNeedsFromPlan(planId: number): Promise<boolean>;
   updatePlanNeed(
     id: number,
-    updates: UpdatePlanNeed,
+    updates: UpdatePlanNeed
   ): Promise<PlanNeed | undefined>;
 
   // Plan with Needs
-  getFinancialPlanWithNeeds(planId: number): Promise<{ plan: FinancialPlan; needs: Need[] } | undefined>;
+  getFinancialPlanWithNeeds(
+    planId: number
+  ): Promise<{ plan: FinancialPlan; needs: Need[] } | undefined>;
 
   // Retirement Parameters (one row per plan)
-  getRetirementParameters(planId: number): Promise<RetirementParameters | undefined>;
-  upsertRetirementParameters(planId: number, updates: UpdateRetirementParameters): Promise<RetirementParameters>;
+  getRetirementParameters(
+    planId: number
+  ): Promise<RetirementParameters | undefined>;
+  upsertRetirementParameters(
+    planId: number,
+    updates: UpdateRetirementParameters
+  ): Promise<RetirementParameters>;
 
   // Future Inflows
   getFutureInflows(): Promise<FutureInflow[]>;
   getFutureInflow(id: number): Promise<FutureInflow | undefined>;
   createFutureInflow(inflow: InsertFutureInflow): Promise<FutureInflow>;
-  updateFutureInflow(id: number, updates: UpdateFutureInflow): Promise<FutureInflow | undefined>;
+  updateFutureInflow(
+    id: number,
+    updates: UpdateFutureInflow
+  ): Promise<FutureInflow | undefined>;
   deleteFutureInflow(id: number): Promise<boolean>;
 
   // Retirement Lump Sum Needs
   getRetirementLumpSumNeeds(): Promise<RetirementLumpSumNeed[]>;
-  getRetirementLumpSumNeed(id: number): Promise<RetirementLumpSumNeed | undefined>;
-  createRetirementLumpSumNeed(need: InsertRetirementLumpSumNeed): Promise<RetirementLumpSumNeed>;
-  updateRetirementLumpSumNeed(id: number, updates: UpdateRetirementLumpSumNeed): Promise<RetirementLumpSumNeed | undefined>;
+  getRetirementLumpSumNeed(
+    id: number
+  ): Promise<RetirementLumpSumNeed | undefined>;
+  createRetirementLumpSumNeed(
+    need: InsertRetirementLumpSumNeed
+  ): Promise<RetirementLumpSumNeed>;
+  updateRetirementLumpSumNeed(
+    id: number,
+    updates: UpdateRetirementLumpSumNeed
+  ): Promise<RetirementLumpSumNeed | undefined>;
   deleteRetirementLumpSumNeed(id: number): Promise<boolean>;
 }
 
@@ -376,7 +394,7 @@ export class MemStorage implements IStorage {
   // Retirement Funds methods
   async getRetirementFunds(): Promise<RetirementFund[]> {
     return Array.from(this.retirementFunds.values()).sort(
-      (a, b) => a.id - b.id,
+      (a, b) => a.id - b.id
     );
   }
 
@@ -385,7 +403,7 @@ export class MemStorage implements IStorage {
   }
 
   async createRetirementFund(
-    insertFund: InsertRetirementFund,
+    insertFund: InsertRetirementFund
   ): Promise<RetirementFund> {
     const id = this.currentFundId++;
     const fund: RetirementFund = {
@@ -447,7 +465,7 @@ export class MemStorage implements IStorage {
 
   async updateRetirementFund(
     id: number,
-    updates: UpdateRetirementFund,
+    updates: UpdateRetirementFund
   ): Promise<RetirementFund | undefined> {
     const existing = this.retirementFunds.get(id);
     if (!existing) return undefined;
@@ -467,7 +485,7 @@ export class MemStorage implements IStorage {
 
     const lowerQuery = query.toLowerCase();
     return allFunds.filter((fund) =>
-      fund.description?.toLowerCase().includes(lowerQuery),
+      fund.description?.toLowerCase().includes(lowerQuery)
     );
   }
 
@@ -481,7 +499,7 @@ export class MemStorage implements IStorage {
   }
 
   async createLumpSumBequest(
-    insertBequest: InsertLumpSumBequest,
+    insertBequest: InsertLumpSumBequest
   ): Promise<LumpSumBequest> {
     const id = this.currentBequestId++;
     const bequest: LumpSumBequest = {
@@ -501,7 +519,7 @@ export class MemStorage implements IStorage {
 
   async updateLumpSumBequest(
     id: number,
-    updates: Partial<InsertLumpSumBequest>,
+    updates: Partial<InsertLumpSumBequest>
   ): Promise<LumpSumBequest | undefined> {
     const existing = this.lumpSumBequests.get(id);
     if (!existing) return undefined;
@@ -523,7 +541,7 @@ export class MemStorage implements IStorage {
     return allBequests.filter(
       (bequest) =>
         bequest.description.toLowerCase().includes(lowerQuery) ||
-        bequest.entity.toLowerCase().includes(lowerQuery),
+        bequest.entity.toLowerCase().includes(lowerQuery)
     );
   }
 
@@ -546,7 +564,9 @@ export class MemStorage implements IStorage {
       deathBenefits: insertAssurance.deathBenefits || ["R 0"],
       ownershipPercentages: insertAssurance.ownershipPercentages || ["100%"],
       beneficiaries: insertAssurance.beneficiaries || [""],
-      beneficiaryPercentages: insertAssurance.beneficiaryPercentages || ["100%"],
+      beneficiaryPercentages: insertAssurance.beneficiaryPercentages || [
+        "100%",
+      ],
       deathBenefit: insertAssurance.deathBenefit || "R 0",
       amount: insertAssurance.amount || "R 0",
       amountToggles: insertAssurance.amountToggles || [true],
@@ -570,7 +590,7 @@ export class MemStorage implements IStorage {
 
   async updateAssurance(
     id: number,
-    updates: UpdateAssurance,
+    updates: UpdateAssurance
   ): Promise<Assurance | undefined> {
     const existing = this.assurance.get(id);
     if (!existing) return undefined;
@@ -590,7 +610,7 @@ export class MemStorage implements IStorage {
 
     const lowerQuery = query.toLowerCase();
     return allAssurance.filter((assurance) =>
-      assurance.description.toLowerCase().includes(lowerQuery),
+      assurance.description.toLowerCase().includes(lowerQuery)
     );
   }
 
@@ -600,13 +620,13 @@ export class MemStorage implements IStorage {
   }
 
   async getDefinedBenefitFund(
-    id: number,
+    id: number
   ): Promise<DefinedBenefitFund | undefined> {
     return this.definedBenefitFunds.get(id);
   }
 
   async createDefinedBenefitFund(
-    fund: InsertDefinedBenefitFund,
+    fund: InsertDefinedBenefitFund
   ): Promise<DefinedBenefitFund> {
     const newFund: DefinedBenefitFund = {
       id: this.currentDefinedBenefitFundId++,
@@ -630,7 +650,7 @@ export class MemStorage implements IStorage {
 
   async updateDefinedBenefitFund(
     id: number,
-    updates: UpdateDefinedBenefitFund,
+    updates: UpdateDefinedBenefitFund
   ): Promise<DefinedBenefitFund | undefined> {
     const existing = this.definedBenefitFunds.get(id);
     if (!existing) return undefined;
@@ -645,14 +665,14 @@ export class MemStorage implements IStorage {
   }
 
   async searchDefinedBenefitFunds(
-    query: string,
+    query: string
   ): Promise<DefinedBenefitFund[]> {
     const allFunds = Array.from(this.definedBenefitFunds.values());
     if (!query.trim()) return allFunds;
 
     const lowerQuery = query.toLowerCase();
     return allFunds.filter((fund) =>
-      fund.description.toLowerCase().includes(lowerQuery),
+      fund.description.toLowerCase().includes(lowerQuery)
     );
   }
 
@@ -662,13 +682,13 @@ export class MemStorage implements IStorage {
   }
 
   async getVoluntaryInvestment(
-    id: number,
+    id: number
   ): Promise<VoluntaryInvestment | undefined> {
     return this.voluntaryInvestments.get(id);
   }
 
   async createVoluntaryInvestment(
-    investment: InsertVoluntaryInvestment,
+    investment: InsertVoluntaryInvestment
   ): Promise<VoluntaryInvestment> {
     const newInvestment: VoluntaryInvestment = {
       id: this.currentVoluntaryInvestmentId++,
@@ -696,7 +716,7 @@ export class MemStorage implements IStorage {
 
   async updateVoluntaryInvestment(
     id: number,
-    updates: UpdateVoluntaryInvestment,
+    updates: UpdateVoluntaryInvestment
   ): Promise<VoluntaryInvestment | undefined> {
     const existing = this.voluntaryInvestments.get(id);
     if (!existing) return undefined;
@@ -711,14 +731,14 @@ export class MemStorage implements IStorage {
   }
 
   async searchVoluntaryInvestments(
-    query: string,
+    query: string
   ): Promise<VoluntaryInvestment[]> {
     const allInvestments = Array.from(this.voluntaryInvestments.values());
     if (!query.trim()) return allInvestments;
 
     const lowerQuery = query.toLowerCase();
     return allInvestments.filter((investment) =>
-      investment.description.toLowerCase().includes(lowerQuery),
+      investment.description.toLowerCase().includes(lowerQuery)
     );
   }
 
@@ -752,7 +772,7 @@ export class MemStorage implements IStorage {
 
   async updateIncomeNeed(
     id: number,
-    updates: UpdateIncomeNeeds,
+    updates: UpdateIncomeNeeds
   ): Promise<IncomeNeeds | undefined> {
     const existing = this.incomeNeeds.get(id);
     if (!existing) return undefined;
@@ -774,7 +794,7 @@ export class MemStorage implements IStorage {
     return allNeeds.filter(
       (need) =>
         need.description.toLowerCase().includes(lowerQuery) ||
-        need.personName.toLowerCase().includes(lowerQuery),
+        need.personName.toLowerCase().includes(lowerQuery)
     );
   }
 
@@ -788,7 +808,7 @@ export class MemStorage implements IStorage {
   }
 
   async createIncomeProvision(
-    provision: InsertIncomeProvisions,
+    provision: InsertIncomeProvisions
   ): Promise<IncomeProvisions> {
     const newProvision: IncomeProvisions = {
       id: this.currentIncomeProvisionId++,
@@ -812,7 +832,7 @@ export class MemStorage implements IStorage {
 
   async updateIncomeProvision(
     id: number,
-    updates: UpdateIncomeProvisions,
+    updates: UpdateIncomeProvisions
   ): Promise<IncomeProvisions | undefined> {
     const existing = this.incomeProvisions.get(id);
     if (!existing) return undefined;
@@ -834,7 +854,7 @@ export class MemStorage implements IStorage {
     return allProvisions.filter(
       (provision) =>
         provision.description.toLowerCase().includes(lowerQuery) ||
-        provision.personName.toLowerCase().includes(lowerQuery),
+        provision.personName.toLowerCase().includes(lowerQuery)
     );
   }
 
@@ -860,7 +880,7 @@ export class MemStorage implements IStorage {
 
   async updateResidueItem(
     id: number,
-    updates: UpdateResidue,
+    updates: UpdateResidue
   ): Promise<Residue | undefined> {
     const existing = this.residue.get(id);
     if (!existing) return undefined;
@@ -879,9 +899,8 @@ export class MemStorage implements IStorage {
     if (!query.trim()) return allResidue;
 
     const lowerQuery = query.toLowerCase();
-    return allResidue.filter(
-      (item) =>
-        item.entity.toLowerCase().includes(lowerQuery),
+    return allResidue.filter((item) =>
+      item.entity.toLowerCase().includes(lowerQuery)
     );
   }
 
@@ -891,13 +910,13 @@ export class MemStorage implements IStorage {
   }
 
   async getAdditionalEstateDutyItem(
-    id: number,
+    id: number
   ): Promise<AdditionalEstateDutyItems | undefined> {
     return this.additionalEstateDutyItems.get(id);
   }
 
   async createAdditionalEstateDutyItem(
-    item: InsertAdditionalEstateDutyItems,
+    item: InsertAdditionalEstateDutyItems
   ): Promise<AdditionalEstateDutyItems> {
     const newItem: AdditionalEstateDutyItems = {
       id: this.currentAdditionalEstateDutyItemId++,
@@ -914,7 +933,7 @@ export class MemStorage implements IStorage {
 
   async updateAdditionalEstateDutyItem(
     id: number,
-    updates: UpdateAdditionalEstateDutyItems,
+    updates: UpdateAdditionalEstateDutyItems
   ): Promise<AdditionalEstateDutyItems | undefined> {
     const existing = this.additionalEstateDutyItems.get(id);
     if (!existing) return undefined;
@@ -929,15 +948,14 @@ export class MemStorage implements IStorage {
   }
 
   async searchAdditionalEstateDutyItems(
-    query: string,
+    query: string
   ): Promise<AdditionalEstateDutyItems[]> {
     const allItems = Array.from(this.additionalEstateDutyItems.values());
     if (!query.trim()) return allItems;
 
     const lowerQuery = query.toLowerCase();
-    return allItems.filter(
-      (item) =>
-        item.description.toLowerCase().includes(lowerQuery),
+    return allItems.filter((item) =>
+      item.description.toLowerCase().includes(lowerQuery)
     );
   }
 
@@ -970,7 +988,7 @@ export class MemStorage implements IStorage {
 
   async updateLiability(
     id: number,
-    updates: UpdateLiabilities,
+    updates: UpdateLiabilities
   ): Promise<Liabilities | undefined> {
     const existing = this.liabilities.get(id);
     if (!existing) return undefined;
@@ -990,7 +1008,7 @@ export class MemStorage implements IStorage {
 
     const lowerQuery = query.toLowerCase();
     return allLiabilities.filter((liability) =>
-      liability.description.toLowerCase().includes(lowerQuery),
+      liability.description.toLowerCase().includes(lowerQuery)
     );
   }
 
@@ -1022,7 +1040,7 @@ export class MemStorage implements IStorage {
 
   async updateAsset(
     id: number,
-    updates: Partial<InsertAssets>,
+    updates: Partial<InsertAssets>
   ): Promise<Assets | undefined> {
     const existing = this.assets.get(id);
     if (!existing) return undefined;
@@ -1042,7 +1060,7 @@ export class MemStorage implements IStorage {
 
     const lowerQuery = query.toLowerCase();
     return allAssets.filter((asset) =>
-      asset.description.toLowerCase().includes(lowerQuery),
+      asset.description.toLowerCase().includes(lowerQuery)
     );
   }
 
@@ -1056,7 +1074,7 @@ export class MemStorage implements IStorage {
   }
 
   async createClientDetail(
-    clientDetail: InsertClientDetails,
+    clientDetail: InsertClientDetails
   ): Promise<ClientDetails> {
     const newClientDetail: ClientDetails = {
       id: this.currentClientDetailId++,
@@ -1078,7 +1096,7 @@ export class MemStorage implements IStorage {
 
   async updateClientDetail(
     id: number,
-    updates: UpdateClientDetails,
+    updates: UpdateClientDetails
   ): Promise<ClientDetails | undefined> {
     const existing = this.clientDetails.get(id);
     if (!existing) return undefined;
@@ -1106,14 +1124,20 @@ export class MemStorage implements IStorage {
 
   // Estate Position Parameters methods for MemStorage
   async getEstatePositionParameters(): Promise<EstatePositionParameters[]> {
-    return Array.from(this.estatePositionParameters.values()).sort((a, b) => a.id - b.id);
+    return Array.from(this.estatePositionParameters.values()).sort(
+      (a, b) => a.id - b.id
+    );
   }
 
-  async getEstatePositionParameter(id: number): Promise<EstatePositionParameters | undefined> {
+  async getEstatePositionParameter(
+    id: number
+  ): Promise<EstatePositionParameters | undefined> {
     return this.estatePositionParameters.get(id);
   }
 
-  async createEstatePositionParameter(parameter: InsertEstatePositionParameters): Promise<EstatePositionParameters> {
+  async createEstatePositionParameter(
+    parameter: InsertEstatePositionParameters
+  ): Promise<EstatePositionParameters> {
     const newParameter: EstatePositionParameters = {
       id: this.currentEstatePositionParameterId++,
       lifeCoverToEstate: parameter.lifeCoverToEstate || "R 0",
@@ -1131,8 +1155,10 @@ export class MemStorage implements IStorage {
       accrualClaimToSpouse: parameter.accrualClaimToSpouse || "R 0",
       ownEstateCapitalRequired: parameter.ownEstateCapitalRequired || "R 0",
       surplus: parameter.surplus || "R 0",
-      estateSurplusUtilisedForDependants: parameter.estateSurplusUtilisedForDependants || "R 0",
-      estatePositionAfterAllocation: parameter.estatePositionAfterAllocation || "R 0",
+      estateSurplusUtilisedForDependants:
+        parameter.estateSurplusUtilisedForDependants || "R 0",
+      estatePositionAfterAllocation:
+        parameter.estatePositionAfterAllocation || "R 0",
       lastUpdated: parameter.lastUpdated || new Date().toISOString(),
     };
     this.estatePositionParameters.set(newParameter.id, newParameter);
@@ -1141,7 +1167,7 @@ export class MemStorage implements IStorage {
 
   async updateEstatePositionParameter(
     id: number,
-    updates: UpdateEstatePositionParameters,
+    updates: UpdateEstatePositionParameters
   ): Promise<EstatePositionParameters | undefined> {
     const parameter = this.estatePositionParameters.get(id);
     if (!parameter) {
@@ -1167,7 +1193,7 @@ export class MemStorage implements IStorage {
     // If none exists, create with default values from the screenshot
     const defaultParameter: InsertEstatePositionParameters = {
       lifeCoverToEstate: "R 4,000,000",
-      voluntaryInvestments: "R 7,812,990", 
+      voluntaryInvestments: "R 7,812,990",
       accrualClaimFromSpouse: "R 0",
       dependantsSurplusUtilised: "R 0",
       ownEstateCapitalProvided: "R 0",
@@ -1203,7 +1229,8 @@ export class MemStorage implements IStorage {
       id: this.currentFinancialPlanId++,
       name: plan.name,
       description: plan.description || null,
-      dateApplicable: plan.dateApplicable || new Date().toISOString().split('T')[0],
+      dateApplicable:
+        plan.dateApplicable || new Date().toISOString().split("T")[0],
       createdAt: plan.createdAt || new Date().toISOString(),
       updatedAt: plan.updatedAt || new Date().toISOString(),
     };
@@ -1213,15 +1240,15 @@ export class MemStorage implements IStorage {
 
   async updateFinancialPlan(
     id: number,
-    updates: UpdateFinancialPlan,
+    updates: UpdateFinancialPlan
   ): Promise<FinancialPlan | undefined> {
     const existing = this.financialPlans.get(id);
     if (!existing) return undefined;
 
-    const updated: FinancialPlan = { 
-      ...existing, 
+    const updated: FinancialPlan = {
+      ...existing,
       ...updates,
-      updatedAt: new Date().toISOString()
+      updatedAt: new Date().toISOString(),
     };
     this.financialPlans.set(id, updated);
     return updated;
@@ -1229,10 +1256,11 @@ export class MemStorage implements IStorage {
 
   async deleteFinancialPlan(id: number): Promise<boolean> {
     // Also delete related plan needs
-    const planNeedsToDelete = Array.from(this.planNeeds.values())
-      .filter(pn => pn.planId === id);
-    planNeedsToDelete.forEach(pn => this.planNeeds.delete(pn.id));
-    
+    const planNeedsToDelete = Array.from(this.planNeeds.values()).filter(
+      (pn) => pn.planId === id
+    );
+    planNeedsToDelete.forEach((pn) => this.planNeeds.delete(pn.id));
+
     return this.financialPlans.delete(id);
   }
 
@@ -1241,9 +1269,11 @@ export class MemStorage implements IStorage {
     if (!query.trim()) return allPlans;
 
     const lowerQuery = query.toLowerCase();
-    return allPlans.filter(plan =>
-      plan.name.toLowerCase().includes(lowerQuery) ||
-      (plan.description && plan.description.toLowerCase().includes(lowerQuery))
+    return allPlans.filter(
+      (plan) =>
+        plan.name.toLowerCase().includes(lowerQuery) ||
+        (plan.description &&
+          plan.description.toLowerCase().includes(lowerQuery))
     );
   }
 
@@ -1270,10 +1300,7 @@ export class MemStorage implements IStorage {
     return newNeed;
   }
 
-  async updateNeed(
-    id: number,
-    updates: UpdateNeed,
-  ): Promise<Need | undefined> {
+  async updateNeed(id: number, updates: UpdateNeed): Promise<Need | undefined> {
     const existing = this.needs.get(id);
     if (!existing) return undefined;
 
@@ -1301,8 +1328,15 @@ export class MemStorage implements IStorage {
         category: "protection",
         hasDetailedSteps: true,
         summaryData: JSON.stringify({
-          estatePosition: { provided: "R5,740,881", required: "R2,918,036", surplus: "R2,822,845" },
-          dependantsPosition: { provided: "R7,822,845", required: "R9,675,356" }
+          estatePosition: {
+            provided: "R5,740,881",
+            required: "R2,918,036",
+            surplus: "R2,822,845",
+          },
+          dependantsPosition: {
+            provided: "R7,822,845",
+            required: "R9,675,356",
+          },
         }),
       },
       {
@@ -1312,7 +1346,7 @@ export class MemStorage implements IStorage {
         hasDetailedSteps: false,
         summaryData: JSON.stringify({
           lumpSumCover: { surplus: "R831,661" },
-          incomeCover: { shortfall: "R5,135,026" }
+          incomeCover: { shortfall: "R5,135,026" },
         }),
       },
       {
@@ -1335,7 +1369,7 @@ export class MemStorage implements IStorage {
         category: "planning",
         hasDetailedSteps: false,
         summaryData: JSON.stringify({
-          retirementFunds: { shortfall: "R8,994,312", required: "R27,965,380" }
+          retirementFunds: { shortfall: "R8,994,312", required: "R27,965,380" },
         }),
       },
       {
@@ -1346,7 +1380,7 @@ export class MemStorage implements IStorage {
         summaryData: JSON.stringify({
           totalNominal: "R6,450,000",
           compulsoryNominal: "R4,450,000",
-          voluntaryNominal: "R2,000,000"
+          voluntaryNominal: "R2,000,000",
         }),
       },
       {
@@ -1400,7 +1434,9 @@ export class MemStorage implements IStorage {
 
   // Plan Needs methods
   async getPlanNeeds(planId: number): Promise<PlanNeed[]> {
-    return Array.from(this.planNeeds.values()).filter(pn => pn.planId === planId);
+    return Array.from(this.planNeeds.values()).filter(
+      (pn) => pn.planId === planId
+    );
   }
 
   async addNeedToPlan(planNeed: InsertPlanNeed): Promise<PlanNeed> {
@@ -1417,9 +1453,10 @@ export class MemStorage implements IStorage {
   }
 
   async removeNeedFromPlan(planId: number, needId: number): Promise<boolean> {
-    const planNeed = Array.from(this.planNeeds.values())
-      .find(pn => pn.planId === planId && pn.needId === needId);
-    
+    const planNeed = Array.from(this.planNeeds.values()).find(
+      (pn) => pn.planId === planId && pn.needId === needId
+    );
+
     if (planNeed) {
       return this.planNeeds.delete(planNeed.id);
     }
@@ -1427,11 +1464,12 @@ export class MemStorage implements IStorage {
   }
 
   async removeAllNeedsFromPlan(planId: number): Promise<boolean> {
-    const planNeedsToRemove = Array.from(this.planNeeds.values())
-      .filter(pn => pn.planId === planId);
-    
+    const planNeedsToRemove = Array.from(this.planNeeds.values()).filter(
+      (pn) => pn.planId === planId
+    );
+
     if (planNeedsToRemove.length > 0) {
-      planNeedsToRemove.forEach(pn => this.planNeeds.delete(pn.id));
+      planNeedsToRemove.forEach((pn) => this.planNeeds.delete(pn.id));
       return true;
     }
     return false;
@@ -1439,7 +1477,7 @@ export class MemStorage implements IStorage {
 
   async updatePlanNeed(
     id: number,
-    updates: UpdatePlanNeed,
+    updates: UpdatePlanNeed
   ): Promise<PlanNeed | undefined> {
     const existing = this.planNeeds.get(id);
     if (!existing) return undefined;
@@ -1449,13 +1487,15 @@ export class MemStorage implements IStorage {
     return updated;
   }
 
-  async getFinancialPlanWithNeeds(planId: number): Promise<{ plan: FinancialPlan; needs: Need[] } | undefined> {
+  async getFinancialPlanWithNeeds(
+    planId: number
+  ): Promise<{ plan: FinancialPlan; needs: Need[] } | undefined> {
     const plan = await this.getFinancialPlan(planId);
     if (!plan) return undefined;
 
     const planNeeds = await this.getPlanNeeds(planId);
     const needs = [];
-    
+
     for (const planNeed of planNeeds) {
       const need = await this.getNeed(planNeed.needId);
       if (need) {
@@ -1467,14 +1507,26 @@ export class MemStorage implements IStorage {
   }
 
   // Retirement Parameters (one row per plan)
-  async getRetirementParameters(planId: number): Promise<RetirementParameters | undefined> {
-    return Array.from(this.retirementParameters.values()).find(p => p.planId === planId);
+  async getRetirementParameters(
+    planId: number
+  ): Promise<RetirementParameters | undefined> {
+    return Array.from(this.retirementParameters.values()).find(
+      (p) => p.planId === planId
+    );
   }
 
-  async upsertRetirementParameters(planId: number, updates: UpdateRetirementParameters): Promise<RetirementParameters> {
+  async upsertRetirementParameters(
+    planId: number,
+    updates: UpdateRetirementParameters
+  ): Promise<RetirementParameters> {
     const existing = await this.getRetirementParameters(planId);
     if (existing) {
-      const merged: RetirementParameters = { ...existing, ...updates, planId, lastUpdated: new Date().toISOString() };
+      const merged: RetirementParameters = {
+        ...existing,
+        ...updates,
+        planId,
+        lastUpdated: new Date().toISOString(),
+      };
       this.retirementParameters.set(existing.id, merged);
       return merged;
     }
@@ -1485,6 +1537,8 @@ export class MemStorage implements IStorage {
       retirementPlanningAge: updates.retirementPlanningAge ?? 90,
       autoCalculateTax: updates.autoCalculateTax ?? true,
       currentAnnualIncome: updates.currentAnnualIncome ?? "R 0",
+      cpi: updates.cpi ?? "4.5%",
+      yieldPremium: updates.yieldPremium ?? "3%",
       lastUpdated: new Date().toISOString(),
     };
     this.retirementParameters.set(created.id, created);
@@ -1514,7 +1568,10 @@ export class MemStorage implements IStorage {
     return created;
   }
 
-  async updateFutureInflow(id: number, updates: UpdateFutureInflow): Promise<FutureInflow | undefined> {
+  async updateFutureInflow(
+    id: number,
+    updates: UpdateFutureInflow
+  ): Promise<FutureInflow | undefined> {
     const existing = this.futureInflows.get(id);
     if (!existing) return undefined;
     const updated = { ...existing, ...updates };
@@ -1528,14 +1585,20 @@ export class MemStorage implements IStorage {
 
   // Retirement Lump Sum Needs
   async getRetirementLumpSumNeeds(): Promise<RetirementLumpSumNeed[]> {
-    return Array.from(this.retirementLumpSumNeeds.values()).sort((a, b) => a.id - b.id);
+    return Array.from(this.retirementLumpSumNeeds.values()).sort(
+      (a, b) => a.id - b.id
+    );
   }
 
-  async getRetirementLumpSumNeed(id: number): Promise<RetirementLumpSumNeed | undefined> {
+  async getRetirementLumpSumNeed(
+    id: number
+  ): Promise<RetirementLumpSumNeed | undefined> {
     return this.retirementLumpSumNeeds.get(id);
   }
 
-  async createRetirementLumpSumNeed(need: InsertRetirementLumpSumNeed): Promise<RetirementLumpSumNeed> {
+  async createRetirementLumpSumNeed(
+    need: InsertRetirementLumpSumNeed
+  ): Promise<RetirementLumpSumNeed> {
     const created: RetirementLumpSumNeed = {
       id: this.currentRetirementLumpSumNeedId++,
       description: need.description ?? "",
@@ -1550,7 +1613,10 @@ export class MemStorage implements IStorage {
     return created;
   }
 
-  async updateRetirementLumpSumNeed(id: number, updates: UpdateRetirementLumpSumNeed): Promise<RetirementLumpSumNeed | undefined> {
+  async updateRetirementLumpSumNeed(
+    id: number,
+    updates: UpdateRetirementLumpSumNeed
+  ): Promise<RetirementLumpSumNeed | undefined> {
     const existing = this.retirementLumpSumNeeds.get(id);
     if (!existing) return undefined;
     const updated = { ...existing, ...updates };
@@ -1586,7 +1652,7 @@ export class DbStorage {
 
   // Helper function to apply defaults for retirement funds
   private applyRetirementFundDefaults(
-    fund: Partial<InsertRetirementFund>,
+    fund: Partial<InsertRetirementFund>
   ): InsertRetirementFund {
     return {
       description: fund.description !== undefined ? fund.description : null,
@@ -1638,7 +1704,7 @@ export class DbStorage {
 
   // Helper function to apply defaults for assurance
   private applyAssuranceDefaults(
-    assuranceData: Partial<InsertAssurance>,
+    assuranceData: Partial<InsertAssurance>
   ): InsertAssurance {
     return {
       description:
@@ -1683,7 +1749,7 @@ export class DbStorage {
 
   // Helper function to apply defaults for additional estate duty items
   private applyAdditionalEstateDutyItemDefaults(
-    item: Partial<InsertAdditionalEstateDutyItems>,
+    item: Partial<InsertAdditionalEstateDutyItems>
   ): InsertAdditionalEstateDutyItems {
     return {
       description: item.description || "",
@@ -1710,7 +1776,7 @@ export class DbStorage {
   }
 
   async createRetirementFund(
-    fund: InsertRetirementFund,
+    fund: InsertRetirementFund
   ): Promise<RetirementFund> {
     const fundWithDefaults = this.applyRetirementFundDefaults(fund);
     const result = await this.db
@@ -1722,7 +1788,7 @@ export class DbStorage {
 
   async updateRetirementFund(
     id: number,
-    updates: UpdateRetirementFund,
+    updates: UpdateRetirementFund
   ): Promise<RetirementFund | undefined> {
     const result = await this.db
       .update(retirementFunds)
@@ -1771,7 +1837,7 @@ export class DbStorage {
 
   async updateAssurance(
     id: number,
-    updates: UpdateAssurance,
+    updates: UpdateAssurance
   ): Promise<Assurance | undefined> {
     const result = await this.db
       .update(assurance)
@@ -1797,7 +1863,10 @@ export class DbStorage {
   // TODO: For now, implementing stubs for all other methods to make interface compatible
   // Each method follows the same pattern as above but for different tables
   async getLumpSumBequests(): Promise<LumpSumBequest[]> {
-    return await this.db.select().from(lumpSumBequests).orderBy(asc(lumpSumBequests.id));
+    return await this.db
+      .select()
+      .from(lumpSumBequests)
+      .orderBy(asc(lumpSumBequests.id));
   }
   async getLumpSumBequest(id: number): Promise<LumpSumBequest | undefined> {
     const result = await this.db
@@ -1807,7 +1876,7 @@ export class DbStorage {
     return result[0];
   }
   async createLumpSumBequest(
-    bequest: InsertLumpSumBequest,
+    bequest: InsertLumpSumBequest
   ): Promise<LumpSumBequest> {
     const result = await this.db
       .insert(lumpSumBequests)
@@ -1817,7 +1886,7 @@ export class DbStorage {
   }
   async updateLumpSumBequest(
     id: number,
-    updates: Partial<InsertLumpSumBequest>,
+    updates: Partial<InsertLumpSumBequest>
   ): Promise<LumpSumBequest | undefined> {
     const result = await this.db
       .update(lumpSumBequests)
@@ -1841,10 +1910,13 @@ export class DbStorage {
   }
 
   async getDefinedBenefitFunds(): Promise<DefinedBenefitFund[]> {
-    return await this.db.select().from(definedBenefitFunds).orderBy(asc(definedBenefitFunds.id));
+    return await this.db
+      .select()
+      .from(definedBenefitFunds)
+      .orderBy(asc(definedBenefitFunds.id));
   }
   async getDefinedBenefitFund(
-    id: number,
+    id: number
   ): Promise<DefinedBenefitFund | undefined> {
     const result = await this.db
       .select()
@@ -1853,7 +1925,7 @@ export class DbStorage {
     return result[0];
   }
   async createDefinedBenefitFund(
-    fund: InsertDefinedBenefitFund,
+    fund: InsertDefinedBenefitFund
   ): Promise<DefinedBenefitFund> {
     const result = await this.db
       .insert(definedBenefitFunds)
@@ -1863,7 +1935,7 @@ export class DbStorage {
   }
   async updateDefinedBenefitFund(
     id: number,
-    updates: UpdateDefinedBenefitFund,
+    updates: UpdateDefinedBenefitFund
   ): Promise<DefinedBenefitFund | undefined> {
     const result = await this.db
       .update(definedBenefitFunds)
@@ -1879,7 +1951,7 @@ export class DbStorage {
     return (result.rowCount || 0) > 0;
   }
   async searchDefinedBenefitFunds(
-    query: string,
+    query: string
   ): Promise<DefinedBenefitFund[]> {
     return await this.db
       .select()
@@ -1889,10 +1961,13 @@ export class DbStorage {
   }
 
   async getVoluntaryInvestments(): Promise<VoluntaryInvestment[]> {
-    return await this.db.select().from(voluntaryInvestments).orderBy(asc(voluntaryInvestments.id));
+    return await this.db
+      .select()
+      .from(voluntaryInvestments)
+      .orderBy(asc(voluntaryInvestments.id));
   }
   async getVoluntaryInvestment(
-    id: number,
+    id: number
   ): Promise<VoluntaryInvestment | undefined> {
     const result = await this.db
       .select()
@@ -1901,7 +1976,7 @@ export class DbStorage {
     return result[0];
   }
   async createVoluntaryInvestment(
-    investment: InsertVoluntaryInvestment,
+    investment: InsertVoluntaryInvestment
   ): Promise<VoluntaryInvestment> {
     const result = await this.db
       .insert(voluntaryInvestments)
@@ -1911,7 +1986,7 @@ export class DbStorage {
   }
   async updateVoluntaryInvestment(
     id: number,
-    updates: UpdateVoluntaryInvestment,
+    updates: UpdateVoluntaryInvestment
   ): Promise<VoluntaryInvestment | undefined> {
     const result = await this.db
       .update(voluntaryInvestments)
@@ -1927,7 +2002,7 @@ export class DbStorage {
     return (result.rowCount || 0) > 0;
   }
   async searchVoluntaryInvestments(
-    query: string,
+    query: string
   ): Promise<VoluntaryInvestment[]> {
     return await this.db
       .select()
@@ -1937,7 +2012,10 @@ export class DbStorage {
   }
 
   async getIncomeNeeds(): Promise<IncomeNeeds[]> {
-    return await this.db.select().from(incomeNeeds).orderBy(asc(incomeNeeds.id));
+    return await this.db
+      .select()
+      .from(incomeNeeds)
+      .orderBy(asc(incomeNeeds.id));
   }
   async getIncomeNeed(id: number): Promise<IncomeNeeds | undefined> {
     const result = await this.db
@@ -1952,7 +2030,7 @@ export class DbStorage {
   }
   async updateIncomeNeed(
     id: number,
-    updates: UpdateIncomeNeeds,
+    updates: UpdateIncomeNeeds
   ): Promise<IncomeNeeds | undefined> {
     const result = await this.db
       .update(incomeNeeds)
@@ -1976,7 +2054,10 @@ export class DbStorage {
   }
 
   async getIncomeProvisions(): Promise<IncomeProvisions[]> {
-    return await this.db.select().from(incomeProvisions).orderBy(asc(incomeProvisions.id));
+    return await this.db
+      .select()
+      .from(incomeProvisions)
+      .orderBy(asc(incomeProvisions.id));
   }
   async getIncomeProvision(id: number): Promise<IncomeProvisions | undefined> {
     const result = await this.db
@@ -1986,7 +2067,7 @@ export class DbStorage {
     return result[0];
   }
   async createIncomeProvision(
-    provision: InsertIncomeProvisions,
+    provision: InsertIncomeProvisions
   ): Promise<IncomeProvisions> {
     const result = await this.db
       .insert(incomeProvisions)
@@ -1996,7 +2077,7 @@ export class DbStorage {
   }
   async updateIncomeProvision(
     id: number,
-    updates: UpdateIncomeProvisions,
+    updates: UpdateIncomeProvisions
   ): Promise<IncomeProvisions | undefined> {
     const result = await this.db
       .update(incomeProvisions)
@@ -2035,7 +2116,7 @@ export class DbStorage {
   }
   async updateResidueItem(
     id: number,
-    updates: UpdateResidue,
+    updates: UpdateResidue
   ): Promise<Residue | undefined> {
     const result = await this.db
       .update(residue)
@@ -2057,10 +2138,13 @@ export class DbStorage {
   }
 
   async getAdditionalEstateDutyItems(): Promise<AdditionalEstateDutyItems[]> {
-    return await this.db.select().from(additionalEstateDutyItems).orderBy(asc(additionalEstateDutyItems.id));
+    return await this.db
+      .select()
+      .from(additionalEstateDutyItems)
+      .orderBy(asc(additionalEstateDutyItems.id));
   }
   async getAdditionalEstateDutyItem(
-    id: number,
+    id: number
   ): Promise<AdditionalEstateDutyItems | undefined> {
     const result = await this.db
       .select()
@@ -2069,7 +2153,7 @@ export class DbStorage {
     return result[0];
   }
   async createAdditionalEstateDutyItem(
-    item: InsertAdditionalEstateDutyItems,
+    item: InsertAdditionalEstateDutyItems
   ): Promise<AdditionalEstateDutyItems> {
     const itemWithDefaults = this.applyAdditionalEstateDutyItemDefaults(item);
     const result = await this.db
@@ -2080,7 +2164,7 @@ export class DbStorage {
   }
   async updateAdditionalEstateDutyItem(
     id: number,
-    updates: UpdateAdditionalEstateDutyItems,
+    updates: UpdateAdditionalEstateDutyItems
   ): Promise<AdditionalEstateDutyItems | undefined> {
     const result = await this.db
       .update(additionalEstateDutyItems)
@@ -2096,7 +2180,7 @@ export class DbStorage {
     return (result.rowCount || 0) > 0;
   }
   async searchAdditionalEstateDutyItems(
-    query: string,
+    query: string
   ): Promise<AdditionalEstateDutyItems[]> {
     return await this.db
       .select()
@@ -2106,7 +2190,10 @@ export class DbStorage {
   }
 
   async getLiabilities(): Promise<Liabilities[]> {
-    return await this.db.select().from(liabilities).orderBy(asc(liabilities.id));
+    return await this.db
+      .select()
+      .from(liabilities)
+      .orderBy(asc(liabilities.id));
   }
   async getLiability(id: number): Promise<Liabilities | undefined> {
     const result = await this.db
@@ -2124,7 +2211,7 @@ export class DbStorage {
   }
   async updateLiability(
     id: number,
-    updates: UpdateLiabilities,
+    updates: UpdateLiabilities
   ): Promise<Liabilities | undefined> {
     const result = await this.db
       .update(liabilities)
@@ -2160,7 +2247,7 @@ export class DbStorage {
   }
   async updateAsset(
     id: number,
-    updates: Partial<InsertAssets>,
+    updates: Partial<InsertAssets>
   ): Promise<Assets | undefined> {
     const result = await this.db
       .update(assets)
@@ -2198,7 +2285,7 @@ export class DbStorage {
   }
 
   async createClientDetail(
-    clientDetail: InsertClientDetails,
+    clientDetail: InsertClientDetails
   ): Promise<ClientDetails> {
     const result = await this.db
       .insert(clientDetails)
@@ -2209,7 +2296,7 @@ export class DbStorage {
 
   async updateClientDetail(
     id: number,
-    updates: UpdateClientDetails,
+    updates: UpdateClientDetails
   ): Promise<ClientDetails | undefined> {
     const result = await this.db
       .update(clientDetails)
@@ -2241,10 +2328,15 @@ export class DbStorage {
 
   // Estate Position Parameters methods
   async getEstatePositionParameters(): Promise<EstatePositionParameters[]> {
-    return await this.db.select().from(estatePositionParameters).orderBy(asc(estatePositionParameters.id));
+    return await this.db
+      .select()
+      .from(estatePositionParameters)
+      .orderBy(asc(estatePositionParameters.id));
   }
 
-  async getEstatePositionParameter(id: number): Promise<EstatePositionParameters | undefined> {
+  async getEstatePositionParameter(
+    id: number
+  ): Promise<EstatePositionParameters | undefined> {
     const result = await this.db
       .select()
       .from(estatePositionParameters)
@@ -2252,7 +2344,9 @@ export class DbStorage {
     return result[0];
   }
 
-  async createEstatePositionParameter(parameter: InsertEstatePositionParameters): Promise<EstatePositionParameters> {
+  async createEstatePositionParameter(
+    parameter: InsertEstatePositionParameters
+  ): Promise<EstatePositionParameters> {
     const result = await this.db
       .insert(estatePositionParameters)
       .values(parameter)
@@ -2262,7 +2356,7 @@ export class DbStorage {
 
   async updateEstatePositionParameter(
     id: number,
-    updates: UpdateEstatePositionParameters,
+    updates: UpdateEstatePositionParameters
   ): Promise<EstatePositionParameters | undefined> {
     const result = await this.db
       .update(estatePositionParameters)
@@ -2287,22 +2381,24 @@ export class DbStorage {
     }
 
     // If none exists, create with calculated default values
-    const defaultParameter: InsertEstatePositionParameters = await this.calculateDefaultEstateParameters();
+    const defaultParameter: InsertEstatePositionParameters =
+      await this.calculateDefaultEstateParameters();
     return await this.createEstatePositionParameter(defaultParameter);
   }
 
   private async calculateDefaultEstateParameters(): Promise<InsertEstatePositionParameters> {
     // Get data from various sources to calculate defaults
-    const [assets, liabilities, retirementFunds, lumpSumBequests] = await Promise.all([
-      this.getAssets(),
-      this.getLiabilities(), 
-      this.getRetirementFunds(),
-      this.getLumpSumBequests()
-    ]);
+    const [assets, liabilities, retirementFunds, lumpSumBequests] =
+      await Promise.all([
+        this.getAssets(),
+        this.getLiabilities(),
+        this.getRetirementFunds(),
+        this.getLumpSumBequests(),
+      ]);
 
     // Helper function to parse currency values
     const parseCurrency = (value: string): number => {
-      return parseFloat(value.replace(/[^\d.-]/g, '')) || 0;
+      return parseFloat(value.replace(/[^\d.-]/g, "")) || 0;
     };
 
     // Calculate total assets
@@ -2310,14 +2406,18 @@ export class DbStorage {
       return sum + parseCurrency(asset.marketValue);
     }, 0);
 
-    // Calculate total liabilities  
+    // Calculate total liabilities
     const totalLiabilities = liabilities.reduce((sum, liability) => {
       return sum + parseCurrency(liability.debtAmount);
     }, 0);
 
     // Calculate total life cover from retirement funds
     const totalLifeCover = retirementFunds.reduce((sum, fund) => {
-      return sum + parseCurrency(fund.approvedLifeCover) + parseCurrency(fund.coverAmount);
+      return (
+        sum +
+        parseCurrency(fund.approvedLifeCover) +
+        parseCurrency(fund.coverAmount)
+      );
     }, 0);
 
     // Calculate total lump sum bequests
@@ -2327,10 +2427,14 @@ export class DbStorage {
 
     // Return calculated defaults
     return {
-      lifeCoverToEstate: `R ${Math.round(totalLifeCover * 0.4).toLocaleString()}`, // 40% of life cover
-      voluntaryInvestments: `R ${Math.round(totalAssets * 0.6).toLocaleString()}`, // 60% of assets
+      lifeCoverToEstate: `R ${Math.round(
+        totalLifeCover * 0.4
+      ).toLocaleString()}`, // 40% of life cover
+      voluntaryInvestments: `R ${Math.round(
+        totalAssets * 0.6
+      ).toLocaleString()}`, // 60% of assets
       accrualClaimFromSpouse: "R 0",
-      dependantsSurplusUtilised: "R 0", 
+      dependantsSurplusUtilised: "R 0",
       ownEstateCapitalProvided: "R 0", // Will be calculated
       estateDuty: `R ${Math.round(totalAssets * 0.02).toLocaleString()}`, // 2% of assets
       executorsFees: `R ${Math.round(totalAssets * 0.035).toLocaleString()}`, // 3.5% of assets
@@ -2338,8 +2442,12 @@ export class DbStorage {
       capitalGainsTax: `R ${Math.round(totalAssets * 0.018).toLocaleString()}`, // 1.8% of assets
       mastersFee: "R 7000",
       deathBedFuneralExpenses: "R 60000",
-      conveyancingValuationFees: `R ${Math.round(totalAssets * 0.01).toLocaleString()}`, // 1% of assets
-      accrualClaimToSpouse: `R ${Math.round(totalAssets * 0.25).toLocaleString()}`, // 25% of assets
+      conveyancingValuationFees: `R ${Math.round(
+        totalAssets * 0.01
+      ).toLocaleString()}`, // 1% of assets
+      accrualClaimToSpouse: `R ${Math.round(
+        totalAssets * 0.25
+      ).toLocaleString()}`, // 25% of assets
       ownEstateCapitalRequired: "R 0", // Will be calculated
       surplus: "R 0", // Will be calculated
       estateSurplusUtilisedForDependants: "R 0", // Will be calculated
@@ -2350,7 +2458,10 @@ export class DbStorage {
 
   // Financial Plans methods
   async getFinancialPlans(): Promise<FinancialPlan[]> {
-    return await this.db.select().from(financialPlans).orderBy(asc(financialPlans.id));
+    return await this.db
+      .select()
+      .from(financialPlans)
+      .orderBy(asc(financialPlans.id));
   }
 
   async getFinancialPlan(id: number): Promise<FinancialPlan | undefined> {
@@ -2371,13 +2482,13 @@ export class DbStorage {
 
   async updateFinancialPlan(
     id: number,
-    updates: UpdateFinancialPlan,
+    updates: UpdateFinancialPlan
   ): Promise<FinancialPlan | undefined> {
     const result = await this.db
       .update(financialPlans)
       .set({
         ...updates,
-        updatedAt: new Date().toISOString()
+        updatedAt: new Date().toISOString(),
       })
       .where(eq(financialPlans.id, id))
       .returning();
@@ -2387,7 +2498,7 @@ export class DbStorage {
   async deleteFinancialPlan(id: number): Promise<boolean> {
     // Delete related plan needs first
     await this.db.delete(planNeeds).where(eq(planNeeds.planId, id));
-    
+
     const result = await this.db
       .delete(financialPlans)
       .where(eq(financialPlans.id, id));
@@ -2413,25 +2524,16 @@ export class DbStorage {
   }
 
   async getNeed(id: number): Promise<Need | undefined> {
-    const result = await this.db
-      .select()
-      .from(needs)
-      .where(eq(needs.id, id));
+    const result = await this.db.select().from(needs).where(eq(needs.id, id));
     return result[0];
   }
 
   async createNeed(need: InsertNeed): Promise<Need> {
-    const result = await this.db
-      .insert(needs)
-      .values(need)
-      .returning();
+    const result = await this.db.insert(needs).values(need).returning();
     return result[0];
   }
 
-  async updateNeed(
-    id: number,
-    updates: UpdateNeed,
-  ): Promise<Need | undefined> {
+  async updateNeed(id: number, updates: UpdateNeed): Promise<Need | undefined> {
     const result = await this.db
       .update(needs)
       .set(updates)
@@ -2466,8 +2568,15 @@ export class DbStorage {
         category: "protection",
         hasDetailedSteps: true,
         summaryData: JSON.stringify({
-          estatePosition: { provided: "R5,740,881", required: "R2,918,036", surplus: "R2,822,845" },
-          dependantsPosition: { provided: "R7,822,845", required: "R9,675,356" }
+          estatePosition: {
+            provided: "R5,740,881",
+            required: "R2,918,036",
+            surplus: "R2,822,845",
+          },
+          dependantsPosition: {
+            provided: "R7,822,845",
+            required: "R9,675,356",
+          },
         }),
       },
       {
@@ -2477,7 +2586,7 @@ export class DbStorage {
         hasDetailedSteps: false,
         summaryData: JSON.stringify({
           lumpSumCover: { surplus: "R831,661" },
-          incomeCover: { shortfall: "R5,135,026" }
+          incomeCover: { shortfall: "R5,135,026" },
         }),
       },
       {
@@ -2500,7 +2609,7 @@ export class DbStorage {
         category: "planning",
         hasDetailedSteps: false,
         summaryData: JSON.stringify({
-          retirementFunds: { shortfall: "R8,994,312", required: "R27,965,380" }
+          retirementFunds: { shortfall: "R8,994,312", required: "R27,965,380" },
         }),
       },
       {
@@ -2511,7 +2620,7 @@ export class DbStorage {
         summaryData: JSON.stringify({
           totalNominal: "R6,450,000",
           compulsoryNominal: "R4,450,000",
-          voluntaryNominal: "R2,000,000"
+          voluntaryNominal: "R2,000,000",
         }),
       },
       {
@@ -2573,19 +2682,14 @@ export class DbStorage {
   }
 
   async addNeedToPlan(planNeed: InsertPlanNeed): Promise<PlanNeed> {
-    const result = await this.db
-      .insert(planNeeds)
-      .values(planNeed)
-      .returning();
+    const result = await this.db.insert(planNeeds).values(planNeed).returning();
     return result[0];
   }
 
   async removeNeedFromPlan(planId: number, needId: number): Promise<boolean> {
     const result = await this.db
       .delete(planNeeds)
-      .where(
-        and(eq(planNeeds.planId, planId), eq(planNeeds.needId, needId))
-      );
+      .where(and(eq(planNeeds.planId, planId), eq(planNeeds.needId, needId)));
     return (result.rowCount || 0) > 0;
   }
 
@@ -2598,7 +2702,7 @@ export class DbStorage {
 
   async updatePlanNeed(
     id: number,
-    updates: UpdatePlanNeed,
+    updates: UpdatePlanNeed
   ): Promise<PlanNeed | undefined> {
     const result = await this.db
       .update(planNeeds)
@@ -2608,13 +2712,15 @@ export class DbStorage {
     return result[0];
   }
 
-  async getFinancialPlanWithNeeds(planId: number): Promise<{ plan: FinancialPlan; needs: Need[] } | undefined> {
+  async getFinancialPlanWithNeeds(
+    planId: number
+  ): Promise<{ plan: FinancialPlan; needs: Need[] } | undefined> {
     const plan = await this.getFinancialPlan(planId);
     if (!plan) return undefined;
 
     const planNeedsResults = await this.getPlanNeeds(planId);
     const needs = [];
-    
+
     for (const planNeed of planNeedsResults) {
       const need = await this.getNeed(planNeed.needId);
       if (need) {
@@ -2626,7 +2732,9 @@ export class DbStorage {
   }
 
   // Retirement Parameters (one row per plan)
-  async getRetirementParameters(planId: number): Promise<RetirementParameters | undefined> {
+  async getRetirementParameters(
+    planId: number
+  ): Promise<RetirementParameters | undefined> {
     const result = await this.db
       .select()
       .from(retirementParameters)
@@ -2634,7 +2742,10 @@ export class DbStorage {
     return result[0];
   }
 
-  async upsertRetirementParameters(planId: number, updates: UpdateRetirementParameters): Promise<RetirementParameters> {
+  async upsertRetirementParameters(
+    planId: number,
+    updates: UpdateRetirementParameters
+  ): Promise<RetirementParameters> {
     const existing = await this.getRetirementParameters(planId);
     if (existing) {
       const result = await this.db
@@ -2659,20 +2770,32 @@ export class DbStorage {
 
   // Future Inflows
   async getFutureInflows(): Promise<FutureInflow[]> {
-    return await this.db.select().from(futureInflows).orderBy(asc(futureInflows.id));
+    return await this.db
+      .select()
+      .from(futureInflows)
+      .orderBy(asc(futureInflows.id));
   }
 
   async getFutureInflow(id: number): Promise<FutureInflow | undefined> {
-    const result = await this.db.select().from(futureInflows).where(eq(futureInflows.id, id));
+    const result = await this.db
+      .select()
+      .from(futureInflows)
+      .where(eq(futureInflows.id, id));
     return result[0];
   }
 
   async createFutureInflow(inflow: InsertFutureInflow): Promise<FutureInflow> {
-    const result = await this.db.insert(futureInflows).values(inflow).returning();
+    const result = await this.db
+      .insert(futureInflows)
+      .values(inflow)
+      .returning();
     return result[0];
   }
 
-  async updateFutureInflow(id: number, updates: UpdateFutureInflow): Promise<FutureInflow | undefined> {
+  async updateFutureInflow(
+    id: number,
+    updates: UpdateFutureInflow
+  ): Promise<FutureInflow | undefined> {
     const result = await this.db
       .update(futureInflows)
       .set(updates)
@@ -2682,26 +2805,44 @@ export class DbStorage {
   }
 
   async deleteFutureInflow(id: number): Promise<boolean> {
-    const result = await this.db.delete(futureInflows).where(eq(futureInflows.id, id));
+    const result = await this.db
+      .delete(futureInflows)
+      .where(eq(futureInflows.id, id));
     return (result.rowCount || 0) > 0;
   }
 
   // Retirement Lump Sum Needs
   async getRetirementLumpSumNeeds(): Promise<RetirementLumpSumNeed[]> {
-    return await this.db.select().from(retirementLumpSumNeeds).orderBy(asc(retirementLumpSumNeeds.id));
+    return await this.db
+      .select()
+      .from(retirementLumpSumNeeds)
+      .orderBy(asc(retirementLumpSumNeeds.id));
   }
 
-  async getRetirementLumpSumNeed(id: number): Promise<RetirementLumpSumNeed | undefined> {
-    const result = await this.db.select().from(retirementLumpSumNeeds).where(eq(retirementLumpSumNeeds.id, id));
+  async getRetirementLumpSumNeed(
+    id: number
+  ): Promise<RetirementLumpSumNeed | undefined> {
+    const result = await this.db
+      .select()
+      .from(retirementLumpSumNeeds)
+      .where(eq(retirementLumpSumNeeds.id, id));
     return result[0];
   }
 
-  async createRetirementLumpSumNeed(need: InsertRetirementLumpSumNeed): Promise<RetirementLumpSumNeed> {
-    const result = await this.db.insert(retirementLumpSumNeeds).values(need).returning();
+  async createRetirementLumpSumNeed(
+    need: InsertRetirementLumpSumNeed
+  ): Promise<RetirementLumpSumNeed> {
+    const result = await this.db
+      .insert(retirementLumpSumNeeds)
+      .values(need)
+      .returning();
     return result[0];
   }
 
-  async updateRetirementLumpSumNeed(id: number, updates: UpdateRetirementLumpSumNeed): Promise<RetirementLumpSumNeed | undefined> {
+  async updateRetirementLumpSumNeed(
+    id: number,
+    updates: UpdateRetirementLumpSumNeed
+  ): Promise<RetirementLumpSumNeed | undefined> {
     const result = await this.db
       .update(retirementLumpSumNeeds)
       .set(updates)
@@ -2711,7 +2852,9 @@ export class DbStorage {
   }
 
   async deleteRetirementLumpSumNeed(id: number): Promise<boolean> {
-    const result = await this.db.delete(retirementLumpSumNeeds).where(eq(retirementLumpSumNeeds.id, id));
+    const result = await this.db
+      .delete(retirementLumpSumNeeds)
+      .where(eq(retirementLumpSumNeeds.id, id));
     return (result.rowCount || 0) > 0;
   }
 }

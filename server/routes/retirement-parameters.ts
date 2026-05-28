@@ -12,10 +12,22 @@ export function registerRetirementParametersRoutes(app: Express) {
 
       const params = await storage.getRetirementParameters(planId);
       // Return a default-shaped object if not yet created (so the form has defaults to render).
-      res.json(params ?? { planId, retirementAge: 65, retirementPlanningAge: 90, autoCalculateTax: true, currentAnnualIncome: "R 0" });
+      res.json(
+        params ?? {
+          planId,
+          retirementAge: 65,
+          retirementPlanningAge: 90,
+          autoCalculateTax: true,
+          currentAnnualIncome: "R 0",
+          cpi: "4.5%",
+          yieldPremium: "3%",
+        }
+      );
     } catch (error) {
       console.error("Error fetching retirement parameters:", error);
-      res.status(500).json({ message: "Failed to fetch retirement parameters" });
+      res
+        .status(500)
+        .json({ message: "Failed to fetch retirement parameters" });
     }
   });
 
@@ -27,7 +39,10 @@ export function registerRetirementParametersRoutes(app: Express) {
       }
 
       const validated = updateRetirementParametersSchema.parse(req.body);
-      const params = await storage.upsertRetirementParameters(planId, validated);
+      const params = await storage.upsertRetirementParameters(
+        planId,
+        validated
+      );
       res.json(params);
     } catch (error) {
       console.error("Error saving retirement parameters:", error);
