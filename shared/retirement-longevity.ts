@@ -30,6 +30,17 @@ export interface DrawdownInputs {
   cpiPct: number;
   /** Real return above CPI as a percent (e.g. 3). Nominal yield = CPI + this. */
   yieldPremiumPct: number;
+  /** Two-Pot cash commuted at retirement (nominal at-retirement rand). Taken as
+   *  a lump sum and removed from the pool, so only the residual annuitises and
+   *  funds the income drawdown. Defaults to 0. */
+  lumpSumAtRetirement?: number;
+  /** Capital at retirement, supplied by the Build projection. When set, the
+   *  accumulation phase is a smooth rise from `startingBalance` to this exact
+   *  figure (the projection owns the run-up, growing each fund at its own rate),
+   *  rather than the engine re-deriving the peak at the drawdown yield. Keeps the
+   *  chart's peak identical to the need-summary's capital-at-retirement. The
+   *  drawdown after retirement still uses the CPI+premium yield. */
+  capitalAtRetirement?: number;
 }
 
 export interface DrawdownPoint {
@@ -62,6 +73,8 @@ export function simulateDrawdown(inputs: DrawdownInputs): DrawdownResult {
     monthlySaving,
     monthlyIncomeRequired,
     cpiPct,
+    lumpSumAtRetirement = 0,
+    capitalAtRetirement,
   } = inputs;
 
   const i = cpiPct / 100;
@@ -73,6 +86,21 @@ export function simulateDrawdown(inputs: DrawdownInputs): DrawdownResult {
   const retAge = Math.round(retirementAge);
   const endAge = Math.max(startAge, Math.round(untilAge));
 
+  // When the projection supplies the capital-at-retirement, the accumulation
+  // phase is a smooth rise from the starting balance to that exact peak (so the
+  // chart agrees with the Build need-summary). Geometric where possible — reads
+  // like compound growth — falling back to linear if the start is non-positive.
+  const seeded = capitalAtRetirement != null && retAge > startAge;
+  const accumulated = (n: number): number => {
+    const t = (n - startAge) / (retAge - startAge);
+    if (startingBalance > 0 && capitalAtRetirement! > 0) {
+      return (
+        startingBalance * Math.pow(capitalAtRetirement! / startingBalance, t)
+      );
+    }
+    return startingBalance + (capitalAtRetirement! - startingBalance) * t;
+  };
+
   const series: DrawdownPoint[] = [{ age: startAge, balance: startingBalance }];
   let balance = startingBalance;
   let depletionAge: number | null = null;
@@ -81,18 +109,39 @@ export function simulateDrawdown(inputs: DrawdownInputs): DrawdownResult {
     // Escalation uses years-from-today, so the income the user enters stays in
     // today's money regardless of when drawdown starts.
     const escalation = Math.pow(1 + i, n - startAge);
-    // Contribute while working; the retirement year is pure growth (no
-    // contribution, no withdrawal) so capital peaks exactly at retirement;
-    // drawdown begins the year after.
-    const flow =
-      n < retAge
-        ? annualSaving * escalation
-        : n > retAge
-        ? -annualIncome * escalation
-        : 0;
-    const prev = balance;
-    balance = prev * (1 + r) + flow;
 
+    if (n < retAge) {
+      // Accumulate. Seeded: rise toward the projection's peak. Otherwise grow at
+      // the yield then contribute. (Never crosses zero downward.)
+      balance = seeded
+        ? accumulated(n)
+        : balance * (1 + r) + annualSaving * escalation;
+      series.push({ age: n, balance });
+      continue;
+    }
+
+    if (n === retAge) {
+      // Reach the gross peak — the projection's figure when seeded, else pure
+      // growth on the engine's own run-up.
+      balance = seeded ? capitalAtRetirement! : balance * (1 + r);
+      series.push({ age: n, balance });
+      // Then commute the Two-Pot lump sum: a vertical step down to the
+      // annuitising capital, plotted at the SAME age so the drop is visible and
+      // the drawdown that follows grows only the residual (the cash has left).
+      if (lumpSumAtRetirement > 0) {
+        const prev = balance;
+        balance = prev - lumpSumAtRetirement;
+        if (balance < 0 && prev >= 0 && depletionAge === null) {
+          depletionAge = retAge;
+        }
+        series.push({ age: n, balance });
+      }
+      continue;
+    }
+
+    // Drawdown: grow then draw the escalating income.
+    const prev = balance;
+    balance = prev * (1 + r) - annualIncome * escalation;
     if (balance < 0 && prev >= 0 && depletionAge === null) {
       // Interpolate the crossing within the year for a smoother readout.
       depletionAge = n - 1 + prev / (prev - balance);

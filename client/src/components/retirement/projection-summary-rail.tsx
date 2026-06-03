@@ -3,28 +3,38 @@ import { formatCurrencyValue } from "@/lib/formatting";
 
 const rand = (n: number) => formatCurrencyValue(Math.round(n).toString());
 
-// A softened tint of the EW accent brown (#A55A2A over the cream card), so the
-// labels recede and the navy values lead. Tune the alpha to taste.
-const LABEL_COLOR = "rgba(165, 90, 42, 0.65)";
+// A light neutral grey so the labels recede and the navy values lead. (Was an
+// accent-brown tint; switched to grey on request — colours still being tuned.)
+const LABEL_COLOR = "#A3A3A3";
 
 /** The need-summary figures for one scenario (current or adjusted). */
 export interface SummaryFigures {
-  /** Surplus / (shortfall) at retirement — the headline. */
+  /** Surplus / (shortfall) at retirement = capital − income need. Computed but
+   *  deliberately not shown as a headline; the gap reads through the income and
+   *  run-out figures instead. */
   surplus: number;
   voluntaryCapital: number;
   retirementDbFunds: number;
+  /** Voluntary + retirement/DB — the capital at the retirement handoff. */
+  capitalAtRetirement: number;
   /** Income required, capitalised over the retirement horizon. */
   incomeOverLife: number;
   monthlyProvided: number;
   monthlyRequired: number;
   untilAge: number;
+  /** Age the pot runs out under the required income; null if it lasts. */
+  runsOutAge: number | null;
 }
 
 /**
- * The need-summary in the EW cream card, integrated beside the Project chart.
+ * The need-summary in a light-blue card (matching the Build FieldGroups),
+ * integrated beside the Project chart.
  * Two tabs — Current (the captured plan) and Adjusted (recomputed live as the
- * sliders move) — showing the same four metrics as the Build band so the
- * planner can compare the original and changed numbers.
+ * sliders move) — and two hero figures mirroring the chart's halves: capital
+ * "At retirement" (building up) and the monthly income "Through retirement"
+ * (drawing down), each with its supporting numbers as sub-items. The shortfall
+ * is deliberately not the headline — the gap shows through "of R… /mo" and the
+ * run-out age instead.
  */
 export function ProjectionSummaryRail({
   current,
@@ -35,16 +45,12 @@ export function ProjectionSummaryRail({
 }) {
   const [tab, setTab] = useState<"current" | "adjusted">("adjusted");
   const f = tab === "current" ? current : adjusted;
-  const shortfall = f.surplus < 0;
 
   return (
-    <div
-      className="rounded-lg p-5"
-      style={{ backgroundColor: "#FAF5EA", border: "1px solid #ECE5D3" }}
-    >
+    <div className="rounded-lg p-4" style={{ backgroundColor: "#F4F8FB" }}>
       <div
-        className="flex justify-center gap-6 mb-5"
-        style={{ borderBottom: "1px solid #ECE5D3" }}
+        className="flex justify-center gap-6 mb-3"
+        style={{ borderBottom: "1px solid #E1E8F0" }}
       >
         {(["current", "adjusted"] as const).map((id) => {
           const on = tab === id;
@@ -69,84 +75,106 @@ export function ProjectionSummaryRail({
         })}
       </div>
 
-      <div className="flex flex-col gap-6">
-        <div>
-          <div
-            className="text-xs font-medium uppercase tracking-wide"
-            style={{ color: LABEL_COLOR }}
-          >
-            At retirement
-          </div>
-          <div
-            className="text-3xl font-semibold tabular-nums mt-1"
-            style={{
-              color: shortfall
-                ? "var(--ew-tangerine)"
-                : "var(--ew-primary-navy)",
-            }}
-          >
-            {shortfall ? "−" : ""}
-            {rand(Math.abs(f.surplus))}
-          </div>
-          <div
-            className="text-xs mt-1 leading-snug"
-            style={{ color: "var(--ew-gray-700)" }}
-          >
-            vs the capital needed to fund income to age {f.untilAge}
-          </div>
-        </div>
+      <div className="flex flex-col gap-3">
+        {/* Phase 1 — building up: the capital built by retirement, with its two
+            components as sub-items. */}
+        <PhaseBlock
+          heading="At retirement"
+          value={rand(f.capitalAtRetirement)}
+          rows={[
+            { label: "Voluntary capital", value: rand(f.voluntaryCapital) },
+            {
+              label: "Retirement & DB funds",
+              value: rand(f.retirementDbFunds),
+            },
+          ]}
+          first
+        />
 
-        <div className="flex flex-col gap-3">
-          <RailRow label="Voluntary capital" value={rand(f.voluntaryCapital)} />
-          <RailRow
-            label="Retirement & DB funds"
-            value={rand(f.retirementDbFunds)}
-          />
-          <RailRow
-            label="Income drawn over life"
-            value={rand(f.incomeOverLife)}
-          />
-          <RailRow
-            label="Monthly income"
-            value={rand(f.monthlyProvided)}
-            sub={`of ${rand(f.monthlyRequired)}`}
-          />
-        </div>
+        {/* Phase 2 — drawing down: the income that capital provides, with the
+            life-of-retirement total and the run-out age as sub-items. */}
+        <PhaseBlock
+          heading="Through retirement"
+          value={rand(f.monthlyProvided)}
+          valueSub={`of ${rand(f.monthlyRequired)} /mo`}
+          rows={[
+            { label: "Income drawn over life", value: rand(f.incomeOverLife) },
+            {
+              label:
+                f.runsOutAge == null ? "Capital lasts" : "Capital runs out",
+              value:
+                f.runsOutAge == null
+                  ? `past ${f.untilAge}`
+                  : `age ${Math.round(f.runsOutAge)}`,
+            },
+          ]}
+        />
       </div>
     </div>
   );
 }
 
-function RailRow({
-  label,
+/** One phase: a hero number (the phase outcome) with its supporting figures as
+ *  compact single-line sub-items. The two blocks mirror the chart's building-up
+ *  and drawing-down halves. */
+function PhaseBlock({
+  heading,
   value,
-  sub,
+  valueSub,
+  rows,
+  first = false,
 }: {
-  label: string;
+  heading: string;
   value: string;
-  sub?: string;
+  valueSub?: string;
+  rows: { label: string; value: string }[];
+  first?: boolean;
 }) {
   return (
-    <div>
+    <div
+      className={first ? undefined : "pt-3"}
+      style={first ? undefined : { borderTop: "1px solid #E1E8F0" }}
+    >
       <div
-        className="text-xs font-medium uppercase tracking-wide"
-        style={{ color: LABEL_COLOR }}
+        className="text-[11px] font-bold uppercase"
+        style={{ color: "var(--ew-blue)", letterSpacing: "0.06em" }}
       >
-        {label}
+        {heading}
       </div>
       <div
-        className="text-base font-semibold tabular-nums"
+        className="text-xl font-semibold tabular-nums mt-0.5"
         style={{ color: "var(--ew-primary-navy)" }}
       >
         {value}
-        {sub && (
+        {valueSub && (
           <span
-            className="text-xs font-normal ml-1"
+            className="text-xs font-normal ml-1.5"
             style={{ color: "var(--ew-gray-700)" }}
           >
-            {sub}
+            {valueSub}
           </span>
         )}
+      </div>
+      <div className="mt-1.5 space-y-1">
+        {rows.map((r) => (
+          <div
+            key={r.label}
+            className="flex items-baseline justify-between gap-3"
+          >
+            <span
+              className="text-[11px] uppercase tracking-wide"
+              style={{ color: LABEL_COLOR }}
+            >
+              {r.label}
+            </span>
+            <span
+              className="text-xs font-semibold tabular-nums"
+              style={{ color: "var(--ew-primary-navy)" }}
+            >
+              {r.value}
+            </span>
+          </div>
+        ))}
       </div>
     </div>
   );

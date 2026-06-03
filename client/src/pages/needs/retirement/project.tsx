@@ -1,8 +1,7 @@
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { Settings2 } from "lucide-react";
+import { Settings2, Table2 } from "lucide-react";
 import { Card } from "@/components/ui/card";
-import { CustomTabs } from "@/components/ui/custom-tabs";
 import {
   parseAmount,
   presentValueGrowingAnnuity,
@@ -11,11 +10,11 @@ import {
 import {
   simulateDrawdown,
   maxSustainableIncome,
-  requiredSaving,
 } from "@shared/retirement-longevity";
 import {
   LongevityChart,
   type LongevityChartPoint,
+  type ChartEvent,
 } from "@/components/retirement/longevity-chart";
 import {
   LongevityControls,
@@ -95,14 +94,21 @@ function makeSummaryComputer(
       retirementDbFunds +
       (capturedIncomeProvided - incomeOverLife);
 
+    // The drawdown pot (chart peak) and the year it runs out — from the SAME
+    // seeded model the chart uses, so the rail agrees with the curve.
+    const capitalAtRetirement = retirementDbFunds + voluntaryCapital;
+    const run = simulateDrawdown({ ...l, capitalAtRetirement });
+
     return {
       surplus,
       voluntaryCapital,
       retirementDbFunds,
+      capitalAtRetirement,
       incomeOverLife,
-      monthlyProvided: maxSustainableIncome(l),
+      monthlyProvided: maxSustainableIncome({ ...l, capitalAtRetirement }),
       monthlyRequired: l.monthlyIncomeRequired,
       untilAge: l.untilAge,
+      runsOutAge: run.depletionAge,
     };
   };
 }
@@ -137,6 +143,7 @@ export default function RetirementProject() {
 
   const [levers, setLevers] = useState<Partial<DrawdownLevers>>({});
   const [adjustOpen, setAdjustOpen] = useState(false);
+  const [breakdownOpen, setBreakdownOpen] = useState(false);
 
   if (isLoading || !projection) {
     return (
@@ -158,66 +165,135 @@ export default function RetirementProject() {
       (s, n) => s + parseAmount(n.amount),
       0
     ),
+    lumpSumAtRetirement: projection.retirementLumpSumCommuted,
     cpiPct: pctOr(params?.cpi, DEFAULT_CPI_PCT),
     yieldPremiumPct: pctOr(params?.yieldPremium, DEFAULT_YIELD_PREMIUM_PCT),
   };
   const effective: DrawdownLevers = { ...baseline, ...levers };
 
-  // ---- Run the model: frozen "Current" baseline vs live "Projected" --------
-  const currentRun = simulateDrawdown(baseline);
-  const projectedRun = simulateDrawdown(effective);
-  const presets = {
-    providedIncome: maxSustainableIncome(effective),
-    requiredSaving: requiredSaving(effective),
-  };
-
   // ---- Need-summary figures (the four Build metrics), recomputed for the
   //      Current (baseline) vs Adjusted (effective) scenarios. Anchored to the
   //      captured values so the Current tab reproduces them exactly, then moved
-  //      by the lever deltas. --------------------------------------------------
+  //      by the lever deltas. These also OWN the run-up to retirement: the
+  //      drawdown pot is seeded from them so the chart peak equals the rail.
+  //      Capital at retirement (the chart peak = the rail's two capital rows)
+  //      is computed inside makeSummaryComputer, so it OWNS the run-up: the
+  //      drawdown pot is seeded from it and the chart peak equals the rail.
   const summaryFor = makeSummaryComputer(projection, baseline);
   const currentSummary = summaryFor(baseline);
   const adjustedSummary = summaryFor(effective);
 
-  const byAge = new Map<number, LongevityChartPoint>();
-  for (const p of currentRun.series) {
-    byAge.set(p.age, { age: p.age, current: p.balance, projected: NaN });
+  // ---- Run the model: frozen "Current" baseline vs live "Projected". The
+  //      projection owns accumulation (peak = the rail's capital), the engine
+  //      owns the drawdown from that peak. ------------------------------------
+  const currentRun = simulateDrawdown({
+    ...baseline,
+    capitalAtRetirement: currentSummary.capitalAtRetirement,
+  });
+  const projectedRun = simulateDrawdown({
+    ...effective,
+    capitalAtRetirement: adjustedSummary.capitalAtRetirement,
+  });
+  // Monthly saving that just funds the income to the end age. Re-solved here
+  // (not via the engine) because saving now moves the peak through the summary,
+  // not through the engine's own accumulation.
+  const solveRequiredSaving = () => {
+    let lo = 0;
+    let hi = 100_000;
+    for (let k = 0; k < 40; k++) {
+      const mid = (lo + hi) / 2;
+      const lv = { ...effective, monthlySaving: mid };
+      const { finalBalance } = simulateDrawdown({
+        ...lv,
+        capitalAtRetirement: summaryFor(lv).capitalAtRetirement,
+      });
+      if (finalBalance >= 0) hi = mid;
+      else lo = mid;
+    }
+    return hi;
+  };
+  const presets = {
+    providedIncome: adjustedSummary.monthlyProvided,
+    requiredSaving: solveRequiredSaving(),
+  };
+
+  // Merge the frozen Current and live Projected runs into chart rows. A two-
+  // pointer walk over the age-sorted series (not a by-age map) so the vertical
+  // lump-sum step — two points at the same retirement age — survives instead of
+  // collapsing. Where only one series has a point (e.g. its own step age), the
+  // other side is NaN and the line bridges it via connectNulls.
+  const cur = currentRun.series;
+  const proj = projectedRun.series;
+  const chartData: LongevityChartPoint[] = [];
+  let ci = 0;
+  let pi = 0;
+  while (ci < cur.length || pi < proj.length) {
+    const ca = ci < cur.length ? cur[ci].age : Infinity;
+    const pa = pi < proj.length ? proj[pi].age : Infinity;
+    if (ca === pa) {
+      chartData.push({
+        age: ca,
+        current: cur[ci].balance,
+        projected: proj[pi].balance,
+      });
+      ci++;
+      pi++;
+    } else if (ca < pa) {
+      chartData.push({ age: ca, current: cur[ci].balance, projected: NaN });
+      ci++;
+    } else {
+      chartData.push({ age: pa, current: NaN, projected: proj[pi].balance });
+      pi++;
+    }
   }
-  for (const p of projectedRun.series) {
-    const e = byAge.get(p.age) ?? {
-      age: p.age,
-      current: NaN,
-      projected: p.balance,
-    };
-    e.projected = p.balance;
-    byAge.set(p.age, e);
-  }
-  const chartData = Array.from(byAge.values()).sort((a, b) => a.age - b.age);
+
+  // Major events marked on the curve. The Two-Pot lump sum is the vertical step
+  // at retirement: two projected points at that age — the gross peak, then the
+  // annuity base. The dot sits at the base (where drawdown begins) and carries
+  // the peak so the tooltip can show peak → lump sum → to annuity.
+  const retAge = Math.round(effective.retirementAge);
+  const atRet = projectedRun.series.filter((p) => p.age === retAge);
+  const events: ChartEvent[] =
+    effective.lumpSumAtRetirement > 0 && atRet.length > 1
+      ? [
+          {
+            age: retAge,
+            value: atRet[1].balance,
+            title: "Lump sum commuted",
+            amount: -effective.lumpSumAtRetirement,
+            capitalBefore: atRet[0].balance,
+          },
+        ]
+      : [];
 
   return (
     <div className="w-full px-6 py-4">
       <div className="w-[1320px] max-w-full">
         <Card className="px-5 py-4 border-0 shadow-sm bg-white">
-          {/* Header: title, legend and Adjust as one centred group. */}
+          {/* Header: title, legend and the two slide-out buttons. */}
           <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 mb-8">
             <h2 className="text-2xl font-semibold text-primary">
               Capital over time
             </h2>
             <Legend />
-            <button
-              type="button"
-              onClick={() => setAdjustOpen(true)}
-              className="inline-flex items-center gap-1.5 h-8 px-3 rounded-md text-xs font-medium bg-white border border-input shadow-sm hover:bg-accent hover:text-accent-foreground"
-              style={{ color: "var(--ew-primary-navy)" }}
-            >
-              <Settings2 className="h-3.5 w-3.5" />
-              Adjust
-            </button>
+            <div className="flex items-center gap-2">
+              <ToolButton
+                icon={Settings2}
+                label="Adjust"
+                onClick={() => setAdjustOpen(true)}
+              />
+              <ToolButton
+                icon={Table2}
+                label="Breakdown"
+                onClick={() => setBreakdownOpen(true)}
+              />
+            </div>
           </div>
 
-          {/* Body: integrated summary rail + chart */}
+          {/* Body: integrated summary rail + chart. Rail vertically centred
+              against the chart's height. */}
           <div className="flex gap-6">
-            <div className="w-80 flex-shrink-0">
+            <div className="w-80 flex-shrink-0 self-center">
               <ProjectionSummaryRail
                 current={currentSummary}
                 adjusted={adjustedSummary}
@@ -228,27 +304,59 @@ export default function RetirementProject() {
                 data={chartData}
                 retirementAge={effective.retirementAge}
                 depletionAge={projectedRun.depletionAge}
+                events={events}
+                capitalAtRetirement={adjustedSummary.capitalAtRetirement}
               />
             </div>
           </div>
         </Card>
       </div>
 
-      <AdjustDrawer open={adjustOpen} onClose={() => setAdjustOpen(false)}>
-        <DrawerTabs
-          controls={
-            <LongevityControls
-              levers={effective}
-              presets={presets}
-              onChange={(next) => setLevers((prev) => ({ ...prev, ...next }))}
-              onReset={() => setLevers({})}
-              dirty={Object.keys(levers).length > 0}
-            />
-          }
-          breakdown={<BreakdownTab projection={projection} />}
+      <AdjustDrawer
+        open={adjustOpen}
+        onClose={() => setAdjustOpen(false)}
+        title="Adjust"
+      >
+        <LongevityControls
+          levers={effective}
+          presets={presets}
+          onChange={(next) => setLevers((prev) => ({ ...prev, ...next }))}
+          onReset={() => setLevers({})}
+          dirty={Object.keys(levers).length > 0}
         />
       </AdjustDrawer>
+
+      <AdjustDrawer
+        open={breakdownOpen}
+        onClose={() => setBreakdownOpen(false)}
+        title="Breakdown"
+      >
+        <BreakdownTab projection={projection} />
+      </AdjustDrawer>
     </div>
+  );
+}
+
+/** A small header button that opens one of the slide-out panels. */
+function ToolButton({
+  icon: Icon,
+  label,
+  onClick,
+}: {
+  icon: typeof Settings2;
+  label: string;
+  onClick: () => void;
+}) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      className="inline-flex items-center gap-1.5 h-8 px-3 rounded-md text-xs font-medium bg-white border border-input shadow-sm hover:bg-accent hover:text-accent-foreground"
+      style={{ color: "var(--ew-primary-navy)" }}
+    >
+      <Icon className="h-3.5 w-3.5" />
+      {label}
+    </button>
   );
 }
 
@@ -273,29 +381,5 @@ function Legend() {
         current
       </span>
     </div>
-  );
-}
-
-function DrawerTabs({
-  controls,
-  breakdown,
-}: {
-  controls: React.ReactNode;
-  breakdown: React.ReactNode;
-}) {
-  const [active, setActive] = useState<"adjust" | "breakdown">("adjust");
-  return (
-    <>
-      <CustomTabs
-        tabs={[
-          { id: "adjust", label: "Adjust" },
-          { id: "breakdown", label: "Breakdown" },
-        ]}
-        activeTab={active}
-        onTabChange={(id) => setActive(id as "adjust" | "breakdown")}
-        className="mb-3"
-      />
-      {active === "breakdown" ? breakdown : controls}
-    </>
   );
 }

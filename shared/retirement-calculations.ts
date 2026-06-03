@@ -284,6 +284,9 @@ export interface PerVehicleProjection {
   // Future inflows only: nominal value at the moment the inflow arrives,
   // before discounting back to retirement-date capital.
   valueAtInflow?: number;
+  // Retirement funds only: Two-Pot cash commuted at retirement
+  // (capitalAtRetirement × lump-sum %). The residual annuitises.
+  lumpSumCommuted?: number;
 }
 
 /**
@@ -319,6 +322,9 @@ export interface RetirementProjection {
   lumpSumNeeds: PerVehicleProjection[];
   incomeRequired: PerVehicleProjection[];
   incomeProvided: PerVehicleProjection[];
+  // Total Two-Pot cash commuted at retirement (nominal at-retirement). The
+  // drawdown engine removes this from the pool before income drawdown.
+  retirementLumpSumCommuted: number;
   additionalMonthlyContribution: number;
   contributionAllocation: ContributionAllocation | null;
   currentMonthlyRaContribution: number;
@@ -377,8 +383,16 @@ export function computeRetirementProjection(
           discountRate: inflation,
           years: yearsToRetirement,
         }),
+        lumpSumCommuted: capital * parsePercent(f.lumpSumPercent),
       };
     });
+
+  // Total Two-Pot cash commuted at retirement — feeds the drawdown engine so
+  // only the annuitising residual funds the income.
+  const retirementLumpSumCommuted = retirementFundProjections.reduce(
+    (s, p) => s + (p.lumpSumCommuted ?? 0),
+    0
+  );
 
   const dbFundProjections: PerVehicleProjection[] =
     input.definedBenefitFunds.map((f) => {
@@ -652,6 +666,7 @@ export function computeRetirementProjection(
     lumpSumNeeds: lumpSumProjections,
     incomeRequired: incomeRequiredProjections,
     incomeProvided: incomeProvidedProjections,
+    retirementLumpSumCommuted,
     additionalMonthlyContribution: additionalContribution,
     contributionAllocation,
     currentMonthlyRaContribution,

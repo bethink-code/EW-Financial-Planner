@@ -51,6 +51,71 @@ describe("simulateDrawdown", () => {
   });
 });
 
+describe("lumpSumAtRetirement", () => {
+  it("commutes the lump sum as a vertical step at retirement", () => {
+    const withLump = simulateDrawdown({
+      ...scenario,
+      lumpSumAtRetirement: 1_000_000,
+    });
+    const without = simulateDrawdown(scenario);
+
+    // Two points at the retirement age: the gross peak, then the annuity base.
+    const at65 = withLump.series.filter((p) => p.age === 65);
+    expect(at65).toHaveLength(2);
+
+    // The peak matches the no-lump run — the run-up to retirement is untouched.
+    const peakWithout = without.series.find((p) => p.age === 65)!.balance;
+    expect(at65[0].balance).toBeCloseTo(peakWithout, 6);
+
+    // The step down equals the commuted cash exactly.
+    expect(at65[0].balance - at65[1].balance).toBeCloseTo(1_000_000, 6);
+
+    // Less annuitising capital → runs out earlier.
+    expect(withLump.depletionAge!).toBeLessThan(without.depletionAge!);
+  });
+
+  it("lowers the sustainable income once cash is commuted", () => {
+    const { monthlyIncomeRequired, ...rest } = scenario;
+    const full = maxSustainableIncome(rest);
+    const afterLump = maxSustainableIncome({
+      ...rest,
+      lumpSumAtRetirement: 1_000_000,
+    });
+    expect(afterLump).toBeLessThan(full);
+  });
+});
+
+describe("capitalAtRetirement (projection-seeded peak)", () => {
+  it("lands the retirement peak on the supplied figure, not the engine's own", () => {
+    const seed = 12_055_492;
+    const { series } = simulateDrawdown({
+      ...scenario,
+      capitalAtRetirement: seed,
+    });
+    const at65 = series.filter((p) => p.age === 65);
+    // First age-65 point is the gross peak (no lump sum in this scenario).
+    expect(at65[0].balance).toBeCloseTo(seed, 2);
+    // And it differs from the engine's self-derived peak.
+    const selfDerived = simulateDrawdown(scenario).series.find(
+      (p) => p.age === 65
+    )!.balance;
+    expect(at65[0].balance).not.toBeCloseTo(selfDerived, -4);
+  });
+
+  it("rises monotonically from the starting balance to the seeded peak", () => {
+    const seed = 12_055_492;
+    const { series } = simulateDrawdown({
+      ...scenario,
+      capitalAtRetirement: seed,
+    });
+    const accum = series.filter((p) => p.age <= 65);
+    expect(accum[0].balance).toBeCloseTo(scenario.startingBalance, 2);
+    for (let k = 1; k < accum.length; k++) {
+      expect(accum[k].balance).toBeGreaterThan(accum[k - 1].balance);
+    }
+  });
+});
+
 describe("maxSustainableIncome", () => {
   it("is below the required income for an under-funded plan, and lands the balance near zero", () => {
     const { monthlyIncomeRequired, ...rest } = scenario;

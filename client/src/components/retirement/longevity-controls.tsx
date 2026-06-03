@@ -1,3 +1,4 @@
+import { type ReactNode } from "react";
 import { formatCurrencyValue } from "@/lib/formatting";
 import { Slider } from "@/components/ui/slider";
 import { YieldControl } from "@/components/retirement/yield-control";
@@ -8,6 +9,7 @@ export interface DrawdownLevers {
   // Fixed from the profile — not editable here:
   currentAge: number;
   startingBalance: number;
+  lumpSumAtRetirement: number;
   // Editable levers:
   cpiPct: number;
   retirementAge: number;
@@ -53,7 +55,7 @@ export function LongevityControls({
     levers.monthlyIncomeRequired - presets.providedIncome
   );
   return (
-    <div className="pt-1 pb-2 space-y-3">
+    <div className="pt-1 pb-2 space-y-4">
       {onReset && (
         <div className="flex justify-end">
           <button
@@ -67,91 +69,117 @@ export function LongevityControls({
           </button>
         </div>
       )}
-      {/* Read-only sustainable income + the editable end age, per the reference. */}
-      <div
-        className="flex items-end justify-between gap-3 rounded-lg p-4"
-        style={{ backgroundColor: "#F4F8FB" }}
-      >
-        <div>
-          <div
-            className="text-xs uppercase tracking-wide font-medium"
+
+      {/* Levers that shape the run-up to retirement. */}
+      <Section title="Before retirement">
+        <ControlRow
+          label="Monthly saving"
+          value={levers.monthlySaving}
+          min={0}
+          max={100_000}
+          step={100}
+          format="currency"
+          preset={{
+            label: `Set to required of ${rand(presets.requiredSaving)}`,
+            value: presets.requiredSaving,
+          }}
+          onChange={(v) => onChange({ monthlySaving: v })}
+        />
+        <ControlRow
+          label="Retirement age"
+          value={levers.retirementAge}
+          min={55}
+          max={75}
+          step={1}
+          format="age"
+          preset={{ label: "Set to 65", value: 65 }}
+          onChange={(v) => onChange({ retirementAge: v })}
+        />
+      </Section>
+
+      {/* Levers that shape the drawdown — and the sustainable-income readout. */}
+      <Section title="After retirement">
+        <div
+          className="flex items-end justify-between gap-3 rounded-lg p-4"
+          style={{ backgroundColor: "#F4F8FB" }}
+        >
+          <div>
+            <div
+              className="text-xs uppercase tracking-wide font-medium"
+              style={{ color: "var(--ew-blue)" }}
+            >
+              Monthly income provided
+            </div>
+            <div
+              className="text-lg font-semibold tabular-nums"
+              style={{ color: "var(--ew-primary-navy)" }}
+            >
+              {rand(presets.providedIncome)}
+            </div>
+            {shortfall > 0 && (
+              <div className="text-xs" style={{ color: "var(--ew-tangerine)" }}>
+                shortfall {rand(shortfall)}/mo
+              </div>
+            )}
+          </div>
+          <label
+            className="flex items-center gap-2 text-xs uppercase tracking-wide font-medium"
             style={{ color: "var(--ew-blue)" }}
           >
-            Monthly income provided
-          </div>
-          <div
-            className="text-lg font-semibold tabular-nums"
-            style={{ color: "var(--ew-primary-navy)" }}
-          >
-            {rand(presets.providedIncome)}
-          </div>
-          {shortfall > 0 && (
-            <div className="text-xs" style={{ color: "var(--ew-tangerine)" }}>
-              shortfall {rand(shortfall)}/mo
-            </div>
-          )}
+            Until age
+            <input
+              type="number"
+              value={Math.round(levers.untilAge)}
+              onChange={(e) =>
+                onChange({ untilAge: parseFloat(e.target.value) || 0 })
+              }
+              className="table-input tabular-nums text-right"
+              style={{ width: 64 }}
+              min={70}
+              max={105}
+              step={1}
+            />
+          </label>
         </div>
-        <label
-          className="flex items-center gap-2 text-xs uppercase tracking-wide font-medium"
-          style={{ color: "var(--ew-blue)" }}
-        >
-          Until age
-          <input
-            type="number"
-            value={Math.round(levers.untilAge)}
-            onChange={(e) =>
-              onChange({ untilAge: parseFloat(e.target.value) || 0 })
-            }
-            className="table-input tabular-nums text-right"
-            style={{ width: 64 }}
-            min={70}
-            max={105}
-            step={1}
-          />
-        </label>
-      </div>
 
-      <ControlRow
-        label="Monthly income required"
-        value={levers.monthlyIncomeRequired}
-        min={0}
-        max={200_000}
-        step={500}
-        format="currency"
-        preset={{
-          label: `Set to provided of ${rand(presets.providedIncome)}`,
-          value: presets.providedIncome,
-        }}
-        onChange={(v) => onChange({ monthlyIncomeRequired: v })}
-      />
-      <ControlRow
-        label="Monthly saving"
-        value={levers.monthlySaving}
-        min={0}
-        max={100_000}
-        step={100}
-        format="currency"
-        preset={{
-          label: `Set to required of ${rand(presets.requiredSaving)}`,
-          value: presets.requiredSaving,
-        }}
-        onChange={(v) => onChange({ monthlySaving: v })}
-      />
-      <YieldControl
-        cpiPct={levers.cpiPct}
-        premium={levers.yieldPremiumPct}
-        onPremiumChange={(v) => onChange({ yieldPremiumPct: v })}
-      />
-      <ControlRow
-        label="Retirement age"
-        value={levers.retirementAge}
-        min={55}
-        max={75}
-        step={1}
-        format="age"
-        preset={{ label: "Set to 65", value: 65 }}
-        onChange={(v) => onChange({ retirementAge: v })}
-      />
+        <ControlRow
+          label="Monthly income required"
+          value={levers.monthlyIncomeRequired}
+          min={0}
+          max={200_000}
+          step={500}
+          format="currency"
+          preset={{
+            label: `Set to provided of ${rand(presets.providedIncome)}`,
+            value: presets.providedIncome,
+          }}
+          onChange={(v) => onChange({ monthlyIncomeRequired: v })}
+        />
+        <YieldControl
+          cpiPct={levers.cpiPct}
+          premium={levers.yieldPremiumPct}
+          onPremiumChange={(v) => onChange({ yieldPremiumPct: v })}
+        />
+      </Section>
+    </div>
+  );
+}
+
+/** A labelled phase group of levers, divided from the one above by a hairline.
+ *  Mirrors the summary rail's At/Through-retirement sections. */
+function Section({ title, children }: { title: string; children: ReactNode }) {
+  return (
+    <div
+      className="space-y-3 pt-3"
+      style={{ borderTop: "1px solid var(--ew-border)" }}
+    >
+      <div
+        className="text-[11px] font-bold uppercase"
+        style={{ color: "var(--ew-blue)", letterSpacing: "0.06em" }}
+      >
+        {title}
+      </div>
+      {children}
     </div>
   );
 }
