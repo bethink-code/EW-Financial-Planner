@@ -215,7 +215,7 @@ export function IncomeProvisionsTable({
               outcomes={[
                 {
                   label: atRetirement
-                    ? "Capital at retirement"
+                    ? "Capital provided"
                     : "Value in current terms",
                   value: formatRand(
                     atRetirement
@@ -649,6 +649,7 @@ export function IncomeProvisionsTable({
       valueInCurrentTerms={totalInCurrentTerms}
       count={provisionCount}
       noun="provision"
+      metricLabel="capital provided"
     />
   ) : showSummary ? (
     <IncomeProvisionsSummary />

@@ -207,7 +207,7 @@ export default function RetirementLumpSumNeedsPage() {
               outcomes={[
                 {
                   label: atRetirement
-                    ? "Capital at retirement"
+                    ? "Capital required"
                     : "Value in current terms",
                   value: formatRand(
                     atRetirement
@@ -367,6 +367,7 @@ export default function RetirementLumpSumNeedsPage() {
       valueInCurrentTerms={totalInCurrentTerms}
       count={needCount}
       noun="need"
+      metricLabel="capital required"
     />
   );
 

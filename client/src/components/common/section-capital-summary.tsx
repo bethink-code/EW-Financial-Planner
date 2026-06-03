@@ -5,25 +5,32 @@ import { useValueMode } from "@/components/common/value-mode";
 const formatRand = (n: number) => formatCurrencyValue(Math.round(n).toString());
 
 /**
- * Per-tab capital summary for the Retirement need. A single accent tile whose
- * figure follows the shared At retirement / Today toggle in the projection
- * band — so every section summary stays in step with the headline equation
- * instead of printing both values at once.
+ * Per-tab capital summary for the Retirement need. A single accent tile: the
+ * metric ("Total capital" / "Total capital required" / "...provided"), the
+ * figure, and an "across N …" sub-line naming the count. The at-retirement vs
+ * today basis is NOT in the label — the shared Values toggle owns it, so the
+ * figure follows the toggle without the label restating it.
  */
 export function SectionCapitalSummary({
   capitalAtRetirement,
   valueInCurrentTerms,
   count,
   noun,
+  metricLabel = "capital",
 }: {
   capitalAtRetirement: number;
   valueInCurrentTerms: number;
   count: number;
-  /** Singular noun for the count subline, e.g. "investment", "inflow". */
+  /** Singular noun for the count subline, e.g. "investment", "need". */
   noun: string;
+  /** The metric this section totals (lower-case): "capital" for sources,
+   *  "capital required" for needs, "capital provided". No retirement/today
+   *  qualifier — the Values toggle carries that. */
+  metricLabel?: string;
 }) {
   const { mode } = useValueMode();
   const atRetirement = mode === "atRetirement";
+  const across = count === 1 ? `1 ${noun}` : `across ${count} ${noun}s`;
   return (
     <SummaryBand>
       {/* Single tile, so cap its width — without this it stretches the full
@@ -31,13 +38,11 @@ export function SectionCapitalSummary({
       <div className="max-w-md">
         <SummaryTile
           variant="accent"
-          label={
-            atRetirement ? "Capital at retirement" : "Value in current terms"
-          }
+          label={`Total ${metricLabel}`}
           value={formatRand(
             atRetirement ? capitalAtRetirement : valueInCurrentTerms
           )}
-          subValue={`${count} ${count === 1 ? noun : `${noun}s`}`}
+          subValue={across}
         />
       </div>
     </SummaryBand>

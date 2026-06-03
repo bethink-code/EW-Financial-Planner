@@ -214,7 +214,7 @@ function IncomeNeedsTable({
               outcomes={[
                 {
                   label: atRetirement
-                    ? "Capital at retirement"
+                    ? "Capital required"
                     : "Value in current terms",
                   value: formatRand(
                     atRetirement
@@ -560,6 +560,7 @@ function IncomeNeedsTable({
       valueInCurrentTerms={totalInCurrentTerms}
       count={needCount}
       noun="need"
+      metricLabel="capital required"
     />
   ) : showSummary ? (
     <IncomeNeedsSummary />
