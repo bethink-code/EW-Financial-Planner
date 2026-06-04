@@ -33,7 +33,7 @@ export function YieldControl({
   return (
     <div className="rounded-lg p-4" style={{ backgroundColor: "#F4F8FB" }}>
       <label
-        className="block text-xs uppercase tracking-wide font-medium mb-2"
+        className="block text-xs font-medium mb-2"
         style={{ color: "var(--ew-blue)" }}
       >
         Yield

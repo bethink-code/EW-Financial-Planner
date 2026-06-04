@@ -10,11 +10,14 @@ export function AdjustDrawer({
   open,
   onClose,
   title = "Adjust",
+  width = "w-[440px]",
   children,
 }: {
   open: boolean;
   onClose: () => void;
   title?: string;
+  /** Tailwind width class for the panel. Breakdown passes a wider value. */
+  width?: string;
   children: React.ReactNode;
 }) {
   return (
@@ -29,7 +32,8 @@ export function AdjustDrawer({
       />
       <aside
         className={cn(
-          "fixed top-0 right-0 z-50 flex h-full w-[440px] max-w-full flex-col bg-white shadow-xl transition-transform duration-300",
+          "fixed top-0 right-0 z-50 flex h-full max-w-full flex-col bg-white shadow-xl transition-transform duration-300",
+          width,
           open ? "translate-x-0" : "translate-x-full"
         )}
         role="dialog"
@@ -40,10 +44,7 @@ export function AdjustDrawer({
           className="flex items-center justify-between px-5 py-4"
           style={{ borderBottom: "1px solid var(--ew-border)" }}
         >
-          <h3
-            className="text-sm font-bold uppercase"
-            style={{ color: "var(--ew-blue)", letterSpacing: "0.06em" }}
-          >
+          <h3 className="text-sm font-bold" style={{ color: "var(--ew-blue)" }}>
             {title}
           </h3>
           <button

@@ -367,7 +367,7 @@ export default function RetirementLumpSumNeedsPage() {
       valueInCurrentTerms={totalInCurrentTerms}
       count={needCount}
       noun="need"
-      metricLabel="capital required"
+      label="lump sum needs"
     />
   );
 

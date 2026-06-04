@@ -5,28 +5,31 @@ import { useValueMode } from "@/components/common/value-mode";
 const formatRand = (n: number) => formatCurrencyValue(Math.round(n).toString());
 
 /**
- * Per-tab capital summary for the Retirement need. A single accent tile: the
- * metric ("Total capital" / "Total capital required" / "...provided"), the
- * figure, and an "across N …" sub-line naming the count. The at-retirement vs
- * today basis is NOT in the label — the shared Values toggle owns it, so the
- * figure follows the toggle without the label restating it.
+ * Per-tab capital summary for the Retirement need. A single accent tile: a
+ * section-specific total ("Total future inflows" / "Total lump sum needs" /
+ * "Total regular income required" …), the figure, and an "across N …" sub-line
+ * naming the count. Each section names its own group explicitly (client
+ * request) rather than a generic "Total capital". The at-retirement vs today
+ * basis is NOT in the label — the shared Values toggle owns it, so the figure
+ * follows the toggle without the label restating it.
  */
 export function SectionCapitalSummary({
   capitalAtRetirement,
   valueInCurrentTerms,
   count,
   noun,
-  metricLabel = "capital",
+  label = "capital",
 }: {
   capitalAtRetirement: number;
   valueInCurrentTerms: number;
   count: number;
   /** Singular noun for the count subline, e.g. "investment", "need". */
   noun: string;
-  /** The metric this section totals (lower-case): "capital" for sources,
-   *  "capital required" for needs, "capital provided". No retirement/today
-   *  qualifier — the Values toggle carries that. */
-  metricLabel?: string;
+  /** What this section totals, lower-case, prefixed with "Total " — the
+   *  explicit group name, e.g. "future inflows", "lump sum needs", "regular
+   *  income required". No retirement/today qualifier — the Values toggle
+   *  carries that. */
+  label?: string;
 }) {
   const { mode } = useValueMode();
   const atRetirement = mode === "atRetirement";
@@ -38,7 +41,7 @@ export function SectionCapitalSummary({
       <div className="max-w-md">
         <SummaryTile
           variant="accent"
-          label={`Total ${metricLabel}`}
+          label={`Total ${label}`}
           value={formatRand(
             atRetirement ? capitalAtRetirement : valueInCurrentTerms
           )}

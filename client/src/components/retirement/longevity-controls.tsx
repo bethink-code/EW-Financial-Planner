@@ -105,7 +105,7 @@ export function LongevityControls({
         >
           <div>
             <div
-              className="text-xs uppercase tracking-wide font-medium"
+              className="text-xs font-medium"
               style={{ color: "var(--ew-blue)" }}
             >
               Monthly income provided
@@ -123,7 +123,7 @@ export function LongevityControls({
             )}
           </div>
           <label
-            className="flex items-center gap-2 text-xs uppercase tracking-wide font-medium"
+            className="flex items-center gap-2 text-xs font-medium"
             style={{ color: "var(--ew-blue)" }}
           >
             Until age
@@ -174,8 +174,8 @@ function Section({ title, children }: { title: string; children: ReactNode }) {
       style={{ borderTop: "1px solid var(--ew-border)" }}
     >
       <div
-        className="text-[11px] font-bold uppercase"
-        style={{ color: "var(--ew-blue)", letterSpacing: "0.06em" }}
+        className="text-[11px] font-bold"
+        style={{ color: "var(--ew-blue)" }}
       >
         {title}
       </div>
@@ -208,7 +208,7 @@ function ControlRow({
   return (
     <div className="rounded-lg p-4" style={{ backgroundColor: "#F4F8FB" }}>
       <label
-        className="block text-xs uppercase tracking-wide font-medium mb-2"
+        className="block text-xs font-medium mb-2"
         style={{ color: "var(--ew-blue)" }}
       >
         {label}

@@ -389,6 +389,7 @@ export default function RetirementProject() {
         open={breakdownOpen}
         onClose={() => setBreakdownOpen(false)}
         title="Breakdown"
+        width="w-[720px]"
       >
         <BreakdownTab projection={projection} />
       </AdjustDrawer>

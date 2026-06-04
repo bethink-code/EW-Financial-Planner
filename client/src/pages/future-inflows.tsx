@@ -338,7 +338,6 @@ export default function FutureInflowsPage() {
                     }
                   />
                 </FormField>
-
               </div>
             </FieldGroup>
           </GroupedDetailForm>
@@ -364,6 +363,7 @@ export default function FutureInflowsPage() {
       valueInCurrentTerms={totalInCurrentTerms}
       count={inflowCount}
       noun="inflow"
+      label="future inflows"
     />
   );
 

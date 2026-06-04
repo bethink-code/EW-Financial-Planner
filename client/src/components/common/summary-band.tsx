@@ -1,4 +1,4 @@
-import { cn } from '@/lib/utils';
+import { cn } from "@/lib/utils";
 
 interface SummaryBandProps {
   /** When true, the first column is left as a spacer matching the body's
@@ -26,22 +26,26 @@ interface SummaryBandProps {
  * Auto-flow: tiles take equal-fraction columns regardless of how many you
  * pass, so adding a fourth tile re-balances the grid automatically.
  */
-export function SummaryBand({ firstColIsSidebar = true, firstSlot, children }: SummaryBandProps) {
+export function SummaryBand({
+  firstColIsSidebar = true,
+  firstSlot,
+  children,
+}: SummaryBandProps) {
   return (
     <div className="flex items-stretch">
       {firstColIsSidebar && (
         <div className="w-80 flex-shrink-0 px-4 py-5">{firstSlot}</div>
       )}
-      <div className={cn('flex-1 py-5', firstColIsSidebar ? 'pl-6 pr-4' : 'px-4')}>
-        <div className="grid grid-flow-col auto-cols-fr gap-3">
-          {children}
-        </div>
+      <div
+        className={cn("flex-1 py-5", firstColIsSidebar ? "pl-6 pr-4" : "px-4")}
+      >
+        <div className="grid grid-flow-col auto-cols-fr gap-3">{children}</div>
       </div>
     </div>
   );
 }
 
-type TileVariant = 'default' | 'accent';
+type TileVariant = "default" | "accent";
 
 interface SummaryTileProps {
   label: string;
@@ -53,38 +57,43 @@ interface SummaryTileProps {
   variant?: TileVariant;
 }
 
-const TILE_STYLES: Record<TileVariant, { bg: string; border: string; label: string }> = {
+const TILE_STYLES: Record<
+  TileVariant,
+  { bg: string; border: string; label: string }
+> = {
   default: {
-    bg: '#F4F8FB',
-    border: 'var(--ew-blue-tertiary-50)',
-    label: 'var(--ew-blue)',
+    bg: "#F4F8FB",
+    border: "var(--ew-blue-tertiary-50)",
+    label: "var(--ew-blue)",
   },
   accent: {
-    bg: '#FAF5EA',
-    border: '#ECE5D3',
-    label: '#A55A2A',
+    bg: "#FAF5EA",
+    border: "#ECE5D3",
+    label: "#A55A2A",
   },
 };
 
 /**
- * SummaryTile — one card inside a SummaryBand. Label on the left (uppercase,
- * coloured); value on the right (semibold, neutral-900). Optional subValue
+ * SummaryTile — one card inside a SummaryBand. Label on the left (sentence
+ * case, coloured); value on the right (semibold, neutral-900). Optional subValue
  * stacks under the value, right-aligned.
  *
  * Variants exist so client-feedback tweaks land in one place: change the
  * `default` style here and every section summary updates.
  */
-export function SummaryTile({ label, value, subValue, variant = 'default' }: SummaryTileProps) {
+export function SummaryTile({
+  label,
+  value,
+  subValue,
+  variant = "default",
+}: SummaryTileProps) {
   const s = TILE_STYLES[variant];
   return (
     <div
       className="rounded-lg px-4 py-4 flex items-baseline justify-between"
       style={{ backgroundColor: s.bg }}
     >
-      <div
-        className="text-sm font-medium uppercase tracking-wide"
-        style={{ color: s.label }}
-      >
+      <div className="text-sm font-medium" style={{ color: s.label }}>
         {label}
       </div>
       <div className="flex flex-col items-end">

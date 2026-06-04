@@ -152,6 +152,7 @@ export function VoluntaryInvestmentTable({
       valueInCurrentTerms={totalInCurrentTerms}
       count={investmentCount}
       noun="investment"
+      label="voluntary investments"
     />
   ) : showSummary ? (
     <VoluntaryInvestmentsSummary />

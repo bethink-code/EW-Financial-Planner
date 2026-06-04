@@ -649,7 +649,7 @@ export function IncomeProvisionsTable({
       valueInCurrentTerms={totalInCurrentTerms}
       count={provisionCount}
       noun="provision"
-      metricLabel="capital provided"
+      label="regular income provided"
     />
   ) : showSummary ? (
     <IncomeProvisionsSummary />

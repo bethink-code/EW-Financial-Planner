@@ -560,7 +560,7 @@ function IncomeNeedsTable({
       valueInCurrentTerms={totalInCurrentTerms}
       count={needCount}
       noun="need"
-      metricLabel="capital required"
+      label="regular income required"
     />
   ) : showSummary ? (
     <IncomeNeedsSummary />

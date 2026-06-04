@@ -27,7 +27,7 @@ export function GuaranteedIncomeRail({
       >
         <div>
           <div
-            className="text-xs font-medium uppercase tracking-wide"
+            className="text-xs font-medium"
             style={{ color: "var(--ew-blue)" }}
           >
             Guaranteed monthly income
@@ -99,35 +99,37 @@ export function GuaranteedIncomeView({
       {/* Right: how it's funded. */}
       <div className="flex-1 min-w-0 self-center">
         <div className="rounded-lg p-6" style={{ backgroundColor: "#F4F8FB" }}>
-          <Row
-            label="Capital at retirement"
-            value={fmt(capitalAtRetirement)}
-            bold
-          />
+          {/* Wider gaps between the three blocks so each reads on its own. */}
+          <div className="space-y-8">
+            <div>
+              <Row
+                label="Capital at retirement"
+                value={fmt(capitalAtRetirement)}
+                bold
+              />
+              {/* Cash vs annuity split bar. */}
+              <div className="mt-3 flex h-3 overflow-hidden rounded-full">
+                <div
+                  style={{
+                    width: `${cashFrac * 100}%`,
+                    backgroundColor: "var(--chart-primary-orange)",
+                  }}
+                  title="Cash lump sum"
+                />
+                <div
+                  style={{
+                    width: `${(1 - cashFrac) * 100}%`,
+                    backgroundColor: "var(--chart-primary-blue)",
+                  }}
+                  title="Capital to annuity"
+                />
+              </div>
+            </div>
 
-          {/* Cash vs annuity split bar. */}
-          <div className="my-4 flex h-3 overflow-hidden rounded-full">
-            <div
-              style={{
-                width: `${cashFrac * 100}%`,
-                backgroundColor: "#A55A2A",
-              }}
-              title="Cash lump sum"
-            />
-            <div
-              style={{
-                width: `${(1 - cashFrac) * 100}%`,
-                backgroundColor: "var(--chart-primary-blue)",
-              }}
-              title="Capital to annuity"
-            />
-          </div>
-
-          <div className="space-y-3">
             <div>
               <div
                 className="text-sm font-semibold mb-1"
-                style={{ color: "#A55A2A" }}
+                style={{ color: "var(--chart-primary-orange)" }}
               >
                 Cash lump sum (commuted)
               </div>

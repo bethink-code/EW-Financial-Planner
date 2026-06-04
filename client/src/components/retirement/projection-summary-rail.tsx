@@ -47,10 +47,10 @@ export function ProjectionSummaryRail({
   const f = tab === "current" ? current : adjusted;
 
   return (
-    <div className="rounded-lg p-4" style={{ backgroundColor: "#F4F8FB" }}>
+    <div className="rounded-lg p-4" style={{ backgroundColor: "#FAF5EA" }}>
       <div
         className="flex justify-center gap-6 mb-3"
-        style={{ borderBottom: "1px solid #E1E8F0" }}
+        style={{ borderBottom: "1px solid #ECE5D3" }}
       >
         {(["current", "adjusted"] as const).map((id) => {
           const on = tab === id;
@@ -133,42 +133,36 @@ function PhaseBlock({
   return (
     <div
       className={first ? undefined : "pt-3"}
-      style={first ? undefined : { borderTop: "1px solid #E1E8F0" }}
+      style={first ? undefined : { borderTop: "1px solid #ECE5D3" }}
     >
-      <div
-        className="text-[11px] font-bold uppercase"
-        style={{ color: "var(--ew-blue)", letterSpacing: "0.06em" }}
-      >
+      <div className="text-xs font-medium" style={{ color: "var(--ew-blue)" }}>
         {heading}
       </div>
       <div
-        className="text-xl font-semibold tabular-nums mt-0.5"
+        className="text-2xl font-semibold tabular-nums mt-0.5"
         style={{ color: "var(--ew-primary-navy)" }}
       >
         {value}
         {valueSub && (
           <span
-            className="text-xs font-normal ml-1.5"
+            className="text-sm font-normal ml-1.5"
             style={{ color: "var(--ew-gray-700)" }}
           >
             {valueSub}
           </span>
         )}
       </div>
-      <div className="mt-1.5 space-y-1">
+      <div className="mt-2 space-y-1">
         {rows.map((r) => (
           <div
             key={r.label}
             className="flex items-baseline justify-between gap-3"
           >
-            <span
-              className="text-[11px] uppercase tracking-wide"
-              style={{ color: LABEL_COLOR }}
-            >
+            <span className="text-sm" style={{ color: LABEL_COLOR }}>
               {r.label}
             </span>
             <span
-              className="text-xs font-semibold tabular-nums"
+              className="text-sm font-semibold tabular-nums"
               style={{ color: "var(--ew-primary-navy)" }}
             >
               {r.value}

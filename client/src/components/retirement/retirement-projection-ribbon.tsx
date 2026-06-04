@@ -93,9 +93,7 @@ export function RetirementProjectionRibbon({
   // today's money. Lives on the right with Refresh.
   const valuesToggle = (
     <div className="flex items-center gap-2">
-      <span className="text-xs text-gray-500 uppercase tracking-wider font-medium">
-        Values
-      </span>
+      <span className="text-[11px] text-gray-500 font-medium">Values</span>
       <ValueModeToggle mode={mode} onChange={setMode} />
     </div>
   );
@@ -274,7 +272,7 @@ function Segment({
         } py-2 flex items-baseline gap-3 min-w-0`}
       >
         <div
-          className="text-xs font-medium uppercase tracking-wide truncate"
+          className="text-xs font-medium truncate"
           style={{ color: "#A55A2A" }}
         >
           {label}
@@ -291,7 +289,7 @@ function Segment({
   return (
     <div className={`${leading ? "pl-2 pr-3" : "px-3"} py-6 min-w-0`}>
       <div
-        className="text-xs font-medium uppercase tracking-wide mb-1.5 whitespace-nowrap"
+        className="text-xs font-medium mb-1.5 whitespace-nowrap"
         style={{ color: "#A55A2A" }}
       >
         {label}
@@ -331,10 +329,10 @@ function ValueModeToggle({
             key={o.id}
             type="button"
             onClick={() => onChange(o.id)}
-            className={`px-3 h-8 text-sm font-medium rounded-[6px] transition-colors whitespace-nowrap ${
+            className={`px-2.5 h-7 text-xs font-medium rounded-[6px] transition-colors whitespace-nowrap ${
               active
-                ? "bg-[#F97415] text-white"
-                : "bg-white text-gray-700 hover:bg-[#F5F1E8]"
+                ? "bg-[var(--ew-blue)] text-white"
+                : "bg-white text-gray-700 hover:bg-[var(--ew-row-tint)]"
             }`}
           >
             {o.label}
