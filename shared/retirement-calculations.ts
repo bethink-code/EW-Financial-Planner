@@ -88,6 +88,131 @@ export function projectFundForward(opts: {
   return fvLumpSum + fvAnnuity;
 }
 
+// ============================================================
+// Two-Pot component split (retirement funds only)
+// ============================================================
+
+// Maximum cash commutable at retirement, by component. Vested follows the old
+// one-third rule; the Retirement pot must annuitise fully; the Savings pot is
+// fully cashable. Opted-out funds follow the vested rule.
+export const COMMUTE_RATE = {
+  vested: 1 / 3,
+  retirement: 0,
+  savings: 1,
+} as const;
+
+// New monthly contributions split two-thirds to the Retirement pot, one-third
+// to the Savings pot. The Vested pot receives none (it pre-dates the reform).
+export const CONTRIBUTION_SPLIT = {
+  vested: 0,
+  retirement: 2 / 3,
+  savings: 1 / 3,
+} as const;
+
+export interface ComponentSlice {
+  valueAtRetirement: number;
+  valueInCurrentTerms: number;
+  lumpSum: number;
+  toAnnuity: number;
+}
+
+export interface TwoPotBreakdown {
+  vested: ComponentSlice;
+  retirement: ComponentSlice;
+  savings: ComponentSlice;
+  optedOut: boolean;
+}
+
+/**
+ * Project a retirement fund's Two-Pot components forward to retirement.
+ *
+ * Each component grows at the same `growthRate` but receives a different share
+ * of new contributions, and commutes a different fraction to cash at
+ * retirement. An opted-out fund is a single vested-rules balance (held in
+ * `vested`) that keeps receiving the full contribution.
+ */
+export function projectTwoPotFund(opts: {
+  vested: number;
+  retirement: number;
+  savings: number;
+  optedOut: boolean;
+  monthlyContribution: number;
+  contributionEscalation: number;
+  growthRate: number;
+  yearsToRetirement: number;
+  inflation: number;
+}): TwoPotBreakdown {
+  const {
+    optedOut,
+    monthlyContribution,
+    contributionEscalation,
+    growthRate,
+    yearsToRetirement,
+    inflation,
+  } = opts;
+
+  const makeSlice = (
+    currentValue: number,
+    contributionShare: number,
+    commuteRate: number
+  ): ComponentSlice => {
+    const valueAtRetirement = projectFundForward({
+      currentValue,
+      monthlyContribution: monthlyContribution * contributionShare,
+      contributionEscalation,
+      growthRate,
+      yearsToRetirement,
+    });
+    const lumpSum = valueAtRetirement * commuteRate;
+    return {
+      valueAtRetirement,
+      valueInCurrentTerms: discountToCurrentTerms({
+        futureValue: valueAtRetirement,
+        discountRate: inflation,
+        years: yearsToRetirement,
+      }),
+      lumpSum,
+      toAnnuity: valueAtRetirement - lumpSum,
+    };
+  };
+
+  const zero: ComponentSlice = {
+    valueAtRetirement: 0,
+    valueInCurrentTerms: 0,
+    lumpSum: 0,
+    toAnnuity: 0,
+  };
+
+  if (optedOut) {
+    // Single vested-rules balance, still contributed to in full.
+    return {
+      vested: makeSlice(opts.vested, 1, COMMUTE_RATE.vested),
+      retirement: zero,
+      savings: zero,
+      optedOut: true,
+    };
+  }
+
+  return {
+    vested: makeSlice(
+      opts.vested,
+      CONTRIBUTION_SPLIT.vested,
+      COMMUTE_RATE.vested
+    ),
+    retirement: makeSlice(
+      opts.retirement,
+      CONTRIBUTION_SPLIT.retirement,
+      COMMUTE_RATE.retirement
+    ),
+    savings: makeSlice(
+      opts.savings,
+      CONTRIBUTION_SPLIT.savings,
+      COMMUTE_RATE.savings
+    ),
+    optedOut: false,
+  };
+}
+
 /**
  * Discount a future value back to today's terms (real-terms equivalent).
  */
@@ -285,8 +410,10 @@ export interface PerVehicleProjection {
   // before discounting back to retirement-date capital.
   valueAtInflow?: number;
   // Retirement funds only: Two-Pot cash commuted at retirement
-  // (capitalAtRetirement × lump-sum %). The residual annuitises.
+  // (sum of per-component lump sums). The residual annuitises.
   lumpSumCommuted?: number;
+  // Retirement funds only: per-component split feeding the Build breakdown.
+  twoPot?: TwoPotBreakdown;
 }
 
 /**
@@ -367,13 +494,27 @@ export function computeRetirementProjection(
   // Project capital sources forward to retirement.
   const retirementFundProjections: PerVehicleProjection[] =
     input.retirementFunds.map((f) => {
-      const capital = projectFundForward({
-        currentValue: parseAmount(f.fundValue),
+      const vested = parseAmount(f.vestedValue);
+      const retirement = parseAmount(f.retirementValue);
+      const savings = parseAmount(f.savingsValue);
+      // Backward-compat: funds captured before the Two-Pot split carry only the
+      // aggregate `fundValue`. Treat it as a single vested-rules balance so they
+      // keep projecting until the advisor enters the component split.
+      const hasSplit = vested + retirement + savings > 0;
+      const twoPot = projectTwoPotFund({
+        vested: hasSplit ? vested : parseAmount(f.fundValue),
+        retirement,
+        savings,
+        optedOut: f.optedOut ?? false,
         monthlyContribution: parseAmount(f.monthlyContribution),
         contributionEscalation: parsePercent(f.contributionEscalation),
         growthRate: parsePercent(f.growthRate),
         yearsToRetirement,
+        inflation,
       });
+      const slices = [twoPot.vested, twoPot.retirement, twoPot.savings];
+      const capital = slices.reduce((s, c) => s + c.valueAtRetirement, 0);
+      const lumpSumCommuted = slices.reduce((s, c) => s + c.lumpSum, 0);
       return {
         id: f.id,
         description: f.description ?? "",
@@ -383,7 +524,8 @@ export function computeRetirementProjection(
           discountRate: inflation,
           years: yearsToRetirement,
         }),
-        lumpSumCommuted: capital * parsePercent(f.lumpSumPercent),
+        lumpSumCommuted,
+        twoPot,
       };
     });
 
@@ -685,7 +827,11 @@ export function isRetirementReadyToProject(input: ProjectionInputs): boolean {
   const hasCapitalSource =
     input.retirementFunds.some(
       (f) =>
-        parseAmount(f.fundValue) > 0 || parseAmount(f.monthlyContribution) > 0
+        parseAmount(f.fundValue) > 0 ||
+        parseAmount(f.vestedValue) > 0 ||
+        parseAmount(f.retirementValue) > 0 ||
+        parseAmount(f.savingsValue) > 0 ||
+        parseAmount(f.monthlyContribution) > 0
     ) ||
     input.definedBenefitFunds.some(
       (f) =>

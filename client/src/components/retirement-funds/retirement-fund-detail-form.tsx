@@ -28,6 +28,8 @@ import {
 } from "@/lib/formatting";
 import { useRetirementProjection } from "@/hooks/use-retirement-projection";
 import { useValueMode } from "@/components/common/value-mode";
+import { parseAmount } from "@shared/retirement-calculations";
+import { TwoPotBreakdown } from "./two-pot-breakdown";
 
 interface RetirementFundDetailFormProps {
   fund: RetirementFund;
@@ -76,8 +78,7 @@ export function RetirementFundDetailForm({
     } else if (
       field === "increasePercentage" ||
       field === "contributionEscalation" ||
-      field === "growthRate" ||
-      field === "lumpSumPercent"
+      field === "growthRate"
     ) {
       const formattedValue = formatPercentageValue(value);
       onUpdate(fund.id, field, formattedValue);
@@ -243,53 +244,87 @@ export function RetirementFundDetailForm({
     const entityValue = currentEntity || primaryEntity?.entityName || "";
     const nameValue = fund.description || "Retirement fund";
 
-    // Two-Pot per-fund outcome calc. Aggregate SARS lump-sum tax across
-    // all funds lives in the Project view — here we just split capital
-    // into the lump sum vs the residual that buys an annuity. Basis
-    // follows the shared At-retirement / Today toggle.
-    const componentValue = fund.component || "Vested";
-    const lumpSumPercentRaw =
-      parseFloat((fund.lumpSumPercent || "0%").replace("%", "")) || 0;
-    const baseCapital = atRetirement
-      ? perVehicle?.capitalAtRetirement ?? 0
-      : perVehicle?.valueInCurrentTerms ?? 0;
-    const lumpSumR = baseCapital * (lumpSumPercentRaw / 100);
-    const toAnnuityR = baseCapital - lumpSumR;
+    // Two-Pot capture: three component balances (Vested / Retirement /
+    // Savings), or a single vested-rules balance when opted out. The
+    // breakdown table below splits each into its cash lump sum vs the
+    // annuitising residual — the engine owns that split. Aggregate SARS
+    // lump-sum tax lives in the Project view.
+    const optedOut = fund.optedOut ?? false;
 
-    // Defaults align with the client's screen: Vested/Opted out commute
-    // 1/3, Retirement pot must annuitise fully, Savings pot fully
-    // commutable. The advisor can dial after — Retirement stays locked.
-    const componentLumpSumDefault: Record<string, string> = {
-      Vested: "33.33%",
-      Retirement: "0%",
-      Savings: "100%",
-      "Opted out": "33.33%",
+    // Legacy funds (and funds captured in the DEL view) carry only the
+    // aggregate fundValue. Surface it under Vested until the advisor splits
+    // it, matching the engine fallback. `currentVested` is the Vested balance
+    // in play right now: the column once split, else the legacy aggregate.
+    const hasSplit =
+      parseAmount(fund.vestedValue) +
+        parseAmount(fund.retirementValue) +
+        parseAmount(fund.savingsValue) >
+      0;
+    const currentVested = hasSplit
+      ? parseAmount(fund.vestedValue)
+      : parseAmount(fund.fundValue);
+    const vestedDefault =
+      !hasSplit && currentVested > 0 ? formatRand(currentVested) : undefined;
+
+    // Keep the single fundValue total in sync with the components so the DEL
+    // view and the projection-readiness check stay coherent.
+    const handleComponentValueBlur = (
+      field: "vestedValue" | "retirementValue" | "savingsValue",
+      value: string
+    ) => {
+      const formatted = formatCurrencyValue(value);
+      onUpdate(fund.id, field, formatted);
+      const next = {
+        vestedValue: currentVested,
+        retirementValue: parseAmount(fund.retirementValue),
+        savingsValue: parseAmount(fund.savingsValue),
+      };
+      next[field] = parseAmount(formatted);
+      // First split edit on a legacy fund: persist the materialised Vested
+      // balance so editing another box doesn't clobber it.
+      if (field !== "vestedValue" && !hasSplit && currentVested > 0) {
+        onUpdate(fund.id, "vestedValue", formatRand(currentVested));
+      }
+      const total = next.vestedValue + next.retirementValue + next.savingsValue;
+      onUpdate(fund.id, "fundValue", formatRand(total));
     };
-    const handleComponentChange = (newComponent: string) => {
-      onUpdate(fund.id, "component", newComponent);
-      onUpdate(
-        fund.id,
-        "lumpSumPercent",
-        componentLumpSumDefault[newComponent] ?? "0%"
+
+    const handleOptedOutChange = (checked: boolean) => {
+      onUpdate(fund.id, "optedOut", checked);
+      if (checked) {
+        // Collapse to the single vested-rules balance.
+        onUpdate(fund.id, "vestedValue", formatRand(currentVested));
+        onUpdate(fund.id, "retirementValue", "R 0");
+        onUpdate(fund.id, "savingsValue", "R 0");
+        onUpdate(fund.id, "fundValue", formatRand(currentVested));
+      }
+    };
+
+    const componentValueField = (
+      field: "vestedValue" | "retirementValue" | "savingsValue",
+      label: string,
+      overrideValue?: string
+    ) => {
+      const value = overrideValue ?? ((fund[field] as string) || "R 0");
+      return (
+        <FormField label={label}>
+          <input
+            type="text"
+            key={`${fund.id}-${field}-${value}`}
+            defaultValue={value}
+            className={`table-input ${getValueClass(value, "currency")}`}
+            style={{ width: "130px" }}
+            onFocus={handleDefaultValueFocus}
+            onBlur={(e) => handleComponentValueBlur(field, e.target.value)}
+            disabled={disabled}
+          />
+        </FormField>
       );
     };
-    const lumpSumDisabled = disabled || componentValue === "Retirement";
 
     return (
       <GroupedDetailForm>
-        <FieldGroup
-          title="Retirement fund"
-          outcomes={[
-            {
-              label: atRetirement
-                ? "Value at retirement"
-                : "Value in current terms",
-              value: formatRand(baseCapital),
-            },
-            { label: "Lump sum", value: formatRand(lumpSumR) },
-            { label: "To annuity", value: formatRand(toAnnuityR) },
-          ]}
-        >
+        <FieldGroup title="Retirement fund">
           <div className="flex gap-3 flex-wrap items-end">
             <FormField label="Name">
               <input
@@ -330,45 +365,6 @@ export function RetirementFundDetailForm({
                   ))}
                 </SelectContent>
               </Select>
-            </FormField>
-
-            <FormField label="Component">
-              <Select
-                value={componentValue}
-                onValueChange={handleComponentChange}
-                disabled={disabled}
-              >
-                <SelectTrigger
-                  className="table-input"
-                  style={{ minWidth: "140px" }}
-                >
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="Vested">Vested</SelectItem>
-                  <SelectItem value="Retirement">Retirement</SelectItem>
-                  <SelectItem value="Savings">Savings</SelectItem>
-                  <SelectItem value="Opted out">Opted out</SelectItem>
-                </SelectContent>
-              </Select>
-            </FormField>
-
-            <FormField label="Lump sum %">
-              <input
-                type="text"
-                key={`${fund.id}-${fund.lumpSumPercent}`}
-                defaultValue={fund.lumpSumPercent || "0%"}
-                className={`table-input ${getValueClass(
-                  fund.lumpSumPercent || "0%",
-                  "percentage"
-                )}`}
-                style={{ width: "90px" }}
-                onFocus={handleDefaultValueFocus}
-                onBlur={(e) =>
-                  handleTextFieldBlur("lumpSumPercent", e.target.value)
-                }
-                disabled={lumpSumDisabled}
-              />
             </FormField>
 
             <FormField label="Contribution (PM)">
@@ -421,22 +417,44 @@ export function RetirementFundDetailForm({
                 disabled={disabled}
               />
             </FormField>
-
-            <FormField label="Current Value">
-              <input
-                type="text"
-                defaultValue={fund.fundValue || "R 0"}
-                className={`table-input ${getValueClass(
-                  fund.fundValue || "R 0",
-                  "currency"
-                )}`}
-                style={{ width: "120px" }}
-                onFocus={handleDefaultValueFocus}
-                onBlur={(e) => handleTextFieldBlur("fundValue", e.target.value)}
-                disabled={disabled}
-              />
-            </FormField>
           </div>
+        </FieldGroup>
+
+        <FieldGroup title="Two-Pot components">
+          <div className="flex gap-3 flex-wrap items-end">
+            <FormField label="Opted out">
+              <label
+                className="flex items-center gap-2 h-9 text-sm"
+                style={{ color: "var(--ew-primary-navy)" }}
+              >
+                <input
+                  type="checkbox"
+                  checked={optedOut}
+                  onChange={(e) => handleOptedOutChange(e.target.checked)}
+                  disabled={disabled}
+                />
+                Pre-2024 rules
+              </label>
+            </FormField>
+
+            {optedOut ? (
+              componentValueField("vestedValue", "Value", vestedDefault)
+            ) : (
+              <>
+                {componentValueField("vestedValue", "Vested", vestedDefault)}
+                {componentValueField("retirementValue", "Retirement")}
+                {componentValueField("savingsValue", "Savings")}
+              </>
+            )}
+          </div>
+
+          {perVehicle?.twoPot && (
+            <TwoPotBreakdown
+              twoPot={perVehicle.twoPot}
+              atRetirement={atRetirement}
+              formatRand={formatRand}
+            />
+          )}
         </FieldGroup>
       </GroupedDetailForm>
     );

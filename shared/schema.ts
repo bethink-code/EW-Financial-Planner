@@ -125,7 +125,17 @@ export const retirementFunds = pgTable("retirement_funds", {
     .default("0%"),
   growthRate: text("growth_rate").notNull().default("10%"),
 
-  // Two-Pot component tagging + per-fund lump-sum election at retirement
+  // Two-Pot component balances (retirement-need view). Post-2024 a fund splits
+  // into up to three components, each with its own commutation rule at
+  // retirement: Vested (~1/3 cash), Retirement (must annuitise), Savings (100%
+  // cash). `optedOut` collapses the fund to a single vested-rules balance.
+  vestedValue: text("vested_value").notNull().default("R 0"),
+  retirementValue: text("retirement_value").notNull().default("R 0"),
+  savingsValue: text("savings_value").notNull().default("R 0"),
+  optedOut: boolean("opted_out").notNull().default(false),
+
+  // DEPRECATED — superseded by the component balances above. Retained to avoid
+  // a destructive prod migration; no longer read by the retirement view.
   component: text("component").notNull().default("Vested"),
   lumpSumPercent: text("lump_sum_percent").notNull().default("33.33%"),
 });

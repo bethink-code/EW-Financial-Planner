@@ -458,6 +458,10 @@ export class MemStorage implements IStorage {
       monthlyContribution: insertFund.monthlyContribution || "R 0",
       contributionEscalation: insertFund.contributionEscalation || "0%",
       growthRate: insertFund.growthRate || "10%",
+      vestedValue: insertFund.vestedValue || "R 0",
+      retirementValue: insertFund.retirementValue || "R 0",
+      savingsValue: insertFund.savingsValue || "R 0",
+      optedOut: insertFund.optedOut ?? false,
       component: insertFund.component || "Vested",
       lumpSumPercent: insertFund.lumpSumPercent || "33.33%",
     };
