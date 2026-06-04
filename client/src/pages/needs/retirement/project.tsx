@@ -11,6 +11,13 @@ import {
   simulateDrawdown,
   maxSustainableIncome,
 } from "@shared/retirement-longevity";
+import { computeGuaranteedIncome } from "@shared/retirement-guaranteed-income";
+import { CustomTabs } from "@/components/ui/custom-tabs";
+import {
+  GuaranteedIncomeView,
+  GuaranteedIncomeRail,
+} from "@/components/retirement/guaranteed-income-view";
+import { IncomeOverTimeChart } from "@/components/retirement/income-over-time-chart";
 import {
   LongevityChart,
   type LongevityChartPoint,
@@ -144,6 +151,9 @@ export default function RetirementProject() {
   const [levers, setLevers] = useState<Partial<DrawdownLevers>>({});
   const [adjustOpen, setAdjustOpen] = useState(false);
   const [breakdownOpen, setBreakdownOpen] = useState(false);
+  const [view, setView] = useState<"capital" | "guaranteed" | "incomeGraph">(
+    "capital"
+  );
 
   if (isLoading || !projection) {
     return (
@@ -182,6 +192,17 @@ export default function RetirementProject() {
   const summaryFor = makeSummaryComputer(projection, baseline);
   const currentSummary = summaryFor(baseline);
   const adjustedSummary = summaryFor(effective);
+
+  // ---- Guaranteed-income (term-annuity) view — the alternative narrative:
+  //      take the Two-Pot cash, annuitise the residual over the horizon.
+  //      Computed from the same seeded capital + commuted lump sum. ----------
+  const guaranteed = computeGuaranteedIncome({
+    capitalAtRetirement: adjustedSummary.capitalAtRetirement,
+    lumpSumCommuted: effective.lumpSumAtRetirement,
+    cpiPct: effective.cpiPct,
+    yieldPremiumPct: effective.yieldPremiumPct,
+    termYears: Math.max(0, effective.untilAge - effective.retirementAge),
+  });
 
   // ---- Run the model: frozen "Current" baseline vs live "Projected". The
   //      projection owns accumulation (peak = the rail's capital), the engine
@@ -270,13 +291,22 @@ export default function RetirementProject() {
     <div className="w-full px-6 py-4">
       <div className="w-[1320px] max-w-full">
         <Card className="px-5 py-4 border-0 shadow-sm bg-white">
-          {/* Header: title, legend and the two slide-out buttons. */}
-          <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 mb-8">
-            <h2 className="text-2xl font-semibold text-primary">
-              Capital over time
-            </h2>
-            <Legend />
-            <div className="flex items-center gap-2">
+          {/* Header: the two-view switcher + the slide-out buttons. The active
+              tab reads as the section heading (text-xl, EW pattern). */}
+          <div className="relative">
+            <CustomTabs
+              tabs={[
+                { id: "capital", label: "Capital over time" },
+                { id: "guaranteed", label: "Guaranteed income" },
+                { id: "incomeGraph", label: "Income over time" },
+              ]}
+              activeTab={view}
+              onTabChange={(id) =>
+                setView(id as "capital" | "guaranteed" | "incomeGraph")
+              }
+            />
+            <div className="absolute right-0 top-0 flex items-center gap-2">
+              {view === "capital" && <Legend />}
               <ToolButton
                 icon={Settings2}
                 label="Adjust"
@@ -290,25 +320,54 @@ export default function RetirementProject() {
             </div>
           </div>
 
-          {/* Body: integrated summary rail + chart. Rail vertically centred
-              against the chart's height. */}
-          <div className="flex gap-6">
-            <div className="w-80 flex-shrink-0 self-center">
-              <ProjectionSummaryRail
-                current={currentSummary}
-                adjusted={adjustedSummary}
-              />
+          {view === "capital" && (
+            // Body: integrated summary rail + chart. Rail vertically centred
+            // against the chart's height.
+            <div className="flex gap-6">
+              <div className="w-80 flex-shrink-0 self-center">
+                <ProjectionSummaryRail
+                  current={currentSummary}
+                  adjusted={adjustedSummary}
+                />
+              </div>
+              <div className="flex-1 min-w-0">
+                <LongevityChart
+                  data={chartData}
+                  retirementAge={effective.retirementAge}
+                  depletionAge={projectedRun.depletionAge}
+                  events={events}
+                  capitalAtRetirement={adjustedSummary.capitalAtRetirement}
+                />
+              </div>
             </div>
-            <div className="flex-1 min-w-0">
-              <LongevityChart
-                data={chartData}
-                retirementAge={effective.retirementAge}
-                depletionAge={projectedRun.depletionAge}
-                events={events}
-                capitalAtRetirement={adjustedSummary.capitalAtRetirement}
+          )}
+
+          {view === "guaranteed" && (
+            <GuaranteedIncomeView
+              result={guaranteed}
+              capitalAtRetirement={adjustedSummary.capitalAtRetirement}
+              monthlyRequired={effective.monthlyIncomeRequired}
+            />
+          )}
+
+          {view === "incomeGraph" && (
+            <div className="flex gap-6">
+              <GuaranteedIncomeRail
+                monthlyIncome={guaranteed.monthlyIncome}
+                monthlyRequired={effective.monthlyIncomeRequired}
+                termYears={guaranteed.termYears}
               />
+              <div className="flex-1 min-w-0">
+                <IncomeOverTimeChart
+                  monthlyIncome={guaranteed.monthlyIncome}
+                  monthlyRequired={effective.monthlyIncomeRequired}
+                  cpiPct={effective.cpiPct}
+                  retirementAge={effective.retirementAge}
+                  untilAge={effective.untilAge}
+                />
+              </div>
             </div>
-          </div>
+          )}
         </Card>
       </div>
 

@@ -24,6 +24,17 @@ const BRACKETS_2025_2026: Bracket[] = [
   { upTo: Infinity, base: 644_489, rate: 0.45, threshold: 1_817_000 },
 ];
 
+// SARS retirement / severance lump-sum tax table (2025/2026). Applied to the
+// cumulative retirement lump sums taken — for this tool, the aggregate Two-Pot
+// cash commuted at retirement across all funds. The lower pre-retirement
+// withdrawal table is not modelled.
+const RETIREMENT_LUMP_SUM_BRACKETS_2025_2026: Bracket[] = [
+  { upTo: 550_000, base: 0, rate: 0, threshold: 0 },
+  { upTo: 770_000, base: 0, rate: 0.18, threshold: 550_000 },
+  { upTo: 1_155_000, base: 39_600, rate: 0.27, threshold: 770_000 },
+  { upTo: Infinity, base: 143_550, rate: 0.36, threshold: 1_155_000 },
+];
+
 const PRIMARY_REBATE_2025_2026 = 17_235;
 const SECONDARY_REBATE_2025_2026 = 9_444;
 const TERTIARY_REBATE_2025_2026 = 3_145;
@@ -37,7 +48,7 @@ export function annualIncomeTax(opts: {
   taxYear?: SaTaxYear;
 }): number {
   const income = Math.max(0, opts.annualTaxableIncome);
-  const bracket = BRACKETS_2025_2026.find(b => income <= b.upTo)!;
+  const bracket = BRACKETS_2025_2026.find((b) => income <= b.upTo)!;
   const gross = bracket.base + (income - bracket.threshold) * bracket.rate;
 
   let rebate = PRIMARY_REBATE_2025_2026;
@@ -47,12 +58,29 @@ export function annualIncomeTax(opts: {
   return Math.max(0, gross - rebate);
 }
 
+/**
+ * SARS tax on a retirement lump sum, per the 2025/2026 retirement table.
+ * Applied to the aggregate cash commuted at retirement across all funds
+ * (the table is a lifetime-cumulative one; pre-retirement withdrawals are
+ * not modelled here).
+ */
+export function retirementLumpSumTax(opts: {
+  lumpSum: number;
+  taxYear?: SaTaxYear;
+}): number {
+  const amount = Math.max(0, opts.lumpSum);
+  const bracket = RETIREMENT_LUMP_SUM_BRACKETS_2025_2026.find(
+    (b) => amount <= b.upTo
+  )!;
+  return bracket.base + (amount - bracket.threshold) * bracket.rate;
+}
+
 export function marginalTaxRate(opts: {
   annualTaxableIncome: number;
   taxYear?: SaTaxYear;
 }): number {
   const income = Math.max(0, opts.annualTaxableIncome);
-  return BRACKETS_2025_2026.find(b => income <= b.upTo)!.rate;
+  return BRACKETS_2025_2026.find((b) => income <= b.upTo)!.rate;
 }
 
 /**
@@ -81,7 +109,9 @@ export function raContributionTaxSaving(opts: {
   if (opts.annualContribution <= 0) return 0;
   const cap = raDeductionCap({ annualTaxableIncome: opts.annualTaxableIncome });
   const deductible = Math.min(opts.annualContribution, cap);
-  const rate = marginalTaxRate({ annualTaxableIncome: opts.annualTaxableIncome });
+  const rate = marginalTaxRate({
+    annualTaxableIncome: opts.annualTaxableIncome,
+  });
   return deductible * rate;
 }
 
@@ -117,7 +147,9 @@ export function allocateAdditionalContribution(opts: {
   const allocatedToRaAnnual = Math.min(additionalAnnual, roomBefore);
   const allocatedToVoluntaryAnnual = additionalAnnual - allocatedToRaAnnual;
 
-  const rate = marginalTaxRate({ annualTaxableIncome: opts.annualTaxableIncome });
+  const rate = marginalTaxRate({
+    annualTaxableIncome: opts.annualTaxableIncome,
+  });
 
   return {
     raMonthly: allocatedToRaAnnual / 12,
