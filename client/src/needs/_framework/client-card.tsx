@@ -1,21 +1,15 @@
-import headerImage from "@assets/EW Header_1753945516780.png";
+import { ClientHeader } from "@/components/navigation/client-header";
 
 /**
- * Client header band — the demo-image strip at the very top of every needs
- * workspace. Placeholder until a real client-record component lands; kept as
- * its own section so the framework layout reads cleanly.
+ * Client header band — the strip at the very top of every needs workspace.
+ * Delegates to the shared responsive ClientHeader (identity card + section
+ * menu strip) with "Financial planning" active, since the needs workspaces
+ * are part of the financial planning section.
  */
 export function ClientCard() {
   return (
-    <section className="w-full overflow-x-auto" aria-label="Client card">
-      <div className="pl-6">
-        <img
-          src={headerImage}
-          alt="Client Header"
-          className="block"
-          style={{ width: "auto", height: "auto" }}
-        />
-      </div>
+    <section className="w-full" aria-label="Client card">
+      <ClientHeader active="financial-planning" />
     </section>
   );
 }
