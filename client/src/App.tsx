@@ -59,6 +59,11 @@ import RetirementImplement from "@/pages/needs/retirement/implement";
 // Retirement Build — single page with all categories as in-page tabs.
 import RetirementBuild from "@/pages/needs/retirement/build";
 
+// Portfolio — client-level section (sibling of Financial planning in the
+// client header strip). All portfolio work is ring-fenced to client/src/portfolio/.
+import { PortfolioLayout } from "@/portfolio/layout";
+import PortfolioPage from "@/portfolio";
+
 function Router() {
   return (
     <div className="min-h-screen bg-gray-50">
@@ -70,6 +75,15 @@ function Router() {
 
         {/* Direct calculator routes (no need chrome) — for development access. */}
         <Route path="/entity-test" component={EntityTestPage} />
+
+        {/* === Portfolio (client-level section, no plan/need chrome) === */}
+        <Route path="/portfolio">
+          {() => (
+            <PortfolioLayout>
+              <PortfolioPage />
+            </PortfolioLayout>
+          )}
+        </Route>
 
         {/* === Need: Death with estate liquidity === */}
         <Route path="/needs/death-estate-liquidity" component={DELLandingRedirect} />

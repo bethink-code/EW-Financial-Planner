@@ -41,12 +41,23 @@ export function FinancialPlanningLayout({
       {/* Client Header Image */}
       <div className="w-full overflow-x-auto">
         <div className="pl-6">
-          <img 
-            src={headerImage} 
-            alt="Client Header - Donald Edward" 
-            className="block"
-            style={{ width: 'auto', height: 'auto' }}
-          />
+          <div className="relative inline-block">
+            <img
+              src={headerImage}
+              alt="Client Header - Donald Edward"
+              className="block"
+              style={{ width: 'auto', height: 'auto' }}
+            />
+            {/* Click target over the "Portfolio" item in the menu strip baked
+                into the PNG (word at x 383-434, strip band y 105-133 of the
+                1324x135 image). Percentages so it tracks the image when the
+                browser scales it down at narrow viewports. */}
+            <Link
+              href="/portfolio"
+              aria-label="Portfolio"
+              className="absolute left-[28.3%] top-[75%] h-[25%] w-[5.2%]"
+            />
+          </div>
         </div>
       </div>
       
