@@ -24,6 +24,30 @@ export interface ColumnDef {
 
 const plainThClass = "px-3 py-2 text-xs font-medium text-gray-600 !normal-case";
 
+/**
+ * Tinted group surface (the FieldGroup pattern): white cards sit on this so
+ * they read as one visual group, distinct from the page's other content.
+ */
+export function SectionSurface({
+  children,
+  className,
+}: {
+  children: React.ReactNode;
+  className?: string;
+}) {
+  return (
+    <div
+      className={cn("rounded-lg border p-3", className)}
+      style={{
+        backgroundColor: "#F4F8FB",
+        borderColor: "var(--ew-blue-tertiary-50)",
+      }}
+    >
+      {children}
+    </div>
+  );
+}
+
 export function ListingSection<T>({
   title,
   viewMode,
@@ -104,37 +128,45 @@ export function ListingSection<T>({
           <tbody>{sort.sorted.map(renderRow)}</tbody>
         </table>
       ) : (
-        <div
-          className={cn(
-            "mt-2 grid gap-3",
-            gridClass ?? "sm:grid-cols-2 xl:grid-cols-3"
-          )}
-        >
-          {sort.sorted.map(renderCard)}
-        </div>
+        <SectionSurface className="mt-2">
+          <div
+            className={cn(
+              "grid gap-3",
+              gridClass ?? "sm:grid-cols-2 xl:grid-cols-3"
+            )}
+          >
+            {sort.sorted.map(renderCard)}
+          </div>
+        </SectionSurface>
       )}
     </div>
   );
 }
 
-/** Card rendering of a listing row: name, optional pill, label/value lines. */
+/**
+ * Card rendering of a listing row, hero-value layout (the KPI-tile shape):
+ * name + optional pill, context line, one big number, small foot line.
+ */
 export function ProductCard({
   name,
   sub,
   pill,
-  stats,
+  value,
+  valueSuffix,
+  foot,
   onClick,
 }: {
   name: string;
   sub?: string;
   pill?: { label: string; tone: Tone };
-  stats: { label: string; value: React.ReactNode }[];
+  value: string;
+  valueSuffix?: string;
+  foot?: React.ReactNode;
   onClick: () => void;
 }) {
   return (
     <div
-      className="cursor-pointer rounded-lg border bg-white p-4 transition-shadow hover:shadow-sm motion-reduce:transition-none"
-      style={{ borderColor: "var(--ew-border)" }}
+      className="cursor-pointer rounded-md border border-neutral-200 bg-white p-3.5 shadow-sm transition-shadow hover:shadow-md motion-reduce:transition-none"
       onClick={onClick}
       role="button"
     >
@@ -148,17 +180,19 @@ export function ProductCard({
         {pill && <StatusPill label={pill.label} tone={pill.tone} />}
       </div>
       {sub && <div className="mt-0.5 text-xs text-gray-500">{sub}</div>}
-      <div className="mt-3 space-y-1.5">
-        {stats.map((stat) => (
-          <div
-            key={stat.label}
-            className="flex items-center justify-between gap-3 text-sm"
-          >
-            <span className="text-xs text-gray-500">{stat.label}</span>
-            <span className="tabular-nums text-neutral-900">{stat.value}</span>
-          </div>
-        ))}
+      <div className="mt-2 text-lg font-semibold tabular-nums text-neutral-900">
+        {value}
+        {valueSuffix && (
+          <span className="ml-1 text-xs font-normal text-gray-500">
+            {valueSuffix}
+          </span>
+        )}
       </div>
+      {foot && (
+        <div className="mt-1 flex items-center justify-between gap-2 text-xs text-gray-500">
+          {foot}
+        </div>
+      )}
     </div>
   );
 }

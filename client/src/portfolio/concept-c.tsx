@@ -11,7 +11,12 @@ import {
   StatusPill,
 } from "./primitives";
 import { QueueItem } from "./attention";
-import { ListingSection, ProductCard, type ColumnDef } from "./listings";
+import {
+  ListingSection,
+  ProductCard,
+  SectionSurface,
+  type ColumnDef,
+} from "./listings";
 import {
   parseAmount,
   parseDmy,
@@ -62,10 +67,10 @@ function MiniGoalCard({
   return (
     <div
       className={cn(
-        "cursor-pointer rounded-lg border bg-white p-3 transition-shadow hover:shadow-sm motion-reduce:transition-none",
-        goal.gap && "border-dashed"
+        "cursor-pointer rounded-md border bg-white p-3 shadow-sm transition-shadow hover:shadow-md motion-reduce:transition-none",
+        goal.gap ? "border-dashed" : "border-neutral-200"
       )}
-      style={{ borderColor: goal.gap ? "#F0B9AC" : "var(--ew-border)" }}
+      style={goal.gap ? { borderColor: "#F0B9AC" } : undefined}
       onClick={onClick}
       role="button"
     >
@@ -135,37 +140,45 @@ export function ConceptC({
     </tr>
   );
 
-  const holdingCard = (row: HoldingRow) => (
-    <ProductCard
-      key={row.name}
-      name={row.name}
-      sub={row.purpose ? `Purpose · ${row.purpose}` : undefined}
-      pill={row.purpose ? undefined : { label: "Not set", tone: "neutral" }}
-      stats={[
-        {
-          label: "Value / premium",
-          value: <span className="font-semibold">{row.value}</span>,
-        },
-        { label: "As at", value: asAt(row) },
-      ]}
-      onClick={() => openPanel(row.panelId)}
-    />
-  );
+  const holdingCard = (row: HoldingRow) => {
+    const monthly = row.value.endsWith(" p.m.");
+    return (
+      <ProductCard
+        key={row.name}
+        name={row.name}
+        sub={row.purpose ? `Purpose · ${row.purpose}` : undefined}
+        pill={row.purpose ? undefined : { label: "Not set", tone: "neutral" }}
+        value={monthly ? row.value.replace(" p.m.", "") : row.value}
+        valueSuffix={monthly ? "p.m." : undefined}
+        foot={
+          row.date ? (
+            <span className="flex items-center gap-1.5 tabular-nums">
+              <FreshnessDot tone={row.freshness!} />
+              As at {row.date}
+            </span>
+          ) : undefined
+        }
+        onClick={() => openPanel(row.panelId)}
+      />
+    );
+  };
 
   return (
     <div className="grid items-start gap-6 lg:grid-cols-[minmax(420px,8fr)_minmax(300px,4fr)]">
       {/* Main column */}
       <div>
         <SectionHeading>The plan</SectionHeading>
-        <div className="mt-2 grid grid-cols-2 gap-3 xl:grid-cols-4">
-          {MINI_GOALS.map((goal) => (
-            <MiniGoalCard
-              key={goal.name}
-              goal={goal}
-              onClick={() => openPanel(goal.panelId)}
-            />
-          ))}
-        </div>
+        <SectionSurface className="mt-2">
+          <div className="grid grid-cols-2 gap-3 xl:grid-cols-4">
+            {MINI_GOALS.map((goal) => (
+              <MiniGoalCard
+                key={goal.name}
+                goal={goal}
+                onClick={() => openPanel(goal.panelId)}
+              />
+            ))}
+          </div>
+        </SectionSurface>
 
         <ListingSection
           title="Holdings"
@@ -182,10 +195,7 @@ export function ConceptC({
         <SectionHeading className="mt-6">
           Since last review · 07 Oct 2025
         </SectionHeading>
-        <div
-          className="mt-2 rounded-lg border bg-white px-4 py-2"
-          style={{ borderColor: "var(--ew-border)" }}
-        >
+        <div className="mt-2 rounded-md border border-neutral-200 bg-white px-4 py-2 shadow-sm">
           {REVIEW_ROWS.map((row, index) => (
             <div
               key={row.label}
@@ -214,37 +224,38 @@ export function ConceptC({
       {/* Attention rail */}
       <div>
         <SectionHeading>Review readiness</SectionHeading>
-        <div
-          className="mt-2 flex items-center gap-4 rounded-lg border bg-white p-4"
-          style={{ borderColor: "var(--ew-border)" }}
-        >
-          <ReadinessRing pct={readiness} />
-          <div>
-            <div
-              className="text-sm font-semibold"
-              style={{ color: "var(--ew-primary-navy)" }}
-            >
-              Review due 07 Oct 2026
-            </div>
-            <div className="mt-0.5 text-xs text-gray-500">
-              5 of 11 checks passing.
+        <SectionSurface className="mt-2">
+          <div className="flex items-center gap-4 rounded-md border border-neutral-200 bg-white p-4 shadow-sm">
+            <ReadinessRing pct={readiness} />
+            <div>
+              <div
+                className="text-sm font-semibold"
+                style={{ color: "var(--ew-primary-navy)" }}
+              >
+                Review due 07 Oct 2026
+              </div>
+              <div className="mt-0.5 text-xs text-gray-500">
+                5 of 11 checks passing.
+              </div>
             </div>
           </div>
-        </div>
+        </SectionSurface>
 
         <SectionHeading className="mt-6">
           Needs attention <span className="font-normal text-gray-500">· 6</span>
         </SectionHeading>
-        <div className="mt-2 space-y-2">
-          {QUEUE.map((item) => (
-            <QueueItem
-              key={item.queueId}
-              item={item}
-              done={resolved.has(item.queueId)}
-              onClick={() => openPanel(item.panelId)}
-            />
-          ))}
-        </div>
+        <SectionSurface className="mt-2">
+          <div className="space-y-2">
+            {QUEUE.map((item) => (
+              <QueueItem
+                key={item.queueId}
+                item={item}
+                done={resolved.has(item.queueId)}
+                onClick={() => openPanel(item.panelId)}
+              />
+            ))}
+          </div>
+        </SectionSurface>
       </div>
     </div>
   );

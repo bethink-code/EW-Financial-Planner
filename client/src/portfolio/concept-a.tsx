@@ -122,22 +122,18 @@ export function ConceptA({
       key={row.name}
       name={row.name}
       sub={`${row.category} · ${row.supplier}`}
-      stats={[
-        { label: "Premium / income", value: row.premium },
-        {
-          label: "Current value",
-          value: <span className="font-semibold">{row.value}</span>,
-        },
-        {
-          label: "Valuation",
-          value: (
-            <span className="flex items-center gap-1.5">
-              <FreshnessDot tone={row.freshness} />
-              {row.date}
-            </span>
-          ),
-        },
-      ]}
+      value={row.value}
+      foot={
+        <>
+          <span className="flex items-center gap-1.5 tabular-nums">
+            <FreshnessDot tone={row.freshness} />
+            {row.date}
+          </span>
+          {row.premium !== "—" && (
+            <span className="tabular-nums">Contributing {row.premium}</span>
+          )}
+        </>
+      }
       onClick={() => openPanel(row.panelId)}
     />
   );
@@ -170,7 +166,8 @@ export function ConceptA({
       name={row.name}
       sub={`${row.meta1} · ${row.meta2}`}
       pill={row.pill}
-      stats={[{ label: "Premium", value: row.premium }]}
+      value={row.premium.replace(" p.m.", "")}
+      valueSuffix="p.m."
       onClick={() => openPanel(row.panelId)}
     />
   );

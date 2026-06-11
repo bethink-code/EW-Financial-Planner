@@ -66,16 +66,15 @@ function GoalCardView({
   return (
     <div
       className={cn(
-        "cursor-pointer rounded-lg border bg-white p-4 transition-shadow hover:shadow-sm motion-reduce:transition-none",
+        "cursor-pointer rounded-md border bg-white p-4 shadow-sm transition-shadow hover:shadow-md motion-reduce:transition-none",
         goal.variant === "gap" && "border-dashed",
-        goal.variant === "unassigned" && "border-dashed border-[#BDBDBD]"
+        goal.variant === "unassigned" && "border-dashed border-[#BDBDBD]",
+        !goal.variant && "border-neutral-200"
       )}
       style={
         goal.variant === "gap"
           ? { backgroundColor: "#FFF9F7", borderColor: "#F0B9AC" }
-          : goal.variant === "unassigned"
-          ? undefined
-          : { borderColor: "var(--ew-border)" }
+          : undefined
       }
       onClick={onClick}
       role="button"
