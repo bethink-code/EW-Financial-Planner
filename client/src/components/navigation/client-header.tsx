@@ -52,11 +52,14 @@ const DEFAULT_CLIENT: ClientIdentity = {
 interface ClientHeaderProps {
   active: "portfolio" | "financial-planning";
   client?: ClientIdentity;
+  /** Optional extra element rendered at the far right of the menu strip. */
+  navExtra?: React.ReactNode;
 }
 
 export function ClientHeader({
   active,
   client = DEFAULT_CLIENT,
+  navExtra,
 }: ClientHeaderProps) {
   return (
     <div className="w-full px-6">
@@ -127,6 +130,7 @@ export function ClientHeader({
             </span>
           )
         )}
+        {navExtra && <span className="ml-auto">{navExtra}</span>}
       </nav>
     </div>
   );

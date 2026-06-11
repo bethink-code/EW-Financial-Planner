@@ -1,5 +1,6 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { cn } from "@/lib/utils";
+import { PresenterContext } from "./layout";
 import {
   CONCEPTS,
   FOOTNOTE,
@@ -32,6 +33,7 @@ export default function PortfolioPage() {
     c: "cards",
   });
 
+  const presenterOpen = useContext(PresenterContext);
   const readiness = READINESS_BASE + resolved.size * READINESS_PER_ITEM;
   const meta = CONCEPTS.find((c) => c.id === activeConcept)!;
 
@@ -53,8 +55,14 @@ export default function PortfolioPage() {
 
   return (
     <div className="w-full px-6 pt-6 pb-2">
-      {/* Presenter band — this is a concept deck, not the product */}
-      <div className="w-full rounded-lg border border-gray-200 bg-white px-6 py-4 shadow-sm">
+      {/* Presenter band — concept-deck controls, hidden unless toggled via
+          the "Concepts" link in the menu strip */}
+      <div
+        className={cn(
+          "w-full rounded-lg border border-gray-200 bg-white px-6 py-4 shadow-sm",
+          !presenterOpen && "hidden"
+        )}
+      >
         <div className="text-xs text-gray-500">
           Portfolio redesign · concept exploration
         </div>
@@ -103,7 +111,12 @@ export default function PortfolioPage() {
       </div>
 
       {/* Concept stage */}
-      <div className="mt-6 w-full rounded-lg border border-gray-200 bg-white px-6 py-6 shadow-sm">
+      <div
+        className={cn(
+          "w-full rounded-lg border border-gray-200 bg-white px-6 py-6 shadow-sm",
+          presenterOpen && "mt-6"
+        )}
+      >
         <div className="mb-4 flex justify-end">
           <ViewModeToggle
             mode={viewModes[activeConcept]}
@@ -137,9 +150,11 @@ export default function PortfolioPage() {
         )}
       </div>
 
-      <p className="mt-4 pb-6 text-xs leading-relaxed text-gray-500">
-        {FOOTNOTE}
-      </p>
+      {presenterOpen && (
+        <p className="mt-4 pb-6 text-xs leading-relaxed text-gray-500">
+          {FOOTNOTE}
+        </p>
+      )}
 
       <PanelHost
         openPanelId={openPanelId}
