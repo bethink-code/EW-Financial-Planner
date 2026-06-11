@@ -25,28 +25,13 @@ export interface ColumnDef {
 const plainThClass = "px-3 py-2 text-xs font-medium text-gray-600 !normal-case";
 
 /**
- * Tinted group surface (the FieldGroup pattern): white cards sit on this so
- * they read as one visual group, distinct from the page's other content.
+ * Card surface: the subtle tint that separates data cards from the white
+ * page (the summary-tile recipe — #F4F8FB on a pale blue border).
  */
-export function SectionSurface({
-  children,
-  className,
-}: {
-  children: React.ReactNode;
-  className?: string;
-}) {
-  return (
-    <div
-      className={cn("rounded-lg border p-3", className)}
-      style={{
-        backgroundColor: "#F4F8FB",
-        borderColor: "var(--ew-blue-tertiary-50)",
-      }}
-    >
-      {children}
-    </div>
-  );
-}
+export const cardSurface = {
+  backgroundColor: "#F4F8FB",
+  borderColor: "var(--ew-blue-tertiary-50)",
+} as const;
 
 export function ListingSection<T>({
   title,
@@ -128,16 +113,14 @@ export function ListingSection<T>({
           <tbody>{sort.sorted.map(renderRow)}</tbody>
         </table>
       ) : (
-        <SectionSurface className="mt-2">
-          <div
-            className={cn(
-              "grid gap-3",
-              gridClass ?? "sm:grid-cols-2 xl:grid-cols-3"
-            )}
-          >
-            {sort.sorted.map(renderCard)}
-          </div>
-        </SectionSurface>
+        <div
+          className={cn(
+            "mt-2 grid gap-3",
+            gridClass ?? "sm:grid-cols-2 xl:grid-cols-3"
+          )}
+        >
+          {sort.sorted.map(renderCard)}
+        </div>
       )}
     </div>
   );
@@ -166,7 +149,8 @@ export function ProductCard({
 }) {
   return (
     <div
-      className="cursor-pointer rounded-md border border-neutral-200 bg-white p-3.5 shadow-sm transition-shadow hover:shadow-md motion-reduce:transition-none"
+      className="cursor-pointer rounded-lg border p-3.5 transition-shadow hover:shadow-sm motion-reduce:transition-none"
+      style={cardSurface}
       onClick={onClick}
       role="button"
     >

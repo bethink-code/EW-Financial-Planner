@@ -11,7 +11,7 @@ import {
 } from "./primitives";
 import { AttentionStrip } from "./attention";
 import { PanelButton } from "./panel-shell";
-import { ListingSection, type ColumnDef } from "./listings";
+import { cardSurface, ListingSection, type ColumnDef } from "./listings";
 import {
   parseAmount,
   type Accessors,
@@ -66,15 +66,17 @@ function GoalCardView({
   return (
     <div
       className={cn(
-        "cursor-pointer rounded-md border bg-white p-4 shadow-sm transition-shadow hover:shadow-md motion-reduce:transition-none",
+        "cursor-pointer rounded-lg border p-4 transition-shadow hover:shadow-sm motion-reduce:transition-none",
         goal.variant === "gap" && "border-dashed",
-        goal.variant === "unassigned" && "border-dashed border-[#BDBDBD]",
-        !goal.variant && "border-neutral-200"
+        goal.variant === "unassigned" &&
+          "border-dashed border-[#BDBDBD] bg-white"
       )}
       style={
         goal.variant === "gap"
           ? { backgroundColor: "#FFF9F7", borderColor: "#F0B9AC" }
-          : undefined
+          : goal.variant === "unassigned"
+          ? undefined
+          : cardSurface
       }
       onClick={onClick}
       role="button"
