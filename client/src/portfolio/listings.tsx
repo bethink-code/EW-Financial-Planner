@@ -33,6 +33,12 @@ export const cardSurface = {
   borderColor: "var(--ew-blue-tertiary-50)",
 } as const;
 
+/** Product cards use a very light grey, keeping the blue tint for summary tiles. */
+export const productSurface = {
+  backgroundColor: "#F8F8F8",
+  borderColor: "#ECECEC",
+} as const;
+
 export function ListingSection<T>({
   title,
   viewMode,
@@ -150,7 +156,7 @@ export function ProductCard({
   return (
     <div
       className="cursor-pointer rounded-lg border p-3.5 transition-shadow hover:shadow-sm motion-reduce:transition-none"
-      style={cardSurface}
+      style={productSurface}
       onClick={onClick}
       role="button"
     >
