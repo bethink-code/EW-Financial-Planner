@@ -1,9 +1,11 @@
 import React from "react";
 import { ClientHeader } from "@/components/navigation/client-header";
+import { BEN_MEANDER } from "./data";
 
 /**
  * Layout for the client-level Portfolio section — client header with
- * "Portfolio" active, then the section's content.
+ * "Portfolio" active, then the section's content. The concept deck uses the
+ * brief's demo client (Ben Meander) rather than the default Donald Edward.
  */
 
 interface PortfolioLayoutProps {
@@ -13,7 +15,7 @@ interface PortfolioLayoutProps {
 export function PortfolioLayout({ children }: PortfolioLayoutProps) {
   return (
     <>
-      <ClientHeader active="portfolio" />
+      <ClientHeader active="portfolio" client={BEN_MEANDER} />
       <div style={{ paddingBottom: "80px" }}>{children}</div>
     </>
   );

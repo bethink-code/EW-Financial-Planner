@@ -35,11 +35,29 @@ const navItems: NavItem[] = [
   { label: "Bna" },
 ];
 
-interface ClientHeaderProps {
-  active: "portfolio" | "financial-planning";
+export interface ClientIdentity {
+  name: string;
+  /** Reference / status / company line shown beside the name. */
+  refLine: string;
+  /** Age / marital detail line under the name. */
+  detailLine: string;
 }
 
-export function ClientHeader({ active }: ClientHeaderProps) {
+const DEFAULT_CLIENT: ClientIdentity = {
+  name: "Donald Edward",
+  refLine: "Demo/1/12345 / Client / Client's company",
+  detailLine: "52 years old / Married ANC with accrual",
+};
+
+interface ClientHeaderProps {
+  active: "portfolio" | "financial-planning";
+  client?: ClientIdentity;
+}
+
+export function ClientHeader({
+  active,
+  client = DEFAULT_CLIENT,
+}: ClientHeaderProps) {
   return (
     <div className="w-full px-6">
       {/* Client identity card (display-only) */}
@@ -47,16 +65,14 @@ export function ClientHeader({ active }: ClientHeaderProps) {
         <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
           <IdCard className="h-6 w-6 shrink-0 text-[#094161]" />
           <span className="text-lg font-bold leading-tight text-[#094161]">
-            Donald Edward
+            {client.name}
           </span>
-          <span className="text-xs text-[#29688D]">
-            Demo/1/12345&ensp;/&ensp;Client&ensp;/&ensp;Client's company
-          </span>
+          <span className="text-xs text-[#29688D]">{client.refLine}</span>
         </div>
 
         <div className="mt-4 flex flex-wrap items-center gap-x-4 gap-y-2">
           <span className="pl-9 text-[13px] text-[#114E72]">
-            52 years old&ensp;/&ensp;Married&ensp;ANC with accrual
+            {client.detailLine}
           </span>
           <button
             type="button"
