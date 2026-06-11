@@ -24,12 +24,12 @@ export default function PortfolioPage() {
   const [openPanelId, setOpenPanelId] = useState<PanelId | null>(null);
   const [resolved, setResolved] = useState<Set<number>>(new Set());
   const [attnExpanded, setAttnExpanded] = useState({ a: false, b: false });
-  // Each concept starts in its designed shape; the toggle is remembered per
-  // concept so switching A/B/C lands on the intended presentation.
+  // Per-concept default presentation; the toggle is remembered per concept
+  // so switching A/B/C lands on the intended view.
   const [viewModes, setViewModes] = useState<Record<ConceptId, ViewMode>>({
-    a: "table",
-    b: "cards",
-    c: "table",
+    a: "cards",
+    b: "table",
+    c: "cards",
   });
 
   const readiness = READINESS_BASE + resolved.size * READINESS_PER_ITEM;
