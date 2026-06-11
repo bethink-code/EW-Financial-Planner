@@ -11,11 +11,19 @@ import {
 } from "./primitives";
 import { AttentionStrip } from "./attention";
 import { PanelButton } from "./panel-shell";
+import { ListingSection, type ColumnDef } from "./listings";
+import {
+  parseAmount,
+  type Accessors,
+  type SortOption,
+  type ViewMode,
+} from "./view";
 
 /**
  * Concept B — "Plan view". The portfolio organised around what the money is
  * for, using the existing Product purpose field. Gaps and unassigned value
- * are first-class cards; reliability flags live inside the affected goals.
+ * are first-class; reliability flags live inside the affected goals. The
+ * goal grid can flip to a table via the view toggle.
  */
 
 interface ConceptBProps {
@@ -24,7 +32,28 @@ interface ConceptBProps {
   resolved: Set<number>;
   expanded: boolean;
   onToggle: () => void;
+  viewMode: ViewMode;
 }
+
+const GOAL_ACCESSORS: Accessors<GoalCard> = {
+  name: (g) => g.title,
+  value: (g) => parseAmount(g.value),
+  progress: (g) => g.barPct ?? 0,
+};
+
+const GOAL_SORTS: SortOption[] = [
+  { value: "name", label: "Name (A–Z)", dir: "asc" },
+  { value: "value", label: "Value (high–low)", dir: "desc" },
+  { value: "progress", label: "Progress (lowest first)", dir: "asc" },
+];
+
+const GOAL_COLUMNS: ColumnDef[] = [
+  { label: "Goal", sortKey: "name" },
+  { label: "Status" },
+  { label: "Current value", right: true, sortKey: "value" },
+  { label: "Progress", sortKey: "progress" },
+  { label: "Note" },
+];
 
 function GoalCardView({
   goal,
@@ -115,7 +144,72 @@ export function ConceptB({
   resolved,
   expanded,
   onToggle,
+  viewMode,
 }: ConceptBProps) {
+  const goalRow = (goal: GoalCard) => (
+    <tr
+      key={goal.title}
+      className="cursor-pointer border-b hover:bg-[var(--ew-row-tint)]"
+      style={{ borderColor: "var(--ew-border)" }}
+      onClick={() => openPanel(goal.panelId)}
+    >
+      <td className="px-3 py-2.5 align-middle">
+        <div
+          className="text-sm font-semibold"
+          style={{ color: "var(--ew-primary-navy)" }}
+        >
+          {goal.title}
+        </div>
+        <div className="text-xs text-gray-500">{goal.sub}</div>
+      </td>
+      <td className="px-3 py-2.5 align-middle">
+        <StatusPill label={goal.pill.label} tone={goal.pill.tone} />
+      </td>
+      <td
+        className={cn(
+          "px-3 py-2.5 text-right align-middle font-semibold tabular-nums",
+          goal.valueMuted ? "text-gray-400" : "text-neutral-900"
+        )}
+      >
+        {goal.value}
+        {goal.valueSuffix && (
+          <span className="ml-1 text-xs font-normal text-gray-500">
+            {goal.valueSuffix}
+          </span>
+        )}
+      </td>
+      <td className="px-3 py-2.5 align-middle">
+        {goal.barPct !== undefined && goal.barTone ? (
+          <span className="flex items-center gap-2">
+            <ProgressBar
+              pct={goal.barPct}
+              tone={goal.barTone}
+              className="w-24"
+            />
+            <span className="text-xs tabular-nums text-gray-500">
+              {goal.barPct}%
+            </span>
+          </span>
+        ) : (
+          <span className="text-xs text-gray-400">—</span>
+        )}
+      </td>
+      <td className="px-3 py-2.5 align-middle text-xs">
+        <span
+          className={goal.footTone === "bad" ? undefined : "text-gray-500"}
+          style={
+            goal.footTone === "bad" ? { color: TONE_COLOR.bad } : undefined
+          }
+        >
+          {goal.foot}
+        </span>
+        {goal.flag && (
+          <div style={{ color: TONE_TINT.warn.text }}>{goal.flag}</div>
+        )}
+      </td>
+    </tr>
+  );
+
   return (
     <div>
       <SectionHeading>The plan — what Ben's money is for</SectionHeading>
@@ -129,15 +223,21 @@ export function ConceptB({
         resolved={resolved}
       />
 
-      <div className="mt-4 grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
-        {GOALS.map((goal) => (
+      <ListingSection
+        viewMode={viewMode}
+        columns={GOAL_COLUMNS}
+        rows={GOALS}
+        accessors={GOAL_ACCESSORS}
+        sortOptions={GOAL_SORTS}
+        renderRow={goalRow}
+        renderCard={(goal) => (
           <GoalCardView
             key={goal.title}
             goal={goal}
             onClick={() => openPanel(goal.panelId)}
           />
-        ))}
-      </div>
+        )}
+      />
 
       <SectionHeading className="mt-8">All products</SectionHeading>
       <p className="mt-1 text-[13px] text-gray-500">

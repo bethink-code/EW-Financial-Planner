@@ -12,6 +12,7 @@ import { ConceptA } from "./concept-a";
 import { ConceptB } from "./concept-b";
 import { ConceptC } from "./concept-c";
 import { PanelHost } from "./panel-host";
+import { ViewModeToggle, type ViewMode } from "./view";
 
 /**
  * Portfolio concept deck — three design directions for the portfolio landing
@@ -23,6 +24,13 @@ export default function PortfolioPage() {
   const [openPanelId, setOpenPanelId] = useState<PanelId | null>(null);
   const [resolved, setResolved] = useState<Set<number>>(new Set());
   const [attnExpanded, setAttnExpanded] = useState({ a: false, b: false });
+  // Each concept starts in its designed shape; the toggle is remembered per
+  // concept so switching A/B/C lands on the intended presentation.
+  const [viewModes, setViewModes] = useState<Record<ConceptId, ViewMode>>({
+    a: "table",
+    b: "cards",
+    c: "table",
+  });
 
   const readiness = READINESS_BASE + resolved.size * READINESS_PER_ITEM;
   const meta = CONCEPTS.find((c) => c.id === activeConcept)!;
@@ -96,9 +104,18 @@ export default function PortfolioPage() {
 
       {/* Concept stage */}
       <div className="mt-6 w-full rounded-lg border border-gray-200 bg-white px-6 py-6 shadow-sm">
+        <div className="mb-4 flex justify-end">
+          <ViewModeToggle
+            mode={viewModes[activeConcept]}
+            onChange={(mode) =>
+              setViewModes((prev) => ({ ...prev, [activeConcept]: mode }))
+            }
+          />
+        </div>
         {activeConcept === "a" && (
           <ConceptA
             {...sharedProps}
+            viewMode={viewModes.a}
             expanded={attnExpanded.a}
             onToggle={() =>
               setAttnExpanded((prev) => ({ ...prev, a: !prev.a }))
@@ -108,13 +125,16 @@ export default function PortfolioPage() {
         {activeConcept === "b" && (
           <ConceptB
             {...sharedProps}
+            viewMode={viewModes.b}
             expanded={attnExpanded.b}
             onToggle={() =>
               setAttnExpanded((prev) => ({ ...prev, b: !prev.b }))
             }
           />
         )}
-        {activeConcept === "c" && <ConceptC {...sharedProps} />}
+        {activeConcept === "c" && (
+          <ConceptC {...sharedProps} viewMode={viewModes.c} />
+        )}
       </div>
 
       <p className="mt-4 pb-6 text-xs leading-relaxed text-gray-500">

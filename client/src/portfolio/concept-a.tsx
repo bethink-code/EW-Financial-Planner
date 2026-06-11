@@ -9,19 +9,23 @@ import {
   MEDICAL_ROWS,
   RISK_ROWS,
   type CoverRow,
+  type InvestmentRow,
 } from "./data-holdings";
-import {
-  FreshnessDot,
-  KpiTile,
-  SectionHeading,
-  StatusPill,
-} from "./primitives";
+import { FreshnessDot, KpiTile, StatusPill } from "./primitives";
 import { AttentionStrip } from "./attention";
+import { ListingSection, ProductCard, type ColumnDef } from "./listings";
+import {
+  parseAmount,
+  parseDmy,
+  type Accessors,
+  type SortOption,
+  type ViewMode,
+} from "./view";
 
 /**
  * Concept A — "At a glance". The familiar category-grouped product view,
  * elevated into a scannable snapshot: KPI band, attention strip, household
- * filters (decorative in the mockup), category tables.
+ * filters (decorative in the mockup), category listings (table or cards).
  */
 
 interface ConceptAProps {
@@ -30,75 +34,52 @@ interface ConceptAProps {
   resolved: Set<number>;
   expanded: boolean;
   onToggle: () => void;
+  viewMode: ViewMode;
 }
 
-// !normal-case: the app-wide `table thead th` rule uppercases headers; the
-// concept deck uses sentence case throughout.
-const thClass =
-  "px-3 py-2 text-left text-xs font-medium text-gray-600 !normal-case";
 const tdClass = "px-3 py-2.5 align-middle";
-
-function CategoryTable({
-  headers,
-  children,
-}: {
-  headers: { label: string; right?: boolean }[];
-  children: React.ReactNode;
-}) {
-  return (
-    <table className="mt-2 w-full text-sm">
-      <thead>
-        <tr style={{ backgroundColor: "var(--ew-blue-tertiary-50)" }}>
-          {headers.map((h) => (
-            <th key={h.label} className={cn(thClass, h.right && "text-right")}>
-              {h.label}
-            </th>
-          ))}
-        </tr>
-      </thead>
-      <tbody>{children}</tbody>
-    </table>
-  );
-}
-
 const rowClass = "cursor-pointer border-b hover:bg-[var(--ew-row-tint)]";
 const rowStyle = { borderColor: "var(--ew-border)" } as const;
 
-function CoverRows({
-  rows,
-  openPanel,
-}: {
-  rows: CoverRow[];
-  openPanel: (id: PanelId) => void;
-}) {
-  return (
-    <>
-      {rows.map((row) => (
-        <tr
-          key={row.name}
-          className={rowClass}
-          style={rowStyle}
-          onClick={() => openPanel(row.panelId)}
-        >
-          <td
-            className={cn(tdClass, "font-medium")}
-            style={{ color: "var(--ew-blue)" }}
-          >
-            {row.name}
-          </td>
-          <td className={tdClass}>{row.meta1}</td>
-          <td className={tdClass}>{row.meta2}</td>
-          <td className={cn(tdClass, "text-right tabular-nums")}>
-            {row.premium}
-          </td>
-          <td className={tdClass}>
-            <StatusPill label={row.pill.label} tone={row.pill.tone} />
-          </td>
-        </tr>
-      ))}
-    </>
-  );
-}
+const INVESTMENT_ACCESSORS: Accessors<InvestmentRow> = {
+  name: (r) => r.name,
+  value: (r) => parseAmount(r.value),
+  premium: (r) => parseAmount(r.premium),
+  date: (r) => parseDmy(r.date),
+};
+
+const INVESTMENT_SORTS: SortOption[] = [
+  { value: "name", label: "Name (A–Z)", dir: "asc" },
+  { value: "value", label: "Value (high–low)", dir: "desc" },
+  { value: "date", label: "Valuation (oldest first)", dir: "asc" },
+];
+
+const COVER_ACCESSORS: Accessors<CoverRow> = {
+  name: (r) => r.name,
+  premium: (r) => parseAmount(r.premium),
+};
+
+const COVER_SORTS: SortOption[] = [
+  { value: "name", label: "Name (A–Z)", dir: "asc" },
+  { value: "premium", label: "Premium (high–low)", dir: "desc" },
+];
+
+const INVESTMENT_COLUMNS: ColumnDef[] = [
+  { label: "Instrument", sortKey: "name" },
+  { label: "Category" },
+  { label: "Supplier" },
+  { label: "Premium / income", right: true, sortKey: "premium" },
+  { label: "Current value", right: true, sortKey: "value" },
+  { label: "Valuation", sortKey: "date" },
+];
+
+const coverColumns = (meta1: string, meta2: string): ColumnDef[] => [
+  { label: "Instrument", sortKey: "name" },
+  { label: meta1 },
+  { label: meta2 },
+  { label: "Premium", right: true, sortKey: "premium" },
+  { label: "Status" },
+];
 
 export function ConceptA({
   openPanel,
@@ -106,7 +87,94 @@ export function ConceptA({
   resolved,
   expanded,
   onToggle,
+  viewMode,
 }: ConceptAProps) {
+  const investmentRow = (row: InvestmentRow) => (
+    <tr
+      key={row.name}
+      className={rowClass}
+      style={rowStyle}
+      onClick={() => openPanel(row.panelId)}
+    >
+      <td
+        className={cn(tdClass, "font-medium")}
+        style={{ color: "var(--ew-blue)" }}
+      >
+        {row.name}
+      </td>
+      <td className={tdClass}>{row.category}</td>
+      <td className={tdClass}>{row.supplier}</td>
+      <td className={cn(tdClass, "text-right tabular-nums")}>{row.premium}</td>
+      <td className={cn(tdClass, "text-right font-semibold tabular-nums")}>
+        {row.value}
+      </td>
+      <td className={tdClass}>
+        <span className="flex items-center gap-1.5 whitespace-nowrap tabular-nums">
+          <FreshnessDot tone={row.freshness} />
+          {row.date}
+        </span>
+      </td>
+    </tr>
+  );
+
+  const investmentCard = (row: InvestmentRow) => (
+    <ProductCard
+      key={row.name}
+      name={row.name}
+      sub={`${row.category} · ${row.supplier}`}
+      stats={[
+        { label: "Premium / income", value: row.premium },
+        {
+          label: "Current value",
+          value: <span className="font-semibold">{row.value}</span>,
+        },
+        {
+          label: "Valuation",
+          value: (
+            <span className="flex items-center gap-1.5">
+              <FreshnessDot tone={row.freshness} />
+              {row.date}
+            </span>
+          ),
+        },
+      ]}
+      onClick={() => openPanel(row.panelId)}
+    />
+  );
+
+  const coverRow = (row: CoverRow) => (
+    <tr
+      key={row.name}
+      className={rowClass}
+      style={rowStyle}
+      onClick={() => openPanel(row.panelId)}
+    >
+      <td
+        className={cn(tdClass, "font-medium")}
+        style={{ color: "var(--ew-blue)" }}
+      >
+        {row.name}
+      </td>
+      <td className={tdClass}>{row.meta1}</td>
+      <td className={tdClass}>{row.meta2}</td>
+      <td className={cn(tdClass, "text-right tabular-nums")}>{row.premium}</td>
+      <td className={tdClass}>
+        <StatusPill label={row.pill.label} tone={row.pill.tone} />
+      </td>
+    </tr>
+  );
+
+  const coverCard = (row: CoverRow) => (
+    <ProductCard
+      key={row.name}
+      name={row.name}
+      sub={`${row.meta1} · ${row.meta2}`}
+      pill={row.pill}
+      stats={[{ label: "Premium", value: row.premium }]}
+      onClick={() => openPanel(row.panelId)}
+    />
+  );
+
   return (
     <div>
       {/* KPI band */}
@@ -156,82 +224,38 @@ export function ConceptA({
         </button>
       </div>
 
-      {/* Investments */}
-      <SectionHeading className="mt-6">
-        Investments — R 3 031 961
-      </SectionHeading>
-      <CategoryTable
-        headers={[
-          { label: "Instrument" },
-          { label: "Category" },
-          { label: "Supplier" },
-          { label: "Premium / income", right: true },
-          { label: "Current value", right: true },
-          { label: "Valuation" },
-        ]}
-      >
-        {INVESTMENT_ROWS.map((row) => (
-          <tr
-            key={row.name}
-            className={rowClass}
-            style={rowStyle}
-            onClick={() => openPanel(row.panelId)}
-          >
-            <td
-              className={cn(tdClass, "font-medium")}
-              style={{ color: "var(--ew-blue)" }}
-            >
-              {row.name}
-            </td>
-            <td className={tdClass}>{row.category}</td>
-            <td className={tdClass}>{row.supplier}</td>
-            <td className={cn(tdClass, "text-right tabular-nums")}>
-              {row.premium}
-            </td>
-            <td
-              className={cn(tdClass, "text-right font-semibold tabular-nums")}
-            >
-              {row.value}
-            </td>
-            <td className={tdClass}>
-              <span className="flex items-center gap-1.5 whitespace-nowrap tabular-nums">
-                <FreshnessDot tone={row.freshness} />
-                {row.date}
-              </span>
-            </td>
-          </tr>
-        ))}
-      </CategoryTable>
+      <ListingSection
+        title="Investments — R 3 031 961"
+        viewMode={viewMode}
+        columns={INVESTMENT_COLUMNS}
+        rows={INVESTMENT_ROWS}
+        accessors={INVESTMENT_ACCESSORS}
+        sortOptions={INVESTMENT_SORTS}
+        renderRow={investmentRow}
+        renderCard={investmentCard}
+      />
 
-      {/* Risk */}
-      <SectionHeading className="mt-6">Risk — R 7 200 p.m.</SectionHeading>
-      <CategoryTable
-        headers={[
-          { label: "Instrument" },
-          { label: "Supplier" },
-          { label: "Reference" },
-          { label: "Premium", right: true },
-          { label: "Status" },
-        ]}
-      >
-        <CoverRows rows={RISK_ROWS} openPanel={openPanel} />
-      </CategoryTable>
+      <ListingSection
+        title="Risk — R 7 200 p.m."
+        viewMode={viewMode}
+        columns={coverColumns("Supplier", "Reference")}
+        rows={RISK_ROWS}
+        accessors={COVER_ACCESSORS}
+        sortOptions={COVER_SORTS}
+        renderRow={coverRow}
+        renderCard={coverCard}
+      />
 
-      {/* Medical aid & short term */}
-      <SectionHeading className="mt-6">
-        Medical aid & short term — R 10 100 p.m.
-      </SectionHeading>
-      <CategoryTable
-        headers={[
-          { label: "Instrument" },
-          { label: "Category" },
-          { label: "Supplier" },
-          { label: "Premium", right: true },
-          { label: "Status" },
-        ]}
-      >
-        <CoverRows rows={MEDICAL_ROWS} openPanel={openPanel} />
-      </CategoryTable>
+      <ListingSection
+        title="Medical aid & short term — R 10 100 p.m."
+        viewMode={viewMode}
+        columns={coverColumns("Category", "Supplier")}
+        rows={MEDICAL_ROWS}
+        accessors={COVER_ACCESSORS}
+        sortOptions={COVER_SORTS}
+        renderRow={coverRow}
+        renderCard={coverCard}
+      />
     </div>
   );
 }

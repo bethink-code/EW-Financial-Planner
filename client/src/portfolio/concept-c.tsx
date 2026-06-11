@@ -1,7 +1,7 @@
-﻿import { cn } from "@/lib/utils";
+import { cn } from "@/lib/utils";
 import type { PanelId } from "./data";
 import { QUEUE } from "./data-attention";
-import { HOLDING_ROWS, REVIEW_ROWS } from "./data-holdings";
+import { HOLDING_ROWS, REVIEW_ROWS, type HoldingRow } from "./data-holdings";
 import { MINI_GOALS, type MiniGoal } from "./data-plan";
 import {
   FreshnessDot,
@@ -11,6 +11,14 @@ import {
   StatusPill,
 } from "./primitives";
 import { QueueItem } from "./attention";
+import { ListingSection, ProductCard, type ColumnDef } from "./listings";
+import {
+  parseAmount,
+  parseDmy,
+  type Accessors,
+  type SortOption,
+  type ViewMode,
+} from "./view";
 
 /**
  * Concept C — "Command centre". Plan strip + holdings in the main column,
@@ -22,7 +30,27 @@ interface ConceptCProps {
   openPanel: (id: PanelId) => void;
   readiness: number;
   resolved: Set<number>;
+  viewMode: ViewMode;
 }
+
+const HOLDING_ACCESSORS: Accessors<HoldingRow> = {
+  name: (r) => r.name,
+  value: (r) => parseAmount(r.value),
+  date: (r) => parseDmy(r.date),
+};
+
+const HOLDING_SORTS: SortOption[] = [
+  { value: "name", label: "Name (A–Z)", dir: "asc" },
+  { value: "value", label: "Value (high–low)", dir: "desc" },
+  { value: "date", label: "As at (oldest first)", dir: "asc" },
+];
+
+const HOLDING_COLUMNS: ColumnDef[] = [
+  { label: "Instrument", sortKey: "name" },
+  { label: "Purpose" },
+  { label: "Value / premium", right: true, sortKey: "value" },
+  { label: "As at", sortKey: "date" },
+];
 
 function MiniGoalCard({
   goal,
@@ -70,7 +98,60 @@ function MiniGoalCard({
   );
 }
 
-export function ConceptC({ openPanel, readiness, resolved }: ConceptCProps) {
+export function ConceptC({
+  openPanel,
+  readiness,
+  resolved,
+  viewMode,
+}: ConceptCProps) {
+  const asAt = (row: HoldingRow) =>
+    row.date ? (
+      <span className="flex items-center gap-1.5 whitespace-nowrap tabular-nums">
+        <FreshnessDot tone={row.freshness!} />
+        {row.date}
+      </span>
+    ) : (
+      <span className="text-gray-400">—</span>
+    );
+
+  const holdingRow = (row: HoldingRow) => (
+    <tr
+      key={row.name}
+      className="cursor-pointer border-b hover:bg-[var(--ew-row-tint)]"
+      style={{ borderColor: "var(--ew-border)" }}
+      onClick={() => openPanel(row.panelId)}
+    >
+      <td
+        className="px-3 py-2.5 font-medium"
+        style={{ color: "var(--ew-blue)" }}
+      >
+        {row.name}
+      </td>
+      <td className="px-3 py-2.5">
+        {row.purpose ?? <StatusPill label="Not set" tone="neutral" />}
+      </td>
+      <td className="px-3 py-2.5 text-right tabular-nums">{row.value}</td>
+      <td className="px-3 py-2.5">{asAt(row)}</td>
+    </tr>
+  );
+
+  const holdingCard = (row: HoldingRow) => (
+    <ProductCard
+      key={row.name}
+      name={row.name}
+      sub={row.purpose ? `Purpose · ${row.purpose}` : undefined}
+      pill={row.purpose ? undefined : { label: "Not set", tone: "neutral" }}
+      stats={[
+        {
+          label: "Value / premium",
+          value: <span className="font-semibold">{row.value}</span>,
+        },
+        { label: "As at", value: asAt(row) },
+      ]}
+      onClick={() => openPanel(row.panelId)}
+    />
+  );
+
   return (
     <div className="grid items-start gap-6 lg:grid-cols-[minmax(420px,8fr)_minmax(300px,4fr)]">
       {/* Main column */}
@@ -86,58 +167,17 @@ export function ConceptC({ openPanel, readiness, resolved }: ConceptCProps) {
           ))}
         </div>
 
-        <SectionHeading className="mt-6">Holdings</SectionHeading>
-        <table className="mt-2 w-full text-sm">
-          <thead>
-            <tr style={{ backgroundColor: "var(--ew-blue-tertiary-50)" }}>
-              <th className="px-3 py-2 text-left text-xs font-medium text-gray-600 !normal-case">
-                Instrument
-              </th>
-              <th className="px-3 py-2 text-left text-xs font-medium text-gray-600 !normal-case">
-                Purpose
-              </th>
-              <th className="px-3 py-2 text-right text-xs font-medium text-gray-600 !normal-case">
-                Value / premium
-              </th>
-              <th className="px-3 py-2 text-left text-xs font-medium text-gray-600 !normal-case">
-                As at
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            {HOLDING_ROWS.map((row) => (
-              <tr
-                key={row.name}
-                className="cursor-pointer border-b hover:bg-[var(--ew-row-tint)]"
-                style={{ borderColor: "var(--ew-border)" }}
-                onClick={() => openPanel(row.panelId)}
-              >
-                <td
-                  className="px-3 py-2.5 font-medium"
-                  style={{ color: "var(--ew-blue)" }}
-                >
-                  {row.name}
-                </td>
-                <td className="px-3 py-2.5">
-                  {row.purpose ?? <StatusPill label="Not set" tone="neutral" />}
-                </td>
-                <td className="px-3 py-2.5 text-right tabular-nums">
-                  {row.value}
-                </td>
-                <td className="px-3 py-2.5">
-                  {row.date ? (
-                    <span className="flex items-center gap-1.5 whitespace-nowrap tabular-nums">
-                      <FreshnessDot tone={row.freshness!} />
-                      {row.date}
-                    </span>
-                  ) : (
-                    <span className="text-gray-400">—</span>
-                  )}
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+        <ListingSection
+          title="Holdings"
+          viewMode={viewMode}
+          columns={HOLDING_COLUMNS}
+          rows={HOLDING_ROWS}
+          accessors={HOLDING_ACCESSORS}
+          sortOptions={HOLDING_SORTS}
+          renderRow={holdingRow}
+          renderCard={holdingCard}
+          gridClass="sm:grid-cols-2 xl:grid-cols-3"
+        />
 
         <SectionHeading className="mt-6">
           Since last review · 07 Oct 2025
