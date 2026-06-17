@@ -5,7 +5,7 @@ import { GOALS, type GoalCard } from "./data-plan";
 import {
   ProgressBar,
   SectionHeading,
-  StatusPill,
+  StatusCard,
   TONE_COLOR,
   TONE_TINT,
 } from "./primitives";
@@ -149,7 +149,7 @@ export function ConceptB({
         <div className="text-xs text-gray-500">{goal.sub}</div>
       </td>
       <td className="px-3 py-2.5 align-middle">
-        <StatusPill label={goal.pill.label} tone={goal.pill.tone} />
+        <StatusCard label={goal.pill.label} tone={goal.pill.tone} />
       </td>
       <td
         className={cn(

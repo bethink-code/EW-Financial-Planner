@@ -1,7 +1,7 @@
 import { FileText } from "lucide-react";
 import { cn } from "@/lib/utils";
 import type { Tone } from "./data";
-import { SectionHeading, StatusPill } from "./primitives";
+import { SectionHeading, StatusCard } from "./primitives";
 import {
   SortHeader,
   SortSelect,
@@ -26,12 +26,14 @@ export interface ColumnDef {
 const plainThClass = "px-3 py-2 text-xs font-medium text-gray-600 !normal-case";
 
 /**
- * Card surface: white with a hairline border, matching the Final Wireframe
- * content cards. (Summary/KPI tiles keep their tint — see KpiTile.)
+ * Card surface: white with the EW drop shadow that lifts a white card off the
+ * white page (Figma token: #627C95 @ 10%, offset 1/4, radius 9). Summary/KPI
+ * tiles keep their tint — see KpiTile.
  */
 export const cardSurface = {
   backgroundColor: "#FFFFFF",
-  borderColor: "var(--ew-border)",
+  borderColor: "#F1F2F4",
+  boxShadow: "1px 4px 9px 0 rgba(98, 124, 149, 0.1)",
 } as const;
 
 export function ListingSection<T>({
@@ -163,7 +165,7 @@ export function ProductCard({
           <FileText className="h-4 w-4 shrink-0 text-gray-400" />
           {name}
         </div>
-        {pill && <StatusPill label={pill.label} tone={pill.tone} />}
+        {pill && <StatusCard label={pill.label} tone={pill.tone} />}
       </div>
       {sub && <div className="mt-0.5 text-xs text-gray-500">{sub}</div>}
       <div className="mt-2 text-lg font-semibold tabular-nums text-neutral-900">

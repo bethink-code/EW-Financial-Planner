@@ -11,7 +11,7 @@ import {
   type CoverRow,
   type InvestmentRow,
 } from "./data-holdings";
-import { FreshnessDot, KpiTile, StatusPill } from "./primitives";
+import { FreshnessDot, KpiTile, StatusCard } from "./primitives";
 import { AttentionStrip } from "./attention";
 import { SomethingMissing } from "./content-patterns";
 import { ListingSection, ProductCard, type ColumnDef } from "./listings";
@@ -156,7 +156,7 @@ export function ConceptA({
       <td className={tdClass}>{row.meta2}</td>
       <td className={cn(tdClass, "text-right tabular-nums")}>{row.premium}</td>
       <td className={tdClass}>
-        <StatusPill label={row.pill.label} tone={row.pill.tone} />
+        <StatusCard label={row.pill.label} tone={row.pill.tone} />
       </td>
     </tr>
   );

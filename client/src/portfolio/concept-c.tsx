@@ -8,7 +8,7 @@ import {
   ProgressBar,
   ReadinessRing,
   SectionHeading,
-  StatusPill,
+  StatusCard,
 } from "./primitives";
 import { QueueItem } from "./attention";
 import {
@@ -137,7 +137,7 @@ export function ConceptC({
         {row.name}
       </td>
       <td className="px-3 py-2.5">
-        {row.purpose ?? <StatusPill label="Not set" tone="neutral" />}
+        {row.purpose ?? <StatusCard label="Not set" tone="neutral" />}
       </td>
       <td className="px-3 py-2.5 text-right tabular-nums">{row.value}</td>
       <td className="px-3 py-2.5">{asAt(row)}</td>

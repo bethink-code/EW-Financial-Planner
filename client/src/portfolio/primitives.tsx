@@ -35,13 +35,17 @@ export function FreshnessDot({ tone, title }: { tone: Tone; title?: string }) {
   );
 }
 
-export function StatusPill({ label, tone }: { label: string; tone: Tone }) {
-  const tint = TONE_TINT[tone];
+/** Status as a tiny card (border + tone dot) — EW doesn't use pill badges. */
+export function StatusCard({ label, tone }: { label: string; tone: Tone }) {
   return (
     <span
-      className="inline-block whitespace-nowrap rounded px-2 py-0.5 text-xs font-medium"
-      style={{ backgroundColor: tint.bg, color: tint.text }}
+      className="inline-flex items-center gap-1.5 whitespace-nowrap rounded-md border bg-white px-2 py-1 text-xs font-medium text-neutral-700"
+      style={{ borderColor: "var(--ew-border)" }}
     >
+      <span
+        className="h-1.5 w-1.5 shrink-0 rounded-full"
+        style={{ backgroundColor: TONE_COLOR[tone] }}
+      />
       {label}
     </span>
   );

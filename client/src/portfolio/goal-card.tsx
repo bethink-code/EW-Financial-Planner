@@ -1,6 +1,6 @@
 import { cn } from "@/lib/utils";
 import type { GoalCard } from "./data-plan";
-import { ProgressBar, StatusPill, TONE_COLOR, TONE_TINT } from "./primitives";
+import { ProgressBar, StatusCard, TONE_COLOR, TONE_TINT } from "./primitives";
 import { cardSurface } from "./listings";
 
 /**
@@ -43,7 +43,7 @@ export function GoalCardView({
           </div>
           <div className="text-xs text-gray-500">{goal.sub}</div>
         </div>
-        <StatusPill label={goal.pill.label} tone={goal.pill.tone} />
+        <StatusCard label={goal.pill.label} tone={goal.pill.tone} />
       </div>
 
       <div
