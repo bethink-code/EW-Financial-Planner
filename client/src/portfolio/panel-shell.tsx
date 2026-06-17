@@ -12,13 +12,13 @@ import { FreshnessDot, TONE_COLOR } from "./primitives";
 
 export function PanelShell({
   open,
-  kicker,
+  subtitle,
   title,
   onClose,
   children,
 }: {
   open: boolean;
-  kicker: string;
+  subtitle: string;
   title: string;
   onClose: () => void;
   children: React.ReactNode;
@@ -56,13 +56,15 @@ export function PanelShell({
           style={{ borderBottom: "1px solid var(--ew-border)" }}
         >
           <div>
-            <div className="text-xs text-gray-500">{kicker}</div>
             <h3
-              className="mt-0.5 text-sm font-bold"
-              style={{ color: "var(--ew-blue)" }}
+              className="text-lg font-bold leading-tight"
+              style={{ color: "var(--ew-primary-navy)" }}
             >
               {title}
             </h3>
+            {subtitle && (
+              <div className="mt-1 text-xs text-gray-500">{subtitle}</div>
+            )}
           </div>
           <button
             type="button"

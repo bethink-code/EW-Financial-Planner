@@ -1,3 +1,4 @@
+import { FileText } from "lucide-react";
 import { cn } from "@/lib/utils";
 import type { Tone } from "./data";
 import { SectionHeading, StatusPill } from "./primitives";
@@ -25,18 +26,12 @@ export interface ColumnDef {
 const plainThClass = "px-3 py-2 text-xs font-medium text-gray-600 !normal-case";
 
 /**
- * Card surface: the subtle tint that separates data cards from the white
- * page (the summary-tile recipe — #F4F8FB on a pale blue border).
+ * Card surface: white with a hairline border, matching the Final Wireframe
+ * content cards. (Summary/KPI tiles keep their tint — see KpiTile.)
  */
 export const cardSurface = {
-  backgroundColor: "#F4F8FB",
-  borderColor: "var(--ew-blue-tertiary-50)",
-} as const;
-
-/** Product cards use a very light grey, keeping the blue tint for summary tiles. */
-export const productSurface = {
-  backgroundColor: "#F8F8F8",
-  borderColor: "#ECECEC",
+  backgroundColor: "#FFFFFF",
+  borderColor: "var(--ew-border)",
 } as const;
 
 export function ListingSection<T>({
@@ -156,15 +151,16 @@ export function ProductCard({
   return (
     <div
       className="cursor-pointer rounded-lg border p-3.5 transition-shadow hover:shadow-sm motion-reduce:transition-none"
-      style={productSurface}
+      style={cardSurface}
       onClick={onClick}
       role="button"
     >
       <div className="flex items-start justify-between gap-2">
         <div
-          className="text-sm font-medium"
+          className="flex items-center gap-1.5 text-sm font-medium"
           style={{ color: "var(--ew-blue)" }}
         >
+          <FileText className="h-4 w-4 shrink-0 text-gray-400" />
           {name}
         </div>
         {pill && <StatusPill label={pill.label} tone={pill.tone} />}

@@ -69,6 +69,11 @@ export function parseAmount(display: string): number {
   return digits ? parseFloat(digits) : 0;
 }
 
+/** 6352000 → "R 6 352 000" — space-grouped to match the deck's fixtures. */
+export function formatRand(value: number): string {
+  return "R " + Math.round(value).toLocaleString("en-US").replace(/,/g, " ");
+}
+
 /** "08/04/2020" → timestamp; missing dates sort after dated rows. */
 export function parseDmy(date?: string): number {
   if (!date) return Number.MAX_SAFE_INTEGER;

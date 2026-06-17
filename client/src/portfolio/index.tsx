@@ -24,7 +24,9 @@ export default function PortfolioPage() {
   const [activeConcept, setActiveConcept] = useState<ConceptId>("a");
   const [openPanelId, setOpenPanelId] = useState<PanelId | null>(null);
   const [resolved, setResolved] = useState<Set<number>>(new Set());
-  const [attnExpanded, setAttnExpanded] = useState({ a: false, b: false });
+  const [attnExpandedA, setAttnExpandedA] = useState(false);
+  // Concept B: the purpose assigned to the unassigned ABSA value (null until set)
+  const [assignedPurpose, setAssignedPurpose] = useState<string | null>(null);
   // Per-concept default presentation; the toggle is remembered per concept
   // so switching A/B/C lands on the intended view.
   const [viewModes, setViewModes] = useState<Record<ConceptId, ViewMode>>({
@@ -49,6 +51,13 @@ export default function PortfolioPage() {
   const resolveItem = (queueId: number) => {
     setResolved((prev) => new Set(prev).add(queueId));
     setOpenPanelId(null);
+  };
+
+  // Assigning ABSA's purpose folds it into a goal (Concept B) and clears the
+  // "outside the plan" attention item.
+  const assignPurpose = (purpose: string) => {
+    setAssignedPurpose(purpose);
+    resolveItem(5);
   };
 
   const sharedProps = { openPanel, readiness, resolved };
@@ -129,20 +138,15 @@ export default function PortfolioPage() {
           <ConceptA
             {...sharedProps}
             viewMode={viewModes.a}
-            expanded={attnExpanded.a}
-            onToggle={() =>
-              setAttnExpanded((prev) => ({ ...prev, a: !prev.a }))
-            }
+            expanded={attnExpandedA}
+            onToggle={() => setAttnExpandedA((prev) => !prev)}
           />
         )}
         {activeConcept === "b" && (
           <ConceptB
-            {...sharedProps}
+            openPanel={openPanel}
             viewMode={viewModes.b}
-            expanded={attnExpanded.b}
-            onToggle={() =>
-              setAttnExpanded((prev) => ({ ...prev, b: !prev.b }))
-            }
+            assignedPurpose={assignedPurpose}
           />
         )}
         {activeConcept === "c" && (
@@ -160,6 +164,7 @@ export default function PortfolioPage() {
         openPanelId={openPanelId}
         onClose={closePanel}
         onResolve={resolveItem}
+        onAssign={assignPurpose}
       />
     </div>
   );

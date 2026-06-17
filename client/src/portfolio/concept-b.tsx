@@ -1,6 +1,6 @@
+import { useState } from "react";
 import { cn } from "@/lib/utils";
 import type { PanelId } from "./data";
-import { STRIP_B } from "./data-attention";
 import { GOALS, type GoalCard } from "./data-plan";
 import {
   ProgressBar,
@@ -9,10 +9,12 @@ import {
   TONE_COLOR,
   TONE_TINT,
 } from "./primitives";
-import { AttentionStrip } from "./attention";
 import { PanelButton } from "./panel-shell";
-import { cardSurface, ListingSection, type ColumnDef } from "./listings";
+import { ContentHeader, SomethingMissing } from "./content-patterns";
+import { GoalCardView } from "./goal-card";
+import { ListingSection, type ColumnDef } from "./listings";
 import {
+  formatRand,
   parseAmount,
   type Accessors,
   type SortOption,
@@ -28,11 +30,72 @@ import {
 
 interface ConceptBProps {
   openPanel: (id: PanelId) => void;
-  readiness: number;
-  resolved: Set<number>;
-  expanded: boolean;
-  onToggle: () => void;
   viewMode: ViewMode;
+  /** When set, the unassigned ABSA value (R 460k) joins the matching goal. */
+  assignedPurpose: string | null;
+}
+
+/** ABSA Share portfolio — the unassigned value the user can pull into a goal. */
+const ABSA_VALUE = 460_000;
+
+/** Maps the assignable purposes to the goal card they feed. */
+const PURPOSE_TO_GOAL: Record<string, string> = {
+  Retirement: "Retirement",
+  Emergency: "Emergency fund",
+  "Saving for a goal: Education": "Education — Fudge",
+};
+
+/** Apply a purpose assignment: drop the unassigned card and fold ABSA's value
+ *  into the chosen goal, recomputing its value, progress and status. */
+function applyAssignment(
+  goals: GoalCard[],
+  assignedPurpose: string | null
+): GoalCard[] {
+  if (!assignedPurpose) return goals;
+  const targetTitle = PURPOSE_TO_GOAL[assignedPurpose];
+  return goals
+    .filter((goal) => goal.variant !== "unassigned")
+    .map((goal) => {
+      if (
+        goal.title !== targetTitle ||
+        goal.currentNum == null ||
+        goal.targetNum == null
+      ) {
+        return goal;
+      }
+      const current = goal.currentNum + ABSA_VALUE;
+      const pct = Math.min(100, Math.round((current / goal.targetNum) * 100));
+      const onTrack = pct >= 100;
+      return {
+        ...goal,
+        value: formatRand(current),
+        valueMuted: false,
+        variant: undefined,
+        barPct: pct,
+        barTone: onTrack ? "good" : goal.barTone,
+        pill: onTrack ? { label: "On track", tone: "good" } : goal.pill,
+        foot: `${pct}% of ${formatRand(
+          goal.targetNum
+        )} target · includes R 460 000 from ABSA`,
+        footTone: undefined,
+      };
+    });
+}
+
+/** Plan-status buckets the content-area filter offers. */
+const GOAL_FILTERS = [
+  { value: "all", label: "All goals" },
+  { value: "attention", label: "Needs attention" },
+  { value: "ontrack", label: "On track" },
+];
+
+function goalNeedsAttention(goal: GoalCard) {
+  return (
+    goal.pill.tone === "warn" ||
+    goal.pill.tone === "bad" ||
+    goal.variant === "gap" ||
+    goal.variant === "unassigned"
+  );
 }
 
 const GOAL_ACCESSORS: Accessors<GoalCard> = {
@@ -55,98 +118,20 @@ const GOAL_COLUMNS: ColumnDef[] = [
   { label: "Note" },
 ];
 
-function GoalCardView({
-  goal,
-  onClick,
-}: {
-  goal: GoalCard;
-  onClick: () => void;
-}) {
-  const warn = TONE_TINT.warn;
-  return (
-    <div
-      className={cn(
-        "cursor-pointer rounded-lg border p-4 transition-shadow hover:shadow-sm motion-reduce:transition-none",
-        goal.variant === "gap" && "border-dashed",
-        goal.variant === "unassigned" &&
-          "border-dashed border-[#BDBDBD] bg-white"
-      )}
-      style={
-        goal.variant === "gap"
-          ? { backgroundColor: "#FFF9F7", borderColor: "#F0B9AC" }
-          : goal.variant === "unassigned"
-          ? undefined
-          : cardSurface
-      }
-      onClick={onClick}
-      role="button"
-    >
-      <div className="flex items-start justify-between gap-2">
-        <div>
-          <div
-            className="text-sm font-semibold"
-            style={{ color: "var(--ew-primary-navy)" }}
-          >
-            {goal.title}
-          </div>
-          <div className="text-xs text-gray-500">{goal.sub}</div>
-        </div>
-        <StatusPill label={goal.pill.label} tone={goal.pill.tone} />
-      </div>
-
-      <div
-        className={cn(
-          "mt-2 text-xl font-semibold tabular-nums",
-          goal.valueMuted ? "text-gray-400" : "text-neutral-900"
-        )}
-      >
-        {goal.value}
-        {goal.valueSuffix && (
-          <span className="ml-1 text-xs font-normal text-gray-500">
-            {goal.valueSuffix}
-          </span>
-        )}
-      </div>
-
-      {goal.barPct !== undefined && goal.barTone && (
-        <ProgressBar pct={goal.barPct} tone={goal.barTone} className="mt-2" />
-      )}
-
-      <div
-        className="mt-2 text-xs"
-        style={{
-          color: goal.footTone === "bad" ? TONE_COLOR.bad : undefined,
-        }}
-      >
-        <span className={goal.footTone ? undefined : "text-gray-500"}>
-          {goal.foot}
-        </span>
-      </div>
-
-      {goal.flag && (
-        <div
-          className="mt-2 rounded border px-2 py-1.5 text-xs"
-          style={{
-            backgroundColor: warn.bg,
-            borderColor: warn.border,
-            color: warn.text,
-          }}
-        >
-          {goal.flag}
-        </div>
-      )}
-    </div>
-  );
-}
-
 export function ConceptB({
   openPanel,
-  readiness,
-  resolved,
-  expanded,
-  onToggle,
   viewMode,
+  assignedPurpose,
 }: ConceptBProps) {
+  const [filter, setFilter] = useState("all");
+
+  const planGoals = applyAssignment(GOALS, assignedPurpose);
+  const goals = planGoals.filter((goal) => {
+    if (filter === "attention") return goalNeedsAttention(goal);
+    if (filter === "ontrack") return goal.pill.tone === "good";
+    return true;
+  });
+
   const goalRow = (goal: GoalCard) => (
     <tr
       key={goal.title}
@@ -213,21 +198,21 @@ export function ConceptB({
 
   return (
     <div>
-      <SectionHeading>The plan — what Ben's money is for</SectionHeading>
-
-      <AttentionStrip
-        copy={STRIP_B}
-        readiness={readiness}
-        expanded={expanded}
-        onToggle={onToggle}
-        openPanel={openPanel}
-        resolved={resolved}
+      <ContentHeader
+        label="Goals in Ben's plan"
+        value={String(planGoals.length)}
+        filter={{
+          label: "Filter",
+          options: GOAL_FILTERS,
+          value: filter,
+          onChange: setFilter,
+        }}
       />
 
       <ListingSection
         viewMode={viewMode}
         columns={GOAL_COLUMNS}
-        rows={GOALS}
+        rows={goals}
         accessors={GOAL_ACCESSORS}
         sortOptions={GOAL_SORTS}
         renderRow={goalRow}
@@ -238,6 +223,19 @@ export function ConceptB({
             onClick={() => openPanel(goal.panelId)}
           />
         )}
+      />
+
+      <SomethingMissing
+        reasons={[
+          "we don't have the product captured yet",
+          "the need is met somewhere we can't see",
+          "a purpose hasn't been assigned to a product",
+        ]}
+        note="If a product is missing, upload a statement or schedule and we'll capture it onto the plan."
+        actions={[
+          { label: "Discuss this" },
+          { label: "Add to the plan", primary: true },
+        ]}
       />
 
       <SectionHeading className="mt-8">All products</SectionHeading>

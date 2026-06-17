@@ -8,49 +8,13 @@ import {
   PanelSection,
   panelInputClass,
 } from "./panel-shell";
+import { RolesGrid } from "./panel-parts";
 
 /**
- * Level 2 product snapshot panels — one per product row. Content from the
- * concept brief; the risk/medical snapshots beyond Liberty are thin key-facts
- * panels so every row in the deck opens its own product, not a stand-in.
+ * Level 2 product snapshot panels for the simpler products (pension, risk,
+ * medical/short term). The richer tabbed investment fly-ins live in
+ * panels-investments.tsx.
  */
-
-export function AbsaPanel() {
-  return (
-    <>
-      <PanelSection title="Key facts">
-        <KvGrid
-          rows={[
-            { k: "Category", v: "Direct Shares" },
-            { k: "Supplier", v: "ABSA Stockbrokers" },
-            { k: "Current value", v: "R 460 000 · 06/10/2025", num: true },
-            { k: "Owner", v: "B Meander (100%)" },
-            { k: "Purpose", v: "Not set", tone: "warn" },
-            { k: "Status", v: "Managed · In force since 01/10/2025" },
-          ]}
-        />
-      </PanelSection>
-      <PanelSection title="Funds">
-        <FundList
-          items={[
-            { label: "Alexander Forbes Grp Hldgs", value: "R 100 000" },
-            { label: "MTN Group Ltd Shares", value: "R 100 000" },
-            { label: "Vodacom Group Ltd", value: "R 260 000" },
-          ]}
-        />
-      </PanelSection>
-      <PanelSection title="Fees">
-        <p className="text-[13px] text-gray-500">
-          Ongoing fees not configured — all rows at 0%.{" "}
-          <span className="font-medium" style={{ color: "var(--ew-blue)" }}>
-            Configure fees →
-          </span>
-        </p>
-      </PanelSection>
-      <Level3Block />
-    </>
-  );
-}
 
 export function PensionPanel() {
   return (
@@ -95,32 +59,6 @@ export function PensionPanel() {
   );
 }
 
-export function MomentumPanel() {
-  return (
-    <>
-      <PanelSection title="Key facts">
-        <KvGrid
-          rows={[
-            { k: "Category", v: "Offshore Investment" },
-            { k: "Supplier", v: "Momentum Wealth Intl" },
-            {
-              k: "Current value",
-              v: "R 1 091 961 · 08/04/2020",
-              tone: "bad",
-              num: true,
-            },
-            { k: "Fund", v: "Sanlam Global Best Ideas (A)" },
-          ]}
-        />
-      </PanelSection>
-      <NoteBlock tone="bad">
-        Valuation 6 years old — update before the review.
-      </NoteBlock>
-      <Level3Block />
-    </>
-  );
-}
-
 export function UtPanel() {
   return (
     <>
@@ -157,6 +95,15 @@ export function LibertyPanel() {
           ]}
         />
       </PanelSection>
+      <PanelSection title="Roles">
+        <RolesGrid
+          roles={[
+            { label: "Owner", name: "B Meander" },
+            { label: "Life assured", name: "Not loaded" },
+            { label: "Premium payer", name: "B Meander" },
+          ]}
+        />
+      </PanelSection>
       <NoteBlock tone="warn">
         No life assured loaded — benefits can't be captured for this policy.
       </NoteBlock>
@@ -180,6 +127,15 @@ export function MyriadPanel() {
           ]}
         />
       </PanelSection>
+      <PanelSection title="Roles">
+        <RolesGrid
+          roles={[
+            { label: "Owner", name: "B Meander" },
+            { label: "Life assured", name: "B Meander" },
+            { label: "Premium payer", name: "B Meander" },
+          ]}
+        />
+      </PanelSection>
       <Level3Block />
     </>
   );
@@ -197,6 +153,15 @@ export function OldMutualPanel() {
             { k: "Premium", v: "R 2 000 p.m.", num: true },
             { k: "Beneficiary", v: "Fudge Meander (child)" },
             { k: "Status", v: "In force" },
+          ]}
+        />
+      </PanelSection>
+      <PanelSection title="Roles">
+        <RolesGrid
+          roles={[
+            { label: "Owner", name: "B Meander" },
+            { label: "Life assured", name: "B Meander" },
+            { label: "Premium payer", name: "B Meander" },
           ]}
         />
       </PanelSection>

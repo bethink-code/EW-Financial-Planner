@@ -13,6 +13,7 @@ import {
 } from "./data-holdings";
 import { FreshnessDot, KpiTile, StatusPill } from "./primitives";
 import { AttentionStrip } from "./attention";
+import { SomethingMissing } from "./content-patterns";
 import { ListingSection, ProductCard, type ColumnDef } from "./listings";
 import {
   parseAmount,
@@ -252,6 +253,19 @@ export function ConceptA({
         sortOptions={COVER_SORTS}
         renderRow={coverRow}
         renderCard={coverCard}
+      />
+
+      <SomethingMissing
+        reasons={[
+          "we don't have the product captured yet",
+          "the cover is held somewhere we can't see",
+          "we're still capturing the latest statement",
+        ]}
+        note="If a policy is missing, upload a schedule or statement and we'll capture it for you."
+        actions={[
+          { label: "Discuss this" },
+          { label: "Add a policy", primary: true },
+        ]}
       />
     </div>
   );

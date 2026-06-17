@@ -2,16 +2,15 @@ import { useRef } from "react";
 import type { PanelId } from "./data";
 import { PanelShell } from "./panel-shell";
 import {
-  AbsaPanel,
   DiscoveryPanel,
   LibertyPanel,
-  MomentumPanel,
   MyriadPanel,
   OldMutualPanel,
   PensionPanel,
   SantamPanel,
   UtPanel,
 } from "./panels-products";
+import { AbsaPanel, MomentumPanel } from "./panels-investments";
 import {
   GoalEduPanel,
   GoalEmergencyPanel,
@@ -33,86 +32,89 @@ import {
  */
 
 type Resolve = (queueId: number) => void;
+type Assign = (purpose: string) => void;
 
 interface PanelEntry {
-  kicker: string;
+  subtitle: string;
   title: string;
-  render: (onResolve: Resolve) => React.ReactNode;
+  render: (onResolve: Resolve, onAssign: Assign) => React.ReactNode;
 }
 
 const REGISTRY: Record<PanelId, PanelEntry> = {
   absa: {
-    kicker: "Product snapshot",
+    subtitle: "Direct shares · ABSA Stockbrokers",
     title: "ABSA Share portfolio",
     render: () => <AbsaPanel />,
   },
   pension: {
-    kicker: "Product snapshot",
+    subtitle: "Product snapshot",
     title: "Company Pension Fund",
     render: () => <PensionPanel />,
   },
   momentum: {
-    kicker: "Product snapshot",
+    subtitle: "Offshore investment · Momentum Wealth Intl",
     title: "Momentum International Investment Option",
     render: () => <MomentumPanel />,
   },
   ut: {
-    kicker: "Product snapshot",
+    subtitle: "Product snapshot",
     title: "Unit Trust — Allan Gray",
     render: () => <UtPanel />,
   },
   liberty: {
-    kicker: "Product snapshot",
+    subtitle: "Product snapshot",
     title: "Liberty (to estate)",
     render: () => <LibertyPanel />,
   },
   myriad: {
-    kicker: "Product snapshot",
+    subtitle: "Product snapshot",
     title: "Myriad (to spouse)",
     render: () => <MyriadPanel />,
   },
   oldmutual: {
-    kicker: "Product snapshot",
+    subtitle: "Product snapshot",
     title: "Old Mutual (to child)",
     render: () => <OldMutualPanel />,
   },
   discovery: {
-    kicker: "Product snapshot",
+    subtitle: "Product snapshot",
     title: "Discovery Classic Delta Saver",
     render: () => <DiscoveryPanel />,
   },
   santam: {
-    kicker: "Product snapshot",
+    subtitle: "Product snapshot",
     title: "Santam Short Term Product",
     render: () => <SantamPanel />,
   },
   "goal-retire": {
-    kicker: "Goal · Level 2",
+    subtitle: "Goal · Level 2",
     title: "Retirement — age 65",
     render: () => <GoalRetirePanel />,
   },
   "goal-edu": {
-    kicker: "Goal · Level 2",
+    subtitle: "Goal · Level 2",
     title: "Education — Fudge (2031)",
     render: () => <GoalEduPanel />,
   },
   "goal-protect": {
-    kicker: "Goal · Level 2",
+    subtitle: "Goal · Level 2",
     title: "Protection",
     render: () => <GoalProtectPanel />,
   },
   "goal-emergency": {
-    kicker: "Goal · Level 2",
+    subtitle: "Goal · Level 2",
     title: "Emergency fund — gap",
     render: () => <GoalEmergencyPanel />,
   },
   "goal-unassigned": {
-    kicker: "Goal · Level 2",
+    subtitle: "Goal · Level 2",
     title: "Assign a purpose",
-    render: (onResolve) => <GoalUnassignedPanel onResolve={onResolve} />,
+    render: (_onResolve, onAssign) => (
+      <GoalUnassignedPanel onAssign={onAssign} />
+    ),
   },
   "fix-pension": {
-    kicker: "Action · Level 2",
+    subtitle: "Action · Level 2",
     title: "Update valuation — Company Pension Fund",
     render: (onResolve) => (
       <ValuationFixPanel
@@ -126,7 +128,7 @@ const REGISTRY: Record<PanelId, PanelEntry> = {
     ),
   },
   "fix-momentum": {
-    kicker: "Action · Level 2",
+    subtitle: "Action · Level 2",
     title: "Update valuation — Momentum International",
     render: (onResolve) => (
       <ValuationFixPanel
@@ -139,7 +141,7 @@ const REGISTRY: Record<PanelId, PanelEntry> = {
     ),
   },
   "fix-ut": {
-    kicker: "Action · Level 2",
+    subtitle: "Action · Level 2",
     title: "Update valuation — Unit Trust",
     render: (onResolve) => (
       <ValuationFixPanel
@@ -152,17 +154,17 @@ const REGISTRY: Record<PanelId, PanelEntry> = {
     ),
   },
   "fix-benefits": {
-    kicker: "Action · Level 2",
+    subtitle: "Action · Level 2",
     title: "Load life assured — Liberty (to estate)",
     render: (onResolve) => <FixBenefitsPanel onResolve={onResolve} />,
   },
   "fix-purpose": {
-    kicker: "Action · Level 2",
+    subtitle: "Action · Level 2",
     title: "Assign product purposes",
     render: (onResolve) => <FixPurposePanel onResolve={onResolve} />,
   },
   "fix-fees": {
-    kicker: "Action · Level 2",
+    subtitle: "Action · Level 2",
     title: "Configure fees — ABSA Share portfolio",
     render: (onResolve) => <FixFeesPanel onResolve={onResolve} />,
   },
@@ -172,10 +174,12 @@ export function PanelHost({
   openPanelId,
   onClose,
   onResolve,
+  onAssign,
 }: {
   openPanelId: PanelId | null;
   onClose: () => void;
   onResolve: Resolve;
+  onAssign: Assign;
 }) {
   const lastEntry = useRef<PanelEntry | null>(null);
   if (openPanelId) lastEntry.current = REGISTRY[openPanelId];
@@ -184,11 +188,11 @@ export function PanelHost({
   return (
     <PanelShell
       open={openPanelId !== null}
-      kicker={entry?.kicker ?? ""}
+      subtitle={entry?.subtitle ?? ""}
       title={entry?.title ?? ""}
       onClose={onClose}
     >
-      {entry?.render(onResolve)}
+      {entry?.render(onResolve, onAssign)}
     </PanelShell>
   );
 }

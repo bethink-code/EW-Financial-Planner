@@ -52,40 +52,6 @@ export const STRIP_A: StripCopy = {
   ],
 };
 
-export const STRIP_B: StripCopy = {
-  lead: "Plan reliability",
-  consequence:
-    "Retirement is built on two 6-year-old valuations, and R 460k sits outside the plan",
-  items: [
-    {
-      queueId: 1,
-      severity: "high",
-      title:
-        "Retirement goal unreliable — Company Pension Fund valued 08/04/2020",
-      sub: "Update the value to restore the on-track position",
-      action: "Update",
-      panelId: "fix-pension",
-    },
-    {
-      queueId: 2,
-      severity: "high",
-      title:
-        "Retirement goal unreliable — Momentum International valued 08/04/2020",
-      sub: "Update the value to restore the on-track position",
-      action: "Update",
-      panelId: "fix-momentum",
-    },
-    {
-      queueId: 5,
-      severity: "med",
-      title: "R 460 000 outside the plan — ABSA Share portfolio has no purpose",
-      sub: "Assign a purpose to include it",
-      action: "Assign",
-      panelId: "goal-unassigned",
-    },
-  ],
-};
-
 export const QUEUE: AttentionItem[] = [
   {
     queueId: 1,

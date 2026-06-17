@@ -19,6 +19,10 @@ export interface GoalCard {
   flag?: string;
   variant?: "gap" | "unassigned";
   panelId: PanelId;
+  /** Numeric current/target — present on goals the unassigned value can join,
+   *  so Concept B can recompute the card when a purpose is assigned. */
+  currentNum?: number;
+  targetNum?: number;
 }
 
 export const GOALS: GoalCard[] = [
@@ -32,6 +36,8 @@ export const GOALS: GoalCard[] = [
     foot: "24% of R 8.5m target · contributing R 7 500 p.m.",
     flag: "Position unreliable — both valuations are 6 years old",
     panelId: "goal-retire",
+    currentNum: 2_071_961,
+    targetNum: 8_500_000,
   },
   {
     title: "Education — Fudge",
@@ -42,6 +48,8 @@ export const GOALS: GoalCard[] = [
     barTone: "good",
     foot: "67% of R 750k target · no regular contribution",
     panelId: "goal-edu",
+    currentNum: 500_000,
+    targetNum: 750_000,
   },
   {
     title: "Protection",
@@ -66,6 +74,8 @@ export const GOALS: GoalCard[] = [
     footTone: "bad",
     variant: "gap",
     panelId: "goal-emergency",
+    currentNum: 0,
+    targetNum: 160_000,
   },
   {
     title: "Not yet assigned",
