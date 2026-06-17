@@ -13,7 +13,10 @@ import { BEN_MEANDER } from "./data";
  * end of the menu strip toggles it.
  */
 
-export const PresenterContext = createContext(false);
+export const PresenterContext = createContext<{
+  open: boolean;
+  setOpen: (open: boolean) => void;
+}>({ open: false, setOpen: () => {} });
 
 interface PortfolioLayoutProps {
   children: React.ReactNode;
@@ -42,7 +45,9 @@ export function PortfolioLayout({ children }: PortfolioLayoutProps) {
           </button>
         }
       />
-      <PresenterContext.Provider value={presenterOpen}>
+      <PresenterContext.Provider
+        value={{ open: presenterOpen, setOpen: setPresenterOpen }}
+      >
         <div style={{ paddingBottom: "80px" }}>{children}</div>
       </PresenterContext.Provider>
     </>

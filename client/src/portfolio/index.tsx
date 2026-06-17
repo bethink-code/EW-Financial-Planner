@@ -35,13 +35,15 @@ export default function PortfolioPage() {
     c: "cards",
   });
 
-  const presenterOpen = useContext(PresenterContext);
+  const { open: presenterOpen, setOpen: setPresenterOpen } =
+    useContext(PresenterContext);
   const readiness = READINESS_BASE + resolved.size * READINESS_PER_ITEM;
   const meta = CONCEPTS.find((c) => c.id === activeConcept)!;
 
   const switchConcept = (id: ConceptId) => {
     setActiveConcept(id);
     setOpenPanelId(null);
+    setPresenterOpen(false); // close the Concepts dropdown once a choice is made
     window.scrollTo({ top: 0 });
   };
 
