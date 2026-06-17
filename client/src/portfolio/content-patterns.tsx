@@ -1,5 +1,5 @@
-import { ChevronDown } from "lucide-react";
 import { PanelButton } from "./panel-shell";
+import { SegmentedControl } from "./view";
 
 /**
  * Content-area patterns from the EW "Final Wireframe" page: the section
@@ -24,7 +24,7 @@ export function ContentHeader({
   filter?: FilterConfig;
 }) {
   return (
-    <div className="flex flex-wrap items-end justify-between gap-4">
+    <div className="flex flex-wrap items-center justify-between gap-4">
       <div>
         <div className="text-[13px] text-gray-500">{label}</div>
         <div className="mt-0.5 text-3xl font-semibold tabular-nums text-neutral-900">
@@ -32,27 +32,12 @@ export function ContentHeader({
         </div>
       </div>
       {filter && (
-        <div className="w-[260px] max-w-[45%]">
-          {filter.label && (
-            <label className="block text-[13px] text-gray-500">
-              {filter.label}
-            </label>
-          )}
-          <div className="relative mt-1">
-            <select
-              value={filter.value}
-              onChange={(e) => filter.onChange(e.target.value)}
-              className="h-10 w-full appearance-none rounded-md border border-[#E0E0E0] bg-white pl-3 pr-9 text-sm text-neutral-900 focus:border-[var(--ew-blue)] focus:outline-none"
-            >
-              {filter.options.map((option) => (
-                <option key={option.value} value={option.value}>
-                  {option.label}
-                </option>
-              ))}
-            </select>
-            <ChevronDown className="pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
-          </div>
-        </div>
+        <SegmentedControl
+          label={filter.label}
+          options={filter.options}
+          value={filter.value}
+          onChange={filter.onChange}
+        />
       )}
     </div>
   );

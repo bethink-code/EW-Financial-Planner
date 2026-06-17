@@ -18,6 +18,8 @@ import { ListingSection, ProductCard, type ColumnDef } from "./listings";
 import {
   parseAmount,
   parseDmy,
+  SegmentButton,
+  SegmentGroup,
   type Accessors,
   type SortOption,
   type ViewMode,
@@ -193,30 +195,24 @@ export function ConceptA({
 
       {/* Household filters (decorative in the mockup) */}
       <div className="mt-4 flex flex-wrap items-center gap-2">
-        {HOUSEHOLD_CHIPS.map((chip) => (
-          <button
-            key={chip.label}
-            type="button"
-            className={cn(
-              "h-8 rounded-full border px-3 text-[13px]",
-              chip.on
-                ? "border-transparent text-white"
-                : "border-[#E0E0E0] bg-white text-gray-600"
-            )}
-            style={chip.on ? { backgroundColor: "var(--ew-blue)" } : undefined}
-          >
-            {chip.label}
-          </button>
-        ))}
+        <SegmentGroup>
+          {HOUSEHOLD_CHIPS.map((chip) => (
+            <SegmentButton key={chip.label} active={chip.on} onClick={() => {}}>
+              {chip.label}
+            </SegmentButton>
+          ))}
+        </SegmentGroup>
         <button
           type="button"
-          className="ml-auto h-8 rounded-full border border-[#E0E0E0] bg-white px-3 text-[13px] text-gray-600"
+          className="ml-auto flex h-8 items-center rounded-md border bg-white px-3 text-[13px] text-gray-600"
+          style={{ borderColor: "var(--ew-border)" }}
         >
           In force only ✓
         </button>
         <button
           type="button"
-          className="flex h-8 items-center gap-1 rounded-full border border-[#E0E0E0] bg-white px-3 text-[13px] text-gray-600"
+          className="flex h-8 items-center gap-1 rounded-md border bg-white px-3 text-[13px] text-gray-600"
+          style={{ borderColor: "var(--ew-border)" }}
         >
           ZAR <ChevronDown className="h-3.5 w-3.5" />
         </button>

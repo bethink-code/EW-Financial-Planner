@@ -242,11 +242,8 @@ export function Level3Block() {
         {LEVEL3_TABS.map((tab) => (
           <span
             key={tab}
-            className="rounded px-2 py-0.5 text-xs"
-            style={{
-              backgroundColor: "#E6F0F5",
-              color: "var(--ew-blue)",
-            }}
+            className="rounded-md border bg-white px-2 py-0.5 text-xs text-gray-600"
+            style={{ borderColor: "var(--ew-border)" }}
           >
             {tab}
           </span>

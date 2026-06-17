@@ -26,6 +26,75 @@ export interface SortOption {
 
 export type Accessors<T> = Record<string, (row: T) => string | number>;
 
+/** Segmented-control container — the bordered shell holding SegmentButtons. */
+export function SegmentGroup({ children }: { children: React.ReactNode }) {
+  return (
+    <div
+      className="flex items-center gap-0.5 rounded-[8px] border bg-white p-0.5"
+      style={{ borderColor: "var(--ew-border)" }}
+    >
+      {children}
+    </div>
+  );
+}
+
+/** One segment — filled blue when active, white otherwise. */
+export function SegmentButton({
+  active,
+  onClick,
+  children,
+}: {
+  active: boolean;
+  onClick: () => void;
+  children: React.ReactNode;
+}) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      className={cn(
+        "flex h-7 items-center gap-1.5 rounded-[6px] px-2.5 text-xs font-medium",
+        active
+          ? "text-white"
+          : "bg-white text-gray-700 hover:bg-[var(--ew-row-tint)]"
+      )}
+      style={active ? { backgroundColor: "var(--ew-blue)" } : undefined}
+    >
+      {children}
+    </button>
+  );
+}
+
+/** Labelled segmented control (e.g. "Filter" + option segments). */
+export function SegmentedControl({
+  label,
+  options,
+  value,
+  onChange,
+}: {
+  label?: string;
+  options: { value: string; label: string }[];
+  value: string;
+  onChange: (value: string) => void;
+}) {
+  return (
+    <div className="flex items-center gap-2">
+      {label && <span className="text-xs text-gray-500">{label}</span>}
+      <SegmentGroup>
+        {options.map((option) => (
+          <SegmentButton
+            key={option.value}
+            active={option.value === value}
+            onClick={() => onChange(option.value)}
+          >
+            {option.label}
+          </SegmentButton>
+        ))}
+      </SegmentGroup>
+    </div>
+  );
+}
+
 export function ViewModeToggle({
   mode,
   onChange,
@@ -33,32 +102,25 @@ export function ViewModeToggle({
   mode: ViewMode;
   onChange: (mode: ViewMode) => void;
 }) {
-  const chip = (m: ViewMode, label: string, Icon: typeof LayoutGrid) => (
-    <button
-      type="button"
-      onClick={() => onChange(m)}
-      className={cn(
-        "flex h-7 items-center gap-1.5 rounded-[6px] px-2.5 text-xs font-medium",
-        mode === m
-          ? "text-white"
-          : "bg-white text-gray-700 hover:bg-[var(--ew-row-tint)]"
-      )}
-      style={mode === m ? { backgroundColor: "var(--ew-blue)" } : undefined}
-    >
-      <Icon className="h-3.5 w-3.5" />
-      {label}
-    </button>
-  );
   return (
     <div className="flex items-center gap-2">
       <span className="text-xs text-gray-500">View</span>
-      <div
-        className="flex items-center gap-0.5 rounded-[8px] border bg-white p-0.5"
-        style={{ borderColor: "var(--ew-border)" }}
-      >
-        {chip("cards", "Cards", LayoutGrid)}
-        {chip("table", "Table", Table2)}
-      </div>
+      <SegmentGroup>
+        <SegmentButton
+          active={mode === "cards"}
+          onClick={() => onChange("cards")}
+        >
+          <LayoutGrid className="h-3.5 w-3.5" />
+          Cards
+        </SegmentButton>
+        <SegmentButton
+          active={mode === "table"}
+          onClick={() => onChange("table")}
+        >
+          <Table2 className="h-3.5 w-3.5" />
+          Table
+        </SegmentButton>
+      </SegmentGroup>
     </div>
   );
 }
