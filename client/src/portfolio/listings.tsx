@@ -157,30 +157,34 @@ export function ProductCard({
       onClick={onClick}
       role="button"
     >
-      <div className="flex items-start justify-between gap-2">
-        <div
-          className="flex items-center gap-1.5 text-sm font-medium"
-          style={{ color: "var(--ew-blue)" }}
-        >
-          <FileText className="h-4 w-4 shrink-0 text-gray-400" />
-          {name}
+      <div className="flex gap-1.5">
+        <FileText className="mt-0.5 h-4 w-4 shrink-0 text-gray-400" />
+        <div className="min-w-0 flex-1">
+          <div className="flex items-start justify-between gap-2">
+            <div
+              className="text-sm font-medium"
+              style={{ color: "var(--ew-blue)" }}
+            >
+              {name}
+            </div>
+            {pill && <StatusCard label={pill.label} tone={pill.tone} />}
+          </div>
+          {sub && <div className="mt-0.5 text-xs text-gray-500">{sub}</div>}
+          <div className="mt-2 text-lg font-semibold tabular-nums text-neutral-900">
+            {value}
+            {valueSuffix && (
+              <span className="ml-1 text-xs font-normal text-gray-500">
+                {valueSuffix}
+              </span>
+            )}
+          </div>
+          {foot && (
+            <div className="mt-1 flex items-center justify-between gap-2 text-xs text-gray-500">
+              {foot}
+            </div>
+          )}
         </div>
-        {pill && <StatusCard label={pill.label} tone={pill.tone} />}
       </div>
-      {sub && <div className="mt-0.5 text-xs text-gray-500">{sub}</div>}
-      <div className="mt-2 text-lg font-semibold tabular-nums text-neutral-900">
-        {value}
-        {valueSuffix && (
-          <span className="ml-1 text-xs font-normal text-gray-500">
-            {valueSuffix}
-          </span>
-        )}
-      </div>
-      {foot && (
-        <div className="mt-1 flex items-center justify-between gap-2 text-xs text-gray-500">
-          {foot}
-        </div>
-      )}
     </div>
   );
 }
