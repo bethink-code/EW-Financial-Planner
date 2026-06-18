@@ -123,7 +123,7 @@ export function GoalRetirePanel() {
           <PanelButton ghost>Adjust target</PanelButton>
         </div>
       </PanelSection>
-      <Level3Block />
+      <Level3Block label="Manage this goal" />
     </>
   );
 }

@@ -106,8 +106,8 @@ export function SectionHeading({
 }) {
   return (
     <h2
-      className={cn("text-sm font-bold", className)}
-      style={{ color: "var(--ew-blue)" }}
+      className={cn("text-xl font-bold", className)}
+      style={{ color: "var(--ew-primary-navy)" }}
     >
       {children}
     </h2>

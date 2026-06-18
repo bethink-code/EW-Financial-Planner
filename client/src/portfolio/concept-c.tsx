@@ -195,9 +195,8 @@ export function ConceptC({
               onClick={() => openPanel(goal.panelId)}
             />
           ))}
+          <SectionAdd label="Add a goal" />
         </div>
-
-        <SectionAdd label="Add a goal" />
 
         <ListingSection
           title="Holdings"

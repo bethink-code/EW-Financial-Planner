@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { X } from "lucide-react";
+import { ChevronRight, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { LEVEL3_TABS, type Tone } from "./data";
 import { FreshnessDot, TONE_COLOR } from "./primitives";
@@ -271,13 +271,31 @@ export function PanelButton({
   );
 }
 
-/** Dashed placeholder for the unchanged Level 3 product detail tab set. */
-export function Level3Block() {
+/**
+ * The Level 2 → Level 3 through-route: every Level 2 panel ends with a
+ * "Manage this product" action opening the full Level 3 detail (the existing
+ * product-management screens, unchanged). The tab chips preview what's there.
+ */
+export function Level3Block({
+  label = "Manage this product",
+}: {
+  label?: string;
+}) {
   return (
-    <div className="rounded-md border border-dashed border-[#BDBDBD] p-3">
-      <div className="text-xs text-neutral-700">
-        <span className="font-semibold">Level 3 — full product detail</span>{" "}
-        (existing screens, unchanged)
+    <div
+      className="rounded-md border border-dashed p-3"
+      style={{ borderColor: "#BDBDBD" }}
+    >
+      <button
+        type="button"
+        className="flex w-full items-center justify-between gap-2 rounded-md px-3.5 py-2.5 text-sm font-semibold text-white transition-opacity hover:opacity-90 motion-reduce:transition-none"
+        style={{ backgroundColor: "var(--ew-blue)" }}
+      >
+        {label}
+        <ChevronRight className="h-4 w-4" />
+      </button>
+      <div className="mt-2.5 text-xs text-gray-500">
+        Opens the full Level 3 detail — existing screens, unchanged:
       </div>
       <div className="mt-2 flex flex-wrap gap-1.5">
         {LEVEL3_TABS.map((tab) => (

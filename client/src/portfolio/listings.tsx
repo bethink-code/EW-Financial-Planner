@@ -80,7 +80,7 @@ export function ListingSection<T>({
     ) : null;
 
   return (
-    <div className="mt-6">
+    <div className="mt-10">
       {(title || sortControl) && (
         <div className="flex min-h-[20px] items-center justify-between gap-3">
           {title ? <SectionHeading>{title}</SectionHeading> : <span />}
@@ -89,35 +89,42 @@ export function ListingSection<T>({
       )}
 
       {viewMode === "table" ? (
-        <table className="mt-2 w-full text-sm">
-          <thead>
-            <tr style={{ backgroundColor: "var(--ew-blue-tertiary-50)" }}>
-              {columns.map((column) =>
-                column.sortKey ? (
-                  <SortHeader
-                    key={column.label}
-                    label={column.label}
-                    right={column.right}
-                    active={sort.key === column.sortKey}
-                    dir={sort.dir}
-                    onClick={() => sort.toggle(column.sortKey!)}
-                  />
-                ) : (
-                  <th
-                    key={column.label}
-                    className={cn(
-                      plainThClass,
-                      column.right ? "text-right" : "text-left"
-                    )}
-                  >
-                    {column.label}
-                  </th>
-                )
-              )}
-            </tr>
-          </thead>
-          <tbody>{sort.sorted.map(renderRow)}</tbody>
-        </table>
+        <>
+          <table className="mt-2 w-full text-sm">
+            <thead>
+              <tr style={{ backgroundColor: "var(--ew-blue-tertiary-50)" }}>
+                {columns.map((column) =>
+                  column.sortKey ? (
+                    <SortHeader
+                      key={column.label}
+                      label={column.label}
+                      right={column.right}
+                      active={sort.key === column.sortKey}
+                      dir={sort.dir}
+                      onClick={() => sort.toggle(column.sortKey!)}
+                    />
+                  ) : (
+                    <th
+                      key={column.label}
+                      className={cn(
+                        plainThClass,
+                        column.right ? "text-right" : "text-left"
+                      )}
+                    >
+                      {column.label}
+                    </th>
+                  )
+                )}
+              </tr>
+            </thead>
+            <tbody>{sort.sorted.map(renderRow)}</tbody>
+          </table>
+          {addLabel && (
+            <div className="mt-3 sm:max-w-xs">
+              <SectionAdd label={addLabel} />
+            </div>
+          )}
+        </>
       ) : (
         <div
           className={cn(
@@ -126,37 +133,30 @@ export function ListingSection<T>({
           )}
         >
           {sort.sorted.map(renderCard)}
+          {addLabel && <SectionAdd label={addLabel} />}
         </div>
       )}
-
-      {addLabel && <SectionAdd label={addLabel} />}
     </div>
   );
 }
 
 /**
- * Per-section "add" footer — advisor-facing and contextual to the section
- * (e.g. "Add a risk policy"), with an upload shortcut. Replaces the single
- * generic "Something missing?" panel.
+ * Per-section "add" card — advisor-facing and contextual to the section
+ * (e.g. "Add a risk policy"). A dashed card with a + that sits in the card
+ * grid or below the table. The advisor captures the policy properly, so
+ * there's no upload-a-statement shortcut. Replaces the generic
+ * "Something missing?" panel.
  */
 export function SectionAdd({ label }: { label: string }) {
   return (
-    <div
-      className="mt-3 flex flex-wrap items-center gap-x-4 gap-y-1 border-t pt-3 text-[13px]"
-      style={{ borderColor: "var(--ew-blue-tertiary-50)" }}
+    <button
+      type="button"
+      className="flex w-full items-center justify-center gap-2 self-start rounded-lg border border-dashed px-4 py-3 text-[13px] font-medium transition-colors hover:bg-[var(--ew-row-tint)] motion-reduce:transition-none"
+      style={{ borderColor: "var(--ew-border)", color: "var(--ew-blue)" }}
     >
-      <button
-        type="button"
-        className="flex items-center gap-1.5 font-medium hover:underline"
-        style={{ color: "var(--ew-blue)" }}
-      >
-        <Plus className="h-3.5 w-3.5" />
-        {label}
-      </button>
-      <button type="button" className="text-gray-500 hover:underline">
-        Upload a statement
-      </button>
-    </div>
+      <Plus className="h-4 w-4" />
+      {label}
+    </button>
   );
 }
 

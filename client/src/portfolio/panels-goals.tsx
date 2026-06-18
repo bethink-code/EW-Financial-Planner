@@ -41,7 +41,7 @@ export function GoalEduPanel() {
           ]}
         />
       </PanelSection>
-      <Level3Block />
+      <Level3Block label="Manage this goal" />
     </>
   );
 }
@@ -81,7 +81,7 @@ export function GoalProtectPanel() {
           <PanelButton ghost>Run cover gap analysis</PanelButton>
         </div>
       </PanelSection>
-      <Level3Block />
+      <Level3Block label="Manage this goal" />
     </>
   );
 }
@@ -103,7 +103,7 @@ export function GoalMedicalPanel() {
         Healthcare cover for the household. Plan-versus-needs analysis lives in
         the medical aid review.
       </NoteBlock>
-      <Level3Block />
+      <Level3Block label="Manage this goal" />
     </>
   );
 }
@@ -125,7 +125,7 @@ export function GoalShortTermPanel() {
         Asset and liability cover (vehicle, home, contents). Sums insured aren't
         captured here yet.
       </NoteBlock>
-      <Level3Block />
+      <Level3Block label="Manage this goal" />
     </>
   );
 }
@@ -195,6 +195,7 @@ export function GoalUnassignedPanel({
         Uses the existing Product purpose field — no data model change. Once
         set, the product joins the plan view automatically.
       </NoteBlock>
+      <Level3Block />
     </>
   );
 }
