@@ -1,13 +1,15 @@
 import { ChevronDown, ChevronUp } from "lucide-react";
 import { cn } from "@/lib/utils";
 import type { PanelId } from "./data";
-import type { AttentionItem, StripCopy } from "./data-attention";
+import { QUEUE, STRIP_A, type AttentionItem } from "./data-attention";
 import { TONE_COLOR, TONE_TINT } from "./primitives";
+import { PlanGapCallout, ValuationCurrency } from "./content-patterns";
 
 /**
  * The attention layer — a parallel layer woven into every concept, never a
- * standalone screen. Concepts A & B get the collapsible strip; Concept C
- * shows the full queue as a persistent rail (QueueItem reused there).
+ * standalone screen. Concept A consolidates everything into one
+ * NeedsAttentionBlock; Concept C shows the queue as a persistent rail
+ * (QueueItem reused there); Concept B weaves reliability into the goals.
  */
 
 export function QueueItem({
@@ -57,35 +59,45 @@ export function QueueItem({
   );
 }
 
-export function AttentionStrip({
-  copy,
+/**
+ * Concept A's consolidated to-do block: one container replacing the separate
+ * re-fetch bar, attention strip and plan-gap callout. Tinted header (count +
+ * consequence + readiness + show/hide) over a white body holding the
+ * valuation-currency row, the full queue, and any uncovered plan intentions —
+ * each item opening its Level 2 slide-out.
+ */
+export function NeedsAttentionBlock({
   readiness,
+  resolved,
   expanded,
   onToggle,
   openPanel,
-  resolved,
+  planGaps,
 }: {
-  copy: StripCopy;
   readiness: number;
+  resolved: Set<number>;
   expanded: boolean;
   onToggle: () => void;
   openPanel: (id: PanelId) => void;
-  resolved: Set<number>;
+  planGaps: { title: string; note: string; onClick: () => void }[];
 }) {
   const warn = TONE_TINT.warn;
   return (
-    <div className="mt-4">
+    <div
+      className="mt-4 overflow-hidden rounded-lg border"
+      style={{ borderColor: warn.border }}
+    >
       <div
-        className="flex cursor-pointer flex-wrap items-center gap-x-4 gap-y-1 rounded-md border px-4 py-2.5"
-        style={{ backgroundColor: warn.bg, borderColor: warn.border }}
+        className="flex cursor-pointer flex-wrap items-center gap-x-4 gap-y-1 px-4 py-2.5"
+        style={{ backgroundColor: warn.bg }}
         onClick={onToggle}
         role="button"
       >
         <span className="text-sm font-semibold" style={{ color: warn.text }}>
-          {copy.lead}
+          {STRIP_A.lead}
         </span>
         <span className="min-w-0 flex-1 text-[13px] text-neutral-700">
-          {copy.consequence}
+          {STRIP_A.consequence}
         </span>
         <span
           className="whitespace-nowrap text-sm font-medium tabular-nums"
@@ -107,22 +119,22 @@ export function AttentionStrip({
       </div>
 
       {expanded && (
-        <div className="mt-2 space-y-2">
-          {copy.items.map((item) => (
-            <QueueItem
-              key={item.queueId}
-              item={item}
-              done={resolved.has(item.queueId)}
-              onClick={() => openPanel(item.panelId)}
-            />
-          ))}
-          <button
-            type="button"
-            className="text-xs font-medium hover:underline"
-            style={{ color: "var(--ew-blue)" }}
-          >
-            View all 6 items →
-          </button>
+        <div className="space-y-4 bg-white px-4 py-4">
+          <ValuationCurrency
+            asAt="06/10/2025"
+            staleNote="3 of 4 valuations need updating"
+          />
+          <div className="space-y-2">
+            {QUEUE.map((item) => (
+              <QueueItem
+                key={item.queueId}
+                item={item}
+                done={resolved.has(item.queueId)}
+                onClick={() => openPanel(item.panelId)}
+              />
+            ))}
+          </div>
+          <PlanGapCallout items={planGaps} />
         </div>
       )}
     </div>

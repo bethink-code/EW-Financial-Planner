@@ -1,7 +1,6 @@
 import { ChevronDown } from "lucide-react";
 import { cn } from "@/lib/utils";
 import type { PanelId } from "./data";
-import { STRIP_A } from "./data-attention";
 import {
   HOUSEHOLD_CHIPS,
   INVESTMENT_ROWS,
@@ -14,12 +13,7 @@ import {
 } from "./data-holdings";
 import { ChipRow, FreshnessDot, KpiTile, StatusCard } from "./primitives";
 import { benefitTags } from "./data-risk";
-import { AttentionStrip } from "./attention";
-import {
-  PlanGapCallout,
-  RefetchBar,
-  SomethingMissing,
-} from "./content-patterns";
+import { NeedsAttentionBlock } from "./attention";
 import { ListingSection, ProductCard } from "./listings";
 import { SegmentButton, SegmentGroup, type ViewMode } from "./view";
 import {
@@ -164,22 +158,13 @@ export function ConceptA({
         ))}
       </div>
 
-      <RefetchBar
-        asAt="06/10/2025"
-        staleNote="3 of 4 valuations need updating"
-      />
-
-      <AttentionStrip
-        copy={STRIP_A}
+      <NeedsAttentionBlock
         readiness={readiness}
+        resolved={resolved}
         expanded={expanded}
         onToggle={onToggle}
         openPanel={openPanel}
-        resolved={resolved}
-      />
-
-      <PlanGapCallout
-        items={[
+        planGaps={[
           {
             title: "Emergency fund — no product assigned",
             note: "≈ R 160 000 recommended (3 months' expenses)",
@@ -215,6 +200,7 @@ export function ConceptA({
 
       <ListingSection
         title="Investments — R 3 031 961"
+        addLabel="Add an investment"
         viewMode={viewMode}
         columns={INVESTMENT_COLUMNS}
         rows={INVESTMENT_ROWS}
@@ -226,6 +212,7 @@ export function ConceptA({
 
       <ListingSection
         title="Risk — R 7 200 p.m."
+        addLabel="Add a risk policy"
         viewMode={viewMode}
         columns={coverColumns("Supplier", "Reference")}
         rows={RISK_ROWS}
@@ -237,6 +224,7 @@ export function ConceptA({
 
       <ListingSection
         title="Medical aid — R 6 700 p.m."
+        addLabel="Add a medical aid"
         viewMode={viewMode}
         columns={coverColumns("Category", "Supplier")}
         rows={MEDICAL_ROWS}
@@ -248,6 +236,7 @@ export function ConceptA({
 
       <ListingSection
         title="Short term insurance — R 3 400 p.m."
+        addLabel="Add short-term cover"
         viewMode={viewMode}
         columns={coverColumns("Category", "Supplier")}
         rows={SHORT_TERM_ROWS}
@@ -255,19 +244,6 @@ export function ConceptA({
         sortOptions={COVER_SORTS}
         renderRow={coverRow}
         renderCard={coverCard}
-      />
-
-      <SomethingMissing
-        reasons={[
-          "we don't have the product captured yet",
-          "the cover is held somewhere we can't see",
-          "we're still capturing the latest statement",
-        ]}
-        note="If a policy is missing, upload a schedule or statement and we'll capture it for you."
-        actions={[
-          { label: "Discuss this" },
-          { label: "Add a policy", primary: true },
-        ]}
       />
     </div>
   );

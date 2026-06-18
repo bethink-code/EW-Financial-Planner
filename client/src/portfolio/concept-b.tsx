@@ -10,11 +10,7 @@ import {
   TONE_TINT,
 } from "./primitives";
 import { PanelButton } from "./panel-shell";
-import {
-  ContentHeader,
-  RefetchBar,
-  SomethingMissing,
-} from "./content-patterns";
+import { ContentHeader, ValuationCurrency } from "./content-patterns";
 import { GoalCardView } from "./goal-card";
 import { ListingSection, type ColumnDef } from "./listings";
 import {
@@ -213,13 +209,11 @@ export function ConceptB({
         }}
       />
 
-      <RefetchBar
-        asAt="06/10/2025"
-        staleNote="3 of 4 valuations need updating"
-      />
+      <ValuationCurrency asAt="06/10/2025" className="mt-4" />
 
       <ListingSection
         viewMode={viewMode}
+        addLabel="Add a product to the plan"
         columns={GOAL_COLUMNS}
         rows={goals}
         accessors={GOAL_ACCESSORS}
@@ -232,19 +226,6 @@ export function ConceptB({
             onClick={() => openPanel(goal.panelId)}
           />
         )}
-      />
-
-      <SomethingMissing
-        reasons={[
-          "we don't have the product captured yet",
-          "the need is met somewhere we can't see",
-          "a purpose hasn't been assigned to a product",
-        ]}
-        note="If a product is missing, upload a statement or schedule and we'll capture it onto the plan."
-        actions={[
-          { label: "Discuss this" },
-          { label: "Add to the plan", primary: true },
-        ]}
       />
 
       <SectionHeading className="mt-8">All products</SectionHeading>

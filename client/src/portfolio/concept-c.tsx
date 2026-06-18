@@ -12,12 +12,13 @@ import {
   StatusCard,
 } from "./primitives";
 import { QueueItem } from "./attention";
-import { RefetchBar } from "./content-patterns";
+import { ValuationCurrency } from "./content-patterns";
 import { benefitTags } from "./data-risk";
 import {
   cardSurface,
   ListingSection,
   ProductCard,
+  SectionAdd,
   type ColumnDef,
 } from "./listings";
 import {
@@ -196,13 +197,11 @@ export function ConceptC({
           ))}
         </div>
 
-        <RefetchBar
-          asAt="06/10/2025"
-          staleNote="3 of 4 valuations need updating"
-        />
+        <SectionAdd label="Add a goal" />
 
         <ListingSection
           title="Holdings"
+          addLabel="Add a holding"
           viewMode={viewMode}
           columns={HOLDING_COLUMNS}
           rows={HOLDING_ROWS}
@@ -262,6 +261,8 @@ export function ConceptC({
             </div>
           </div>
         </div>
+
+        <ValuationCurrency asAt="06/10/2025" className="mt-3" />
 
         <SectionHeading className="mt-6">
           Needs attention <span className="font-normal text-gray-500">· 6</span>

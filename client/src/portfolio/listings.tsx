@@ -1,4 +1,4 @@
-import { FileText } from "lucide-react";
+import { FileText, Plus } from "lucide-react";
 import { cn } from "@/lib/utils";
 import type { Tone } from "./data";
 import { SectionHeading, StatusCard } from "./primitives";
@@ -46,6 +46,7 @@ export function ListingSection<T>({
   renderRow,
   renderCard,
   gridClass,
+  addLabel,
 }: {
   /** Omit to render the listing without its own heading row. */
   title?: string;
@@ -57,6 +58,8 @@ export function ListingSection<T>({
   renderRow: (row: T) => React.ReactNode;
   renderCard: (row: T) => React.ReactNode;
   gridClass?: string;
+  /** Advisor-facing "add to this section" label, e.g. "Add a risk policy". */
+  addLabel?: string;
 }) {
   const sort = useSort(rows, accessors);
 
@@ -125,6 +128,34 @@ export function ListingSection<T>({
           {sort.sorted.map(renderCard)}
         </div>
       )}
+
+      {addLabel && <SectionAdd label={addLabel} />}
+    </div>
+  );
+}
+
+/**
+ * Per-section "add" footer — advisor-facing and contextual to the section
+ * (e.g. "Add a risk policy"), with an upload shortcut. Replaces the single
+ * generic "Something missing?" panel.
+ */
+export function SectionAdd({ label }: { label: string }) {
+  return (
+    <div
+      className="mt-3 flex flex-wrap items-center gap-x-4 gap-y-1 border-t pt-3 text-[13px]"
+      style={{ borderColor: "var(--ew-blue-tertiary-50)" }}
+    >
+      <button
+        type="button"
+        className="flex items-center gap-1.5 font-medium hover:underline"
+        style={{ color: "var(--ew-blue)" }}
+      >
+        <Plus className="h-3.5 w-3.5" />
+        {label}
+      </button>
+      <button type="button" className="text-gray-500 hover:underline">
+        Upload a statement
+      </button>
     </div>
   );
 }
