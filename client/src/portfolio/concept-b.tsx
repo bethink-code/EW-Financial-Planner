@@ -10,7 +10,11 @@ import {
   TONE_TINT,
 } from "./primitives";
 import { PanelButton } from "./panel-shell";
-import { ContentHeader, SomethingMissing } from "./content-patterns";
+import {
+  ContentHeader,
+  RefetchBar,
+  SomethingMissing,
+} from "./content-patterns";
 import { GoalCardView } from "./goal-card";
 import { ListingSection, type ColumnDef } from "./listings";
 import {
@@ -207,6 +211,11 @@ export function ConceptB({
           value: filter,
           onChange: setFilter,
         }}
+      />
+
+      <RefetchBar
+        asAt="06/10/2025"
+        staleNote="3 of 4 valuations need updating"
       />
 
       <ListingSection

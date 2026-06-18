@@ -14,10 +14,12 @@ import { AbsaPanel, MomentumPanel } from "./panels-investments";
 import {
   GoalEduPanel,
   GoalEmergencyPanel,
+  GoalMedicalPanel,
   GoalProtectPanel,
-  GoalRetirePanel,
+  GoalShortTermPanel,
   GoalUnassignedPanel,
 } from "./panels-goals";
+import { GoalRetirePanel } from "./panels-goal-retire";
 import {
   FixBenefitsPanel,
   FixFeesPanel,
@@ -98,8 +100,18 @@ const REGISTRY: Record<PanelId, PanelEntry> = {
   },
   "goal-protect": {
     subtitle: "Goal · Level 2",
-    title: "Protection",
+    title: "Life cover",
     render: () => <GoalProtectPanel />,
+  },
+  "goal-medical": {
+    subtitle: "Goal · Level 2",
+    title: "Medical aid",
+    render: () => <GoalMedicalPanel />,
+  },
+  "goal-shortterm": {
+    subtitle: "Goal · Level 2",
+    title: "Short-term insurance",
+    render: () => <GoalShortTermPanel />,
   },
   "goal-emergency": {
     subtitle: "Goal · Level 2",

@@ -75,7 +75,7 @@ export function PanelShell({
             <X className="h-4 w-4" />
           </button>
         </div>
-        <div className="flex-1 space-y-5 overflow-y-auto px-5 py-5">
+        <div className="flex-1 space-y-8 overflow-y-auto px-5 py-6">
           {children}
         </div>
       </aside>
@@ -91,15 +91,18 @@ export function PanelSection({
   children: React.ReactNode;
 }) {
   return (
-    <div>
+    <section>
       <h4
-        className="mb-2 text-[13px] font-semibold"
-        style={{ color: "var(--ew-blue)" }}
+        className="mb-3 border-b pb-1.5 text-[15px] font-semibold"
+        style={{
+          color: "var(--ew-primary-navy)",
+          borderColor: "var(--ew-blue-tertiary-50)",
+        }}
       >
         {title}
       </h4>
       {children}
-    </div>
+    </section>
   );
 }
 
@@ -112,7 +115,7 @@ export interface KvRow {
 
 export function KvGrid({ rows }: { rows: KvRow[] }) {
   return (
-    <div className="grid grid-cols-[150px_1fr] gap-y-1.5 text-sm">
+    <div className="grid grid-cols-[150px_1fr] gap-y-2.5 text-[13px]">
       {rows.map((row) => (
         <div key={row.k} className="contents">
           <span className="text-gray-500">{row.k}</span>
@@ -140,7 +143,7 @@ export function FundList({
       {items.map((item) => (
         <li
           key={item.label}
-          className="flex items-center justify-between gap-3 border-b py-2 text-sm last:border-b-0"
+          className="flex items-center justify-between gap-3 border-b py-2 text-[13px] last:border-b-0"
           style={{ borderColor: "var(--ew-blue-tertiary-50)" }}
         >
           <span className="font-medium" style={{ color: "var(--ew-blue)" }}>
@@ -152,6 +155,44 @@ export function FundList({
           </span>
         </li>
       ))}
+    </ul>
+  );
+}
+
+/** Benefit schedule for a risk policy — what it pays out, by benefit type.
+ *  Amounts of "—" render greyed as "Not captured". */
+export function BenefitTable({
+  benefits,
+}: {
+  benefits: { type: string; amount: string; basis: string }[];
+}) {
+  return (
+    <ul>
+      {benefits.map((benefit) => {
+        const empty = benefit.amount === "—";
+        return (
+          <li
+            key={benefit.type}
+            className="flex items-center justify-between gap-3 border-b py-2 last:border-b-0"
+            style={{ borderColor: "var(--ew-blue-tertiary-50)" }}
+          >
+            <div>
+              <div className="text-[13px] text-neutral-700">{benefit.type}</div>
+              <div
+                className={cn(
+                  "text-[13px] font-semibold tabular-nums",
+                  empty ? "text-gray-400" : "text-neutral-900"
+                )}
+              >
+                {benefit.amount}
+              </div>
+            </div>
+            <span className="whitespace-nowrap text-xs text-gray-500">
+              {empty ? "Not captured" : benefit.basis}
+            </span>
+          </li>
+        );
+      })}
     </ul>
   );
 }

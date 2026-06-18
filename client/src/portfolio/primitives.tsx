@@ -51,6 +51,30 @@ export function StatusCard({ label, tone }: { label: string; tone: Tone }) {
   );
 }
 
+/** Squared bordered chip (EW tag pattern — never a pill). Used for the
+ *  benefit tags on risk cards and any small "this exists" label. */
+export function Chip({ children }: { children: React.ReactNode }) {
+  return (
+    <span
+      className="inline-flex items-center rounded-md border bg-white px-2 py-0.5 text-[11px] text-gray-600"
+      style={{ borderColor: "var(--ew-border)" }}
+    >
+      {children}
+    </span>
+  );
+}
+
+/** A wrapped row of squared chips — shared by every benefit-tag rendering. */
+export function ChipRow({ tags }: { tags: string[] }) {
+  return (
+    <div className="flex flex-wrap gap-1">
+      {tags.map((tag) => (
+        <Chip key={tag}>{tag}</Chip>
+      ))}
+    </div>
+  );
+}
+
 export function ProgressBar({
   pct,
   tone,

@@ -8,22 +8,28 @@ import {
   KPIS,
   MEDICAL_ROWS,
   RISK_ROWS,
+  SHORT_TERM_ROWS,
   type CoverRow,
   type InvestmentRow,
 } from "./data-holdings";
-import { FreshnessDot, KpiTile, StatusCard } from "./primitives";
+import { ChipRow, FreshnessDot, KpiTile, StatusCard } from "./primitives";
+import { benefitTags } from "./data-risk";
 import { AttentionStrip } from "./attention";
-import { SomethingMissing } from "./content-patterns";
-import { ListingSection, ProductCard, type ColumnDef } from "./listings";
 import {
-  parseAmount,
-  parseDmy,
-  SegmentButton,
-  SegmentGroup,
-  type Accessors,
-  type SortOption,
-  type ViewMode,
-} from "./view";
+  PlanGapCallout,
+  RefetchBar,
+  SomethingMissing,
+} from "./content-patterns";
+import { ListingSection, ProductCard } from "./listings";
+import { SegmentButton, SegmentGroup, type ViewMode } from "./view";
+import {
+  coverColumns,
+  COVER_ACCESSORS,
+  COVER_SORTS,
+  INVESTMENT_ACCESSORS,
+  INVESTMENT_COLUMNS,
+  INVESTMENT_SORTS,
+} from "./concept-a-config";
 
 /**
  * Concept A — "At a glance". The familiar category-grouped product view,
@@ -43,46 +49,6 @@ interface ConceptAProps {
 const tdClass = "px-3 py-2.5 align-middle";
 const rowClass = "cursor-pointer border-b hover:bg-[var(--ew-row-tint)]";
 const rowStyle = { borderColor: "var(--ew-border)" } as const;
-
-const INVESTMENT_ACCESSORS: Accessors<InvestmentRow> = {
-  name: (r) => r.name,
-  value: (r) => parseAmount(r.value),
-  premium: (r) => parseAmount(r.premium),
-  date: (r) => parseDmy(r.date),
-};
-
-const INVESTMENT_SORTS: SortOption[] = [
-  { value: "name", label: "Name (A–Z)", dir: "asc" },
-  { value: "value", label: "Value (high–low)", dir: "desc" },
-  { value: "date", label: "Valuation (oldest first)", dir: "asc" },
-];
-
-const COVER_ACCESSORS: Accessors<CoverRow> = {
-  name: (r) => r.name,
-  premium: (r) => parseAmount(r.premium),
-};
-
-const COVER_SORTS: SortOption[] = [
-  { value: "name", label: "Name (A–Z)", dir: "asc" },
-  { value: "premium", label: "Premium (high–low)", dir: "desc" },
-];
-
-const INVESTMENT_COLUMNS: ColumnDef[] = [
-  { label: "Instrument", sortKey: "name" },
-  { label: "Category" },
-  { label: "Supplier" },
-  { label: "Premium / income", right: true, sortKey: "premium" },
-  { label: "Current value", right: true, sortKey: "value" },
-  { label: "Valuation", sortKey: "date" },
-];
-
-const coverColumns = (meta1: string, meta2: string): ColumnDef[] => [
-  { label: "Instrument", sortKey: "name" },
-  { label: meta1 },
-  { label: meta2 },
-  { label: "Premium", right: true, sortKey: "premium" },
-  { label: "Status" },
-];
 
 export function ConceptA({
   openPanel,
@@ -130,7 +96,7 @@ export function ConceptA({
         <>
           <span className="flex items-center gap-1.5 tabular-nums">
             <FreshnessDot tone={row.freshness} />
-            {row.date}
+            Last valued {row.date}
           </span>
           {row.premium !== "—" && (
             <span className="tabular-nums">Contributing {row.premium}</span>
@@ -141,39 +107,53 @@ export function ConceptA({
     />
   );
 
-  const coverRow = (row: CoverRow) => (
-    <tr
-      key={row.name}
-      className={rowClass}
-      style={rowStyle}
-      onClick={() => openPanel(row.panelId)}
-    >
-      <td
-        className={cn(tdClass, "font-medium")}
-        style={{ color: "var(--ew-blue)" }}
+  const coverRow = (row: CoverRow) => {
+    const tags = benefitTags(row.panelId);
+    return (
+      <tr
+        key={row.name}
+        className={rowClass}
+        style={rowStyle}
+        onClick={() => openPanel(row.panelId)}
       >
-        {row.name}
-      </td>
-      <td className={tdClass}>{row.meta1}</td>
-      <td className={tdClass}>{row.meta2}</td>
-      <td className={cn(tdClass, "text-right tabular-nums")}>{row.premium}</td>
-      <td className={tdClass}>
-        <StatusCard label={row.pill.label} tone={row.pill.tone} />
-      </td>
-    </tr>
-  );
+        <td
+          className={cn(tdClass, "font-medium")}
+          style={{ color: "var(--ew-blue)" }}
+        >
+          {row.name}
+        </td>
+        <td className={tdClass}>{row.meta1}</td>
+        <td className={tdClass}>{row.meta2}</td>
+        <td className={cn(tdClass, "text-right tabular-nums")}>
+          {row.premium}
+        </td>
+        <td className={tdClass}>
+          <StatusCard label={row.pill.label} tone={row.pill.tone} />
+          {tags.length > 0 && (
+            <div className="mt-1.5">
+              <ChipRow tags={tags} />
+            </div>
+          )}
+        </td>
+      </tr>
+    );
+  };
 
-  const coverCard = (row: CoverRow) => (
-    <ProductCard
-      key={row.name}
-      name={row.name}
-      sub={`${row.meta1} · ${row.meta2}`}
-      pill={row.pill}
-      value={row.premium.replace(" p.m.", "")}
-      valueSuffix="p.m."
-      onClick={() => openPanel(row.panelId)}
-    />
-  );
+  const coverCard = (row: CoverRow) => {
+    const tags = benefitTags(row.panelId);
+    return (
+      <ProductCard
+        key={row.name}
+        name={row.name}
+        sub={`${row.meta1} · ${row.meta2}`}
+        pill={row.pill}
+        value={row.premium.replace(" p.m.", "")}
+        valueSuffix="p.m."
+        foot={tags.length > 0 ? <ChipRow tags={tags} /> : undefined}
+        onClick={() => openPanel(row.panelId)}
+      />
+    );
+  };
 
   return (
     <div>
@@ -184,6 +164,11 @@ export function ConceptA({
         ))}
       </div>
 
+      <RefetchBar
+        asAt="06/10/2025"
+        staleNote="3 of 4 valuations need updating"
+      />
+
       <AttentionStrip
         copy={STRIP_A}
         readiness={readiness}
@@ -191,6 +176,16 @@ export function ConceptA({
         onToggle={onToggle}
         openPanel={openPanel}
         resolved={resolved}
+      />
+
+      <PlanGapCallout
+        items={[
+          {
+            title: "Emergency fund — no product assigned",
+            note: "≈ R 160 000 recommended (3 months' expenses)",
+            onClick: () => openPanel("goal-emergency"),
+          },
+        ]}
       />
 
       {/* Household filters (decorative in the mockup) */}
@@ -241,10 +236,21 @@ export function ConceptA({
       />
 
       <ListingSection
-        title="Medical aid & short term — R 10 100 p.m."
+        title="Medical aid — R 6 700 p.m."
         viewMode={viewMode}
         columns={coverColumns("Category", "Supplier")}
         rows={MEDICAL_ROWS}
+        accessors={COVER_ACCESSORS}
+        sortOptions={COVER_SORTS}
+        renderRow={coverRow}
+        renderCard={coverCard}
+      />
+
+      <ListingSection
+        title="Short term insurance — R 3 400 p.m."
+        viewMode={viewMode}
+        columns={coverColumns("Category", "Supplier")}
+        rows={SHORT_TERM_ROWS}
         accessors={COVER_ACCESSORS}
         sortOptions={COVER_SORTS}
         renderRow={coverRow}

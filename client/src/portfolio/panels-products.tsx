@@ -1,4 +1,5 @@
 import {
+  BenefitTable,
   FundList,
   KvGrid,
   Level3Block,
@@ -9,6 +10,7 @@ import {
   panelInputClass,
 } from "./panel-shell";
 import { RolesGrid } from "./panel-parts";
+import { RISK_BENEFITS } from "./data-risk";
 
 /**
  * Level 2 product snapshot panels for the simpler products (pension, risk,
@@ -95,6 +97,9 @@ export function LibertyPanel() {
           ]}
         />
       </PanelSection>
+      <PanelSection title="Benefits">
+        <BenefitTable benefits={RISK_BENEFITS.liberty!.benefits} />
+      </PanelSection>
       <PanelSection title="Roles">
         <RolesGrid
           roles={[
@@ -127,6 +132,9 @@ export function MyriadPanel() {
           ]}
         />
       </PanelSection>
+      <PanelSection title="Benefits">
+        <BenefitTable benefits={RISK_BENEFITS.myriad!.benefits} />
+      </PanelSection>
       <PanelSection title="Roles">
         <RolesGrid
           roles={[
@@ -155,6 +163,9 @@ export function OldMutualPanel() {
             { k: "Status", v: "In force" },
           ]}
         />
+      </PanelSection>
+      <PanelSection title="Benefits">
+        <BenefitTable benefits={RISK_BENEFITS.oldmutual!.benefits} />
       </PanelSection>
       <PanelSection title="Roles">
         <RolesGrid

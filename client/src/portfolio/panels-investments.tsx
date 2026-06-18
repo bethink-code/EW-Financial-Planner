@@ -32,7 +32,7 @@ export function MomentumPanel() {
       />
 
       {tab === "Funds" && (
-        <div className="space-y-3">
+        <div className="space-y-5">
           <div className="space-y-1.5">
             <div className="flex items-center justify-between text-sm">
               <span className="text-gray-500">Total</span>
@@ -64,7 +64,7 @@ export function MomentumPanel() {
       )}
 
       {tab === "Asset allocation" && (
-        <div className="space-y-3">
+        <div className="space-y-5">
           <div className="space-y-1.5">
             <div className="flex items-center justify-between text-sm">
               <span className="text-gray-500">Local 3%</span>
@@ -116,7 +116,7 @@ export function MomentumPanel() {
       )}
 
       {tab === "Policy details" && (
-        <div className="space-y-4">
+        <div className="space-y-6">
           <KvGrid
             rows={[
               { k: "Category", v: "Offshore Investment" },
@@ -161,7 +161,7 @@ export function AbsaPanel() {
       />
 
       {tab === "Holdings" && (
-        <div className="space-y-3">
+        <div className="space-y-5">
           <div className="space-y-1.5">
             <div className="flex items-center justify-between text-sm">
               <span className="text-gray-500">Total</span>
@@ -188,7 +188,7 @@ export function AbsaPanel() {
       )}
 
       {tab === "Asset allocation" && (
-        <div className="space-y-3">
+        <div className="space-y-5">
           <div className="space-y-1.5">
             <div className="flex items-center justify-between text-sm">
               <span className="text-gray-500">Local 100%</span>
@@ -217,7 +217,7 @@ export function AbsaPanel() {
       )}
 
       {tab === "Policy details" && (
-        <div className="space-y-4">
+        <div className="space-y-6">
           <KvGrid
             rows={[
               { k: "Category", v: "Direct Shares" },

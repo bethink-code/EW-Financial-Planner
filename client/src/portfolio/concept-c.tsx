@@ -4,6 +4,7 @@ import { QUEUE } from "./data-attention";
 import { HOLDING_ROWS, REVIEW_ROWS, type HoldingRow } from "./data-holdings";
 import { MINI_GOALS, type MiniGoal } from "./data-plan";
 import {
+  ChipRow,
   FreshnessDot,
   ProgressBar,
   ReadinessRing,
@@ -11,6 +12,8 @@ import {
   StatusCard,
 } from "./primitives";
 import { QueueItem } from "./attention";
+import { RefetchBar } from "./content-patterns";
+import { benefitTags } from "./data-risk";
 import {
   cardSurface,
   ListingSection,
@@ -54,7 +57,7 @@ const HOLDING_COLUMNS: ColumnDef[] = [
   { label: "Instrument", sortKey: "name" },
   { label: "Purpose" },
   { label: "Value / premium", right: true, sortKey: "value" },
-  { label: "As at", sortKey: "date" },
+  { label: "Last valuation", sortKey: "date" },
 ];
 
 function MiniGoalCard({
@@ -123,29 +126,38 @@ export function ConceptC({
       <span className="text-gray-400">—</span>
     );
 
-  const holdingRow = (row: HoldingRow) => (
-    <tr
-      key={row.name}
-      className="cursor-pointer border-b hover:bg-[var(--ew-row-tint)]"
-      style={{ borderColor: "var(--ew-border)" }}
-      onClick={() => openPanel(row.panelId)}
-    >
-      <td
-        className="px-3 py-2.5 font-medium"
-        style={{ color: "var(--ew-blue)" }}
+  const holdingRow = (row: HoldingRow) => {
+    const tags = benefitTags(row.panelId);
+    return (
+      <tr
+        key={row.name}
+        className="cursor-pointer border-b hover:bg-[var(--ew-row-tint)]"
+        style={{ borderColor: "var(--ew-border)" }}
+        onClick={() => openPanel(row.panelId)}
       >
-        {row.name}
-      </td>
-      <td className="px-3 py-2.5">
-        {row.purpose ?? <StatusCard label="Not set" tone="neutral" />}
-      </td>
-      <td className="px-3 py-2.5 text-right tabular-nums">{row.value}</td>
-      <td className="px-3 py-2.5">{asAt(row)}</td>
-    </tr>
-  );
+        <td
+          className="px-3 py-2.5 font-medium"
+          style={{ color: "var(--ew-blue)" }}
+        >
+          {row.name}
+        </td>
+        <td className="px-3 py-2.5">
+          {row.purpose ?? <StatusCard label="Not set" tone="neutral" />}
+          {tags.length > 0 && (
+            <div className="mt-1.5">
+              <ChipRow tags={tags} />
+            </div>
+          )}
+        </td>
+        <td className="px-3 py-2.5 text-right tabular-nums">{row.value}</td>
+        <td className="px-3 py-2.5">{asAt(row)}</td>
+      </tr>
+    );
+  };
 
   const holdingCard = (row: HoldingRow) => {
     const monthly = row.value.endsWith(" p.m.");
+    const tags = benefitTags(row.panelId);
     return (
       <ProductCard
         key={row.name}
@@ -158,8 +170,10 @@ export function ConceptC({
           row.date ? (
             <span className="flex items-center gap-1.5 tabular-nums">
               <FreshnessDot tone={row.freshness!} />
-              As at {row.date}
+              Last valued {row.date}
             </span>
+          ) : tags.length > 0 ? (
+            <ChipRow tags={tags} />
           ) : undefined
         }
         onClick={() => openPanel(row.panelId)}
@@ -181,6 +195,11 @@ export function ConceptC({
             />
           ))}
         </div>
+
+        <RefetchBar
+          asAt="06/10/2025"
+          staleNote="3 of 4 valuations need updating"
+        />
 
         <ListingSection
           title="Holdings"

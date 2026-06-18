@@ -30,6 +30,8 @@ export type PanelId =
   | "goal-retire"
   | "goal-edu"
   | "goal-protect"
+  | "goal-medical"
+  | "goal-shortterm"
   | "goal-emergency"
   | "goal-unassigned"
   | "fix-pension"

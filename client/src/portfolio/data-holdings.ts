@@ -142,6 +142,9 @@ export const MEDICAL_ROWS: CoverRow[] = [
     pill: { label: "In force", tone: "good" },
     panelId: "discovery",
   },
+];
+
+export const SHORT_TERM_ROWS: CoverRow[] = [
   {
     name: "Santam Short Term Product",
     meta1: "Short Term Insurance",
@@ -196,31 +199,31 @@ export const HOLDING_ROWS: HoldingRow[] = [
   },
   {
     name: "Liberty (to estate)",
-    purpose: "Protection",
+    purpose: "Life cover",
     value: "R 3 100 p.m.",
     panelId: "liberty",
   },
   {
     name: "Myriad (to spouse)",
-    purpose: "Protection",
+    purpose: "Life cover",
     value: "R 2 100 p.m.",
     panelId: "myriad",
   },
   {
     name: "Old Mutual (to child)",
-    purpose: "Protection",
+    purpose: "Life cover",
     value: "R 2 000 p.m.",
     panelId: "oldmutual",
   },
   {
     name: "Discovery Classic Delta Saver",
-    purpose: "Protection",
+    purpose: "Medical aid",
     value: "R 6 700 p.m.",
     panelId: "discovery",
   },
   {
     name: "Santam Short Term",
-    purpose: "Protection",
+    purpose: "Short-term insurance",
     value: "R 3 400 p.m.",
     panelId: "santam",
   },
