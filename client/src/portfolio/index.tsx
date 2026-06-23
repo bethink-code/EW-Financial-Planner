@@ -8,42 +8,43 @@ import {
   READINESS_PER_ITEM,
   type ConceptId,
   type PanelId,
+  type PortfolioTab,
 } from "./data";
-import { ConceptA } from "./concept-a";
+import { CustomTabs } from "@/components/ui/custom-tabs";
+import { TabOverview } from "./tab-overview";
+import { TabInvestments, type ManagedFilter } from "./tab-investments";
+import { TabRiskLt } from "./tab-risk-lt";
+import { TabRiskSt } from "./tab-risk-st";
+import { TabMedical } from "./tab-medical";
 import { ConceptB } from "./concept-b";
-import { ConceptC } from "./concept-c";
 import { PanelHost } from "./panel-host";
-import { ViewModeToggle, type ViewMode } from "./view";
 
-/**
- * Portfolio concept deck — three design directions for the portfolio landing
- * page, presented for the client to choose one before final prototyping.
- * Everything is a mockup on demo data (Ben Meander); state lives in memory.
- */
+const PORTFOLIO_TABS = [
+  { id: "overview", label: "Overview" },
+  { id: "investments", label: "Investments" },
+  { id: "risk-lt", label: "Long-term risk" },
+  { id: "risk-st", label: "Short-term risk" },
+  { id: "medical", label: "Medical aid" },
+];
+
 export default function PortfolioPage() {
+  const [activeTab, setActiveTab] = useState<PortfolioTab>("investments");
   const [activeConcept, setActiveConcept] = useState<ConceptId>("a");
+  const [managedFilter, setManagedFilter] = useState<ManagedFilter>("all");
   const [openPanelId, setOpenPanelId] = useState<PanelId | null>(null);
   const [resolved, setResolved] = useState<Set<number>>(new Set());
-  const [attnExpandedA, setAttnExpandedA] = useState(false);
-  // Concept B: the purpose assigned to the unassigned ABSA value (null until set)
   const [assignedPurpose, setAssignedPurpose] = useState<string | null>(null);
-  // Per-concept default presentation; the toggle is remembered per concept
-  // so switching A/B/C lands on the intended view.
-  const [viewModes, setViewModes] = useState<Record<ConceptId, ViewMode>>({
-    a: "cards",
-    b: "table",
-    c: "cards",
-  });
 
   const { open: presenterOpen, setOpen: setPresenterOpen } =
     useContext(PresenterContext);
+
   const readiness = READINESS_BASE + resolved.size * READINESS_PER_ITEM;
   const meta = CONCEPTS.find((c) => c.id === activeConcept)!;
 
   const switchConcept = (id: ConceptId) => {
     setActiveConcept(id);
     setOpenPanelId(null);
-    setPresenterOpen(false); // close the Concepts dropdown once a choice is made
+    setPresenterOpen(false);
     window.scrollTo({ top: 0 });
   };
 
@@ -55,30 +56,26 @@ export default function PortfolioPage() {
     setOpenPanelId(null);
   };
 
-  // Assigning ABSA's purpose folds it into a goal (Concept B) and clears the
-  // "outside the plan" attention item.
   const assignPurpose = (purpose: string) => {
     setAssignedPurpose(purpose);
     resolveItem(5);
   };
 
-  const sharedProps = { openPanel, readiness, resolved };
-
   return (
     <div className="w-full px-6 pt-6 pb-2">
-      {/* Presenter band — concept-deck controls, hidden unless toggled via
-          the "Concepts" link in the menu strip */}
+      {/* Presenter band — view switcher, hidden unless toggled via "Concepts" in the menu strip */}
       <div
         className={cn(
           "w-full rounded-lg border border-gray-200 bg-white px-6 py-4 shadow-sm",
           !presenterOpen && "hidden"
         )}
       >
-        <div className="text-xs text-gray-500">
-          Portfolio redesign · concept exploration
-        </div>
-        <h1 className="mt-0.5 text-2xl font-semibold text-primary">
-          Portfolio landing — three concept directions
+        <div className="text-xs text-gray-500">Portfolio · view direction</div>
+        <h1
+          className="mt-0.5 text-2xl font-semibold"
+          style={{ color: "var(--ew-primary-navy)" }}
+        >
+          Switch view
         </h1>
 
         <div className="mt-4 flex flex-wrap gap-2">
@@ -98,10 +95,7 @@ export default function PortfolioPage() {
               >
                 <span className="text-sm font-semibold">{concept.name}</span>
                 <span
-                  className={cn(
-                    "text-xs",
-                    active ? "text-white/80" : "text-gray-500"
-                  )}
+                  className={cn("text-xs", active ? "text-white/80" : "text-gray-500")}
                 >
                   {concept.subtitle}
                 </span>
@@ -121,38 +115,60 @@ export default function PortfolioPage() {
         </p>
       </div>
 
-      {/* Concept stage */}
+      {/* Main content */}
       <div
         className={cn(
           "w-full rounded-lg border border-gray-200 bg-white px-6 py-6 shadow-sm",
           presenterOpen && "mt-6"
         )}
       >
-        <div className="mb-4 flex justify-end">
-          <ViewModeToggle
-            mode={viewModes[activeConcept]}
-            onChange={(mode) =>
-              setViewModes((prev) => ({ ...prev, [activeConcept]: mode }))
-            }
-          />
-        </div>
-        {activeConcept === "a" && (
-          <ConceptA
-            {...sharedProps}
-            viewMode={viewModes.a}
-            expanded={attnExpandedA}
-            onToggle={() => setAttnExpandedA((prev) => !prev)}
-          />
-        )}
-        {activeConcept === "b" && (
+        {activeConcept === "a" ? (
+          <>
+            <CustomTabs
+              tabs={PORTFOLIO_TABS}
+              activeTab={activeTab}
+              onTabChange={(id) => setActiveTab(id as PortfolioTab)}
+              className="mb-6"
+            />
+
+            {activeTab === "overview" && <TabOverview />}
+
+            {activeTab === "investments" && (
+              <TabInvestments
+                openPanel={openPanel}
+                managedFilter={managedFilter}
+                onManagedFilterChange={setManagedFilter}
+              />
+            )}
+
+            {activeTab === "risk-lt" && (
+              <TabRiskLt
+                openPanel={openPanel}
+                managedFilter={managedFilter}
+              />
+            )}
+
+            {activeTab === "risk-st" && (
+              <TabRiskSt
+                openPanel={openPanel}
+                managedFilter={managedFilter}
+              />
+            )}
+
+            {activeTab === "medical" && (
+              <TabMedical
+                openPanel={openPanel}
+                managedFilter={managedFilter}
+              />
+            )}
+          </>
+        ) : (
+          /* View B — Goals → Products (full build is a separate session) */
           <ConceptB
             openPanel={openPanel}
-            viewMode={viewModes.b}
+            viewMode="cards"
             assignedPurpose={assignedPurpose}
           />
-        )}
-        {activeConcept === "c" && (
-          <ConceptC {...sharedProps} viewMode={viewModes.c} />
         )}
       </div>
 
