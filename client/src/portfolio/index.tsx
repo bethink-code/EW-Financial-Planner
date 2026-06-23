@@ -28,7 +28,7 @@ const PORTFOLIO_TABS = [
 ];
 
 export default function PortfolioPage() {
-  const [activeTab, setActiveTab] = useState<PortfolioTab>("investments");
+  const [activeTab, setActiveTab] = useState<PortfolioTab>("overview");
   const [activeConcept, setActiveConcept] = useState<ConceptId>("a");
   const [managedFilter, setManagedFilter] = useState<ManagedFilter>("all");
   const [openPanelId, setOpenPanelId] = useState<PanelId | null>(null);
