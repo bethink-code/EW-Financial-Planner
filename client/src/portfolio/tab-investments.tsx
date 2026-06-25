@@ -1,410 +1,176 @@
 import { useState } from "react";
-import { ArrowUp, ArrowDown, ArrowRight, FileText } from "lucide-react";
-import { cn } from "@/lib/utils";
-import type { PanelId } from "./data";
-import {
-  INVESTMENT_ROWS,
-  SUBCATEGORY_LABELS,
-  type InvestmentRow,
-  type InvestmentSubcategory,
-} from "./data-holdings";
+import { FileText } from "lucide-react";
+import { HybridViewWrapper } from "@/components/common/hybrid-view-wrapper";
+import { HybridHeaderBar } from "@/components/common/hybrid-header-bar";
+import { SummaryBand, SummaryTile } from "@/components/common/summary-band";
+import { SubcategoryNav, type SubcatItem } from "./subcategory-nav";
+import { FreshnessDot, MiniCard } from "./primitives";
+import { INVESTMENT_ROWS, type InvestmentRow } from "./data-holdings";
 import { productGoalLabels, type ProductId } from "./data-links";
-import { Chip, ChipRow, FreshnessDot, SectionHeading } from "./primitives";
-import { cardSurface, ListingSection, SectionAdd } from "./listings";
-import {
-  SegmentButton,
-  SegmentGroup,
-  ViewModeToggle,
-  parseAmount,
-  type Accessors,
-  type SortOption,
-  type ViewMode,
-} from "./view";
+import type { PanelId, Tone } from "./data";
 
-type ManagedFilter = "all" | "managed" | "recorded";
+export type Dir = "subcategory" | "need";
+export type ManagedFilter = "all" | "managed" | "not-managed";
 
-/** Direction arrow derived from current vs prior-period IRR. */
-function DirectionIcon({ row }: { row: InvestmentRow }) {
-  if (row.irr === "—" || row.irrPrior == null) {
-    return <ArrowRight className="h-3.5 w-3.5 text-gray-400" />;
-  }
-  const current = parseFloat(row.irr);
-  if (current > row.irrPrior)
-    return <ArrowUp className="h-3.5 w-3.5 text-green-600" />;
-  if (current < row.irrPrior)
-    return <ArrowDown className="h-3.5 w-3.5 text-red-500" />;
-  return <ArrowRight className="h-3.5 w-3.5 text-gray-400" />;
-}
-
-/** "Recorded" badge — only shown on adviser-recorded (not managed) products. */
-function RecordedBadge() {
-  return (
-    <span
-      className="inline-flex items-center rounded-md border bg-white px-2 py-0.5 text-[11px] font-medium text-gray-500"
-      style={{ borderColor: "#BDBDBD" }}
-    >
-      Recorded
-    </span>
-  );
-}
-
-/** Local/offshore split bar — compact, inline. */
-function SplitBar({
-  localPct,
-  offshorePct,
-}: {
-  localPct: number;
-  offshorePct: number;
-}) {
-  return (
-    <div className="mt-1.5 min-w-[80px]">
-      <div className="flex justify-between text-[10px] text-gray-400">
-        <span>{localPct}%</span>
-        <span>{offshorePct}%</span>
-      </div>
-      <div className="mt-0.5 flex h-1.5 overflow-hidden rounded-full">
-        <div
-          style={{ width: `${localPct}%`, backgroundColor: "var(--ew-blue)" }}
-        />
-        <div
-          style={{ width: `${offshorePct}%`, backgroundColor: "#F97415" }}
-        />
-      </div>
-      <div className="mt-0.5 flex justify-between text-[10px] text-gray-400">
-        <span>Local</span>
-        <span>Offshore</span>
-      </div>
-    </div>
-  );
-}
-
-/** Compute per-subcategory totals and direction for chip rendering. */
-function subcategoryStats(
-  rows: InvestmentRow[],
-  sub: InvestmentSubcategory
-): { total: number; irr: string; direction: "up" | "down" | "flat" } {
-  const items = rows.filter((r) => r.subcategory === sub);
-  const total = items.reduce((s, r) => s + r.valueNum, 0);
-  const withIrr = items.filter((r) => r.irr !== "—" && r.irrPrior != null);
-  let irr = "—";
-  let direction: "up" | "down" | "flat" = "flat";
-  if (withIrr.length > 0) {
-    const r = withIrr[0];
-    irr = r.irr;
-    const current = parseFloat(r.irr);
-    direction =
-      current > r.irrPrior! ? "up" : current < r.irrPrior! ? "down" : "flat";
-  }
-  return { total, irr, direction };
-}
-
-function fmtRand(n: number) {
-  if (n === 0) return "R 0";
-  return "R " + Math.round(n).toLocaleString("en-US").replace(/,/g, " ");
-}
-
-const SUBCATEGORIES: InvestmentSubcategory[] = [
-  "unit-trust",
-  "pension",
-  "offshore",
-  "shares",
-  "tax-free",
+const SUBCATS: SubcatItem[] = [
+  { id: "all",        label: "All investments",  summary: "R 3 031 961" },
+  { id: "unit-trust", label: "Unit trusts",       summary: "R 500 000" },
+  { id: "pension",    label: "Pension funds",     summary: "R 980 000" },
+  { id: "offshore",   label: "Offshore",          summary: "R 1 091 961" },
+  { id: "shares",     label: "Direct shares",     summary: "R 460 000" },
+  { id: "tax-free",   label: "Tax-free savings",  summary: "R 0", empty: true },
 ];
 
-const INVESTMENT_TOTAL_NUM = INVESTMENT_ROWS.reduce(
-  (s, r) => s + r.valueNum,
-  0
-);
+const NEED_SUBCATS: SubcatItem[] = [
+  { id: "all",        label: "All",               summary: "4 products",        tone: "neutral" },
+  { id: "retirement", label: "Retirement",        summary: "24% of target",     tone: "warn" },
+  { id: "education",  label: "Education",         summary: "67% of target",     tone: "good" },
+  { id: "unassigned", label: "Not yet assigned",  summary: "1 product",         tone: "warn" },
+  { id: "emergency",  label: "Emergency fund",    summary: "Gap — no products", tone: "bad", empty: true },
+];
 
-const ACCESSORS: Accessors<InvestmentRow> = {
-  name: (r) => r.name,
-  value: (r) => r.valueNum,
-  date: (r) => r.date,
+const NEED_PRODUCT_IDS: Record<string, string[]> = {
+  all:        ["absa", "pension", "momentum", "ut"],
+  retirement: ["pension", "momentum"],
+  education:  ["ut"],
+  unassigned: ["absa"],
+  emergency:  [],
 };
 
-const SORT_OPTIONS: SortOption[] = [
-  { value: "name", label: "Name (A–Z)", dir: "asc" },
-  { value: "value", label: "Value (high–low)", dir: "desc" },
-  { value: "date", label: "Last valued (newest first)", dir: "desc" },
-];
-
-const TABLE_COLUMNS = [
-  { label: "Product", sortKey: "name" },
-  { label: "Supplier / Policy" },
-  { label: "Market value", right: true, sortKey: "value" },
-  { label: "Local / Offshore" },
-  { label: "Goals" },
-];
-
-interface TabInvestmentsProps {
-  openPanel: (id: PanelId) => void;
-  managedFilter: ManagedFilter;
-  onManagedFilterChange: (f: ManagedFilter) => void;
+function goalMiniCards(row: InvestmentRow): { label: string; value: string; tone: Tone }[] {
+  const goals = productGoalLabels(row.productId as ProductId);
+  if (goals.length === 0) return [{ label: "Goal", value: "Not yet assigned", tone: "warn" }];
+  return goals.map((label) => {
+    const tone: Tone =
+      label === "Retirement" ? "warn" :
+      label.startsWith("Education") ? "good" :
+      "good";
+    return {
+      label,
+      value: label === "Retirement" ? "24% · Behind target" : "67% · On track",
+      tone,
+    };
+  });
 }
 
-export function TabInvestments({
-  openPanel,
-  managedFilter,
-  onManagedFilterChange,
-}: TabInvestmentsProps) {
-  const [activeSub, setActiveSub] = useState<InvestmentSubcategory | null>(
-    null
-  );
-  const [viewMode, setViewMode] = useState<ViewMode>("cards");
-
-  const tdClass = "px-3 py-3 align-middle";
-  const rowClass =
-    "cursor-pointer border-b hover:bg-[var(--ew-row-tint)] transition-colors";
-
-  const filteredByManaged = INVESTMENT_ROWS.filter((r) => {
-    if (managedFilter === "managed") return r.managed;
-    if (managedFilter === "recorded") return !r.managed;
-    return true;
-  });
-
-  const displayRows = activeSub
-    ? filteredByManaged.filter((r) => r.subcategory === activeSub)
-    : filteredByManaged;
-
-  const renderRow = (row: InvestmentRow) => {
-    const goals = productGoalLabels(row.productId as ProductId);
-    return (
-      <tr
-        key={row.productId}
-        className={rowClass}
-        style={{ borderColor: "var(--ew-border)" }}
-        onClick={() => openPanel(row.panelId)}
-      >
-        <td className={cn(tdClass, "min-w-[180px]")}>
-          <div className="flex items-start gap-2">
-            <FileText className="mt-0.5 h-4 w-4 shrink-0 text-gray-400" />
-            <div>
-              <div
-                className="text-sm font-medium"
-                style={{ color: "var(--ew-blue)" }}
-              >
-                {row.name}
-              </div>
-              <div className="mt-0.5 text-xs text-gray-500">
-                Started {row.started} · {row.owners}
-              </div>
-              {!row.managed && (
-                <div className="mt-1">
-                  <RecordedBadge />
-                </div>
-              )}
-            </div>
-          </div>
-        </td>
-        <td className={tdClass}>
-          <div className="text-[13px] text-neutral-700">{row.supplier}</div>
-          <div className="text-xs text-gray-400">{row.policyNo}</div>
-        </td>
-        <td className={cn(tdClass, "text-right")}>
-          <div className="font-semibold tabular-nums text-neutral-900">
-            {row.value}
-          </div>
-          <div className="flex items-center justify-end gap-1 text-xs text-gray-400">
-            <FreshnessDot tone={row.freshness} />
-            {row.date}
-          </div>
-          {row.irr !== "—" && (
-            <div className="text-xs tabular-nums text-gray-500">
-              IRR {row.irr}
-            </div>
-          )}
-        </td>
-        <td className={tdClass}>
-          <SplitBar localPct={row.localPct} offshorePct={row.offshorePct} />
-        </td>
-        <td className={tdClass}>
-          <ChipRow tags={goals} />
-        </td>
-      </tr>
-    );
-  };
-
-  const renderCard = (row: InvestmentRow) => {
-    const goals = productGoalLabels(row.productId as ProductId);
-    return (
-      <div
-        key={row.productId}
-        className="cursor-pointer rounded-lg border p-3.5 transition-shadow hover:shadow-sm"
-        style={cardSurface}
-        onClick={() => openPanel(row.panelId)}
-        role="button"
-      >
+function PolicyCard({ row, openPanel }: { row: InvestmentRow; openPanel: (id: PanelId) => void }) {
+  const miniCards = goalMiniCards(row);
+  return (
+    <div
+      className="cursor-pointer rounded-lg border bg-white p-4 transition-shadow hover:shadow-sm"
+      style={{ borderColor: "var(--ew-border)" }}
+      onClick={() => openPanel(row.panelId)}
+      role="button"
+    >
+      <div className="flex items-start justify-between gap-2">
         <div className="flex items-start gap-2">
           <FileText className="mt-0.5 h-4 w-4 shrink-0 text-gray-400" />
-          <div className="min-w-0 flex-1">
-            <div className="flex items-start justify-between gap-2">
-              <div
-                className="text-sm font-medium"
-                style={{ color: "var(--ew-blue)" }}
-              >
-                {row.name}
-              </div>
-              {!row.managed && <RecordedBadge />}
+          <div>
+            <div className="text-[14px] font-semibold leading-tight" style={{ color: "var(--ew-primary-navy)" }}>
+              {row.name}
             </div>
-            <div className="mt-0.5 text-xs text-gray-500">
-              {row.supplier} · {row.policyNo}
-            </div>
-            <div className="mt-2 text-lg font-semibold tabular-nums text-neutral-900">
-              {row.value}
-            </div>
-            <div className="flex items-center gap-1.5 text-xs text-gray-400">
-              <FreshnessDot tone={row.freshness} />
-              {row.date}
-              {row.irr !== "—" && (
-                <span className="ml-1 text-gray-500">· IRR {row.irr}</span>
-              )}
-            </div>
-            <SplitBar localPct={row.localPct} offshorePct={row.offshorePct} />
-            {goals.length > 0 && (
-              <div className="mt-2">
-                <div className="mb-1 text-[11px] text-gray-400">Goals</div>
-                <ChipRow tags={goals} />
-              </div>
-            )}
+            <div className="mt-0.5 text-[11px] text-gray-500">{row.supplier}</div>
           </div>
         </div>
-      </div>
-    );
-  };
-
-  return (
-    <div>
-      {/* Header */}
-      <div className="flex flex-wrap items-end justify-between gap-3">
-        <div>
-          <div className="text-[13px] text-gray-500">Total investments</div>
-          <div className="text-[28px] font-semibold tabular-nums text-neutral-900">
-            {fmtRand(INVESTMENT_TOTAL_NUM)}
-          </div>
-          <div className="text-xs text-gray-400">Market value · 06/10/2025</div>
-        </div>
-        <div className="flex items-center gap-2">
-          <span className="text-xs text-gray-500">Show</span>
-          <select
-            className="h-8 rounded-md border border-[#E0E0E0] bg-white px-2.5 text-xs text-neutral-900 focus:border-[var(--ew-blue)] focus:outline-none"
-            value={managedFilter}
-            onChange={(e) =>
-              onManagedFilterChange(e.target.value as ManagedFilter)
-            }
-          >
-            <option value="all">All products</option>
-            <option value="managed">Managed only</option>
-            <option value="recorded">Recorded only</option>
-          </select>
-        </div>
-      </div>
-
-      {/* Subcategory chips */}
-      <div className="mt-5 flex flex-wrap gap-2">
-        <button
-          type="button"
-          onClick={() => setActiveSub(null)}
-          className={cn(
-            "flex flex-col items-start rounded-lg border px-3.5 py-2.5 text-left text-[13px] transition-colors",
-            activeSub === null
-              ? "border-[var(--ew-blue)] bg-[var(--ew-blue-tertiary-50)]"
-              : "border-[var(--ew-border)] bg-white hover:bg-[var(--ew-row-tint)]"
-          )}
-        >
-          <span
-            className="font-semibold"
-            style={{
-              color: activeSub === null ? "var(--ew-blue)" : "var(--ew-primary-navy)",
-            }}
-          >
-            All categories
+        {!row.managed && (
+          <span className="shrink-0 rounded-md border bg-white px-2 py-0.5 text-[11px] text-gray-500" style={{ borderColor: "#BDBDBD" }}>
+            Not managed
           </span>
-          <span className="tabular-nums text-neutral-900">
-            {fmtRand(INVESTMENT_TOTAL_NUM)}
-          </span>
-        </button>
-        {SUBCATEGORIES.map((sub) => {
-          const stats = subcategoryStats(INVESTMENT_ROWS, sub);
-          const active = activeSub === sub;
-          const DirIcon =
-            stats.direction === "up"
-              ? ArrowUp
-              : stats.direction === "down"
-              ? ArrowDown
-              : ArrowRight;
-          const dirColor =
-            stats.direction === "up"
-              ? "#1DB247"
-              : stats.direction === "down"
-              ? "#E4410D"
-              : "#9CA3AF";
-          return (
-            <button
-              key={sub}
-              type="button"
-              onClick={() => setActiveSub(active ? null : sub)}
-              className={cn(
-                "flex flex-col items-start rounded-lg border px-3.5 py-2.5 text-left text-[13px] transition-colors",
-                active
-                  ? "border-[var(--ew-blue)] bg-[var(--ew-blue-tertiary-50)]"
-                  : "border-[var(--ew-border)] bg-white hover:bg-[var(--ew-row-tint)]"
-              )}
-            >
-              <span className="flex items-center gap-1.5">
-                <DirIcon
-                  className="h-3.5 w-3.5"
-                  style={{ color: dirColor }}
-                />
-                <span
-                  className="font-semibold"
-                  style={{
-                    color: active ? "var(--ew-blue)" : "var(--ew-primary-navy)",
-                  }}
-                >
-                  {SUBCATEGORY_LABELS[sub]}
-                </span>
-              </span>
-              <span
-                className={cn(
-                  "tabular-nums",
-                  stats.total === 0 ? "text-gray-400" : "text-neutral-900"
-                )}
-              >
-                {fmtRand(stats.total)}
-              </span>
-              <span className="text-[11px] text-gray-400">
-                {stats.irr !== "—" ? `IRR ${stats.irr}` : "IRR —"}
-              </span>
-            </button>
-          );
-        })}
+        )}
       </div>
 
-      {/* Product list */}
-      <div className="mt-6">
-        <div className="flex items-center justify-between">
-          <SectionHeading>
-            {activeSub ? SUBCATEGORY_LABELS[activeSub] : "All investments"}
-            <span className="ml-2 text-base font-normal text-gray-400">
-              ({displayRows.length})
-            </span>
-          </SectionHeading>
-          <ViewModeToggle mode={viewMode} onChange={setViewMode} />
+      <div className="mt-3">
+        <div className="text-[22px] font-bold tabular-nums text-neutral-900">{row.value}</div>
+        <div className="flex items-center gap-2 text-[12px]">
+          <span className="flex items-center gap-1 text-gray-400">
+            <FreshnessDot tone={row.freshness} />
+            {row.date}
+          </span>
+          {row.irr !== "—" && <span className="text-gray-500">· IRR {row.irr}</span>}
         </div>
+      </div>
 
-        <ListingSection
-          viewMode={viewMode}
-          columns={TABLE_COLUMNS}
-          rows={displayRows}
-          accessors={ACCESSORS}
-          sortOptions={SORT_OPTIONS}
-          renderRow={renderRow}
-          renderCard={renderCard}
-          addLabel="Add an investment"
-        />
+      <div className="mt-3">
+        <div className="mb-1.5 text-[10px] font-semibold uppercase tracking-widest text-gray-400">
+          Goals this covers
+        </div>
+        <div className="flex flex-wrap gap-2">
+          {miniCards.map((mc) => (
+            <MiniCard key={mc.label} label={mc.label} value={mc.value} tone={mc.tone} />
+          ))}
+        </div>
       </div>
     </div>
   );
 }
 
-export type { ManagedFilter };
+interface TabInvestmentsProps {
+  dir: Dir;
+  managedFilter: ManagedFilter;
+  openPanel: (id: PanelId) => void;
+}
+
+export function TabInvestments({ dir, managedFilter, openPanel }: TabInvestmentsProps) {
+  const [selected, setSelected] = useState("all");
+
+  const allNavItems = dir === "subcategory" ? SUBCATS : NEED_SUBCATS;
+  const selectedLabel = allNavItems.find((s) => s.id === selected)?.label ?? "Investments";
+
+  const visibleRows = (() => {
+    let rows = INVESTMENT_ROWS;
+    if (selected !== "all") {
+      if (dir === "subcategory") {
+        rows = rows.filter((r) => r.subcategory === selected);
+      } else {
+        const ids = NEED_PRODUCT_IDS[selected] ?? [];
+        rows = rows.filter((r) => ids.includes(r.productId));
+      }
+    }
+    if (managedFilter === "managed")     rows = rows.filter((r) => r.managed);
+    if (managedFilter === "not-managed") rows = rows.filter((r) => !r.managed);
+    return rows;
+  })();
+
+  const productCount = INVESTMENT_ROWS.length;
+
+  return (
+    <HybridViewWrapper
+      summary={
+        <SummaryBand>
+          <SummaryTile label="Total investments" value="R 3 031 961" subValue={`across ${productCount} products`} />
+          {dir === "subcategory" ? (
+            <>
+              <SummaryTile label="Managed"     value="R 2 571 961" subValue="3 products" />
+              <SummaryTile label="Not managed" value="R 460 000"   subValue="1 product" />
+            </>
+          ) : (
+            <>
+              <SummaryTile label="Retirement" value="24% funded" subValue="Behind target" />
+              <SummaryTile label="Education"  value="67% funded" subValue="On track" />
+            </>
+          )}
+        </SummaryBand>
+      }
+      header={
+        <HybridHeaderBar
+          add={{ label: "Add investment", onClick: () => {} }}
+          title={selectedLabel}
+        />
+      }
+      summaryCards={
+        <SubcategoryNav items={allNavItems} selected={selected} onChange={setSelected} />
+      }
+      detailForms={
+        visibleRows.length === 0 ? (
+          <div className="p-8 text-center text-[13px] text-gray-400">No products in this selection</div>
+        ) : (
+          <div className="grid gap-4 p-5 sm:grid-cols-2">
+            {visibleRows.map((row) => (
+              <PolicyCard key={row.productId} row={row} openPanel={openPanel} />
+            ))}
+          </div>
+        )
+      }
+    />
+  );
+}

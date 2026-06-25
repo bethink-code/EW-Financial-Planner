@@ -315,7 +315,9 @@ function LocalOffshoreBar({
   );
 }
 
-export function TabOverview() {
+import type { ManagedFilter } from "./tab-investments";
+
+export function TabOverview({ managedFilter: _managedFilter }: { managedFilter: ManagedFilter }) {
   const [chartView, setChartView] = useState<"graph" | "table">("graph");
 
   return (

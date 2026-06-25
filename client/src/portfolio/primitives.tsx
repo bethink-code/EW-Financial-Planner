@@ -151,6 +151,44 @@ export function KpiTile({
   );
 }
 
+/**
+ * MiniCard — tone-mapped outcome card used at the bottom of every policy card
+ * to show the product↔goal relationship. Single quiet background; tone lives
+ * in the value text only (navy = good/neutral, orange = warn, red = bad).
+ */
+export function MiniCard({
+  label,
+  value,
+  tone,
+}: {
+  label: string;
+  value: string;
+  tone: Tone;
+}) {
+  const valueColor: Record<Tone, string> = {
+    good:    "var(--ew-primary-navy)",
+    neutral: "var(--ew-primary-navy)",
+    warn:    "#F97415",
+    bad:     "#E4410D",
+  };
+  return (
+    <div
+      className="flex min-w-[120px] flex-col rounded-md px-3 py-2"
+      style={{ backgroundColor: "#E5ECF3", border: "1px solid #D0E0ED" }}
+    >
+      <span className="text-[11px] font-medium leading-tight text-gray-500">
+        {label}
+      </span>
+      <span
+        className="mt-0.5 text-[13px] font-semibold leading-tight"
+        style={{ color: valueColor[tone] }}
+      >
+        {value}
+      </span>
+    </div>
+  );
+}
+
 /** Conic-gradient readiness ring — tangerine below 70%, green at or above. */
 export function ReadinessRing({ pct }: { pct: number }) {
   const color = pct >= 70 ? TONE_COLOR.good : TONE_COLOR.warn;
