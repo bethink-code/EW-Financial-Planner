@@ -9,6 +9,7 @@ import {
   ReferenceLine,
 } from "recharts";
 import { BarChart2, ChevronRight, Table2 } from "lucide-react";
+import { RISK_COVER_SUMMARY } from "./data-risk";
 import { MEDICAL_ROWS, SHORT_TERM_ROWS } from "./data-holdings";
 import { SectionHeading } from "./primitives";
 import { cardSurface } from "./listings";
@@ -316,17 +317,16 @@ function LocalOffshoreBar({
 
 import type { PortfolioTab } from "./data";
 
-/** Compact category summary card — title, headline number, one subline.
- *  The detail lives on the category's own tab, one click away. */
+/** Compact category summary card — title + tight benefit rows (what the
+ *  cover pays out, not what it costs). The detail lives on the category's
+ *  own tab, one click away. */
 function CategoryCard({
   title,
-  value,
-  subline,
+  rows,
   onClick,
 }: {
   title: string;
-  value: string;
-  subline: string;
+  rows: { label: string; value: string }[];
   onClick?: () => void;
 }) {
   return (
@@ -340,10 +340,16 @@ function CategoryCard({
         <SectionHeading>{title}</SectionHeading>
         <ChevronRight className="mt-1 h-4 w-4 shrink-0 text-gray-400" />
       </div>
-      <div className="mt-2 text-xl font-semibold tabular-nums text-neutral-900">
-        {value}
-      </div>
-      <div className="mt-0.5 text-[13px] text-gray-500">{subline}</div>
+      <ul className="mt-2">
+        {rows.map((row) => (
+          <li key={row.label} className="flex items-baseline justify-between gap-3 py-1">
+            <span className="min-w-0 text-[12px] text-gray-500">{row.label}</span>
+            <span className="whitespace-nowrap text-[13px] font-semibold tabular-nums text-neutral-900">
+              {row.value}
+            </span>
+          </li>
+        ))}
+      </ul>
     </div>
   );
 }
@@ -355,33 +361,10 @@ export function TabOverview({ openTab }: { openTab?: (tab: PortfolioTab) => void
     // Same card frame as HybridViewWrapper — square top merging with the tab
     // strip's underline, so Overview doesn't read as a different layout.
     <div className="-mt-px rounded-b-lg border border-neutral-200 bg-white p-5 shadow-sm">
-      {/* Category summary cards — compact, above the chart so they never
-          fall below the fold */}
-      <div className="grid gap-4 md:grid-cols-3">
-        <CategoryCard
-          title="Medical aid"
-          value={MEDICAL_ROWS[0].premium}
-          subline={`${MEDICAL_ROWS[0].name} · ${MEDICAL_ROWS[0].pill.label}`}
-          onClick={() => openTab?.("medical")}
-        />
-        <CategoryCard
-          title="Short-term risk"
-          value={SHORT_TERM_ROWS[0].premium}
-          subline={`${SHORT_TERM_ROWS[0].name} · ${SHORT_TERM_ROWS[0].pill.label}`}
-          onClick={() => openTab?.("risk-st")}
-        />
-        <CategoryCard
-          title="Long-term risk"
-          value="R 7 000 000"
-          subline="Death cover · Premiums R 7 200 p.m."
-          onClick={() => openTab?.("risk-lt")}
-        />
-      </div>
-
       {/* Investment portfolio — directly on the card surface, no box.
           px-5 matches the cards' internal padding so the section content
-          lines up with the card text above. */}
-      <div className="mt-6 px-5">
+          lines up with the card text below. */}
+      <div className="px-5 pt-2">
         <div className="flex items-start justify-between gap-3">
           {/* Same click-through affordance as the category cards above */}
           <div
@@ -441,6 +424,24 @@ export function TabOverview({ openTab }: { openTab?: (tab: PortfolioTab) => void
         <LocalOffshoreBar localPct={70} offshorePct={30} />
       </div>
 
+      {/* Category summary cards — compact benefit rows below the chart */}
+      <div className="mt-6 grid gap-4 md:grid-cols-3">
+        <CategoryCard
+          title="Medical aid"
+          rows={[{ label: MEDICAL_ROWS[0].name, value: MEDICAL_ROWS[0].pill.label }]}
+          onClick={() => openTab?.("medical")}
+        />
+        <CategoryCard
+          title="Short-term risk"
+          rows={[{ label: SHORT_TERM_ROWS[0].name, value: SHORT_TERM_ROWS[0].pill.label }]}
+          onClick={() => openTab?.("risk-st")}
+        />
+        <CategoryCard
+          title="Long-term risk"
+          rows={RISK_COVER_SUMMARY}
+          onClick={() => openTab?.("risk-lt")}
+        />
+      </div>
     </div>
   );
 }
