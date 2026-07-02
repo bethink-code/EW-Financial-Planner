@@ -66,8 +66,10 @@ export function CoverPolicyCard({
           </div>
           <div className="mt-0.5 text-[11px] text-gray-500">{row.meta1} · {row.meta2}</div>
 
-          <div className="mt-3 flex items-center justify-between gap-2">
-            <div className="flex items-baseline gap-2">
+          {/* flex-wrap: on narrow cards the status chip drops to its own
+              line instead of squeezing the premium into wrapping. */}
+          <div className="mt-3 flex flex-wrap items-center justify-between gap-x-2 gap-y-1.5">
+            <div className="flex items-baseline gap-2 whitespace-nowrap">
               <div className="text-[22px] font-bold tabular-nums text-neutral-900">{row.premium}</div>
               <div className="text-[11px] text-gray-400">Monthly premium</div>
             </div>

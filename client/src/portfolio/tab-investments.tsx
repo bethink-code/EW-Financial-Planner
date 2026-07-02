@@ -74,22 +74,27 @@ function PolicyCard({ row, openPanel }: { row: InvestmentRow; openPanel: (id: Pa
       <div className="flex items-start gap-2">
         <FileText className="mt-0.5 h-4 w-4 shrink-0 text-gray-400" />
         <div className="min-w-0 flex-1">
-          <div className="flex items-start justify-between gap-2">
-            <div>
+          {/* flex-wrap: on narrow cards the badge drops below the name
+              instead of squeezing it into one-word-per-line wrapping. */}
+          <div className="flex flex-wrap items-start justify-between gap-x-2 gap-y-1">
+            <div className="min-w-[140px] flex-1">
               <div className="text-[14px] font-semibold leading-tight" style={{ color: "var(--ew-primary-navy)" }}>
                 {row.name}
               </div>
               <div className="mt-0.5 text-[11px] text-gray-500">{row.supplier}</div>
             </div>
             {!row.managed && (
-              <span className="shrink-0 rounded-md border bg-white px-2 py-0.5 text-[11px] text-gray-500" style={{ borderColor: "#BDBDBD" }}>
+              <span
+                className="whitespace-nowrap rounded-md border bg-white px-2 py-0.5 text-[11px] text-gray-500"
+                style={{ borderColor: "#BDBDBD" }}
+              >
                 Not managed
               </span>
             )}
           </div>
 
           <div className="mt-3">
-            <div className="text-[22px] font-bold tabular-nums text-neutral-900">{row.value}</div>
+            <div className="whitespace-nowrap text-[22px] font-bold tabular-nums text-neutral-900">{row.value}</div>
             <div className="flex items-center gap-2 text-[12px]">
               <span className="flex items-center gap-1 text-gray-400">
                 <FreshnessDot tone={row.freshness} />
