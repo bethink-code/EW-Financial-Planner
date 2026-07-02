@@ -70,38 +70,41 @@ function PolicyCard({ row, openPanel }: { row: InvestmentRow; openPanel: (id: Pa
       onClick={() => openPanel(row.panelId)}
       role="button"
     >
-      <div className="flex items-start justify-between gap-2">
-        <div className="flex items-start gap-2">
-          <FileText className="mt-0.5 h-4 w-4 shrink-0 text-gray-400" />
-          <div>
-            <div className="text-[14px] font-semibold leading-tight" style={{ color: "var(--ew-primary-navy)" }}>
-              {row.name}
+      {/* Body indents to title — the icon sits alone in its gutter. */}
+      <div className="flex items-start gap-2">
+        <FileText className="mt-0.5 h-4 w-4 shrink-0 text-gray-400" />
+        <div className="min-w-0 flex-1">
+          <div className="flex items-start justify-between gap-2">
+            <div>
+              <div className="text-[14px] font-semibold leading-tight" style={{ color: "var(--ew-primary-navy)" }}>
+                {row.name}
+              </div>
+              <div className="mt-0.5 text-[11px] text-gray-500">{row.supplier}</div>
             </div>
-            <div className="mt-0.5 text-[11px] text-gray-500">{row.supplier}</div>
+            {!row.managed && (
+              <span className="shrink-0 rounded-md border bg-white px-2 py-0.5 text-[11px] text-gray-500" style={{ borderColor: "#BDBDBD" }}>
+                Not managed
+              </span>
+            )}
+          </div>
+
+          <div className="mt-3">
+            <div className="text-[22px] font-bold tabular-nums text-neutral-900">{row.value}</div>
+            <div className="flex items-center gap-2 text-[12px]">
+              <span className="flex items-center gap-1 text-gray-400">
+                <FreshnessDot tone={row.freshness} />
+                {row.date}
+              </span>
+              {row.irr !== "—" && <span className="text-gray-500">· IRR {row.irr}</span>}
+            </div>
+          </div>
+
+          <div className="mt-3 flex flex-wrap gap-2">
+            {miniCards.map((mc) => (
+              <MiniCard key={mc.label} label={mc.label} value={mc.value} tone={mc.tone} />
+            ))}
           </div>
         </div>
-        {!row.managed && (
-          <span className="shrink-0 rounded-md border bg-white px-2 py-0.5 text-[11px] text-gray-500" style={{ borderColor: "#BDBDBD" }}>
-            Not managed
-          </span>
-        )}
-      </div>
-
-      <div className="mt-3">
-        <div className="text-[22px] font-bold tabular-nums text-neutral-900">{row.value}</div>
-        <div className="flex items-center gap-2 text-[12px]">
-          <span className="flex items-center gap-1 text-gray-400">
-            <FreshnessDot tone={row.freshness} />
-            {row.date}
-          </span>
-          {row.irr !== "—" && <span className="text-gray-500">· IRR {row.irr}</span>}
-        </div>
-      </div>
-
-      <div className="mt-3 flex flex-wrap gap-2">
-        {miniCards.map((mc) => (
-          <MiniCard key={mc.label} label={mc.label} value={mc.value} tone={mc.tone} />
-        ))}
       </div>
     </div>
   );

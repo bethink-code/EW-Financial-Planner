@@ -57,22 +57,23 @@ export function CoverPolicyCard({
       onClick={() => openPanel(row.panelId)}
       role="button"
     >
+      {/* Body indents to title — the icon sits alone in its gutter. */}
       <div className="flex items-start gap-2">
         <FileText className="mt-0.5 h-4 w-4 shrink-0 text-gray-400" />
-        <div className="min-w-0">
+        <div className="min-w-0 flex-1">
           <div className="text-[14px] font-semibold leading-tight" style={{ color: "var(--ew-primary-navy)" }}>
             {row.name}
           </div>
           <div className="mt-0.5 text-[11px] text-gray-500">{row.meta1} · {row.meta2}</div>
-        </div>
-      </div>
 
-      <div className="mt-3 flex items-center justify-between gap-2">
-        <div className="flex items-baseline gap-2">
-          <div className="text-[22px] font-bold tabular-nums text-neutral-900">{row.premium}</div>
-          <div className="text-[11px] text-gray-400">Monthly premium</div>
+          <div className="mt-3 flex items-center justify-between gap-2">
+            <div className="flex items-baseline gap-2">
+              <div className="text-[22px] font-bold tabular-nums text-neutral-900">{row.premium}</div>
+              <div className="text-[11px] text-gray-400">Monthly premium</div>
+            </div>
+            <StatusCard label={row.pill.label} tone={row.pill.tone} />
+          </div>
         </div>
-        <StatusCard label={row.pill.label} tone={row.pill.tone} />
       </div>
     </div>
   );
