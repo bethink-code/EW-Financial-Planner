@@ -7,6 +7,14 @@ import { SubcategoryNav, type SubcatItem } from "./subcategory-nav";
 import { FreshnessDot, MiniCard } from "./primitives";
 import { INVESTMENT_ROWS, type InvestmentRow } from "./data-holdings";
 import { productGoalLabels, type ProductId } from "./data-links";
+import {
+  parseAmount,
+  parseDmy,
+  SortHeader,
+  useSort,
+  type Accessors,
+  type ViewMode,
+} from "./view";
 import type { PanelId, Tone } from "./data";
 
 export type Dir = "subcategory" | "need";
@@ -99,14 +107,77 @@ function PolicyCard({ row, openPanel }: { row: InvestmentRow; openPanel: (id: Pa
   );
 }
 
+/** Table half of the cards/table toggle — sortable headers, rows click
+ *  through to the product's slide-in panel like the cards do. */
+function InvestmentsTable({ rows, openPanel }: { rows: InvestmentRow[]; openPanel: (id: PanelId) => void }) {
+  const accessors: Accessors<InvestmentRow> = {
+    name:     (r) => r.name,
+    supplier: (r) => r.supplier,
+    value:    (r) => parseAmount(r.value),
+    date:     (r) => parseDmy(r.date),
+    irr:      (r) => (r.irr === "—" ? 0 : parseAmount(r.irr)),
+  };
+  const sort = useSort(rows, accessors);
+
+  return (
+    <div className="p-5">
+      <table className="w-full text-sm">
+        <thead>
+          <tr style={{ backgroundColor: "var(--ew-blue-tertiary-50)" }}>
+            <SortHeader label="Product"  active={sort.key === "name"}     dir={sort.dir} onClick={() => sort.toggle("name")} />
+            <SortHeader label="Supplier" active={sort.key === "supplier"} dir={sort.dir} onClick={() => sort.toggle("supplier")} />
+            <SortHeader label="Value" right active={sort.key === "value"} dir={sort.dir} onClick={() => sort.toggle("value")} />
+            <SortHeader label="Valued"   active={sort.key === "date"}     dir={sort.dir} onClick={() => sort.toggle("date")} />
+            <SortHeader label="IRR" right active={sort.key === "irr"}     dir={sort.dir} onClick={() => sort.toggle("irr")} />
+            <th className="px-3 py-2 text-left text-xs font-medium text-gray-600 !normal-case">Goals</th>
+          </tr>
+        </thead>
+        <tbody>
+          {sort.sorted.map((row) => {
+            const goals = goalMiniCards(row);
+            return (
+              <tr
+                key={row.productId}
+                className="cursor-pointer border-b hover:bg-[var(--ew-row-tint)]"
+                style={{ borderColor: "var(--ew-border)" }}
+                onClick={() => openPanel(row.panelId)}
+              >
+                <td className="px-3 py-2.5 font-medium" style={{ color: "var(--ew-primary-navy)" }}>
+                  {row.name}
+                  {!row.managed && (
+                    <span className="ml-2 text-[11px] font-normal text-gray-400">Not managed</span>
+                  )}
+                </td>
+                <td className="px-3 py-2.5 text-gray-500">{row.supplier}</td>
+                <td className="whitespace-nowrap px-3 py-2.5 text-right font-medium tabular-nums text-neutral-900">{row.value}</td>
+                <td className="whitespace-nowrap px-3 py-2.5 text-gray-500">
+                  <span className="inline-flex items-center gap-1.5">
+                    <FreshnessDot tone={row.freshness} />
+                    {row.date}
+                  </span>
+                </td>
+                <td className="px-3 py-2.5 text-right tabular-nums text-gray-500">{row.irr}</td>
+                <td className="px-3 py-2.5 text-gray-500">
+                  {goals.map((g) => `${g.label} · ${g.value}`).join(", ")}
+                </td>
+              </tr>
+            );
+          })}
+        </tbody>
+      </table>
+    </div>
+  );
+}
+
 interface TabInvestmentsProps {
   dir: Dir;
   managedFilter: ManagedFilter;
+  viewMode: ViewMode;
   openPanel: (id: PanelId) => void;
   viewActions?: React.ReactNode;
 }
 
-export function TabInvestments({ dir, managedFilter, openPanel, viewActions }: TabInvestmentsProps) {
+export function TabInvestments({ dir, managedFilter, viewMode, openPanel, viewActions }: TabInvestmentsProps) {
   const [selected, setSelected] = useState("all");
 
   const allNavItems = dir === "subcategory" ? SUBCATS : NEED_SUBCATS;
@@ -169,6 +240,8 @@ export function TabInvestments({ dir, managedFilter, openPanel, viewActions }: T
       detailForms={
         visibleRows.length === 0 ? (
           <div className="p-8 text-center text-[13px] text-gray-400">No products in this selection</div>
+        ) : viewMode === "table" ? (
+          <InvestmentsTable rows={visibleRows} openPanel={openPanel} />
         ) : (
           <div className="grid gap-4 p-5 sm:grid-cols-2">
             {visibleRows.map((row) => (

@@ -2,8 +2,9 @@ import { useState } from "react";
 import { HybridViewWrapper } from "@/components/common/hybrid-view-wrapper";
 import { HybridHeaderBar } from "@/components/common/hybrid-header-bar";
 import { SubcategoryNav, type SubcatItem } from "./subcategory-nav";
-import { CoverPolicyCard } from "./listings";
+import { CoverPolicyCard, CoverPolicyTable } from "./listings";
 import { SHORT_TERM_ROWS } from "./data-holdings";
+import type { ViewMode } from "./view";
 import type { PanelId } from "./data";
 import type { Dir, ManagedFilter } from "./tab-investments";
 
@@ -23,11 +24,12 @@ const NEED_SUBCATS: SubcatItem[] = [
 interface TabRiskStProps {
   dir: Dir;
   managedFilter: ManagedFilter;
+  viewMode: ViewMode;
   openPanel: (id: PanelId) => void;
   viewActions?: React.ReactNode;
 }
 
-export function TabRiskSt({ dir, managedFilter, openPanel, viewActions }: TabRiskStProps) {
+export function TabRiskSt({ dir, managedFilter, viewMode, openPanel, viewActions }: TabRiskStProps) {
   const [selected, setSelected] = useState("all");
 
   const allNavItems = dir === "subcategory" ? SUBCATS : NEED_SUBCATS;
@@ -64,6 +66,8 @@ export function TabRiskSt({ dir, managedFilter, openPanel, viewActions }: TabRis
       detailForms={
         visibleRows.length === 0 ? (
           <div className="p-8 text-center text-[13px] text-gray-400">No policies in this selection</div>
+        ) : viewMode === "table" ? (
+          <CoverPolicyTable rows={visibleRows} openPanel={openPanel} />
         ) : (
           <div className="grid gap-4 p-5 sm:grid-cols-2">
             {visibleRows.map((row) => (

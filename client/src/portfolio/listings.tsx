@@ -4,6 +4,7 @@ import type { PanelId, Tone } from "./data";
 import type { CoverRow } from "./data-holdings";
 import { SectionHeading, StatusCard } from "./primitives";
 import {
+  parseAmount,
   SortHeader,
   SortSelect,
   useSort,
@@ -73,6 +74,62 @@ export function CoverPolicyCard({
         </div>
         <StatusCard label={row.pill.label} tone={row.pill.tone} />
       </div>
+    </div>
+  );
+}
+
+/**
+ * Table rendering of the cover rows — the table half of the cards/table
+ * toggle on the cover tabs. Sortable headers, rows click through to the
+ * product's slide-in panel like the cards do.
+ */
+export function CoverPolicyTable({
+  rows,
+  openPanel,
+}: {
+  rows: CoverRow[];
+  openPanel: (id: PanelId) => void;
+}) {
+  const accessors: Accessors<CoverRow> = {
+    name:    (r) => r.name,
+    premium: (r) => parseAmount(r.premium),
+    status:  (r) => r.pill.label,
+  };
+  const sort = useSort(rows, accessors);
+
+  return (
+    <div className="p-5">
+      <table className="w-full text-sm">
+        <thead>
+          <tr style={{ backgroundColor: "var(--ew-blue-tertiary-50)" }}>
+            <SortHeader label="Policy"  active={sort.key === "name"}    dir={sort.dir} onClick={() => sort.toggle("name")} />
+            <th className={cn(plainThClass, "text-left")}>Details</th>
+            <SortHeader label="Premium" right active={sort.key === "premium"} dir={sort.dir} onClick={() => sort.toggle("premium")} />
+            <SortHeader label="Status"  active={sort.key === "status"}  dir={sort.dir} onClick={() => sort.toggle("status")} />
+          </tr>
+        </thead>
+        <tbody>
+          {sort.sorted.map((row) => (
+            <tr
+              key={row.productId}
+              className="cursor-pointer border-b hover:bg-[var(--ew-row-tint)]"
+              style={{ borderColor: "var(--ew-border)" }}
+              onClick={() => openPanel(row.panelId)}
+            >
+              <td className="px-3 py-2.5 font-medium" style={{ color: "var(--ew-primary-navy)" }}>
+                {row.name}
+              </td>
+              <td className="px-3 py-2.5 text-gray-500">{row.meta1} · {row.meta2}</td>
+              <td className="whitespace-nowrap px-3 py-2.5 text-right font-medium tabular-nums text-neutral-900">
+                {row.premium}
+              </td>
+              <td className="px-3 py-2.5">
+                <StatusCard label={row.pill.label} tone={row.pill.tone} />
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
     </div>
   );
 }
