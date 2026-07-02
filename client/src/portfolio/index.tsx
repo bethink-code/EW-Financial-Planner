@@ -43,7 +43,7 @@ export default function PortfolioPage() {
   );
 
   return (
-    <div className="w-full px-6 pt-6 pb-2">
+    <div className="w-full px-6 pb-2">
 
       {/* Category tabs */}
       <CustomTabs

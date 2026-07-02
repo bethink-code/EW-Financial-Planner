@@ -187,17 +187,17 @@ export default function LegacyProductDetail() {
   const [activeTab, setActiveTab] = useState("Details");
 
   return (
-    <div className="px-6 pt-4" style={{ backgroundColor: "#F2F7FA", minHeight: "100vh" }}>
+    <div className="px-6" style={{ backgroundColor: "#F2F7FA", minHeight: "100vh" }}>
 
       {/* ── Zone 2 · Back link + product sub-tabs on one strip ──
           The journey context here is one hop deep, so it folds into the tab
           row as a leading "‹ Portfolio" instead of its own context band. */}
       <div className="flex items-stretch">
-        <div className="flex items-end border-b border-neutral-200 pb-3 pr-2">
+        <div className="flex items-center border-b border-neutral-200 pb-2 pr-3">
           <Link
             href="/portfolio"
-            className="flex items-center gap-1 whitespace-nowrap text-sm font-medium transition-opacity hover:opacity-70"
-            style={{ color: "var(--ew-blue)" }}
+            className="flex items-center gap-1 whitespace-nowrap rounded-md border bg-white px-3 py-1.5 text-sm font-medium transition-colors hover:bg-[var(--ew-row-tint)]"
+            style={{ borderColor: "var(--ew-border)", color: "var(--ew-blue)" }}
           >
             <ChevronLeft className="h-4 w-4" />
             Portfolio

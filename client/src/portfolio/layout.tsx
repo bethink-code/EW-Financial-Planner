@@ -10,7 +10,9 @@ export function PortfolioLayout({ children }: PortfolioLayoutProps) {
   return (
     <>
       <ClientHeader active="portfolio" client={BEN_MEANDER} />
-      <div style={{ paddingBottom: "80px" }}>{children}</div>
+      {/* pt-10 separates our working interface (tab strip and below) from
+          the platform chrome above. */}
+      <div className="pt-10" style={{ paddingBottom: "80px" }}>{children}</div>
     </>
   );
 }
