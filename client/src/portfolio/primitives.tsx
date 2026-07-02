@@ -174,7 +174,7 @@ export function MiniCard({
   return (
     <div
       className="flex min-w-[120px] flex-col rounded-md px-3 py-2"
-      style={{ backgroundColor: "#E5ECF3", border: "1px solid #D0E0ED" }}
+      style={{ backgroundColor: "#F4F8FB" }}
     >
       <span className="text-[11px] font-medium leading-tight text-gray-500">
         {label}
