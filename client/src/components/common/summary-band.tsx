@@ -11,6 +11,10 @@ interface SummaryBandProps {
    *  toggle-with-NET-total tile. Only renders when firstColIsSidebar is
    *  true (otherwise there's no first column to fill). */
   firstSlot?: React.ReactNode;
+  /** How the KPI tiles size in the content column. `fill` (default) stretches
+   *  them to equal fractions of the width; `hug` sizes each to its content and
+   *  left-aligns them (narrow tiles, trailing space). */
+  tileFit?: "fill" | "hug";
   children: React.ReactNode;
 }
 
@@ -29,6 +33,7 @@ interface SummaryBandProps {
 export function SummaryBand({
   firstColIsSidebar = true,
   firstSlot,
+  tileFit = "fill",
   children,
 }: SummaryBandProps) {
   return (
@@ -39,7 +44,16 @@ export function SummaryBand({
       <div
         className={cn("flex-1 py-5", firstColIsSidebar ? "pl-6 pr-4" : "px-4")}
       >
-        <div className="grid grid-flow-col auto-cols-fr gap-3">{children}</div>
+        <div
+          className={cn(
+            "gap-3",
+            tileFit === "hug"
+              ? "flex flex-wrap"
+              : "grid grid-flow-col auto-cols-fr"
+          )}
+        >
+          {children}
+        </div>
       </div>
     </div>
   );
@@ -90,7 +104,7 @@ export function SummaryTile({
   const s = TILE_STYLES[variant];
   return (
     <div
-      className="rounded-lg px-4 py-4 flex items-baseline justify-between"
+      className="rounded-lg px-4 py-4 flex items-baseline justify-between gap-8"
       style={{ backgroundColor: s.bg }}
     >
       <div className="text-sm font-medium" style={{ color: s.label }}>

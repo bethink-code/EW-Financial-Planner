@@ -108,9 +108,10 @@ interface TabInvestmentsProps {
   dir: Dir;
   managedFilter: ManagedFilter;
   openPanel: (id: PanelId) => void;
+  viewActions?: React.ReactNode;
 }
 
-export function TabInvestments({ dir, managedFilter, openPanel }: TabInvestmentsProps) {
+export function TabInvestments({ dir, managedFilter, openPanel, viewActions }: TabInvestmentsProps) {
   const [selected, setSelected] = useState("all");
 
   const allNavItems = dir === "subcategory" ? SUBCATS : NEED_SUBCATS;
@@ -136,8 +137,17 @@ export function TabInvestments({ dir, managedFilter, openPanel }: TabInvestments
   return (
     <HybridViewWrapper
       summary={
-        <SummaryBand>
-          <SummaryTile label="Total investments" value="R 3 031 961" subValue={`across ${productCount} products`} />
+        <SummaryBand
+          tileFit="hug"
+          firstSlot={
+            <SummaryTile
+              variant="accent"
+              label="Total investments"
+              value="R 3 031 961"
+              subValue={`across ${productCount} products`}
+            />
+          }
+        >
           {dir === "subcategory" ? (
             <>
               <SummaryTile label="Managed"     value="R 2 571 961" subValue="3 products" />
@@ -155,6 +165,7 @@ export function TabInvestments({ dir, managedFilter, openPanel }: TabInvestments
         <HybridHeaderBar
           add={{ label: "Add investment", onClick: () => {} }}
           title={selectedLabel}
+          actions={viewActions}
         />
       }
       summaryCards={

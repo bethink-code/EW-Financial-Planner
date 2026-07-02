@@ -70,9 +70,10 @@ interface TabMedicalProps {
   dir: Dir;
   managedFilter: ManagedFilter;
   openPanel: (id: PanelId) => void;
+  viewActions?: React.ReactNode;
 }
 
-export function TabMedical({ dir, managedFilter, openPanel }: TabMedicalProps) {
+export function TabMedical({ dir, managedFilter, openPanel, viewActions }: TabMedicalProps) {
   const [selected, setSelected] = useState("all");
 
   const allNavItems = dir === "subcategory" ? SUBCATS : NEED_SUBCATS;
@@ -100,6 +101,7 @@ export function TabMedical({ dir, managedFilter, openPanel }: TabMedicalProps) {
         <HybridHeaderBar
           add={{ label: "Add policy", onClick: () => {} }}
           title={selectedLabel}
+          actions={viewActions}
         />
       }
       summaryCards={

@@ -63,6 +63,7 @@ import RetirementBuild from "@/pages/needs/retirement/build";
 // client header strip). All portfolio work is ring-fenced to client/src/portfolio/.
 import { PortfolioLayout } from "@/portfolio/layout";
 import PortfolioPage from "@/portfolio";
+import LegacyProductDetail from "@/portfolio/page-legacy-detail";
 
 function Router() {
   return (
@@ -77,6 +78,13 @@ function Router() {
         <Route path="/entity-test" component={EntityTestPage} />
 
         {/* === Portfolio (client-level section, no plan/need chrome) === */}
+        <Route path="/portfolio/legacy/:productId">
+          {() => (
+            <PortfolioLayout>
+              <LegacyProductDetail />
+            </PortfolioLayout>
+          )}
+        </Route>
         <Route path="/portfolio">
           {() => (
             <PortfolioLayout>

@@ -1,0 +1,883 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Elite Wealth — Portfolio Dashboard Concepts</title>
+<style>
+  :root{
+    --teal-900:#014C66; --teal-800:#015D7E; --teal-700:#06738F; --teal-600:#0B7FA0;
+    --teal-100:#D7EAF3; --teal-50:#EBF5FA;
+    --ink:#1C2B33; --ink-soft:#51656F; --line:#BFD9E4; --card:#FFFFFF; --page:#F2F7FA;
+    --good:#1E8E5A; --good-bg:#E3F4EC;
+    --warn:#B97509; --warn-bg:#FCF1DC;
+    --bad:#C2403A; --bad-bg:#FAE6E4;
+    --neutral-bg:#EDF2F5;
+    --shadow:0 10px 30px rgba(1,76,102,.16);
+    --radius:8px;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html{font-size:15px;}
+  body{font-family:"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif; background:var(--page); color:var(--ink); line-height:1.45;}
+  button{font:inherit; cursor:pointer; background:none; border:none; color:inherit;}
+  a{color:var(--teal-700);}
+
+  /* ===== Presenter chrome ===== */
+  .presenter{background:var(--teal-900); color:#fff; padding:18px 28px 0;}
+  .presenter .kicker{font-size:.72rem; letter-spacing:.18em; text-transform:uppercase; color:#9CC8DA; margin-bottom:4px;}
+  .presenter h1{font-size:1.25rem; font-weight:600; margin-bottom:14px;}
+  .concept-tabs{display:flex; gap:8px; flex-wrap:wrap;}
+  .concept-tab{background:rgba(255,255,255,.08); border:1px solid rgba(255,255,255,.18); border-bottom:none;
+    border-radius:8px 8px 0 0; padding:10px 18px 9px; text-align:left; color:#CFE6F0; min-width:215px; transition:background .15s;}
+  .concept-tab:hover{background:rgba(255,255,255,.16);}
+  .concept-tab .ct-name{display:block; font-weight:600; font-size:.95rem; color:#fff;}
+  .concept-tab .ct-sub{display:block; font-size:.74rem; margin-top:2px; color:#A9CFDF;}
+  .concept-tab.active{background:var(--page); color:var(--teal-900);}
+  .concept-tab.active .ct-name{color:var(--teal-900);}
+  .concept-tab.active .ct-sub{color:var(--ink-soft);}
+
+  .concept-note{max-width:1280px; margin:0 auto; padding:14px 28px 0; font-size:.85rem; color:var(--ink-soft);}
+  .concept-note strong{color:var(--teal-800);}
+
+  /* ===== Product chrome (Elite Wealth) ===== */
+  .mock{max-width:1280px; margin:14px auto 60px; background:#fff; border:1px solid var(--line); border-radius:10px; overflow:hidden; box-shadow:0 4px 18px rgba(1,76,102,.07); display:flex;}
+  .sidebar{width:46px; background:var(--teal-800); flex:none;}
+  .mock-body{flex:1; min-width:0;}
+  .client-bar{background:var(--teal-50); border-bottom:1px solid var(--line); padding:10px 18px; display:flex; align-items:center; gap:12px; flex-wrap:wrap;}
+  .client-bar .cname{font-weight:700; color:var(--teal-900);}
+  .client-bar .cmeta{font-size:.8rem; color:var(--ink-soft);}
+  .client-bar .spacer{flex:1;}
+  .chip-btn{border:1px solid var(--line); background:#fff; border-radius:6px; padding:5px 12px; font-size:.8rem; color:var(--teal-800);}
+  .nav-strip{background:var(--teal-100); padding:8px 18px; font-size:.83rem; color:var(--teal-700); display:flex; gap:16px; flex-wrap:wrap;}
+  .nav-strip .on{font-weight:700; color:var(--teal-900);}
+  .stage{padding:20px 22px 30px;}
+
+  h2.section{font-size:.82rem; letter-spacing:.14em; text-transform:uppercase; color:var(--teal-700); margin:26px 0 10px; font-weight:600;}
+  h2.section:first-child{margin-top:0;}
+  .muted{color:var(--ink-soft);}
+  .num{font-variant-numeric:tabular-nums;}
+
+  /* ===== Shared bits ===== */
+  .dot{display:inline-block; width:9px; height:9px; border-radius:50%; margin-right:6px; vertical-align:1px;}
+  .dot.good{background:var(--good);} .dot.warn{background:var(--warn);} .dot.bad{background:var(--bad);} .dot.neutral{background:#9FB4BD;}
+  .pill{display:inline-block; font-size:.72rem; font-weight:600; padding:3px 9px; border-radius:99px;}
+  .pill.good{background:var(--good-bg); color:var(--good);}
+  .pill.warn{background:var(--warn-bg); color:var(--warn);}
+  .pill.bad{background:var(--bad-bg); color:var(--bad);}
+  .pill.neutral{background:var(--neutral-bg); color:var(--ink-soft);}
+
+  table{width:100%; border-collapse:collapse; font-size:.86rem;}
+  thead th{background:var(--teal-100); color:var(--teal-800); font-weight:600; text-align:left; padding:8px 10px; font-size:.78rem;}
+  tbody td{padding:9px 10px; border-bottom:1px solid #E3EEF3;}
+  tbody tr.rowlink{cursor:pointer;}
+  tbody tr.rowlink:hover{background:var(--teal-50);}
+  td.r, th.r{text-align:right;}
+
+  .cards{display:grid; gap:14px;}
+  .card{background:var(--card); border:1px solid var(--line); border-radius:var(--radius); padding:16px;}
+
+  /* ===== KPI band (Concept A) ===== */
+  .kpis{display:grid; grid-template-columns:repeat(auto-fit,minmax(190px,1fr)); gap:12px; margin-bottom:6px;}
+  .kpi{background:var(--card); border:1px solid var(--line); border-radius:var(--radius); padding:14px 16px;}
+  .kpi .k-label{font-size:.72rem; text-transform:uppercase; letter-spacing:.08em; color:var(--ink-soft);}
+  .kpi .k-value{font-size:1.45rem; font-weight:700; color:var(--teal-900); margin-top:2px;}
+  .kpi .k-foot{font-size:.76rem; margin-top:3px;}
+  .kpi.flag{border-color:#EAD3A8; background:#FFFBF2;}
+
+  .filters{display:flex; gap:8px; flex-wrap:wrap; margin:14px 0 4px;}
+  .fchip{border:1px solid var(--line); border-radius:99px; padding:5px 13px; font-size:.79rem; background:#fff; color:var(--ink-soft);}
+  .fchip.on{background:var(--teal-800); border-color:var(--teal-800); color:#fff;}
+
+  .freshness{font-size:.76rem;}
+
+  /* ===== Concept B ===== */
+  .goal-grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(255px,1fr)); gap:14px;}
+  .goal-card{background:var(--card); border:1px solid var(--line); border-radius:var(--radius); padding:16px; cursor:pointer; transition:box-shadow .15s, transform .15s; display:flex; flex-direction:column; gap:8px;}
+  .goal-card:hover{box-shadow:var(--shadow); transform:translateY(-2px);}
+  .goal-card .g-head{display:flex; justify-content:space-between; align-items:flex-start; gap:8px;}
+  .goal-card .g-title{font-weight:700; color:var(--teal-900);}
+  .goal-card .g-sub{font-size:.78rem; color:var(--ink-soft);}
+  .goal-card .g-value{font-size:1.3rem; font-weight:700; color:var(--teal-900);}
+  .bar{height:8px; background:#E4EEF3; border-radius:99px; overflow:hidden;}
+  .bar > span{display:block; height:100%; border-radius:99px;}
+  .bar .b-good{background:var(--good);} .bar .b-warn{background:var(--warn);} .bar .b-bad{background:var(--bad);}
+  .goal-card.gap{border-style:dashed; border-color:#D9A8A4; background:#FFFAF9;}
+  .goal-card.unassigned{border-style:dashed;}
+  .g-foot{font-size:.78rem; margin-top:auto;}
+
+  /* ===== Concept C ===== */
+  .work-grid{display:grid; grid-template-columns:minmax(330px,5fr) minmax(380px,7fr); gap:18px; align-items:start;}
+  @media (max-width:980px){ .work-grid{grid-template-columns:1fr;} }
+  .queue-item{display:flex; gap:11px; padding:12px 13px; border:1px solid var(--line); border-radius:var(--radius); background:#fff; cursor:pointer; transition:box-shadow .15s;}
+  .queue-item + .queue-item{margin-top:9px;}
+  .queue-item:hover{box-shadow:var(--shadow);}
+  .queue-item .q-sev{flex:none; width:8px; border-radius:99px;}
+  .q-sev.high{background:var(--bad);} .q-sev.med{background:var(--warn);} .q-sev.low{background:#9FB4BD;}
+  .queue-item .q-title{font-weight:600; font-size:.88rem; color:var(--teal-900);}
+  .queue-item .q-sub{font-size:.78rem; color:var(--ink-soft); margin-top:2px;}
+  .queue-item .q-act{margin-left:auto; align-self:center; font-size:.78rem; color:var(--teal-700); white-space:nowrap; font-weight:600;}
+  .queue-item.done{opacity:.5;}
+  .queue-item.done .q-title{text-decoration:line-through;}
+  .readiness{display:flex; align-items:center; gap:14px;}
+  .ring{--p:45; width:74px; height:74px; border-radius:50%; flex:none;
+    background:conic-gradient(var(--warn) calc(var(--p)*1%), #E4EEF3 0); display:grid; place-items:center;}
+  .ring > div{width:56px; height:56px; border-radius:50%; background:#fff; display:grid; place-items:center; font-weight:700; color:var(--teal-900);}
+
+  /* ===== Attention layer (shared, parallel) ===== */
+  .attn-bar{display:flex; align-items:center; gap:12px; background:#FFFBF2; border:1px solid #EAD3A8; border-radius:var(--radius);
+    padding:10px 14px; margin:14px 0 4px; cursor:pointer; font-size:.85rem;}
+  .attn-bar .a-count{font-weight:700; color:var(--warn);}
+  .attn-bar .a-ready{margin-left:auto; font-size:.78rem; color:var(--ink-soft); white-space:nowrap;}
+  .attn-bar .a-toggle{font-size:.78rem; font-weight:600; color:var(--teal-700); white-space:nowrap;}
+  .attn-list{margin:8px 0 4px;}
+  .goal-flag{font-size:.74rem; color:var(--warn); background:var(--warn-bg); border-radius:5px; padding:4px 8px;}
+  .mini-goals{display:grid; grid-template-columns:repeat(auto-fit,minmax(165px,1fr)); gap:10px; margin-bottom:4px;}
+  .mini-goal{background:var(--card); border:1px solid var(--line); border-radius:var(--radius); padding:11px 13px; cursor:pointer; transition:box-shadow .15s;}
+  .mini-goal:hover{box-shadow:var(--shadow);}
+  .mini-goal .mg-name{font-size:.78rem; font-weight:600; color:var(--teal-900); display:flex; justify-content:space-between; gap:6px; align-items:center;}
+  .mini-goal .mg-val{font-size:1.02rem; font-weight:700; color:var(--teal-900); margin:4px 0 6px;}
+  .mini-goal .bar{height:5px;}
+  .mini-goal.gap{border-style:dashed; border-color:#D9A8A4; background:#FFFAF9;}
+
+  /* ===== Slide-in panel (Level 2) ===== */
+  .overlay{position:fixed; inset:0; background:rgba(8,40,53,.35); opacity:0; pointer-events:none; transition:opacity .2s; z-index:40;}
+  .overlay.show{opacity:1; pointer-events:auto;}
+  .panel{position:fixed; top:0; right:0; height:100%; width:min(520px,94vw); background:#fff; z-index:50;
+    transform:translateX(105%); transition:transform .25s ease; box-shadow:-12px 0 40px rgba(1,76,102,.25); display:flex; flex-direction:column;}
+  .panel.show{transform:translateX(0);}
+  .panel-head{background:var(--teal-800); color:#fff; padding:16px 20px;}
+  .panel-head .p-kicker{font-size:.7rem; letter-spacing:.14em; text-transform:uppercase; color:#A9CFDF;}
+  .panel-head h3{font-size:1.05rem; margin-top:2px;}
+  .panel-close{position:absolute; top:12px; right:14px; color:#fff; font-size:1.25rem; line-height:1; padding:4px 8px;}
+  .panel-body{padding:18px 20px 26px; overflow-y:auto; font-size:.88rem;}
+  .panel-body h4{font-size:.76rem; letter-spacing:.12em; text-transform:uppercase; color:var(--teal-700); margin:18px 0 8px;}
+  .panel-body h4:first-child{margin-top:0;}
+  .kv{display:grid; grid-template-columns:1fr 1fr; gap:7px 14px; font-size:.85rem;}
+  .kv .k{color:var(--ink-soft);}
+  .kv .v{font-weight:600; text-align:right;}
+  .tabline{display:flex; flex-wrap:wrap; gap:6px;}
+  .tabline a{font-size:.75rem; border:1px solid var(--line); border-radius:5px; padding:4px 9px; text-decoration:none; color:var(--teal-700); background:var(--teal-50);}
+  .level3{margin-top:18px; padding:12px; border:1px dashed var(--line); border-radius:var(--radius); background:var(--teal-50); font-size:.8rem;}
+  .btn{display:inline-block; background:var(--teal-700); color:#fff; border-radius:6px; padding:8px 16px; font-size:.84rem; font-weight:600;}
+  .btn.ghost{background:#fff; color:var(--teal-700); border:1px solid var(--line);}
+  .btn + .btn{margin-left:8px;}
+  .field{margin:10px 0;}
+  .field label{display:block; font-size:.76rem; color:var(--ink-soft); margin-bottom:4px;}
+  .field input, .field select{width:100%; border:1px solid var(--line); border-radius:6px; padding:8px 10px; font:inherit;}
+  .note{font-size:.78rem; color:var(--ink-soft); background:var(--neutral-bg); border-radius:6px; padding:9px 11px; margin-top:12px;}
+  .plist{list-style:none;}
+  .plist li{display:flex; justify-content:space-between; gap:10px; padding:8px 0; border-bottom:1px solid #E3EEF3; font-size:.85rem;}
+  .plist li a{font-weight:600; text-decoration:none;}
+
+  .footnote{max-width:1280px; margin:-40px auto 50px; padding:0 28px; font-size:.76rem; color:var(--ink-soft);}
+  @media (prefers-reduced-motion:reduce){ *{transition:none !important;} }
+</style>
+</head>
+<body>
+
+<!-- ===================== PRESENTER HEADER ===================== -->
+<header class="presenter">
+  <div class="kicker">Elite Wealth · Portfolio redesign · Concept exploration</div>
+  <h1>Portfolio landing — three concept directions</h1>
+  <nav class="concept-tabs" role="tablist">
+    <button class="concept-tab active" data-c="a" onclick="setConcept('a')">
+      <span class="ct-name">A · At a glance</span>
+      <span class="ct-sub">Holdings-first, elevated</span>
+    </button>
+    <button class="concept-tab" data-c="b" onclick="setConcept('b')">
+      <span class="ct-name">B · Plan view</span>
+      <span class="ct-sub">Goals &amp; purpose-first</span>
+    </button>
+    <button class="concept-tab" data-c="c" onclick="setConcept('c')">
+      <span class="ct-name">C · Command centre</span>
+      <span class="ct-sub">Plan + holdings + attention rail</span>
+    </button>
+  </nav>
+</header>
+
+<p class="concept-note" id="note-a"><strong>Concept A — At a glance.</strong> The familiar category structure, elevated into a scannable snapshot: totals, premiums, household context up front. The attention layer runs in parallel as a collapsible strip and inline freshness flags. Lowest change cost; every existing mental model survives. Click any product row to open the Level 2 panel.</p>
+<p class="concept-note" id="note-b" hidden><strong>Concept B — Plan view.</strong> The portfolio organised around what the money is <em>for</em>, using the Product purpose data the platform already captures. The attention layer is woven into the goals themselves — a stale valuation isn't a separate to-do, it's a reliability warning on the Retirement goal. Click a goal to open the Level 2 panel.</p>
+<p class="concept-note" id="note-c" hidden><strong>Concept C — Command centre.</strong> Doesn't choose between lenses: plan strip on top, holdings below, and the attention queue as a persistent rail running alongside both. The most complete answer — and the densest. Click queue items to action them; resolving updates readiness live.</p>
+
+<!-- ===================== CONCEPT A ===================== -->
+<div class="mock" id="concept-a">
+  <div class="sidebar"></div>
+  <div class="mock-body">
+    <div class="client-bar">
+      <span class="cname">Ben Meander</span>
+      <span class="cmeta">DEMO/1/1588 · Potential client · My Company</span>
+      <span class="cmeta">51 years old · Married ANC with accrual</span>
+      <span class="spacer"></span>
+      <button class="chip-btn">Related entities ▾</button>
+      <button class="chip-btn">New client</button>
+    </div>
+    <div class="nav-strip">
+      <span>Home</span><span>Activity dashboard</span><span>Client engagement</span><span>Client info</span>
+      <span class="on">Portfolio</span><span>Assets &amp; liabilities</span><span>Budget</span><span>Investment planning</span>
+    </div>
+    <div class="stage">
+
+      <div class="kpis">
+        <div class="kpi">
+          <div class="k-label">Total investments</div>
+          <div class="k-value num">R 3 031 961</div>
+          <div class="k-foot muted">4 products · 8 funds</div>
+        </div>
+        <div class="kpi">
+          <div class="k-label">Monthly premiums</div>
+          <div class="k-value num">R 17 300</div>
+          <div class="k-foot muted">Risk R 7 200 · Medical R 6 700 · Short term R 3 400</div>
+        </div>
+        <div class="kpi">
+          <div class="k-label">Monthly contributions</div>
+          <div class="k-value num">R 7 500</div>
+          <div class="k-foot muted">Company Pension Fund</div>
+        </div>
+        <div class="kpi">
+          <div class="k-label">Next review</div>
+          <div class="k-value" style="font-size:1.15rem">07 Oct 2026</div>
+          <div class="k-foot muted">Last reviewed 07/10/2025</div>
+        </div>
+      </div>
+
+      <div class="attn-bar" onclick="toggleAttn('a')">
+        <span class="a-count">⚠ 6 items need attention</span>
+        <span class="muted">2 valuations are 6 years old — the totals above can't be trusted until they're updated</span>
+        <span class="a-ready">Review readiness 45%</span>
+        <span class="a-toggle" id="attn-toggle-a">Show ▾</span>
+      </div>
+      <div class="attn-list" id="attn-list-a" hidden>
+        <div class="queue-item" onclick="openPanel('fix-pension')">
+          <div class="q-sev high"></div>
+          <div><div class="q-title">Valuation 6 years old — Company Pension Fund</div>
+          <div class="q-sub">Last value R 980 000 on 08/04/2020</div></div>
+          <div class="q-act">Update →</div>
+        </div>
+        <div class="queue-item" onclick="openPanel('fix-momentum')">
+          <div class="q-sev high"></div>
+          <div><div class="q-title">Valuation 6 years old — Momentum International</div>
+          <div class="q-sub">Last value R 1 091 961 on 08/04/2020</div></div>
+          <div class="q-act">Update →</div>
+        </div>
+        <div class="queue-item" onclick="openPanel('fix-benefits')">
+          <div class="q-sev high"></div>
+          <div><div class="q-title">No life assured loaded — Liberty (to estate)</div>
+          <div class="q-sub">Cover gap analysis blocked</div></div>
+          <div class="q-act">Fix →</div>
+        </div>
+        <div style="font-size:.78rem; margin-top:6px;"><a href="javascript:void(0)">View all 6 items →</a></div>
+      </div>
+
+      <div class="filters">
+        <button class="fchip on">Ben Meander</button>
+        <button class="fchip on">Shadow (spouse)</button>
+        <button class="fchip">Fudge (child)</button>
+        <button class="fchip">Family Trust</button>
+        <button class="fchip" style="margin-left:auto">In force only ✓</button>
+        <button class="fchip">ZAR ▾</button>
+      </div>
+
+      <h2 class="section">Investments — R 3 031 961</h2>
+      <table>
+        <thead><tr>
+          <th>Instrument</th><th>Category</th><th>Supplier</th><th class="r">Premium / income</th><th class="r">Current value</th><th>Valuation</th>
+        </tr></thead>
+        <tbody>
+          <tr class="rowlink" onclick="openPanel('absa')">
+            <td><a href="javascript:void(0)">ABSA Share portfolio</a></td><td>Direct Shares</td><td>ABSA Stockbrokers</td>
+            <td class="r num">—</td><td class="r num"><strong>R 460 000</strong></td>
+            <td class="freshness"><span class="dot good"></span>06/10/2025</td>
+          </tr>
+          <tr class="rowlink" onclick="openPanel('pension')">
+            <td><a href="javascript:void(0)">Company Pension Fund</a></td><td>Pension Fund</td><td>Supplier unknown</td>
+            <td class="r num">R 7 500 p.m.</td><td class="r num"><strong>R 980 000</strong></td>
+            <td class="freshness"><span class="dot bad"></span>08/04/2020</td>
+          </tr>
+          <tr class="rowlink" onclick="openPanel('momentum')">
+            <td><a href="javascript:void(0)">Momentum International Investment Option</a></td><td>Offshore Investment</td><td>Momentum Wealth Intl</td>
+            <td class="r num">—</td><td class="r num"><strong>R 1 091 961</strong></td>
+            <td class="freshness"><span class="dot bad"></span>08/04/2020</td>
+          </tr>
+          <tr class="rowlink" onclick="openPanel('ut')">
+            <td><a href="javascript:void(0)">Unit Trust</a></td><td>Unit Trust Portfolio</td><td>Allan Gray</td>
+            <td class="r num">—</td><td class="r num"><strong>R 500 000</strong></td>
+            <td class="freshness"><span class="dot warn"></span>16/01/2023</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h2 class="section">Risk — R 7 200 p.m.</h2>
+      <table>
+        <thead><tr>
+          <th>Instrument</th><th>Supplier</th><th>Reference</th><th class="r">Premium</th><th>Status</th>
+        </tr></thead>
+        <tbody>
+          <tr class="rowlink" onclick="openPanel('liberty')">
+            <td><a href="javascript:void(0)">Liberty (to estate)</a></td><td>Liberty Group Limited</td><td>L123456789</td>
+            <td class="r num">R 3 100 p.m.</td><td><span class="pill warn">Benefits not captured</span></td>
+          </tr>
+          <tr class="rowlink" onclick="openPanel('liberty')">
+            <td><a href="javascript:void(0)">Myriad (to spouse)</a></td><td>Momentum Myriad</td><td>M123456789</td>
+            <td class="r num">R 2 100 p.m.</td><td><span class="pill good">In force</span></td>
+          </tr>
+          <tr class="rowlink" onclick="openPanel('liberty')">
+            <td><a href="javascript:void(0)">Old Mutual (to child)</a></td><td>Old Mutual Life</td><td>OM123456789</td>
+            <td class="r num">R 2 000 p.m.</td><td><span class="pill good">In force</span></td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h2 class="section">Medical aid &amp; short term — R 10 100 p.m.</h2>
+      <table>
+        <thead><tr><th>Instrument</th><th>Category</th><th>Supplier</th><th class="r">Premium</th><th>Status</th></tr></thead>
+        <tbody>
+          <tr class="rowlink" onclick="openPanel('liberty')">
+            <td><a href="javascript:void(0)">Discovery Classic Delta Saver</a></td><td>Medical Aid</td><td>Discovery Health</td>
+            <td class="r num">R 6 700 p.m.</td><td><span class="pill good">In force</span></td>
+          </tr>
+          <tr class="rowlink" onclick="openPanel('liberty')">
+            <td><a href="javascript:void(0)">Santam Short Term Product</a></td><td>Short Term Insurance</td><td>Santam</td>
+            <td class="r num">R 3 400 p.m.</td><td><span class="pill good">In force</span></td>
+          </tr>
+        </tbody>
+      </table>
+
+    </div>
+  </div>
+</div>
+
+<!-- ===================== CONCEPT B ===================== -->
+<div class="mock" id="concept-b" hidden>
+  <div class="sidebar"></div>
+  <div class="mock-body">
+    <div class="client-bar">
+      <span class="cname">Ben Meander</span>
+      <span class="cmeta">DEMO/1/1588 · Potential client · My Company</span>
+      <span class="cmeta">51 years old · Married ANC with accrual</span>
+      <span class="spacer"></span>
+      <button class="chip-btn">Related entities ▾</button>
+      <button class="chip-btn">New client</button>
+    </div>
+    <div class="nav-strip">
+      <span>Home</span><span>Activity dashboard</span><span>Client engagement</span><span>Client info</span>
+      <span class="on">Portfolio</span><span>Assets &amp; liabilities</span><span>Budget</span><span>Investment planning</span>
+    </div>
+    <div class="stage">
+
+      <h2 class="section">The plan — what Ben's money is for</h2>
+
+      <div class="attn-bar" onclick="toggleAttn('b')">
+        <span class="a-count">⚠ Plan reliability</span>
+        <span class="muted">Retirement is built on two 6-year-old valuations, and R 460k sits outside the plan</span>
+        <span class="a-ready">Review readiness 45%</span>
+        <span class="a-toggle" id="attn-toggle-b">Show ▾</span>
+      </div>
+      <div class="attn-list" id="attn-list-b" hidden>
+        <div class="queue-item" onclick="openPanel('fix-pension')">
+          <div class="q-sev high"></div>
+          <div><div class="q-title">Retirement goal unreliable — Company Pension Fund valued 08/04/2020</div>
+          <div class="q-sub">Update the value to restore the on-track position</div></div>
+          <div class="q-act">Update →</div>
+        </div>
+        <div class="queue-item" onclick="openPanel('fix-momentum')">
+          <div class="q-sev high"></div>
+          <div><div class="q-title">Retirement goal unreliable — Momentum International valued 08/04/2020</div>
+          <div class="q-sub">Update the value to restore the on-track position</div></div>
+          <div class="q-act">Update →</div>
+        </div>
+        <div class="queue-item" onclick="openPanel('goal-unassigned')">
+          <div class="q-sev med"></div>
+          <div><div class="q-title">R 460 000 outside the plan — ABSA Share portfolio has no purpose</div>
+          <div class="q-sub">Assign a purpose to include it</div></div>
+          <div class="q-act">Assign →</div>
+        </div>
+      </div>
+
+      <div class="goal-grid">
+
+        <div class="goal-card" onclick="openPanel('goal-retire')">
+          <div class="g-head">
+            <div>
+              <div class="g-title">Retirement</div>
+              <div class="g-sub">Age 65 · 14 years to go · 2 products</div>
+            </div>
+            <span class="pill warn">Behind target</span>
+          </div>
+          <div class="g-value num">R 2 071 961</div>
+          <div class="bar"><span class="b-warn" style="width:24%"></span></div>
+          <div class="g-foot muted">24% of R 8.5m target · contributing R 7 500 p.m.</div>
+          <div class="goal-flag">⚠ Position unreliable — both valuations are 6 years old</div>
+        </div>
+
+        <div class="goal-card" onclick="openPanel('goal-edu')">
+          <div class="g-head">
+            <div>
+              <div class="g-title">Education — Fudge</div>
+              <div class="g-sub">2031 · 5 years to go · 1 product</div>
+            </div>
+            <span class="pill good">On track</span>
+          </div>
+          <div class="g-value num">R 500 000</div>
+          <div class="bar"><span class="b-good" style="width:67%"></span></div>
+          <div class="g-foot muted">67% of R 750k target · no regular contribution</div>
+        </div>
+
+        <div class="goal-card" onclick="openPanel('goal-protect')">
+          <div class="g-head">
+            <div>
+              <div class="g-title">Protection</div>
+              <div class="g-sub">Life, medical &amp; short term · 5 products</div>
+            </div>
+            <span class="pill warn">Cover not analysed</span>
+          </div>
+          <div class="g-value num">R 17 300 <span style="font-size:.8rem; font-weight:400" class="muted">p.m.</span></div>
+          <div class="bar"><span class="b-warn" style="width:50%"></span></div>
+          <div class="g-foot muted">Benefit amounts missing on 1 of 3 life policies</div>
+        </div>
+
+        <div class="goal-card gap" onclick="openPanel('goal-emergency')">
+          <div class="g-head">
+            <div>
+              <div class="g-title">Emergency fund</div>
+              <div class="g-sub">No products assigned</div>
+            </div>
+            <span class="pill bad">Gap</span>
+          </div>
+          <div class="g-value num muted">R 0</div>
+          <div class="bar"><span class="b-bad" style="width:3%"></span></div>
+          <div class="g-foot" style="color:var(--bad)">≈ R 160k recommended (3 months' expenses)</div>
+        </div>
+
+        <div class="goal-card unassigned" onclick="openPanel('goal-unassigned')">
+          <div class="g-head">
+            <div>
+              <div class="g-title">Not yet assigned</div>
+              <div class="g-sub">1 product · no purpose captured</div>
+            </div>
+            <span class="pill neutral">Assign</span>
+          </div>
+          <div class="g-value num">R 460 000</div>
+          <div class="g-foot muted">ABSA Share portfolio — assign a purpose to include it in the plan</div>
+        </div>
+
+      </div>
+
+      <h2 class="section">All products</h2>
+      <p class="muted" style="font-size:.82rem; margin-bottom:8px;">The full category view stays one click away — same data, plan lens removed.</p>
+      <button class="btn ghost">View by product category →</button>
+
+    </div>
+  </div>
+</div>
+
+<!-- ===================== CONCEPT C ===================== -->
+<div class="mock" id="concept-c" hidden>
+  <div class="sidebar"></div>
+  <div class="mock-body">
+    <div class="client-bar">
+      <span class="cname">Ben Meander</span>
+      <span class="cmeta">DEMO/1/1588 · Potential client · My Company</span>
+      <span class="cmeta">51 years old · Married ANC with accrual</span>
+      <span class="spacer"></span>
+      <button class="chip-btn">Related entities ▾</button>
+      <button class="chip-btn">New client</button>
+    </div>
+    <div class="nav-strip">
+      <span>Home</span><span>Activity dashboard</span><span>Client engagement</span><span>Client info</span>
+      <span class="on">Portfolio</span><span>Assets &amp; liabilities</span><span>Budget</span><span>Investment planning</span>
+    </div>
+    <div class="stage">
+      <div class="work-grid" style="grid-template-columns:minmax(420px,8fr) minmax(300px,4fr);">
+
+        <div>
+          <h2 class="section">The plan</h2>
+          <div class="mini-goals">
+            <div class="mini-goal" onclick="openPanel('goal-retire')">
+              <div class="mg-name">Retirement <span class="dot warn" title="Behind target, stale data"></span></div>
+              <div class="mg-val num">R 2.07m</div>
+              <div class="bar"><span class="b-warn" style="width:24%"></span></div>
+            </div>
+            <div class="mini-goal" onclick="openPanel('goal-edu')">
+              <div class="mg-name">Education <span class="dot good"></span></div>
+              <div class="mg-val num">R 500k</div>
+              <div class="bar"><span class="b-good" style="width:67%"></span></div>
+            </div>
+            <div class="mini-goal" onclick="openPanel('goal-protect')">
+              <div class="mg-name">Protection <span class="dot warn"></span></div>
+              <div class="mg-val num">R 17 300 <span style="font-size:.7rem; font-weight:400" class="muted">p.m.</span></div>
+              <div class="bar"><span class="b-warn" style="width:50%"></span></div>
+            </div>
+            <div class="mini-goal gap" onclick="openPanel('goal-emergency')">
+              <div class="mg-name">Emergency <span class="dot bad"></span></div>
+              <div class="mg-val num muted">R 0</div>
+              <div class="bar"><span class="b-bad" style="width:3%"></span></div>
+            </div>
+          </div>
+
+          <h2 class="section">Holdings</h2>
+          <table>
+            <thead><tr><th>Instrument</th><th>Purpose</th><th class="r">Value / premium</th><th>As at</th></tr></thead>
+            <tbody>
+              <tr class="rowlink" onclick="openPanel('absa')"><td>ABSA Share portfolio</td><td><span class="pill neutral">Not set</span></td><td class="r num">R 460 000</td><td class="freshness"><span class="dot good"></span>06/10/2025</td></tr>
+              <tr class="rowlink" onclick="openPanel('pension')"><td>Company Pension Fund</td><td>Retirement</td><td class="r num">R 980 000</td><td class="freshness"><span class="dot bad"></span>08/04/2020</td></tr>
+              <tr class="rowlink" onclick="openPanel('momentum')"><td>Momentum International</td><td>Retirement</td><td class="r num">R 1 091 961</td><td class="freshness"><span class="dot bad"></span>08/04/2020</td></tr>
+              <tr class="rowlink" onclick="openPanel('ut')"><td>Unit Trust (Allan Gray)</td><td>Education</td><td class="r num">R 500 000</td><td class="freshness"><span class="dot warn"></span>16/01/2023</td></tr>
+              <tr class="rowlink" onclick="openPanel('liberty')"><td>Liberty (to estate)</td><td>Protection</td><td class="r num">R 3 100 p.m.</td><td class="muted">—</td></tr>
+              <tr class="rowlink" onclick="openPanel('liberty')"><td>Myriad (to spouse)</td><td>Protection</td><td class="r num">R 2 100 p.m.</td><td class="muted">—</td></tr>
+              <tr class="rowlink" onclick="openPanel('liberty')"><td>Old Mutual (to child)</td><td>Protection</td><td class="r num">R 2 000 p.m.</td><td class="muted">—</td></tr>
+              <tr class="rowlink" onclick="openPanel('liberty')"><td>Discovery Classic Delta Saver</td><td>Protection</td><td class="r num">R 6 700 p.m.</td><td class="muted">—</td></tr>
+              <tr class="rowlink" onclick="openPanel('liberty')"><td>Santam Short Term</td><td>Protection</td><td class="r num">R 3 400 p.m.</td><td class="muted">—</td></tr>
+            </tbody>
+          </table>
+
+          <h2 class="section">Since last review · 07 Oct 2025</h2>
+          <div class="card" style="font-size:.84rem;">
+            <div style="display:flex; justify-content:space-between; padding:5px 0; border-bottom:1px solid #E3EEF3;"><span>ABSA Share portfolio revalued</span><span class="num">+R 460 000 · 06/10/2025</span></div>
+            <div style="display:flex; justify-content:space-between; padding:5px 0; border-bottom:1px solid #E3EEF3;"><span>Asset split loaded — du Preez Rassie 100%</span><span class="muted">07/10/2025</span></div>
+            <div style="display:flex; justify-content:space-between; padding:5px 0;"><span>No transactions captured in period</span><span class="muted">10/03 – 10/06/2026</span></div>
+          </div>
+        </div>
+
+        <div>
+          <h2 class="section">Review readiness</h2>
+          <div class="card readiness">
+            <div class="ring" id="ring" style="--p:45"><div id="ring-val">45%</div></div>
+            <div>
+              <div style="font-weight:700; color:var(--teal-900)">Review due 07 Oct 2026</div>
+              <div class="muted" style="font-size:.82rem; margin-top:2px;">5 of 11 checks passing.</div>
+            </div>
+          </div>
+
+          <h2 class="section">Needs attention <span class="muted" style="text-transform:none; letter-spacing:0; font-weight:400">· 6</span></h2>
+          <div id="queue">
+            <div class="queue-item" data-q="1" onclick="openPanel('fix-pension')">
+              <div class="q-sev high"></div>
+              <div>
+                <div class="q-title">Valuation 6 years old — Company Pension Fund</div>
+                <div class="q-sub">Affects Retirement goal &amp; totals</div>
+              </div>
+              <div class="q-act">Update →</div>
+            </div>
+            <div class="queue-item" data-q="2" onclick="openPanel('fix-momentum')">
+              <div class="q-sev high"></div>
+              <div>
+                <div class="q-title">Valuation 6 years old — Momentum International</div>
+                <div class="q-sub">Affects Retirement goal &amp; totals</div>
+              </div>
+              <div class="q-act">Update →</div>
+            </div>
+            <div class="queue-item" data-q="3" onclick="openPanel('fix-benefits')">
+              <div class="q-sev high"></div>
+              <div>
+                <div class="q-title">No life assured — Liberty (to estate)</div>
+                <div class="q-sub">Cover gap analysis blocked</div>
+              </div>
+              <div class="q-act">Fix →</div>
+            </div>
+            <div class="queue-item" data-q="4" onclick="openPanel('fix-ut')">
+              <div class="q-sev med"></div>
+              <div>
+                <div class="q-title">Valuation 3 years old — Unit Trust</div>
+                <div class="q-sub">Affects Education goal</div>
+              </div>
+              <div class="q-act">Update →</div>
+            </div>
+            <div class="queue-item" data-q="5" onclick="openPanel('fix-purpose')">
+              <div class="q-sev med"></div>
+              <div>
+                <div class="q-title">Purpose not set — ABSA Share portfolio</div>
+                <div class="q-sub">R 460k outside the plan</div>
+              </div>
+              <div class="q-act">Assign →</div>
+            </div>
+            <div class="queue-item" data-q="6" onclick="openPanel('fix-fees')">
+              <div class="q-sev med"></div>
+              <div>
+                <div class="q-title">Ongoing fees not configured — ABSA</div>
+                <div class="q-sub">Fee reporting incomplete</div>
+              </div>
+              <div class="q-act">Configure →</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<p class="footnote">Concept mockups · demo data (Ben Meander) · Level 3 — the full product detail tab set (Details, Roles, Benefits, Values, Transactions, Structure, Status, Ongoing fees, Fees on premiums, Commspace, Asset split) — is unchanged in all three concepts and reachable from every Level 2 panel.</p>
+
+<!-- ===================== LEVEL 2 PANEL ===================== -->
+<div class="overlay" id="overlay" onclick="closePanel()"></div>
+<aside class="panel" id="panel" aria-hidden="true">
+  <div class="panel-head">
+    <button class="panel-close" onclick="closePanel()" aria-label="Close">×</button>
+    <div class="p-kicker" id="p-kicker">Level 2 · slide-in</div>
+    <h3 id="p-title">—</h3>
+  </div>
+  <div class="panel-body" id="p-body"></div>
+</aside>
+
+<script>
+/* ---------- concept switching ---------- */
+function setConcept(c){
+  ['a','b','c'].forEach(k=>{
+    document.getElementById('concept-'+k).hidden = (k!==c);
+    document.getElementById('note-'+k).hidden = (k!==c);
+    document.querySelector('.concept-tab[data-c="'+k+'"]').classList.toggle('active', k===c);
+  });
+  closePanel();
+  window.scrollTo({top:0});
+}
+function toggleAttn(c){
+  const l = document.getElementById('attn-list-'+c);
+  const t = document.getElementById('attn-toggle-'+c);
+  l.hidden = !l.hidden;
+  t.textContent = l.hidden ? 'Show ▾' : 'Hide ▴';
+}
+
+/* ---------- Level 2 panel content ---------- */
+const L3 = `<div class="level3"><strong>Level 3 — full product detail</strong> (existing screens, unchanged)
+  <div class="tabline" style="margin-top:8px;">
+    <a href="javascript:void(0)">Details</a><a href="javascript:void(0)">Roles</a><a href="javascript:void(0)">Benefits</a>
+    <a href="javascript:void(0)">Values</a><a href="javascript:void(0)">Transactions</a><a href="javascript:void(0)">Structure</a>
+    <a href="javascript:void(0)">Status</a><a href="javascript:void(0)">Ongoing fees</a><a href="javascript:void(0)">Fees on premiums</a>
+    <a href="javascript:void(0)">Commspace</a><a href="javascript:void(0)">Asset split</a>
+  </div></div>`;
+
+const PANELS = {
+  /* ----- Concept A: product snapshot ----- */
+  absa:{k:'Product snapshot', t:'ABSA Share portfolio', b:`
+    <h4>Key facts</h4>
+    <div class="kv">
+      <span class="k">Category</span><span class="v">Direct Shares</span>
+      <span class="k">Supplier</span><span class="v">ABSA Stockbrokers</span>
+      <span class="k">Current value</span><span class="v num">R 460 000 · 06/10/2025</span>
+      <span class="k">Owner</span><span class="v">B Meander (100%)</span>
+      <span class="k">Purpose</span><span class="v" style="color:var(--warn)">Not set</span>
+      <span class="k">Status</span><span class="v">Managed · In force since 01/10/2025</span>
+    </div>
+    <h4>Funds</h4>
+    <ul class="plist">
+      <li><span>Alexander Forbes Grp Hldgs</span><span class="num">R 100 000</span></li>
+      <li><span>MTN Group Ltd Shares</span><span class="num">R 100 000</span></li>
+      <li><span>Vodacom Group Ltd</span><span class="num">R 260 000</span></li>
+    </ul>
+    <h4>Fees</h4>
+    <p class="muted">Ongoing fees not configured — all rows at 0%. <a href="javascript:void(0)">Configure fees →</a></p>
+    ${L3}`},
+  pension:{k:'Product snapshot', t:'Company Pension Fund', b:`
+    <h4>Key facts</h4>
+    <div class="kv">
+      <span class="k">Category</span><span class="v">Pension Fund</span>
+      <span class="k">Supplier</span><span class="v">Unknown</span>
+      <span class="k">Current value</span><span class="v num" style="color:var(--bad)">R 980 000 · 08/04/2020</span>
+      <span class="k">Contribution</span><span class="v num">R 7 500 p.m.</span>
+      <span class="k">Owner</span><span class="v">B Meander</span>
+    </div>
+    <div class="note"><span class="dot bad"></span><strong>Valuation 6 years old.</strong> Everything this page says about Ben's retirement position is built on this number.</div>
+    <h4>Quick update</h4>
+    <div class="field"><label>New value (ZAR)</label><input type="text" placeholder="0.00"></div>
+    <div class="field"><label>Value date</label><input type="text" value="10/06/2026"></div>
+    <button class="btn">Save value</button>
+    ${L3}`},
+  momentum:{k:'Product snapshot', t:'Momentum International Investment Option', b:`
+    <h4>Key facts</h4>
+    <div class="kv">
+      <span class="k">Category</span><span class="v">Offshore Investment</span>
+      <span class="k">Supplier</span><span class="v">Momentum Wealth Intl</span>
+      <span class="k">Current value</span><span class="v num" style="color:var(--bad)">R 1 091 961 · 08/04/2020</span>
+      <span class="k">Fund</span><span class="v">Sanlam Global Best Ideas (A)</span>
+    </div>
+    <div class="note"><span class="dot bad"></span>Valuation 6 years old — update before the review.</div>
+    ${L3}`},
+  ut:{k:'Product snapshot', t:'Unit Trust — Allan Gray', b:`
+    <h4>Key facts</h4>
+    <div class="kv">
+      <span class="k">Category</span><span class="v">Unit Trust Portfolio</span>
+      <span class="k">Current value</span><span class="v num" style="color:var(--warn)">R 500 000 · 16/01/2023</span>
+      <span class="k">Fund</span><span class="v">Coronation Balanced Plus A</span>
+    </div>
+    ${L3}`},
+  liberty:{k:'Product snapshot', t:'Liberty (to estate)', b:`
+    <h4>Key facts</h4>
+    <div class="kv">
+      <span class="k">Category</span><span class="v">Risk Product</span>
+      <span class="k">Supplier</span><span class="v">Liberty Group Limited</span>
+      <span class="k">Reference</span><span class="v">L123456789</span>
+      <span class="k">Premium</span><span class="v num">R 3 100 p.m.</span>
+      <span class="k">Beneficiary</span><span class="v">Estate</span>
+    </div>
+    <div class="note"><span class="dot warn"></span>No life assured loaded — benefits can't be captured for this policy.</div>
+    ${L3}`},
+
+  /* ----- Concept B: goal drill-ins ----- */
+  'goal-retire':{k:'Goal · Level 2', t:'Retirement — age 65', b:`
+    <h4>Position</h4>
+    <div class="kv">
+      <span class="k">Target</span><span class="v num">R 8 500 000 by 2040</span>
+      <span class="k">Current</span><span class="v num">R 2 071 961 (24%)</span>
+      <span class="k">Contributing</span><span class="v num">R 7 500 p.m.</span>
+      <span class="k">Projected at 65</span><span class="v num" style="color:var(--warn)">≈ R 6.1m — shortfall R 2.4m</span>
+    </div>
+    <div class="bar" style="margin:10px 0"><span class="b-warn" style="width:24%"></span></div>
+    <h4>Products serving this goal</h4>
+    <ul class="plist">
+      <li><a href="javascript:void(0)">Company Pension Fund</a><span class="num">R 980 000 <span class="dot bad" title="stale"></span></span></li>
+      <li><a href="javascript:void(0)">Momentum International</a><span class="num">R 1 091 961 <span class="dot bad" title="stale"></span></span></li>
+    </ul>
+    <div class="note">Two of two valuations are 6 years old — the on-track position is unreliable until they're updated.</div>
+    <h4>Actions</h4>
+    <button class="btn">Adjust target</button><button class="btn ghost">Model contribution increase</button>
+    ${L3}`},
+  'goal-edu':{k:'Goal · Level 2', t:'Education — Fudge (2031)', b:`
+    <h4>Position</h4>
+    <div class="kv">
+      <span class="k">Target</span><span class="v num">R 750 000 by 2031</span>
+      <span class="k">Current</span><span class="v num">R 500 000 (67%)</span>
+      <span class="k">Contributing</span><span class="v">None</span>
+    </div>
+    <div class="bar" style="margin:10px 0"><span class="b-good" style="width:67%"></span></div>
+    <h4>Products serving this goal</h4>
+    <ul class="plist">
+      <li><a href="javascript:void(0)">Unit Trust — Coronation Balanced Plus A</a><span class="num">R 500 000</span></li>
+    </ul>
+    ${L3}`},
+  'goal-protect':{k:'Goal · Level 2', t:'Protection', b:`
+    <h4>Cover in place</h4>
+    <ul class="plist">
+      <li><a href="javascript:void(0)">Liberty (to estate)</a><span class="num">R 3 100 p.m. <span class="dot warn"></span></span></li>
+      <li><a href="javascript:void(0)">Myriad (to spouse)</a><span class="num">R 2 100 p.m.</span></li>
+      <li><a href="javascript:void(0)">Old Mutual (to child)</a><span class="num">R 2 000 p.m.</span></li>
+      <li><a href="javascript:void(0)">Discovery Classic Delta Saver</a><span class="num">R 6 700 p.m.</span></li>
+      <li><a href="javascript:void(0)">Santam Short Term</a><span class="num">R 3 400 p.m.</span></li>
+    </ul>
+    <div class="note"><span class="dot warn"></span>Benefit amounts are missing on the Liberty policy, so cover vs need can't be analysed yet.</div>
+    <h4>Actions</h4>
+    <button class="btn">Capture benefits</button><button class="btn ghost">Run cover gap analysis</button>
+    ${L3}`},
+  'goal-emergency':{k:'Goal · Level 2', t:'Emergency fund — gap', b:`
+    <p>No product in Ben's portfolio is assigned to emergency provision.</p>
+    <h4>Suggested basis</h4>
+    <div class="kv">
+      <span class="k">Monthly expenses (budget)</span><span class="v num">≈ R 53 000</span>
+      <span class="k">3-month buffer</span><span class="v num">≈ R 160 000</span>
+    </div>
+    <div class="note">This is the conversation starter for the review — either assign an existing liquid product or open a recommendation.</div>
+    <h4>Actions</h4>
+    <button class="btn">Assign existing product</button><button class="btn ghost">Add to advice record</button>`},
+  'goal-unassigned':{k:'Goal · Level 2', t:'Assign a purpose', b:`
+    <p><strong>ABSA Share portfolio</strong> · R 460 000 has no product purpose captured.</p>
+    <div class="field"><label>Product purpose</label>
+      <select>
+        <option>[ -- Please select an entry -- ]</option>
+        <option>Emergency</option><option>Retirement</option>
+        <option>Saving for a goal: Education</option><option>Saving for a goal: Holiday</option>
+        <option>Saving for a goal: Other</option><option>Saving for a goal: Property</option>
+        <option>Saving for a goal: Vehicle</option>
+      </select>
+    </div>
+    <button class="btn">Save purpose</button>
+    <div class="note">Uses the existing Product purpose field — no data model change. Once set, the product joins the plan view automatically.</div>`},
+
+  /* ----- Concept C: fix-it panels ----- */
+  'fix-pension':{k:'Action · Level 2', t:'Update valuation — Company Pension Fund', b:`
+    <div class="kv">
+      <span class="k">Last value</span><span class="v num">R 980 000</span>
+      <span class="k">Value date</span><span class="v" style="color:var(--bad)">08/04/2020 · 6 years ago</span>
+    </div>
+    <h4>New value</h4>
+    <div class="field"><label>Value (ZAR)</label><input type="text" placeholder="0.00" id="fx-val"></div>
+    <div class="field"><label>Value date</label><input type="text" value="10/06/2026"></div>
+    <button class="btn" onclick="resolveItem(1)">Save value</button>
+    <button class="btn ghost">Request statement</button>
+    <div class="note">Saving here writes to the same Values store as the existing tab — Level 2 is a faster door, not a new database.</div>
+    ${L3}`},
+  'fix-momentum':{k:'Action · Level 2', t:'Update valuation — Momentum International', b:`
+    <div class="kv">
+      <span class="k">Last value</span><span class="v num">R 1 091 961</span>
+      <span class="k">Value date</span><span class="v" style="color:var(--bad)">08/04/2020 · 6 years ago</span>
+    </div>
+    <h4>New value</h4>
+    <div class="field"><label>Value (ZAR)</label><input type="text" placeholder="0.00"></div>
+    <div class="field"><label>Value date</label><input type="text" value="10/06/2026"></div>
+    <button class="btn" onclick="resolveItem(2)">Save value</button>
+    ${L3}`},
+  'fix-ut':{k:'Action · Level 2', t:'Update valuation — Unit Trust', b:`
+    <div class="kv">
+      <span class="k">Last value</span><span class="v num">R 500 000</span>
+      <span class="k">Value date</span><span class="v" style="color:var(--warn)">16/01/2023 · 3 years ago</span>
+    </div>
+    <h4>New value</h4>
+    <div class="field"><label>Value (ZAR)</label><input type="text" placeholder="0.00"></div>
+    <div class="field"><label>Value date</label><input type="text" value="10/06/2026"></div>
+    <button class="btn" onclick="resolveItem(4)">Save value</button>
+    ${L3}`},
+  'fix-benefits':{k:'Action · Level 2', t:'Load life assured — Liberty (to estate)', b:`
+    <p>Benefits can't be captured because no life assured is loaded on this policy.</p>
+    <div class="field"><label>Life assured</label>
+      <select><option>Ben Meander</option><option>Shadow Meander (spouse)</option><option>Fudge Meander (child)</option></select>
+    </div>
+    <button class="btn" onclick="resolveItem(3)">Save &amp; capture benefits</button>
+    ${L3}`},
+  'fix-purpose':{k:'Action · Level 2', t:'Assign product purposes', b:`
+    <p>4 investment products have no purpose set. Assign them in one pass:</p>
+    <div class="field"><label>ABSA Share portfolio · R 460 000</label>
+      <select><option>[ -- select -- ]</option><option>Emergency</option><option>Retirement</option><option>Saving for a goal: Education</option><option>Saving for a goal: Property</option></select></div>
+    <div class="field"><label>Company Pension Fund · R 980 000</label>
+      <select><option>Retirement</option></select></div>
+    <div class="field"><label>Momentum International · R 1 091 961</label>
+      <select><option>Retirement</option></select></div>
+    <div class="field"><label>Unit Trust · R 500 000</label>
+      <select><option>Saving for a goal: Education</option></select></div>
+    <button class="btn" onclick="resolveItem(5)">Save all</button>
+    <div class="note">Same Product purpose field as the Details tab — captured once, used everywhere (including Concept B's plan view).</div>`},
+  'fix-fees':{k:'Action · Level 2', t:'Configure fees — ABSA Share portfolio', b:`
+    <p>All ongoing fee rows are at 0% for this product.</p>
+    <div class="kv">
+      <span class="k">Adviser fee (ongoing)</span><span class="v">0% · not set</span>
+      <span class="k">Platform fee</span><span class="v">0% · not set</span>
+      <span class="k">Fund manager fee</span><span class="v">0% · not set</span>
+    </div>
+    <div class="note">Opens the consolidated fees configuration (separate workstream, in progress) pre-filtered to this product.</div>
+    <button class="btn" onclick="resolveItem(6)">Open fee configuration</button>
+    ${L3}`}
+};
+
+function openPanel(id){
+  const p = PANELS[id]; if(!p) return;
+  document.getElementById('p-kicker').textContent = p.k;
+  document.getElementById('p-title').textContent = p.t;
+  document.getElementById('p-body').innerHTML = p.b;
+  document.getElementById('overlay').classList.add('show');
+  const panel = document.getElementById('panel');
+  panel.classList.add('show');
+  panel.setAttribute('aria-hidden','false');
+}
+function closePanel(){
+  document.getElementById('overlay').classList.remove('show');
+  const panel = document.getElementById('panel');
+  panel.classList.remove('show');
+  panel.setAttribute('aria-hidden','true');
+}
+document.addEventListener('keydown', e=>{ if(e.key==='Escape') closePanel(); });
+
+/* Concept C demo: resolving a queue item updates readiness */
+let resolved = new Set();
+function resolveItem(n){
+  if(!resolved.has(n)){
+    resolved.add(n);
+    const item = document.querySelector('.queue-item[data-q="'+n+'"]');
+    if(item){ item.classList.add('done'); item.querySelector('.q-act').textContent = 'Done ✓'; }
+    const pct = 45 + resolved.size * 9;
+    const ring = document.getElementById('ring');
+    ring.style.setProperty('--p', pct);
+    ring.style.background = 'conic-gradient(' + (pct>=70 ? 'var(--good)' : 'var(--warn)') + ' ' + pct + '%, #E4EEF3 0)';
+    document.getElementById('ring-val').textContent = pct + '%';
+  }
+  closePanel();
+}
+</script>
+</body>
+</html>

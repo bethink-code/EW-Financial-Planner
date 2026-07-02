@@ -1,4 +1,5 @@
 import { useEffect } from "react";
+import { useLocation } from "wouter";
 import { ChevronRight, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { LEVEL3_TABS, type Tone } from "./data";
@@ -278,9 +279,12 @@ export function PanelButton({
  */
 export function Level3Block({
   label = "Manage this product",
+  productId = "absa",
 }: {
   label?: string;
+  productId?: string;
 }) {
+  const [, navigate] = useLocation();
   return (
     <div
       className="rounded-md border border-dashed p-3"
@@ -288,6 +292,7 @@ export function Level3Block({
     >
       <button
         type="button"
+        onClick={() => navigate(`/portfolio/legacy/${productId}`)}
         className="flex w-full items-center justify-between gap-2 rounded-md px-3.5 py-2.5 text-sm font-semibold text-white transition-opacity hover:opacity-90 motion-reduce:transition-none"
         style={{ backgroundColor: "var(--ew-blue)" }}
       >

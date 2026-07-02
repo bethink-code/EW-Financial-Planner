@@ -19,6 +19,9 @@ interface HybridHeaderBarProps {
   onDuplicate?: () => void;
   /** Delete the selected item. */
   onDelete?: () => void;
+  /** Optional right-aligned slot for view-level controls (e.g. view-by /
+   *  filter segmented controls). Renders before Duplicate/Delete. */
+  actions?: React.ReactNode;
   /** Disables every button while a mutation is in flight. */
   disabled?: boolean;
 }
@@ -43,6 +46,7 @@ export function HybridHeaderBar({
   emptyTitle,
   onDuplicate,
   onDelete,
+  actions,
   disabled = false,
 }: HybridHeaderBarProps) {
   const displayTitle = title?.trim() || emptyTitle || "";
@@ -82,7 +86,8 @@ export function HybridHeaderBar({
           </h2>
         )}
 
-        <div className="ml-auto flex gap-2">
+        <div className="ml-auto flex items-center gap-2">
+          {actions}
           {onDuplicate && (
             <Button
               variant="outline"

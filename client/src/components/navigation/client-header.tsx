@@ -113,9 +113,19 @@ export function ClientHeader({
       <nav className="mt-2 flex flex-wrap items-center gap-x-[17px] gap-y-1 rounded bg-[#D4E8F4] px-8 py-1.5 text-[13px]">
         {navItems.map((item) =>
           item.key === active ? (
-            <span key={item.label} className="font-semibold text-[#016991]">
-              {item.label}
-            </span>
+            item.href ? (
+              <Link
+                key={item.label}
+                href={item.href}
+                className="font-semibold text-[#016991]"
+              >
+                {item.label}
+              </Link>
+            ) : (
+              <span key={item.label} className="font-semibold text-[#016991]">
+                {item.label}
+              </span>
+            )
           ) : item.href ? (
             <Link
               key={item.label}

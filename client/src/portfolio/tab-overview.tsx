@@ -11,7 +11,8 @@ import {
 import { BarChart2, Table2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { RISK_COVER_SUMMARY } from "./data-risk";
-import { SectionHeading } from "./primitives";
+import { MEDICAL_ROWS, SHORT_TERM_ROWS } from "./data-holdings";
+import { SectionHeading, StatusCard } from "./primitives";
 import { cardSurface } from "./listings";
 import { SegmentButton, SegmentGroup } from "./view";
 
@@ -375,50 +376,107 @@ export function TabOverview({ managedFilter: _managedFilter }: { managedFilter: 
         <LocalOffshoreBar localPct={70} offshorePct={30} />
       </div>
 
-      {/* Risk snapshot — 1/3 width */}
-      <div className="rounded-lg border p-5" style={cardSurface}>
-        <SectionHeading>Risk</SectionHeading>
-        <div className="mt-0.5 text-[13px] text-gray-500">
-          Total cover across captured policies
-        </div>
-        <ul className="mt-4 space-y-0">
-          {RISK_COVER_SUMMARY.map((item) => (
+      {/* Right column — Risk, Medical, Short-term stacked */}
+      <div className="flex flex-col gap-4">
+        {/* Risk snapshot */}
+        <div className="rounded-lg border p-5" style={cardSurface}>
+          <SectionHeading>Risk</SectionHeading>
+          <div className="mt-0.5 text-[13px] text-gray-500">
+            Total cover across captured policies
+          </div>
+          <ul className="mt-4 space-y-0">
+            {RISK_COVER_SUMMARY.map((item) => (
+              <li
+                key={item.label}
+                className={cn(
+                  "flex items-baseline justify-between gap-3 border-b py-3 last:border-b-0"
+                )}
+                style={{ borderColor: "var(--ew-border)" }}
+              >
+                <span className="text-[13px] text-gray-500">{item.label}</span>
+                <span className="text-right text-[15px] font-semibold tabular-nums text-neutral-900">
+                  {item.value}
+                </span>
+              </li>
+            ))}
             <li
-              key={item.label}
-              className={cn(
-                "flex items-baseline justify-between gap-3 border-b py-3 last:border-b-0"
-              )}
+              className="flex items-baseline justify-between gap-3 border-b py-3 last:border-b-0"
               style={{ borderColor: "var(--ew-border)" }}
             >
-              <span className="text-[13px] text-gray-500">{item.label}</span>
-              <span className="text-right text-[15px] font-semibold tabular-nums text-neutral-900">
-                {item.value}
-              </span>
+              <span className="text-[13px] text-gray-500">Dread disease</span>
+              <span className="text-[15px] text-gray-400">—</span>
             </li>
-          ))}
-          <li
-            className="flex items-baseline justify-between gap-3 border-b py-3 last:border-b-0"
+          </ul>
+          <div
+            className="mt-4 rounded-md border px-3 py-2.5 text-[12px] text-gray-500"
+            style={{ backgroundColor: "#F4F8FB", borderColor: "var(--ew-border)" }}
+          >
+            Liberty benefits not captured — total cover understated
+          </div>
+          <div
+            className="mt-4 border-t pt-4"
             style={{ borderColor: "var(--ew-border)" }}
           >
-            <span className="text-[13px] text-gray-500">Dread disease</span>
-            <span className="text-[15px] text-gray-400">—</span>
-          </li>
-        </ul>
-        <div
-          className="mt-4 rounded-md border px-3 py-2.5 text-[12px] text-gray-500"
-          style={{ backgroundColor: "#F4F8FB", borderColor: "var(--ew-border)" }}
-        >
-          Liberty benefits not captured — total cover understated
-        </div>
-        <div
-          className="mt-4 border-t pt-4"
-          style={{ borderColor: "var(--ew-border)" }}
-        >
-          <div className="text-[13px] text-gray-500">Total premiums</div>
-          <div className="text-xl font-semibold tabular-nums text-neutral-900">
-            R 7 200{" "}
-            <span className="text-sm font-normal text-gray-400">p.m.</span>
+            <div className="text-[13px] text-gray-500">Total premiums</div>
+            <div className="text-xl font-semibold tabular-nums text-neutral-900">
+              R 7 200{" "}
+              <span className="text-sm font-normal text-gray-400">p.m.</span>
+            </div>
           </div>
+        </div>
+
+        {/* Medical aid */}
+        <div className="rounded-lg border p-5" style={cardSurface}>
+          <SectionHeading>Medical aid</SectionHeading>
+          <ul className="mt-3 space-y-0">
+            {MEDICAL_ROWS.map((row) => (
+              <li
+                key={row.productId}
+                className="flex items-start justify-between gap-3 border-b py-3 last:border-b-0"
+                style={{ borderColor: "var(--ew-border)" }}
+              >
+                <div>
+                  <div className="text-[13px] font-medium text-neutral-900">{row.name}</div>
+                  <div className="mt-0.5 text-[12px] text-gray-400">{row.meta2}</div>
+                </div>
+                <div className="shrink-0 text-right">
+                  <div className="text-[15px] font-semibold tabular-nums text-neutral-900">
+                    {row.premium}
+                  </div>
+                  <div className="mt-1.5">
+                    <StatusCard label={row.pill.label} tone={row.pill.tone} />
+                  </div>
+                </div>
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        {/* Short-term insurance */}
+        <div className="rounded-lg border p-5" style={cardSurface}>
+          <SectionHeading>Short-term insurance</SectionHeading>
+          <ul className="mt-3 space-y-0">
+            {SHORT_TERM_ROWS.map((row) => (
+              <li
+                key={row.productId}
+                className="flex items-start justify-between gap-3 border-b py-3 last:border-b-0"
+                style={{ borderColor: "var(--ew-border)" }}
+              >
+                <div>
+                  <div className="text-[13px] font-medium text-neutral-900">{row.name}</div>
+                  <div className="mt-0.5 text-[12px] text-gray-400">{row.meta2}</div>
+                </div>
+                <div className="shrink-0 text-right">
+                  <div className="text-[15px] font-semibold tabular-nums text-neutral-900">
+                    {row.premium}
+                  </div>
+                  <div className="mt-1.5">
+                    <StatusCard label={row.pill.label} tone={row.pill.tone} />
+                  </div>
+                </div>
+              </li>
+            ))}
+          </ul>
         </div>
       </div>
     </div>

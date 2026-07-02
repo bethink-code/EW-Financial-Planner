@@ -77,9 +77,10 @@ interface TabRiskLtProps {
   dir: Dir;
   managedFilter: ManagedFilter;
   openPanel: (id: PanelId) => void;
+  viewActions?: React.ReactNode;
 }
 
-export function TabRiskLt({ dir, managedFilter, openPanel }: TabRiskLtProps) {
+export function TabRiskLt({ dir, managedFilter, openPanel, viewActions }: TabRiskLtProps) {
   const [selected, setSelected] = useState("all");
 
   const allNavItems = dir === "subcategory" ? SUBCATS : NEED_SUBCATS;
@@ -111,6 +112,7 @@ export function TabRiskLt({ dir, managedFilter, openPanel }: TabRiskLtProps) {
         <HybridHeaderBar
           add={{ label: "Add policy", onClick: () => {} }}
           title={selectedLabel}
+          actions={viewActions}
         />
       }
       summaryCards={
