@@ -8,11 +8,9 @@ import {
   ResponsiveContainer,
   ReferenceLine,
 } from "recharts";
-import { BarChart2, Table2 } from "lucide-react";
-import { cn } from "@/lib/utils";
-import { RISK_COVER_SUMMARY } from "./data-risk";
+import { BarChart2, ChevronRight, Table2 } from "lucide-react";
 import { MEDICAL_ROWS, SHORT_TERM_ROWS } from "./data-holdings";
-import { SectionHeading, StatusCard } from "./primitives";
+import { SectionHeading } from "./primitives";
 import { cardSurface } from "./listings";
 import { SegmentButton, SegmentGroup } from "./view";
 
@@ -171,7 +169,7 @@ function renderDot(props: {
 
 function InvestmentChart() {
   return (
-    <ResponsiveContainer width="100%" height={240}>
+    <ResponsiveContainer width="100%" height={170}>
       <AreaChart
         data={CHART_DATA}
         margin={{ top: 8, right: 4, left: 0, bottom: 0 }}
@@ -316,21 +314,88 @@ function LocalOffshoreBar({
   );
 }
 
-import type { ManagedFilter } from "./tab-investments";
+import type { PortfolioTab } from "./data";
 
-export function TabOverview({ managedFilter: _managedFilter }: { managedFilter: ManagedFilter }) {
+/** Compact category summary card — title, headline number, one subline.
+ *  The detail lives on the category's own tab, one click away. */
+function CategoryCard({
+  title,
+  value,
+  subline,
+  onClick,
+}: {
+  title: string;
+  value: string;
+  subline: string;
+  onClick?: () => void;
+}) {
+  return (
+    <div
+      className="cursor-pointer rounded-lg border p-5 transition-shadow hover:shadow-sm"
+      style={cardSurface}
+      onClick={onClick}
+      role="button"
+    >
+      <div className="flex items-start justify-between gap-2">
+        <SectionHeading>{title}</SectionHeading>
+        <ChevronRight className="mt-1 h-4 w-4 shrink-0 text-gray-400" />
+      </div>
+      <div className="mt-2 text-xl font-semibold tabular-nums text-neutral-900">
+        {value}
+      </div>
+      <div className="mt-0.5 text-[13px] text-gray-500">{subline}</div>
+    </div>
+  );
+}
+
+export function TabOverview({ openTab }: { openTab?: (tab: PortfolioTab) => void }) {
   const [chartView, setChartView] = useState<"graph" | "table">("graph");
 
   return (
-    <div className="grid gap-4 lg:grid-cols-3">
-      {/* Investment Portfolio — 2/3 width */}
-      <div className="rounded-lg border p-5 lg:col-span-2" style={cardSurface}>
+    // Same card frame as HybridViewWrapper — square top merging with the tab
+    // strip's underline, so Overview doesn't read as a different layout.
+    <div className="-mt-px rounded-b-lg border border-neutral-200 bg-white p-5 shadow-sm">
+      {/* Category summary cards — compact, above the chart so they never
+          fall below the fold */}
+      <div className="grid gap-4 md:grid-cols-3">
+        <CategoryCard
+          title="Medical aid"
+          value={MEDICAL_ROWS[0].premium}
+          subline={`${MEDICAL_ROWS[0].name} · ${MEDICAL_ROWS[0].pill.label}`}
+          onClick={() => openTab?.("medical")}
+        />
+        <CategoryCard
+          title="Short-term risk"
+          value={SHORT_TERM_ROWS[0].premium}
+          subline={`${SHORT_TERM_ROWS[0].name} · ${SHORT_TERM_ROWS[0].pill.label}`}
+          onClick={() => openTab?.("risk-st")}
+        />
+        <CategoryCard
+          title="Long-term risk"
+          value="R 7 000 000"
+          subline="Death cover · Premiums R 7 200 p.m."
+          onClick={() => openTab?.("risk-lt")}
+        />
+      </div>
+
+      {/* Investment portfolio — directly on the card surface, no box.
+          px-5 matches the cards' internal padding so the section content
+          lines up with the card text above. */}
+      <div className="mt-6 px-5">
         <div className="flex items-start justify-between gap-3">
-          <div>
-            <SectionHeading>Investment portfolio</SectionHeading>
-            <div className="mt-0.5 text-[13px] text-gray-500">
-              Market value · as at 06/10/2025
+          {/* Same click-through affordance as the category cards above */}
+          <div
+            className="flex cursor-pointer items-start gap-2"
+            onClick={() => openTab?.("investments")}
+            role="button"
+          >
+            <div>
+              <SectionHeading>Investments</SectionHeading>
+              <div className="mt-0.5 text-[13px] text-gray-500">
+                Market value · as at 06/10/2025
+              </div>
             </div>
+            <ChevronRight className="mt-1 h-4 w-4 shrink-0 text-gray-400" />
           </div>
           <SegmentGroup>
             <SegmentButton
@@ -376,109 +441,6 @@ export function TabOverview({ managedFilter: _managedFilter }: { managedFilter: 
         <LocalOffshoreBar localPct={70} offshorePct={30} />
       </div>
 
-      {/* Right column — Risk, Medical, Short-term stacked */}
-      <div className="flex flex-col gap-4">
-        {/* Risk snapshot */}
-        <div className="rounded-lg border p-5" style={cardSurface}>
-          <SectionHeading>Risk</SectionHeading>
-          <div className="mt-0.5 text-[13px] text-gray-500">
-            Total cover across captured policies
-          </div>
-          <ul className="mt-4 space-y-0">
-            {RISK_COVER_SUMMARY.map((item) => (
-              <li
-                key={item.label}
-                className={cn(
-                  "flex items-baseline justify-between gap-3 border-b py-3 last:border-b-0"
-                )}
-                style={{ borderColor: "var(--ew-border)" }}
-              >
-                <span className="text-[13px] text-gray-500">{item.label}</span>
-                <span className="text-right text-[15px] font-semibold tabular-nums text-neutral-900">
-                  {item.value}
-                </span>
-              </li>
-            ))}
-            <li
-              className="flex items-baseline justify-between gap-3 border-b py-3 last:border-b-0"
-              style={{ borderColor: "var(--ew-border)" }}
-            >
-              <span className="text-[13px] text-gray-500">Dread disease</span>
-              <span className="text-[15px] text-gray-400">—</span>
-            </li>
-          </ul>
-          <div
-            className="mt-4 rounded-md border px-3 py-2.5 text-[12px] text-gray-500"
-            style={{ backgroundColor: "#F4F8FB", borderColor: "var(--ew-border)" }}
-          >
-            Liberty benefits not captured — total cover understated
-          </div>
-          <div
-            className="mt-4 border-t pt-4"
-            style={{ borderColor: "var(--ew-border)" }}
-          >
-            <div className="text-[13px] text-gray-500">Total premiums</div>
-            <div className="text-xl font-semibold tabular-nums text-neutral-900">
-              R 7 200{" "}
-              <span className="text-sm font-normal text-gray-400">p.m.</span>
-            </div>
-          </div>
-        </div>
-
-        {/* Medical aid */}
-        <div className="rounded-lg border p-5" style={cardSurface}>
-          <SectionHeading>Medical aid</SectionHeading>
-          <ul className="mt-3 space-y-0">
-            {MEDICAL_ROWS.map((row) => (
-              <li
-                key={row.productId}
-                className="flex items-start justify-between gap-3 border-b py-3 last:border-b-0"
-                style={{ borderColor: "var(--ew-border)" }}
-              >
-                <div>
-                  <div className="text-[13px] font-medium text-neutral-900">{row.name}</div>
-                  <div className="mt-0.5 text-[12px] text-gray-400">{row.meta2}</div>
-                </div>
-                <div className="shrink-0 text-right">
-                  <div className="text-[15px] font-semibold tabular-nums text-neutral-900">
-                    {row.premium}
-                  </div>
-                  <div className="mt-1.5">
-                    <StatusCard label={row.pill.label} tone={row.pill.tone} />
-                  </div>
-                </div>
-              </li>
-            ))}
-          </ul>
-        </div>
-
-        {/* Short-term insurance */}
-        <div className="rounded-lg border p-5" style={cardSurface}>
-          <SectionHeading>Short-term insurance</SectionHeading>
-          <ul className="mt-3 space-y-0">
-            {SHORT_TERM_ROWS.map((row) => (
-              <li
-                key={row.productId}
-                className="flex items-start justify-between gap-3 border-b py-3 last:border-b-0"
-                style={{ borderColor: "var(--ew-border)" }}
-              >
-                <div>
-                  <div className="text-[13px] font-medium text-neutral-900">{row.name}</div>
-                  <div className="mt-0.5 text-[12px] text-gray-400">{row.meta2}</div>
-                </div>
-                <div className="shrink-0 text-right">
-                  <div className="text-[15px] font-semibold tabular-nums text-neutral-900">
-                    {row.premium}
-                  </div>
-                  <div className="mt-1.5">
-                    <StatusCard label={row.pill.label} tone={row.pill.tone} />
-                  </div>
-                </div>
-              </li>
-            ))}
-          </ul>
-        </div>
-      </div>
     </div>
   );
 }

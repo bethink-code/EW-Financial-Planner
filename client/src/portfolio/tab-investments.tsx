@@ -90,15 +90,10 @@ function PolicyCard({ row, openPanel }: { row: InvestmentRow; openPanel: (id: Pa
         </div>
       </div>
 
-      <div className="mt-3">
-        <div className="mb-1.5 text-[10px] font-semibold uppercase tracking-widest text-gray-400">
-          Goals this covers
-        </div>
-        <div className="flex flex-wrap gap-2">
-          {miniCards.map((mc) => (
-            <MiniCard key={mc.label} label={mc.label} value={mc.value} tone={mc.tone} />
-          ))}
-        </div>
+      <div className="mt-3 flex flex-wrap gap-2">
+        {miniCards.map((mc) => (
+          <MiniCard key={mc.label} label={mc.label} value={mc.value} tone={mc.tone} />
+        ))}
       </div>
     </div>
   );

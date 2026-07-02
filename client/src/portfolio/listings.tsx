@@ -1,6 +1,7 @@
 import { FileText, Plus } from "lucide-react";
 import { cn } from "@/lib/utils";
-import type { Tone } from "./data";
+import type { PanelId, Tone } from "./data";
+import type { CoverRow } from "./data-holdings";
 import { SectionHeading, StatusCard } from "./primitives";
 import {
   SortHeader,
@@ -35,6 +36,46 @@ export const cardSurface = {
   borderColor: "#F1F2F4",
   boxShadow: "1px 4px 9px 0 rgba(98, 124, 149, 0.1)",
 } as const;
+
+/**
+ * Thin policy card shared by the cover tabs (long-term risk, short-term risk,
+ * medical aid): name + status up top, premium below. The depth (goals,
+ * benefits, holdings) lives in the product's slide-in panel, one click away.
+ */
+export function CoverPolicyCard({
+  row,
+  openPanel,
+}: {
+  row: CoverRow;
+  openPanel: (id: PanelId) => void;
+}) {
+  return (
+    <div
+      className="cursor-pointer rounded-lg border bg-white p-4 transition-shadow hover:shadow-sm"
+      style={{ borderColor: "var(--ew-border)" }}
+      onClick={() => openPanel(row.panelId)}
+      role="button"
+    >
+      <div className="flex items-start gap-2">
+        <FileText className="mt-0.5 h-4 w-4 shrink-0 text-gray-400" />
+        <div className="min-w-0">
+          <div className="text-[14px] font-semibold leading-tight" style={{ color: "var(--ew-primary-navy)" }}>
+            {row.name}
+          </div>
+          <div className="mt-0.5 text-[11px] text-gray-500">{row.meta1} · {row.meta2}</div>
+        </div>
+      </div>
+
+      <div className="mt-3 flex items-center justify-between gap-2">
+        <div className="flex items-baseline gap-2">
+          <div className="text-[22px] font-bold tabular-nums text-neutral-900">{row.premium}</div>
+          <div className="text-[11px] text-gray-400">Monthly premium</div>
+        </div>
+        <StatusCard label={row.pill.label} tone={row.pill.tone} />
+      </div>
+    </div>
+  );
+}
 
 export function ListingSection<T>({
   title,

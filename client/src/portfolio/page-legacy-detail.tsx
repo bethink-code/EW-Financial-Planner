@@ -189,28 +189,29 @@ export default function LegacyProductDetail() {
   return (
     <div className="px-6 pt-4" style={{ backgroundColor: "#F2F7FA", minHeight: "100vh" }}>
 
-      {/* ── Zone 1 · Context band — where you came from ── */}
-      <div className="mb-4 rounded-lg border border-gray-200 bg-white px-6 py-4 shadow-sm">
-        <span className="mb-1 block text-xs font-medium uppercase tracking-wider text-gray-500">
-          Portfolio
-        </span>
-        <Link
-          href="/portfolio"
-          className="flex w-fit items-center gap-1 text-sm font-medium transition-opacity hover:opacity-70"
-          style={{ color: "var(--ew-blue)" }}
-        >
-          <ChevronLeft className="h-4 w-4" />
-          Back to portfolio
-        </Link>
+      {/* ── Zone 2 · Back link + product sub-tabs on one strip ──
+          The journey context here is one hop deep, so it folds into the tab
+          row as a leading "‹ Portfolio" instead of its own context band. */}
+      <div className="flex items-stretch">
+        <div className="flex items-end border-b border-neutral-200 pb-3 pr-2">
+          <Link
+            href="/portfolio"
+            className="flex items-center gap-1 whitespace-nowrap text-sm font-medium transition-opacity hover:opacity-70"
+            style={{ color: "var(--ew-blue)" }}
+          >
+            <ChevronLeft className="h-4 w-4" />
+            Portfolio
+          </Link>
+        </div>
+        <div className="min-w-0 flex-1">
+          <CustomTabs
+            tabs={PRODUCT_TABS}
+            activeTab={activeTab}
+            onTabChange={setActiveTab}
+            className="mb-0"
+          />
+        </div>
       </div>
-
-      {/* ── Zone 2 · Product sub-tabs ── */}
-      <CustomTabs
-        tabs={PRODUCT_TABS}
-        activeTab={activeTab}
-        onTabChange={setActiveTab}
-        className="mb-0"
-      />
 
       {/* ── Card frame — merges with the tab strip above (Mode B: item detail) ── */}
       <div className="-mt-px overflow-hidden rounded-b-lg border border-neutral-200 bg-white shadow-sm">

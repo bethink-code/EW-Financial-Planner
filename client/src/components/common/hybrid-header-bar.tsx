@@ -15,6 +15,10 @@ interface HybridHeaderBarProps {
   title?: string | null;
   /** Placeholder shown when `title` is empty. */
   emptyTitle?: string;
+  /** Optional inline stat rendered after the title (e.g. "R 6 700 p.m. ·
+   *  1 policy") — lets a tab fold a one-number summary into the toolbar
+   *  instead of carrying a full summary band. */
+  meta?: React.ReactNode;
   /** Duplicate the selected item. */
   onDuplicate?: () => void;
   /** Delete the selected item. */
@@ -44,6 +48,7 @@ export function HybridHeaderBar({
   add,
   title,
   emptyTitle,
+  meta,
   onDuplicate,
   onDelete,
   actions,
@@ -84,6 +89,11 @@ export function HybridHeaderBar({
           >
             {displayTitle}
           </h2>
+        )}
+        {meta && (
+          <div className="whitespace-nowrap text-[13px] text-gray-500">
+            {meta}
+          </div>
         )}
 
         <div className="ml-auto flex items-center gap-2">
